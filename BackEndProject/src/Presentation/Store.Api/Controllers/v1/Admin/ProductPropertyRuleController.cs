@@ -1,5 +1,5 @@
 using Asp.Versioning;
-using Edition.Api.Attributes;
+using Store.Api.Attributes;
 using Edition.Application.Features.ProductPropertyRules.Queries;
 using Edition.Application.Features.ProductPropertyRules.Commands;
 using MediatR;

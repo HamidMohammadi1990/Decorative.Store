@@ -8,7 +8,7 @@ using Edition.Application.Features.RefreshTokens.Commands;
 using Edition.Application.Features.UserSessions.Commands;
 using Edition.Application.Features.UserSessions.Queries;
 
-using Edition.Api.Attributes;
+using Store.Api.Attributes;
 using Store.WebFramework.Api;
 using Store.Api.Extensions;
 using Store.Common.Enums;

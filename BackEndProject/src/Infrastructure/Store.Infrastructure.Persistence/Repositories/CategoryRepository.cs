@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
-using Edition.Domain.Dtos.Products;
+using Store.Domain.Dtos.Products;
 using Microsoft.EntityFrameworkCore;
-using Edition.Domain.Dtos.SubCategories;
+using Store.Domain.Dtos.SubCategories;
 using Edition.Application.Common.Extensions;
 using Store.Infrastructure.Persistence.Extensions;
 using Store.Infrastructure.Persistence;

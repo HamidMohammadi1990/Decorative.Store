@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Edition.Infrastructure.Persistence.Interceptors;
+using Store.Infrastructure.Persistence.Interceptors;
 using Store.Domain.Entities;
 using Store.Domain.Enums;
 

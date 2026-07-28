@@ -1,6 +1,6 @@
 using FluentValidation;
 using Edition.Application.Common.Validation;
-using Edition.Domain.Enums;
+using Store.Domain.Enums;
 using Edition.Application.Features.ContentPolicies.Commands;
 using Store.Common.Localization;
 using Store.Domain.ContentPolicies;

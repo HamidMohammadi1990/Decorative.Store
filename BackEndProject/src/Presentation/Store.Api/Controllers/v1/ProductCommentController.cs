@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Edition.Application.Features.ProductComments.Queries;
 using Edition.Application.Features.ProductComments.Commands;
 
-using Edition.Api.Attributes;
+using Store.Api.Attributes;
 using Store.WebFramework.Api;
 using Store.Common.Enums;
 using Store.Common.Models;

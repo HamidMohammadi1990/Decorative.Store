@@ -1,4 +1,4 @@
-﻿using Edition.Domain.Dtos.Others;
+﻿using Store.Domain.Dtos.Others;
 
 namespace Store.Domain.Dtos.Orders;
 

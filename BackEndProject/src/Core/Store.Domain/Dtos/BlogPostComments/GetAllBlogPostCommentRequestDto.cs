@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using Edition.Domain.QueryFilters;
+using Store.Domain.QueryFilters;
 using Store.Domain.Dtos.ContentPolicies;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Entities;

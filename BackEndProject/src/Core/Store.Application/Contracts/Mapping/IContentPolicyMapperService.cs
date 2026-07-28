@@ -1,4 +1,4 @@
-using Edition.Domain.ContentPolicies;
+using Store.Domain.ContentPolicies;
 using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Features.ContentPolicies.Queries;
 using Edition.Application.Features.ContentPolicyMetadata.Queries;

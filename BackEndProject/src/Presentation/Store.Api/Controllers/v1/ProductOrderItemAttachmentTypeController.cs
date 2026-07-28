@@ -3,7 +3,7 @@ using Edition.Application.Features.ProductOrderItemAttachmentTypes.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-using Edition.Api.Attributes;
+using Store.Api.Attributes;
 using Store.WebFramework.Api;
 using Store.Common.Enums;
 using Store.Domain.Dtos.Pagination;

@@ -1,7 +1,7 @@
 using MediatR;
 using Asp.Versioning;
-using Edition.Common.Models;
-using Edition.Api.Attributes;
+using Store.Common.Models;
+using Store.Api.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Edition.Application.Features.ContentPolicyMetadata.Queries;
 using Store.WebFramework.Api;

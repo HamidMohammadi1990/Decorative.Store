@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using System.Reflection;
-using Edition.Domain.Enums;
+using Store.Domain.Enums;
 using Edition.Application.Contracts.ContentPolicies;
 using Store.Domain.ContentPolicies;
 

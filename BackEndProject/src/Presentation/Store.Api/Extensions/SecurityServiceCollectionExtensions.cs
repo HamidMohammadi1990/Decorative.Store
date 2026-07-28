@@ -1,7 +1,7 @@
 using System.Net;
 using System.Text;
 using System.Security.Claims;
-using Edition.Common.Exceptions;
+using Store.Common.Exceptions;
 using Microsoft.Extensions.Options;
 using Edition.Application.Contracts;
 using Microsoft.IdentityModel.Tokens;

@@ -1,1 +1,1 @@
-﻿global using Edition.Domain.Enums;
+﻿global using Store.Domain.Enums;

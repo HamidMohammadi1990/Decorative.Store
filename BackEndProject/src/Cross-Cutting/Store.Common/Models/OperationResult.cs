@@ -1,5 +1,4 @@
-﻿using Edition.Common.Extensions;
-using Store.Common.Enums;
+﻿using Store.Common.Enums;
 
 namespace Store.Common.Models;
 

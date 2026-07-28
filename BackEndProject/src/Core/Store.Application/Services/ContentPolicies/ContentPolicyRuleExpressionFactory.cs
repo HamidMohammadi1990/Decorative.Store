@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 using System.Reflection;
-using Edition.Domain.Enums;
+using Store.Domain.Enums;
 using Edition.Application.Models.ContentPolicies;
 using Store.Domain.Dtos.ContentPolicies;
 using Store.Domain.ContentPolicies;

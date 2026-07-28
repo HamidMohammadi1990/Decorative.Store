@@ -1,5 +1,5 @@
 using Asp.Versioning;
-using Edition.Api.Attributes;
+using Store.Api.Attributes;
 using Edition.Application.Features.ProductOrderItemAttachmentTypes.Queries;
 using Edition.Application.Features.ProductOrderItemAttachmentTypes.Commands;
 using MediatR;

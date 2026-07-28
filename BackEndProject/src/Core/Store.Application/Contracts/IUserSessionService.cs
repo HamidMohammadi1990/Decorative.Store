@@ -1,4 +1,4 @@
-using Edition.Domain.Repositories;
+using Store.Domain.Repositories;
 using Edition.Application.Models.Services;
 using Edition.Application.Contracts.Persistence;
 using Edition.Application.Common.Caching.Enums;

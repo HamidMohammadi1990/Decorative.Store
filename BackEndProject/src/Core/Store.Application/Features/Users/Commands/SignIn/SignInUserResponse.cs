@@ -1,4 +1,4 @@
-﻿using Edition.Common.Models;
+﻿using Store.Common.Models;
 using System.Text.Json.Serialization;
 using Edition.Application.Common.Utilities.Security.Attributes;
 

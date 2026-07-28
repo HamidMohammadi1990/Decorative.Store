@@ -1,4 +1,4 @@
-﻿using Edition.Domain.Entities;
+﻿using Store.Domain.Entities;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Store.Infrastructure.Persistence.Extensions;

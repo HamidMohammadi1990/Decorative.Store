@@ -1,4 +1,4 @@
-using Edition.Domain.Enums;
+using Store.Domain.Enums;
 using Edition.Application.Common.Extensions;
 using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Contracts.Mapping;

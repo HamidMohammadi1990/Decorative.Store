@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using Edition.Domain.Enums;
+using Store.Domain.Enums;
 
 namespace Edition.Application.Contracts.ContentPolicies;
 

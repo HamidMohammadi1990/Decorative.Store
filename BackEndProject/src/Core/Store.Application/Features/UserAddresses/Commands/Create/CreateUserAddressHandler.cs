@@ -1,4 +1,4 @@
-﻿using Edition.Common.Extensions;
+﻿using Store.Common.Extensions;
 using Edition.Application.Contracts;
 using Edition.Application.Contracts.Persistence;
 using Store.Common.Models;

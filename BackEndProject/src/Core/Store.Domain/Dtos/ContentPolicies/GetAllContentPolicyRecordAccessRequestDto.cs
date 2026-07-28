@@ -1,5 +1,5 @@
-using Edition.Domain.Enums;
-using Edition.Domain.QueryFilters;
+using Store.Domain.Enums;
+using Store.Domain.QueryFilters;
 using Store.Domain.Dtos.Pagination;
 
 namespace Store.Domain.Dtos.ContentPolicies;

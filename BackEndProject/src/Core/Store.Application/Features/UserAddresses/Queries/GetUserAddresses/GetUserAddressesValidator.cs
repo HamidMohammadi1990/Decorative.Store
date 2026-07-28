@@ -1,5 +1,5 @@
 using FluentValidation;
-using Edition.Common.Localization;
+using Store.Common.Localization;
 using Edition.Application.Common.Validation;
 
 namespace Edition.Application.Features.UserAddresses.Queries;

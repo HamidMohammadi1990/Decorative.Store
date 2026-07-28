@@ -1,12 +1,12 @@
 using MediatR;
 using Asp.Versioning;
-using Edition.Common.Models;
+using Store.Common.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Edition.Application.Features.Wallets.Queries;
 using Edition.Application.Features.Wallets.Commands;
 
-using Edition.Api.Attributes;
+using Store.Api.Attributes;
 using Store.WebFramework.Api;
 using Store.Common.Enums;
 using Store.Domain.Dtos.Pagination;

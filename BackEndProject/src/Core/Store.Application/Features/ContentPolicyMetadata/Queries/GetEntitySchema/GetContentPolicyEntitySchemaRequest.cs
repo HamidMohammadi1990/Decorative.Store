@@ -1,4 +1,4 @@
-using Edition.Domain.Enums;
+using Store.Domain.Enums;
 using Store.Common.Models;
 
 namespace Edition.Application.Features.ContentPolicyMetadata.Queries;

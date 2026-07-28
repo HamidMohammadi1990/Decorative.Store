@@ -1,6 +1,6 @@
 using MediatR;
 using Asp.Versioning;
-using Edition.Api.Attributes;
+using Store.Api.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Edition.Application.Features.Banks.Queries;
 using Edition.Application.Features.Banks.Commands;

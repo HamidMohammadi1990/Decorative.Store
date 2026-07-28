@@ -1,4 +1,4 @@
-using Edition.Domain.Enums;
+using Store.Domain.Enums;
 
 namespace Store.Domain.Dtos.CompanyStories;
 

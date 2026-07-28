@@ -1,4 +1,4 @@
-using Edition.Common.Security;
+using Store.Common.Security;
 using Edition.Application.Models.Constants;
 using Edition.Application.Common.Utilities.JsonAttributes;
 

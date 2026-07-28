@@ -1,4 +1,4 @@
-﻿using Edition.Common.Utilities;
+﻿using Store.Common.Utilities;
 using Edition.Application.Contracts;
 using Edition.Application.Contracts.Infrastructure;
 using Store.Common.Models;

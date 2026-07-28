@@ -1,11 +1,11 @@
 using MediatR;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using Edition.Domain.Dtos.Pagination;
+using Store.Domain.Dtos.Pagination;
 using Edition.Application.Features.CompanyStoryLikes.Queries;
 using Edition.Application.Features.CompanyStoryLikes.Commands;
 
-using Edition.Api.Attributes;
+using Store.Api.Attributes;
 using Store.WebFramework.Api;
 using Store.Common.Enums;
 

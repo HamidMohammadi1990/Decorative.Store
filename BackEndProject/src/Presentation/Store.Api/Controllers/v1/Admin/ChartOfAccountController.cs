@@ -1,6 +1,6 @@
 using MediatR;
 using Asp.Versioning;
-using Edition.Api.Attributes;
+using Store.Api.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Edition.Application.Features.ChartOfAccounts.Queries;

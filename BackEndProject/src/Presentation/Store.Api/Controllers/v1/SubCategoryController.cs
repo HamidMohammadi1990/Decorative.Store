@@ -3,7 +3,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Edition.Application.Features.SubCategories.Queries;
 
-using Edition.Api.Attributes;
+using Store.Api.Attributes;
 using Store.WebFramework.Api;
 using Store.Common.Enums;
 using Store.Domain.Dtos.Pagination;

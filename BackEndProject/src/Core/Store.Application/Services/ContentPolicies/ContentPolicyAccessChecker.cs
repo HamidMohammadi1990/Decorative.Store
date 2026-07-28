@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using Edition.Common.Exceptions;
+using Store.Common.Exceptions;
 using Edition.Application.Contracts.ContentPolicies;
 using Store.Domain.Enums;
 

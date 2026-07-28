@@ -1,4 +1,4 @@
-using Edition.Domain.Dtos.ContentPolicies;
+using Store.Domain.Dtos.ContentPolicies;
 using Store.Common.Models;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Repositories;

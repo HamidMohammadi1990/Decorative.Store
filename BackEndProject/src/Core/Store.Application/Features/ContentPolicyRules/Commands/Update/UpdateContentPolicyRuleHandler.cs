@@ -1,7 +1,7 @@
 using Edition.Application.Contracts.Persistence;
 using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Services.ContentPolicies;
-using Edition.Domain.Dtos.ContentPolicies;
+using Store.Domain.Dtos.ContentPolicies;
 using Store.Common.Models;
 using Store.Domain.Repositories;
 

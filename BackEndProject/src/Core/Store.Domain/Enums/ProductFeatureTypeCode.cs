@@ -1,4 +1,4 @@
-﻿using Edition.Domain.Attributes;
+﻿using Store.Domain.Attributes;
 using System.ComponentModel.DataAnnotations;
 using Store.Domain.Resources;
 

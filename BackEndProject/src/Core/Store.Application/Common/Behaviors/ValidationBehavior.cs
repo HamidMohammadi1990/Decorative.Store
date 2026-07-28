@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Edition.Common.Exceptions;
+using Store.Common.Exceptions;
 using Store.Common.Localization;
 
 namespace Edition.Application.Common.Behaviors;

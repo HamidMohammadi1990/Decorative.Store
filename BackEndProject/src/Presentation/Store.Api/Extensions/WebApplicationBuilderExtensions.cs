@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Edition.Api.Modules;
+using Store.Api.Modules;
 using Autofac.Extensions.DependencyInjection;
 
 namespace Store.Api.Extensions;

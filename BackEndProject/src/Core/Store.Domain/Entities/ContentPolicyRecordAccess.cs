@@ -1,4 +1,4 @@
-using Edition.Domain.ContentPolicies;
+using Store.Domain.ContentPolicies;
 using Store.Domain.Common;
 
 namespace Store.Domain.Entities;
