@@ -7,24 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="SeedData\Data\cities.json" />
-		<None Remove="SeedData\Data\provinces.json" />
-		<None Remove="SeedData\Data\ChartOfAccounts.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="SeedData\Data\ChartOfAccounts.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-		<Content Include="SeedData\Data\Cities.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-		<Content Include="SeedData\Data\Provinces.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
 		  <PrivateAssets>all</PrivateAssets>
@@ -43,23 +25,5 @@
 
 	<ItemGroup>
 		<InternalsVisibleTo Include="Store.Infrastructure.Persistence.Tests" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="SeedData\Data\AllProducts.json">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="SeedData\Data\Categories.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="SeedData\Data\Extract Code Files\Multi Files\Properties\Fixes\dedicated-digital-multi-digital-version.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="SeedData\Data\Extract Code Files\Multi Files\Properties\Fixes\dedicated-digital-with-digital-binding.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="SeedData\Data\Extract Code Files\Multi Files\Properties\Fixes\dedicated-digital-without-binding-digital.json">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 </Project>
