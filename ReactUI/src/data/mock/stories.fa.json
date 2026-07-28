@@ -1,0 +1,380 @@
+[
+  {
+    "id": "sg1",
+    "slug": "living-room-refresh",
+    "title": "نوسازی نشیمن",
+    "avatar": { "src": "/images/home/living-room.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/living-room.jpg", "alt": "نوسازی نشیمن" },
+    "productSlugs": ["harmony-armchair", "andes-3-seater-sofa"],
+    "likes": 428,
+    "publishedAt": "2026-05-28",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg1-s1",
+        "caption": "با کوسن‌های بافت‌دار و رنگ‌های گرم، فضای نشیمن را دلنشین کنید.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/living-room.jpg",
+          "alt": "چیدمان نشیمن",
+          "durationMs": 5000
+        }
+      },
+      {
+        "id": "sg1-s2",
+        "caption": "صندلی هارمونی با نور طبیعی عالی هماهنگ می‌شود.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/velvet-sofa.jpg",
+          "alt": "جزئیات صندلی هارمونی",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": [
+      {
+        "id": "sg1-c1",
+        "authorName": "سارا م.",
+        "date": "2026-05-29",
+        "text": "عالیه! دقیقاً همین پالت رو می‌خواستم.",
+        "likes": 12
+      }
+    ]
+  },
+  {
+    "id": "sg2",
+    "slug": "dining-essentials",
+    "title": "ضروریات ناهارخوری",
+    "avatar": { "src": "/images/home/dining.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/dining.jpg", "alt": "ضروریات ناهارخوری" },
+    "productSlugs": ["mid-century-dining-table"],
+    "likes": 312,
+    "publishedAt": "2026-05-25",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg2-s1",
+        "caption": "خطوط میدسنچری برای میزبانی روزمره.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/dining.jpg",
+          "alt": "چیدمان میز ناهارخوری",
+          "durationMs": 5000
+        }
+      },
+      {
+        "id": "sg2-s2",
+        "media": {
+          "type": "video",
+          "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+          "poster": "/images/home/dining.jpg",
+          "alt": "ویدیو چیدمان میز",
+          "durationMs": 12000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg3",
+    "slug": "bedroom-calm",
+    "title": "آرامش اتاق خواب",
+    "avatar": { "src": "/images/home/bedroom.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/bedroom.jpg", "alt": "آرامش اتاق خواب" },
+    "productSlugs": ["artisan-bed-frame"],
+    "likes": 267,
+    "publishedAt": "2026-05-20",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg3-s1",
+        "caption": "ملحفه نرم و چوب گرم برای شب‌های آرام.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/bedroom.jpg",
+          "alt": "چیدمان اتاق خواب",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": [
+      {
+        "id": "sg3-c1",
+        "authorName": "علی ر.",
+        "date": "2026-05-21",
+        "text": "خیلی آرامش‌بخشه. برای اتاق مهمان ذخیره کردم.",
+        "likes": 5
+      }
+    ]
+  },
+  {
+    "id": "sg4",
+    "slug": "outdoor-living",
+    "title": "زندگی در فضای باز",
+    "avatar": { "src": "/images/home/in-stock.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/in-stock.jpg", "alt": "زندگی در فضای باز" },
+    "productSlugs": [],
+    "likes": 189,
+    "publishedAt": "2026-05-15",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg4-s1",
+        "caption": "فضای زندگی را به باغ گسترش دهید.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/in-stock.jpg",
+          "alt": "نشیمن باغ",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg5",
+    "slug": "lighting-tips",
+    "title": "نکات روشنایی",
+    "avatar": { "src": "/images/home/trade-interior.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/trade-interior.jpg", "alt": "نکات روشنایی" },
+    "productSlugs": [],
+    "likes": 156,
+    "publishedAt": "2026-05-10",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg5-s1",
+        "caption": "روشنایی محیطی، کاری و تزئینی را لایه‌بندی کنید.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/trade-interior.jpg",
+          "alt": "چیدمان نور",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg6",
+    "slug": "new-arrivals",
+    "title": "تازه‌ها",
+    "avatar": { "src": "/images/home/new-arrivals.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/new-arrivals.jpg", "alt": "تازه‌ها" },
+    "productSlugs": ["harmony-armchair"],
+    "likes": 502,
+    "publishedAt": "2026-06-01",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg6-s1",
+        "caption": "محصولات تازه رسیده — برای خرید ضربه بزنید.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/new-arrivals.jpg",
+          "alt": "کلکسیون جدید",
+          "durationMs": 5000
+        }
+      },
+      {
+        "id": "sg6-s2",
+        "media": {
+          "type": "image",
+          "src": "/images/home/bedroom-set.jpg",
+          "alt": "جزئیات کلکسیون",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg7",
+    "slug": "velvet-sofa-styling",
+    "title": "مبل مخملی",
+    "avatar": { "src": "/images/home/velvet-sofa.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/velvet-sofa.jpg", "alt": "چیدمان مبل مخملی" },
+    "productSlugs": ["andes-3-seater-sofa"],
+    "likes": 241,
+    "publishedAt": "2026-05-08",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg7-s1",
+        "caption": "بافت غنی، فرم ماندگار.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/velvet-sofa.jpg",
+          "alt": "مبل مخملی",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg8",
+    "slug": "bedroom-set-ideas",
+    "title": "ست اتاق خواب",
+    "avatar": { "src": "/images/home/bedroom-set.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/bedroom-set.jpg", "alt": "ایده ست خواب" },
+    "productSlugs": ["artisan-bed-frame"],
+    "likes": 198,
+    "publishedAt": "2026-05-05",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg8-s1",
+        "media": {
+          "type": "image",
+          "src": "/images/home/bedroom-set.jpg",
+          "alt": "ست اتاق خواب",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg9",
+    "slug": "collaboration-edit",
+    "title": "انتخاب طراح",
+    "avatar": { "src": "/images/home/collaboration.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/collaboration.jpg", "alt": "همکاری طراحان" },
+    "productSlugs": [],
+    "likes": 175,
+    "publishedAt": "2026-05-02",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg9-s1",
+        "caption": "گلچینی از استودیو طراحی ما.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/collaboration.jpg",
+          "alt": "انتخاب طراح",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg10",
+    "slug": "office-corner",
+    "title": "دفتر خانگی",
+    "avatar": { "src": "/images/home/commercial-office.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/commercial-office.jpg", "alt": "گوشه دفتر خانگی" },
+    "productSlugs": [],
+    "likes": 143,
+    "publishedAt": "2026-04-28",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg10-s1",
+        "media": {
+          "type": "image",
+          "src": "/images/home/commercial-office.jpg",
+          "alt": "چیدمان دفتر",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg11",
+    "slug": "in-stock-now",
+    "title": "موجود در انبار",
+    "avatar": { "src": "/images/home/in-stock.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/in-stock.jpg", "alt": "محصولات موجود" },
+    "productSlugs": ["harmony-armchair"],
+    "likes": 388,
+    "publishedAt": "2026-04-25",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg11-s1",
+        "caption": "آماده ارسال — تعداد محدود.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/in-stock.jpg",
+          "alt": "موجود در انبار",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg12",
+    "slug": "trade-interior-tour",
+    "title": "تور دکور",
+    "avatar": { "src": "/images/home/trade-interior.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/trade-interior.jpg", "alt": "تور دکوراسیون" },
+    "productSlugs": [],
+    "likes": 221,
+    "publishedAt": "2026-04-20",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg12-s1",
+        "media": {
+          "type": "video",
+          "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+          "poster": "/images/home/trade-interior.jpg",
+          "alt": "ویدیو تور",
+          "durationMs": 12000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg13",
+    "slug": "cozy-corners",
+    "title": "گوشه‌های دنج",
+    "avatar": { "src": "/images/home/living-room.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/bedroom.jpg", "alt": "گوشه دنج" },
+    "productSlugs": ["harmony-armchair"],
+    "likes": 167,
+    "publishedAt": "2026-04-15",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg13-s1",
+        "media": {
+          "type": "image",
+          "src": "/images/home/bedroom.jpg",
+          "alt": "گوشه دنج",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg14",
+    "slug": "summer-refresh",
+    "title": "نوسازی تابستان",
+    "avatar": { "src": "/images/home/new-arrivals.jpg", "alt": "دیبا گالری" },
+    "coverImage": { "src": "/images/home/dining.jpg", "alt": "نوسازی تابستان" },
+    "productSlugs": ["mid-century-dining-table"],
+    "likes": 294,
+    "publishedAt": "2026-04-10",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg14-s1",
+        "caption": "لایه‌های سبک برای فصل پیش‌رو.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/dining.jpg",
+          "alt": "چیدمان تابستان",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  }
+]

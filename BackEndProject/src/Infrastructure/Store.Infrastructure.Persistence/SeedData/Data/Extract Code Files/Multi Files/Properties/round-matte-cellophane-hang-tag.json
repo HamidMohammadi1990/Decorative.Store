@@ -1,0 +1,60 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "3681",
+            "Title": "5.1*9.6دورگرد(9*4.5)"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "روی چاپ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          },
+          {
+            "Id": "2",
+            "Title": "دو رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1000",
+            "Title": "1000"
+          },
+          {
+            "Id": "30000",
+            "Title": "30000"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  }
+]

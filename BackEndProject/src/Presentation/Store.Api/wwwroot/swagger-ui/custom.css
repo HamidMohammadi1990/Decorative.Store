@@ -1,0 +1,87 @@
+.swagger-ui .topbar {
+  background-color: #1a2332;
+  border-bottom: 1px solid #2d3a4f;
+}
+
+html.edition-docs-with-header .swagger-ui .information-container {
+  padding-top: 8px;
+}
+
+html.edition-docs-with-header .swagger-ui .filter-container {
+  margin-top: 8px;
+}
+
+.swagger-ui {
+  direction: ltr;
+}
+
+.swagger-ui .topbar .download-url-wrapper input[type="text"] {
+  border-color: #2d3a4f;
+}
+
+.swagger-ui .info .title {
+  font-family: 'Vazirmatn', system-ui, sans-serif;
+}
+
+.swagger-ui .info h1,
+.swagger-ui .info h2,
+.swagger-ui .info h3 {
+  font-family: 'Vazirmatn', system-ui, sans-serif;
+}
+
+.swagger-ui .opblock-tag {
+  font-size: 1.05rem;
+  border-bottom: 1px solid #e8eef7;
+}
+
+.swagger-ui .opblock-tag-section.is-open .opblock-tag {
+  border-bottom-color: #dbeafe;
+}
+
+.swagger-ui .opblock-tag small {
+  color: #64748b;
+}
+
+.swagger-ui .btn.authorize {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.swagger-ui .btn.execute {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.edition-swagger-tag-group {
+  margin: 0 0 1.25rem;
+  border: 1px solid #e8eef7;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.edition-swagger-tag-group-title {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border: 0;
+  background: #f8fafc;
+  color: #1e293b;
+  font: 600 1rem/1.4 'Vazirmatn', system-ui, sans-serif;
+  text-align: left;
+  cursor: pointer;
+}
+
+.edition-swagger-tag-group-title:hover {
+  background: #f1f5f9;
+}
+
+.edition-swagger-tag-group-body .opblock-tag-section {
+  margin: 0;
+  border-radius: 0;
+}
+
+.edition-swagger-tag-group:not(.is-open) .edition-swagger-tag-group-body {
+  display: none;
+}

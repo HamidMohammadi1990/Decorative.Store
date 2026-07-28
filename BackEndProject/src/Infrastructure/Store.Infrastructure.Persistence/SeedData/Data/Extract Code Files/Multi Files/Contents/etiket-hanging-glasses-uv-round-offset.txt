@@ -1,0 +1,104 @@
+<div class="col-md-7 col-12">
+                    <h1 class="title-h2  pr-2 text-right  mt-4 mt-md-0 mb-4">  کارت اتیکت آویز گلاسه یووی دورگرد</h1>
+
+                    <div class="select_data  mb-3">
+                        <div class="line mb-3 d-flex align-items-center">
+                            <label class="text-secondary w-25 mb-0">
+                                عنوان سفارش
+                            </label>
+                            <input required="Required" class="form-control w-75" id="title" maxlength="150" minlength="1" name="title" type="text" value="" aria-required="true">
+                        </div>
+                        
+                            <div class="line mb-3 d-flex align-items-center" id="offsetSizeBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    سایز
+                                </label>
+                                <select required="Required" class="custom-select w-75 valid" data-val="true" data-val-number="The field offsetSizeID must be a number." id="offsetSizeID" name="offsetSizeID" aria-required="true" aria-describedby="offsetSizeID-error" aria-invalid="false"><option value="3680">5.1*9.6دورگرد(بعدازبرش9*4.5)</option>
+</select>
+                            </div>
+                        <div class="line mb-3 d-flex align-items-center " id="offsetSideBox">
+                            <label class="text-secondary w-25 mb-0">
+                                روی چاپ
+                            </label>
+                            <select class="custom-select w-75 valid" data-val="true" data-val-number="The field offsetSideID must be a number." data-val-required="The offsetSideID field is required." id="offsetSideID" name="offsetSideID" aria-required="true" aria-describedby="offsetSideID-error" aria-invalid="false"><option value="">انتخاب کنید ...</option>
+<option value="1">یک رو</option>
+<option value="2">دو رو</option>
+</select>
+                        </div>
+                        <div class="line mb-3 d-flex align-items-center" id="offsetTirazhBox">
+                            <label class="text-secondary w-25 mb-0">
+                                تیراژ
+                            </label>
+                            <select required="required" class="custom-select w-75 valid" data-val="true" data-val-number="The field offsetTirazhID must be a number." id="offsetTirazhID" name="offsetTirazhID" aria-required="true" aria-describedby="offsetTirazhID-error" aria-invalid="false"><option value="1000">1000</option></select>
+                        </div>
+
+                    </div>
+
+                            <div class="box-custom rounded border mb-3 p-3" id="additionalBox">
+
+                                <h3 class="title mb-3 pr-2 text-right">
+                                    <strong>  خدمات پس از چاپ </strong>
+                                </h3>
+                                <div class="list" id="additionalList">
+                                    
+
+
+
+    <input type="hidden" value="18" id="offsetAdtGeneral17447">
+    <input type="hidden" value="0" id="offsetAdtGettirazhType17447">
+    <input type="hidden" value="2" id="offsetAdtType17447">
+    <input type="hidden" id="offsetAdtPrice17447" name="offsetAdtPrice17447" class="adtPrice" value="9890000">
+    <input type="hidden" id="offsetAdtID17447" value="17447">
+    <input type="hidden" id="offsetAdtIsFile17447" value="False">
+    <input type="hidden" id="offsetAdtIsDuplex17447" value="False">
+        <input type="hidden" id="offsetAdtRequired17447" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input offsetAdt" id="offsetAdt17447" onchange="showOffsetBox('17447')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="offsetAdt17447">نیم تیغ A4 ملخی</label>
+                </div>
+            </div>
+
+                <input class="d-none" type="text" id="offsetAdtCount17447" name="offsetAdtCount17447" value="1" required="required">
+                <div class="custom-control float-left col-md-6 pl-0 offsetAdtBox d-inline-block" id="offsetAdt17447Box">
+                    <select class="form-control w-75 d-inline-block mb-1 valid" id="offsetAdtStrCount17447" name="offsetAdtStrCount17447" onchange="calculatePriceAdt_Offset('17447')" required="" aria-required="true" aria-describedby="offsetAdtStrCount17447-error" aria-invalid="false"><option value="">انتخاب کنید ... </option><option value="نیم تیغ بزرگ">نیم تیغ بزرگ</option><option value="نیم تیغ کوچک">نیم تیغ کوچک</option><option value="نیم تیغ متوسط">نیم تیغ متوسط</option></select>
+
+                        <input type="text" class="d-none" id="offsetAdtParameter17447" name="offsetAdtParameter17447" value="0">
+
+                        <input type="hidden" id="offsetAdtStartNumber17447" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="32" id="offsetAdtGeneral18118">
+    <input type="hidden" value="0" id="offsetAdtGettirazhType18118">
+    <input type="hidden" value="2" id="offsetAdtType18118">
+    <input type="hidden" id="offsetAdtPrice18118" name="offsetAdtPrice18118" class="adtPrice" value="0">
+    <input type="hidden" id="offsetAdtID18118" value="18118">
+    <input type="hidden" id="offsetAdtIsFile18118" value="False">
+    <input type="hidden" id="offsetAdtIsDuplex18118" value="False">
+        <input type="hidden" id="offsetAdtRequired18118" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input offsetAdt" id="offsetAdt18118" onchange="showOffsetBox('18118')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="offsetAdt18118">پاکت سازیی </label>
+                </div>
+            </div>
+
+                <div class="custom-control float-left col-md-6 pl-0 offsetAdtBox d-inline-block" id="offsetAdt18118Box">
+                    <select class="form-control w-75 d-inline-block valid" id="offsetAdtStrCount18118" name="offsetAdtStrCount18118" onchange="calculatePriceAdt_Offset('18118')" required="" aria-required="true" aria-describedby="offsetAdtStrCount18118-error" aria-invalid="false"><option value="">انتخاب کنید ... </option><option value="پاکت A4 تحریر">پاکت A4 تحریر</option><option value="پاکت A4 گلاسه">پاکت A4 گلاسه</option><option value="پاکت A5 تحریر">پاکت A5 تحریر</option><option value="پاکت A5 گلاسه">پاکت A5 گلاسه</option><option value="پاکت ملخی تحریر">پاکت ملخی تحریر</option><option value="پاکت ملخی گلاسه">پاکت ملخی گلاسه</option></select>
+                        <input type="text" placeholder="تعداد" min="0" max="99999" maxlength="5" class="form-control w-75 d-none input-number mt-1" id="offsetAdtCount18118" name="offsetAdtCount18118" onblur="calculatePriceAdt_Offset('18118')" required="required" aria-required="true">
+
+                        <input type="text" class="d-none" id="offsetAdtParameter18118" name="offsetAdtParameter18118" value="0">
+
+                        <input type="hidden" id="offsetAdtStartNumber18118" name="offsetAdtStartNumber18118" value="0">
+                </div>
+        </div>
+
+                                </div>
+                            </div>
+                    <div id="offsetDeliveryBox">
+
+                    </div>
+
+                </div>

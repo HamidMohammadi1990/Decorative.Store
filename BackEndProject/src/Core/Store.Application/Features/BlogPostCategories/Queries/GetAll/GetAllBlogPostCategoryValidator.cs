@@ -1,0 +1,14 @@
+using FluentValidation;
+using Edition.Application.Common.Validation;
+
+namespace Edition.Application.Features.BlogPostCategories.Queries;
+
+public class GetAllBlogPostCategoryValidator : AbstractValidator<GetAllBlogPostCategoryRequest>
+{
+    public GetAllBlogPostCategoryValidator()
+    {
+        RuleFor(x => x.Pagination).MustBeValidPagination();
+        RuleFor(x => x.Title).MaximumLengthWhenNotEmpty(EntityFieldLengths.BlogPostCategory.Title);
+        RuleFor(x => x.Slug).MaximumLengthWhenNotEmpty(EntityFieldLengths.BlogPostCategory.Slug);
+    }
+}

@@ -1,0 +1,185 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "2283",
+            "Title": "1"
+          },
+          {
+            "Id": "2284",
+            "Title": "2"
+          },
+          {
+            "Id": "2285",
+            "Title": "3"
+          },
+          {
+            "Id": "2286",
+            "Title": "4"
+          },
+          {
+            "Id": "2287",
+            "Title": "5"
+          },
+          {
+            "Id": "0",
+            "Title": "تیراژ دلخواه"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "نوع چاپ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "3205",
+            "Title": "UV چهاررنگ"
+          },
+          {
+            "Id": "5728",
+            "Title": "اکو سالونت"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": []
+  },
+  {
+    "CategoryTitle": "انتخاب کالا",
+    "Properties": [
+      {
+        "Title": "رول آپ مشکی درجه یک 200*85",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "رول آپ مشکی درجه یک 200*85",
+            "Type": "number",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 99999,
+            "Items": [],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      },
+      {
+        "Title": "رول آپ نقره ای درجه یک200*85",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "رول آپ نقره ای درجه یک200*85",
+            "Type": "number",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 99999,
+            "Items": [],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      },
+      {
+        "Title": "رول آپ نقره ای پایه پهن200*85",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "رول آپ نقره ای پایه پهن200*85",
+            "Type": "number",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 99999,
+            "Items": [],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      },
+      {
+        "Title": "رول آپ نقره ای درجه دو 200*85",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "رول آپ نقره ای درجه دو 200*85",
+            "Type": "number",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 99999,
+            "Items": [],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      },
+      {
+        "Title": "رول آپ مشکی درجه دو 200*85",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "رول آپ مشکی درجه دو 200*85",
+            "Type": "number",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 99999,
+            "Items": [],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      }
+    ]
+  }
+]

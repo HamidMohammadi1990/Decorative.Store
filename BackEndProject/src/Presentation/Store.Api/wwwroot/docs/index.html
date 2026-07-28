@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Edition API — Docs</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="/lib/fonts/vazirmatn/vazirmatn.css" />
+  <link rel="stylesheet" href="/docs/edition-header.css" />
+  <link rel="stylesheet" href="/docs/docs-custom.css" />
+</head>
+<body>
+  <header id="edition-docs-header">
+    <a class="edition-docs-brand" href="/">Edition API</a>
+    <div class="edition-header-end">
+      <label class="edition-locale" for="edition-locale-select">
+        <span class="edition-locale-field">
+          <span class="edition-locale-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </span>
+          <select id="edition-locale-select" class="edition-locale-select" aria-label="Language">
+            <option value="fa-IR">فارسی</option>
+            <option value="en-US">English</option>
+          </select>
+        </span>
+      </label>
+      <nav class="edition-docs-tabs" aria-label="Documentation views">
+        <a class="edition-docs-tab" href="/swagger">Try it out</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="edition-docs-main">
+    <iframe id="panel-docs" class="edition-docs-panel is-active" src="/docs/read" title="API Documentation"></iframe>
+  </main>
+
+  <script src="/docs/edition-locale.js"></script>
+  <script src="/docs/docs-portal.js"></script>
+</body>
+</html>

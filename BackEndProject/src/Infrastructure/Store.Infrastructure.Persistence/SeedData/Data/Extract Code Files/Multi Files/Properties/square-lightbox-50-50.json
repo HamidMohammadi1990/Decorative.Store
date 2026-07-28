@@ -1,0 +1,66 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "3883",
+            "Title": "مربع"
+          },
+          {
+            "Id": "3884",
+            "Title": "مربع"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": []
+  },
+  {
+    "CategoryTitle": "خدمات پس از چاپ",
+    "Properties": [
+      {
+        "Title": "ضربه گیر",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "ضربه گیر",
+            "Type": "number",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 99999,
+            "Items": [],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      }
+    ]
+  }
+]

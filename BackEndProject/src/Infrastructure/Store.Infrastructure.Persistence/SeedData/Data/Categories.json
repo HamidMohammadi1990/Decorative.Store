@@ -1,0 +1,3584 @@
+[
+  {
+    "Title": "چاپ دیجیتال",
+    "Type": "category",
+    "Slug": "digital-print",
+    "SubCategories": [
+      {
+        "Title": "چاپ دیجیتال اختصاصی",
+        "Type": "subcategory",
+        "Slug": "product-dedicated-digital-printing",
+        "Products": [
+          {
+            "Title": "اختصاصی دیجیتال چند نسخه ای",
+            "Type": "product",
+            "Slug": "dedicated-digital-multi-digital-version",
+            "Code": "P-DIG-75A7"
+          },
+          {
+            "Title": "اختصاصی دیجیتال با صحافی",
+            "Type": "product",
+            "Slug": "dedicated-digital-with-digital-binding",
+            "Code": "P-DIG-31EA"
+          },
+          {
+            "Title": "دیجیتال اختصاصی بدون صحافی",
+            "Type": "product",
+            "Slug": "dedicated-digital-without-binding-digital",
+            "Code": "P-DIG-0F9F"
+          }
+        ],
+        "Code": "SC-DIG-4F17"
+      },
+      {
+        "Title": "چاپ دیجیتال کارت ویزیت",
+        "Type": "subcategory",
+        "Slug": "product-digital-business-card",
+        "Products": [
+          {
+            "Title": "لمینت مات دیجیتال",
+            "Type": "product",
+            "Slug": "laminate-matte-digital",
+            "Code": "P-DIG-253A"
+          },
+          {
+            "Title": "سلفون مات دیجیتال",
+            "Type": "product",
+            "Slug": "cellphone-matte-digital",
+            "Code": "P-DIG-5B41"
+          },
+          {
+            "Title": "دو لایه لوکس",
+            "Type": "product",
+            "Slug": "two-layer-luxury-digital",
+            "Code": "P-DIG-3F23"
+          },
+          {
+            "Title": "لمینت براق دیجیتال",
+            "Type": "product",
+            "Slug": "laminate-gloss-digital-digital",
+            "Code": "P-DIG-DA7C"
+          },
+          {
+            "Title": "سلفون براق دیجیتال",
+            "Type": "product",
+            "Slug": "cellphone-gloss-digital-digital",
+            "Code": "P-DIG-897E"
+          },
+          {
+            "Title": "گلاسه",
+            "Type": "product",
+            "Slug": "glass-digital",
+            "Code": "P-DIG-4C45"
+          },
+          {
+            "Title": "کتان 300 گرم",
+            "Type": "product",
+            "Slug": "linen-300-gram-digital",
+            "Code": "P-DIG-532F"
+          },
+          {
+            "Title": "کتان کهلر",
+            "Type": "product",
+            "Slug": "linen-kohler-digital",
+            "Code": "P-DIG-C3D0"
+          },
+          {
+            "Title": "سلفون مخملی",
+            "Type": "product",
+            "Slug": "cellphone-velvet-digital",
+            "Code": "P-DIG-CC13"
+          },
+          {
+            "Title": "کتان 350 گرم",
+            "Type": "product",
+            "Slug": "linen-350-gram-digital",
+            "Code": "P-DIG-BF86"
+          },
+          {
+            "Title": "ایندربود 350 گرم",
+            "Type": "product",
+            "Slug": "inderboard-350-gram-digital",
+            "Code": "P-DIG-5D79"
+          },
+          {
+            "Title": "کارتی 300 گرم",
+            "Type": "product",
+            "Slug": "card-300-gram-digital",
+            "Code": "P-DIG-6085"
+          },
+          {
+            "Title": "سلفون شنی",
+            "Type": "product",
+            "Slug": "sandy-cellophane-business-card",
+            "Code": "P-DIG-D175"
+          },
+          {
+            "Title": "سلفون طرح دار",
+            "Type": "product",
+            "Slug": "cellophane-design-digital",
+            "Code": "P-DIG-96CB"
+          }
+        ],
+        "Code": "SC-DIG-7382"
+      },
+      {
+        "Title": "چاپ دیجیتال بروشور",
+        "Type": "subcategory",
+        "Slug": "product-digital-brochure",
+        "Products": [
+          {
+            "Title": "چاپ بروشور دولت",
+            "Type": "product",
+            "Slug": "two-fold-brochure",
+            "Code": "P-DIG-DFD4"
+          },
+          {
+            "Title": "چاپ بروشور سه لت",
+            "Type": "product",
+            "Slug": "brochure-three-leaf-digital",
+            "Code": "P-DIG-A914"
+          },
+          {
+            "Title": "چاپ بروشور چهار لت",
+            "Type": "product",
+            "Slug": "brochure-four-leaf-digital",
+            "Code": "P-DIG-9EAF"
+          }
+        ],
+        "Code": "SC-DIG-0A62"
+      },
+      {
+        "Title": "چاپ دیجیتال پاکت",
+        "Type": "subcategory",
+        "Slug": "product-envelope-digital",
+        "Products": [
+          {
+            "Title": "چاپ پاکت ملخی نامه",
+            "Type": "product",
+            "Slug": "envelope-digital",
+            "Code": "P-DIG-8FA3"
+          },
+          {
+            "Title": "چاپ پاکت A5",
+            "Type": "product",
+            "Slug": "print-envelope-digital-a5",
+            "Code": "P-DIG-5083"
+          },
+          {
+            "Title": "چاپ پاکت A4 درب روی طول",
+            "Type": "product",
+            "Slug": "envelope-a4-door-on-digital-length",
+            "Code": "P-DIG-87EF"
+          }
+        ],
+        "Code": "SC-DIG-1AA5"
+      },
+      {
+        "Title": "چاپ دیجیتال سربرگ",
+        "Type": "subcategory",
+        "Slug": "product-letterhead-digital",
+        "Products": [
+          {
+            "Title": "چاپ سربرگ A4 دیجیتال",
+            "Type": "product",
+            "Slug": "header-digital",
+            "Code": "P-DIG-80FF"
+          },
+          {
+            "Title": "چاپ سربرگ A5 دیجیتال",
+            "Type": "product",
+            "Slug": "header-sheet-a5-digital",
+            "Code": "P-DIG-18E9"
+          },
+          {
+            "Title": "چاپ سربرگ A6 دیجیتال",
+            "Type": "product",
+            "Slug": "a6-digital-letterhead",
+            "Code": "P-DIG-8661"
+          }
+        ],
+        "Code": "SC-DIG-4D75"
+      },
+      {
+        "Title": "چاپ دیجیتال تراکت",
+        "Type": "subcategory",
+        "Slug": "product-digital-tract",
+        "Products": [
+          {
+            "Title": "چاپ دیجیتال تراکت",
+            "Type": "product",
+            "Slug": "digital-tract",
+            "Code": "P-DIG-BB92"
+          }
+        ],
+        "Code": "SC-DIG-110B"
+      },
+      {
+        "Title": "چاپ دیجیتال پوستر",
+        "Type": "subcategory",
+        "Slug": "product-digital-poster",
+        "Products": [
+          {
+            "Title": "چاپ پوستر دیجیتال",
+            "Type": "product",
+            "Slug": "digital-poster",
+            "Code": "P-DIG-1AE7"
+          }
+        ],
+        "Code": "SC-DIG-88FA"
+      },
+      {
+        "Title": "کارت دعوت و پستال دیجیتال",
+        "Type": "subcategory",
+        "Slug": "product-invitation-postal-card",
+        "Products": [
+          {
+            "Title": "کارت دعوت یک لت",
+            "Type": "product",
+            "Slug": "invitation-card-a-digital-lat",
+            "Code": "P-DIG-8F76"
+          },
+          {
+            "Title": "کارت دعوت دولت",
+            "Type": "product",
+            "Slug": "invitation-card-digital",
+            "Code": "P-DIG-A1CC"
+          }
+        ],
+        "Code": "SC-DIG-4482"
+      },
+      {
+        "Title": "کارت آویز گردنی",
+        "Type": "subcategory",
+        "Slug": "product-card-pendant-neck-digital",
+        "Products": [
+          {
+            "Title": "کارت آویز گردنی",
+            "Type": "product",
+            "Slug": "irankohan-irproduct-card-pendant-neck-digital",
+            "Code": "P-DIG-2247"
+          }
+        ],
+        "Code": "SC-DIG-4B33"
+      },
+      {
+        "Title": "گواهینامه",
+        "Type": "subcategory",
+        "Slug": "product-certificate",
+        "Products": [
+          {
+            "Title": "گواهینامه",
+            "Type": "product",
+            "Slug": "certificate",
+            "Code": "P-DIG-E0D3"
+          }
+        ],
+        "Code": "SC-DIG-04F2"
+      },
+      {
+        "Title": "چاپ دیجیتال لیبل",
+        "Type": "subcategory",
+        "Slug": "product-lable-digital-print",
+        "Products": [
+          {
+            "Title": "لیبل پی وی سی متالایز",
+            "Type": "product",
+            "Slug": "digital-label-pvc-metallized",
+            "Code": "P-DIG-7E13"
+          },
+          {
+            "Title": "لیبل کاغذی",
+            "Type": "product",
+            "Slug": "label-paper-digital",
+            "Code": "P-DIG-A8A0"
+          },
+          {
+            "Title": "لیبل شیشه ای دیجیتال",
+            "Type": "product",
+            "Slug": "digital-glass-label",
+            "Code": "P-DIG-D7DA"
+          },
+          {
+            "Title": "لیبل pvc",
+            "Type": "product",
+            "Slug": "label-pvc-digital",
+            "Code": "P-DIG-0727"
+          },
+          {
+            "Title": "لیبل متالایز کاغذی",
+            "Type": "product",
+            "Slug": "label-metalized-digital",
+            "Code": "P-DIG-0EBE"
+          }
+        ],
+        "Code": "SC-DIG-B69C"
+      },
+      {
+        "Title": "فولدر جیب دار",
+        "Type": "subcategory",
+        "Slug": "product-folder-pocket-digital",
+        "Products": [
+          {
+            "Title": "چاپ فولدر جیب دار دیجیتال",
+            "Type": "product",
+            "Slug": "folder-pocket-digital",
+            "Code": "P-DIG-1290"
+          }
+        ],
+        "Code": "SC-DIG-68C0"
+      },
+      {
+        "Title": "زیر بشقابی",
+        "Type": "subcategory",
+        "Slug": "product-under-plate",
+        "Products": [
+          {
+            "Title": "چاپ زیر بشقابی",
+            "Type": "product",
+            "Slug": "sub-plate-digital",
+            "Code": "P-DIG-2579"
+          }
+        ],
+        "Code": "SC-DIG-C661"
+      },
+      {
+        "Title": "چاپ فاکتور",
+        "Type": "subcategory",
+        "Slug": "product-digital-invoice",
+        "Products": [
+          {
+            "Title": "چاپ فاکتور کاربن لس",
+            "Type": "product",
+            "Slug": "invoice-carbon-loss-digital",
+            "Code": "P-DIG-0BB4"
+          },
+          {
+            "Title": "چاپ فاکتور الوان",
+            "Type": "product",
+            "Slug": "print-invoice-color-digital",
+            "Code": "P-DIG-EB58"
+          }
+        ],
+        "Code": "SC-DIG-7035"
+      },
+      {
+        "Title": "چاپ مجله دیجیتال",
+        "Type": "subcategory",
+        "Slug": "product-digital-magazine",
+        "Products": [
+          {
+            "Title": "چاپ مجله",
+            "Type": "product",
+            "Slug": "digital-magazine",
+            "Code": "P-DIG-E299"
+          }
+        ],
+        "Code": "SC-DIG-3FBA"
+      },
+      {
+        "Title": "چاپ دیجیتال کتاب",
+        "Type": "subcategory",
+        "Slug": "product-digital-book",
+        "Products": [
+          {
+            "Title": "چاپ دیجیتال کتاب",
+            "Type": "product",
+            "Slug": "digital-book",
+            "Code": "P-DIG-248D"
+          }
+        ],
+        "Code": "SC-DIG-54DC"
+      },
+      {
+        "Title": "چاپ جزوه",
+        "Type": "subcategory",
+        "Slug": "product-booklet-digital",
+        "Products": [
+          {
+            "Title": "چاپ دیجیتال جزوه",
+            "Type": "product",
+            "Slug": "booklet-digital",
+            "Code": "P-DIG-FE93"
+          }
+        ],
+        "Code": "SC-DIG-5760"
+      },
+      {
+        "Title": "چاپ دیجیتال کاتالوگ",
+        "Type": "subcategory",
+        "Slug": "product-catalog-and-digital-journal",
+        "Products": [
+          {
+            "Title": "چاپ دیجیتال کاتالوگ و ژورنال",
+            "Type": "product",
+            "Slug": "catalog-and-digital-journal",
+            "Code": "P-DIG-B407"
+          }
+        ],
+        "Code": "SC-DIG-53BB"
+      },
+      {
+        "Title": "صحافی پایان نامه و گالینگور",
+        "Type": "subcategory",
+        "Slug": "product-hardcover-digital",
+        "Products": [
+          {
+            "Title": "صحافی و چاپ گالینگور",
+            "Type": "product",
+            "Slug": "hardcover-digital",
+            "Code": "P-DIG-E6D2"
+          }
+        ],
+        "Code": "SC-DIG-C7E0"
+      },
+      {
+        "Title": "چاپ دیجیتال تقویم",
+        "Type": "subcategory",
+        "Slug": "product-calendar-desktop-digital",
+        "Products": [
+          {
+            "Title": "چاپ تقویم دیواری تک برگ",
+            "Type": "product",
+            "Slug": "wall-calendars",
+            "Code": "P-DIG-F2F5"
+          },
+          {
+            "Title": "سفارش تقویم رومیزی",
+            "Type": "product",
+            "Slug": "desktop-calendar",
+            "Code": "P-DIG-C2E5"
+          }
+        ],
+        "Code": "SC-DIG-4F5C"
+      },
+      {
+        "Title": "پرینت سیاه سفید",
+        "Type": "subcategory",
+        "Slug": "product-print-black-white-digital",
+        "Products": [
+          {
+            "Title": "پرینت و چاپ سیاه سفید",
+            "Type": "product",
+            "Slug": "print-black-white-digital",
+            "Code": "P-DIG-64A7"
+          }
+        ],
+        "Code": "SC-DIG-8BCC"
+      },
+      {
+        "Title": "چاپ ریسو گراف",
+        "Type": "subcategory",
+        "Slug": "product-print-riso-graph-digital",
+        "Products": [
+          {
+            "Title": "چاپ ریسو گراف",
+            "Type": "product",
+            "Slug": "print-riso-graph-digital",
+            "Code": "P-DIG-AEB5"
+          }
+        ],
+        "Code": "SC-DIG-F3C6"
+      },
+      {
+        "Title": "چاپ کارت اسکرچ (رمز دار، کارت قرعه کشی)",
+        "Type": "subcategory",
+        "Slug": "product-scratch-card",
+        "Products": [
+          {
+            "Title": "چاپ کارت اسکرچ (رمز دار)",
+            "Type": "product",
+            "Slug": "card-scratch-encrypted-digital",
+            "Code": "P-DIG-31AC"
+          }
+        ],
+        "Code": "SC-DIG-DD99"
+      },
+      {
+        "Title": "چاپ اتیکت و تگ",
+        "Type": "subcategory",
+        "Slug": "product-etiquette-printing",
+        "Products": [
+          {
+            "Title": "چاپ اتیکت و تگ",
+            "Type": "product",
+            "Slug": "etiquette-printing",
+            "Code": "P-DIG-1B1A"
+          }
+        ],
+        "Code": "SC-DIG-3613"
+      }
+    ],
+    "Code": "C-DIG"
+  },
+  {
+    "Title": "کارت پی وی سی (PVC)",
+    "Type": "category",
+    "Slug": "pvc-card",
+    "SubCategories": [
+      {
+        "Title": "کارت پرسنلی PVC",
+        "Type": "subcategory",
+        "Slug": "product-pvc-personnel-card",
+        "Products": [
+          {
+            "Title": "کارت پرسنلی PVC سفید",
+            "Type": "product",
+            "Slug": "white-pvc-card",
+            "Code": "P-PVC-94EF"
+          }
+        ],
+        "Code": "SC-PVC-4CEF"
+      },
+      {
+        "Title": "(PVC) کارت ویزیت پی وی سی",
+        "Type": "subcategory",
+        "Slug": "product-pvc-card-print",
+        "Products": [
+          {
+            "Title": "کارت PVC 300 میکرون سفید",
+            "Type": "product",
+            "Slug": "300-micron-white-pvc-card",
+            "Code": "P-PVC-9783"
+          },
+          {
+            "Title": "کارت PVC 500 میکرون سفید",
+            "Type": "product",
+            "Slug": "500-micron-white-pvc-card",
+            "Code": "P-PVC-9095"
+          },
+          {
+            "Title": "کارت PVC 760 میکرون سفید",
+            "Type": "product",
+            "Slug": "760-micron-white-pvc-card",
+            "Code": "P-PVC-5FBF"
+          },
+          {
+            "Title": "کارت PVC 300 میکرون صدفی",
+            "Type": "product",
+            "Slug": "300-micron-clamshell-pvc-card",
+            "Code": "P-PVC-D7C1"
+          },
+          {
+            "Title": "کارت PVC 300 میکرون طلایی",
+            "Type": "product",
+            "Slug": "300-micron-golden-pvc-card",
+            "Code": "P-PVC-5A59"
+          },
+          {
+            "Title": "کارت PVC 300 میکرون نقره ای",
+            "Type": "product",
+            "Slug": "300-micron-silver-pvc-card",
+            "Code": "P-PVC-7D35"
+          },
+          {
+            "Title": "کارت PVC 500 میکرون صدفی",
+            "Type": "product",
+            "Slug": "shell-pvc-card-500-micron",
+            "Code": "P-PVC-E444"
+          },
+          {
+            "Title": "کارت PVC 500 میکرون طلایی",
+            "Type": "product",
+            "Slug": "500-micron-gold-pvc-card",
+            "Code": "P-PVC-9434"
+          },
+          {
+            "Title": "کارت PVC 500 میکرون نقره ای",
+            "Type": "product",
+            "Slug": "500-micron-silver-pvc-card",
+            "Code": "P-PVC-A4EF"
+          },
+          {
+            "Title": "کارت PVC 760 میکرون صدفی",
+            "Type": "product",
+            "Slug": "760-micron-clamshell-pvc-card",
+            "Code": "P-PVC-4C4B"
+          },
+          {
+            "Title": "کارت PVC 760 میکرون طلایی",
+            "Type": "product",
+            "Slug": "760-micron-gold-pvc-card",
+            "Code": "P-PVC-FE7F"
+          },
+          {
+            "Title": "کارت PVC 760 میکرون نقره ای",
+            "Type": "product",
+            "Slug": "760-micron-silver-pvc-card",
+            "Code": "P-PVC-3D29"
+          }
+        ],
+        "Code": "SC-PVC-E83C"
+      },
+      {
+        "Title": "کارت تخفیف",
+        "Type": "subcategory",
+        "Slug": "product-discount-card-printing",
+        "Products": [
+          {
+            "Title": "کارت تخفیف",
+            "Type": "product",
+            "Slug": "discount-printing",
+            "Code": "P-PVC-4416"
+          }
+        ],
+        "Code": "SC-PVC-DD89"
+      },
+      {
+        "Title": "کارت باشگاه مشتریان",
+        "Type": "subcategory",
+        "Slug": "product-customer-club-card-printing",
+        "Products": [
+          {
+            "Title": "کارت باشگاه مشتریان",
+            "Type": "product",
+            "Slug": "customer-club-card-printing",
+            "Code": "P-PVC-6474"
+          }
+        ],
+        "Code": "SC-PVC-6595"
+      },
+      {
+        "Title": "کارت گارانتی (ضمانت)",
+        "Type": "subcategory",
+        "Slug": "product-warranty-card-printing",
+        "Products": [
+          {
+            "Title": "کارت گارانتی",
+            "Type": "product",
+            "Slug": "کارت-گارانتی-کارت-pvc",
+            "Code": "P-PVC-A6FF"
+          }
+        ],
+        "Code": "SC-PVC-0192"
+      },
+      {
+        "Title": "کارت وفاداری",
+        "Type": "subcategory",
+        "Slug": "product-card-loyalty",
+        "Products": [
+          {
+            "Title": "کارت وفاداری",
+            "Type": "product",
+            "Slug": "loyalty-card-pvc",
+            "Code": "P-PVC-01E3"
+          }
+        ],
+        "Code": "SC-PVC-B654"
+      },
+      {
+        "Title": "کارت رفاهی",
+        "Type": "subcategory",
+        "Slug": "product-card-welfare-card-pvc",
+        "Products": [
+          {
+            "Title": "کارت رفاهی",
+            "Type": "product",
+            "Slug": "welfare-card-printing",
+            "Code": "P-PVC-7EBB"
+          }
+        ],
+        "Code": "SC-PVC-4A7A"
+      },
+      {
+        "Title": "کارت PVC مگنت دار",
+        "Type": "subcategory",
+        "Slug": "product-magnetic-pvc-card-printing",
+        "Products": [
+          {
+            "Title": "سفارش کارت pvc مگنت دار",
+            "Type": "product",
+            "Slug": "pvc-card-magnet",
+            "Code": "P-PVC-331F"
+          }
+        ],
+        "Code": "SC-PVC-6E56"
+      },
+      {
+        "Title": "کارت ویزیت شیشه ای",
+        "Type": "subcategory",
+        "Slug": "product-pvc-glass-business-card",
+        "Products": [
+          {
+            "Title": "چاپ کارت 500 میکرون پی وی سی شیشه ای نیمه شفاف",
+            "Type": "product",
+            "Slug": "500-micron-translucent-glass-pvc-card-printing",
+            "Code": "P-PVC-7229"
+          },
+          {
+            "Title": "چاپ کارت pvc 300 میکرون نیمه شفاف",
+            "Type": "product",
+            "Slug": "300-micron-semi-transparent-pvc-card-printing",
+            "Code": "P-PVC-64DB"
+          },
+          {
+            "Title": "چاپ کارت 500 میکرون پی وی سی شیشه ای شفاف",
+            "Type": "product",
+            "Slug": "500-micron-clear-glass-pvc-card-printing",
+            "Code": "P-PVC-7F52"
+          }
+        ],
+        "Code": "SC-PVC-4FA6"
+      }
+    ],
+    "Code": "C-PVC"
+  },
+  {
+    "Title": "چاپ افست عمومی",
+    "Type": "category",
+    "Slug": "offset-print",
+    "SubCategories": [
+      {
+        "Title": "چاپ اختصاصی افست",
+        "Type": "subcategory",
+        "Slug": "product-exclusive-offset-printing",
+        "Products": [
+          {
+            "Title": "چاپ اختصاصی افست",
+            "Type": "product",
+            "Slug": "اختصاصی-افست-افست",
+            "Code": "P-OFS-622F"
+          }
+        ],
+        "Code": "SC-OFS-33F2"
+      },
+      {
+        "Title": "چاپ افست کارت ویزیت",
+        "Type": "subcategory",
+        "Slug": "product-offset-business-card",
+        "Products": [
+          {
+            "Title": "لمینت مات",
+            "Type": "product",
+            "Slug": "laminate-matte-offset",
+            "Code": "P-OFS-88F5"
+          },
+          {
+            "Title": "سلفون مات",
+            "Type": "product",
+            "Slug": "matte-offset-cellophane",
+            "Code": "P-OFS-2E87"
+          },
+          {
+            "Title": "لمینت برجسته",
+            "Type": "product",
+            "Slug": "laminate-embossed-offset",
+            "Code": "P-OFS-3BF8"
+          },
+          {
+            "Title": "لمینت برجسته مخملی",
+            "Type": "product",
+            "Slug": "laminate-embossed-velvet-offset",
+            "Code": "P-OFS-5C91"
+          },
+          {
+            "Title": "لمینت برجسته طلا کوب",
+            "Type": "product",
+            "Slug": "laminate-embossed-gold-stamping-offset",
+            "Code": "P-OFS-299C"
+          },
+          {
+            "Title": "سلفون مات مخملی",
+            "Type": "product",
+            "Slug": "cellophane-matte-velvet-offset",
+            "Code": "P-OFS-0594"
+          },
+          {
+            "Title": "لمینت براق",
+            "Type": "product",
+            "Slug": "laminate-gloss-offset",
+            "Code": "P-OFS-A60E"
+          },
+          {
+            "Title": "لمینت براق طرح موج",
+            "Type": "product",
+            "Slug": "laminate-gloss-design-wave-offset",
+            "Code": "P-OFS-3B01"
+          },
+          {
+            "Title": "لمینت مات طرح موج",
+            "Type": "product",
+            "Slug": "laminate-matte-design-wave-offset",
+            "Code": "P-OFS-C666"
+          },
+          {
+            "Title": "سلفون مات دو رو موضعی",
+            "Type": "product",
+            "Slug": "cellophane-matte-double-sided-local-offset",
+            "Code": "P-OFS-2B59"
+          },
+          {
+            "Title": "سلفون مات دورو طلا کوب",
+            "Type": "product",
+            "Slug": "cellophane-matte-double-gold-pound-offset",
+            "Code": "P-OFS-A73B"
+          },
+          {
+            "Title": "سلفون مات مخملی موضعی",
+            "Type": "product",
+            "Slug": "cellophane-matte-velvet-local-offset",
+            "Code": "P-OFS-E9F9"
+          },
+          {
+            "Title": "سلفون مات مخملی طلا کوب",
+            "Type": "product",
+            "Slug": "cellophane-matte-velvet-gold-stamping-offset",
+            "Code": "P-OFS-C153"
+          },
+          {
+            "Title": "سلفون مات مخملی دور گرد",
+            "Type": "product",
+            "Slug": "cellophane-matte-velvet-round-offset",
+            "Code": "P-OFS-9DB8"
+          },
+          {
+            "Title": "لمینت براق ویزیتی",
+            "Type": "product",
+            "Slug": "laminate-gloss-visit-offset",
+            "Code": "P-OFS-674B"
+          },
+          {
+            "Title": "لمینت مات ویزیتی",
+            "Type": "product",
+            "Slug": "laminate-matte-visit-offset",
+            "Code": "P-OFS-21B7"
+          },
+          {
+            "Title": "لمینت براق مربع",
+            "Type": "product",
+            "Slug": "laminate-gloss-square-offset",
+            "Code": "P-OFS-AF64"
+          },
+          {
+            "Title": "لمینت مات مربع",
+            "Type": "product",
+            "Slug": "laminate-matte-square-offset",
+            "Code": "P-OFS-04DB"
+          },
+          {
+            "Title": "سلفون براق",
+            "Type": "product",
+            "Slug": "cellophane-gloss-offset",
+            "Code": "P-OFS-A7C8"
+          },
+          {
+            "Title": "لیبل یو وی",
+            "Type": "product",
+            "Slug": "uv-label",
+            "Code": "P-OFS-803B"
+          },
+          {
+            "Title": "کتان امباس",
+            "Type": "product",
+            "Slug": "linen-emboss-offset",
+            "Code": "P-OFS-2967"
+          },
+          {
+            "Title": "کتان  امباس دورگرد",
+            "Type": "product",
+            "Slug": "linen-round-offset",
+            "Code": "P-OFS-0621"
+          },
+          {
+            "Title": "گلاسه یووی",
+            "Type": "product",
+            "Slug": "glass-uv-offset",
+            "Code": "P-OFS-8EB7"
+          },
+          {
+            "Title": "کتان آلمان",
+            "Type": "product",
+            "Slug": "linen-element-offset",
+            "Code": "P-OFS-85FD"
+          },
+          {
+            "Title": "لمینت کوچک برجسته",
+            "Type": "product",
+            "Slug": "laminate-small-embossed-offset",
+            "Code": "P-OFS-5E44"
+          },
+          {
+            "Title": "کارتی  300 گرم",
+            "Type": "product",
+            "Slug": "laminate-small-embossed-offset-300-gr",
+            "Code": "P-OFS-5E44"
+          },
+          {
+            "Title": "لمینت برجسته مخملی طلاکوب",
+            "Type": "product",
+            "Slug": "laminate-embossed-velvet-gold-offset-print",
+            "Code": "P-OFS-A03B"
+          },
+          {
+            "Title": "گلاسه یووی دورگرد طرح چرم",
+            "Type": "product",
+            "Slug": "gloss-uv-round-offset-leather-design",
+            "Code": "P-OFS-F05D"
+          },
+          {
+            "Title": "سلفون مات  مربع دورگرد",
+            "Type": "product",
+            "Slug": "cellophane-matte-and-glossy-square-round-offset",
+            "Code": "P-OFS-3955"
+          },
+          {
+            "Title": "گلاسه بدون روکش",
+            "Type": "product",
+            "Slug": "gloss-without-coating-offset",
+            "Code": "P-OFS-1A2E"
+          },
+          {
+            "Title": "کتان امباس لمینت",
+            "Type": "product",
+            "Slug": "linen-emboss-laminate-offset",
+            "Code": "P-OFS-BB0E"
+          },
+          {
+            "Title": "سلفون مات  طرح موج",
+            "Type": "product",
+            "Slug": "cellophane-matte-and-glossy-wave-offset-design",
+            "Code": "P-OFS-EE56"
+          },
+          {
+            "Title": "لمینت براق دایره",
+            "Type": "product",
+            "Slug": "round-glossy-laminate",
+            "Code": "P-OFS-BC8C"
+          },
+          {
+            "Title": "سلفون براق طرح موج",
+            "Type": "product",
+            "Slug": "cellophane-glossy-wave-offset-design",
+            "Code": "P-OFS-4F0A"
+          },
+          {
+            "Title": "سلفون براق مربع دورگرد",
+            "Type": "product",
+            "Slug": "cellophane-glossy-square-offset",
+            "Code": "P-OFS-A5DF"
+          },
+          {
+            "Title": "اتیکت لمینت برجسته دورگرد",
+            "Type": "product",
+            "Slug": "label-laminate-embossed-circular-offset",
+            "Code": "P-OFS-3658"
+          },
+          {
+            "Title": "اتیکت لمینت برجسته طلاوب دورگرد",
+            "Type": "product",
+            "Slug": "etiquet-laminate-embossed-tlawob-around-offset",
+            "Code": "P-OFS-4D24"
+          },
+          {
+            "Title": "اتیکت اویز سلفون مات دورگرد",
+            "Type": "product",
+            "Slug": "round-matte-cellophane-hang-tag",
+            "Code": "P-OFS-FE90"
+          },
+          {
+            "Title": "اتیکت  آویز گلاسه یووی دورگرد",
+            "Type": "product",
+            "Slug": "etiket-hanging-glasses-uv-round-offset",
+            "Code": "P-OFS-B32A"
+          },
+          {
+            "Title": "سلفون مات دورتیز طلاکوب",
+            "Type": "product",
+            "Slug": "matte-cellophane-with-gold-plated-edges",
+            "Code": "P-OFS-9E10"
+          }
+        ],
+        "Code": "SC-OFS-BEA5"
+      },
+      {
+        "Title": "چاپ بروشور",
+        "Type": "subcategory",
+        "Slug": "product-offset-brochure",
+        "Products": [
+          {
+            "Title": "بروشور A4",
+            "Type": "product",
+            "Slug": "a4-brochure-offset",
+            "Code": "P-OFS-9C70"
+          },
+          {
+            "Title": "بروشور A5",
+            "Type": "product",
+            "Slug": "brochure-a5-offset",
+            "Code": "P-OFS-CA98"
+          },
+          {
+            "Title": "بروشور A3",
+            "Type": "product",
+            "Slug": "brochure-a3-offset",
+            "Code": "P-OFS-F1D1"
+          }
+        ],
+        "Code": "SC-OFS-CCE4"
+      },
+      {
+        "Title": "چاپ پاکت افست",
+        "Type": "subcategory",
+        "Slug": "product-offset-envelope",
+        "Products": [
+          {
+            "Title": "چاپ پاکت نامه",
+            "Type": "product",
+            "Slug": "envelope-letter-offset",
+            "Code": "P-OFS-6C67"
+          },
+          {
+            "Title": "پاکت A4",
+            "Type": "product",
+            "Slug": "envelope-a4-offset",
+            "Code": "P-OFS-3EAD"
+          },
+          {
+            "Title": "پاکت A5",
+            "Type": "product",
+            "Slug": "envelopea5-offset",
+            "Code": "P-OFS-84AB"
+          },
+          {
+            "Title": "پاکت A3",
+            "Type": "product",
+            "Slug": "envelope-a3-offset",
+            "Code": "P-OFS-1B84"
+          }
+        ],
+        "Code": "SC-OFS-3445"
+      },
+      {
+        "Title": "چاپ افست سربرگ",
+        "Type": "subcategory",
+        "Slug": "product-offset-letterhead",
+        "Products": [
+          {
+            "Title": "سربرگ افست A4",
+            "Type": "product",
+            "Slug": "aletterhead-offset-a4",
+            "Code": "P-OFS-C78D"
+          },
+          {
+            "Title": "سربرگ افست A5",
+            "Type": "product",
+            "Slug": "letterhead-a5-offset",
+            "Code": "P-OFS-E34C"
+          },
+          {
+            "Title": "سربرگ افست A6",
+            "Type": "product",
+            "Slug": "letterhead-a6-offset",
+            "Code": "P-OFS-6A02"
+          },
+          {
+            "Title": "یادداشت تحریر",
+            "Type": "product",
+            "Slug": "یادداشت-تحریر-افست",
+            "Code": "P-OFS-6AB4"
+          }
+        ],
+        "Code": "SC-OFS-9376"
+      },
+      {
+        "Title": "چاپ تراکت",
+        "Type": "subcategory",
+        "Slug": "product-offset-flyer",
+        "Products": [
+          {
+            "Title": "تراکت a5",
+            "Type": "product",
+            "Slug": "tract-a5-offset",
+            "Code": "P-OFS-5418"
+          },
+          {
+            "Title": "تراکت a4",
+            "Type": "product",
+            "Slug": "tract-a4-offset",
+            "Code": "P-OFS-AB11"
+          },
+          {
+            "Title": "تراکت a6",
+            "Type": "product",
+            "Slug": "tract-a6-offset",
+            "Code": "P-OFS-E0D0"
+          },
+          {
+            "Title": "تراکت B5",
+            "Type": "product",
+            "Slug": "tract-b5-offset",
+            "Code": "P-OFS-4A57"
+          },
+          {
+            "Title": "تراکت B4",
+            "Type": "product",
+            "Slug": "tract-b4-offset-print",
+            "Code": "P-OFS-BFCC"
+          },
+          {
+            "Title": "تراکت B6",
+            "Type": "product",
+            "Slug": "tract-b6-offset",
+            "Code": "P-OFS-6125"
+          },
+          {
+            "Title": "تراکت کرافت a4",
+            "Type": "product",
+            "Slug": "tract-craft-a4-offset",
+            "Code": "P-OFS-55B9"
+          },
+          {
+            "Title": "تراکت کرافت a5",
+            "Type": "product",
+            "Slug": "tract-craft-a5-offset",
+            "Code": "P-OFS-0386"
+          },
+          {
+            "Title": "تراکت کرافت a6",
+            "Type": "product",
+            "Slug": "tract-craft-a6-offset",
+            "Code": "P-OFS-9C5F"
+          }
+        ],
+        "Code": "SC-OFS-99DA"
+      },
+      {
+        "Title": "چاپ پوستر افست",
+        "Type": "subcategory",
+        "Slug": "product-poster-offset",
+        "Products": [
+          {
+            "Title": "چاپ پوستر A3",
+            "Type": "product",
+            "Slug": "poster-a3-offset",
+            "Code": "P-OFS-5945"
+          },
+          {
+            "Title": "چاپ پوسترA2",
+            "Type": "product",
+            "Slug": "poster-a2-offset",
+            "Code": "P-OFS-95A5"
+          },
+          {
+            "Title": "چاپ پوسترB2",
+            "Type": "product",
+            "Slug": "poster-b2-offset",
+            "Code": "P-OFS-D54B"
+          },
+          {
+            "Title": "پوستر B3",
+            "Type": "product",
+            "Slug": "poster-b3-offset",
+            "Code": "P-OFS-9BBA"
+          },
+          {
+            "Title": "پوستر b4",
+            "Type": "product",
+            "Slug": "poster-b4-offset",
+            "Code": "P-OFS-8E11"
+          }
+        ],
+        "Code": "SC-OFS-7E46"
+      },
+      {
+        "Title": "چاپ افست لیبل",
+        "Type": "subcategory",
+        "Slug": "product-lable-offset",
+        "Products": [
+          {
+            "Title": "لیبل سلفون براق",
+            "Type": "product",
+            "Slug": "label-cellophane-glos-offset",
+            "Code": "P-OFS-174D"
+          },
+          {
+            "Title": "لیبل یووی",
+            "Type": "product",
+            "Slug": "label-uv-ofset",
+            "Code": "P-OFS-40B7"
+          },
+          {
+            "Title": "لیبل بدون روکش",
+            "Type": "product",
+            "Slug": "label-without-coating-offset",
+            "Code": "P-OFS-A47A"
+          },
+          {
+            "Title": "لیبل شیشه ای",
+            "Type": "product",
+            "Slug": "label-glass-offset",
+            "Code": "P-OFS-426E"
+          },
+          {
+            "Title": "لیبل سلفون مات",
+            "Type": "product",
+            "Slug": "لیبل-سلفون-مات-افست",
+            "Code": "P-OFS-3CBB"
+          }
+        ],
+        "Code": "SC-OFS-E907"
+      },
+      {
+        "Title": "چاپ فاکتور",
+        "Type": "subcategory",
+        "Slug": "product-offset-invoice",
+        "Products": [
+          {
+            "Title": "کاربن لس دورنگ دو نسخه ای (قرمز- مشکی)",
+            "Type": "product",
+            "Slug": "carben-less-two-version-offset",
+            "Code": "P-OFS-DE94"
+          },
+          {
+            "Title": "کاربن لس تک رنگ مشکی دو برگی",
+            "Type": "product",
+            "Slug": "factor-carbon-less-ncr",
+            "Code": "P-OFS-2A55"
+          },
+          {
+            "Title": "کاربن لس دورنگ سه نسخه ای (قرمز- مشکی)",
+            "Type": "product",
+            "Slug": "factor-carben-less-red-black--offset",
+            "Code": "P-OFS-1101"
+          },
+          {
+            "Title": "کاربن لس تک رنگ مشکی سه برگی",
+            "Type": "product",
+            "Slug": "offset-factor-carbonless-black",
+            "Code": "P-OFS-09A1"
+          },
+          {
+            "Title": "کاربن لس تک رنگ مشکی چهاربرگی",
+            "Type": "product",
+            "Slug": "carben-color-black-four-leaf",
+            "Code": "P-OFS-D7F3"
+          },
+          {
+            "Title": "کاربن لس تک رنگ سورمه ای دو برگی",
+            "Type": "product",
+            "Slug": "carben-less-two-leaf-offset",
+            "Code": "P-OFS-A336"
+          },
+          {
+            "Title": "کاربن لس تک رنگ سورمه ای سه برگی",
+            "Type": "product",
+            "Slug": "threeleafed-navy-blue-monochrome-invoice",
+            "Code": "P-OFS-4135"
+          },
+          {
+            "Title": "کاربن لس چهار رنگ دو برگی",
+            "Type": "product",
+            "Slug": "carbonless-fourcolor-doubleleaf",
+            "Code": "P-OFS-1C7F"
+          },
+          {
+            "Title": "کاربن لس چهار رنگ سه برگی",
+            "Type": "product",
+            "Slug": "carbonless-four-color-three-leaf",
+            "Code": "P-OFS-900B"
+          },
+          {
+            "Title": "تحریر الوان تک رنگ مشکی دو برگی",
+            "Type": "product",
+            "Slug": "two-page-monochromatic-black-colored-notebook",
+            "Code": "P-OFS-BD82"
+          },
+          {
+            "Title": "تحریر الوان تک رنگ مشکی سه برگی",
+            "Type": "product",
+            "Slug": "three-page-monochromatic-black-colored",
+            "Code": "P-OFS-0472"
+          },
+          {
+            "Title": "تحریر الوان دو رنگ دو برگی (قرمز- مشکی)",
+            "Type": "product",
+            "Slug": "invoice-printing-in-two-colors-red-and-black",
+            "Code": "P-OFS-A856"
+          },
+          {
+            "Title": "تحریر الوان دو رنگ سه برگی (قرمز- مشکی)",
+            "Type": "product",
+            "Slug": "two-color-three-page-colored-notebook-red-black",
+            "Code": "P-OFS-2979"
+          },
+          {
+            "Title": "تحریر الوان چهار رنگ دو برگی",
+            "Type": "product",
+            "Slug": "two-page-four-color-colored-typewriter",
+            "Code": "P-OFS-49DC"
+          },
+          {
+            "Title": "تحریر الوان چهار رنگ سه برگی",
+            "Type": "product",
+            "Slug": "four-color-three-page-typewriter",
+            "Code": "P-OFS-7D63"
+          }
+        ],
+        "Code": "SC-OFS-63E7"
+      }
+    ],
+    "Code": "C-OFS"
+  },
+  {
+    "Title": "چاپ و بسته بندی",
+    "Type": "category",
+    "Slug": "packaging",
+    "SubCategories": [
+      {
+        "Title": "چاپ و بسته بندی",
+        "Type": "subcategory",
+        "Slug": "packaging-products",
+        "Products": [
+          {
+            "Title": "چاپ جعبه",
+            "Type": "product",
+            "Slug": "product-print_carton_t2",
+            "Code": "P-PKG-D78C"
+          },
+          {
+            "Title": "پوستر اختصاصی",
+            "Type": "product",
+            "Slug": "product-poster-ofset",
+            "Code": "P-PKG-E588"
+          },
+          {
+            "Title": "چاپ جعبه و کارتن افست اختصاصی",
+            "Type": "product",
+            "Slug": "product-box-printing",
+            "Code": "P-PKG-59CB"
+          },
+          {
+            "Title": "چاپ لیبل رول افست اختصاصی",
+            "Type": "product",
+            "Slug": "product-label-offset-printing",
+            "Code": "P-PKG-2212"
+          },
+          {
+            "Title": "چاپ ست اداری اختصاصی افست",
+            "Type": "product",
+            "Slug": "product-office-set-printing",
+            "Code": "P-PKG-BC3E"
+          },
+          {
+            "Title": "چاپ کاتالوگ افست",
+            "Type": "product",
+            "Slug": "product-dedicated-offset-catalog-printing",
+            "Code": "P-PKG-7AED"
+          },
+          {
+            "Title": "چاپ تقویم سال",
+            "Type": "product",
+            "Slug": "product-calendar-desktop",
+            "Code": "P-PKG-60C4"
+          }
+        ],
+        "Code": "SC-PKG-4AE2"
+      }
+    ],
+    "Code": "C-PKG"
+  },
+  {
+    "Title": "پلات لمینت - اکو سالونت و UV",
+    "Type": "category",
+    "Slug": "eco-solvent-laminate-plot",
+    "SubCategories": [
+      {
+        "Title": "چاپ پوستر با دستگاه پلات",
+        "Type": "subcategory",
+        "Slug": "product-poster-plot",
+        "Products": [
+          {
+            "Title": "چاپ پوستر",
+            "Type": "product",
+            "Slug": "poster-plot",
+            "Code": "P-PLT-8315"
+          }
+        ],
+        "Code": "SC-PLT-D78D"
+      },
+      {
+        "Title": "چاپ استیکر",
+        "Type": "subcategory",
+        "Slug": "product-sticker-print",
+        "Products": [
+          {
+            "Title": "چاپ مش",
+            "Type": "product",
+            "Slug": "mesh-plot",
+            "Code": "P-PLT-19E0"
+          },
+          {
+            "Title": "چاپ انواع استیکر",
+            "Type": "product",
+            "Slug": "sticker-plot",
+            "Code": "P-PLT-5551"
+          }
+        ],
+        "Code": "SC-PLT-3AF1"
+      },
+      {
+        "Title": "سازه های نمایشگاهی",
+        "Type": "subcategory",
+        "Slug": "product-exhibition-structures",
+        "Products": [
+          {
+            "Title": "میز کانتر دو نفره",
+            "Type": "product",
+            "Slug": "table-counter-two-person",
+            "Code": "P-PLT-DCEA"
+          },
+          {
+            "Title": "میز کانتر تاجدار",
+            "Type": "product",
+            "Slug": "table-counter-crowned-plot",
+            "Code": "P-PLT-A23C"
+          },
+          {
+            "Title": "استند ایکس 60x170",
+            "Type": "product",
+            "Slug": "stand-x-60x170-plot",
+            "Code": "P-PLT-3B57"
+          },
+          {
+            "Title": "جاکاتالوگی کلاسیک دو طرفه",
+            "Type": "product",
+            "Slug": "jakatalogi-plot",
+            "Code": "P-PLT-8E58"
+          },
+          {
+            "Title": "استند رو میزی",
+            "Type": "product",
+            "Slug": "stand-on-table-plot",
+            "Code": "P-PLT-496B"
+          },
+          {
+            "Title": "پرژکتور پاپ آپ",
+            "Type": "product",
+            "Slug": "projector-pop-up-plot",
+            "Code": "P-PLT-1F5E"
+          },
+          {
+            "Title": "پایه بوم",
+            "Type": "product",
+            "Slug": "base-canvas-plot",
+            "Code": "P-PLT-9FFA"
+          },
+          {
+            "Title": "هارد کیس",
+            "Type": "product",
+            "Slug": "hard-case-plot",
+            "Code": "P-PLT-20CD"
+          },
+          {
+            "Title": "استند ایکس 200x90",
+            "Type": "product",
+            "Slug": "stand-x-200x90-plot",
+            "Code": "P-PLT-F9BA"
+          },
+          {
+            "Title": "میز کانتر یک نفره",
+            "Type": "product",
+            "Slug": "counter-table-single-person-plot",
+            "Code": "P-PLT-88B6"
+          },
+          {
+            "Title": "جاکاتالوگی ایستاده یک طرفه",
+            "Type": "product",
+            "Slug": "جاکاتالوگی-ایستاده-یک-طرفه-پلات",
+            "Code": "P-PLT-C935"
+          }
+        ],
+        "Code": "SC-PLT-A932"
+      },
+      {
+        "Title": "چاپ شاسی",
+        "Type": "subcategory",
+        "Slug": "product-wood-board-print",
+        "Products": [
+          {
+            "Title": "چاپ شاسی کوچک",
+            "Type": "product",
+            "Slug": "chassis-small-plot",
+            "Code": "P-PLT-B5F0"
+          },
+          {
+            "Title": "چاپ شاسی بزرگ",
+            "Type": "product",
+            "Slug": "chassis-large-plot",
+            "Code": "P-PLT-873D"
+          }
+        ],
+        "Code": "SC-PLT-775F"
+      },
+      {
+        "Title": "چاپ بک لایت",
+        "Type": "subcategory",
+        "Slug": "product-backlight",
+        "Products": [
+          {
+            "Title": "چاپ بک لایت اکو سالونت",
+            "Type": "product",
+            "Slug": "backlight-eco-salon-plot",
+            "Code": "P-PLT-2B94"
+          },
+          {
+            "Title": "چاپ بک لایت ایندور",
+            "Type": "product",
+            "Slug": "backlight-indoor-plot",
+            "Code": "P-PLT-1423"
+          }
+        ],
+        "Code": "SC-PLT-19B7"
+      },
+      {
+        "Title": "چاپ سولیت (گری بگ)",
+        "Type": "subcategory",
+        "Slug": "product-solit-plot",
+        "Products": [
+          {
+            "Title": "چاپ سولیت",
+            "Type": "product",
+            "Slug": "solit-plot",
+            "Code": "P-PLT-FE9B"
+          }
+        ],
+        "Code": "SC-PLT-F98D"
+      },
+      {
+        "Title": "چاپ کاغذ دیواری",
+        "Type": "subcategory",
+        "Slug": "product-wallpaper",
+        "Products": [
+          {
+            "Title": "چاپ کاغذ دیواری طرح کتان",
+            "Type": "product",
+            "Slug": "linen-design-wallpaper",
+            "Code": "P-PLT-B38B"
+          },
+          {
+            "Title": "چاپ کاغذ دیواری طرح چرم",
+            "Type": "product",
+            "Slug": "leather-design-wallpaper",
+            "Code": "P-PLT-43C7"
+          }
+        ],
+        "Code": "SC-PLT-EFA6"
+      },
+      {
+        "Title": "چاپ کنواس",
+        "Type": "subcategory",
+        "Slug": "product-canvas-printing",
+        "Products": [
+          {
+            "Title": "چاپ کنواس ایندور",
+            "Type": "product",
+            "Slug": "print-canvas-indoor",
+            "Code": "P-PLT-7D03"
+          }
+        ],
+        "Code": "SC-PLT-E320"
+      },
+      {
+        "Title": "چاپ پوستر اسنپ",
+        "Type": "subcategory",
+        "Slug": "product-poster-snap-plot",
+        "Products": [
+          {
+            "Title": "چاپ پوستر اسنپ",
+            "Type": "product",
+            "Slug": "poster-snap-plot",
+            "Code": "P-PLT-23D5"
+          }
+        ],
+        "Code": "SC-PLT-DBC7"
+      },
+      {
+        "Title": "سفارش قاب",
+        "Type": "subcategory",
+        "Slug": "product-framed-print-spring-",
+        "Products": [
+          {
+            "Title": "قاب فنری میله ریز برای تابلوهای چاپ",
+            "Type": "product",
+            "Slug": "rod-thin-plot",
+            "Code": "P-PLT-8676"
+          }
+        ],
+        "Code": "SC-PLT-52BB"
+      },
+      {
+        "Title": "چاپ فوم برد",
+        "Type": "subcategory",
+        "Slug": "product-foam-board-printing",
+        "Products": [
+          {
+            "Title": "فوم برد 5 m",
+            "Type": "product",
+            "Slug": "foam-board-5m-plot",
+            "Code": "P-PLT-66D9"
+          }
+        ],
+        "Code": "SC-PLT-4CA8"
+      },
+      {
+        "Title": "چاپ P-P چسبدار",
+        "Type": "subcategory",
+        "Slug": "product-p-p-adhesive-plot",
+        "Products": [
+          {
+            "Title": "چاپ p-p چسبدار",
+            "Type": "product",
+            "Slug": "p-p-adhesive-plot",
+            "Code": "P-PLT-C281"
+          }
+        ],
+        "Code": "SC-PLT-10FF"
+      },
+      {
+        "Title": "چاپ پلات لمینت",
+        "Type": "subcategory",
+        "Slug": "product-print-plot",
+        "Products": [
+          {
+            "Title": "کاغذ تحریر",
+            "Type": "product",
+            "Slug": "paper-writing-plot",
+            "Code": "P-PLT-0633"
+          },
+          {
+            "Title": "چاپ کاغذ کوتد",
+            "Type": "product",
+            "Slug": "paper-coated-plot",
+            "Code": "P-PLT-0A4E"
+          },
+          {
+            "Title": "چاپ کاغذ گلاسه",
+            "Type": "product",
+            "Slug": "paper-glass-plot",
+            "Code": "P-PLT-CB1F"
+          }
+        ],
+        "Code": "SC-PLT-F29B"
+      },
+      {
+        "Title": "پاپ آپ نمایشگاهی",
+        "Type": "subcategory",
+        "Slug": "product-stand-up-plot-plot",
+        "Products": [
+          {
+            "Title": "چاپ استند پاپ آپ",
+            "Type": "product",
+            "Slug": "stand-up-plot-plot",
+            "Code": "P-PLT-DD0E"
+          }
+        ],
+        "Code": "SC-PLT-2C91"
+      },
+      {
+        "Title": "استند رول آپ",
+        "Type": "subcategory",
+        "Slug": "product-roll-up-stand",
+        "Products": [
+          {
+            "Title": "رول آپ 85x200",
+            "Type": "product",
+            "Slug": "roll-up-85x200-plot",
+            "Code": "P-PLT-4B0F"
+          },
+          {
+            "Title": "رول آپ گردان",
+            "Type": "product",
+            "Slug": "roll-up-revolving-plot",
+            "Code": "P-PLT-35E4"
+          },
+          {
+            "Title": "رول آپ 60x160",
+            "Type": "product",
+            "Slug": "roll-up-60x160-plot",
+            "Code": "P-PLT-CAE9"
+          },
+          {
+            "Title": "رول آپ 120x200",
+            "Type": "product",
+            "Slug": "roll-up-120x200-plot",
+            "Code": "P-PLT-267A"
+          },
+          {
+            "Title": "رول آپ 150x200",
+            "Type": "product",
+            "Slug": "roll-up-150x200-plot",
+            "Code": "P-PLT-557F"
+          }
+        ],
+        "Code": "SC-PLT-5389"
+      },
+      {
+        "Title": "پارچه کشسان",
+        "Type": "subcategory",
+        "Slug": "product-elastic-fabric",
+        "Products": [
+          {
+            "Title": "چاپ پارچه کشسان",
+            "Type": "product",
+            "Slug": "پارچه-کشسان-پلات",
+            "Code": "P-PLT-1726"
+          }
+        ],
+        "Code": "SC-PLT-0B72"
+      }
+    ],
+    "Code": "C-PLT"
+  },
+  {
+    "Title": "چاپ پارچه",
+    "Type": "category",
+    "Slug": "fabric-print",
+    "SubCategories": [
+      {
+        "Title": "چاپ پارچه (چاپ روسری، شال، کوسن، پرده و ..)",
+        "Type": "subcategory",
+        "Slug": "product-fabric-print",
+        "Products": [
+          {
+            "Title": "چاپ پارچه ساتن براق",
+            "Type": "product",
+            "Slug": "shiny-satin-fabric-print",
+            "Code": "P-FAB-3969"
+          },
+          {
+            "Title": "چاپ پارچه (بدون جنس)",
+            "Type": "product",
+            "Slug": "fabric-printing-without-chance",
+            "Code": "P-FAB-DAF2"
+          },
+          {
+            "Title": "چاپ پارچه ساتن مات",
+            "Type": "product",
+            "Slug": "matte-satin-fabric-print",
+            "Code": "P-FAB-9D1B"
+          },
+          {
+            "Title": "چاپ پارچه فلامنت",
+            "Type": "product",
+            "Slug": "filament-fabric-print",
+            "Code": "P-FAB-F6A4"
+          },
+          {
+            "Title": "چاپ پارچه مخمل",
+            "Type": "product",
+            "Slug": "print-velvet-fabric",
+            "Code": "P-FAB-B5DC"
+          }
+        ],
+        "Code": "SC-FAB-76BB"
+      },
+      {
+        "Title": "چاپ پارچه محرم‌",
+        "Type": "subcategory",
+        "Slug": "product-muharram-fabric-printing",
+        "Products": [
+          {
+            "Title": "پارچه محرم",
+            "Type": "product",
+            "Slug": "muharram-fabric",
+            "Code": "P-FAB-8C0A"
+          },
+          {
+            "Title": "پرده محرم",
+            "Type": "product",
+            "Slug": "muharram-curtain",
+            "Code": "P-FAB-C903"
+          },
+          {
+            "Title": "پرچم محرم",
+            "Type": "product",
+            "Slug": "muharram-flag",
+            "Code": "P-FAB-F9B9"
+          },
+          {
+            "Title": "کتیبه مذهبی",
+            "Type": "product",
+            "Slug": "religious-inscription",
+            "Code": "P-FAB-8A7E"
+          }
+        ],
+        "Code": "SC-FAB-DE0E"
+      },
+      {
+        "Title": "چاپ شال و روسری",
+        "Type": "subcategory",
+        "Slug": "product-print-shawls-and-scarves",
+        "Products": [
+          {
+            "Title": "چاپ پارچه شال و روسری",
+            "Type": "product",
+            "Slug": "scarf-print",
+            "Code": "P-FAB-233A"
+          }
+        ],
+        "Code": "SC-FAB-A161"
+      },
+      {
+        "Title": "چاپ رو مبلی",
+        "Type": "subcategory",
+        "Slug": "product-furniture-printing",
+        "Products": [
+          {
+            "Title": "چاپ روی رومبلی",
+            "Type": "product",
+            "Slug": "sofa-fabric-printing",
+            "Code": "P-FAB-E781"
+          }
+        ],
+        "Code": "SC-FAB-9A52"
+      }
+    ],
+    "Code": "C-FAB"
+  },
+  {
+    "Title": "هدایای تبلیغاتی",
+    "Type": "category",
+    "Slug": "promotional-gifts",
+    "SubCategories": [
+      {
+        "Title": "چاپ اختصاصی هدایای تبلیغاتی خاص",
+        "Type": "subcategory",
+        "Slug": "product-special-promotional",
+        "Products": [
+          {
+            "Title": "اختصاصی هدایا و تبلیغات",
+            "Type": "product",
+            "Slug": "dedicated-gifts-and-advertising",
+            "Code": "P-GFT-E36D"
+          }
+        ],
+        "Code": "SC-GFT-4BEC"
+      },
+      {
+        "Title": "چاپ پرچم",
+        "Type": "subcategory",
+        "Slug": "product-flag-print",
+        "Products": [
+          {
+            "Title": "چاپ پرچم ایران",
+            "Type": "product",
+            "Slug": "iranian-flag-printing",
+            "Code": "P-GFT-0B72"
+          },
+          {
+            "Title": "ریسه پرچم رنگی عمومی",
+            "Type": "product",
+            "Slug": "general-colored-flag-rope",
+            "Code": "P-GFT-B869"
+          },
+          {
+            "Title": "چاپ ریسه پرچم اختصاصی",
+            "Type": "product",
+            "Slug": "exclusive-flag-ribbon-printing",
+            "Code": "P-GFT-6844"
+          }
+        ],
+        "Code": "SC-GFT-AF9B"
+      },
+      {
+        "Title": "حکاکی روی پلاک استیل",
+        "Type": "subcategory",
+        "Slug": "product-engraving-plaque-gift",
+        "Products": [
+          {
+            "Title": "حکاکی پلاک",
+            "Type": "product",
+            "Slug": "engraving-plaque-gift",
+            "Code": "P-GFT-86F8"
+          }
+        ],
+        "Code": "SC-GFT-EB76"
+      },
+      {
+        "Title": "چاپ زیر لیوانی PVC گرد",
+        "Type": "subcategory",
+        "Slug": "product-round-pvc-coaster",
+        "Products": [
+          {
+            "Title": "چاپ زیر لیوانی چوبی گرد 10 در 10",
+            "Type": "product",
+            "Slug": "round-wooden-cup",
+            "Code": "P-GFT-7822"
+          },
+          {
+            "Title": "چاپ زیرلیوانی پی وی سی 8 میل",
+            "Type": "product",
+            "Slug": "8-mm-round-pvc-coaster",
+            "Code": "P-GFT-EECA"
+          }
+        ],
+        "Code": "SC-GFT-C006"
+      },
+      {
+        "Title": "چاپ پازل",
+        "Type": "subcategory",
+        "Slug": "product-print-photos-on-puzzle",
+        "Products": [
+          {
+            "Title": "چاپ پازل ام دی اف",
+            "Type": "product",
+            "Slug": "mdf-puzzle",
+            "Code": "P-GFT-D299"
+          },
+          {
+            "Title": "چاپ پازل مقوایی",
+            "Type": "product",
+            "Slug": "cardboard-puzzle",
+            "Code": "P-GFT-4181"
+          }
+        ],
+        "Code": "SC-GFT-8883"
+      },
+      {
+        "Title": "چاپ پیکسل تبلیغاتی",
+        "Type": "subcategory",
+        "Slug": "product-pixels",
+        "Products": [
+          {
+            "Title": "چاپ پیکسل سوزنی",
+            "Type": "product",
+            "Slug": "needle-pixels",
+            "Code": "P-GFT-733A"
+          },
+          {
+            "Title": "چاپ پیکسل مگنتی",
+            "Type": "product",
+            "Slug": "magnetic-pixels",
+            "Code": "P-GFT-9753"
+          },
+          {
+            "Title": "چاپ پیکسل جاسویچی",
+            "Type": "product",
+            "Slug": "jasovichi-pixels",
+            "Code": "P-GFT-15E7"
+          }
+        ],
+        "Code": "SC-GFT-5BDE"
+      },
+      {
+        "Title": "چاپ تیشرت",
+        "Type": "subcategory",
+        "Slug": "product-t-shirt-print",
+        "Products": [
+          {
+            "Title": "چاپ تیشرت سفید",
+            "Type": "product",
+            "Slug": "white-t-shirt-printing",
+            "Code": "P-GFT-7F08"
+          },
+          {
+            "Title": "چاپ تیشرت طوسی (ملانژ)",
+            "Type": "product",
+            "Slug": "gray-t-shirt-printing",
+            "Code": "P-GFT-90D6"
+          }
+        ],
+        "Code": "SC-GFT-3CD2"
+      },
+      {
+        "Title": "چاپ طرح دلخواه روی کاشی",
+        "Type": "subcategory",
+        "Slug": "product-tile-printing",
+        "Products": [
+          {
+            "Title": "چاپ کاشی",
+            "Type": "product",
+            "Slug": "tile-print",
+            "Code": "P-GFT-93AC"
+          }
+        ],
+        "Code": "SC-GFT-84E4"
+      },
+      {
+        "Title": "چاپ بشقاب سابلیمیشن",
+        "Type": "subcategory",
+        "Slug": "product-plate-printing",
+        "Products": [
+          {
+            "Title": "چاپ بشقاب کوچک",
+            "Type": "product",
+            "Slug": "small-square-plate",
+            "Code": "P-GFT-A2C4"
+          },
+          {
+            "Title": "چاپ بشقاب بزرگ",
+            "Type": "product",
+            "Slug": "big-square-plate",
+            "Code": "P-GFT-AC23"
+          }
+        ],
+        "Code": "SC-GFT-D974"
+      },
+      {
+        "Title": "چاپ خودکار تبلیغاتی",
+        "Type": "subcategory",
+        "Slug": "product-laser-printing-on-pen",
+        "Products": [
+          {
+            "Title": "خودکار فلزی",
+            "Type": "product",
+            "Slug": "laser-printing-on-metal-pen",
+            "Code": "P-GFT-2D06"
+          },
+          {
+            "Title": "خودکار پلاستیکی کد 1",
+            "Type": "product",
+            "Slug": "plastic-pen-code-1",
+            "Code": "P-GFT-67BB"
+          },
+          {
+            "Title": "خودکار پلاستیکی کد 2",
+            "Type": "product",
+            "Slug": "plastic-pen-code-2",
+            "Code": "P-GFT-72CA"
+          },
+          {
+            "Title": "خودکار تاچ کمر پیچ",
+            "Type": "product",
+            "Slug": "pen-touch-waist-screw",
+            "Code": "P-GFT-23E2"
+          },
+          {
+            "Title": "خودکار پلاستیکی گیره پهن",
+            "Type": "product",
+            "Slug": "plastic-pen",
+            "Code": "P-GFT-5561"
+          },
+          {
+            "Title": "خودکار استند موبایلی و ضد عفونی کننده به همراه چاپ تک رنگ",
+            "Type": "product",
+            "Slug": "pen-mobile-stand-and-disinfectant",
+            "Code": "P-GFT-E4E1"
+          },
+          {
+            "Title": "خودکار های لایت دار",
+            "Type": "product",
+            "Slug": "printing-illuminated-pens",
+            "Code": "P-GFT-8F95"
+          }
+        ],
+        "Code": "SC-GFT-901D"
+      },
+      {
+        "Title": "چاپ بج سینه (اتیکت سینه)",
+        "Type": "subcategory",
+        "Slug": "product-chest-logo-print",
+        "Products": [
+          {
+            "Title": "بج سینه طلایی",
+            "Type": "product",
+            "Slug": "chest-logo-gold",
+            "Code": "P-GFT-D9F9"
+          },
+          {
+            "Title": "بج پلی استر",
+            "Type": "product",
+            "Slug": "polyester-chest-logo",
+            "Code": "P-GFT-3906"
+          },
+          {
+            "Title": "بج آنادایز",
+            "Type": "product",
+            "Slug": "anadize-chest-logo",
+            "Code": "P-GFT-B790"
+          },
+          {
+            "Title": "بج سینه نقره ای",
+            "Type": "product",
+            "Slug": "silver-chest-logo",
+            "Code": "P-GFT-C378"
+          }
+        ],
+        "Code": "SC-GFT-20F7"
+      },
+      {
+        "Title": "جاموبایلی تبلیغاتی",
+        "Type": "subcategory",
+        "Slug": "product-mobile-advertising-holder",
+        "Products": [
+          {
+            "Title": "سفارش جا موبایلی چوبی",
+            "Type": "product",
+            "Slug": "wooden-mobile-holder",
+            "Code": "P-GFT-08FC"
+          },
+          {
+            "Title": "چاپ هولدر چوبی موبایل",
+            "Type": "product",
+            "Slug": "mobile-wooden-holder",
+            "Code": "P-GFT-B40B"
+          },
+          {
+            "Title": "چاپ هولدر موبایل آلومینیومی",
+            "Type": "product",
+            "Slug": "aluminum-mobile-phone-holder-printing",
+            "Code": "P-GFT-FDD4"
+          }
+        ],
+        "Code": "SC-GFT-390D"
+      },
+      {
+        "Title": "چاپ دفترچه یادداشت",
+        "Type": "subcategory",
+        "Slug": "product-kohan-notebook-printing",
+        "Products": [
+          {
+            "Title": "دفتر چه یاداشت چرم مصنوعی(17*25)",
+            "Type": "product",
+            "Slug": "synthetic-leather-notebook-size--1725",
+            "Code": "P-GFT-BDEB"
+          },
+          {
+            "Title": "دفتر چه یاداشت چرم مصنوعی(10*14)",
+            "Type": "product",
+            "Slug": "leather-notebook",
+            "Code": "P-GFT-48F6"
+          },
+          {
+            "Title": "دفتر چه یاداشت چوبی(10*13)",
+            "Type": "product",
+            "Slug": "wooden-notebook",
+            "Code": "P-GFT-F2E3"
+          },
+          {
+            "Title": "یاداشت کرافت بدون خط (5.5*8.5)",
+            "Type": "product",
+            "Slug": "craft-note",
+            "Code": "P-GFT-1499"
+          },
+          {
+            "Title": "دفترچه یاداشت کرافت 8.5*5.5",
+            "Type": "product",
+            "Slug": "craft-notebook",
+            "Code": "P-GFT-5427"
+          }
+        ],
+        "Code": "SC-GFT-5245"
+      },
+      {
+        "Title": "چاپ پارک فون (نمایش شماره پارک خودرو)",
+        "Type": "subcategory",
+        "Slug": "product-parkphone-print",
+        "Products": [
+          {
+            "Title": "چاپ پارک فون",
+            "Type": "product",
+            "Slug": "parkphone-for-car-number-notes",
+            "Code": "P-GFT-8406"
+          }
+        ],
+        "Code": "SC-GFT-93EF"
+      },
+      {
+        "Title": "چاپ ساعت",
+        "Type": "subcategory",
+        "Slug": "product-clock-printing",
+        "Products": [
+          {
+            "Title": "بتنی ساروج",
+            "Type": "product",
+            "Slug": "saroj-concrete-clock-printing",
+            "Code": ""
+          },
+          {
+            "Title": "بتنی دوران",
+            "Type": "product",
+            "Slug": "بتنی-دوران-هدایا-تبلیغات",
+            "Code": ""
+          },
+          {
+            "Title": "بتنی کومو",
+            "Type": "product",
+            "Slug": "como-concrete-desk-clock-printing",
+            "Code": ""
+          },
+          {
+            "Title": "بتنی آرک",
+            "Type": "product",
+            "Slug": "concrete-arc-desktop-clock",
+            "Code": ""
+          }
+        ],
+        "Code": "SC-GFT-29EF"
+      },
+      {
+        "Title": "حکاکی لیزری",
+        "Type": "subcategory",
+        "Slug": "product-laser-engraving",
+        "Products": [
+          {
+            "Title": "حکاکی لیزری پلاک",
+            "Type": "product",
+            "Slug": "laser-plate-engraving",
+            "Code": "P-GFT-95FB"
+          }
+        ],
+        "Code": "SC-GFT-8231"
+      },
+      {
+        "Title": "چراغ قوه تبلیغاتی",
+        "Type": "subcategory",
+        "Slug": "product-flashlight-logo-printing",
+        "Products": [
+          {
+            "Title": "سفارش جا کلیدی تبلیغاتی چراغ قوه دار",
+            "Type": "product",
+            "Slug": "flashlight",
+            "Code": "P-GFT-D051"
+          }
+        ],
+        "Code": "SC-GFT-0A49"
+      },
+      {
+        "Title": "مهر فوری",
+        "Type": "subcategory",
+        "Slug": "product-stamp-order",
+        "Products": [
+          {
+            "Title": "مهر برجسته",
+            "Type": "product",
+            "Slug": "مهر-برجسته-هدایا-تبلیغات",
+            "Code": "P-GFT-2ABC"
+          }
+        ],
+        "Code": "SC-GFT-18EE"
+      },
+      {
+        "Title": "ست محصولات چوبی تبلیغاتی",
+        "Type": "subcategory",
+        "Slug": "product-printing-wooden-products",
+        "Products": [
+          {
+            "Title": "ست اداری جا چسب دار",
+            "Type": "product",
+            "Slug": "adhesive-office-set",
+            "Code": "P-GFT-05ED"
+          },
+          {
+            "Title": "با جا کارت",
+            "Type": "product",
+            "Slug": "box-and-place-of-business-card",
+            "Code": ""
+          },
+          {
+            "Title": "بدون جا کارت",
+            "Type": "product",
+            "Slug": "no-box-and-place-of-business-card",
+            "Code": ""
+          },
+          {
+            "Title": "قلک",
+            "Type": "product",
+            "Slug": "wooden-money-piggy-bank",
+            "Code": "P-GFT-D2B8"
+          },
+          {
+            "Title": "جا دستمال کاغذی رولی",
+            "Type": "product",
+            "Slug": "hold-a-paper-towel",
+            "Code": "P-GFT-4AE8"
+          },
+          {
+            "Title": "کازیه کشو دار دوبل",
+            "Type": "product",
+            "Slug": "case-drawer",
+            "Code": "P-GFT-4041"
+          },
+          {
+            "Title": "کازیه 4طبقه کلاسیک",
+            "Type": "product",
+            "Slug": "case-4",
+            "Code": "P-GFT-A71F"
+          },
+          {
+            "Title": "جعبه پذیرایی",
+            "Type": "product",
+            "Slug": "wooden-reception-box",
+            "Code": "P-GFT-A28D"
+          },
+          {
+            "Title": "استند موبایل (7.5*12)سانتیمتر",
+            "Type": "product",
+            "Slug": "wooden-mobile-holder-stand-7-12",
+            "Code": ""
+          },
+          {
+            "Title": "استند موبایل (5.5*9) سانتیمتر",
+            "Type": "product",
+            "Slug": "5-59",
+            "Code": ""
+          },
+          {
+            "Title": "جا دستمال کاغذی",
+            "Type": "product",
+            "Slug": "mobile-stand",
+            "Code": "P-GFT-F2BC"
+          }
+        ],
+        "Code": "SC-GFT-F0E4"
+      },
+      {
+        "Title": "هدایای تبلیغاتی مدیریتی",
+        "Type": "subcategory",
+        "Slug": "product-advertising-management-set",
+        "Products": [
+          {
+            "Title": "K1فلاسک - کیف دستی زیپی - خودکار فلزی - جای کارت ویزیت - جاکلیدی ریموتی",
+            "Type": "product",
+            "Slug": "k1",
+            "Code": "P-GFT-B637"
+          },
+          {
+            "Title": "K2فلاسک - کیف دوشی اسپرت بزرگ",
+            "Type": "product",
+            "Slug": "keychain-pencil-case-set",
+            "Code": "P-GFT-BEE0"
+          },
+          {
+            "Title": "K3فلاسک - کیف دوشی اسپرت - جاکلیدی",
+            "Type": "product",
+            "Slug": "set-card-key",
+            "Code": "P-GFT-D314"
+          },
+          {
+            "Title": "K4فلاسک دماسنج دار _پاور بانک ال سی دی دار10000میلی آمپر_کیف پاسپورتی و دوشی چرم طبیعی",
+            "Type": "product",
+            "Slug": "k4",
+            "Code": "P-GFT-C90B"
+          },
+          {
+            "Title": "K5کیف دوشی چرم_فلاسک دما سنج دار_ جا کلیدی",
+            "Type": "product",
+            "Slug": "k26",
+            "Code": "P-GFT-4C2A"
+          },
+          {
+            "Title": "K6 فلاسک - کیف دستی چرم طبیعی - جعبه نفیس -اسپیکر - باور بانک 10000 میلی آمپر",
+            "Type": "product",
+            "Slug": "k10",
+            "Code": "P-GFT-E258"
+          },
+          {
+            "Title": "K7کیف پولپالتویی-جا کارت ویزیت آکاردئونی-جا کلیدی آویز-کمر بند ترمو",
+            "Type": "product",
+            "Slug": "k8",
+            "Code": "P-GFT-0304"
+          },
+          {
+            "Title": "K8 خودکار _جا کارتی مشکی کوره ای _ جا کلیدی مشکی _ یاداشت",
+            "Type": "product",
+            "Slug": "k5",
+            "Code": "P-GFT-97B2"
+          },
+          {
+            "Title": "K9کیف پول - خودکار - جای کارت ویزیت - جاکلیدی",
+            "Type": "product",
+            "Slug": "k6",
+            "Code": "P-GFT-4D69"
+          },
+          {
+            "Title": "K10دفتر یادداشت - خودکار - جای کارت ویزیت -  جا کلیدی",
+            "Type": "product",
+            "Slug": "k7",
+            "Code": "P-GFT-0219"
+          },
+          {
+            "Title": "K11کیف پول پالتویی-جای کارت ویزیت الومینیوم-خودکار-جاکلیدی",
+            "Type": "product",
+            "Slug": "k9",
+            "Code": "P-GFT-533F"
+          },
+          {
+            "Title": "K12کیف پول پالتویی ترمو-جای کارت ویزیت طلایی-جاکلیدی- خودکار ترمو",
+            "Type": "product",
+            "Slug": "k11",
+            "Code": "P-GFT-FF5E"
+          },
+          {
+            "Title": "K13کیف پول پالتویی زبانه دار-جای کارت ویزیت طلایی-جاکلیدی-فلش مموری 16 گیگ",
+            "Type": "product",
+            "Slug": "k12",
+            "Code": "P-GFT-1904"
+          },
+          {
+            "Title": "K14کیف پول پالتویی زبانه دار-جای کارت ویزیت طلایی-جا کلیدی-خودکار",
+            "Type": "product",
+            "Slug": "k13",
+            "Code": "P-GFT-A61C"
+          },
+          {
+            "Title": "K15کیف دستی زیپی - خودکار - جای کارت ویزیت - جاکلیدی",
+            "Type": "product",
+            "Slug": "k14",
+            "Code": "P-GFT-1A65"
+          },
+          {
+            "Title": "K16کیف پول - جای کارت ویزیت - جاکلیدی",
+            "Type": "product",
+            "Slug": "k15",
+            "Code": "P-GFT-8161"
+          },
+          {
+            "Title": "K17کیف پول پالتویی ترمو-جای کارت ویزیت نقره خش دار-جا کلیدی- خودکار  نقره ای فلزی",
+            "Type": "product",
+            "Slug": "16-k",
+            "Code": "P-GFT-3356"
+          },
+          {
+            "Title": "K26خودکار فلزی نفیس - جای ریموتی",
+            "Type": "product",
+            "Slug": "leather-phone-case-documents-elsa",
+            "Code": "P-GFT-FAAE"
+          },
+          {
+            "Title": "K27خودکار فلزی - جاکلیدی",
+            "Type": "product",
+            "Slug": "leather-phone-documents-case",
+            "Code": "P-GFT-A2FD"
+          },
+          {
+            "Title": "G7 جا کارت ویزیت",
+            "Type": "product",
+            "Slug": "leather-phone-case-diba",
+            "Code": "P-GFT-0EA2"
+          },
+          {
+            "Title": "G10جا کارت ویزیت",
+            "Type": "product",
+            "Slug": "leather-phone-case-documents-savin",
+            "Code": "P-GFT-F235"
+          },
+          {
+            "Title": "G9جا کارت ویزیت",
+            "Type": "product",
+            "Slug": "leather-phone-case-maserati",
+            "Code": "P-GFT-F178"
+          },
+          {
+            "Title": "K18کیف پول پالتویی-جای کارت ویزیت آلومینیوم- جاکلیدی آویز-فلش مموری16 گیگ",
+            "Type": "product",
+            "Slug": "k18-management-set",
+            "Code": "P-GFT-474D"
+          },
+          {
+            "Title": "K19کیف پول پالتویی-جای کارت ویزیت-جا کلیدی-خودکار-فلش مموری16 گیگ",
+            "Type": "product",
+            "Slug": "k19-management-set",
+            "Code": "P-GFT-4547"
+          },
+          {
+            "Title": "K20کیف پول - خودکار - جای کارت ویزیت آکاردیون - جاکلیدی",
+            "Type": "product",
+            "Slug": "k20-management-set",
+            "Code": "P-GFT-0CFB"
+          },
+          {
+            "Title": "K21کیف پول پالتویی چرم طبیعی _جا کلیدی طلایی _ خودکار فلزی",
+            "Type": "product",
+            "Slug": "k21-management-set",
+            "Code": "P-GFT-16DF"
+          },
+          {
+            "Title": "K22دفتر یادداشت - خودکار - جای کارت ویزیت -جا کلیدی",
+            "Type": "product",
+            "Slug": "k22-management-set",
+            "Code": "P-GFT-F87E"
+          },
+          {
+            "Title": "K23جای کارت ویزیت مسی رنگ_فلش مموری 16 گیگ_جا کلیدی مسی رنگ _خودکار مسی رنگ",
+            "Type": "product",
+            "Slug": "k23-management-set",
+            "Code": "P-GFT-335D"
+          },
+          {
+            "Title": "K24کیف پول زبانه دار - خودکار - جای کارت ویزیت - جاکلیدی",
+            "Type": "product",
+            "Slug": "k24-management-set",
+            "Code": "P-GFT-6D9C"
+          },
+          {
+            "Title": "K25خودکار فلزی - جا کارتی - جا کلیدی",
+            "Type": "product",
+            "Slug": "k25کیف-پول-پالتویی-زبانه-دار-جای-کارت-ویزیت---جا-کلیدی-هدایا-تبلیغات",
+            "Code": "P-GFT-2C0F"
+          },
+          {
+            "Title": "K28ست بتنی اداری روکو",
+            "Type": "product",
+            "Slug": "roku-k28",
+            "Code": "P-GFT-016F"
+          },
+          {
+            "Title": "K29ست بتنی اداری دکو",
+            "Type": "product",
+            "Slug": "deco-k29",
+            "Code": "P-GFT-0E03"
+          },
+          {
+            "Title": "K30ست بتنی اداری باروک",
+            "Type": "product",
+            "Slug": "k30-management-set",
+            "Code": "P-GFT-D1B5"
+          },
+          {
+            "Title": "K31 جای کاغذ و خودکار بتنی روکو",
+            "Type": "product",
+            "Slug": "k31-management-set",
+            "Code": "P-GFT-F6DD"
+          },
+          {
+            "Title": "K32جای کارت/یاداشت و قلمدان دوبل گردویی ایران",
+            "Type": "product",
+            "Slug": "k32-management-set",
+            "Code": "P-GFT-5106"
+          },
+          {
+            "Title": "k1006مینی پرسو-فرنچ پرس-ماگ درب دار- قاشق استیل-جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "management-set-k1006",
+            "Code": "P-GFT-F29B"
+          },
+          {
+            "Title": "k1008تراول ماگ قفلی-دفترچه یاداشت اروپایی-ماگ سرامیکی-هیتر ماگ- قاشق استیل-جعبه سخت نفیس-",
+            "Type": "product",
+            "Slug": "promotional-gift-set-k1008",
+            "Code": "P-GFT-17F1"
+          },
+          {
+            "Title": "K1030 پاور بانک 10000 - دفترچه اروپایی - جا کارتی - خودکار فلزی - جا کلیدی - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "k1030-management-set",
+            "Code": "P-GFT-9872"
+          },
+          {
+            "Title": "K1034  دفترچه یادداشت اروپایی - پایه نگهدارنده ی گوشی فلزی - خودکار فلزی - جا کلیدی فلزی - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "k1034-management-set",
+            "Code": "P-GFT-DE78"
+          },
+          {
+            "Title": "K1035 آسیاب سه گوش استیل - موکاپات قهوه - تمپر فلزی - 2عدد شات پیرکس - شیشه دانه قهوه - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "promotional-gift-set-k1035",
+            "Code": "P-GFT-592F"
+          },
+          {
+            "Title": "K 1037 مینی پرسو - آسیاب سه گوش استیل - 2 عدد شات پیرکس - شیشه دانه قهوه - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "promotional-gift-set-k1037",
+            "Code": "P-GFT-981E"
+          },
+          {
+            "Title": "K1039 فلاسک درجه دار هوشمند - موکاپات قهوه - تمپر فلزی - 2 عدد شات قهوه به همراه زیر بامبو  - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "promotional-gift-set-k1039",
+            "Code": "P-GFT-0942"
+          },
+          {
+            "Title": "K1043 فلاسک هوشمند درجه دار - ماگ سرامیکی درب دار - قاشق استیل - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "management-set-k1043",
+            "Code": "P-GFT-8513"
+          },
+          {
+            "Title": "K1045 فرنچ پرس - 3 عدد شیشه دمنوش - بابونه -جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "promotional-gift-set-k1045",
+            "Code": "P-GFT-ADD9"
+          },
+          {
+            "Title": "K1051 فلاسک نیم لیتری به همراه سه عدد لیوان استیل - فرنچ پرس - شیشه دمنوش - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "management-set-k1051",
+            "Code": "P-GFT-8803"
+          },
+          {
+            "Title": "K1055 فرنچ پرس - خودکار فلزی  - دفترچه یادداشت اروپایی - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "k1055-management-set",
+            "Code": "P-GFT-374D"
+          },
+          {
+            "Title": "K1056 فلاسک درجه دار هوشمند - جا کلیدی - جا کارتی - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "k1056-management-set",
+            "Code": "P-GFT-42E9"
+          },
+          {
+            "Title": "K1057 موکاپات قهوه - تمپر فلزی - 2 عدد شات به همراه زیر بامبو - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "k1057-management-half-set",
+            "Code": "P-GFT-82CA"
+          },
+          {
+            "Title": "K1059 فرنچ پرس - 2 عدد فنجان سرامیکی به همراه زیر بامبو - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "k1059-management-half-set",
+            "Code": "P-GFT-743B"
+          },
+          {
+            "Title": "K1071 پاور بانک 10000- کیت پند کاره موبایل - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "k1071-management-half-set",
+            "Code": "P-GFT-9691"
+          },
+          {
+            "Title": "K1072 پاور بانک 5000 مک سیف دار اپل - ولت آیفون - پایه نگهدارنده گوشی - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "k1072-management-half-set",
+            "Code": "P-GFT-8FE1"
+          },
+          {
+            "Title": "K1074 مینی اسپیکر - خودکار فلزی - فلش مموری فلزی - جعبه8 سخت نفیس",
+            "Type": "product",
+            "Slug": "k1074-management-half-set",
+            "Code": "P-GFT-24B3"
+          },
+          {
+            "Title": "K1076 جاکارتی پرم و آلمینیوم - خودکار فلزی  - جعبه سخت نفیس",
+            "Type": "product",
+            "Slug": "k1076-management-half-set",
+            "Code": "P-GFT-C237"
+          }
+        ],
+        "Code": "SC-GFT-8C38"
+      },
+      {
+        "Title": "چاپ لیوان (ماگ)",
+        "Type": "subcategory",
+        "Slug": "product-mag",
+        "Products": [
+          {
+            "Title": "لیوان ساده",
+            "Type": "product",
+            "Slug": "print-photo-on-simple-glass",
+            "Code": "P-GFT-98A9"
+          },
+          {
+            "Title": "لیوان دسته رنگی وداخل رنگی",
+            "Type": "product",
+            "Slug": "colored-and-in-colored-glass",
+            "Code": "P-GFT-B45F"
+          },
+          {
+            "Title": "ماگ حرارتی",
+            "Type": "product",
+            "Slug": "magic-mug",
+            "Code": "P-GFT-C8B7"
+          },
+          {
+            "Title": "نیم ماگ داخل و دسته رنگی",
+            "Type": "product",
+            "Slug": "half-mag-print",
+            "Code": "P-GFT-28B1"
+          },
+          {
+            "Title": "قندان",
+            "Type": "product",
+            "Slug": "printing-on-sugar-cane",
+            "Code": "P-GFT-6795"
+          },
+          {
+            "Title": "لیوان رنگی دسته قلبی",
+            "Type": "product",
+            "Slug": "colored-cup-with-heart-handle",
+            "Code": "P-GFT-44BD"
+          }
+        ],
+        "Code": "SC-GFT-D4B2"
+      },
+      {
+        "Title": "زیردستی اداری A4 تخته شاسی",
+        "Type": "subcategory",
+        "Slug": "product-clipboard",
+        "Products": [
+          {
+            "Title": "تخته شاسی (زیر دستی) A4 ام دی اف",
+            "Type": "product",
+            "Slug": "under-hand-a4-mdf",
+            "Code": "P-GFT-0BAD"
+          },
+          {
+            "Title": "زیر دستی A4 پلکسی (تخته شاسی)",
+            "Type": "product",
+            "Slug": "plexiglas",
+            "Code": "P-GFT-66E9"
+          }
+        ],
+        "Code": "SC-GFT-89A9"
+      },
+      {
+        "Title": "تقویم رومیزی سال",
+        "Type": "subcategory",
+        "Slug": "product-desktop-calendar",
+        "Products": [
+          {
+            "Title": "تقویم رو میزی دریا",
+            "Type": "product",
+            "Slug": "calendar_darya",
+            "Code": "P-GFT-C544"
+          },
+          {
+            "Title": "تقویم رو میزی الینا",
+            "Type": "product",
+            "Slug": "calendar-elina",
+            "Code": "P-GFT-297B"
+          },
+          {
+            "Title": "تقویم رو میزی مینیاتور",
+            "Type": "product",
+            "Slug": "calendar-miniator",
+            "Code": "P-GFT-3191"
+          },
+          {
+            "Title": "تقویم رو میزی ستایش",
+            "Type": "product",
+            "Slug": "calendar-setayesh",
+            "Code": "P-GFT-788F"
+          },
+          {
+            "Title": "تقویم رو میزی نگین",
+            "Type": "product",
+            "Slug": "calendar-amitis",
+            "Code": "P-GFT-E6F8"
+          },
+          {
+            "Title": "تقویم رو میزی سورن",
+            "Type": "product",
+            "Slug": "calendar-soren",
+            "Code": "P-GFT-8750"
+          },
+          {
+            "Title": "تقویم رو میزی جهان",
+            "Type": "product",
+            "Slug": "calendar-on-the-world-table",
+            "Code": "P-GFT-5603"
+          },
+          {
+            "Title": "تقویم رو میزی طلا",
+            "Type": "product",
+            "Slug": "anna-calendar",
+            "Code": "P-GFT-A422"
+          },
+          {
+            "Title": "تقویم رو میزی تذهیب",
+            "Type": "product",
+            "Slug": "calendar-on-table-tazhib",
+            "Code": "P-GFT-A325"
+          },
+          {
+            "Title": "تقویم رو میزی رویال(17*12)",
+            "Type": "product",
+            "Slug": "calendar-royal",
+            "Code": "P-GFT-EA66"
+          },
+          {
+            "Title": "تقویم رو میزی رها (12*17)",
+            "Type": "product",
+            "Slug": "cellphone-desktop-calendar",
+            "Code": "P-GFT-9F44"
+          },
+          {
+            "Title": "تقویم رو میزی ساحل (12*17)",
+            "Type": "product",
+            "Slug": "hardcover-flower-table-calendar",
+            "Code": "P-GFT-A590"
+          },
+          {
+            "Title": "تقویم رو میزی دنیا",
+            "Type": "product",
+            "Slug": "تقویم-رو-میزی-کهن-هدایا-تبلیغات",
+            "Code": "P-GFT-D34A"
+          },
+          {
+            "Title": "تقویم رو میزی ملانی",
+            "Type": "product",
+            "Slug": "melanie-desk-calendar",
+            "Code": "P-GFT-C610"
+          },
+          {
+            "Title": "تقویم رومیزی بتنی دماوند",
+            "Type": "product",
+            "Slug": "damavand-concrete-calendar",
+            "Code": "P-GFT-027D"
+          },
+          {
+            "Title": "تقویم رومیزی بتنی طاق",
+            "Type": "product",
+            "Slug": "arch-desk-calendar",
+            "Code": "P-GFT-DE10"
+          }
+        ],
+        "Code": "SC-GFT-949A"
+      },
+      {
+        "Title": "چاپ سررسید 1404",
+        "Type": "subcategory",
+        "Slug": "product-calendar-book",
+        "Products": [
+          {
+            "Title": "چاپ سالنامه ژوبین (ارگانایزر)",
+            "Type": "product",
+            "Slug": "binder-yearbook",
+            "Code": "P-GFT-64AC"
+          }
+        ],
+        "Code": "SC-GFT-2CEC"
+      },
+      {
+        "Title": "فلش تبلیغاتی",
+        "Type": "subcategory",
+        "Slug": "product-advertising-flash",
+        "Products": [
+          {
+            "Title": "سفارش چاپ فلش فلزی",
+            "Type": "product",
+            "Slug": "metal-flash",
+            "Code": "P-GFT-A680"
+          },
+          {
+            "Title": "سفارش و چاپ فلش کارتی",
+            "Type": "product",
+            "Slug": "flash-card",
+            "Code": "P-GFT-5FE8"
+          }
+        ],
+        "Code": "SC-GFT-0FA0"
+      },
+      {
+        "Title": "ضد عفونی کننده هوشمند",
+        "Type": "subcategory",
+        "Slug": "product-ضد-عفونی-کننده-هوشمند-هدایا-تبلیغات",
+        "Products": [
+          {
+            "Title": "ضد عفونی کننده",
+            "Type": "product",
+            "Slug": "smart-disinfectant",
+            "Code": "P-GFT-8814"
+          }
+        ],
+        "Code": "SC-GFT-78C1"
+      },
+      {
+        "Title": "چاپ تراول ماگ",
+        "Type": "subcategory",
+        "Slug": "product-travel-mug-printing",
+        "Products": [
+          {
+            "Title": "سفارش چاپ تراول ماگ 350 سی سی",
+            "Type": "product",
+            "Slug": "mug-printing-350cc",
+            "Code": "P-GFT-872E"
+          },
+          {
+            "Title": "سفارش و چاپ تراول ماگ تبلیغاتی 500 سی سی",
+            "Type": "product",
+            "Slug": "500cc-promotional-mug",
+            "Code": "P-GFT-CE1D"
+          }
+        ],
+        "Code": "SC-GFT-697C"
+      },
+      {
+        "Title": "فلاسک هوشمند تبلیغاتی",
+        "Type": "subcategory",
+        "Slug": "product-smart-promotional-flask-printing",
+        "Products": [
+          {
+            "Title": "خرید فلاسک هوشمند تبلیغاتی",
+            "Type": "product",
+            "Slug": "promotional-smart-flask",
+            "Code": "P-GFT-0745"
+          }
+        ],
+        "Code": "SC-GFT-F981"
+      },
+      {
+        "Title": "عطر تبلیغاتی",
+        "Type": "subcategory",
+        "Slug": "product-promotional-perfume",
+        "Products": [
+          {
+            "Title": "عطر تبلیغاتی با رایحه مردانه",
+            "Type": "product",
+            "Slug": "mens-promotional-perfume",
+            "Code": "P-GFT-3641"
+          },
+          {
+            "Title": "عطر تبلیغاتی با رایحه زنانه",
+            "Type": "product",
+            "Slug": "عطر-تبلیغاتی-با-رایحه-زنانه-هدایا-تبلیغات",
+            "Code": "P-GFT-18D5"
+          }
+        ],
+        "Code": "SC-GFT-6449"
+      }
+    ],
+    "Code": "C-GFT"
+  },
+  {
+    "Title": "چاپ لیبل UVDTF - چاپ DTF",
+    "Type": "category",
+    "Slug": "uvdtf-dtf-label-printing",
+    "SubCategories": [
+      {
+        "Title": "چاپ لیبل",
+        "Type": "subcategory",
+        "Slug": "uv-dtf-label-products",
+        "Products": [
+          {
+            "Title": "چاپ لیبل چاپ UV DTF",
+            "Type": "product",
+            "Slug": "print-label-uv-dtf",
+            "Code": "P-LBL-A36C"
+          },
+          {
+            "Title": "چاپ لیبل DTF",
+            "Type": "product",
+            "Slug": "flatbed-uv-dtf-label-printing",
+            "Code": "P-LBL-2A44"
+          }
+        ],
+        "Code": "SC-LBL-6384"
+      }
+    ],
+    "Code": "C-LBL"
+  },
+  {
+    "Title": "چاپ فلت بد و برش لیزر",
+    "Type": "category",
+    "Slug": "flatbed-print-and-laser-cut",
+    "SubCategories": [
+      {
+        "Title": "چاپ اختصاصی فلت بد",
+        "Type": "subcategory",
+        "Slug": "dedicated-flatbed-print",
+        "Products": [
+          {
+            "Title": "چاپ اختصاصی فلت بد",
+            "Type": "product",
+            "Slug": "dedicated-flatbed-flatbed",
+            "Code": "P-FLB-4FEF"
+          }
+        ],
+        "Code": "SC-FLB-26D5"
+      },
+      {
+        "Title": "چاپ مستقیم روی فوم برد",
+        "Type": "subcategory",
+        "Slug": "foam-board-flatbed-print",
+        "Products": [
+          {
+            "Title": "چاپ فوم برد 5 میل",
+            "Type": "product",
+            "Slug": "flatbed-5ml-foam",
+            "Code": "P-FLB-FBF7"
+          },
+          {
+            "Title": "چاپ فوم برد مستقیم 10 میل",
+            "Type": "product",
+            "Slug": "foam-board-5m-flatbed",
+            "Code": "P-FLB-4CA6"
+          }
+        ],
+        "Code": "SC-FLB-3900"
+      },
+      {
+        "Title": "چاپ مستقیم روی پی وی سی",
+        "Type": "subcategory",
+        "Slug": "pvc-flatbed-print",
+        "Products": [
+          {
+            "Title": "پی وی سی 8m",
+            "Type": "product",
+            "Slug": "pvc-8m-flatbed",
+            "Code": "P-FLB-6EDD"
+          }
+        ],
+        "Code": "SC-FLB-6AE0"
+      },
+      {
+        "Title": "چاپ پلکسی با دستگاه فلت بد",
+        "Type": "subcategory",
+        "Slug": "plexiglas-flatbed-print",
+        "Products": [
+          {
+            "Title": "پلکسی 2mرنگی",
+            "Type": "product",
+            "Slug": "plexiglas-2m-color-flatbed",
+            "Code": "P-FLB-64D0"
+          },
+          {
+            "Title": "پلکسی 3mرنگی",
+            "Type": "product",
+            "Slug": "plexiglas-3m-color-flatbed",
+            "Code": "P-FLB-6D96"
+          },
+          {
+            "Title": "پلکسی 4mرنگی",
+            "Type": "product",
+            "Slug": "plexiglas-4m-color-flatbed",
+            "Code": "P-FLB-0F1A"
+          },
+          {
+            "Title": "پلکسی 5mرنگی",
+            "Type": "product",
+            "Slug": "plexiglas-5m-color-flatbed",
+            "Code": "P-FLB-0BB7"
+          },
+          {
+            "Title": "پلکسی2mشفاف",
+            "Type": "product",
+            "Slug": "plexiglas2m-transparent-flatbed",
+            "Code": "P-FLB-0311"
+          },
+          {
+            "Title": "پلکسی3m شفاف",
+            "Type": "product",
+            "Slug": "plexiglas3m-transparent-flatbed",
+            "Code": "P-FLB-0425"
+          },
+          {
+            "Title": "پلکسی 4m شفاف",
+            "Type": "product",
+            "Slug": "plexiglas-4m-transparent-flatbed",
+            "Code": "P-FLB-8444"
+          },
+          {
+            "Title": "پلکسی 5m شفاف",
+            "Type": "product",
+            "Slug": "plexiglas-5m-transparent-flatbed",
+            "Code": "P-FLB-FAF4"
+          },
+          {
+            "Title": "پلکسی 2/5m رنگی چینی",
+            "Type": "product",
+            "Slug": "chinese-colored-plexiglass",
+            "Code": "P-FLB-BB12"
+          }
+        ],
+        "Code": "SC-FLB-4C13"
+      },
+      {
+        "Title": "چاپ عکس روی چوب (MDF)",
+        "Type": "subcategory",
+        "Slug": "mdf-flatbed-print",
+        "Products": [
+          {
+            "Title": "چاپ ام دی اف سفید 3 میل",
+            "Type": "product",
+            "Slug": "mdf-white-flatbed",
+            "Code": "P-FLB-4B12"
+          }
+        ],
+        "Code": "SC-FLB-A082"
+      },
+      {
+        "Title": "چاپ روی شیشه",
+        "Type": "subcategory",
+        "Slug": "glass-flatbed-print",
+        "Products": [
+          {
+            "Title": "چاپ رنگی با دستگاه فلت بد",
+            "Type": "product",
+            "Slug": "print-color-flatbed-new",
+            "Code": "P-FLB-1910"
+          }
+        ],
+        "Code": "SC-FLB-E493"
+      },
+      {
+        "Title": "چاپ روی فلز",
+        "Type": "subcategory",
+        "Slug": "metal-flatbed-print",
+        "Products": [
+          {
+            "Title": "چاپ رنگی فلزات",
+            "Type": "product",
+            "Slug": "print-color-flatbed",
+            "Code": "P-FLB-094D"
+          }
+        ],
+        "Code": "SC-FLB-FAC2"
+      },
+      {
+        "Title": "چاپ روی چرم",
+        "Type": "subcategory",
+        "Slug": "leather-flatbed-print",
+        "Products": [
+          {
+            "Title": "چاپ مستقیم روی چرم",
+            "Type": "product",
+            "Slug": "print-direct-on-leather-flatbed",
+            "Code": "P-FLB-9851"
+          }
+        ],
+        "Code": "SC-FLB-C9B8"
+      },
+      {
+        "Title": "چاپ چهار رنگ و پنج رنگ معمولی",
+        "Type": "subcategory",
+        "Slug": "flatbed-four-five-color-print",
+        "Products": [
+          {
+            "Title": "چاپ فلت بد با کیفیت خوب",
+            "Type": "product",
+            "Slug": "print-flatbed-four-color",
+            "Code": "P-FLB-4CCC"
+          },
+          {
+            "Title": "چاپ فلت بد با کیفیت معمولی",
+            "Type": "product",
+            "Slug": "چاپ-فلت-بد--با-کیفیت-معمولی-فلت-بد",
+            "Code": "P-FLB-BBE6"
+          }
+        ],
+        "Code": "SC-FLB-93F3"
+      },
+      {
+        "Title": "چاپ مولتی استایل طلایی و نقره ای",
+        "Type": "subcategory",
+        "Slug": "multi-style-gold-silver-print",
+        "Products": [
+          {
+            "Title": "مولتی استایل طلایی براق",
+            "Type": "product",
+            "Slug": "multi-style-gold-and-single",
+            "Code": "P-FLB-1062"
+          },
+          {
+            "Title": "مولتی استایل نقره ای براق",
+            "Type": "product",
+            "Slug": "silver-multi-style-print",
+            "Code": "P-FLB-85A2"
+          },
+          {
+            "Title": "مولتی استایل طلایی خشدار",
+            "Type": "product",
+            "Slug": "multi-style-golden-khachdar-print",
+            "Code": "P-FLB-4F33"
+          },
+          {
+            "Title": "مولتی استایل نقره ای خشدار",
+            "Type": "product",
+            "Slug": "multi-style-silver-khashdar-print",
+            "Code": "P-FLB-9312"
+          }
+        ],
+        "Code": "SC-FLB-45BF"
+      },
+      {
+        "Title": "چاپ روی کامپوزیت با دستگاه فلت بد",
+        "Type": "subcategory",
+        "Slug": "composite-flatbed-print",
+        "Products": [
+          {
+            "Title": "چاپ کامپوزیت با دستگاه فلت بد",
+            "Type": "product",
+            "Slug": "print-composite",
+            "Code": "P-FLB-201F"
+          },
+          {
+            "Title": "چاپ کامپوزیت نقره ای",
+            "Type": "product",
+            "Slug": "composite-silver-flatbed",
+            "Code": "P-FLB-3076"
+          }
+        ],
+        "Code": "SC-FLB-B684"
+      },
+      {
+        "Title": "چاپ لایت باکس دو طرفه دیواری",
+        "Type": "subcategory",
+        "Slug": "double-sided-wall-lightbox-print",
+        "Products": [
+          {
+            "Title": "لایت باکس مربع (50*50)",
+            "Type": "product",
+            "Slug": "square-lightbox-50-50",
+            "Code": "P-FLB-060A"
+          },
+          {
+            "Title": "لایت باکس گرد قطر 50",
+            "Type": "product",
+            "Slug": "round-light-box-diameter-50",
+            "Code": "P-FLB-1A91"
+          }
+        ],
+        "Code": "SC-FLB-DF34"
+      },
+      {
+        "Title": "چاپ UV DTF",
+        "Type": "subcategory",
+        "Slug": "uv-dtf-print",
+        "Products": [
+          {
+            "Title": "چاپ UV DTF حرفه‌ای",
+            "Type": "product",
+            "Slug": "print-uv-dtf",
+            "Code": "P-FLB-D402"
+          }
+        ],
+        "Code": "SC-FLB-D728"
+      },
+      {
+        "Title": "چاپ DTF (مخصوص پارچه)",
+        "Type": "subcategory",
+        "Slug": "dtf-fabric-print",
+        "Products": [
+          {
+            "Title": "چاپ انواع لیبل DTF (پارچه)",
+            "Type": "product",
+            "Slug": "flatbed-dtf-textile-printing",
+            "Code": "P-FLB-2A44"
+          }
+        ],
+        "Code": "SC-FLB-9430"
+      }
+    ],
+    "Code": "C-FLB"
+  },
+  {
+    "Title": "چاپ و رایت CD و DVD",
+    "Type": "category",
+    "Slug": "cd-dvd-burn-print",
+    "SubCategories": [
+      {
+        "Title": "چاپ و رایت اختصاصی سی دی",
+        "Type": "subcategory",
+        "Slug": "dedicated-cd-burn-print",
+        "Products": [
+          {
+            "Title": "اختصاصی چاپ و رایت سی دی",
+            "Type": "product",
+            "Slug": "dedicated-print-and-burn-cd",
+            "Code": "P-CDD-04F7"
+          }
+        ],
+        "Code": "SC-CDD-5AE1"
+      },
+      {
+        "Title": "چاپ سی دی",
+        "Type": "subcategory",
+        "Slug": "cd-printing",
+        "Products": [
+          {
+            "Title": "چاپ و رایت CD دیجیتال",
+            "Type": "product",
+            "Slug": "print-burn-cd",
+            "Code": "P-CDD-0854"
+          },
+          {
+            "Title": "چاپ و رایت CD افست",
+            "Type": "product",
+            "Slug": "burn-cd-print-cd",
+            "Code": "P-CDD-EA98"
+          }
+        ],
+        "Code": "SC-CDD-B114"
+      },
+      {
+        "Title": "چاپ دی وی دی",
+        "Type": "subcategory",
+        "Slug": "dvd-printing",
+        "Products": [
+          {
+            "Title": "چاپ و رایت DVD دیجیتال",
+            "Type": "product",
+            "Slug": "dvd-printing-dvd-burning",
+            "Code": "P-CDD-37C6"
+          },
+          {
+            "Title": "چاپ و رایت DVD افست",
+            "Type": "product",
+            "Slug": "dvd-printing-and-burning",
+            "Code": "P-CDD-C160"
+          }
+        ],
+        "Code": "SC-CDD-1E0F"
+      },
+      {
+        "Title": "قاب CD و DVD",
+        "Type": "subcategory",
+        "Slug": "cd-dvd-cases",
+        "Products": [
+          {
+            "Title": "کاور ضد خش",
+            "Type": "product",
+            "Slug": "anti-scratch-cover-cd",
+            "Code": "P-CDD-7CBA"
+          },
+          {
+            "Title": "سلفون CD",
+            "Type": "product",
+            "Slug": "cellophane-cd-wrapper",
+            "Code": "P-CDD-AC78"
+          },
+          {
+            "Title": "دکمه CD",
+            "Type": "product",
+            "Slug": "cd-button",
+            "Code": "P-CDD-2096"
+          },
+          {
+            "Title": "قاب باریک",
+            "Type": "product",
+            "Slug": "frame-narrow-print-burn-cd",
+            "Code": "P-CDD-0718"
+          },
+          {
+            "Title": "قاب پهن",
+            "Type": "product",
+            "Slug": "wide-frame-print-burn-cd",
+            "Code": "P-CDD-5978"
+          },
+          {
+            "Title": "قاب dvdتکی معمولی",
+            "Type": "product",
+            "Slug": "frame-single-ordinary",
+            "Code": "P-CDD-F859"
+          },
+          {
+            "Title": "قاب dvd چهارتایی",
+            "Type": "product",
+            "Slug": "frame-dvd-quad",
+            "Code": "P-CDD-6F8C"
+          },
+          {
+            "Title": "قاب dvd دوبل",
+            "Type": "product",
+            "Slug": "double-dvd-frame",
+            "Code": "P-CDD-6210"
+          },
+          {
+            "Title": "قاب dvdشش تایی",
+            "Type": "product",
+            "Slug": "frame-six-dvd",
+            "Code": "P-CDD-8197"
+          },
+          {
+            "Title": "قاب dvd ده تایی",
+            "Type": "product",
+            "Slug": "frame-dvd-ten",
+            "Code": "P-CDD-A01B"
+          },
+          {
+            "Title": "قاب dvd دوازده تایی",
+            "Type": "product",
+            "Slug": "frame-dvd",
+            "Code": "P-CDD-5CE7"
+          }
+        ],
+        "Code": "SC-CDD-E794"
+      }
+    ],
+    "Code": "C-CDD"
+  },
+  {
+    "Title": "کاتر پلاتر و لیبل اموال",
+    "Type": "category",
+    "Slug": "cutter-plotter-property-label",
+    "SubCategories": [
+      {
+        "Title": "لیبل با برش خاص",
+        "Type": "subcategory",
+        "Slug": "special-cut-label",
+        "Products": [
+          {
+            "Title": "لیبل A3+کاغذی بابرش خاص",
+            "Type": "product",
+            "Slug": "label-paper-specials-cut",
+            "Code": "P-CTP-637D"
+          },
+          {
+            "Title": "لیبل A3+ pvc بابرش خاص",
+            "Type": "product",
+            "Slug": "pvc-label-with-special-cut",
+            "Code": "P-CTP-9C94"
+          },
+          {
+            "Title": "لیبل A3+ شیشه ای بابرش خاص",
+            "Type": "product",
+            "Slug": "glass-label-with-special-cut",
+            "Code": "P-CTP-2B74"
+          },
+          {
+            "Title": "لیبل A3+ متالایز بابرش خاص",
+            "Type": "product",
+            "Slug": "metallized-label-with-special-cut",
+            "Code": "P-CTP-B5AD"
+          }
+        ],
+        "Code": "SC-CTP-5DF0"
+      },
+      {
+        "Title": "چاپ مقوا برش خاص (ای کات)",
+        "Type": "subcategory",
+        "Slug": "cardboard-special-cut",
+        "Products": [
+          {
+            "Title": "سفارش و چاپ مقوا برش کاتر پلاتر",
+            "Type": "product",
+            "Slug": "printing-cardboard-cutting-cutter-plotter",
+            "Code": "P-CTP-B624"
+          }
+        ],
+        "Code": "SC-CTP-138F"
+      },
+      {
+        "Title": "چاپ استیکر برش کاتر پلاتر",
+        "Type": "subcategory",
+        "Slug": "sticker-cutter-plotter",
+        "Products": [
+          {
+            "Title": "چاپ استیکر با برش کاتر پلاتر",
+            "Type": "product",
+            "Slug": "sticker-printing-with-cutter-plotter",
+            "Code": "P-CTP-61ED"
+          }
+        ],
+        "Code": "SC-CTP-2D62"
+      },
+      {
+        "Title": "چاپ مش برش کاتر پلاتر",
+        "Type": "subcategory",
+        "Slug": "mesh-cutter-plotter",
+        "Products": [
+          {
+            "Title": "چاپ مش با برش کاتر پلاتر",
+            "Type": "product",
+            "Slug": "mesh-with-cut-cutter-plotter",
+            "Code": "P-CTP-D260"
+          }
+        ],
+        "Code": "SC-CTP-CEF3"
+      },
+      {
+        "Title": "برش شبرنگ با کاتر پلاتر",
+        "Type": "subcategory",
+        "Slug": "reflective-cutter-plotter",
+        "Products": [
+          {
+            "Title": "شبرنگ با برش کاتر پلاتر",
+            "Type": "product",
+            "Slug": "shebarang-with-cut-cutter-plotter",
+            "Code": "P-CTP-0CB5"
+          }
+        ],
+        "Code": "SC-CTP-9EBD"
+      },
+      {
+        "Title": "روز رنگ با برش کاتر پلاتر",
+        "Type": "subcategory",
+        "Slug": "daylight-cutter-plotter",
+        "Products": [
+          {
+            "Title": "روز رنگ با برش کاتر پلاتر",
+            "Type": "product",
+            "Slug": "day-color-with-cut-cutter-plotter",
+            "Code": "P-CTP-F4AD"
+          }
+        ],
+        "Code": "SC-CTP-5FF9"
+      },
+      {
+        "Title": "چاپ لیبل اموال",
+        "Type": "subcategory",
+        "Slug": "property-label",
+        "Products": [
+          {
+            "Title": "چاپ لیبل اموال",
+            "Type": "product",
+            "Slug": "property-label-printing",
+            "Code": "P-CTP-7F86"
+          }
+        ],
+        "Code": "SC-CTP-FCBF"
+      },
+      {
+        "Title": "چاپ لیبل گچی (خرد شونده) | لیبل گارانتی",
+        "Type": "subcategory",
+        "Slug": "destructible-label",
+        "Products": [
+          {
+            "Title": "لیبل گچی (خرد شونده)",
+            "Type": "product",
+            "Slug": "لیبل-گچی",
+            "Code": "P-CTP-740B"
+          }
+        ],
+        "Code": "SC-CTP-C929"
+      }
+    ],
+    "Code": "C-CTP"
+  },
+  {
+    "Title": "چاپ بنر و فلکسی",
+    "Type": "category",
+    "Slug": "flex-banner-print",
+    "SubCategories": [
+      {
+        "Title": "چاپ اختصاصی بنر لارج فرمت",
+        "Type": "subcategory",
+        "Slug": "dedicated-large-format-banner",
+        "Products": [
+          {
+            "Title": "اختصاصی لارج فرمت",
+            "Type": "product",
+            "Slug": "dedicated-large-format-large-format",
+            "Code": "P-BNR-8B53"
+          }
+        ],
+        "Code": "SC-BNR-B654"
+      },
+      {
+        "Title": "چاپ بنر فوری",
+        "Type": "subcategory",
+        "Slug": "urgent-banner-print",
+        "Products": [
+          {
+            "Title": "چاپ بنر",
+            "Type": "product",
+            "Slug": "banner",
+            "Code": "P-BNR-12DF"
+          }
+        ],
+        "Code": "SC-BNR-97D1"
+      },
+      {
+        "Title": "چاپ فلکسی فوری",
+        "Type": "subcategory",
+        "Slug": "urgent-flex-print",
+        "Products": [
+          {
+            "Title": "چاپ فلکسی",
+            "Type": "product",
+            "Slug": "flexi-printing",
+            "Code": "P-BNR-5381"
+          }
+        ],
+        "Code": "SC-BNR-0B35"
+      },
+      {
+        "Title": "چاپ بنر و استند",
+        "Type": "subcategory",
+        "Slug": "banner-stand-print",
+        "Products": [
+          {
+            "Title": "چاپ بنر استند 90x200",
+            "Type": "product",
+            "Slug": "banner-stand",
+            "Code": "P-BNR-F564"
+          }
+        ],
+        "Code": "SC-BNR-2DF9"
+      }
+    ],
+    "Code": "C-BNR"
+  }
+]

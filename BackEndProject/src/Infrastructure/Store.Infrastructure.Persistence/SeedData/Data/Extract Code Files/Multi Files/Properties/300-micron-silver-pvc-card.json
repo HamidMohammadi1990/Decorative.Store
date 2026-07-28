@@ -1,0 +1,83 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "وجه",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          },
+          {
+            "Id": "2",
+            "Title": "دو رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "5513",
+            "Title": "50"
+          },
+          {
+            "Id": "5514",
+            "Title": "100"
+          },
+          {
+            "Id": "5515",
+            "Title": "200"
+          },
+          {
+            "Id": "5516",
+            "Title": "500"
+          },
+          {
+            "Id": "5517",
+            "Title": "750"
+          },
+          {
+            "Id": "5518",
+            "Title": "1000"
+          },
+          {
+            "Id": "5519",
+            "Title": "2000"
+          },
+          {
+            "Id": "0",
+            "Title": "تیراژ دلخواه"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": []
+  }
+]

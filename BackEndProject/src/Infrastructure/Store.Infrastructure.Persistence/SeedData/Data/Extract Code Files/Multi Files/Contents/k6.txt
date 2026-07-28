@@ -1,0 +1,794 @@
+<div class="col-md-7 col-12">
+                        <h1 class="title-h2  pr-2 text-right  mt-4 mt-md-0 mb-4">  K9کیف پول - خودکار - جای کارت ویزیت - جاکلیدی</h1>
+
+                        <div class="select_data  mb-3">
+                                <div class="line mb-3 d-flex align-items-center">
+                                    <label class="text-secondary w-25 mb-0">
+                                        عنوان سفارش
+                                    </label>
+                                    <input required="Required" class="form-control w-75" id="title" maxlength="150" minlength="1" name="title" type="text" value="" aria-required="true">
+                                </div>
+                            
+
+                            <div class="line mb-3 align-items-center d-none" id="materialBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    جنس مصرفی
+                                </label>
+                                <select class="custom-select w-75" data-val="true" data-val-number="The field materialID must be a number." data-val-required="The materialID field is required." id="materialID" name="materialID"><option selected="selected" value="6989">ست مدیریتی</option>
+</select>
+                            </div>
+
+
+
+
+                            <div class="line mb-3 align-items-center d-none" id="sideBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    وجه
+                                </label>
+                                <select class="custom-select w-75" data-val="true" data-val-number="The field sideID must be a number." data-val-required="The sideID field is required." id="sideID" name="sideID"><option value="">انتخاب کنید ...</option>
+</select>
+                            </div>
+                            <div class="line mb-3 align-items-center d-none" id="tirazhBox">
+                                    <label class="text-secondary w-25 mb-0">
+                                        تیراژ
+                                    </label>
+                                <select class="custom-select w-75" data-val="true" data-val-number="The field tirazhID must be a number." data-val-required="The tirazhID field is required." id="tirazhID" name="tirazhID"><option selected="selected" value="0">تیراژ دلخواه</option>
+</select>
+                            </div>
+                            <div class="line mb-3 align-items-center d-flex" id="customTirazhBox">
+                                    <label class="text-secondary w-25 mb-0">
+                                        تیراژ
+                                    </label>
+                                <input class="form-control w-75 d-inline-block input-number" data-val="true" data-val-number="The field tirazhCount must be a number." data-val-required="The tirazhCount field is required." id="tirazhCount" max="99999" maxlength="5" min="1" name="tirazhCount" type="text" value="0">
+                            </div>
+
+
+
+                            <div class="line mb-3 align-items-center d-none" id="sizeBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    سایز
+                                </label>
+                                <select required="Required" class="custom-select w-75" data-val="true" data-val-number="The field sizeID must be a number." id="sizeID" name="sizeID" aria-required="true"><option value="">انتخاب کنید ...</option>
+</select>
+                            </div>
+
+
+
+                            <div class="line mb-3 align-items-center d-none" id="customSizeBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    ابعاد
+                                </label>
+                                <div class="w-35">
+<input class="form-control d-inline-block input-float" data-val="true" data-val-number="The field tool must be a number." data-val-required="The tool field is required." id="tool" max="99" maxlength="4" min="1" name="tool" onblur="txtToolOnBlur();" placeholder="طول به سانتیمتر" type="text" value="0">                                        <p class="font-weight-lighter small mr-2">حداکثر طول :<b>99</b> سانتیمتر</p>
+                                </div>
+                                <div class="w-35 mr-3">
+<input class="form-control d-inline-block input-float" data-val="true" data-val-number="The field arz must be a number." data-val-required="The arz field is required." id="arz" max="99" maxlength="3" min="1" name="arz" onblur="txtArzOnBlur();" placeholder="عرض" type="text" value="0">                                        <p class="font-weight-lighter small mr-2">حداکثر عرض :<b>99</b> سانتیمتر</p>
+                                </div>
+                            </div>
+
+                            <div class="line mb-3 align-items-center d-none" id="printKindBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    نوع چاپ
+                                </label>
+                                <select class="custom-select w-75" data-val="true" data-val-number="The field printKindID must be a number." data-val-required="The printKindID field is required." id="printKindID" name="printKindID"><option value="5537">حکاکی لیزر یکرو</option>
+</select>
+                            </div>
+
+
+                            
+
+
+<input type="hidden" id="coverPrice" name="coverPrice" value="0">
+
+
+
+    <input class="d-none" type="text" id="coverRequired" name="coverRequired" value="false">
+    <div class="box-custom rounded border mb-3 p-3 d-none" id="coverBox">
+        <h3 class="title mb-3 pr-2 text-right">
+            <strong> روکش</strong>
+        </h3>
+        <div class="d-flex">
+            <label class="text-secondary w-25 mb-0">
+                روکش
+            </label>
+            <select id="coverID" name="coverID" class="custom-select w-75">
+                <option value="0" generalid="0">بدون روکش</option>
+            </select>
+        </div>
+        <div class="d-none mt-2" id="coverAdtCountBox">
+            <label class="w-25"></label>
+            <input class="form-control d-none input-number w-75" min="0" max="99999" maxlength="5" id="coverAdtCount" name="coverAdtCount" required="" onblur="calculatePriceAdt('','cover','coverID')" aria-required="true">
+        </div>
+
+        <div class="d-none mt-2" id="coverStrCountBox">
+            <label class="w-25"></label>
+            <select id="coverStrCount" name="coverStrCount" class="custom-select w-75" required="" onchange="calculatePriceAdt('','cover','coverID')" aria-required="true"></select>
+        </div>
+
+        <div class="d-none mt-2" id="coverParameterBox">
+            <label class="w-25"></label>
+            <select id="coverParameter" name="coverParameter" class="custom-select w-75" required="" aria-required="true"></select>
+        </div>
+    </div>
+
+                            
+<input type="hidden" id="sahafiPrice" name="sahafiPrice" value="0">
+
+
+    <input type="hidden" id="sahafiID" name="sahafiID" value="0">
+    <input type="hidden" id="sahafiAdtCount" name="sahafiAdtCount" value="0">
+    <input type="hidden" id="sahafiStrCount" name="sahafiStrCount" value="0">
+    <input type="hidden" id="sahafiParameter" name="sahafiParameter" value="0">
+    <input class="d-none" type="text" id="sahafiRequired" name="sahafiRequired" value="false">
+    
+                        </div>
+
+
+<input type="hidden" id="matid" value="23804">
+<div class="line mb-3 d-none Goal align-items-center" id="023804">
+                                        <label class="text-secondary w-25 mb-0">
+                                            مدل
+                                        </label>
+                                        <select required="Required" class="custom-select w-75 " data-val="true" data-val-number="The field AttGifID must be a number." data-val-required="The AttGifID field is required." id="AttGifID" name="AttGifID" onchange="GiffChange(this.value ,0)" rel-id="0" aria-required="true"><option value="13192">K9کیف پول - خودکار - جای کارت ویزیت - جاکلیدی</option>
+</select>
+                                    </div>
+
+
+
+                                <div class="box-custom rounded border mb-3 p-3" id="additionalBox">
+                                    <h3 class="title mb-3 pr-2 text-right">
+                                        <strong>  خدمات پس از چاپ </strong>
+                                    </h3>
+                                    <div class="list" id="additionalList">
+                                        
+
+
+
+    <input type="hidden" value="3" id="adtGeneral15608">
+    <input type="hidden" value="0" id="adtGettirazhType15608">
+    <input type="hidden" value="2" id="adtType15608">
+    <input type="hidden" id="adtPrice15608" name="adtPrice15608" class="adtPrice" value="7490">
+    <input type="hidden" id="adtID15608" value="15608">
+    <input type="hidden" id="adtIsFile15608" value="False">
+    <input type="hidden" id="adtIsDuplex15608" value="False">
+        <input type="hidden" id="adtRequired15608" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15608" onchange="showAdtBox('15608')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15608">پلاک نقره ای براق (4*4)</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15608Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15608" name="adtCount15608" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15608" name="adtParameter15608" value="0">
+                    <select class="d-none" id="adtStrCount15608" name="adtStrCount15608">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15608" name="adtStartNumber15608" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15609">
+    <input type="hidden" value="0" id="adtGettirazhType15609">
+    <input type="hidden" value="2" id="adtType15609">
+    <input type="hidden" id="adtPrice15609" name="adtPrice15609" class="adtPrice" value="74900">
+    <input type="hidden" id="adtID15609" value="15609">
+    <input type="hidden" id="adtIsFile15609" value="False">
+    <input type="hidden" id="adtIsDuplex15609" value="False">
+        <input type="hidden" id="adtRequired15609" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15609" onchange="showAdtBox('15609')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15609">پلاک نقره ای تخت براق(2.5*5)</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15609Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15609" name="adtCount15609" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15609" name="adtParameter15609" value="0">
+                    <select class="d-none" id="adtStrCount15609" name="adtStrCount15609">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15609" name="adtStartNumber15609" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15610">
+    <input type="hidden" value="0" id="adtGettirazhType15610">
+    <input type="hidden" value="2" id="adtType15610">
+    <input type="hidden" id="adtPrice15610" name="adtPrice15610" class="adtPrice" value="64200">
+    <input type="hidden" id="adtID15610" value="15610">
+    <input type="hidden" id="adtIsFile15610" value="False">
+    <input type="hidden" id="adtIsDuplex15610" value="False">
+        <input type="hidden" id="adtRequired15610" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15610" onchange="showAdtBox('15610')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15610">پلاک طلایی تخت براق( 2.5*5)</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15610Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15610" name="adtCount15610" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15610" name="adtParameter15610" value="0">
+                    <select class="d-none" id="adtStrCount15610" name="adtStrCount15610">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15610" name="adtStartNumber15610" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15611">
+    <input type="hidden" value="0" id="adtGettirazhType15611">
+    <input type="hidden" value="2" id="adtType15611">
+    <input type="hidden" id="adtPrice15611" name="adtPrice15611" class="adtPrice" value="58850">
+    <input type="hidden" id="adtID15611" value="15611">
+    <input type="hidden" id="adtIsFile15611" value="False">
+    <input type="hidden" id="adtIsDuplex15611" value="False">
+        <input type="hidden" id="adtRequired15611" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15611" onchange="showAdtBox('15611')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15611">پلاک طلایی تخت براق (2.5*2.5)</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15611Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15611" name="adtCount15611" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15611" name="adtParameter15611" value="0">
+                    <select class="d-none" id="adtStrCount15611" name="adtStrCount15611">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15611" name="adtStartNumber15611" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15612">
+    <input type="hidden" value="0" id="adtGettirazhType15612">
+    <input type="hidden" value="2" id="adtType15612">
+    <input type="hidden" id="adtPrice15612" name="adtPrice15612" class="adtPrice" value="80250">
+    <input type="hidden" id="adtID15612" value="15612">
+    <input type="hidden" id="adtIsFile15612" value="False">
+    <input type="hidden" id="adtIsDuplex15612" value="False">
+        <input type="hidden" id="adtRequired15612" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15612" onchange="showAdtBox('15612')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15612">پلاک طلایی تخت براق(3*6)</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15612Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15612" name="adtCount15612" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15612" name="adtParameter15612" value="0">
+                    <select class="d-none" id="adtStrCount15612" name="adtStrCount15612">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15612" name="adtStartNumber15612" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15613">
+    <input type="hidden" value="0" id="adtGettirazhType15613">
+    <input type="hidden" value="2" id="adtType15613">
+    <input type="hidden" id="adtPrice15613" name="adtPrice15613" class="adtPrice" value="62060">
+    <input type="hidden" id="adtID15613" value="15613">
+    <input type="hidden" id="adtIsFile15613" value="False">
+    <input type="hidden" id="adtIsDuplex15613" value="False">
+        <input type="hidden" id="adtRequired15613" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15613" onchange="showAdtBox('15613')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15613">پلاک طلایی تخت3*3</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15613Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15613" name="adtCount15613" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15613" name="adtParameter15613" value="0">
+                    <select class="d-none" id="adtStrCount15613" name="adtStrCount15613">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15613" name="adtStartNumber15613" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15614">
+    <input type="hidden" value="0" id="adtGettirazhType15614">
+    <input type="hidden" value="2" id="adtType15614">
+    <input type="hidden" id="adtPrice15614" name="adtPrice15614" class="adtPrice" value="32100">
+    <input type="hidden" id="adtID15614" value="15614">
+    <input type="hidden" id="adtIsFile15614" value="False">
+    <input type="hidden" id="adtIsDuplex15614" value="False">
+        <input type="hidden" id="adtRequired15614" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15614" onchange="showAdtBox('15614')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15614">پلاک مولتی استایل طلایی 2.5*5</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15614Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15614" name="adtCount15614" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15614" name="adtParameter15614" value="0">
+                    <select class="d-none" id="adtStrCount15614" name="adtStrCount15614">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15614" name="adtStartNumber15614" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15616">
+    <input type="hidden" value="0" id="adtGettirazhType15616">
+    <input type="hidden" value="2" id="adtType15616">
+    <input type="hidden" id="adtPrice15616" name="adtPrice15616" class="adtPrice" value="32100">
+    <input type="hidden" id="adtID15616" value="15616">
+    <input type="hidden" id="adtIsFile15616" value="False">
+    <input type="hidden" id="adtIsDuplex15616" value="False">
+        <input type="hidden" id="adtRequired15616" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15616" onchange="showAdtBox('15616')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15616">پلاک طلایی براق(3*1.5)</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15616Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15616" name="adtCount15616" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15616" name="adtParameter15616" value="0">
+                    <select class="d-none" id="adtStrCount15616" name="adtStrCount15616">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15616" name="adtStartNumber15616" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15617">
+    <input type="hidden" value="0" id="adtGettirazhType15617">
+    <input type="hidden" value="2" id="adtType15617">
+    <input type="hidden" id="adtPrice15617" name="adtPrice15617" class="adtPrice" value="53500">
+    <input type="hidden" id="adtID15617" value="15617">
+    <input type="hidden" id="adtIsFile15617" value="False">
+    <input type="hidden" id="adtIsDuplex15617" value="False">
+        <input type="hidden" id="adtRequired15617" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15617" onchange="showAdtBox('15617')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15617">پلاک طلایی براق(4*4)</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15617Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15617" name="adtCount15617" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15617" name="adtParameter15617" value="0">
+                    <select class="d-none" id="adtStrCount15617" name="adtStrCount15617">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15617" name="adtStartNumber15617" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15619">
+    <input type="hidden" value="0" id="adtGettirazhType15619">
+    <input type="hidden" value="2" id="adtType15619">
+    <input type="hidden" id="adtPrice15619" name="adtPrice15619" class="adtPrice" value="32100">
+    <input type="hidden" id="adtID15619" value="15619">
+    <input type="hidden" id="adtIsFile15619" value="False">
+    <input type="hidden" id="adtIsDuplex15619" value="False">
+        <input type="hidden" id="adtRequired15619" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15619" onchange="showAdtBox('15619')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15619">پلاک طلایی4*1.5</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15619Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15619" name="adtCount15619" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15619" name="adtParameter15619" value="0">
+                    <select class="d-none" id="adtStrCount15619" name="adtStrCount15619">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15619" name="adtStartNumber15619" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15620">
+    <input type="hidden" value="0" id="adtGettirazhType15620">
+    <input type="hidden" value="2" id="adtType15620">
+    <input type="hidden" id="adtPrice15620" name="adtPrice15620" class="adtPrice" value="32100">
+    <input type="hidden" id="adtID15620" value="15620">
+    <input type="hidden" id="adtIsFile15620" value="False">
+    <input type="hidden" id="adtIsDuplex15620" value="False">
+        <input type="hidden" id="adtRequired15620" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15620" onchange="showAdtBox('15620')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15620">پلاک طلایی3.5*1</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15620Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15620" name="adtCount15620" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15620" name="adtParameter15620" value="0">
+                    <select class="d-none" id="adtStrCount15620" name="adtStrCount15620">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15620" name="adtStartNumber15620" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15621">
+    <input type="hidden" value="0" id="adtGettirazhType15621">
+    <input type="hidden" value="2" id="adtType15621">
+    <input type="hidden" id="adtPrice15621" name="adtPrice15621" class="adtPrice" value="46010">
+    <input type="hidden" id="adtID15621" value="15621">
+    <input type="hidden" id="adtIsFile15621" value="False">
+    <input type="hidden" id="adtIsDuplex15621" value="False">
+        <input type="hidden" id="adtRequired15621" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15621" onchange="showAdtBox('15621')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15621">پلاک طلایی 1.5*5</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15621Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15621" name="adtCount15621" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15621" name="adtParameter15621" value="0">
+                    <select class="d-none" id="adtStrCount15621" name="adtStrCount15621">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15621" name="adtStartNumber15621" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15622">
+    <input type="hidden" value="0" id="adtGettirazhType15622">
+    <input type="hidden" value="2" id="adtType15622">
+    <input type="hidden" id="adtPrice15622" name="adtPrice15622" class="adtPrice" value="32100">
+    <input type="hidden" id="adtID15622" value="15622">
+    <input type="hidden" id="adtIsFile15622" value="False">
+    <input type="hidden" id="adtIsDuplex15622" value="False">
+        <input type="hidden" id="adtRequired15622" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15622" onchange="showAdtBox('15622')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15622">پلاک طلایی خشدار3*1</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15622Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15622" name="adtCount15622" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15622" name="adtParameter15622" value="0">
+                    <select class="d-none" id="adtStrCount15622" name="adtStrCount15622">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15622" name="adtStartNumber15622" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15623">
+    <input type="hidden" value="0" id="adtGettirazhType15623">
+    <input type="hidden" value="2" id="adtType15623">
+    <input type="hidden" id="adtPrice15623" name="adtPrice15623" class="adtPrice" value="149800">
+    <input type="hidden" id="adtID15623" value="15623">
+    <input type="hidden" id="adtIsFile15623" value="False">
+    <input type="hidden" id="adtIsDuplex15623" value="False">
+        <input type="hidden" id="adtRequired15623" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15623" onchange="showAdtBox('15623')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15623">حکاکی  لیزری چهار تیکه</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15623Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15623" name="adtCount15623" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15623" name="adtParameter15623" value="0">
+                    <select class="d-none" id="adtStrCount15623" name="adtStrCount15623">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15623" name="adtStartNumber15623" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15624">
+    <input type="hidden" value="0" id="adtGettirazhType15624">
+    <input type="hidden" value="2" id="adtType15624">
+    <input type="hidden" id="adtPrice15624" name="adtPrice15624" class="adtPrice" value="112350">
+    <input type="hidden" id="adtID15624" value="15624">
+    <input type="hidden" id="adtIsFile15624" value="False">
+    <input type="hidden" id="adtIsDuplex15624" value="False">
+        <input type="hidden" id="adtRequired15624" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15624" onchange="showAdtBox('15624')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15624">حکاکی  لیزری سه تیکه</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15624Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15624" name="adtCount15624" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15624" name="adtParameter15624" value="0">
+                    <select class="d-none" id="adtStrCount15624" name="adtStrCount15624">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15624" name="adtStartNumber15624" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15625">
+    <input type="hidden" value="0" id="adtGettirazhType15625">
+    <input type="hidden" value="2" id="adtType15625">
+    <input type="hidden" id="adtPrice15625" name="adtPrice15625" class="adtPrice" value="802500">
+    <input type="hidden" id="adtID15625" value="15625">
+    <input type="hidden" id="adtIsFile15625" value="False">
+    <input type="hidden" id="adtIsDuplex15625" value="False">
+        <input type="hidden" id="adtRequired15625" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15625" onchange="showAdtBox('15625')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15625"> حکاکی روی پلاک تقویم وسالنامه</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15625Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15625" name="adtCount15625" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15625" name="adtParameter15625" value="0">
+                    <select class="d-none" id="adtStrCount15625" name="adtStrCount15625">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15625" name="adtStartNumber15625" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15626">
+    <input type="hidden" value="0" id="adtGettirazhType15626">
+    <input type="hidden" value="2" id="adtType15626">
+    <input type="hidden" id="adtPrice15626" name="adtPrice15626" class="adtPrice" value="44940">
+    <input type="hidden" id="adtID15626" value="15626">
+    <input type="hidden" id="adtIsFile15626" value="False">
+    <input type="hidden" id="adtIsDuplex15626" value="False">
+        <input type="hidden" id="adtRequired15626" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15626" onchange="showAdtBox('15626')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15626">پلاک طلایی تخت خشدار(3*6)</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15626Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15626" name="adtCount15626" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15626" name="adtParameter15626" value="0">
+                    <select class="d-none" id="adtStrCount15626" name="adtStrCount15626">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15626" name="adtStartNumber15626" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15627">
+    <input type="hidden" value="0" id="adtGettirazhType15627">
+    <input type="hidden" value="2" id="adtType15627">
+    <input type="hidden" id="adtPrice15627" name="adtPrice15627" class="adtPrice" value="29960">
+    <input type="hidden" id="adtID15627" value="15627">
+    <input type="hidden" id="adtIsFile15627" value="False">
+    <input type="hidden" id="adtIsDuplex15627" value="False">
+        <input type="hidden" id="adtRequired15627" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15627" onchange="showAdtBox('15627')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15627">پلاک نقره ای خشدار(3*6)</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15627Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15627" name="adtCount15627" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15627" name="adtParameter15627" value="0">
+                    <select class="d-none" id="adtStrCount15627" name="adtStrCount15627">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15627" name="adtStartNumber15627" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15628">
+    <input type="hidden" value="0" id="adtGettirazhType15628">
+    <input type="hidden" value="2" id="adtType15628">
+    <input type="hidden" id="adtPrice15628" name="adtPrice15628" class="adtPrice" value="53500">
+    <input type="hidden" id="adtID15628" value="15628">
+    <input type="hidden" id="adtIsFile15628" value="False">
+    <input type="hidden" id="adtIsDuplex15628" value="False">
+        <input type="hidden" id="adtRequired15628" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15628" onchange="showAdtBox('15628')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15628">پلاک طلایی خشدار(4*4)</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15628Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15628" name="adtCount15628" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15628" name="adtParameter15628" value="0">
+                    <select class="d-none" id="adtStrCount15628" name="adtStrCount15628">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15628" name="adtStartNumber15628" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15629">
+    <input type="hidden" value="0" id="adtGettirazhType15629">
+    <input type="hidden" value="2" id="adtType15629">
+    <input type="hidden" id="adtPrice15629" name="adtPrice15629" class="adtPrice" value="39590">
+    <input type="hidden" id="adtID15629" value="15629">
+    <input type="hidden" id="adtIsFile15629" value="False">
+    <input type="hidden" id="adtIsDuplex15629" value="False">
+        <input type="hidden" id="adtRequired15629" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15629" onchange="showAdtBox('15629')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15629">پلاک طلایی خشدار( 2.5*5)</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15629Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15629" name="adtCount15629" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15629" name="adtParameter15629" value="0">
+                    <select class="d-none" id="adtStrCount15629" name="adtStrCount15629">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15629" name="adtStartNumber15629" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15630">
+    <input type="hidden" value="0" id="adtGettirazhType15630">
+    <input type="hidden" value="2" id="adtType15630">
+    <input type="hidden" id="adtPrice15630" name="adtPrice15630" class="adtPrice" value="29960">
+    <input type="hidden" id="adtID15630" value="15630">
+    <input type="hidden" id="adtIsFile15630" value="False">
+    <input type="hidden" id="adtIsDuplex15630" value="False">
+        <input type="hidden" id="adtRequired15630" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15630" onchange="showAdtBox('15630')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15630">پلاک نقره ای خشدار(2.5*5)</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15630Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15630" name="adtCount15630" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15630" name="adtParameter15630" value="0">
+                    <select class="d-none" id="adtStrCount15630" name="adtStrCount15630">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15630" name="adtStartNumber15630" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15631">
+    <input type="hidden" value="0" id="adtGettirazhType15631">
+    <input type="hidden" value="2" id="adtType15631">
+    <input type="hidden" id="adtPrice15631" name="adtPrice15631" class="adtPrice" value="32100">
+    <input type="hidden" id="adtID15631" value="15631">
+    <input type="hidden" id="adtIsFile15631" value="False">
+    <input type="hidden" id="adtIsDuplex15631" value="False">
+        <input type="hidden" id="adtRequired15631" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15631" onchange="showAdtBox('15631')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15631">پلاک نقره ای براق(2.5*5)</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15631Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15631" name="adtCount15631" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15631" name="adtParameter15631" value="0">
+                    <select class="d-none" id="adtStrCount15631" name="adtStrCount15631">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15631" name="adtStartNumber15631" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="3" id="adtGeneral15632">
+    <input type="hidden" value="0" id="adtGettirazhType15632">
+    <input type="hidden" value="2" id="adtType15632">
+    <input type="hidden" id="adtPrice15632" name="adtPrice15632" class="adtPrice" value="32100">
+    <input type="hidden" id="adtID15632" value="15632">
+    <input type="hidden" id="adtIsFile15632" value="False">
+    <input type="hidden" id="adtIsDuplex15632" value="False">
+        <input type="hidden" id="adtRequired15632" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt15632" onchange="showAdtBox('15632')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt15632">پلاک  نقره ای 3*3</label>
+                </div>
+            </div>
+
+                <!--  قیمت هر عدد -->
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt15632Box">
+                    <input type="text" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number" id="adtCount15632" name="adtCount15632" onblur="adtFunction(this);" required="required">
+                    <label class="text-secondary mb-0">عدد</label>
+                        <input type="text" class="d-none" id="adtParameter15632" name="adtParameter15632" value="0">
+                    <select class="d-none" id="adtStrCount15632" name="adtStrCount15632">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="hidden" id="adtStartNumber15632" name="adtStartNumber15632" value="0">
+                </div>
+        </div>
+                                    </div>
+                                </div>
+                       
+                                            </div>

@@ -1,0 +1,130 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "جنس مصرفی",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "7117",
+            "Title": "کارت pvc760 میکرون سفید"
+          },
+          {
+            "Id": "7118",
+            "Title": "کارت pvc500 میکرون سفید"
+          },
+          {
+            "Id": "7119",
+            "Title": "کارت pvc300 میکرون سفید"
+          },
+          {
+            "Id": "7120",
+            "Title": "کارت pvc300 میکرون طلایی"
+          },
+          {
+            "Id": "7121",
+            "Title": "کارت pvc300 میکرون صدفی"
+          },
+          {
+            "Id": "7122",
+            "Title": "کارت pvc300 میکرون نقره ای"
+          },
+          {
+            "Id": "7126",
+            "Title": "کارت pvc760 میکرون صدفی"
+          },
+          {
+            "Id": "7127",
+            "Title": "کارت pvc760 میکرون طلایی"
+          },
+          {
+            "Id": "7128",
+            "Title": "کارت pvc760 میکرون نقره ای"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "وجه",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          },
+          {
+            "Id": "2",
+            "Title": "دو رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "5569",
+            "Title": "50"
+          },
+          {
+            "Id": "5570",
+            "Title": "100"
+          },
+          {
+            "Id": "5571",
+            "Title": "200"
+          },
+          {
+            "Id": "5572",
+            "Title": "500"
+          },
+          {
+            "Id": "5573",
+            "Title": "750"
+          },
+          {
+            "Id": "5574",
+            "Title": "1000"
+          },
+          {
+            "Id": "5575",
+            "Title": "2000"
+          },
+          {
+            "Id": "0",
+            "Title": "تیراژ دلخواه"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": []
+  }
+]

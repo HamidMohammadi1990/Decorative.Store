@@ -1,0 +1,172 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "جنس مصرفی",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1258",
+            "Title": "cd افست با چاپ و رایت"
+          },
+          {
+            "Id": "4627",
+            "Title": "cd افست فقط چاپ"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1223",
+            "Title": "1000"
+          },
+          {
+            "Id": "1224",
+            "Title": "2000"
+          },
+          {
+            "Id": "1226",
+            "Title": "3000"
+          },
+          {
+            "Id": "2399",
+            "Title": "5000"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": []
+  },
+  {
+    "CategoryTitle": "خدمات پس از چاپ",
+    "Properties": [
+      {
+        "Title": "هزینه ساخت باکس 60*60",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "قاب dvd دوبل",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سلفون cd",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "کاور ضد خش",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "دکمه cd",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "قاب dvd چهارتایی",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "قابcdپهن",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "قابcd باریک",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "قاب dvdبلورین",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "قاب dvdتکی معمولی",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "قفل سخت افزاری",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  }
+]

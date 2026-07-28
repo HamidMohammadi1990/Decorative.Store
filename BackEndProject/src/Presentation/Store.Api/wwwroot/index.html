@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Edition — پلتفرم یکپارچه چاپ و تجارت الکترونیک. وب‌سرویس RESTful با معماری Clean Architecture برای کاتالوگ، سفارش، پرداخت، CMS و مدیریت سازمانی." />
+  <title>Edition Platform — پلتفرم چاپ و تجارت الکترونیک</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="/lib/fonts/vazirmatn/vazirmatn.css" />
+  <link rel="stylesheet" href="/portal.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="/">
+        <span class="brand-mark">E</span>
+        <span>Edition Platform</span>
+      </a>
+      <nav class="site-nav">
+        <a href="#about">درباره</a>
+        <a href="#modules">ماژول‌ها</a>
+        <a href="#developers">توسعه‌دهندگان</a>
+        <a class="nav-cta" href="/docs">مستندات API</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-badges">
+          <span class="badge badge-accent">REST API · OpenAPI 3</span>
+          <span class="badge">.NET 10</span>
+          <span class="badge">Clean Architecture</span>
+        </div>
+        <h1>
+          زیرساخت دیجیتال <span>چاپ و فروش آنلاین</span>
+        </h1>
+        <p class="hero-lead">
+          Edition یک پلتفرم سازمانی برای مدیریت کاتالوگ محصولات چاپی، ثبت سفارش، پرداخت چندکاناله،
+          کیف پول، CMS و پنل ادمین است — با وب‌سرویس RESTful استاندارد برای یکپارچه‌سازی با وب، موبایل و سیستم‌های شریک.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/docs">ورود به پورتال API</a>
+          <a class="btn btn-secondary" href="/swagger">تست تعاملی</a>
+        </div>
+      </div>
+      <aside class="hero-panel" aria-label="آمار پلتفرم">
+        <h3>در یک نگاه</h3>
+        <div class="stat-grid">
+          <div class="stat-item">
+            <div class="stat-value">۵۰+</div>
+            <div class="stat-label">ماژول کسب‌وکار</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">۸۶</div>
+            <div class="stat-label">کنترلر API</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">RBAC</div>
+            <div class="stat-label">دسترسی داینامیک ادمین</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">fa / en</div>
+            <div class="stat-label">چندزبانه</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <h2>چرا Edition؟</h2>
+        <p>
+          پلتفرمی که فرایندهای پیچیده صنعت چاپ — از قیمت‌گذاری و ویژگی محصول تا سبد خرید، پرداخت و حسابداری —
+          را در یک معماری منسجم و قابل توسعه جمع کرده است.
+        </p>
+      </div>
+      <div class="about-grid">
+        <article class="about-card">
+          <div class="icon icon-blue">🖨️</div>
+          <h3>تخصص در حوزه چاپ</h3>
+          <p>
+            کاتالوگ محصولات با ویژگی‌های پویا، قیمت‌گذاری، فایل سفارش، پیوست و قوانین خاص صنعت چاپ —
+            نه یک فروشگاه عمومی، بلکه موتور اختصاصی چاپ آنلاین.
+          </p>
+        </article>
+        <article class="about-card">
+          <div class="icon icon-green">🔗</div>
+          <h3>یکپارچه‌سازی سازمانی</h3>
+          <p>
+            API استاندارد برای اتصال به وب‌سایت، اپلیکیشن موبایل، ERP و درگاه‌های پرداخت.
+            مستندات OpenAPI، نمونه درخواست و محیط تست برای تیم فنی شریک.
+          </p>
+        </article>
+        <article class="about-card">
+          <div class="icon icon-amber">🛡️</div>
+          <h3>امنیت و مقیاس‌پذیری</h3>
+          <p>
+            احراز هویت JWT، مدیریت نشست، RBAC با permission داینامیک، Content Policy برای کنترل داده
+            و معماری لایه‌ای برای رشد تدریجی بدون فروپاشی ساختار.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="modules">
+    <div class="container">
+      <div class="section-header">
+        <h2>دامنه کسب‌وکار</h2>
+        <p>ماژول‌های اصلی پلتفرم که از طریق وب‌سرویس در دسترس هستند</p>
+      </div>
+      <div class="modules-grid">
+        <article class="module-card">
+          <h3><span class="module-dot"></span>کاتالوگ و محصولات</h3>
+          <p>دسته‌بندی، زیردسته، تگ، تخفیف، ویژگی‌ها، قیمت، فایل و توضیحات محصول چاپی</p>
+        </article>
+        <article class="module-card">
+          <h3><span class="module-dot"></span>سفارش و خرید</h3>
+          <p>سبد خرید، ثبت سفارش، property سفارشی، پیوست، مالیات، کمیسیون و پیگیری وضعیت</p>
+        </article>
+        <article class="module-card">
+          <h3><span class="module-dot"></span>پرداخت و کیف پول</h3>
+          <p>پرداخت چندشرکتی، شارژ کیف پول، تراکنش بانکی و زیرساخت حسابداری</p>
+        </article>
+        <article class="module-card">
+          <h3><span class="module-dot"></span>CMS و بلاگ</h3>
+          <p>صفحات، سکشن‌ها، بلاگ، دسته‌بندی، تگ، نظرات و تعامل کاربران</p>
+        </article>
+        <article class="module-card">
+          <h3><span class="module-dot"></span>شرکت و چندشعبه‌ای</h3>
+          <p>مدیریت شرکت‌ها، نظرات، دستگاه POS و تنظیمات اختصاصی هر مجموعه</p>
+        </article>
+        <article class="module-card">
+          <h3><span class="module-dot"></span>کاربران و احراز هویت</h3>
+          <p>ثبت‌نام، ورود، OTP، نشست فعال، refresh token و مدیریت پروفایل</p>
+        </article>
+        <article class="module-card">
+          <h3><span class="module-dot"></span>ادمین و دسترسی</h3>
+          <p>نقش‌ها، permission داینامیک، Content Policy و جداسازی API عمومی و مدیریتی</p>
+        </article>
+        <article class="module-card">
+          <h3><span class="module-dot"></span>زیرساخت مکانی</h3>
+          <p>استان، شهر، آدرس کاربر، روش ارسال و گزینه‌های تحویل</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>مسیر یکپارچه‌سازی</h2>
+        <p>از آشنایی با API تا ارسال اولین درخواست در چهار گام</p>
+      </div>
+      <div class="flow-steps">
+        <article class="flow-step">
+          <h3>مطالعه مستندات</h3>
+          <p>مرور endpointها در منوی کناری ReDoc — تست تعاملی از تب «تست API»</p>
+        </article>
+        <article class="flow-step">
+          <h3>احراز هویت</h3>
+          <p>دریافت JWT از sign-in و تنظیم Authorize در Swagger UI</p>
+        </article>
+        <article class="flow-step">
+          <h3>تست درخواست</h3>
+          <p>ارسال درخواست واقعی با Try it out و انتخاب زبان fa / en</p>
+        </article>
+        <article class="flow-step">
+          <h3>استقرار در محصول</h3>
+          <p>استفاده از swagger.json در Postman، codegen یا کلاینت اختصاصی</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>استانداردهای فنی</h2>
+        <p>زیرساختی که تیم توسعه را برای نگهداری بلندمدت آماده می‌کند</p>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-block">
+          <h3>معماری و الگوها</h3>
+          <ul class="tech-list">
+            <li>Clean Architecture با جداسازی Domain، Application و Infrastructure</li>
+            <li>CQRS با MediatR و FluentValidation</li>
+            <li>Repository Pattern و Unit of Work</li>
+            <li>API Versioning (v1) و پاسخ یکپارچه ApiResult</li>
+            <li>Localization فارسی و انگلیسی با Accept-Language</li>
+          </ul>
+        </div>
+        <div class="tech-block">
+          <h3>امنیت و مستندات</h3>
+          <ul class="tech-list">
+            <li>JWT Bearer و OAuth2 در Swagger</li>
+            <li>مدیریت نشست و کنترل توکن مسدودشده</li>
+            <li>RBAC ادمین با Permission از روی کنترلر</li>
+            <li>مستندات OpenAPI 3 با توضیحات XML از کد</li>
+            <li>Content-Type استاندارد application/json</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="developers">
+    <div class="container">
+      <div class="section-header">
+        <h2>پورتال توسعه‌دهندگان</h2>
+        <p>ابزارهای آماده برای تیم فنی، QA و شرکای یکپارچه‌سازی</p>
+      </div>
+      <div class="portal-cards">
+        <article class="portal-card">
+          <h3>📖 مستندات API</h3>
+          <p>
+            منوی چندسطحی (Authentication / Public / Admin)، توضیحات endpoint،
+            schema درخواست و پاسخ — مطالعه در ReDoc، تست در تب «تست API» با یک کلیک.
+          </p>
+          <a class="btn btn-primary" href="/docs">ورود به /docs</a>
+        </article>
+        <article class="portal-card">
+          <h3>🧪 Swagger UI</h3>
+          <p>
+            ارسال درخواست زنده، Authorize با JWT، مشاهده duration پاسخ،
+            فیلتر endpoint و انتخاب زبان فارسی / انگلیسی.
+          </p>
+          <a class="btn btn-primary" href="/swagger">ورود به /swagger</a>
+        </article>
+        <article class="portal-card">
+          <h3>📄 OpenAPI Spec</h3>
+          <p>
+            فایل JSON استاندارد برای import در Postman، Insomnia، Bruno
+            یا تولید خودکار SDK در زبان‌های مختلف.
+          </p>
+          <a class="btn btn-secondary" href="/swagger/v1/swagger.json" target="_blank" rel="noopener">دانلود swagger.json</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="/">
+            <span class="brand-mark">E</span>
+            <span>Edition Platform</span>
+          </a>
+          <p>
+            پلتفرم یکپارچه چاپ و تجارت الکترونیک — زیرساخت API برای کسب‌وکارهایی
+            که به راه‌حل سازمانی، قابل اتکا و قابل توسعه نیاز دارند.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>دسترسی سریع</h4>
+          <ul class="footer-links">
+            <li><a href="/docs">مستندات</a></li>
+            <li><a href="/swagger">تست API</a></li>
+            <li><a href="/swagger/v1/swagger.json">OpenAPI JSON</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>فناوری</h4>
+          <ul class="footer-links">
+            <li><a href="#modules">ماژول‌های کسب‌وکار</a></li>
+            <li><a href="#developers">پورتال توسعه‌دهندگان</a></li>
+            <li><a href="https://github.com/HamidMohammadi1990" target="_blank" rel="noopener">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© Edition Platform — REST API v1</span>
+        <span>ساخته‌شده با .NET 10 · Clean Architecture</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

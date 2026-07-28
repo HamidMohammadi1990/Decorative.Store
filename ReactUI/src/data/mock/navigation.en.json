@@ -1,0 +1,353 @@
+{
+  "primaryNav": [
+    {
+      "id": "blog",
+      "label": "Journal",
+      "href": "/blog"
+    },
+    {
+      "id": "new",
+      "label": "New",
+      "href": "/new",
+      "columns": [
+        {
+          "title": "Shop New Arrivals",
+          "links": [
+            { "label": "All New Arrivals", "href": "/new" },
+            { "label": "New Furniture", "href": "/new/furniture" },
+            { "label": "New Sofas & Armchairs", "href": "/new/sofas" },
+            { "label": "New Rugs", "href": "/new/rugs" },
+            { "label": "New Lighting", "href": "/new/lighting" }
+          ]
+        },
+        {
+          "title": "More New",
+          "links": [
+            { "label": "New Bed Linen", "href": "/new/bed-linen" },
+            { "label": "New Cushions & Throws", "href": "/new/cushions" },
+            { "label": "New Kitchen & Dining", "href": "/new/kitchen-dining" },
+            { "label": "New Garden", "href": "/new/garden" }
+          ]
+        },
+        {
+          "title": "Featured",
+          "links": [
+            { "label": "Summer Lookbook", "href": "/lookbook" },
+            { "label": "emma chamberlain × Diba Gallery", "href": "/collaborations/emma-chamberlain" },
+            { "label": "Coastal Escape", "href": "/shop/coastal" },
+            { "label": "Refined Modern", "href": "/shop/modern" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "furniture",
+      "label": "Furniture",
+      "href": "/furniture",
+      "columns": [
+        {
+          "title": "Living Room",
+          "links": [
+            { "label": "Sofas", "href": "/furniture/sofas" },
+            { "label": "Armchairs", "href": "/furniture/armchairs" },
+            { "label": "Coffee Tables", "href": "/furniture/coffee-tables" },
+            { "label": "TV Stands & Media Consoles", "href": "/furniture/tv-stands" }
+          ]
+        },
+        {
+          "title": "Dining & Kitchen",
+          "links": [
+            { "label": "Dining Tables", "href": "/furniture/dining-tables" },
+            { "label": "Dining Chairs & Benches", "href": "/furniture/dining-chairs" },
+            { "label": "Bar & Counter Stools", "href": "/furniture/bar-stools" },
+            { "label": "Sideboards", "href": "/furniture/sideboards" }
+          ]
+        },
+        {
+          "title": "Bedroom",
+          "links": [
+            { "label": "Beds", "href": "/furniture/beds" },
+            { "label": "Bedside Tables", "href": "/furniture/bedside-tables" },
+            { "label": "Chests of Drawers", "href": "/furniture/chests" },
+            { "label": "Mattresses", "href": "/furniture/mattresses" }
+          ]
+        },
+        {
+          "title": "Home Office",
+          "links": [
+            { "label": "Desks", "href": "/furniture/desks" },
+            { "label": "Desk Chairs", "href": "/furniture/desk-chairs" },
+            { "label": "Bookcases & Shelves", "href": "/furniture/bookcases" },
+            { "label": "In-Stock Furniture", "href": "/in-stock/furniture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sofas",
+      "label": "Sofas",
+      "href": "/sofas",
+      "columns": [
+        {
+          "title": "Shop All",
+          "links": [
+            { "label": "All Sofas", "href": "/sofas" },
+            { "label": "Chaise & Corner Sofas", "href": "/sofas/chaise-corner" },
+            { "label": "Sofa Beds", "href": "/sofas/sofa-beds" },
+            { "label": "Armchairs", "href": "/sofas/armchairs" }
+          ]
+        },
+        {
+          "title": "Shop by Size",
+          "links": [
+            { "label": "2 Seater", "href": "/sofas/2-seater" },
+            { "label": "3 Seater", "href": "/sofas/3-seater" },
+            { "label": "4 Seater", "href": "/sofas/4-seater" },
+            { "label": "5 Seater", "href": "/sofas/5-seater" }
+          ]
+        },
+        {
+          "title": "Collections",
+          "links": [
+            { "label": "Andes Collection", "href": "/sofas/andes" },
+            { "label": "Haven Collection", "href": "/sofas/haven" },
+            { "label": "Harmony Collection", "href": "/sofas/harmony" },
+            { "label": "In-Stock Sofas", "href": "/in-stock/sofas" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "garden",
+      "label": "Garden",
+      "href": "/garden",
+      "columns": [
+        {
+          "title": "Furniture",
+          "links": [
+            { "label": "Garden Lounge Furniture", "href": "/garden/lounge" },
+            { "label": "Garden Dining Furniture", "href": "/garden/dining" },
+            { "label": "Porto Collection", "href": "/garden/porto" },
+            { "label": "In-Stock Garden", "href": "/in-stock/garden" }
+          ]
+        },
+        {
+          "title": "Plants & Decor",
+          "links": [
+            { "label": "Outdoor Planters", "href": "/garden/planters-outdoor" },
+            { "label": "Indoor Planters", "href": "/garden/planters-indoor" },
+            { "label": "Outdoor Cushions", "href": "/garden/cushions" },
+            { "label": "Garden Parasols", "href": "/garden/parasols" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rugs",
+      "label": "Rugs & Curtains",
+      "href": "/rugs-curtains",
+      "columns": [
+        {
+          "title": "Rugs",
+          "links": [
+            { "label": "Area Rugs", "href": "/rugs/area" },
+            { "label": "Wool Rugs", "href": "/rugs/wool" },
+            { "label": "Patterned Rugs", "href": "/rugs/patterned" },
+            { "label": "Rug Pads", "href": "/rugs/pads" }
+          ]
+        },
+        {
+          "title": "Curtains",
+          "links": [
+            { "label": "All Curtains", "href": "/curtains" },
+            { "label": "Blackout Curtains", "href": "/curtains/blackout" },
+            { "label": "Sheer Curtains", "href": "/curtains/sheer" },
+            { "label": "Poles & Accessories", "href": "/curtains/hardware" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bed-linen",
+      "label": "Bed Linen",
+      "href": "/bed-linen",
+      "columns": [
+        {
+          "title": "By Category",
+          "links": [
+            { "label": "Duvet Covers & Pillowcases", "href": "/bed-linen/duvet-covers" },
+            { "label": "Bed Sheets", "href": "/bed-linen/sheets" },
+            { "label": "Blankets & Throws", "href": "/bed-linen/throws" },
+            { "label": "Duvet Inserts", "href": "/bed-linen/inserts" }
+          ]
+        },
+        {
+          "title": "By Fabric",
+          "links": [
+            { "label": "Linen", "href": "/bed-linen/linen" },
+            { "label": "TENCEL™", "href": "/bed-linen/tencel" },
+            { "label": "Organic Cotton", "href": "/bed-linen/organic-cotton" },
+            { "label": "Velvet", "href": "/bed-linen/velvet" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bath",
+      "label": "Bath",
+      "href": "/bath",
+      "columns": [
+        {
+          "title": "Furniture",
+          "links": [
+            { "label": "Medicine Cabinets & Mirrors", "href": "/bath/cabinets" },
+            { "label": "Bathroom Hardware", "href": "/bath/hardware" }
+          ]
+        },
+        {
+          "title": "Linens & Accessories",
+          "links": [
+            { "label": "Towels", "href": "/bath/towels" },
+            { "label": "Bath Mats", "href": "/bath/mats" },
+            { "label": "Bathroom Accessories", "href": "/bath/accessories" },
+            { "label": "Baskets & Hampers", "href": "/bath/baskets" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lighting",
+      "label": "Lighting",
+      "href": "/lighting",
+      "columns": [
+        {
+          "title": "Ceiling",
+          "links": [
+            { "label": "Chandeliers", "href": "/lighting/chandeliers" },
+            { "label": "Pendants", "href": "/lighting/pendants" },
+            { "label": "Flushmounts", "href": "/lighting/flushmounts" }
+          ]
+        },
+        {
+          "title": "Lamps & Wall",
+          "links": [
+            { "label": "Table & Desk Lamps", "href": "/lighting/table-lamps" },
+            { "label": "Floor Lamps", "href": "/lighting/floor-lamps" },
+            { "label": "Sconces", "href": "/lighting/sconces" },
+            { "label": "In-Stock Lighting", "href": "/in-stock/lighting" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "decor",
+      "label": "Cushions & Decor",
+      "href": "/decor",
+      "columns": [
+        {
+          "title": "Soft Furnishings",
+          "links": [
+            { "label": "Cushions", "href": "/decor/cushions" },
+            { "label": "Throws", "href": "/decor/throws" },
+            { "label": "Outdoor Cushions", "href": "/decor/outdoor-cushions" }
+          ]
+        },
+        {
+          "title": "Room Decor",
+          "links": [
+            { "label": "Vases", "href": "/decor/vases" },
+            { "label": "Candles & Home Fragrance", "href": "/decor/fragrance" },
+            { "label": "Baskets & Hampers", "href": "/decor/baskets" },
+            { "label": "Planters & Faux Plants", "href": "/decor/planters" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "art",
+      "label": "Art & Mirrors",
+      "href": "/art-mirrors",
+      "columns": [
+        {
+          "title": "Mirrors",
+          "links": [
+            { "label": "Wall Mirrors", "href": "/mirrors/wall" },
+            { "label": "Floor Mirrors", "href": "/mirrors/floor" },
+            { "label": "Decorative Mirrors", "href": "/mirrors/decorative" }
+          ]
+        },
+        {
+          "title": "Art",
+          "links": [
+            { "label": "Art Prints", "href": "/art" },
+            { "label": "Picture Frames", "href": "/art/frames" },
+            { "label": "Wall Shelves & Hooks", "href": "/art/wall-org" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kitchen",
+      "label": "Kitchen & Dining",
+      "href": "/kitchen-dining",
+      "columns": [
+        {
+          "title": "Dinnerware",
+          "links": [
+            { "label": "Dinnerware Sets", "href": "/kitchen-dining/sets" },
+            { "label": "Dinner Plates", "href": "/kitchen-dining/plates" },
+            { "label": "Bowls", "href": "/kitchen-dining/bowls" },
+            { "label": "Mugs", "href": "/kitchen-dining/mugs" }
+          ]
+        },
+        {
+          "title": "Entertaining",
+          "links": [
+            { "label": "Glassware & Barware", "href": "/kitchen-dining/glassware" },
+            { "label": "Serveware", "href": "/kitchen-dining/serveware" },
+            { "label": "Table Linens", "href": "/kitchen-dining/table-linens" },
+            { "label": "Cutlery", "href": "/kitchen-dining/cutlery" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gifts",
+      "label": "Gifts",
+      "href": "/gifts",
+      "children": [
+        { "label": "All Gifts", "href": "/gifts" },
+        { "label": "Gifts Under 5M", "href": "/gifts/under-5m" },
+        { "label": "Gifts 5M – 10M", "href": "/gifts/5m-10m" },
+        { "label": "Gifts Over 10M", "href": "/gifts/10m-15m" },
+        { "label": "Housewarming Gifts", "href": "/gifts/housewarming" },
+        { "label": "Gifts for the Host", "href": "/gifts/host" }
+      ]
+    },
+    {
+      "id": "sale",
+      "label": "Sale",
+      "href": "/sale",
+      "columns": [
+        {
+          "title": "Summer Sale",
+          "links": [
+            { "label": "All Sale", "href": "/sale" },
+            { "label": "Furniture Sale", "href": "/sale/furniture" },
+            { "label": "Rugs & Curtains Sale", "href": "/sale/rugs-curtains" },
+            { "label": "Lighting Sale", "href": "/sale/lighting" }
+          ]
+        },
+        {
+          "title": "Clearance",
+          "links": [
+            { "label": "All Clearance", "href": "/clearance" },
+            { "label": "Save 50% or More", "href": "/clearance/50-off" },
+            { "label": "Furniture Clearance", "href": "/clearance/furniture" },
+            { "label": "Garden Clearance", "href": "/clearance/garden" }
+          ]
+        }
+      ]
+    }
+  ]
+}

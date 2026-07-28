@@ -1,0 +1,107 @@
+﻿using Edition.Application.Common.Extensions;
+using Edition.Application.Contracts.ContentPolicies;
+using Edition.Application.Contracts.Mapping;
+using Edition.Application.Features.ProductComments.Queries;
+using Store.Domain.Dtos.ProductComments;
+using Store.Domain.Dtos.Pagination;
+using Store.Domain.Entities;
+
+namespace Edition.Application.Mappings;
+
+public class ProductCommentMapperService : IProductCommentMapperService
+{
+    public GetProductCommentResponse Map(ProductComment model)
+    {
+        return new GetProductCommentResponse
+        {
+            Id = model.Id,
+            UserId = model.UserId,
+            CompanyId = model.CompanyId,
+            ProductId = model.ProductId,
+            CommentRate = model.CommentRate,
+            Description = model.Description,
+            QualityRating = model.QualityRating,
+            CommentTopicId = model.CommentTopicId,
+            AffordableRating = model.AffordableRating
+        };
+    }
+
+    public PagedResult<GetAllProductCommentResponse> Map(PagedResult<GetAllProductCommentResponseDto> model)
+    {
+        var items = model
+            .Items
+            .Select(x => new GetAllProductCommentResponse
+            {
+                Id = x.Id,
+                UserId = x.UserId,
+                ProductId = x.ProductId,
+                CompanyId = x.CompanyId,
+                CompanyName = x.CompanyName,
+                Description = x.Description,
+                CommentRate = x.CommentRate,
+                QualityRating = x.CommentRate,
+                CommentTopicId = x.CommentTopicId,
+                UserName = x.UserName,
+                UserFirstName = x.UserFirstName,
+                UserLastName = x.UserLastName,
+                ProductTitle = x.ProductTitle,
+                AffordableRating = x.AffordableRating,
+                CommentTopicTitle = x.CommentTopicTitle,
+            })
+            .ToList();
+
+        return PagedResult<GetAllProductCommentResponse>.Create(items, model);
+    }
+
+    public PagedResult<SearchProductCommentResponse> Map(PagedResult<SearchProductCommentResponseDto> model)
+    {
+        var items = model
+            .Items
+            .Select(x => new SearchProductCommentResponse
+            {
+                Id = x.Id,
+                UserId = x.UserId,
+                ProductId = x.ProductId,
+                CompanyId = x.CompanyId,
+                CompanyName = x.CompanyName,
+                Description = x.Description,
+                CommentRate = x.CommentRate,
+                QualityRating = x.CommentRate,
+                CommentTopicId = x.CommentTopicId,
+                UserName = x.UserName,
+                UserFirstName = x.UserFirstName,
+                UserLastName = x.UserLastName,
+                ProductTitle = x.ProductTitle,
+                AffordableRating = x.AffordableRating,
+                CommentTopicTitle = x.CommentTopicTitle,
+            })
+            .ToList();
+
+        return PagedResult<SearchProductCommentResponse>.Create(items, model);
+    }
+
+    public GetAllProductCommentRequestDto Map(GetAllProductCommentRequest model)
+    {
+        return new GetAllProductCommentRequestDto
+        {
+            UserId = model.UserId,
+            IsActive = model.IsActive,
+            CompanyId = model.CompanyId,
+            ProductId = model.ProductId,
+            Pagination = model.Pagination,
+            CommentTopicId = model.CommentTopicId
+        }.WithContentPolicy<ProductComment, GetAllProductCommentRequestDto>(model);
+    }
+
+    public SearchProductCommentRequestDto Map(SearchProductCommentRequest model)
+    {
+        return new SearchProductCommentRequestDto
+        {
+            UserId = model.UserId,            
+            CompanyId = model.CompanyId,
+            ProductId = model.ProductId,
+            Pagination = model.Pagination,
+            CommentTopicId = model.CommentTopicId
+        }.WithContentPolicy<ProductComment, SearchProductCommentRequestDto>(model);
+    }
+}

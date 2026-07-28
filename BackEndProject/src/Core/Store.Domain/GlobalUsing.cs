@@ -1,0 +1,1 @@
+﻿global using Edition.Domain.Enums;

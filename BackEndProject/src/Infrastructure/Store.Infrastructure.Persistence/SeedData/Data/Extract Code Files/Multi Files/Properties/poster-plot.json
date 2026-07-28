@@ -1,0 +1,166 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "جنس مصرفی",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1231",
+            "Title": "کتد170 گرمی"
+          },
+          {
+            "Id": "1232",
+            "Title": "گلاسه 180گرم براق"
+          },
+          {
+            "Id": "7320",
+            "Title": "گلاسه 250گرم براق"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "192",
+            "Title": "35*50"
+          },
+          {
+            "Id": "193",
+            "Title": "42*60"
+          },
+          {
+            "Id": "194",
+            "Title": "50*70"
+          },
+          {
+            "Id": "195",
+            "Title": "60*90"
+          },
+          {
+            "Id": "196",
+            "Title": "100*70"
+          },
+          {
+            "Id": "0",
+            "Title": "سایز دلخواه"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "ابعاد",
+        "Type": "text",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 1500,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": [
+      {
+        "Title": "روکش",
+        "Type": "select",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "0",
+            "Title": "بدون روکش"
+          },
+          {
+            "Id": "4288",
+            "Title": "لمینت گرم مات"
+          },
+          {
+            "Id": "4289",
+            "Title": "لمینت سرد مات"
+          },
+          {
+            "Id": "4290",
+            "Title": "لمینت سرد براق"
+          },
+          {
+            "Id": "4291",
+            "Title": "لمینت گرم براق"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "خدمات پس از چاپ",
+    "Properties": [
+      {
+        "Title": "پانچ.",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "پانچ.",
+            "Type": "select",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 0,
+            "Items": [
+              {
+                "Id": "پانچ درشت",
+                "Title": "پانچ درشت"
+              },
+              {
+                "Id": "پانچ ریز",
+                "Title": "پانچ ریز"
+              }
+            ],
+            "Dependencies": [],
+            "Properties": []
+          },
+          {
+            "Title": "تعداد",
+            "Type": "number",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 99999,
+            "Items": [],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      }
+    ]
+  }
+]

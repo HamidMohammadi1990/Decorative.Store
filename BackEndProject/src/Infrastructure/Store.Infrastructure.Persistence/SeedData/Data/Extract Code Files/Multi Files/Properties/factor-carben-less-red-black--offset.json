@@ -1,0 +1,234 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "3751",
+            "Title": "A5بعد از برش 19.7در14.2 تحریر 55 گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3752",
+            "Title": "A4بعد از برش 19.7در28.7 تحریر 55 گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3753",
+            "Title": "B6بعد ازبرش 16.7در11.7 تحریر 55 گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3754",
+            "Title": "A6بعد ازبرش9.7در14.2 تحریر 55 گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3755",
+            "Title": "B5بعد از برش 16.7در23.7 تحریر 55 گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3756",
+            "Title": "B4 بعد ازبرش33.7در23.7 تحریر 55 گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3757",
+            "Title": "A3بعد از برش 28.7در39.7 تحریر 55 گرم الوان 55 گرم"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "روی چاپ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1000",
+            "Title": "1000"
+          },
+          {
+            "Id": "2000",
+            "Title": "2000"
+          },
+          {
+            "Id": "5000",
+            "Title": "5000"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "خدمات پس از چاپ",
+    "Properties": [
+      {
+        "Title": "اوارق آزاد",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سرچسب",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "پرفراژ و منگنه",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "شماره سریال .",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "شماره شروع",
+            "Type": "number",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 99999,
+            "Items": [],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      },
+      {
+        "Title": "کاتتر پلاتر.",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "کاتتر پلاتر.",
+            "Type": "select",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 0,
+            "Items": [
+              {
+                "Id": "چیدمان 10",
+                "Title": "چیدمان 10"
+              },
+              {
+                "Id": "چیدمان 100",
+                "Title": "چیدمان 100"
+              },
+              {
+                "Id": "چیدمان 1000 به بالا",
+                "Title": "چیدمان 1000 به بالا"
+              },
+              {
+                "Id": "چیدمان 150",
+                "Title": "چیدمان 150"
+              },
+              {
+                "Id": "چیدمان 200",
+                "Title": "چیدمان 200"
+              },
+              {
+                "Id": "چیدمان 25",
+                "Title": "چیدمان 25"
+              },
+              {
+                "Id": "چیدمان 250",
+                "Title": "چیدمان 250"
+              },
+              {
+                "Id": "چیدمان 300",
+                "Title": "چیدمان 300"
+              },
+              {
+                "Id": "چیدمان 35",
+                "Title": "چیدمان 35"
+              },
+              {
+                "Id": "چیدمان 400",
+                "Title": "چیدمان 400"
+              },
+              {
+                "Id": "چیدمان 5",
+                "Title": "چیدمان 5"
+              },
+              {
+                "Id": "چیدمان 50",
+                "Title": "چیدمان 50"
+              },
+              {
+                "Id": "چیدمان 500",
+                "Title": "چیدمان 500"
+              },
+              {
+                "Id": "چیدمان 600",
+                "Title": "چیدمان 600"
+              },
+              {
+                "Id": "چیدمان 700",
+                "Title": "چیدمان 700"
+              },
+              {
+                "Id": "چیدمان 75",
+                "Title": "چیدمان 75"
+              },
+              {
+                "Id": "چیدمان 800",
+                "Title": "چیدمان 800"
+              },
+              {
+                "Id": "چیدمان 900",
+                "Title": "چیدمان 900"
+              }
+            ],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      }
+    ]
+  }
+]

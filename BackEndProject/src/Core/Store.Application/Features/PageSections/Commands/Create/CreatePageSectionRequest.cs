@@ -1,0 +1,14 @@
+using Edition.Application.Common.Utilities.Security.Attributes;
+using System.Text.Json.Serialization;
+using Store.Common.Models;
+
+namespace Edition.Application.Features.PageSections.Commands;
+
+public record CreatePageSectionRequest : IRequest<OperationResult<CreatePageSectionResponse>>
+{
+    [JsonConverter(typeof(PageEncryptor))]
+    public int PageId { get; init; }
+    [JsonConverter(typeof(SectionEncryptor))]
+    public int SectionId { get; init; }
+    public int Priority { get; init; }
+}

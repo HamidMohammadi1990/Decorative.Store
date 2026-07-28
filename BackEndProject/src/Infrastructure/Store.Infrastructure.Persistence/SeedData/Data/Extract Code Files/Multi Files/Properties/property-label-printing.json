@@ -1,0 +1,93 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "3905",
+            "Title": "1.5*5"
+          },
+          {
+            "Id": "3906",
+            "Title": "2*5"
+          },
+          {
+            "Id": "3907",
+            "Title": "2.5*5"
+          },
+          {
+            "Id": "3908",
+            "Title": "شیت 100*50 برای سایز دلخواه"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "نوع چاپ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "5857",
+            "Title": "UV چهاررنگ"
+          },
+          {
+            "Id": "5859",
+            "Title": "UV پنج رنگ"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": []
+  },
+  {
+    "CategoryTitle": "انتخاب کالا",
+    "Properties": [
+      {
+        "Title": "لیبل اموال 2.5*5 رنگی",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "لیبل اموال 2.5*5 رنگی",
+            "Type": "number",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 99999,
+            "Items": [],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      }
+    ]
+  }
+]

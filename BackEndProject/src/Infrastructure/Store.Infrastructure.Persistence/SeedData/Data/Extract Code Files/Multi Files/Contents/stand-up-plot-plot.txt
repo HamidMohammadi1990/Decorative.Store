@@ -1,0 +1,433 @@
+<div class="col-md-7 col-12">
+                        <h1 class="title-h2  pr-2 text-right  mt-4 mt-md-0 mb-4">  چاپ استند پاپ آپ</h1>
+
+                        <div class="select_data  mb-3">
+                                <div class="line mb-3 d-flex align-items-center">
+                                    <label class="text-secondary w-25 mb-0">
+                                        عنوان سفارش
+                                    </label>
+                                    <input required="Required" class="form-control w-75" id="title" maxlength="150" minlength="1" name="title" type="text" value="" aria-required="true">
+                                </div>
+                            
+
+                            <div class="line mb-3 align-items-center d-none" id="materialBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    جنس مصرفی
+                                </label>
+                                <select class="custom-select w-75" data-val="true" data-val-number="The field materialID must be a number." data-val-required="The materialID field is required." id="materialID" name="materialID"><option selected="selected" value="4618">کتد170 گرمی </option>
+</select>
+                            </div>
+
+
+
+
+                            <div class="line mb-3 align-items-center d-none" id="sideBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    وجه
+                                </label>
+                                <select class="custom-select w-75" data-val="true" data-val-number="The field sideID must be a number." data-val-required="The sideID field is required." id="sideID" name="sideID"><option value="1">یک رو</option>
+</select>
+                            </div>
+                            <div class="line mb-3 d-flex align-items-center" id="tirazhBox">
+                                    <label class="text-secondary w-25 mb-0">
+                                        تیراژ
+                                    </label>
+                                <select class="custom-select w-75 valid" data-val="true" data-val-number="The field tirazhID must be a number." data-val-required="The tirazhID field is required." id="tirazhID" name="tirazhID" aria-required="true" aria-describedby="tirazhID-error" aria-invalid="false"><option value="">انتخاب کنید ...</option>
+<option value="2391">1</option>
+<option value="2392">2</option>
+<option value="2393">3</option>
+<option value="2394">4</option>
+<option value="2395">5</option>
+<option value="2396">6</option>
+<option value="2397">7</option>
+<option value="2398">8</option>
+<option selected="selected" value="0">تیراژ دلخواه</option>
+</select>
+                            </div>
+                            <div class="line mb-3 align-items-center d-flex" id="customTirazhBox">
+                                    <label class="text-secondary w-25 mb-0">
+                                        تیراژ
+                                    </label>
+                                <input class="form-control w-75 d-inline-block input-number" data-val="true" data-val-number="The field tirazhCount must be a number." data-val-required="The tirazhCount field is required." id="tirazhCount" max="99999" maxlength="5" min="1" name="tirazhCount" type="text" value="0">
+                            </div>
+
+
+
+                            <div class="line mb-3 d-flex align-items-center" id="sizeBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    سایز
+                                </label>
+                                <select required="Required" class="custom-select w-75 valid" data-val="true" data-val-number="The field sizeID must be a number." id="sizeID" name="sizeID" aria-required="true" aria-describedby="sizeID-error" aria-invalid="false"><option value="">انتخاب کنید ...</option>
+<option value="3482">3*2</option>
+<option value="3483">3*3</option>
+<option value="3484">4*3</option>
+<option value="3485">5*3</option>
+</select>
+                            </div>
+
+
+                                <div class="line mb-3 d-flex align-items-center" id="sizeBox">
+                                    <label class="text-secondary w-25 mb-0">
+                                        نوع
+                                    </label>
+                                    <select required="Required" class="custom-select w-75 valid" data-val="true" data-val-number="The field MultiLatTypeVal must be a number." id="MultiLatTypeVal" name="MultiLatTypeVal" aria-required="true" aria-describedby="MultiLatTypeVal-error" aria-invalid="false"><option value="">انتخاب کنید ...</option>
+<option value="2">منحنی</option>
+<option value="1">تخت</option>
+</select>
+                                </div>
+
+                            <div class="line mb-3 d-none align-items-center" id="customSizeBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    ابعاد
+                                </label>
+                                <div class="w-35">
+<input class="form-control d-inline-block input-float" data-val="true" data-val-number="The field tool must be a number." data-val-required="The tool field is required." id="tool" max="99" maxlength="4" min="1" name="tool" onblur="txtToolOnBlur();" placeholder="طول به سانتیمتر" type="text" value="0">                                        <p class="font-weight-lighter small mr-2">حداکثر طول :<b>99</b> سانتیمتر</p>
+                                </div>
+                                <div class="w-35 mr-3">
+<input class="form-control d-inline-block input-float" data-val="true" data-val-number="The field arz must be a number." data-val-required="The arz field is required." id="arz" max="99" maxlength="3" min="1" name="arz" onblur="txtArzOnBlur();" placeholder="عرض" type="text" value="0">                                        <p class="font-weight-lighter small mr-2">حداکثر عرض :<b>99</b> سانتیمتر</p>
+                                </div>
+                            </div>
+
+                            <div class="line mb-3 align-items-center d-none" id="printKindBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    نوع چاپ
+                                </label>
+                                <select class="custom-select w-75" data-val="true" data-val-number="The field printKindID must be a number." data-val-required="The printKindID field is required." id="printKindID" name="printKindID"><option value="4262">پلات</option>
+</select>
+                            </div>
+
+
+                            
+
+
+<input type="hidden" id="coverPrice" name="coverPrice" value="17075841">
+
+
+
+        <input class="d-none" type="text" id="coverRequired" name="coverRequired" value="false">
+        <div class="box-custom rounded border mb-3 p-3" id="coverBox">
+            <h3 class="title mb-3 pr-2 text-right">
+                <strong> روکش</strong>
+            </h3>
+            <div class="d-flex">
+                <label class="text-secondary w-25 mb-0">
+                    روکش
+                </label>
+                <select id="coverID" name="coverID" class="custom-select w-75 valid" aria-invalid="false">
+                        <option value="9677" generalid="28">لمینت گرم مات</option>
+                        <option value="9678" generalid="28">لمینت گرم براق</option>
+                </select>
+            </div>
+            <div class="d-none mt-2" id="coverAdtCountBox">
+                <label class="w-25"></label>
+                <input class="form-control d-none input-number w-75" min="0" max="99999" maxlength="5" id="coverAdtCount" name="coverAdtCount" required="" onblur="calculatePriceAdt('','cover','coverID')" aria-required="true">
+            </div>
+
+            <div class="d-none mt-2" id="coverStrCountBox">
+                <label class="w-25"></label>
+                <select id="coverStrCount" name="coverStrCount" class="custom-select w-75" required="" onchange="calculatePriceAdt('','cover','coverID')" aria-required="true"><option value="دو رو">دو رو</option></select>
+            </div>
+
+            <div class="d-none mt-2" id="coverParameterBox">
+                <label class="w-25"></label>
+                <select id="coverParameter" name="coverParameter" class="custom-select w-75" required="" aria-required="true"></select>
+            </div>
+        </div>
+
+                            
+<input type="hidden" id="sahafiPrice" name="sahafiPrice" value="0">
+
+
+    <input type="hidden" id="sahafiID" name="sahafiID" value="0">
+    <input type="hidden" id="sahafiAdtCount" name="sahafiAdtCount" value="0">
+    <input type="hidden" id="sahafiStrCount" name="sahafiStrCount" value="0">
+    <input type="hidden" id="sahafiParameter" name="sahafiParameter" value="0">
+    <input class="d-none" type="text" id="sahafiRequired" name="sahafiRequired" value="false">
+    
+                        </div>
+
+
+
+
+
+                                <div class="list" id="additionalList">
+                                    
+
+
+
+    <input type="hidden" value="22" id="adtGeneral9676">
+    <input type="hidden" value="0" id="adtGettirazhType9676">
+    <input type="hidden" value="2" id="adtType9676">
+    <input type="hidden" id="adtPrice9676" name="adtPrice9676" class="adtPrice" value="0">
+    <input type="hidden" id="adtID9676" value="9676">
+    <input type="hidden" id="adtIsFile9676" value="False">
+    <input type="hidden" id="adtIsDuplex9676" value="False">
+        <input type="hidden" id="adtStartNumber9676" name="adtStartNumber9676" value="0">
+        <input type="hidden" id="adtRequired9676" value="true">
+            <!-- اجباری -->
+            <!-- بدون پارامتر یا یک پارامتر -->
+            <!-- یا دارای چند پارامتر و انتخاب توسط مشتری نباشد  -->
+                <select class="d-none" id="adtStrCount9676" name="adtStrCount9676">
+                    <option value="0" selected=""></option>
+                </select>
+                <input type="hidden" id="adtCount9676" name="adtCount9676">
+                <input type="hidden" id="adtParameter9676" name="adtParameter9676" value="0">
+                <input type="hidden" class="adt d-none" id="adt9676" checked="">
+    <input type="hidden" value="27" id="adtGeneral15887">
+    <input type="hidden" value="0" id="adtGettirazhType15887">
+    <input type="hidden" value="2" id="adtType15887">
+    <input type="hidden" id="adtPrice15887" name="adtPrice15887" class="adtPrice" value="0">
+    <input type="hidden" id="adtID15887" value="15887">
+    <input type="hidden" id="adtIsFile15887" value="False">
+    <input type="hidden" id="adtIsDuplex15887" value="False">
+        <input type="hidden" id="adtStartNumber15887" name="adtStartNumber15887" value="0">
+        <input type="hidden" id="adtRequired15887" value="true">
+            <!-- اجباری -->
+            <!-- بدون پارامتر یا یک پارامتر -->
+            <!-- یا دارای چند پارامتر و انتخاب توسط مشتری نباشد  -->
+                <input type="hidden" id="adtCount15887" name="adtCount15887" value="1">
+                <select class="d-none" id="adtStrCount15887" name="adtStrCount15887">
+                    <option selected=""></option>
+                </select>
+                <input type="hidden" id="adtParameter15887" name="adtParameter15887" value="0">
+                <input type="hidden" class="adt d-none" id="adt15887" checked="">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    $('.input-number').focusin(function () {
+        $(this).data('oldValue', $(this).val());
+    });
+
+    $('.input-number').change(function () {
+
+        minValue = parseInt($(this).attr('min'));
+        maxValue = parseInt($(this).attr('max'));
+        valueCurrent = parseInt($(this).val());
+
+        if (Number.isNaN(minValue) || Number.isNaN(maxValue)) {
+            return;
+        }
+
+        name = $(this).attr('name');
+        if (valueCurrent >= minValue) {
+            $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled')
+        } else {
+            $(this).val($(this).data('oldValue'));
+        }
+        if (valueCurrent <= maxValue) {
+            $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
+        } else {
+            if (valueCurrent > maxValue) {
+                $(this).val(maxValue);
+            }
+            else if (valueCurrent < minValue) {
+                $(this).val(minValue);
+            }
+        }
+
+    });
+
+    $(".input-number").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13]) !== -1 ||
+            // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+            // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+            // let it happen, don't do anything
+            return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+</script>
+                                </div>
+
+                                <div class="box-custom rounded border mb-3 p-3" id="productBox">
+                                    <h3 class="title mb-3 pr-2 text-right">
+                                        <strong> انتخاب کالا </strong>
+                                    </h3>
+                                    <div class="list" id="productList">
+                                                <div class="row mb-1 mh-35 ">
+                                                    <div class="custom-control custom-checkbox col-md-12 pl-0">
+                                                        <div class="form-group float-right pt-1 col-md-6">
+                                                            <input type="hidden" value="4619" id="matID_4619">
+                                                            <input type="hidden" value="false" id="matRequired_4619">
+                                                            <input type="checkbox" class="custom-control-input mat" id="mat_4619" onchange="showMatCount('4619');">
+                                                            <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12" for="mat_4619">پاپاپ 3*2 منحنی</label>
+                                                        </div>
+
+                                                        <div class="custom-control float-left col-md-6 pl-0 matBox d-inline-block" id="matCount_4619_box">
+                                                            <div class="form-group">
+                                                                <input type="text" min="0" maxlength="5" max="99999" class="form-control w-75 d-inline-block input-number" id="matCount_4619" name="matCount_4619" onblur="materialCountFunction(this);" required="required">
+                                                                <label class="text-secondary mb-0">عدد</label>
+                                                            </div>
+                                                            <input class="productPrice" id="matPrice_4619" name="matPrice_4619" type="hidden" value="0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1 mh-35 ">
+                                                    <div class="custom-control custom-checkbox col-md-12 pl-0">
+                                                        <div class="form-group float-right pt-1 col-md-6">
+                                                            <input type="hidden" value="4620" id="matID_4620">
+                                                            <input type="hidden" value="false" id="matRequired_4620">
+                                                            <input type="checkbox" class="custom-control-input mat" id="mat_4620" onchange="showMatCount('4620');">
+                                                            <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12" for="mat_4620">پاپاپ 3*3 منحنی</label>
+                                                        </div>
+
+                                                        <div class="custom-control float-left col-md-6 pl-0 matBox d-inline-block" id="matCount_4620_box">
+                                                            <div class="form-group">
+                                                                <input type="text" min="0" maxlength="5" max="99999" class="form-control w-75 d-inline-block input-number" id="matCount_4620" name="matCount_4620" onblur="materialCountFunction(this);" required="required">
+                                                                <label class="text-secondary mb-0">عدد</label>
+                                                            </div>
+                                                            <input class="productPrice" id="matPrice_4620" name="matPrice_4620" type="hidden" value="0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1 mh-35 ">
+                                                    <div class="custom-control custom-checkbox col-md-12 pl-0">
+                                                        <div class="form-group float-right pt-1 col-md-6">
+                                                            <input type="hidden" value="4621" id="matID_4621">
+                                                            <input type="hidden" value="false" id="matRequired_4621">
+                                                            <input type="checkbox" class="custom-control-input mat" id="mat_4621" onchange="showMatCount('4621');">
+                                                            <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12" for="mat_4621">پاپاپ 4*3 منحنی</label>
+                                                        </div>
+
+                                                        <div class="custom-control float-left col-md-6 pl-0 matBox d-inline-block" id="matCount_4621_box">
+                                                            <div class="form-group">
+                                                                <input type="text" min="0" maxlength="5" max="99999" class="form-control w-75 d-inline-block input-number" id="matCount_4621" name="matCount_4621" onblur="materialCountFunction(this);" required="required">
+                                                                <label class="text-secondary mb-0">عدد</label>
+                                                            </div>
+                                                            <input class="productPrice" id="matPrice_4621" name="matPrice_4621" type="hidden" value="0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1 mh-35 ">
+                                                    <div class="custom-control custom-checkbox col-md-12 pl-0">
+                                                        <div class="form-group float-right pt-1 col-md-6">
+                                                            <input type="hidden" value="4622" id="matID_4622">
+                                                            <input type="hidden" value="false" id="matRequired_4622">
+                                                            <input type="checkbox" class="custom-control-input mat" id="mat_4622" onchange="showMatCount('4622');">
+                                                            <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12" for="mat_4622">پاپاپ 5*3 منحنی</label>
+                                                        </div>
+
+                                                        <div class="custom-control float-left col-md-6 pl-0 matBox d-inline-block" id="matCount_4622_box">
+                                                            <div class="form-group">
+                                                                <input type="text" min="0" maxlength="5" max="99999" class="form-control w-75 d-inline-block input-number" id="matCount_4622" name="matCount_4622" onblur="materialCountFunction(this);" required="required">
+                                                                <label class="text-secondary mb-0">عدد</label>
+                                                            </div>
+                                                            <input class="productPrice" id="matPrice_4622" name="matPrice_4622" type="hidden" value="0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1 mh-35 ">
+                                                    <div class="custom-control custom-checkbox col-md-12 pl-0">
+                                                        <div class="form-group float-right pt-1 col-md-6">
+                                                            <input type="hidden" value="4623" id="matID_4623">
+                                                            <input type="hidden" value="false" id="matRequired_4623">
+                                                            <input type="checkbox" class="custom-control-input mat" id="mat_4623" onchange="showMatCount('4623');">
+                                                            <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12" for="mat_4623">پاپاپ 3*2 تخت</label>
+                                                        </div>
+
+                                                        <div class="custom-control float-left col-md-6 pl-0 matBox d-inline-block" id="matCount_4623_box">
+                                                            <div class="form-group">
+                                                                <input type="text" min="0" maxlength="5" max="99999" class="form-control w-75 d-inline-block input-number" id="matCount_4623" name="matCount_4623" onblur="materialCountFunction(this);" required="required">
+                                                                <label class="text-secondary mb-0">عدد</label>
+                                                            </div>
+                                                            <input class="productPrice" id="matPrice_4623" name="matPrice_4623" type="hidden" value="0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1 mh-35 ">
+                                                    <div class="custom-control custom-checkbox col-md-12 pl-0">
+                                                        <div class="form-group float-right pt-1 col-md-6">
+                                                            <input type="hidden" value="4624" id="matID_4624">
+                                                            <input type="hidden" value="false" id="matRequired_4624">
+                                                            <input type="checkbox" class="custom-control-input mat" id="mat_4624" onchange="showMatCount('4624');">
+                                                            <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12" for="mat_4624">پاپاپ 3*5  تخت </label>
+                                                        </div>
+
+                                                        <div class="custom-control float-left col-md-6 pl-0 matBox d-inline-block" id="matCount_4624_box">
+                                                            <div class="form-group">
+                                                                <input type="text" min="0" maxlength="5" max="99999" class="form-control w-75 d-inline-block input-number" id="matCount_4624" name="matCount_4624" onblur="materialCountFunction(this);" required="required">
+                                                                <label class="text-secondary mb-0">عدد</label>
+                                                            </div>
+                                                            <input class="productPrice" id="matPrice_4624" name="matPrice_4624" type="hidden" value="0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1 mh-35 ">
+                                                    <div class="custom-control custom-checkbox col-md-12 pl-0">
+                                                        <div class="form-group float-right pt-1 col-md-6">
+                                                            <input type="hidden" value="4625" id="matID_4625">
+                                                            <input type="hidden" value="false" id="matRequired_4625">
+                                                            <input type="checkbox" class="custom-control-input mat" id="mat_4625" onchange="showMatCount('4625');">
+                                                            <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12" for="mat_4625">پاپاپ 4*3تخت</label>
+                                                        </div>
+
+                                                        <div class="custom-control float-left col-md-6 pl-0 matBox d-inline-block" id="matCount_4625_box">
+                                                            <div class="form-group">
+                                                                <input type="text" min="0" maxlength="5" max="99999" class="form-control w-75 d-inline-block input-number" id="matCount_4625" name="matCount_4625" onblur="materialCountFunction(this);" required="required">
+                                                                <label class="text-secondary mb-0">عدد</label>
+                                                            </div>
+                                                            <input class="productPrice" id="matPrice_4625" name="matPrice_4625" type="hidden" value="0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1 mh-35 ">
+                                                    <div class="custom-control custom-checkbox col-md-12 pl-0">
+                                                        <div class="form-group float-right pt-1 col-md-6">
+                                                            <input type="hidden" value="4626" id="matID_4626">
+                                                            <input type="hidden" value="false" id="matRequired_4626">
+                                                            <input type="checkbox" class="custom-control-input mat" id="mat_4626" onchange="showMatCount('4626');">
+                                                            <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12" for="mat_4626">پاپاپ 3*5  تخت </label>
+                                                        </div>
+
+                                                        <div class="custom-control float-left col-md-6 pl-0 matBox d-inline-block" id="matCount_4626_box">
+                                                            <div class="form-group">
+                                                                <input type="text" min="0" maxlength="5" max="99999" class="form-control w-75 d-inline-block input-number" id="matCount_4626" name="matCount_4626" onblur="materialCountFunction(this);" required="required">
+                                                                <label class="text-secondary mb-0">عدد</label>
+                                                            </div>
+                                                            <input class="productPrice" id="matPrice_4626" name="matPrice_4626" type="hidden" value="0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-1 mh-35 ">
+                                                    <div class="custom-control custom-checkbox col-md-12 pl-0">
+                                                        <div class="form-group float-right pt-1 col-md-6">
+                                                            <input type="hidden" value="4637" id="matID_4637">
+                                                            <input type="hidden" value="false" id="matRequired_4637">
+                                                            <input type="checkbox" class="custom-control-input mat" id="mat_4637" onchange="showMatCount('4637');">
+                                                            <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12" for="mat_4637">پاپاپ 3*3 تخت</label>
+                                                        </div>
+
+                                                        <div class="custom-control float-left col-md-6 pl-0 matBox d-inline-block" id="matCount_4637_box">
+                                                            <div class="form-group">
+                                                                <input type="text" min="0" maxlength="5" max="99999" class="form-control w-75 d-inline-block input-number" id="matCount_4637" name="matCount_4637" onblur="materialCountFunction(this);" required="required">
+                                                                <label class="text-secondary mb-0">عدد</label>
+                                                            </div>
+                                                            <input class="productPrice" id="matPrice_4637" name="matPrice_4637" type="hidden" value="0">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                    </div>
+                                </div>                        
+                                            </div>

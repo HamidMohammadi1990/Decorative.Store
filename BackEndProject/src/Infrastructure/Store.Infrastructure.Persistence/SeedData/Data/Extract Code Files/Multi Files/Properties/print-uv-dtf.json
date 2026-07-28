@@ -1,0 +1,57 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "ابعاد",
+        "Type": "text",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 420,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": []
+  },
+  {
+    "CategoryTitle": "خدمات پس از چاپ",
+    "Properties": [
+      {
+        "Title": "نوع چیدمان",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "نوع چیدمان",
+            "Type": "select",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 0,
+            "Items": [],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      }
+    ]
+  }
+]

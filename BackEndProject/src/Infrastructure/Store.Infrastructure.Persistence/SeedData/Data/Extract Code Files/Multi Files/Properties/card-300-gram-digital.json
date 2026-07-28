@@ -1,0 +1,110 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "وجه",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          },
+          {
+            "Id": "2",
+            "Title": "دو رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "2374",
+            "Title": "50"
+          },
+          {
+            "Id": "2375",
+            "Title": "100"
+          },
+          {
+            "Id": "2376",
+            "Title": "200"
+          },
+          {
+            "Id": "2377",
+            "Title": "300"
+          },
+          {
+            "Id": "2378",
+            "Title": "500"
+          },
+          {
+            "Id": "2379",
+            "Title": "750"
+          },
+          {
+            "Id": "2380",
+            "Title": "1000"
+          },
+          {
+            "Id": "0",
+            "Title": "تیراژ دلخواه"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "2464",
+            "Title": "9*5"
+          },
+          {
+            "Id": "2465",
+            "Title": "8.5*5.5"
+          },
+          {
+            "Id": "2466",
+            "Title": "9*6"
+          },
+          {
+            "Id": "2467",
+            "Title": "5*5"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": []
+  }
+]

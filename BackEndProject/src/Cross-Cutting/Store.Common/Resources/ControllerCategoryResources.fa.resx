@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ApiControllerCategory_AccessControl" xml:space="preserve"><value>کنترل دسترسی</value></data>
+  <data name="ApiControllerCategory_Authentication" xml:space="preserve"><value>احراز هویت</value></data>
+  <data name="ApiControllerCategory_Blog" xml:space="preserve"><value>وبلاگ</value></data>
+  <data name="ApiControllerCategory_Catalog" xml:space="preserve"><value>کاتالوگ</value></data>
+  <data name="ApiControllerCategory_Cms" xml:space="preserve"><value>مدیریت محتوا</value></data>
+  <data name="ApiControllerCategory_Comments" xml:space="preserve"><value>نظرات</value></data>
+  <data name="ApiControllerCategory_Company" xml:space="preserve"><value>شرکت</value></data>
+  <data name="ApiControllerCategory_ContentPolicy" xml:space="preserve"><value>سیاست محتوا</value></data>
+  <data name="ApiControllerCategory_Delivery" xml:space="preserve"><value>ارسال</value></data>
+  <data name="ApiControllerCategory_Financial" xml:space="preserve"><value>مالی</value></data>
+  <data name="ApiControllerCategory_General" xml:space="preserve"><value>عمومی</value></data>
+  <data name="ApiControllerCategory_Location" xml:space="preserve"><value>موقعیت مکانی</value></data>
+  <data name="ApiControllerCategory_Orders" xml:space="preserve"><value>سفارش‌ها</value></data>
+  <data name="ApiControllerCategory_PostType" xml:space="preserve"><value>نوع پست</value></data>
+  <data name="ApiControllerCategory_Product" xml:space="preserve"><value>محصول</value></data>
+  <data name="ApiControllerCategory_Property" xml:space="preserve"><value>ویژگی</value></data>
+  <data name="ApiControllerCategory_Tags" xml:space="preserve"><value>برچسب‌ها</value></data>
+  <data name="ApiControllerCategory_Users" xml:space="preserve"><value>کاربران</value></data>
+  <data name="ApiControllerCategory_Wallet" xml:space="preserve"><value>کیف پول</value></data>
+  <data name="ApiControllerCategory_Localization" xml:space="preserve"><value>چندزبانگی</value></data>
+</root>

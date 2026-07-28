@@ -1,0 +1,97 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "جنس",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1210",
+            "Title": "سربرگ تحریر 80گرمی(بعدازبرش20.7*14.5)"
+          },
+          {
+            "Id": "5808",
+            "Title": "سربرگ تحریر 100 گرمی(بعدازبرش20.7*14.5)"
+          },
+          {
+            "Id": "5809",
+            "Title": "سربرگ کتان 120 گرمی(بعدازبرش20.7*14.5)"
+          },
+          {
+            "Id": "7448",
+            "Title": "سربرگ تحریر 120گرم(بعد از برش"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "روی چاپ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          },
+          {
+            "Id": "2",
+            "Title": "دو رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1000",
+            "Title": "1000"
+          },
+          {
+            "Id": "2000",
+            "Title": "2000"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "خدمات پس از چاپ",
+    "Properties": [
+      {
+        "Title": "سرچسب تحریر",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سرچسب",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  }
+]

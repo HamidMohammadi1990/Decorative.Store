@@ -1,0 +1,121 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "وجه",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          },
+          {
+            "Id": "2",
+            "Title": "دو رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "5687",
+            "Title": "50"
+          },
+          {
+            "Id": "5688",
+            "Title": "100"
+          },
+          {
+            "Id": "5689",
+            "Title": "200"
+          },
+          {
+            "Id": "5690",
+            "Title": "300"
+          },
+          {
+            "Id": "5691",
+            "Title": "500"
+          },
+          {
+            "Id": "5692",
+            "Title": "750"
+          },
+          {
+            "Id": "5693",
+            "Title": "1000"
+          },
+          {
+            "Id": "0",
+            "Title": "تیراژ دلخواه"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "3732",
+            "Title": "9*5"
+          },
+          {
+            "Id": "3733",
+            "Title": "8.5*5.5"
+          },
+          {
+            "Id": "3734",
+            "Title": "9*6"
+          },
+          {
+            "Id": "3735",
+            "Title": "5*5"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "خدمات پس از چاپ",
+    "Properties": [
+      {
+        "Title": "گوشه گرد دستی",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  }
+]

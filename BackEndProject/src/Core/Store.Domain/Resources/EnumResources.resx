@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountPartyType_Company" xml:space="preserve"><value>Company</value></data>
+  <data name="AccountPartyType_Customer" xml:space="preserve"><value>Customer</value></data>
+  <data name="AccountPartyType_Intermediary" xml:space="preserve"><value>Intermediary</value></data>
+  <data name="AccountPartyType_Vat" xml:space="preserve"><value>Vat</value></data>
+  <data name="ChartOfAccountDetailType_Bank" xml:space="preserve"><value>Bank</value></data>
+  <data name="ChartOfAccountDetailType_Hesab" xml:space="preserve"><value>Hesab</value></data>
+  <data name="ChartOfAccountDetailType_Kala" xml:space="preserve"><value>Kala</value></data>
+  <data name="ChartOfAccountDetailType_None" xml:space="preserve"><value>None</value></data>
+  <data name="ChartOfAccountDetailType_Sandogh" xml:space="preserve"><value>Sandogh</value></data>
+  <data name="ChartOfAccountDetailType_Shakhs" xml:space="preserve"><value>Shakhs</value></data>
+  <data name="ChartOfAccountDetailType_TankhahGardan" xml:space="preserve"><value>Tankhah Gardan</value></data>
+  <data name="ChartOfAccountType_BahayeTamamShodeyeKalayeForukhtehShodeh" xml:space="preserve"><value>Bahaye Tamam Shodeye Kalaye Forukhteh Shodeh</value></data>
+  <data name="ChartOfAccountType_BedehiHa" xml:space="preserve"><value>Bedehi Ha</value></data>
+  <data name="ChartOfAccountType_DaraeiHa" xml:space="preserve"><value>Daraei Ha</value></data>
+  <data name="ChartOfAccountType_Daramad" xml:space="preserve"><value>Daramad</value></data>
+  <data name="ChartOfAccountType_Forush" xml:space="preserve"><value>Forush</value></data>
+  <data name="ChartOfAccountType_Hazineha" xml:space="preserve"><value>Hazineha</value></data>
+  <data name="ChartOfAccountType_HoghughSahebanSaham" xml:space="preserve"><value>Hoghugh Saheban Saham</value></data>
+  <data name="ChartOfAccountType_Kharid" xml:space="preserve"><value>Kharid</value></data>
+  <data name="ChartOfAccountType_None" xml:space="preserve"><value>None</value></data>
+  <data name="ChartOfAccountType_SAYERHesabHa" xml:space="preserve"><value>S A Y E R Hesab Ha</value></data>
+  <data name="CheckStatusType_Blocked" xml:space="preserve"><value>Blocked</value></data>
+  <data name="CheckStatusType_Cancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="CheckStatusType_Expired" xml:space="preserve"><value>Expired</value></data>
+  <data name="CheckStatusType_InsufficientFunds" xml:space="preserve"><value>Insufficient Funds</value></data>
+  <data name="CheckStatusType_Lost" xml:space="preserve"><value>Lost</value></data>
+  <data name="CheckStatusType_Paid" xml:space="preserve"><value>Paid</value></data>
+  <data name="CheckStatusType_Seized" xml:space="preserve"><value>Seized</value></data>
+  <data name="CheckStatusType_SentToBank" xml:space="preserve"><value>Sent To Bank</value></data>
+  <data name="CheckStatusType_Unpaid" xml:space="preserve"><value>Unpaid</value></data>
+  <data name="CheckStatusType_Valid" xml:space="preserve"><value>Valid</value></data>
+  <data name="CompanyStoryMediaType_Image" xml:space="preserve"><value>Image</value></data>
+  <data name="CompanyStoryMediaType_Video" xml:space="preserve"><value>Video</value></data>
+  <data name="CommentStatusType_Approved" xml:space="preserve"><value>Approved</value></data>
+  <data name="CommentStatusType_Deleted" xml:space="preserve"><value>Deleted</value></data>
+  <data name="CommentStatusType_Pending" xml:space="preserve"><value>Pending</value></data>
+  <data name="CommentStatusType_Rejected" xml:space="preserve"><value>Rejected</value></data>
+  <data name="ContentPolicyEffect_Allow" xml:space="preserve"><value>Allow</value></data>
+  <data name="ContentPolicyEffect_Deny" xml:space="preserve"><value>Deny</value></data>
+  <data name="ContentPolicyOperator_Contains" xml:space="preserve"><value>Contains</value></data>
+  <data name="ContentPolicyOperator_EndsWith" xml:space="preserve"><value>Ends With</value></data>
+  <data name="ContentPolicyOperator_Equals" xml:space="preserve"><value>Equals</value></data>
+  <data name="ContentPolicyOperator_Exists" xml:space="preserve"><value>Exists</value></data>
+  <data name="ContentPolicyOperator_GreaterThan" xml:space="preserve"><value>Greater Than</value></data>
+  <data name="ContentPolicyOperator_GreaterThanOrEqual" xml:space="preserve"><value>Greater Than Or Equal</value></data>
+  <data name="ContentPolicyOperator_In" xml:space="preserve"><value>In</value></data>
+  <data name="ContentPolicyOperator_IsNotNull" xml:space="preserve"><value>Is Not Null</value></data>
+  <data name="ContentPolicyOperator_IsNull" xml:space="preserve"><value>Is Null</value></data>
+  <data name="ContentPolicyOperator_LessThan" xml:space="preserve"><value>Less Than</value></data>
+  <data name="ContentPolicyOperator_LessThanOrEqual" xml:space="preserve"><value>Less Than Or Equal</value></data>
+  <data name="ContentPolicyOperator_NotContains" xml:space="preserve"><value>Not Contains</value></data>
+  <data name="ContentPolicyOperator_NotEquals" xml:space="preserve"><value>Not Equals</value></data>
+  <data name="ContentPolicyOperator_NotExists" xml:space="preserve"><value>Not Exists</value></data>
+  <data name="ContentPolicyOperator_NotIn" xml:space="preserve"><value>Not In</value></data>
+  <data name="ContentPolicyOperator_StartsWith" xml:space="preserve"><value>Starts With</value></data>
+  <data name="ContentPolicyOperator_Between" xml:space="preserve"><value>Between</value></data>
+  <data name="ContentPolicyOperator_NotBetween" xml:space="preserve"><value>Not Between</value></data>
+  <data name="ContentPolicyOperator_CountEquals" xml:space="preserve"><value>Count Equals</value></data>
+  <data name="ContentPolicyOperator_CountNotEquals" xml:space="preserve"><value>Count Not Equals</value></data>
+  <data name="ContentPolicyOperator_CountGreaterThan" xml:space="preserve"><value>Count Greater Than</value></data>
+  <data name="ContentPolicyOperator_CountGreaterThanOrEqual" xml:space="preserve"><value>Count Greater Than Or Equal</value></data>
+  <data name="ContentPolicyOperator_CountLessThan" xml:space="preserve"><value>Count Less Than</value></data>
+  <data name="ContentPolicyOperator_CountLessThanOrEqual" xml:space="preserve"><value>Count Less Than Or Equal</value></data>
+  <data name="ContentPolicyValueType_Context" xml:space="preserve"><value>Context</value></data>
+  <data name="ContentPolicyValueType_Literal" xml:space="preserve"><value>Literal</value></data>
+  <data name="CurrencyCodeType_GBP" xml:space="preserve"><value>GBP</value></data>
+  <data name="CurrencyCodeType_Toman" xml:space="preserve"><value>Toman</value></data>
+  <data name="CurrencyCodeType_TRY" xml:space="preserve"><value>TRY</value></data>
+  <data name="CurrencyCodeType_USD" xml:space="preserve"><value>USD</value></data>
+  <data name="DiscountValidationFailure_CooperationOnly" xml:space="preserve"><value>Cooperation Only</value></data>
+  <data name="DiscountValidationFailure_DiscountAlreadyConsumed" xml:space="preserve"><value>Discount Already Consumed</value></data>
+  <data name="DiscountValidationFailure_Expired" xml:space="preserve"><value>Expired</value></data>
+  <data name="DiscountValidationFailure_Inactive" xml:space="preserve"><value>Inactive</value></data>
+  <data name="DiscountValidationFailure_InvalidDiscountType" xml:space="preserve"><value>Invalid Discount Type</value></data>
+  <data name="DiscountValidationFailure_MinimumAmountNotMet" xml:space="preserve"><value>Minimum Amount Not Met</value></data>
+  <data name="DiscountValidationFailure_NoEligibleItems" xml:space="preserve"><value>No Eligible Items</value></data>
+  <data name="DiscountValidationFailure_UsageLimitReached" xml:space="preserve"><value>Usage Limit Reached</value></data>
+  <data name="DiscountValidationFailure_UserNotEligible" xml:space="preserve"><value>User Not Eligible</value></data>
+  <data name="FileSizeUnitType_Bytes" xml:space="preserve"><value>Bytes</value></data>
+  <data name="FileSizeUnitType_Gigabytes" xml:space="preserve"><value>Gigabytes</value></data>
+  <data name="FileSizeUnitType_Kilobytes" xml:space="preserve"><value>Kilobytes</value></data>
+  <data name="FileSizeUnitType_Megabytes" xml:space="preserve"><value>Megabytes</value></data>
+  <data name="FinancialDocumentType_BankTransaction" xml:space="preserve"><value>Bank Transaction</value></data>
+  <data name="FinancialDocumentType_Vat" xml:space="preserve"><value>Vat</value></data>
+  <data name="ForgetPasswordOptionType_Email" xml:space="preserve"><value>Email</value></data>
+  <data name="ForgetPasswordOptionType_Message" xml:space="preserve"><value>Message</value></data>
+  <data name="GenderType_Female" xml:space="preserve"><value>Female</value></data>
+  <data name="GenderType_Male" xml:space="preserve"><value>Male</value></data>
+  <data name="MethodType_AsyncAction" xml:space="preserve"><value>Async Action</value></data>
+  <data name="MethodType_AsyncFunction" xml:space="preserve"><value>Async Function</value></data>
+  <data name="MethodType_Synchronous" xml:space="preserve"><value>Synchronous</value></data>
+  <data name="OrderCommissionStatusType_Paid" xml:space="preserve"><value>Paid</value></data>
+  <data name="OrderCommissionStatusType_Pending" xml:space="preserve"><value>Pending</value></data>
+  <data name="OrderCommissionStatusType_Refunded" xml:space="preserve"><value>Refunded</value></data>
+  <data name="OrderItemStatusType_AcceptedByCompany" xml:space="preserve"><value>Accepted By Company</value></data>
+  <data name="OrderItemStatusType_ApprovingDesign" xml:space="preserve"><value>Approving Design</value></data>
+  <data name="OrderItemStatusType_AwaitingDesignApprovalByUser" xml:space="preserve"><value>Awaiting Design Approval By User</value></data>
+  <data name="OrderItemStatusType_Completed" xml:space="preserve"><value>Completed</value></data>
+  <data name="OrderItemStatusType_InProgress" xml:space="preserve"><value>In Progress</value></data>
+  <data name="OrderItemStatusType_Pending" xml:space="preserve"><value>Pending</value></data>
+  <data name="OrderItemStatusType_Rejected" xml:space="preserve"><value>Rejected</value></data>
+  <data name="OrderItemStatusType_RejectedForEdit" xml:space="preserve"><value>Rejected For Edit</value></data>
+  <data name="OrderNoteType_General" xml:space="preserve"><value>General</value></data>
+  <data name="OrderNoteType_Private" xml:space="preserve"><value>Private</value></data>
+  <data name="OrderNoteType_Systemic" xml:space="preserve"><value>Systemic</value></data>
+  <data name="OrderStatusType_Completed" xml:space="preserve"><value>Completed</value></data>
+  <data name="OrderStatusType_InProgress" xml:space="preserve"><value>In Progress</value></data>
+  <data name="OrderStatusType_Pending" xml:space="preserve"><value>Pending</value></data>
+  <data name="OrderStatusType_Rejected" xml:space="preserve"><value>Rejected</value></data>
+  <data name="OrderVatStatusType_Paid" xml:space="preserve"><value>Paid</value></data>
+  <data name="OrderVatStatusType_Pending" xml:space="preserve"><value>Pending</value></data>
+  <data name="OrderVatStatusType_Refunded" xml:space="preserve"><value>Refunded</value></data>
+  <data name="PageType_CategoryPage" xml:space="preserve"><value>Category Page</value></data>
+  <data name="PageType_CheckoutPage" xml:space="preserve"><value>Checkout Page</value></data>
+  <data name="PageType_General" xml:space="preserve"><value>General</value></data>
+  <data name="PageType_Home" xml:space="preserve"><value>Home</value></data>
+  <data name="PageType_ProductPage" xml:space="preserve"><value>Product Page</value></data>
+  <data name="PaymentOptionType_BankOnly" xml:space="preserve"><value>Bank Only</value></data>
+  <data name="PaymentOptionType_WalletAndBank" xml:space="preserve"><value>Wallet And Bank</value></data>
+  <data name="PaymentOptionType_WalletOnly" xml:space="preserve"><value>Wallet Only</value></data>
+  <data name="PermissionLevelType_Action" xml:space="preserve"><value>Action</value></data>
+  <data name="PermissionLevelType_Page" xml:space="preserve"><value>Page</value></data>
+  <data name="PermissionLevelType_Product" xml:space="preserve"><value>Product</value></data>
+  <data name="PermissionLevelType_Tab" xml:space="preserve"><value>Tab</value></data>
+  <data name="PictureColorModeType_All" xml:space="preserve"><value>All</value></data>
+  <data name="PictureColorModeType_CMYK" xml:space="preserve"><value>CMYK</value></data>
+  <data name="PictureColorModeType_RGB" xml:space="preserve"><value>RGB</value></data>
+  <data name="PictureColorModeType_Unknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="PosTransactionStatusType_Cancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="PosTransactionStatusType_Failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="PosTransactionStatusType_Success" xml:space="preserve"><value>Success</value></data>
+  <data name="ProductFeatureDataType_Boolean" xml:space="preserve"><value>Boolean</value></data>
+  <data name="ProductFeatureDataType_Complex" xml:space="preserve"><value>Complex</value></data>
+  <data name="ProductFeatureDataType_DateTime" xml:space="preserve"><value>DateTime</value></data>
+  <data name="ProductFeatureDataType_Decimal" xml:space="preserve"><value>Decimal</value></data>
+  <data name="ProductFeatureDataType_Float" xml:space="preserve"><value>Float</value></data>
+  <data name="ProductFeatureDataType_Integer" xml:space="preserve"><value>Integer</value></data>
+  <data name="ProductFeatureDataType_Long" xml:space="preserve"><value>Long</value></data>
+  <data name="ProductFeatureDataType_String" xml:space="preserve"><value>String</value></data>
+  <data name="ProductFeatureTypeCode_DisplayOnMenu" xml:space="preserve"><value>Display On Menu</value></data>
+  <data name="PropertyType_Boolean" xml:space="preserve"><value>Boolean</value></data>
+  <data name="PropertyType_Dimensions" xml:space="preserve"><value>Dimensions</value></data>
+  <data name="PropertyType_HasParents" xml:space="preserve"><value>Has Parents</value></data>
+  <data name="PropertyType_Numeric" xml:space="preserve"><value>Numeric</value></data>
+  <data name="PropertyType_NumericWithItem" xml:space="preserve"><value>Numeric With Item</value></data>
+  <data name="PropertyType_Select" xml:space="preserve"><value>Select</value></data>
+  <data name="PropertyType_Text" xml:space="preserve"><value>Text</value></data>
+  <data name="RefundMethodType_BankAccount" xml:space="preserve"><value>Bank Account</value></data>
+  <data name="RefundMethodType_Wallet" xml:space="preserve"><value>Wallet</value></data>
+  <data name="TransactionStatusType_Canceled" xml:space="preserve"><value>Canceled</value></data>
+  <data name="TransactionStatusType_Completed" xml:space="preserve"><value>Completed</value></data>
+  <data name="TransactionStatusType_Failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="TransactionStatusType_Partial" xml:space="preserve"><value>Partial</value></data>
+  <data name="TransactionStatusType_Pending" xml:space="preserve"><value>Pending</value></data>
+  <data name="TransactionStatusType_Refunded" xml:space="preserve"><value>Refunded</value></data>
+  <data name="UserSessionRevokeReason_PasswordChanged" xml:space="preserve"><value>Password Changed</value></data>
+  <data name="UserSessionRevokeReason_RevokedByUser" xml:space="preserve"><value>Revoked By User</value></data>
+  <data name="UserSessionRevokeReason_RevokedOtherSessions" xml:space="preserve"><value>Revoked Other Sessions</value></data>
+  <data name="UserSessionRevokeReason_SecurityStampChanged" xml:space="preserve"><value>Security Stamp Changed</value></data>
+  <data name="UserSessionRevokeReason_SessionLimitExceeded" xml:space="preserve"><value>Session Limit Exceeded</value></data>
+  <data name="UserSessionRevokeReason_SignOut" xml:space="preserve"><value>Sign Out</value></data>
+  <data name="DeviceType_Unknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="DeviceType_Desktop" xml:space="preserve"><value>Desktop</value></data>
+  <data name="DeviceType_Mobile" xml:space="preserve"><value>Mobile</value></data>
+  <data name="DeviceType_Tablet" xml:space="preserve"><value>Tablet</value></data>
+  <data name="OperatingSystemType_Unknown" xml:space="preserve"><value>Unknown</value></data>
+  <data name="OperatingSystemType_Windows" xml:space="preserve"><value>Windows</value></data>
+  <data name="OperatingSystemType_MacOs" xml:space="preserve"><value>macOS</value></data>
+  <data name="OperatingSystemType_Linux" xml:space="preserve"><value>Linux</value></data>
+  <data name="OperatingSystemType_Android" xml:space="preserve"><value>Android</value></data>
+  <data name="OperatingSystemType_iOS" xml:space="preserve"><value>iOS</value></data>
+  <data name="OperatingSystemType_ChromeOs" xml:space="preserve"><value>ChromeOS</value></data>
+  <data name="WalletStatusType_Active" xml:space="preserve"><value>Active</value></data>
+  <data name="WalletStatusType_Banned" xml:space="preserve"><value>Banned</value></data>
+  <data name="WalletStatusType_None" xml:space="preserve"><value>None</value></data>
+  <data name="WalletStatusType_Suspend" xml:space="preserve"><value>Suspend</value></data>
+  <data name="WalletTransactionStatusType_Completed" xml:space="preserve"><value>Completed</value></data>
+  <data name="WalletTransactionStatusType_Pending" xml:space="preserve"><value>Pending</value></data>
+  <data name="WalletTransactionType_Decremental" xml:space="preserve"><value>Decremental</value></data>
+  <data name="WalletTransactionType_Incremental" xml:space="preserve"><value>Incremental</value></data>
+  <data name="PermissionType_ApproveBlogPostComment" xml:space="preserve"><value>Approve Blog Post Comment</value></data>
+  <data name="PermissionType_AssignRolePermission" xml:space="preserve"><value>Assign Role Permission</value></data>
+  <data name="PermissionType_AssignUserRole" xml:space="preserve"><value>Assign User Role</value></data>
+  <data name="PermissionType_ChangeProductCommentStatus" xml:space="preserve"><value>Change Product Comment Status</value></data>
+  <data name="PermissionType_ChangeUserPassword" xml:space="preserve"><value>Change User Password</value></data>
+  <data name="PermissionType_CheckPermission" xml:space="preserve"><value>Check Permission</value></data>
+  <data name="PermissionType_CreateBlogPost" xml:space="preserve"><value>Create Blog Post</value></data>
+  <data name="PermissionType_CreateBlogPostCategory" xml:space="preserve"><value>Create Blog Post Category</value></data>
+  <data name="PermissionType_CreateBlogPostTag" xml:space="preserve"><value>Create Blog Post Tag</value></data>
+  <data name="PermissionType_CreateCategory" xml:space="preserve"><value>Create Category</value></data>
+  <data name="PermissionType_CreateChartOfAccount" xml:space="preserve"><value>Create Chart Of Account</value></data>
+  <data name="PermissionType_CreateCity" xml:space="preserve"><value>Create City</value></data>
+  <data name="PermissionType_CreateCommentTopic" xml:space="preserve"><value>Create Comment Topic</value></data>
+  <data name="PermissionType_CreateCompanyPosDevice" xml:space="preserve"><value>Create Company Pos Device</value></data>
+  <data name="PermissionType_CreateContentPolicy" xml:space="preserve"><value>Create Content Policy</value></data>
+  <data name="PermissionType_CreateContentPolicyRule" xml:space="preserve"><value>Create Content Policy Rule</value></data>
+  <data name="PermissionType_CreateDeliveryOption" xml:space="preserve"><value>Create Delivery Option</value></data>
+  <data name="PermissionType_CreateDeliveryType" xml:space="preserve"><value>Create Delivery Type</value></data>
+  <data name="PermissionType_CreateManagedPermission" xml:space="preserve"><value>Create Managed Permission</value></data>
+  <data name="PermissionType_CreatePostType" xml:space="preserve"><value>Create Post Type</value></data>
+  <data name="PermissionType_CreateProduct" xml:space="preserve"><value>Create Product</value></data>
+  <data name="PermissionType_CreateProductDescription" xml:space="preserve"><value>Create Product Description</value></data>
+  <data name="PermissionType_CreateProductFileRange" xml:space="preserve"><value>Create Product File Range</value></data>
+  <data name="PermissionType_CreateProductPrice" xml:space="preserve"><value>Create Product Price</value></data>
+  <data name="PermissionType_CreateProductPriceDeliveryOption" xml:space="preserve"><value>Create Product Price Delivery Option</value></data>
+  <data name="PermissionType_CreateProductPropertyPrice" xml:space="preserve"><value>Create Product Property Price</value></data>
+  <data name="PermissionType_CreateProperty" xml:space="preserve"><value>Create Property</value></data>
+  <data name="PermissionType_CreatePropertyCategory" xml:space="preserve"><value>Create Property Category</value></data>
+  <data name="PermissionType_CreatePropertyItem" xml:space="preserve"><value>Create Property Item</value></data>
+  <data name="PermissionType_CreatePropertyItemPrice" xml:space="preserve"><value>Create Property Item Price</value></data>
+  <data name="PermissionType_CreateProvince" xml:space="preserve"><value>Create Province</value></data>
+  <data name="PermissionType_CreateRole" xml:space="preserve"><value>Create Role</value></data>
+  <data name="PermissionType_CreateStatus" xml:space="preserve"><value>Create Status</value></data>
+  <data name="PermissionType_CreateSubCategory" xml:space="preserve"><value>Create Sub Category</value></data>
+  <data name="PermissionType_CreateTag" xml:space="preserve"><value>Create Tag</value></data>
+  <data name="PermissionType_CreateUser" xml:space="preserve"><value>Create User</value></data>
+  <data name="PermissionType_CreateUserAddress" xml:space="preserve"><value>Create User Address</value></data>
+  <data name="PermissionType_DeleteCategory" xml:space="preserve"><value>Delete Category</value></data>
+  <data name="PermissionType_DeleteChartOfAccount" xml:space="preserve"><value>Delete Chart Of Account</value></data>
+  <data name="PermissionType_DeleteCity" xml:space="preserve"><value>Delete City</value></data>
+  <data name="PermissionType_DeleteCommentTopic" xml:space="preserve"><value>Delete Comment Topic</value></data>
+  <data name="PermissionType_DeleteCompanyPosDevice" xml:space="preserve"><value>Delete Company Pos Device</value></data>
+  <data name="PermissionType_DeleteContentPolicy" xml:space="preserve"><value>Delete Content Policy</value></data>
+  <data name="PermissionType_DeleteContentPolicyRule" xml:space="preserve"><value>Delete Content Policy Rule</value></data>
+  <data name="PermissionType_DeleteDeliveryType" xml:space="preserve"><value>Delete Delivery Type</value></data>
+  <data name="PermissionType_DeletePermission" xml:space="preserve"><value>Delete Permission</value></data>
+  <data name="PermissionType_DeletePostType" xml:space="preserve"><value>Delete Post Type</value></data>
+  <data name="PermissionType_DeleteProduct" xml:space="preserve"><value>Delete Product</value></data>
+  <data name="PermissionType_DeleteProductDescription" xml:space="preserve"><value>Delete Product Description</value></data>
+  <data name="PermissionType_DeleteProductFile" xml:space="preserve"><value>Delete Product File</value></data>
+  <data name="PermissionType_DeleteProductPriceDeliveryOption" xml:space="preserve"><value>Delete Product Price Delivery Option</value></data>
+  <data name="PermissionType_DeleteProperty" xml:space="preserve"><value>Delete Property</value></data>
+  <data name="PermissionType_DeletePropertyCategory" xml:space="preserve"><value>Delete Property Category</value></data>
+  <data name="PermissionType_DeletePropertyItem" xml:space="preserve"><value>Delete Property Item</value></data>
+  <data name="PermissionType_DeleteProvince" xml:space="preserve"><value>Delete Province</value></data>
+  <data name="PermissionType_DeleteRole" xml:space="preserve"><value>Delete Role</value></data>
+  <data name="PermissionType_DeleteRolePermission" xml:space="preserve"><value>Delete Role Permission</value></data>
+  <data name="PermissionType_DeleteSubCategory" xml:space="preserve"><value>Delete Sub Category</value></data>
+  <data name="PermissionType_DeleteTag" xml:space="preserve"><value>Delete Tag</value></data>
+  <data name="PermissionType_DeleteUser" xml:space="preserve"><value>Delete User</value></data>
+  <data name="PermissionType_DeleteUserRole" xml:space="preserve"><value>Delete User Role</value></data>
+  <data name="PermissionType_GetBlogPostById" xml:space="preserve"><value>Get Blog Post By Id</value></data>
+  <data name="PermissionType_GetBlogPostCategoryById" xml:space="preserve"><value>Get Blog Post Category By Id</value></data>
+  <data name="PermissionType_GetBlogPostCommentById" xml:space="preserve"><value>Get Blog Post Comment By Id</value></data>
+  <data name="PermissionType_GetBlogPostLikeById" xml:space="preserve"><value>Get Blog Post Like By Id</value></data>
+  <data name="PermissionType_GetBlogPostTagById" xml:space="preserve"><value>Get Blog Post Tag By Id</value></data>
+  <data name="PermissionType_GetCategoryById" xml:space="preserve"><value>Get Category By Id</value></data>
+  <data name="PermissionType_GetChartOfAccountById" xml:space="preserve"><value>Get Chart Of Account By Id</value></data>
+  <data name="PermissionType_GetCityById" xml:space="preserve"><value>Get City By Id</value></data>
+  <data name="PermissionType_GetCommentTopicById" xml:space="preserve"><value>Get Comment Topic By Id</value></data>
+  <data name="PermissionType_GetCompanyById" xml:space="preserve"><value>Get Company By Id</value></data>
+  <data name="PermissionType_GetCompanyCommentById" xml:space="preserve"><value>Get Company Comment By Id</value></data>
+  <data name="PermissionType_GetCompanyPosDeviceById" xml:space="preserve"><value>Get Company Pos Device By Id</value></data>
+  <data name="PermissionType_GetContentPolicyById" xml:space="preserve"><value>Get Content Policy By Id</value></data>
+  <data name="PermissionType_GetContentPolicyRuleById" xml:space="preserve"><value>Get Content Policy Rule By Id</value></data>
+  <data name="PermissionType_GetDeliveryOptionById" xml:space="preserve"><value>Get Delivery Option By Id</value></data>
+  <data name="PermissionType_GetDeliveryTypeById" xml:space="preserve"><value>Get Delivery Type By Id</value></data>
+  <data name="PermissionType_GetFinancialYearById" xml:space="preserve"><value>Get Financial Year By Id</value></data>
+  <data name="PermissionType_GetOrderById" xml:space="preserve"><value>Get Order By Id</value></data>
+  <data name="PermissionType_GetOrderDetail" xml:space="preserve"><value>Get Order Detail</value></data>
+  <data name="PermissionType_GetOrderStatusSummary" xml:space="preserve"><value>Get Order Status Summary</value></data>
+  <data name="PermissionType_GetPermissionById" xml:space="preserve"><value>Get Permission By Id</value></data>
+  <data name="PermissionType_GetPostTypeById" xml:space="preserve"><value>Get Post Type By Id</value></data>
+  <data name="PermissionType_GetProductById" xml:space="preserve"><value>Get Product By Id</value></data>
+  <data name="PermissionType_GetProductCommentById" xml:space="preserve"><value>Get Product Comment By Id</value></data>
+  <data name="PermissionType_GetProductDescriptionById" xml:space="preserve"><value>Get Product Description By Id</value></data>
+  <data name="PermissionType_GetProductFileById" xml:space="preserve"><value>Get Product File By Id</value></data>
+  <data name="PermissionType_GetProductPriceById" xml:space="preserve"><value>Get Product Price By Id</value></data>
+  <data name="PermissionType_GetProductPriceDeliveryOptionById" xml:space="preserve"><value>Get Product Price Delivery Option By Id</value></data>
+  <data name="PermissionType_GetProductPropertyPriceById" xml:space="preserve"><value>Get Product Property Price By Id</value></data>
+  <data name="PermissionType_GetPropertyById" xml:space="preserve"><value>Get Property By Id</value></data>
+  <data name="PermissionType_GetPropertyCategoryById" xml:space="preserve"><value>Get Property Category By Id</value></data>
+  <data name="PermissionType_GetPropertyItemById" xml:space="preserve"><value>Get Property Item By Id</value></data>
+  <data name="PermissionType_GetPropertyItemPriceById" xml:space="preserve"><value>Get Property Item Price By Id</value></data>
+  <data name="PermissionType_GetProvinceById" xml:space="preserve"><value>Get Province By Id</value></data>
+  <data name="PermissionType_GetRoleById" xml:space="preserve"><value>Get Role By Id</value></data>
+  <data name="PermissionType_GetRolePermissionById" xml:space="preserve"><value>Get Role Permission By Id</value></data>
+  <data name="PermissionType_GetSubCategoryById" xml:space="preserve"><value>Get Sub Category By Id</value></data>
+  <data name="PermissionType_GetTagById" xml:space="preserve"><value>Get Tag By Id</value></data>
+  <data name="PermissionType_GetUserAddressById" xml:space="preserve"><value>Get User Address By Id</value></data>
+  <data name="PermissionType_GetUserById" xml:space="preserve"><value>Get User By Id</value></data>
+  <data name="PermissionType_GetUserRoleById" xml:space="preserve"><value>Get User Role By Id</value></data>
+  <data name="PermissionType_ListBlogPost" xml:space="preserve"><value>List Blog Post</value></data>
+  <data name="PermissionType_ListBlogPostCategory" xml:space="preserve"><value>List Blog Post Category</value></data>
+  <data name="PermissionType_ListBlogPostComment" xml:space="preserve"><value>List Blog Post Comment</value></data>
+  <data name="PermissionType_ListBlogPostLike" xml:space="preserve"><value>List Blog Post Like</value></data>
+  <data name="PermissionType_ListBlogPostTag" xml:space="preserve"><value>List Blog Post Tag</value></data>
+  <data name="PermissionType_ListCategory" xml:space="preserve"><value>List Category</value></data>
+  <data name="PermissionType_ListChartOfAccount" xml:space="preserve"><value>List Chart Of Account</value></data>
+  <data name="PermissionType_ListCity" xml:space="preserve"><value>List City</value></data>
+  <data name="PermissionType_ListCommentTopic" xml:space="preserve"><value>List Comment Topic</value></data>
+  <data name="PermissionType_ListCompany" xml:space="preserve"><value>List Company</value></data>
+  <data name="PermissionType_ListCompanyComment" xml:space="preserve"><value>List Company Comment</value></data>
+  <data name="PermissionType_ListCompanyPosDevice" xml:space="preserve"><value>List Company Pos Device</value></data>
+  <data name="PermissionType_ListContentPolicy" xml:space="preserve"><value>List Content Policy</value></data>
+  <data name="PermissionType_ListContentPolicyRule" xml:space="preserve"><value>List Content Policy Rule</value></data>
+  <data name="PermissionType_ListDeliveryOption" xml:space="preserve"><value>List Delivery Option</value></data>
+  <data name="PermissionType_ListDeliveryType" xml:space="preserve"><value>List Delivery Type</value></data>
+  <data name="PermissionType_ListFinancialYear" xml:space="preserve"><value>List Financial Year</value></data>
+  <data name="PermissionType_ListOrder" xml:space="preserve"><value>List Order</value></data>
+  <data name="PermissionType_ListOrderByStatus" xml:space="preserve"><value>List Order By Status</value></data>
+  <data name="PermissionType_ListPermission" xml:space="preserve"><value>List Permission</value></data>
+  <data name="PermissionType_ListPostType" xml:space="preserve"><value>List Post Type</value></data>
+  <data name="PermissionType_ListProduct" xml:space="preserve"><value>List Product</value></data>
+  <data name="PermissionType_ListProductComment" xml:space="preserve"><value>List Product Comment</value></data>
+  <data name="PermissionType_ListProductDescription" xml:space="preserve"><value>List Product Description</value></data>
+  <data name="PermissionType_ListProductFile" xml:space="preserve"><value>List Product File</value></data>
+  <data name="PermissionType_ListProductPrice" xml:space="preserve"><value>List Product Price</value></data>
+  <data name="PermissionType_ListProductPriceDeliveryOption" xml:space="preserve"><value>List Product Price Delivery Option</value></data>
+  <data name="PermissionType_ListProductPropertyPrice" xml:space="preserve"><value>List Product Property Price</value></data>
+  <data name="PermissionType_ListProperty" xml:space="preserve"><value>List Property</value></data>
+  <data name="PermissionType_ListPropertyCategory" xml:space="preserve"><value>List Property Category</value></data>
+  <data name="PermissionType_ListPropertyItem" xml:space="preserve"><value>List Property Item</value></data>
+  <data name="PermissionType_ListPropertyItemPrice" xml:space="preserve"><value>List Property Item Price</value></data>
+  <data name="PermissionType_ListProvince" xml:space="preserve"><value>List Province</value></data>
+  <data name="PermissionType_ListRole" xml:space="preserve"><value>List Role</value></data>
+  <data name="PermissionType_ListRolePermission" xml:space="preserve"><value>List Role Permission</value></data>
+  <data name="PermissionType_ListSubCategory" xml:space="preserve"><value>List Sub Category</value></data>
+  <data name="PermissionType_ListTag" xml:space="preserve"><value>List Tag</value></data>
+  <data name="PermissionType_ListUser" xml:space="preserve"><value>List User</value></data>
+  <data name="PermissionType_ListUserAddress" xml:space="preserve"><value>List User Address</value></data>
+  <data name="PermissionType_ListUserRole" xml:space="preserve"><value>List User Role</value></data>
+  <data name="PermissionType_ManageBlogPost" xml:space="preserve"><value>Manage Blog Post</value></data>
+  <data name="PermissionType_ManageBlogPostCategory" xml:space="preserve"><value>Manage Blog Post Category</value></data>
+  <data name="PermissionType_ManageBlogPostComment" xml:space="preserve"><value>Manage Blog Post Comment</value></data>
+  <data name="PermissionType_ManageBlogPostGroup" xml:space="preserve"><value>Manage Blog Post Group</value></data>
+  <data name="PermissionType_ManageBlogPostLike" xml:space="preserve"><value>Manage Blog Post Like</value></data>
+  <data name="PermissionType_ManageBlogPostTag" xml:space="preserve"><value>Manage Blog Post Tag</value></data>
+  <data name="PermissionType_ManageCategory" xml:space="preserve"><value>Manage Category</value></data>
+  <data name="PermissionType_ManageCategoryGroup" xml:space="preserve"><value>Manage Category Group</value></data>
+  <data name="PermissionType_ManageChartOfAccount" xml:space="preserve"><value>Manage Chart Of Account</value></data>
+  <data name="PermissionType_ManageCity" xml:space="preserve"><value>Manage City</value></data>
+  <data name="PermissionType_ManageCommentTopic" xml:space="preserve"><value>Manage Comment Topic</value></data>
+  <data name="PermissionType_ManageCommentTopicGroup" xml:space="preserve"><value>Manage Comment Topic Group</value></data>
+  <data name="PermissionType_ManageCompany" xml:space="preserve"><value>Manage Company</value></data>
+  <data name="PermissionType_ManageCompanyComment" xml:space="preserve"><value>Manage Company Comment</value></data>
+  <data name="PermissionType_ManageCompanyGroup" xml:space="preserve"><value>Manage Company Group</value></data>
+  <data name="PermissionType_ManageCompanyPosDevice" xml:space="preserve"><value>Manage Company Pos Device</value></data>
+  <data name="PermissionType_ManageContentPolicy" xml:space="preserve"><value>Manage Content Policy</value></data>
+  <data name="PermissionType_ManageContentPolicyGroup" xml:space="preserve"><value>Manage Content Policy Group</value></data>
+  <data name="PermissionType_ManageContentPolicyRule" xml:space="preserve"><value>Manage Content Policy Rule</value></data>
+  <data name="PermissionType_ManageContentPolicyRuleGroup" xml:space="preserve"><value>Manage Content Policy Rule Group</value></data>
+  <data name="PermissionType_ManageDeliveryOption" xml:space="preserve"><value>Manage Delivery Option</value></data>
+  <data name="PermissionType_ManageDeliveryType" xml:space="preserve"><value>Manage Delivery Type</value></data>
+  <data name="PermissionType_ManageDeliveryTypeGroup" xml:space="preserve"><value>Manage Delivery Type Group</value></data>
+  <data name="PermissionType_ManageFinancialGroup" xml:space="preserve"><value>Manage Financial Group</value></data>
+  <data name="PermissionType_ManageFinancialYear" xml:space="preserve"><value>Manage Financial Year</value></data>
+  <data name="PermissionType_ManageLocationGroup" xml:space="preserve"><value>Manage Location Group</value></data>
+  <data name="PermissionType_ManageOrder" xml:space="preserve"><value>Manage Order</value></data>
+  <data name="PermissionType_ManageOrderGroup" xml:space="preserve"><value>Manage Order Group</value></data>
+  <data name="PermissionType_ManagePermission" xml:space="preserve"><value>Manage Permission</value></data>
+  <data name="PermissionType_ManagePermissionGroup" xml:space="preserve"><value>Manage Permission Group</value></data>
+  <data name="PermissionType_ManagePostType" xml:space="preserve"><value>Manage Post Type</value></data>
+  <data name="PermissionType_ManagePostTypeGroup" xml:space="preserve"><value>Manage Post Type Group</value></data>
+  <data name="PermissionType_ManageProduct" xml:space="preserve"><value>Manage Product</value></data>
+  <data name="PermissionType_ManageProductComment" xml:space="preserve"><value>Manage Product Comment</value></data>
+  <data name="PermissionType_ManageProductCommentGroup" xml:space="preserve"><value>Manage Product Comment Group</value></data>
+  <data name="PermissionType_ManageProductDescription" xml:space="preserve"><value>Manage Product Description</value></data>
+  <data name="PermissionType_ManageProductFile" xml:space="preserve"><value>Manage Product File</value></data>
+  <data name="PermissionType_ManageProductGroup" xml:space="preserve"><value>Manage Product Group</value></data>
+  <data name="PermissionType_ManageProductPrice" xml:space="preserve"><value>Manage Product Price</value></data>
+  <data name="PermissionType_ManageProductPriceDeliveryOption" xml:space="preserve"><value>Manage Product Price Delivery Option</value></data>
+  <data name="PermissionType_ManageProductPropertyPrice" xml:space="preserve"><value>Manage Product Property Price</value></data>
+  <data name="PermissionType_ManageProperty" xml:space="preserve"><value>Manage Property</value></data>
+  <data name="PermissionType_ManagePropertyCategory" xml:space="preserve"><value>Manage Property Category</value></data>
+  <data name="PermissionType_ManagePropertyGroup" xml:space="preserve"><value>Manage Property Group</value></data>
+  <data name="PermissionType_ManagePropertyItem" xml:space="preserve"><value>Manage Property Item</value></data>
+  <data name="PermissionType_ManagePropertyItemPrice" xml:space="preserve"><value>Manage Property Item Price</value></data>
+  <data name="PermissionType_ManageProvince" xml:space="preserve"><value>Manage Province</value></data>
+  <data name="PermissionType_ManageRole" xml:space="preserve"><value>Manage Role</value></data>
+  <data name="PermissionType_ManageRoleGroup" xml:space="preserve"><value>Manage Role Group</value></data>
+  <data name="PermissionType_ManageRolePermission" xml:space="preserve"><value>Manage Role Permission</value></data>
+  <data name="PermissionType_ManageRolePermissionGroup" xml:space="preserve"><value>Manage Role Permission Group</value></data>
+  <data name="PermissionType_ManageStatus" xml:space="preserve"><value>Manage Status</value></data>
+  <data name="PermissionType_ManageStatusGroup" xml:space="preserve"><value>Manage Status Group</value></data>
+  <data name="PermissionType_ManageSubCategory" xml:space="preserve"><value>Manage Sub Category</value></data>
+  <data name="PermissionType_ManageSubCategoryGroup" xml:space="preserve"><value>Manage Sub Category Group</value></data>
+  <data name="PermissionType_ManageTag" xml:space="preserve"><value>Manage Tag</value></data>
+  <data name="PermissionType_ManageTagGroup" xml:space="preserve"><value>Manage Tag Group</value></data>
+  <data name="PermissionType_ManageUserAddress" xml:space="preserve"><value>Manage User Address</value></data>
+  <data name="PermissionType_ManageUserAddressGroup" xml:space="preserve"><value>Manage User Address Group</value></data>
+  <data name="PermissionType_ManageUserRole" xml:space="preserve"><value>Manage User Role</value></data>
+  <data name="PermissionType_ManageUserRoleGroup" xml:space="preserve"><value>Manage User Role Group</value></data>
+  <data name="PermissionType_ManageUsers" xml:space="preserve"><value>Manage Users</value></data>
+  <data name="PermissionType_ManageUsersGroup" xml:space="preserve"><value>Manage Users Group</value></data>
+  <data name="PermissionType_Product" xml:space="preserve"><value>Product</value></data>
+  <data name="PermissionType_PublishBlogPost" xml:space="preserve"><value>Publish Blog Post</value></data>
+  <data name="PermissionType_UpdateBlogPost" xml:space="preserve"><value>Update Blog Post</value></data>
+  <data name="PermissionType_UpdateBlogPostCategory" xml:space="preserve"><value>Update Blog Post Category</value></data>
+  <data name="PermissionType_UpdateBlogPostTag" xml:space="preserve"><value>Update Blog Post Tag</value></data>
+  <data name="PermissionType_UpdateCategory" xml:space="preserve"><value>Update Category</value></data>
+  <data name="PermissionType_UpdateChartOfAccount" xml:space="preserve"><value>Update Chart Of Account</value></data>
+  <data name="PermissionType_UpdateCity" xml:space="preserve"><value>Update City</value></data>
+  <data name="PermissionType_UpdateCommentTopic" xml:space="preserve"><value>Update Comment Topic</value></data>
+  <data name="PermissionType_UpdateCompanyPosDevice" xml:space="preserve"><value>Update Company Pos Device</value></data>
+  <data name="PermissionType_UpdateContentPolicy" xml:space="preserve"><value>Update Content Policy</value></data>
+  <data name="PermissionType_UpdateContentPolicyRule" xml:space="preserve"><value>Update Content Policy Rule</value></data>
+  <data name="PermissionType_UpdateDeliveryOption" xml:space="preserve"><value>Update Delivery Option</value></data>
+  <data name="PermissionType_UpdateDeliveryType" xml:space="preserve"><value>Update Delivery Type</value></data>
+  <data name="PermissionType_UpdatePermission" xml:space="preserve"><value>Update Permission</value></data>
+  <data name="PermissionType_UpdatePostType" xml:space="preserve"><value>Update Post Type</value></data>
+  <data name="PermissionType_UpdateProduct" xml:space="preserve"><value>Update Product</value></data>
+  <data name="PermissionType_UpdateProductDescription" xml:space="preserve"><value>Update Product Description</value></data>
+  <data name="PermissionType_UpdateProductFileStatus" xml:space="preserve"><value>Update Product File Status</value></data>
+  <data name="PermissionType_UpdateProductPrice" xml:space="preserve"><value>Update Product Price</value></data>
+  <data name="PermissionType_UpdateProductPriceDeliveryOption" xml:space="preserve"><value>Update Product Price Delivery Option</value></data>
+  <data name="PermissionType_UpdateProductPropertyPrice" xml:space="preserve"><value>Update Product Property Price</value></data>
+  <data name="PermissionType_UpdateProperty" xml:space="preserve"><value>Update Property</value></data>
+  <data name="PermissionType_UpdatePropertyCategory" xml:space="preserve"><value>Update Property Category</value></data>
+  <data name="PermissionType_UpdatePropertyItem" xml:space="preserve"><value>Update Property Item</value></data>
+  <data name="PermissionType_UpdatePropertyItemPrice" xml:space="preserve"><value>Update Property Item Price</value></data>
+  <data name="PermissionType_UpdateProvince" xml:space="preserve"><value>Update Province</value></data>
+  <data name="PermissionType_UpdateRole" xml:space="preserve"><value>Update Role</value></data>
+  <data name="PermissionType_UpdateSubCategory" xml:space="preserve"><value>Update Sub Category</value></data>
+  <data name="PermissionType_UpdateTag" xml:space="preserve"><value>Update Tag</value></data>
+  <data name="PermissionType_UpdateUser" xml:space="preserve"><value>Update User</value></data>
+  <data name="PermissionType_CreateFinancialYear" xml:space="preserve"><value>Create Financial Year</value></data>
+  <data name="PermissionType_DeleteFinancialYear" xml:space="preserve"><value>Delete Financial Year</value></data>
+  <data name="PermissionType_UpdateFinancialYear" xml:space="preserve"><value>Update Financial Year</value></data>
+  <data name="PermissionType_DeleteBlogPostTag" xml:space="preserve"><value>Delete Blog Post Tag</value></data>
+  <data name="PermissionType_ManageProductFeatureType" xml:space="preserve"><value>Manage Product Feature Type</value></data>
+  <data name="PermissionType_ListProductFeatureType" xml:space="preserve"><value>List Product Feature Type</value></data>
+  <data name="PermissionType_GetProductFeatureTypeById" xml:space="preserve"><value>Get Product Feature Type By Id</value></data>
+  <data name="PermissionType_CreateProductFeatureType" xml:space="preserve"><value>Create Product Feature Type</value></data>
+  <data name="PermissionType_UpdateProductFeatureType" xml:space="preserve"><value>Update Product Feature Type</value></data>
+  <data name="PermissionType_DeleteProductFeatureType" xml:space="preserve"><value>Delete Product Feature Type</value></data>
+  <data name="PermissionType_ManageProductProperty" xml:space="preserve"><value>Manage Product Property</value></data>
+  <data name="PermissionType_ListProductProperty" xml:space="preserve"><value>List Product Property</value></data>
+  <data name="PermissionType_GetProductPropertyById" xml:space="preserve"><value>Get Product Property By Id</value></data>
+  <data name="PermissionType_CreateProductProperty" xml:space="preserve"><value>Create Product Property</value></data>
+  <data name="PermissionType_UpdateProductProperty" xml:space="preserve"><value>Update Product Property</value></data>
+  <data name="PermissionType_DeleteProductProperty" xml:space="preserve"><value>Delete Product Property</value></data>
+  <data name="PermissionType_ManageProductPropertyRule" xml:space="preserve"><value>Manage Product Property Rule</value></data>
+  <data name="PermissionType_ListProductPropertyRule" xml:space="preserve"><value>List Product Property Rule</value></data>
+  <data name="PermissionType_GetProductPropertyRuleById" xml:space="preserve"><value>Get Product Property Rule By Id</value></data>
+  <data name="PermissionType_CreateProductPropertyRule" xml:space="preserve"><value>Create Product Property Rule</value></data>
+  <data name="PermissionType_UpdateProductPropertyRule" xml:space="preserve"><value>Update Product Property Rule</value></data>
+  <data name="PermissionType_DeleteProductPropertyRule" xml:space="preserve"><value>Delete Product Property Rule</value></data>
+  <data name="PermissionType_ManageDiscount" xml:space="preserve"><value>Manage Discount</value></data>
+  <data name="PermissionType_ListDiscount" xml:space="preserve"><value>List Discount</value></data>
+  <data name="PermissionType_GetDiscountById" xml:space="preserve"><value>Get Discount By Id</value></data>
+  <data name="PermissionType_CreateDiscount" xml:space="preserve"><value>Create Discount</value></data>
+  <data name="PermissionType_UpdateDiscount" xml:space="preserve"><value>Update Discount</value></data>
+  <data name="PermissionType_DeleteDiscount" xml:space="preserve"><value>Delete Discount</value></data>
+  <data name="PermissionType_ManageProductOrderItemAttachmentType" xml:space="preserve"><value>Manage Product Order Item Attachment Type</value></data>
+  <data name="PermissionType_ListProductOrderItemAttachmentType" xml:space="preserve"><value>List Product Order Item Attachment Type</value></data>
+  <data name="PermissionType_GetProductOrderItemAttachmentTypeById" xml:space="preserve"><value>Get Product Order Item Attachment Type By Id</value></data>
+  <data name="PermissionType_CreateProductOrderItemAttachmentType" xml:space="preserve"><value>Create Product Order Item Attachment Type</value></data>
+  <data name="PermissionType_UpdateProductOrderItemAttachmentType" xml:space="preserve"><value>Update Product Order Item Attachment Type</value></data>
+  <data name="PermissionType_DeleteProductOrderItemAttachmentType" xml:space="preserve"><value>Delete Product Order Item Attachment Type</value></data>
+  <data name="PermissionType_ManageBank" xml:space="preserve"><value>Manage Bank</value></data>
+  <data name="PermissionType_ListBank" xml:space="preserve"><value>List Bank</value></data>
+  <data name="PermissionType_GetBankById" xml:space="preserve"><value>Get Bank By Id</value></data>
+  <data name="PermissionType_CreateBank" xml:space="preserve"><value>Create Bank</value></data>
+  <data name="PermissionType_UpdateBank" xml:space="preserve"><value>Update Bank</value></data>
+  <data name="PermissionType_DeleteBank" xml:space="preserve"><value>Delete Bank</value></data>
+  <data name="PermissionType_ManageCmsGroup" xml:space="preserve"><value>Manage Cms Group</value></data>
+  <data name="PermissionType_ManagePage" xml:space="preserve"><value>Manage Page</value></data>
+  <data name="PermissionType_ListPage" xml:space="preserve"><value>List Page</value></data>
+  <data name="PermissionType_GetPageById" xml:space="preserve"><value>Get Page By Id</value></data>
+  <data name="PermissionType_CreatePage" xml:space="preserve"><value>Create Page</value></data>
+  <data name="PermissionType_UpdatePage" xml:space="preserve"><value>Update Page</value></data>
+  <data name="PermissionType_DeletePage" xml:space="preserve"><value>Delete Page</value></data>
+  <data name="PermissionType_ManageSection" xml:space="preserve"><value>Manage Section</value></data>
+  <data name="PermissionType_ListSection" xml:space="preserve"><value>List Section</value></data>
+  <data name="PermissionType_GetSectionById" xml:space="preserve"><value>Get Section By Id</value></data>
+  <data name="PermissionType_CreateSection" xml:space="preserve"><value>Create Section</value></data>
+  <data name="PermissionType_UpdateSection" xml:space="preserve"><value>Update Section</value></data>
+  <data name="PermissionType_DeleteSection" xml:space="preserve"><value>Delete Section</value></data>
+  <data name="PermissionType_ManageSectionType" xml:space="preserve"><value>Manage Section Type</value></data>
+  <data name="PermissionType_ListSectionType" xml:space="preserve"><value>List Section Type</value></data>
+  <data name="PermissionType_GetSectionTypeById" xml:space="preserve"><value>Get Section Type By Id</value></data>
+  <data name="PermissionType_CreateSectionType" xml:space="preserve"><value>Create Section Type</value></data>
+  <data name="PermissionType_UpdateSectionType" xml:space="preserve"><value>Update Section Type</value></data>
+  <data name="PermissionType_DeleteSectionType" xml:space="preserve"><value>Delete Section Type</value></data>
+  <data name="PermissionType_ManageSectionItem" xml:space="preserve"><value>Manage Section Item</value></data>
+  <data name="PermissionType_ListSectionItem" xml:space="preserve"><value>List Section Item</value></data>
+  <data name="PermissionType_GetSectionItemById" xml:space="preserve"><value>Get Section Item By Id</value></data>
+  <data name="PermissionType_CreateSectionItem" xml:space="preserve"><value>Create Section Item</value></data>
+  <data name="PermissionType_UpdateSectionItem" xml:space="preserve"><value>Update Section Item</value></data>
+  <data name="PermissionType_DeleteSectionItem" xml:space="preserve"><value>Delete Section Item</value></data>
+  <data name="PermissionType_ManagePageSection" xml:space="preserve"><value>Manage Page Section</value></data>
+  <data name="PermissionType_ListPageSection" xml:space="preserve"><value>List Page Section</value></data>
+  <data name="PermissionType_GetPageSectionById" xml:space="preserve"><value>Get Page Section By Id</value></data>
+  <data name="PermissionType_CreatePageSection" xml:space="preserve"><value>Create Page Section</value></data>
+  <data name="PermissionType_UpdatePageSection" xml:space="preserve"><value>Update Page Section</value></data>
+  <data name="PermissionType_DeletePageSection" xml:space="preserve"><value>Delete Page Section</value></data>
+  <data name="PermissionType_ManageWebSiteSetting" xml:space="preserve"><value>Manage Web Site Setting</value></data>
+  <data name="PermissionType_GetWebSiteSettingById" xml:space="preserve"><value>Get Web Site Setting By Id</value></data>
+  <data name="PermissionType_UpdateWebSiteSetting" xml:space="preserve"><value>Update Web Site Setting</value></data>
+  <data name="PermissionType_ManageContentPolicyRecordAccessGroup" xml:space="preserve"><value>Manage Content Policy Record Access Group</value></data>
+  <data name="PermissionType_ManageContentPolicyRecordAccess" xml:space="preserve"><value>Manage Content Policy Record Access</value></data>
+  <data name="PermissionType_CreateContentPolicyRecordAccess" xml:space="preserve"><value>Create Content Policy Record Access</value></data>
+  <data name="PermissionType_DeleteContentPolicyRecordAccess" xml:space="preserve"><value>Delete Content Policy Record Access</value></data>
+  <data name="PermissionType_ListContentPolicyRecordAccess" xml:space="preserve"><value>List Content Policy Record Access</value></data>
+  <data name="PermissionType_GetContentPolicyRecordAccessById" xml:space="preserve"><value>Get Content Policy Record Access By Id</value></data>
+  <data name="PermissionType_SetContentPolicyRecordAccess" xml:space="preserve"><value>Set Content Policy Record Access</value></data>
+  <data name="PermissionType_ManageContentPolicyMetadataGroup" xml:space="preserve"><value>Manage Content Policy Metadata Group</value></data>
+  <data name="PermissionType_ManageContentPolicyMetadata" xml:space="preserve"><value>Manage Content Policy Metadata</value></data>
+  <data name="PermissionType_ContentPolicy_GetEntityTypes" xml:space="preserve"><value>Get Content Policy Entity Types</value></data>
+  <data name="PermissionType_ContentPolicy_GetEntitySchema" xml:space="preserve"><value>Get Content Policy Entity Schema</value></data>
+  <data name="PermissionType_ContentPolicy_GetRuleOptions" xml:space="preserve"><value>Get Content Policy Rule Options</value></data>
+  <data name="PermissionType_ContentPolicy_GetPropertyOperators" xml:space="preserve"><value>Get Content Policy Property Operators</value></data>
+  <data name="PermissionType_ContentPolicy_ValidateRules" xml:space="preserve"><value>Validate Content Policy Rules</value></data>
+  <data name="PermissionType_ContentPolicy_Preview" xml:space="preserve"><value>Preview Content Policy</value></data>
+  <data name="PermissionType_ContentPolicy_CompareMerge" xml:space="preserve"><value>Compare Content Policy Merge</value></data>
+  <data name="PermissionType_ManageCompanyStory" xml:space="preserve"><value>Manage Company Story</value></data>
+  <data name="PermissionType_CreateCompanyStory" xml:space="preserve"><value>Create Company Story</value></data>
+  <data name="PermissionType_UpdateCompanyStory" xml:space="preserve"><value>Update Company Story</value></data>
+  <data name="PermissionType_ActivateCompanyStory" xml:space="preserve"><value>Activate Company Story</value></data>
+  <data name="PermissionType_DeactivateCompanyStory" xml:space="preserve"><value>Deactivate Company Story</value></data>
+  <data name="PermissionType_ManageCompanyStoryComment" xml:space="preserve"><value>Manage Company Story Comment</value></data>
+  <data name="PermissionType_ApproveCompanyStoryComment" xml:space="preserve"><value>Approve Company Story Comment</value></data>
+  <data name="PermissionType_ManageCompanyStoryLike" xml:space="preserve"><value>Manage Company Story Like</value></data>
+  <data name="PermissionType_ListCompanyStory" xml:space="preserve"><value>List Company Story</value></data>
+  <data name="PermissionType_GetCompanyStoryById" xml:space="preserve"><value>Get Company Story By Id</value></data>
+  <data name="PermissionType_ListCompanyStoryComment" xml:space="preserve"><value>List Company Story Comment</value></data>
+  <data name="PermissionType_GetCompanyStoryCommentById" xml:space="preserve"><value>Get Company Story Comment By Id</value></data>
+  <data name="PermissionType_ListCompanyStoryLike" xml:space="preserve"><value>List Company Story Like</value></data>
+  <data name="PermissionType_GetCompanyStoryLikeById" xml:space="preserve"><value>Get Company Story Like By Id</value></data>
+  <data name="PermissionType_ManageLanguageGroup" xml:space="preserve"><value>Manage Language Group</value></data>
+  <data name="PermissionType_ManageLanguage" xml:space="preserve"><value>Manage Language</value></data>
+  <data name="PermissionType_ListLanguage" xml:space="preserve"><value>List Language</value></data>
+  <data name="PermissionType_GetLanguageById" xml:space="preserve"><value>Get Language By Id</value></data>
+  <data name="PermissionType_CreateLanguage" xml:space="preserve"><value>Create Language</value></data>
+  <data name="PermissionType_UpdateLanguage" xml:space="preserve"><value>Update Language</value></data>
+  <data name="PermissionType_DeleteLanguage" xml:space="preserve"><value>Delete Language</value></data>
+  <data name="PermissionType_SetDefaultLanguage" xml:space="preserve"><value>Set Default Language</value></data>
+</root>

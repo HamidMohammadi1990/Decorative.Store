@@ -1,0 +1,175 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "جنس مصرفی",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1099",
+            "Title": "تحریر  80 گرم"
+          },
+          {
+            "Id": "1100",
+            "Title": "تحریر  100 گرم"
+          },
+          {
+            "Id": "1102",
+            "Title": "تحریر الوان(کاغذرنگی)"
+          },
+          {
+            "Id": "1103",
+            "Title": "کرم  70 گرم"
+          },
+          {
+            "Id": "1104",
+            "Title": "کرافت  100 گرم"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "وجه",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          },
+          {
+            "Id": "2",
+            "Title": "دو رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "86",
+            "Title": "A5"
+          },
+          {
+            "Id": "87",
+            "Title": "A4"
+          },
+          {
+            "Id": "88",
+            "Title": "A3"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": []
+  },
+  {
+    "CategoryTitle": "خدمات پس از چاپ",
+    "Properties": [
+      {
+        "Title": "برش تحریر دوربری",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "پانچ چهار سوراخ تحریر",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سرچسب تحریر",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "پرفراژ تحریر",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "پرفراژ تحریر",
+            "Type": "select",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 0,
+            "Items": [
+              {
+                "Id": "پنج خط",
+                "Title": "پنج خط"
+              },
+              {
+                "Id": "چهار خط",
+                "Title": "چهار خط"
+              },
+              {
+                "Id": "دو خط",
+                "Title": "دو خط"
+              },
+              {
+                "Id": "سه خط",
+                "Title": "سه خط"
+              },
+              {
+                "Id": "شش خط",
+                "Title": "شش خط"
+              },
+              {
+                "Id": "یک خط",
+                "Title": "یک خط"
+              }
+            ],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      }
+    ]
+  }
+]

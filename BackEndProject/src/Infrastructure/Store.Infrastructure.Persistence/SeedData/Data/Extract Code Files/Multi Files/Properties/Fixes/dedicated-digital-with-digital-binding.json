@@ -1,0 +1,342 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "2442",
+            "Title": "رحلی اندازه ۲۰x۲۸ (بعد برش)"
+          },
+          {
+            "Id": "3594",
+            "Title": "رقعی ۱۴.۵x20.5. (بعد برش)"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "صفحات داخلی",
+    "Properties": [
+      {
+        "Title": "جنس کاغذ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1322",
+            "Title": "تحریر  80 گرم"
+          },
+          {
+            "Id": "3503",
+            "Title": "تحریر  100 گرم"
+          },
+          {
+            "Id": "3504",
+            "Title": "کتان  100 گرم"
+          },
+          {
+            "Id": "3505",
+            "Title": "گلاسه  150 گرم"
+          },
+          {
+            "Id": "3506",
+            "Title": "گلاسه  200 گرم"
+          },
+          {
+            "Id": "3507",
+            "Title": "گلاسه  250 گرم"
+          },
+          {
+            "Id": "3508",
+            "Title": "گلاسه  300 گرم"
+          },
+          {
+            "Id": "3509",
+            "Title": "کتان  300 گرم"
+          },
+          {
+            "Id": "3510",
+            "Title": "مقوا کارتی  300 گرم"
+          },
+          {
+            "Id": "3511",
+            "Title": "گلاسه  135 گرم"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "رنگ چاپ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1139",
+            "Title": "رنگی"
+          },
+          {
+            "Id": "3237",
+            "Title": "سیاه سفید"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تعداد صفحات",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "جلد",
+    "Properties": [
+      {
+        "Title": "جنس کاغذ جلد",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1069",
+            "Title": "تحریر  80 گرم"
+          },
+          {
+            "Id": "1070",
+            "Title": "تحریر  100 گرم"
+          },
+          {
+            "Id": "1079",
+            "Title": "گلاسه  150 گرم"
+          },
+          {
+            "Id": "1080",
+            "Title": "گلاسه  200 گرم"
+          },
+          {
+            "Id": "1081",
+            "Title": "گلاسه  250 گرم"
+          },
+          {
+            "Id": "1083",
+            "Title": "گلاسه  135 گرم"
+          },
+          {
+            "Id": "5926",
+            "Title": "گلاسه  300 گرم"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "وجه چاپ جلد",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          },
+          {
+            "Id": "2",
+            "Title": "دو رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "رنگ چاپ جلد",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1034",
+            "Title": "رنگی"
+          },
+          {
+            "Id": "1035",
+            "Title": "سیاه سفید"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "روکش",
+        "InnerProperties": [
+          {
+            "Title": "روکش",
+            "Properties": [
+              {
+                "Title": "نوع",
+                "Type": "select",
+                "IsRequired": false,
+                "Min": 0,
+                "Max": 0,
+                "Items": [
+                  {
+                    "Id": "0",
+                    "Title": "بدون روکش"
+                  },
+                  {
+                    "Id": "4162",
+                    "Title": "سلفون براق"
+                  },
+                  {
+                    "Id": "4163",
+                    "Title": "سلفون مات مخملی"
+                  },
+                  {
+                    "Id": "4174",
+                    "Title": "سلفون مات"
+                  }
+                ],
+                "Dependencies": [
+		 {
+		    "DependedIds": "4162,4163,4174",
+                    "Title": "روکش",
+                    "Type": "select",
+                    "IsRequired": true,
+                    "Min": 0,
+                    "Max": 0,
+                    "Items": [
+                    {
+                      "Id": "یک رو",
+                      "Title": "یک رو"
+                    },
+                    {
+                      "Id": "دو رو",
+                      "Title": "دو رو"
+                    }
+                  ],
+                  "Dependencies": [],
+                  "Properties": []
+                }
+		],
+                "Properties": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "صحافی",
+    "Properties": [
+      {
+        "Title": "صحافی",
+        "Type": "select",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "0",
+            "Title": "بدون صحافی"
+          },
+          {
+            "Id": "8546",
+            "Title": "منگنه ساده"
+          },
+          {
+            "Id": "8547",
+            "Title": "منگنه لوپ"
+          },
+          {
+            "Id": "8549",
+            "Title": "چسب گرم تحریر"
+          },
+          {
+            "Id": "8551",
+            "Title": "چسب گرم گلاسه"
+          },
+          {
+            "Id": "12584",
+            "Title": "سیم دوبل شماره 14"
+          }
+        ],
+        "Dependencies": [
+	{
+          "DependedIds": "8546,8547,8549,12584",
+          "Title": "نوع صحافی",
+          "Type": "select",
+          "IsRequired": true,
+          "Min": 0,
+          "Max": 0,
+          "Items": [
+          {
+            "Id": "1",
+            "Title": "فارسی"
+          },
+          {
+            "Id": "2",
+            "Title": "انگلیسی"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+        },
+        {
+          "DependedIds": "8546,8547,8549,12584",
+          "Title": "جهت صحافی",
+          "Type": "select",
+          "IsRequired": true,
+          "Min": 0,
+          "Max": 0,
+          "Items": [
+          {
+            "Id": "2",
+            "Title": "افقی"
+          },
+          {
+            "Id": "1",
+            "Title": "عمودی"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+        }
+	],
+        "Properties": []
+      }
+    ]
+  }
+]

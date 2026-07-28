@@ -1,0 +1,206 @@
+<div class="col-md-7 col-12">
+                        <h1 class="title-h2  pr-2 text-right  mt-4 mt-md-0 mb-4">  چاپ اتیکت و تگ</h1>
+
+                        <div class="select_data  mb-3">
+                                <div class="line mb-3 d-flex align-items-center">
+                                    <label class="text-secondary w-25 mb-0">
+                                        عنوان سفارش
+                                    </label>
+                                    <input required="Required" class="form-control w-75" id="title" maxlength="150" minlength="1" name="title" type="text" value="" aria-required="true">
+                                </div>
+                            
+
+                            <div class="line mb-3 d-flex align-items-center" id="materialBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    جنس مصرفی
+                                </label>
+                                <select class="custom-select w-75 valid" data-val="true" data-val-number="The field materialID must be a number." data-val-required="The materialID field is required." id="materialID" name="materialID" aria-required="true" aria-describedby="materialID-error" aria-invalid="false"><option value="">انتخاب کنید ...</option>
+<option value="5861">گلاسه  300 گرم </option>
+<option value="5862">گلاسه  250 گرم </option>
+<option value="5863">کتان  300 گرم </option>
+<option value="5865">کرافت  300 گرم </option>
+<option value="5866">صدفی  300 گرم </option>
+</select>
+                            </div>
+
+
+
+
+                            <div class="line mb-3 d-flex align-items-center " id="sideBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    وجه
+                                </label>
+                                <select class="custom-select w-75 valid" data-val="true" data-val-number="The field sideID must be a number." data-val-required="The sideID field is required." id="sideID" name="sideID" aria-required="true" aria-describedby="sideID-error" aria-invalid="false"><option value="">انتخاب کنید ...</option>
+<option value="1">یک رو</option>
+<option value="2">دو رو</option>
+</select>
+                            </div>
+                            <div class="line mb-3 d-flex align-items-center" id="tirazhBox">
+                                    <label class="text-secondary w-25 mb-0">
+                                        تیراژ
+                                    </label>
+                                <select class="custom-select w-75 valid" data-val="true" data-val-number="The field tirazhID must be a number." data-val-required="The tirazhID field is required." id="tirazhID" name="tirazhID" aria-required="true" aria-describedby="tirazhID-error" aria-invalid="false"><option value="">انتخاب کنید ...</option>
+<option value="3892">50</option>
+<option value="3893">100</option>
+<option value="3894">200</option>
+<option value="3895">300</option>
+<option value="3896">500</option>
+<option value="3897">750</option>
+<option value="3898">1000</option>
+<option selected="selected" value="0">تیراژ دلخواه</option>
+</select>
+                            </div>
+                            <div class="line mb-3 align-items-center d-flex" id="customTirazhBox">
+                                    <label class="text-secondary w-25 mb-0">
+                                        تیراژ
+                                    </label>
+                                <input class="form-control w-75 d-inline-block input-number" data-val="true" data-val-number="The field tirazhCount must be a number." data-val-required="The tirazhCount field is required." id="tirazhCount" max="99999" maxlength="5" min="1" name="tirazhCount" type="text" value="0">
+                            </div>
+
+
+
+                            <div class="line mb-3 d-flex align-items-center" id="sizeBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    سایز
+                                </label>
+                                <select required="Required" class="custom-select w-75 valid" data-val="true" data-val-number="The field sizeID must be a number." id="sizeID" name="sizeID" aria-required="true" aria-describedby="sizeID-error" aria-invalid="false"><option value="">انتخاب کنید ...</option>
+<option value="3604">8*5</option>
+<option value="3605">8.5*4.5</option>
+<option value="3606">10*4.5</option>
+<option value="3607">5*5</option>
+<option value="0">سایز دلخواه</option>
+</select>
+                            </div>
+
+
+
+                            <div class="line mb-3 align-items-center d-flex" id="customSizeBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    ابعاد
+                                </label>
+                                <div class="w-35">
+<input class="form-control d-inline-block input-float" data-val="true" data-val-number="The field tool must be a number." data-val-required="The tool field is required." id="tool" max="21" maxlength="4" min="1" name="tool" onblur="txtToolOnBlur();" placeholder="طول" type="text" value="0">                                        <p class="font-weight-lighter small mr-2">حداکثر طول :<b>21</b> سانتیمتر</p>
+                                </div>
+                                <div class="w-35 mr-3">
+<input class="form-control d-inline-block input-float" data-val="true" data-val-number="The field arz must be a number." data-val-required="The arz field is required." id="arz" max="29" maxlength="4" min="1" name="arz" onblur="txtArzOnBlur();" placeholder="عرض" type="text" value="0">                                        <p class="font-weight-lighter small mr-2">حداکثر عرض :<b>29</b> سانتیمتر</p>
+                                </div>
+                            </div>
+
+                            <div class="line mb-3 align-items-center d-none" id="printKindBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    نوع چاپ
+                                </label>
+                                <select class="custom-select w-75" data-val="true" data-val-number="The field printKindID must be a number." data-val-required="The printKindID field is required." id="printKindID" name="printKindID"><option value="4452">رنگی</option>
+</select>
+                            </div>
+
+
+                            
+
+
+<input type="hidden" id="coverPrice" name="coverPrice" value="0">
+
+
+
+    <input class="d-none" type="text" id="coverRequired" name="coverRequired" value="false">
+    <div class="box-custom rounded border mb-3 p-3 d-block" id="coverBox">
+        <h3 class="title mb-3 pr-2 text-right">
+            <strong> روکش</strong>
+        </h3>
+        <div class="d-flex">
+            <label class="text-secondary w-25 mb-0">
+                روکش
+            </label>
+            <select id="coverID" name="coverID" class="custom-select w-75 valid" aria-invalid="false"><option value="0" generalid="0">بدون روکش</option><option value="12589" generalid="24">سلفون مات</option><option value="12590" generalid="24">سلفون مات مخملی</option><option value="12591" generalid="24">سلفون براق</option><option value="12592" generalid="24">لمینت براق </option><option value="12593" generalid="24">لمینت مات </option></select>
+        </div>
+        <div class="d-none mt-2" id="coverAdtCountBox">
+            <label class="w-25"></label>
+            <input class="form-control d-none input-number w-75" min="0" max="99999" maxlength="5" id="coverAdtCount" name="coverAdtCount" required="" onblur="calculatePriceAdt('','cover','coverID')" aria-required="true">
+        </div>
+
+        <div class="d-none mt-2" id="coverStrCountBox">
+            <label class="w-25"></label>
+            <select id="coverStrCount" name="coverStrCount" class="custom-select w-75" required="" onchange="calculatePriceAdt('','cover','coverID')" aria-required="true"><option value="دو رو">دو رو</option></select>
+        </div>
+
+        <div class="d-none mt-2" id="coverParameterBox">
+            <label class="w-25"></label>
+            <select id="coverParameter" name="coverParameter" class="custom-select w-75" required="" aria-required="true"></select>
+        </div>
+    </div>
+
+                            
+<input type="hidden" id="sahafiPrice" name="sahafiPrice" value="0">
+
+
+    <input type="hidden" id="sahafiID" name="sahafiID" value="0">
+    <input type="hidden" id="sahafiAdtCount" name="sahafiAdtCount" value="0">
+    <input type="hidden" id="sahafiStrCount" name="sahafiStrCount" value="0">
+    <input type="hidden" id="sahafiParameter" name="sahafiParameter" value="0">
+    <input class="d-none" type="text" id="sahafiRequired" name="sahafiRequired" value="false">
+    
+                        </div>
+
+
+
+
+
+                                <div class="box-custom rounded border mb-3 p-3" id="additionalBox">
+                                    <h3 class="title mb-3 pr-2 text-right">
+                                        <strong>  خدمات پس از چاپ </strong>
+                                    </h3>
+                                    <div class="list" id="additionalList">
+                                        
+
+
+
+    <input type="hidden" value="3" id="adtGeneral18144">
+    <input type="hidden" value="0" id="adtGettirazhType18144">
+    <input type="hidden" value="2" id="adtType18144">
+    <input type="hidden" id="adtPrice18144" name="adtPrice18144" class="adtPrice" value="13288">
+    <input type="hidden" id="adtID18144" value="18144">
+    <input type="hidden" id="adtIsFile18144" value="False">
+    <input type="hidden" id="adtIsDuplex18144" value="False">
+        <input type="hidden" id="adtRequired18144" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input adt" id="adt18144" onchange="showAdtBox('18144')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="adt18144">پانچ تک سوراخ  کاغذ و مقوی</label>
+                </div>
+            </div>
+
+                <div class="custom-control d-none float-left col-md-6 pl-0 adtBox" id="adt18144Box">
+
+                        <input type="hidden" id="adtCount18144" name="adtCount18144" value="0" required="required">
+
+                    <select class="d-none" id="adtStrCount18144" name="adtStrCount18144">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="text" class="d-none" id="adtParameter18144" name="adtParameter18144" value="0">
+
+                        <input type="hidden" id="adtStartNumber18144" name="adtStartNumber18144" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="25" id="adtGeneral12587">
+    <input type="hidden" value="0" id="adtGettirazhType12587">
+    <input type="hidden" value="2" id="adtType12587">
+    <input type="hidden" id="adtPrice12587" name="adtPrice12587" class="adtPrice" value="266002">
+    <input type="hidden" id="adtID12587" value="12587">
+    <input type="hidden" id="adtIsFile12587" value="False">
+    <input type="hidden" id="adtIsDuplex12587" value="False">
+        <input type="hidden" id="adtStartNumber12587" name="adtStartNumber12587" value="0">
+        <input type="hidden" id="adtRequired12587" value="true">
+            <!-- اجباری -->
+            <!-- بدون پارامتر یا یک پارامتر -->
+            <!-- یا دارای چند پارامتر و انتخاب توسط مشتری نباشد  -->
+                <select class="d-none" id="adtStrCount12587" name="adtStrCount12587">
+                    <option selected=""></option>
+                </select>
+                <input type="hidden" id="adtCount12587" name="adtCount12587">
+                <input type="hidden" id="adtParameter12587" name="adtParameter12587" value="0">
+                <input type="hidden" class="adt d-none" id="adt12587" checked="">
+                                    </div>
+                                </div>
+                                            </div>

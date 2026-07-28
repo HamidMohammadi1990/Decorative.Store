@@ -1,0 +1,305 @@
+{
+  "categories": [
+    { "id": "c1", "slug": "interior-design", "label": "Interior Design" },
+    { "id": "c2", "slug": "styling-tips", "label": "Styling Tips" },
+    { "id": "c3", "slug": "sustainability", "label": "Sustainability" },
+    { "id": "c4", "slug": "seasonal", "label": "Seasonal" }
+  ],
+  "authors": [
+    {
+      "id": "a1",
+      "name": "Sarah Mitchell",
+      "role": "Design Editor",
+      "avatar": { "src": "/images/home/living-room.jpg", "alt": "Sarah Mitchell" },
+      "bio": "Sarah writes about modern living, material choices, and the quiet details that make a room feel complete."
+    },
+    {
+      "id": "a2",
+      "name": "James Okonkwo",
+      "role": "Interior Stylist",
+      "avatar": { "src": "/images/home/bedroom.jpg", "alt": "James Okonkwo" },
+      "bio": "James specialises in layered textures, compact spaces, and styling that balances comfort with restraint."
+    },
+    {
+      "id": "a3",
+      "name": "Diba Gallery Studio",
+      "role": "Editorial Team",
+      "avatar": { "src": "/images/home/dining.jpg", "alt": "Diba Gallery Studio" },
+      "bio": "Stories from our design studio — seasonal ideas, care guides, and inspiration from the Diba Gallery community."
+    }
+  ],
+  "posts": [
+    {
+      "id": "p1",
+      "slug": "layering-textures-living-room",
+      "title": "How to Layer Textures in a Modern Living Room",
+      "excerpt": "Linen, velvet, brass and wood — the combinations that add depth without clutter.",
+      "coverImage": { "src": "/images/home/living-room.jpg", "alt": "Layered living room textures" },
+      "categorySlug": "styling-tips",
+      "authorId": "a1",
+      "publishedAt": "2026-05-12",
+      "readTimeMinutes": 6,
+      "likes": 142,
+      "commentCount": 18,
+      "featured": true,
+      "tags": ["textures", "living room", "styling"],
+      "gallery": [
+        { "src": "/images/home/living-room.jpg", "alt": "Living room overview" },
+        { "src": "/images/home/velvet-sofa.jpg", "alt": "Velvet sofa detail" },
+        { "src": "/images/home/new-arrivals.jpg", "alt": "Accent styling" }
+      ],
+      "content": [
+        "Texture is one of the fastest ways to make a room feel considered. When every surface shares the same finish, spaces can read flat — even when the furniture is beautiful.",
+        "Start with a foundation of natural materials: a wool rug, oak side table, or linen curtains. These set a calm base that more expressive pieces can sit on top of.",
+        "Introduce contrast with one statement texture — velvet on a sofa, a ceramic lamp base, or brushed brass hardware. The goal is balance, not competition.",
+        "Repeat a accent material in two places so the room feels intentional. If you use brass in a pendant, echo it in a mirror frame or tray.",
+        "Finish with soft layers: cushions, throws, and books. These are the details guests notice subconsciously — the room feels warm because it is layered, not because it is busy."
+      ],
+      "comments": [
+        {
+          "id": "cm1",
+          "authorName": "Emma R.",
+          "date": "2026-05-13",
+          "text": "Loved the tip about repeating brass twice — tried it and it really works.",
+          "likes": 12
+        },
+        {
+          "id": "cm2",
+          "authorName": "David K.",
+          "date": "2026-05-14",
+          "text": "Would love a follow-up on small apartments with the same approach.",
+          "likes": 5
+        }
+      ],
+      "relatedSlugs": ["small-space-styling", "colour-palette-2026", "velvet-care-tips"]
+    },
+    {
+      "id": "p2",
+      "slug": "sustainable-materials-guide",
+      "title": "A Practical Guide to Sustainable Materials at Home",
+      "excerpt": "From FSC-certified wood to responsibly sourced linen — what to look for when you shop.",
+      "coverImage": { "src": "/images/home/bedroom-set.jpg", "alt": "Sustainable bedroom materials" },
+      "categorySlug": "sustainability",
+      "authorId": "a3",
+      "publishedAt": "2026-05-08",
+      "readTimeMinutes": 8,
+      "likes": 98,
+      "commentCount": 11,
+      "featured": true,
+      "tags": ["sustainability", "materials", "guide"],
+      "gallery": [
+        { "src": "/images/home/bedroom-set.jpg", "alt": "Bedroom set" },
+        { "src": "/images/home/bedroom.jpg", "alt": "Natural textiles" }
+      ],
+      "content": [
+        "Sustainable design is not a single material choice — it is a series of thoughtful decisions about longevity, sourcing, and how a piece will live in your home for years.",
+        "Wood furniture should carry credible certification where possible. Kiln-dried hardwood frames and repairable construction extend the life of seating and tables.",
+        "Textiles matter too. Linen and organic cotton age gracefully, while performance fabrics can reduce the need for frequent replacement in high-traffic rooms.",
+        "Consider end-of-life: modular pieces, removable covers, and classic silhouettes stay relevant longer than trend-driven shapes.",
+        "The most sustainable item is often the one you keep. Invest in versatile staples and layer personality with smaller, replaceable accents."
+      ],
+      "comments": [
+        {
+          "id": "cm3",
+          "authorName": "Nina P.",
+          "date": "2026-05-09",
+          "text": "Clear and helpful — especially the note on repairable construction.",
+          "likes": 8
+        }
+      ],
+      "relatedSlugs": ["velvet-care-tips", "layering-textures-living-room", "outdoor-living-ideas"]
+    },
+    {
+      "id": "p3",
+      "slug": "small-space-styling",
+      "title": "Small-Space Styling: Five Rules That Actually Work",
+      "excerpt": "Make compact rooms feel open, intentional, and far from cramped.",
+      "coverImage": { "src": "/images/home/bedroom.jpg", "alt": "Small space styling" },
+      "categorySlug": "interior-design",
+      "authorId": "a2",
+      "publishedAt": "2026-04-28",
+      "readTimeMinutes": 5,
+      "likes": 176,
+      "commentCount": 24,
+      "featured": true,
+      "tags": ["small space", "interior design", "apartment"],
+      "gallery": [
+        { "src": "/images/home/bedroom.jpg", "alt": "Compact bedroom" },
+        { "src": "/images/home/living-room.jpg", "alt": "Open layout" },
+        { "src": "/images/home/dining.jpg", "alt": "Dining nook" }
+      ],
+      "content": [
+        "Small rooms reward editing. Choose fewer, better pieces with clear purpose rather than filling every corner.",
+        "Use vertical lines — tall shelving, floor lamps, and hung curtains close to the ceiling — to draw the eye upward.",
+        "Mirrors and light tones expand perception, but contrast is still important. One darker accent anchors the room.",
+        "Multi-functional furniture — storage ottomans, extendable tables — reduces visual noise.",
+        "Leave breathing room at entry sightlines. The first view into a space sets the tone for how large it feels."
+      ],
+      "comments": [
+        {
+          "id": "cm4",
+          "authorName": "Leila M.",
+          "date": "2026-04-29",
+          "text": "The vertical lines tip changed our studio completely. Thank you!",
+          "likes": 21
+        }
+      ],
+      "relatedSlugs": ["layering-textures-living-room", "bedroom-calm-retreat", "colour-palette-2026"]
+    },
+    {
+      "id": "p4",
+      "slug": "seasonal-table-setting",
+      "title": "Seasonal Table Settings for Everyday Meals",
+      "excerpt": "Elevate weeknight dinners with linen, ceramics, and effortless centrepieces.",
+      "coverImage": { "src": "/images/home/dining.jpg", "alt": "Seasonal table setting" },
+      "categorySlug": "seasonal",
+      "authorId": "a1",
+      "publishedAt": "2026-04-15",
+      "readTimeMinutes": 4,
+      "likes": 67,
+      "commentCount": 9,
+      "tags": ["dining", "seasonal", "tablescape"],
+      "gallery": [
+        { "src": "/images/home/dining.jpg", "alt": "Dining table" }
+      ],
+      "content": [
+        "A beautiful table does not require a special occasion. Start with a neutral base — stoneware, clear glass, natural linen — and add one seasonal element.",
+        "In spring, fresh greenery or soft pastel napkins feel right. In autumn, warm wood boards and taper candles create atmosphere quickly.",
+        "Keep height low so conversation stays easy. Bud vases beat towering arrangements for daily use.",
+        "Mix matte and glossy finishes for subtle depth: a glazed bowl on a linen runner, matte plates with polished cutlery."
+      ],
+      "comments": [],
+      "relatedSlugs": ["colour-palette-2026", "outdoor-living-ideas", "layering-textures-living-room"]
+    },
+    {
+      "id": "p5",
+      "slug": "velvet-care-tips",
+      "title": "Caring for Velvet Upholstery Year-Round",
+      "excerpt": "Simple habits to preserve colour, pile, and shape on velvet sofas and chairs.",
+      "coverImage": { "src": "/images/home/velvet-sofa.jpg", "alt": "Velvet sofa care" },
+      "categorySlug": "styling-tips",
+      "authorId": "a3",
+      "publishedAt": "2026-04-02",
+      "readTimeMinutes": 5,
+      "likes": 89,
+      "commentCount": 14,
+      "tags": ["velvet", "care", "upholstery"],
+      "gallery": [
+        { "src": "/images/home/velvet-sofa.jpg", "alt": "Velvet detail" }
+      ],
+      "content": [
+        "Velvet develops character with use — light marking on the pile is normal and often settles with gentle brushing.",
+        "Vacuum weekly with an upholstery attachment. Work in the direction of the nap to lift fibres evenly.",
+        "Rotate cushions monthly so wear distributes naturally across the seat.",
+        "Keep velvet away from prolonged direct sunlight to preserve depth of colour.",
+        "For spills, blot immediately and avoid rubbing. Professional cleaning once a year keeps performance fabrics at their best."
+      ],
+      "comments": [
+        {
+          "id": "cm5",
+          "authorName": "Tom H.",
+          "date": "2026-04-03",
+          "text": "Didn't know about brushing direction — pile looks much better now.",
+          "likes": 6
+        }
+      ],
+      "relatedSlugs": ["sustainable-materials-guide", "layering-textures-living-room", "bedroom-calm-retreat"]
+    },
+    {
+      "id": "p6",
+      "slug": "colour-palette-2026",
+      "title": "The Colour Palettes Shaping Interiors in 2026",
+      "excerpt": "Warm neutrals, muted greens, and grounded terracotta — how to use them at home.",
+      "coverImage": { "src": "/images/home/new-arrivals.jpg", "alt": "2026 colour palettes" },
+      "categorySlug": "interior-design",
+      "authorId": "a2",
+      "publishedAt": "2026-03-20",
+      "readTimeMinutes": 7,
+      "likes": 203,
+      "commentCount": 31,
+      "tags": ["colour", "trends", "interior design"],
+      "gallery": [
+        { "src": "/images/home/new-arrivals.jpg", "alt": "Colour inspiration" },
+        { "src": "/images/home/living-room.jpg", "alt": "Neutral palette" }
+      ],
+      "content": [
+        "This year favours warmth over stark minimalism. Cream, oat, and caramel create rooms that feel lived-in from day one.",
+        "Muted sage and olive pair beautifully with walnut and brass — a combination that works in both city flats and country homes.",
+        "Terracotta accents add energy without overpowering. Use them in ceramics, artwork, or a single accent chair.",
+        "When testing colour, view swatches at different times of day. North-facing rooms need warmer bases; bright spaces can handle cooler grey-greens.",
+        "Build palettes in ratios: 70% neutral foundation, 20% secondary tone, 10% accent."
+      ],
+      "comments": [
+        {
+          "id": "cm6",
+          "authorName": "Yasmin A.",
+          "date": "2026-03-21",
+          "text": "The 70/20/10 ratio made choosing paint so much easier.",
+          "likes": 15
+        }
+      ],
+      "relatedSlugs": ["layering-textures-living-room", "small-space-styling", "seasonal-table-setting"]
+    },
+    {
+      "id": "p7",
+      "slug": "bedroom-calm-retreat",
+      "title": "Designing a Calm Bedroom Retreat",
+      "excerpt": "Soft lighting, layered linen, and the furniture layout that supports better rest.",
+      "coverImage": { "src": "/images/home/bedroom-set.jpg", "alt": "Calm bedroom retreat" },
+      "categorySlug": "interior-design",
+      "authorId": "a1",
+      "publishedAt": "2026-03-05",
+      "readTimeMinutes": 6,
+      "likes": 134,
+      "commentCount": 16,
+      "tags": ["bedroom", "wellness", "lighting"],
+      "gallery": [
+        { "src": "/images/home/bedroom-set.jpg", "alt": "Bedroom set" },
+        { "src": "/images/home/bedroom.jpg", "alt": "Bedroom lighting" }
+      ],
+      "content": [
+        "Bedrooms should signal rest the moment you enter. Start by reducing visual clutter — closed storage and a limited palette help.",
+        "Layer lighting at three heights: ambient ceiling or wall wash, bedside task lights, and a low accent for evening.",
+        "Choose breathable textiles. Linen and cotton regulate temperature and improve comfort through the seasons.",
+        "Position the bed to avoid direct alignment with harsh morning light if you are sensitive to early sun.",
+        "A single sculptural object on a bedside table — a ceramic vase, a small stack of books — is enough decoration."
+      ],
+      "comments": [],
+      "relatedSlugs": ["small-space-styling", "velvet-care-tips", "colour-palette-2026"]
+    },
+    {
+      "id": "p8",
+      "slug": "outdoor-living-ideas",
+      "title": "Outdoor Living: Extending Your Home Into the Garden",
+      "excerpt": "Furniture layouts, weather-ready textiles, and lighting for evenings outside.",
+      "coverImage": { "src": "/images/home/new-arrivals.jpg", "alt": "Outdoor living space" },
+      "categorySlug": "seasonal",
+      "authorId": "a2",
+      "publishedAt": "2026-02-18",
+      "readTimeMinutes": 5,
+      "likes": 76,
+      "commentCount": 8,
+      "tags": ["garden", "outdoor", "seasonal"],
+      "gallery": [
+        { "src": "/images/home/new-arrivals.jpg", "alt": "Outdoor seating" }
+      ],
+      "content": [
+        "Treat outdoor space as a room without walls. Define zones with rugs, planters, and furniture groupings.",
+        "Choose materials rated for your climate — teak and powder-coated aluminium perform well in variable weather.",
+        "Outdoor lighting should be low and warm. String lights, lanterns, and uplighting create ambience without glare.",
+        "Keep textiles weather-resistant or store cushions in a bench box when not in use.",
+        "A small bistro set can host morning coffee; a sectional arrangement suits weekend entertaining — plan for your real routines."
+      ],
+      "comments": [
+        {
+          "id": "cm7",
+          "authorName": "Chris B.",
+          "date": "2026-02-19",
+          "text": "Zone tip with planters worked brilliantly on our patio.",
+          "likes": 4
+        }
+      ],
+      "relatedSlugs": ["seasonal-table-setting", "sustainable-materials-guide", "layering-textures-living-room"]
+    }
+  ]
+}

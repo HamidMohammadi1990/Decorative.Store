@@ -1,0 +1,24 @@
+using System.Text.Json.Serialization;
+using Edition.Application.Common.Utilities.Security.Attributes;
+using Store.Domain.Enums;
+
+namespace Edition.Application.Features.Wallets.Queries;
+
+public record GetWalletResponse
+{
+    [JsonConverter(typeof(WalletEncryptor))]
+    public int Id { get; init; }
+
+    public string Title { get; init; } = default!;
+
+    [JsonConverter(typeof(UserEncryptor))]
+    public int? UserId { get; init; }
+
+    [JsonConverter(typeof(CompanyEncryptor))]
+    public int? CompanyId { get; init; }
+
+    public decimal Balance { get; init; }
+    public bool IsDefault { get; init; }
+    public WalletStatusType Status { get; init; }
+    public DateTime CreatedOnUtc { get; init; }
+}

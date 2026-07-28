@@ -1,0 +1,313 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "63",
+            "Title": "رحلی اندازه ۲۰x۲۸ (بعد برش)"
+          },
+          {
+            "Id": "64",
+            "Title": "وزیری 17x۲4 (بعد برش)"
+          },
+          {
+            "Id": "65",
+            "Title": "رقعی ۱۴.۵x20.5. (بعد برش)"
+          },
+          {
+            "Id": "2436",
+            "Title": "خشتی 20x20"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1110",
+            "Title": "1"
+          },
+          {
+            "Id": "1111",
+            "Title": "5"
+          },
+          {
+            "Id": "1112",
+            "Title": "25"
+          },
+          {
+            "Id": "1113",
+            "Title": "50"
+          },
+          {
+            "Id": "1114",
+            "Title": "75"
+          },
+          {
+            "Id": "1115",
+            "Title": "100"
+          },
+          {
+            "Id": "0",
+            "Title": "تیراژ دلخواه"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تعداد صفحات",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "صفحات داخلی",
+    "Properties": [
+      {
+        "Title": "جنس کاغذ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1076",
+            "Title": "تحریر  80 گرم"
+          },
+          {
+            "Id": "1077",
+            "Title": "تحریر  100 گرم"
+          },
+          {
+            "Id": "1078",
+            "Title": "گلاسه  150 گرم"
+          },
+          {
+            "Id": "3494",
+            "Title": "گلاسه  135 گرم"
+          },
+          {
+            "Id": "7017",
+            "Title": "بالک  70 گرم"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "رنگ چاپ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1040",
+            "Title": "رنگی"
+          },
+          {
+            "Id": "1041",
+            "Title": "سیاه سفید"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تعداد صفحات",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "روکش",
+        "InnerProperties": [
+          {
+            "Title": "روکش",
+            "Properties": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "جلد",
+    "Properties": [
+      {
+        "Title": "جنس کاغذ جلد",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1071",
+            "Title": "گلاسه  300 گرم"
+          },
+          {
+            "Id": "1072",
+            "Title": "گلاسه  250 گرم"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "وجه چاپ جلد",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          },
+          {
+            "Id": "2",
+            "Title": "دو رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "روکش",
+        "InnerProperties": [
+          {
+            "Title": "روکش",
+            "Properties": [
+              {
+                "Title": "روکش",
+                "Type": "select",
+                "IsRequired": false,
+                "Min": 0,
+                "Max": 0,
+                "Items": [
+                  {
+                    "Id": "0",
+                    "Title": "بدون روکش"
+                  },
+                  {
+                    "Id": "4167",
+                    "Title": "سلفون براق"
+                  },
+                  {
+                    "Id": "4168",
+                    "Title": "سلفون مات"
+                  },
+                  {
+                    "Id": "4169",
+                    "Title": "سلفون مات مخملی"
+                  }
+                ],
+                "Dependencies": [],
+                "Properties": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "صحافی",
+    "Properties": [
+      {
+        "Title": "صحافی",
+        "Type": "select",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "0",
+            "Title": "بدون صحافی"
+          },
+          {
+            "Id": "4171",
+            "Title": "چسب گرم گلاسه"
+          },
+          {
+            "Id": "4172",
+            "Title": "چسب گرم تحریر"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "نوع صحافی",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "فارسی"
+          },
+          {
+            "Id": "2",
+            "Title": "انگلیسی"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "جهت صحافی",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "2",
+            "Title": "افقی"
+          },
+          {
+            "Id": "1",
+            "Title": "عمودی"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  }
+]

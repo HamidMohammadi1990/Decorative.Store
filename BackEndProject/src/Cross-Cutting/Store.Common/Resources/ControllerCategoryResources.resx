@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="ApiControllerCategory_AccessControl" xml:space="preserve"><value>Access Control</value></data>
+  <data name="ApiControllerCategory_Authentication" xml:space="preserve"><value>Authentication</value></data>
+  <data name="ApiControllerCategory_Blog" xml:space="preserve"><value>Blog</value></data>
+  <data name="ApiControllerCategory_Catalog" xml:space="preserve"><value>Catalog</value></data>
+  <data name="ApiControllerCategory_Cms" xml:space="preserve"><value>CMS</value></data>
+  <data name="ApiControllerCategory_Comments" xml:space="preserve"><value>Comments</value></data>
+  <data name="ApiControllerCategory_Company" xml:space="preserve"><value>Company</value></data>
+  <data name="ApiControllerCategory_ContentPolicy" xml:space="preserve"><value>Content Policy</value></data>
+  <data name="ApiControllerCategory_Delivery" xml:space="preserve"><value>Delivery</value></data>
+  <data name="ApiControllerCategory_Financial" xml:space="preserve"><value>Financial</value></data>
+  <data name="ApiControllerCategory_General" xml:space="preserve"><value>General</value></data>
+  <data name="ApiControllerCategory_Location" xml:space="preserve"><value>Location</value></data>
+  <data name="ApiControllerCategory_Orders" xml:space="preserve"><value>Orders</value></data>
+  <data name="ApiControllerCategory_PostType" xml:space="preserve"><value>Post Type</value></data>
+  <data name="ApiControllerCategory_Product" xml:space="preserve"><value>Product</value></data>
+  <data name="ApiControllerCategory_Property" xml:space="preserve"><value>Property</value></data>
+  <data name="ApiControllerCategory_Tags" xml:space="preserve"><value>Tags</value></data>
+  <data name="ApiControllerCategory_Users" xml:space="preserve"><value>Users</value></data>
+  <data name="ApiControllerCategory_Wallet" xml:space="preserve"><value>Wallet</value></data>
+  <data name="ApiControllerCategory_Localization" xml:space="preserve"><value>Localization</value></data>
+</root>

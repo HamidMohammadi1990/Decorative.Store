@@ -1,0 +1,130 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "3772",
+            "Title": "A5بعد از برش19.7 در 14.2 تحریر 55گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3773",
+            "Title": "A69.7 در 14.2 تحریر55 گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3774",
+            "Title": "A4بعد از برش 19.7 در 28.7 تحریر 55گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3775",
+            "Title": "B6بعد از برش 16.7 در 11.7 تحریر55 گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3776",
+            "Title": "B5بعد از برش 16.7در23.7 تحریر 55گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3777",
+            "Title": "B4بعد از برش 23.7 در 33.7 تحریر 55 گرم الوان 55گرم"
+          },
+          {
+            "Id": "3778",
+            "Title": "A3بعد از برش 28.7در39.7 تحریر 55گرم الوان 55 گرم"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "روی چاپ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1000",
+            "Title": "1000"
+          },
+          {
+            "Id": "2000",
+            "Title": "2000"
+          },
+          {
+            "Id": "5000",
+            "Title": "5000"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "خدمات پس از چاپ",
+    "Properties": [
+      {
+        "Title": "سرچسب",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "پرفراژ و منگنه",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "شماره سریال .",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "شماره شروع",
+            "Type": "number",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 99999,
+            "Items": [],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      }
+    ]
+  }
+]

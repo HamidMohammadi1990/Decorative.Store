@@ -1,0 +1,60 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "جنس",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1216",
+            "Title": "پوستر50.70تحریر80گرمی"
+          },
+          {
+            "Id": "1217",
+            "Title": "پوستر50.70گلاسه 135گرمی"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "روی چاپ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1000",
+            "Title": "1000"
+          },
+          {
+            "Id": "2000",
+            "Title": "2000"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,155 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "5320",
+            "Title": "25"
+          },
+          {
+            "Id": "5321",
+            "Title": "50"
+          },
+          {
+            "Id": "5322",
+            "Title": "100"
+          },
+          {
+            "Id": "5323",
+            "Title": "200"
+          },
+          {
+            "Id": "5324",
+            "Title": "300"
+          },
+          {
+            "Id": "5325",
+            "Title": "500"
+          },
+          {
+            "Id": "5326",
+            "Title": "1000"
+          },
+          {
+            "Id": "0",
+            "Title": "تیراژ دلخواه"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "3632",
+            "Title": "A۵ اندازه ۱۴x۲۰ (بعد برش)"
+          },
+          {
+            "Id": "3633",
+            "Title": "A۴ اندازه ۲۰x۲۸ (بعد برش)"
+          },
+          {
+            "Id": "3634",
+            "Title": "A۳ اندازه  ۲۸x۴۰ (بعد برش)"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "نوع چاپ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "5565",
+            "Title": "رنگی"
+          },
+          {
+            "Id": "5566",
+            "Title": "سیاه سفید"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": []
+  },
+  {
+    "CategoryTitle": "خدمات پس از چاپ",
+    "Properties": [
+      {
+        "Title": "برش ویزیتی",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "نیم تیغ A4 ملخی",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "نیم تیغ A4 ملخی",
+            "Type": "select",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 0,
+            "Items": [
+              {
+                "Id": "نیم تیغ بزرگ",
+                "Title": "نیم تیغ بزرگ"
+              },
+              {
+                "Id": "نیم تیغ کوچک",
+                "Title": "نیم تیغ کوچک"
+              },
+              {
+                "Id": "نیم تیغ متوسط",
+                "Title": "نیم تیغ متوسط"
+              }
+            ],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      }
+    ]
+  }
+]

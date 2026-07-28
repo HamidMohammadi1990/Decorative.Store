@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="OK" xml:space="preserve"><value>عملیات با موفقیت انجام شد</value></data>
+  <data name="ServerError" xml:space="preserve"><value>خطای سرور رخ داده است</value></data>
+  <data name="InvalidId" xml:space="preserve"><value>شناسه نامعتبر</value></data>
+  <data name="InvalidFinancialYearId" xml:space="preserve"><value>شناسه سال مالی نامعتبر است</value></data>
+  <data name="InvalidChartOfAccountId" xml:space="preserve"><value>شناسه حساب نامعتبر</value></data>
+  <data name="InvalidSessionId" xml:space="preserve"><value>نشست یافت نشد</value></data>
+  <data name="InvalidRequest" xml:space="preserve"><value>درخواست نامعتبر</value></data>
+  <data name="InvalidToken" xml:space="preserve"><value>توکن نامعتبر است</value></data>
+  <data name="InvalidAttachments" xml:space="preserve"><value>فایل های بارگذاری شده معتبر نمی باشند</value></data>
+  <data name="InvalidOperation" xml:space="preserve"><value>حذف دسترسی ریشه مجاز نیست</value></data>
+  <data name="UserNotFound" xml:space="preserve"><value>کاربر یافت نشد</value></data>
+  <data name="UserNameOrPasswordIsNotValid" xml:space="preserve"><value>نام کاربری یا رمز عبور صحیح نمی باشد</value></data>
+  <data name="AnAccountWithThisInfoHasAleardyBeenRegistered" xml:space="preserve"><value>حساب کاربری با این مشخصات قبلاً ثبت شده است</value></data>
+  <data name="UserNameIsNotValid" xml:space="preserve"><value>نام کاربری صحیح نمی باشد</value></data>
+  <data name="UserIsInActive" xml:space="preserve"><value>کاربر غیرفعال می باشد</value></data>
+  <data name="TheUserIsInActive" xml:space="preserve"><value>کاربر غیر فعال می باشد</value></data>
+  <data name="AccessDenied" xml:space="preserve"><value>عدم دسترسی</value></data>
+  <data name="VerificationCodeIsNotCorrect" xml:space="preserve"><value>کد تایید صحیح نمی باشد</value></data>
+  <data name="VerificationCodeIsNotValid" xml:space="preserve"><value>کد تایید معتبر نمی باشد</value></data>
+  <data name="VerificationCodeHasBeenSent" xml:space="preserve"><value>کد تایید ارسال شد</value></data>
+  <data name="VerificationCodeSentSuccessfully" xml:space="preserve"><value>کد تایید با موفقیت ارسال شد</value></data>
+  <data name="VerificationCodeCouldNotBeSendSuccessfully" xml:space="preserve"><value>کد تایید با موفقیت ارسال نشد</value></data>
+  <data name="TheSmsHasAleardyBeenSentToYou" xml:space="preserve"><value>پیامک از قبل برایتان ارسال گردیده است، لطفا {0} ثانیه صبر نمایید</value></data>
+  <data name="TheEmailHasAleardyBeenSentToYou" xml:space="preserve"><value>ایمیل از قبل برایتان ارسال گردیده است، لطفا {0} ثانیه صبر نمایید</value></data>
+  <data name="ThereIsNoMobileRegisteredForYou" xml:space="preserve"><value>شماره همراهی برای شما ثبت نشده است</value></data>
+  <data name="ThereIsNoEmailRegisteredForYou" xml:space="preserve"><value>ایمیلی برای شما ثبت نشده است</value></data>
+  <data name="EmailOrMobileIsNotVerified" xml:space="preserve"><value>ایمیل یا شماره همراه تایید نشده است</value></data>
+  <data name="MobileOrEmailIsNotVerified" xml:space="preserve"><value>موبایل یا ایمیل تایید نشده است</value></data>
+  <data name="MobileIsUsedByAnotherUser" xml:space="preserve"><value>شماره موبایل توسط کاربر دیگری استفاده شده است</value></data>
+  <data name="ActivationCodeIsNotCorrect" xml:space="preserve"><value>کد فعالسازی صحیح نمی باشد</value></data>
+  <data name="MismatchWithPreviousPassword" xml:space="preserve"><value>عدم تطابق با رمز قبلی</value></data>
+  <data name="SessionExpired" xml:space="preserve"><value>نشست نامعتبر یا منقضی شده است</value></data>
+  <data name="CannotRevokeCurrentSession" xml:space="preserve"><value>برای خروج از نشست فعلی از sign-out استفاده کنید</value></data>
+  <data name="TokenIsInvalid" xml:space="preserve"><value>توکن نامعتبر می باشد</value></data>
+  <data name="TokenIsNotExpired" xml:space="preserve"><value>توکن هنوز منقضی نشده است</value></data>
+  <data name="TokenIsExpired" xml:space="preserve"><value>توکن منقضی شده است</value></data>
+  <data name="OrderIsNotFound" xml:space="preserve"><value>سفارشی یافت نشد</value></data>
+  <data name="OrderIsEmpty" xml:space="preserve"><value>سبد خرید خالی است</value></data>
+  <data name="OrderItemNotFound" xml:space="preserve"><value>آیتم سفارش یافت نشد</value></data>
+  <data name="OrderCannotBeDeleted" xml:space="preserve"><value>امکان حذف سفارش به دلیل وجود سوابق مالی وجود ندارد</value></data>
+  <data name="PaymentInProgress" xml:space="preserve"><value>پرداخت این سفارش در جریان است. ابتدا پرداخت را تکمیل یا لغو کنید</value></data>
+  <data name="RequiredAttachments" xml:space="preserve"><value>بارگذاری فایل ها الزامی است</value></data>
+  <data name="AttachmentsProcessingFailed" xml:space="preserve"><value>پردازش ضمیمه ها با موفقیت انجام نشد</value></data>
+  <data name="InvalidUploadedAttachmentFile" xml:space="preserve"><value>فایل بارگذاری شده معتبر نمی باشد</value></data>
+  <data name="InvalidAttachmentFileSize" xml:space="preserve"><value>حجم فایل معتبر نمی باشد</value></data>
+  <data name="ImageWidthBelowMinimum" xml:space="preserve"><value>عرض تصویر کم تر از حد مجاز می باشد</value></data>
+  <data name="ImageWidthAboveMaximum" xml:space="preserve"><value>عرض تصویر بیشتر از حد مجاز می باشد</value></data>
+  <data name="ImageHeightBelowMinimum" xml:space="preserve"><value>طول تصویر کم تر از حد مجاز می باشد</value></data>
+  <data name="ImageHeightAboveMaximum" xml:space="preserve"><value>طول تصویر بیشتر از حد مجاز می باشد</value></data>
+  <data name="ImageHorizontalResolutionBelowMinimum" xml:space="preserve"><value>رزولوشن افقی کم تر از حد مجاز می باشد</value></data>
+  <data name="ImageHorizontalResolutionAboveMaximum" xml:space="preserve"><value>رزولوشن افقی بیشتر از حد مجاز می باشد</value></data>
+  <data name="ImageVerticalResolutionBelowMinimum" xml:space="preserve"><value>رزولوشن عمودی کم تر از حد مجاز می باشد</value></data>
+  <data name="ImageVerticalResolutionAboveMaximum" xml:space="preserve"><value>رزولوشن عمودی بیشتر از حد مجاز می باشد</value></data>
+  <data name="InvalidImageColorMode" xml:space="preserve"><value>مود رنگی تصویر معتبر نمی باشد</value></data>
+  <data name="DiscountNotFound" xml:space="preserve"><value>کد تخفیف یافت نشد</value></data>
+  <data name="DiscountAlreadyConsumed" xml:space="preserve"><value>کد تخفیف دیگری قبلاً برای این سفارش استفاده شده است</value></data>
+  <data name="DiscountInactive" xml:space="preserve"><value>کد تخفیف غیرفعال است</value></data>
+  <data name="DiscountExpired" xml:space="preserve"><value>کد تخفیف منقضی شده است</value></data>
+  <data name="DiscountCooperationOnly" xml:space="preserve"><value>این کد تخفیف فقط برای کاربران همکار قابل استفاده است</value></data>
+  <data name="DiscountUsageLimitReached" xml:space="preserve"><value>ظرفیت استفاده از این کد تخفیف تکمیل شده است</value></data>
+  <data name="DiscountUserNotEligible" xml:space="preserve"><value>این کد تخفیف برای حساب شما قابل استفاده نیست</value></data>
+  <data name="DiscountMinimumAmountNotMet" xml:space="preserve"><value>مبلغ سفارش کمتر از حداقل مبلغ مجاز برای این تخفیف است</value></data>
+  <data name="DiscountNoEligibleItems" xml:space="preserve"><value>هیچ آیتمی در سفارش واجد شرایط این تخفیف نیست</value></data>
+  <data name="DiscountInvalidType" xml:space="preserve"><value>نوع تخفیف پیکربندی نشده است</value></data>
+  <data name="DiscountIsNotValid" xml:space="preserve"><value>کد تخفیف معتبر نیست</value></data>
+  <data name="DuplicateLike" xml:space="preserve"><value>پست قبلا توسط شما لایک شده است</value></data>
+  <data name="HasChildren" xml:space="preserve"><value>ابتدا زیرمجموعه‌های دسترسی را حذف کنید</value></data>
+  <data name="InUse" xml:space="preserve"><value>این دسترسی به نقش‌ها اختصاص داده شده است</value></data>
+  <data name="NoAvailableMethodPasswordRecoveryDescription" xml:space="preserve"><value>روشی برای بازیابی رمز عبور وجود ندارد، لطفا با پشتیبانی تماس بگیرید</value></data>
+  <data name="ContactSupportToRecoverYourPassword" xml:space="preserve"><value>روشی برای بازیابی رمز عبور وجود ندارد، لطفا با پشتیبانی تماس بگیرید</value></data>
+  <data name="PasswordResetIsNotAvailableWithTheSelectedMethod" xml:space="preserve"><value>امکان فراموشی رمز عبور با روش انتخاب شده وجود ندارد</value></data>
+  <data name="TheChosenMethodIsNotValid" xml:space="preserve"><value>روش انتخابی صحیح نمی باشد</value></data>
+  <data name="GeneralException" xml:space="preserve"><value>خطایی رخ داده است</value></data>
+  <data name="RecordHasDependencies" xml:space="preserve"><value>این رکورد دارای زیرمجموعه است و امکان حذف آن وجود ندارد</value></data>
+  <data name="InvalidReference" xml:space="preserve"><value>رکورد مرتبط یافت نشد یا نامعتبر است</value></data>
+  <data name="RequiredFieldMissing" xml:space="preserve"><value>اطلاعات اجباری کامل نیست</value></data>
+  <data name="DataTooLong" xml:space="preserve"><value>مقدار وارد شده بیش از حد مجاز است</value></data>
+  <data name="ConcurrencyConflict" xml:space="preserve"><value>رکورد توسط کاربر دیگری تغییر یافته است. لطفاً مجدداً تلاش کنید</value></data>
+  <data name="DatabaseDeadlock" xml:space="preserve"><value>عملیات به دلیل تداخل موقت انجام نشد. لطفاً دوباره تلاش کنید</value></data>
+  <data name="DatabaseTimeout" xml:space="preserve"><value>عملیات پایگاه داده بیش از حد طول کشید. لطفاً دوباره تلاش کنید</value></data>
+  <data name="ValidationError" xml:space="preserve"><value>خطای اعتبارسنجی</value></data>
+  <data name="AuthException" xml:space="preserve"><value>خطای احراز هویت</value></data>
+  <data name="AuthenticationFailed" xml:space="preserve"><value>احراز هویت ناموفق بود.</value></data>
+  <data name="AuthenticateFailure" xml:space="preserve"><value>احراز هویت ناموفق بود.</value></data>
+  <data name="UnauthorizedResourceAccess" xml:space="preserve"><value>شما مجاز به دسترسی به این منبع نیستید.</value></data>
+  <data name="UnhandledException" xml:space="preserve"><value>خطای غیرمنتظره رخ داده است</value></data>
+  <data name="InvalidIdValidator" xml:space="preserve"><value>شناسه نامعتبر است</value></data>
+  <data name="TitleRequired" xml:space="preserve"><value>عنوان الزامی است</value></data>
+  <data name="NameRequired" xml:space="preserve"><value>نام الزامی است</value></data>
+  <data name="AddressRequired" xml:space="preserve"><value>آدرس الزامی است</value></data>
+  <data name="DescriptionRequired" xml:space="preserve"><value>توضیحات اجباری می باشد</value></data>
+  <data name="DuplicateTitle" xml:space="preserve"><value>عنوان تکراری می باشد</value></data>
+  <data name="DuplicateProduct" xml:space="preserve"><value>محصول تکراری می باشد</value></data>
+  <data name="DuplicateAddress" xml:space="preserve"><value>آدرس تکراری می باشد</value></data>
+  <data name="DuplicateTag" xml:space="preserve"><value>تگ تکراری می باشد</value></data>
+  <data name="MaxLengthExceeded" xml:space="preserve"><value>حداکثر طول مجاز رعایت نشده است</value></data>
+  <data name="MinLengthNotMet" xml:space="preserve"><value>حداقل طول رعایت نشده است</value></data>
+  <data name="InvalidProductId" xml:space="preserve"><value>شناسه محصول نامعتبر</value></data>
+  <data name="InvalidBankId" xml:space="preserve"><value>شناسه بانک نامتعبر</value></data>
+  <data name="InvalidStoreId" xml:space="preserve"><value>شناسه فروشگاه نامتعبر</value></data>
+  <data name="IpRequired" xml:space="preserve"><value>ای پی الزامی است</value></data>
+  <data name="StartDateMustBeBeforeEndDate" xml:space="preserve"><value>تاریخ شروع باید قبل از تاریخ پایان باشد</value></data>
+  <data name="ImageMaxSizeExceeded" xml:space="preserve"><value>عکس نمیتواند بیشتر از 5 مگابایت باشد</value></data>
+  <data name="ImageRequired" xml:space="preserve"><value>عکس الزامی میباشد</value></data>
+  <data name="ProductCodeRequired" xml:space="preserve"><value>کد محصول الزامی است</value></data>
+  <data name="PermissionIdInvalid" xml:space="preserve"><value>شناسه دسترسی نامعتبر است</value></data>
+  <data name="PermissionTitleRequired" xml:space="preserve"><value>عنوان الزامی است</value></data>
+  <data name="PermissionAddressRequired" xml:space="preserve"><value>آدرس الزامی است</value></data>
+  <data name="PermissionNamespaceRequired" xml:space="preserve"><value>فضای نام الزامی است</value></data>
+  <data name="PermissionPriorityInvalid" xml:space="preserve"><value>اولویت نامعتبر است</value></data>
+  <data name="ImageProcessingFailed" xml:space="preserve"><value>پردازش تصویر با خطا مواجه شد</value></data>
+  <data name="ImageFormatNotSupported" xml:space="preserve"><value>فرمت تصویر پشتیبانی نمی‌شود</value></data>
+  <data name="ImageSizeInvalid" xml:space="preserve"><value>اندازه تصویر نامعتبر است</value></data>
+  <data name="InvalidFileExtension" xml:space="preserve"><value>فرمت فایل نامعتبر است</value></data>
+  <data name="InvalidFile" xml:space="preserve"><value>فایل معتبر نیست</value></data>
+  <data name="InvalidCityId" xml:space="preserve"><value>شناسه شهر نامعتبر</value></data>
+  <data name="InvalidIpAddress" xml:space="preserve"><value>آیپی معتبر نیست</value></data>
+  <data name="DiscountCodeRequired" xml:space="preserve"><value>کد تخفیف الزامی است</value></data>
+  <data name="DuplicateDiscountCode" xml:space="preserve"><value>کد تخفیف تکراری است</value></data>
+  <data name="SlugRequired" xml:space="preserve"><value>اسلاگ الزامی است</value></data>
+  <data name="DuplicateSlug" xml:space="preserve"><value>اسلاگ تکراری می باشد</value></data>
+  <data name="IconRequired" xml:space="preserve"><value>آیکون الزامی است</value></data>
+  <data name="SectionTypeNotFound" xml:space="preserve"><value>نوع بخش یافت نشد</value></data>
+  <data name="SectionCannotBeOwnParent" xml:space="preserve"><value>بخش نمی‌تواند والد خود باشد</value></data>
+  <data name="ParentSectionNotFound" xml:space="preserve"><value>بخش والد یافت نشد</value></data>
+  <data name="DuplicateRecord" xml:space="preserve"><value>رکورد تکراری می باشد</value></data>
+  <data name="DuplicateDelivery" xml:space="preserve"><value>تحویل تکراری می باشد</value></data>
+  <data name="DuplicateInformation" xml:space="preserve"><value>اطلاعات تکراری می باشند</value></data>
+  <data name="DuplicateTitleOrAddress" xml:space="preserve"><value>عنوان و یا آدرس تکراری می باشد</value></data>
+  <data name="DuplicateRole" xml:space="preserve"><value>نقش تکراری می باشد</value></data>
+  <data name="MinLength5Characters" xml:space="preserve"><value>حداقل 5 کاراکتر</value></data>
+  <data name="MinLength10Characters" xml:space="preserve"><value>حداقل 10 کاراکتر</value></data>
+  <data name="MinLength11Characters" xml:space="preserve"><value>حداقل 11 کاراکتر</value></data>
+  <data name="MinLength15Characters" xml:space="preserve"><value>حداقل 15 کاراکتر</value></data>
+  <data name="MinLength50Characters" xml:space="preserve"><value>حداقل 50 کارکتر</value></data>
+  <data name="MaxLength6Characters" xml:space="preserve"><value>حداکثر 6 کاراکتر</value></data>
+  <data name="MaxLength10Characters" xml:space="preserve"><value>حداکثر 10 کاراکتر</value></data>
+  <data name="MaxLength11Characters" xml:space="preserve"><value>حداکثر 11 کاراکتر</value></data>
+  <data name="MaxLength12Characters" xml:space="preserve"><value>حداکثر 12 کاراکتر</value></data>
+  <data name="MaxLength20Characters" xml:space="preserve"><value>حداکثر 20 کاراکتر</value></data>
+  <data name="MaxLength25Characters" xml:space="preserve"><value>حداکثر 25 کاراکتر</value></data>
+  <data name="MaxLength30Characters" xml:space="preserve"><value>حداکثر 30 کاراکتر</value></data>
+  <data name="MaxLength35Characters" xml:space="preserve"><value>حداکثر 35 کاراکتر</value></data>
+  <data name="MaxLength50Characters" xml:space="preserve"><value>حداکثر 50 کاراکتر</value></data>
+  <data name="MaxLength100Characters" xml:space="preserve"><value>حداکثر 100 کاراکتر</value></data>
+  <data name="MaxLength120Characters" xml:space="preserve"><value>حداکثر 120 کاراکتر</value></data>
+  <data name="MaxLength150Characters" xml:space="preserve"><value>حداکثر 150 کاراکتر</value></data>
+  <data name="MaxLength200Characters" xml:space="preserve"><value>حداکثر 200 کاراکتر</value></data>
+  <data name="MaxLength250Characters" xml:space="preserve"><value>حداکثر 250 کاراکتر</value></data>
+  <data name="MaxLength300Characters" xml:space="preserve"><value>حداکثر 300 کاراکتر</value></data>
+  <data name="InvalidLatitude" xml:space="preserve"><value>عرض جغرافیایی نامعتبر</value></data>
+  <data name="InvalidLongitude" xml:space="preserve"><value>طول جغرافیایی نامعتبر</value></data>
+  <data name="RatingRange0To5" xml:space="preserve"><value>بازه مجاز 0 تا 5</value></data>
+  <data name="MinDeliveryDays1" xml:space="preserve"><value>حداقل روز 1</value></data>
+  <data name="EnterMobileOrEmailAsUserName" xml:space="preserve"><value>لطفا نام کاربری را شماره همراه یا ایمیل وارد کنید</value></data>
+  <data name="EnterMobileOrEmail" xml:space="preserve"><value>لطفا شماره همراه یا ایمیل وارد کنید</value></data>
+  <data name="PasswordIsNotValid" xml:space="preserve"><value>رمز عبور معتبر نمی باشد</value></data>
+  <data name="UserNameRequired" xml:space="preserve"><value>نام کاربری الزامی می باشد</value></data>
+  <data name="UserNameMustBeMobile" xml:space="preserve"><value>نام کاربری بایستی شماره همراه وارد گردد</value></data>
+  <data name="UserNameMustBeMobileOrEmail" xml:space="preserve"><value>نام کاربری بایستی شماره همراه یا ایمیل باشد</value></data>
+  <data name="UserNameMaxLength11" xml:space="preserve"><value>نام کاربری بایستی حداکثر 11 کاراکتر باشد</value></data>
+  <data name="FirstNameRequired" xml:space="preserve"><value>نام الزامی می باشد</value></data>
+  <data name="FirstNameMaxLength50" xml:space="preserve"><value>نام بایستی حداکثر 50 کاراکتر باشد</value></data>
+  <data name="LastNameRequired" xml:space="preserve"><value>نام خانوادگی الزامی می باشد</value></data>
+  <data name="LastNameMaxLength50" xml:space="preserve"><value>نام خانوادگی بایستی حداکثر 50 کاراکتر باشد</value></data>
+  <data name="EmailRequired" xml:space="preserve"><value>ایمیل الزامی می باشد</value></data>
+  <data name="EmailIsNotValid" xml:space="preserve"><value>ایمیل نامعتبر می باشد</value></data>
+  <data name="MobileIsNotValid" xml:space="preserve"><value>شماره همراه نامعتبر می باشد</value></data>
+  <data name="PasswordRequired" xml:space="preserve"><value>رمز عبور الزامی می باشد</value></data>
+  <data name="OtpRequired" xml:space="preserve"><value>رمز یکبار مصرف الزامی می باشد</value></data>
+  <data name="GenderRequired" xml:space="preserve"><value>جنسیت الزامی می باشد</value></data>
+  <data name="InvalidUser" xml:space="preserve"><value>کاربر نامعتبر است</value></data>
+  <data name="InvalidRole" xml:space="preserve"><value>نقش نامعتبر است</value></data>
+  <data name="RoleNotFound" xml:space="preserve"><value>نقش یافت نشد</value></data>
+  <data name="UserRoleAlreadyAssigned" xml:space="preserve"><value>این نقش قبلاً به کاربر اختصاص داده شده است</value></data>
+  <data name="InvalidPermission" xml:space="preserve"><value>دسترسی نامعتبر است</value></data>
+  <data name="PermissionNotFound" xml:space="preserve"><value>دسترسی یافت نشد</value></data>
+  <data name="RolePermissionAlreadyAssigned" xml:space="preserve"><value>این دسترسی قبلاً به نقش اختصاص داده شده است</value></data>
+  <data name="DuplicatePermissionId" xml:space="preserve"><value>شناسه دسترسی تکراری است</value></data>
+  <data name="InvalidPermissionLevel" xml:space="preserve"><value>سطح دسترسی نامعتبر است</value></data>
+  <data name="InvalidParentId" xml:space="preserve"><value>شناسه والد نامعتبر است</value></data>
+  <data name="PriceAlreadyRegistered" xml:space="preserve"><value>قیمت ثبت شده، لطفا قیمت ثبت شده را ویرایش کنید</value></data>
+  <data name="StatusTypeRequired" xml:space="preserve"><value>نوع وضعیت الزامی است</value></data>
+  <data name="TitleMaxLength50" xml:space="preserve"><value>عنوان نباید بیشتر 50 کارکتر باشد</value></data>
+  <data name="TitleMinLength10" xml:space="preserve"><value>عنوان نباید کمتر از 10 کارکتر باشد</value></data>
+  <data name="ValueRatingRequired" xml:space="preserve"><value>رتبه بندی مقرون به صرفه الزامی است</value></data>
+  <data name="ReviewRateRequired" xml:space="preserve"><value>نرخ نظرالزامی است</value></data>
+  <data name="QualityRatingRequired" xml:space="preserve"><value>رتبه بندی کیفیت الزامی است</value></data>
+  <data name="TopicRequired" xml:space="preserve"><value>موضوع الزامی است</value></data>
+  <data name="ProductPropertyRuleAlreadyExists" xml:space="preserve"><value>برای این ویژگی محصول، قانون قبلا ثبت شده است</value></data>
+  <data name="DuplicateProductProperty" xml:space="preserve"><value>ویژگی برای این محصول تکراری است</value></data>
+  <data name="DuplicateProductAttachmentType" xml:space="preserve"><value>این نوع فایل برای محصول تکراری است</value></data>
+  <data name="BankNotSelected" xml:space="preserve"><value>بانکی انتخاب نشده است</value></data>
+  <data name="WalletNotSelected" xml:space="preserve"><value>کیف پول انتخاب نشده است</value></data>
+  <data name="InvalidPaymentOption" xml:space="preserve"><value>روش پرداخت نامعتبر است</value></data>
+  <data name="WalletNotFound" xml:space="preserve"><value>کیف پول یافت نشد</value></data>
+  <data name="WalletIsNotActive" xml:space="preserve"><value>کیف پول فعال نیست</value></data>
+  <data name="InsufficientWalletBalance" xml:space="preserve"><value>موجودی کیف پول کافی نیست</value></data>
+  <data name="WalletChargeInProgress" xml:space="preserve"><value>شارژ کیف پول دیگری در حال انجام است</value></data>
+  <data name="NoPendingWalletCharge" xml:space="preserve"><value>شارژ کیف پول در انتظار تأیید یافت نشد</value></data>
+  <data name="FinancialYearNotFound" xml:space="preserve"><value>سال مالی فعال برای این شرکت یافت نشد</value></data>
+  <data name="NoPendingBankPayment" xml:space="preserve"><value>پرداخت بانکی در انتظار تأیید برای این سفارش یافت نشد</value></data>
+  <data name="PaymentFailed" xml:space="preserve"><value>پرداخت ناموفق بود</value></data>
+  <data name="BankTransactionNotFound" xml:space="preserve"><value>تراکنش بانکی یافت نشد</value></data>
+  <data name="InvalidBlogPostId" xml:space="preserve"><value>شناسه پست نامعتبر است</value></data>
+  <data name="InvalidCompanyStoryId" xml:space="preserve"><value>شناسه استوری کمپانی نامعتبر است</value></data>
+  <data name="InvalidRefreshToken" xml:space="preserve"><value>رفرش توکن نامعتبر</value></data>
+  <data name="AccountCodeRequired" xml:space="preserve"><value>کد حساب الزامی است</value></data>
+  <data name="AccountCodeMaxLength20" xml:space="preserve"><value>کد حساب نباید بیشتر از 20 کاراکتر باشد</value></data>
+  <data name="AccountTitleRequired" xml:space="preserve"><value>عنوان حساب الزامی است</value></data>
+  <data name="AccountTitleMaxLength50" xml:space="preserve"><value>عنوان حساب نباید بیشتر از 50 کاراکتر باشد</value></data>
+  <data name="AccountCodeAlphanumericRequired" xml:space="preserve"><value>کد حساب بایستی شامل اعداد و حروف باشد</value></data>
+  <data name="AccountTitleLettersAndSpacesRequired" xml:space="preserve"><value>عنوان حساب بایستی شامل حروف و فاصله باشد</value></data>
+  <data name="InvalidAccountType" xml:space="preserve"><value>نوع حساب نامعتبر است</value></data>
+  <data name="InvalidAccountDetail" xml:space="preserve"><value>تفصیل نامعتبر است</value></data>
+  <data name="ContentPolicyScopeRequired" xml:space="preserve"><value>فقط یکی از نقش یا کاربر را مشخص کنید، نه هر دو</value></data>
+  <data name="ContentPolicyEntityTypeRequired" xml:space="preserve"><value>نوع موجودیت الزامی است</value></data>
+  <data name="ContentPolicyEntityTypeNotRegistered" xml:space="preserve"><value>نوع موجودیت برای سیاست‌های محتوا ثبت نشده است</value></data>
+  <data name="ContentPolicyMergeModeInvalidForRole" xml:space="preserve"><value>حالت ادغام فقط برای policyهای کاربر قابل استفاده است</value></data>
+  <data name="EmailIsUsedByAnotherUser" xml:space="preserve"><value>ایمیل توسط کاربر دیگری استفاده شده است</value></data>
+  <data name="HasPageSections" xml:space="preserve"><value>ابتدا بخش‌های صفحه را حذف کنید</value></data>
+  <data name="HasSections" xml:space="preserve"><value>ابتدا بخش‌های این نوع را حذف کنید</value></data>
+  <data name="HasSectionItems" xml:space="preserve"><value>ابتدا آیتم‌های بخش را حذف کنید</value></data>
+  <data name="PageNotFound" xml:space="preserve"><value>صفحه یافت نشد</value></data>
+  <data name="WebSiteSettingsNotFound" xml:space="preserve"><value>تنظیمات وب سایت ثبت نشده است</value></data>
+  <data name="CannotDeleteRootPermission" xml:space="preserve"><value>حذف دسترسی ریشه مجاز نیست</value></data>
+</root>

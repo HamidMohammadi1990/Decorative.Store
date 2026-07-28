@@ -1,0 +1,26 @@
+﻿using System.Text.Json.Serialization;
+using Edition.Application.Contracts.ContentPolicies;
+using Edition.Application.Common.Utilities.Security.Attributes;
+using Store.Common.Models;
+using Store.Domain.Dtos.Pagination;
+using Store.Domain.Entities;
+
+namespace Edition.Application.Features.ProductComments.Queries;
+
+public record GetAllProductCommentRequest : ContentPolicyRequest<ProductComment>, IRequest<OperationResult<PagedResult<GetAllProductCommentResponse>>>
+{
+    [JsonConverter(typeof(ProductNullableEncryptor))]
+    public int? ProductId { get; init; }
+
+    [JsonConverter(typeof(UserNullableEncryptor))]
+    public int? UserId { get; init; }
+
+    [JsonConverter(typeof(CompanyNullableEncryptor))]
+    public int? CompanyId { get; init; }
+
+    [JsonConverter(typeof(CommentTopicNullableEncryptor))]
+    public int? CommentTopicId { get; init; }
+
+    public bool? IsActive { get; init; }
+    public PagedRequest Pagination { get; init; } = default!;
+}

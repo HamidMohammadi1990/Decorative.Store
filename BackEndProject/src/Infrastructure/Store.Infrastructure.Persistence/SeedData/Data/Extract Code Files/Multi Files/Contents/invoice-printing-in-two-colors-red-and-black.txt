@@ -1,0 +1,173 @@
+<div class="col-md-7 col-12">
+                    <h1 class="title-h2  pr-2 text-right  mt-4 mt-md-0 mb-4">  چاپ فاکتور تحریر الوان دو رنگ دو برگی (قرمز- مشکی)</h1>
+
+                    <div class="select_data  mb-3">
+                        <div class="line mb-3 d-flex align-items-center">
+                            <label class="text-secondary w-25 mb-0">
+                                عنوان سفارش
+                            </label>
+                            <input required="Required" class="form-control w-75" id="title" maxlength="150" minlength="1" name="title" type="text" value="" aria-required="true">
+                        </div>
+                        
+                            <div class="line mb-3 d-flex align-items-center" id="offsetSizeBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    سایز
+                                </label>
+                                <select required="Required" class="custom-select w-75 valid" data-val="true" data-val-number="The field offsetSizeID must be a number." id="offsetSizeID" name="offsetSizeID" aria-required="true" aria-describedby="offsetSizeID-error" aria-invalid="false"><option value="">انتخاب کنید ...</option>
+<option value="3828">A5بعد از برش 19.7در14.2 تحریر 70گرم الوان 60 گرم</option>
+<option value="3829">A6بعد از برش 9.7در14.2 تحریر 70 گرم الوان 60 گرم</option>
+<option value="3830">A4بعد از برش 19.7در 28.7 تحریر 70گرم الوان 60 گرم</option>
+<option value="3831">B6بعد ازبرش 16.7در 11.7 تحریر 70گرم الوان 60 گرم</option>
+<option value="3832">B5بعد از برش 1607در23.7 تحریر70گرم الوان 60 گرم</option>
+<option value="3833">B4بعد از برش 33.7د23.7 تحریر 70گرم الوان 60 گرم</option>
+<option value="3834">A3بعد از برش 28.7در39.7 تحریر 70گرم الوان 60 گرم</option>
+</select>
+                            </div>
+                        <div class="line mb-3 d-flex align-items-center " id="offsetSideBox">
+                            <label class="text-secondary w-25 mb-0">
+                                روی چاپ
+                            </label>
+                            <select class="custom-select w-75 valid" data-val="true" data-val-number="The field offsetSideID must be a number." data-val-required="The offsetSideID field is required." id="offsetSideID" name="offsetSideID" aria-required="true" aria-describedby="offsetSideID-error" aria-invalid="false"><option value="1">یک رو</option></select>
+                        </div>
+                        <div class="line mb-3 d-flex align-items-center" id="offsetTirazhBox">
+                            <label class="text-secondary w-25 mb-0">
+                                تیراژ
+                            </label>
+                            <select required="required" class="custom-select w-75 valid" data-val="true" data-val-number="The field offsetTirazhID must be a number." id="offsetTirazhID" name="offsetTirazhID" aria-required="true" aria-describedby="offsetTirazhID-error" aria-invalid="false"><option value="null">انتخاب کنید ...</option><option value="1000">1000</option><option value="2000">2000</option><option value="5000">5000</option></select>
+                        </div>
+
+                    </div>
+
+                            <div class="box-custom rounded border mb-3 p-3" id="additionalBox">
+
+                                <h3 class="title mb-3 pr-2 text-right">
+                                    <strong>  خدمات پس از چاپ </strong>
+                                </h3>
+                                <div class="list" id="additionalList">
+                                    
+
+
+
+    <input type="hidden" value="2" id="offsetAdtGeneral17308">
+    <input type="hidden" value="0" id="offsetAdtGettirazhType17308">
+    <input type="hidden" value="2" id="offsetAdtType17308">
+    <input type="hidden" id="offsetAdtPrice17308" name="offsetAdtPrice17308" class="adtPrice" value="0">
+    <input type="hidden" id="offsetAdtID17308" value="17308">
+    <input type="hidden" id="offsetAdtIsFile17308" value="False">
+    <input type="hidden" id="offsetAdtIsDuplex17308" value="False">
+        <input type="hidden" id="offsetAdtRequired17308" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input offsetAdt" id="offsetAdt17308" onchange="showOffsetBox('17308')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="offsetAdt17308">اوارق آزاد</label>
+                </div>
+            </div>
+
+                <div class="custom-control float-left col-md-6 pl-0 offsetAdtBox d-inline-block" id="offsetAdt17308Box">
+
+                        <input type="hidden" id="offsetAdtCount17308" name="offsetAdtCount17308" value="0" required="required">
+
+                    <select class="d-none" id="offsetAdtStrCount17308" name="offsetAdtStrCount17308">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="text" class="d-none" id="offsetAdtParameter17308" name="offsetAdtParameter17308" value="0">
+
+                        <input type="hidden" id="offsetAdtStartNumber17308" name="offsetAdtStartNumber17308" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="2" id="offsetAdtGeneral17309">
+    <input type="hidden" value="0" id="offsetAdtGettirazhType17309">
+    <input type="hidden" value="2" id="offsetAdtType17309">
+    <input type="hidden" id="offsetAdtPrice17309" name="offsetAdtPrice17309" class="adtPrice" value="0">
+    <input type="hidden" id="offsetAdtID17309" value="17309">
+    <input type="hidden" id="offsetAdtIsFile17309" value="False">
+    <input type="hidden" id="offsetAdtIsDuplex17309" value="False">
+        <input type="hidden" id="offsetAdtRequired17309" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input offsetAdt" id="offsetAdt17309" onchange="showOffsetBox('17309')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="offsetAdt17309">سرچسب</label>
+                </div>
+            </div>
+
+                <div class="custom-control float-left col-md-6 pl-0 offsetAdtBox d-inline-block" id="offsetAdt17309Box">
+
+                        <input type="hidden" id="offsetAdtCount17309" name="offsetAdtCount17309" value="0" required="required">
+
+                    <select class="d-none" id="offsetAdtStrCount17309" name="offsetAdtStrCount17309">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="text" class="d-none" id="offsetAdtParameter17309" name="offsetAdtParameter17309" value="0">
+
+                        <input type="hidden" id="offsetAdtStartNumber17309" name="offsetAdtStartNumber17309" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="2" id="offsetAdtGeneral17310">
+    <input type="hidden" value="0" id="offsetAdtGettirazhType17310">
+    <input type="hidden" value="2" id="offsetAdtType17310">
+    <input type="hidden" id="offsetAdtPrice17310" name="offsetAdtPrice17310" class="adtPrice" value="0">
+    <input type="hidden" id="offsetAdtID17310" value="17310">
+    <input type="hidden" id="offsetAdtIsFile17310" value="False">
+    <input type="hidden" id="offsetAdtIsDuplex17310" value="False">
+        <input type="hidden" id="offsetAdtRequired17310" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input offsetAdt" id="offsetAdt17310" onchange="showOffsetBox('17310')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="offsetAdt17310">پرفراژ و منگنه</label>
+                </div>
+            </div>
+
+                <div class="custom-control float-left col-md-6 pl-0 offsetAdtBox d-inline-block" id="offsetAdt17310Box">
+
+                        <input type="hidden" id="offsetAdtCount17310" name="offsetAdtCount17310" value="0" required="required">
+
+                    <select class="d-none" id="offsetAdtStrCount17310" name="offsetAdtStrCount17310">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="text" class="d-none" id="offsetAdtParameter17310" name="offsetAdtParameter17310" value="0">
+
+                        <input type="hidden" id="offsetAdtStartNumber17310" name="offsetAdtStartNumber17310" value="0">
+                </div>
+        </div>
+    <input type="hidden" value="2" id="offsetAdtGeneral17311">
+    <input type="hidden" value="0" id="offsetAdtGettirazhType17311">
+    <input type="hidden" value="2" id="offsetAdtType17311">
+    <input type="hidden" id="offsetAdtPrice17311" name="offsetAdtPrice17311" class="adtPrice" value="0">
+    <input type="hidden" id="offsetAdtID17311" value="17311">
+    <input type="hidden" id="offsetAdtIsFile17311" value="False">
+    <input type="hidden" id="offsetAdtIsDuplex17311" value="False">
+        <input type="hidden" id="offsetAdtRequired17311" value="false">
+        <div class="row mb-1 mh-35">
+            <div class="float-right pt-1 col-md-6">
+                <div class="custom-checkbox custom-control pl-0">
+                    <input type="checkbox" class="custom-control-input offsetAdt" id="offsetAdt17311" onchange="showOffsetBox('17311')">
+                    <label class="custom-control-label align-middle col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0" for="offsetAdt17311">شماره سریال .</label>
+                </div>
+            </div>
+
+                <div class="custom-control float-left col-md-6 pl-0 offsetAdtBox d-inline-block" id="offsetAdt17311Box">
+
+                        <input type="hidden" id="offsetAdtCount17311" name="offsetAdtCount17311" value="0" required="required">
+
+                    <select class="d-none" id="offsetAdtStrCount17311" name="offsetAdtStrCount17311">
+                        <option value="0" selected=""></option>
+                    </select>
+
+                        <input type="text" class="d-none" id="offsetAdtParameter17311" name="offsetAdtParameter17311" value="0">
+
+                        <input type="text" placeholder="شماره شروع" min="0" max="99999" maxlength="5" class="form-control w-75 d-inline-block input-number mt-1" id="offsetAdtStartNumber17311" name="offsetAdtStartNumber17311" required="" aria-required="true">
+                </div>
+        </div>
+                                </div>
+                            </div>
+                    <div id="offsetDeliveryBox">
+
+                    </div>
+
+                </div>

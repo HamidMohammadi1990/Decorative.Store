@@ -1,0 +1,140 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "3786",
+            "Title": "A5بعد از برش 19.7 در 14.2 تحریر 55 گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3787",
+            "Title": "A6بعد از برش9.7 در14.2 تحریر 55گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3788",
+            "Title": "A4بعد از برش 19.7 در 28.7 تحریر 55 گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3789",
+            "Title": "B6بعد از برش 16.7 در11.7 تحریر 55گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3790",
+            "Title": "B5بعد از برش 16.7 در 23.7 تحریر 55 گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3791",
+            "Title": "B4بعد از برش 23.7 در 33.7 تحریر 55 گرم الوان 55 گرم"
+          },
+          {
+            "Id": "3792",
+            "Title": "A3بعد از برش 28.7 در 39.7 تحریر 55گرم الوان 55 گرم"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "روی چاپ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1000",
+            "Title": "1000"
+          },
+          {
+            "Id": "2000",
+            "Title": "2000"
+          },
+          {
+            "Id": "5000",
+            "Title": "5000"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "خدمات پس از چاپ",
+    "Properties": [
+      {
+        "Title": "اوارق آزاد",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سرچسب",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "پرفراژ و منگنه",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "شماره سریال .",
+        "Type": "checkbox",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [],
+        "Dependencies": [
+          {
+            "Title": "شماره شروع",
+            "Type": "number",
+            "IsRequired": true,
+            "Min": 0,
+            "Max": 99999,
+            "Items": [],
+            "Dependencies": [],
+            "Properties": []
+          }
+        ],
+        "Properties": []
+      }
+    ]
+  }
+]

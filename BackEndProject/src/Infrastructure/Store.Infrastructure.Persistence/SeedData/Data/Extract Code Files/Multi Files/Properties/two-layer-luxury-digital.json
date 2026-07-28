@@ -1,0 +1,134 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "جنس مصرفی",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1091",
+            "Title": "گلاسه  300 گرم"
+          },
+          {
+            "Id": "1097",
+            "Title": "کتان  300 گرم"
+          },
+          {
+            "Id": "1098",
+            "Title": "مقوا کارتی  300 گرم"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1128",
+            "Title": "50"
+          },
+          {
+            "Id": "1129",
+            "Title": "100"
+          },
+          {
+            "Id": "1130",
+            "Title": "200"
+          },
+          {
+            "Id": "1131",
+            "Title": "500"
+          },
+          {
+            "Id": "1132",
+            "Title": "1000"
+          },
+          {
+            "Id": "0",
+            "Title": "تیراژ دلخواه"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "66",
+            "Title": "5*9"
+          },
+          {
+            "Id": "67",
+            "Title": "5.5*8.5"
+          },
+          {
+            "Id": "68",
+            "Title": "6*9"
+          },
+          {
+            "Id": "69",
+            "Title": "5*5"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": [
+      {
+        "Title": "روکش",
+        "Type": "select",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "0",
+            "Title": "بدون روکش"
+          },
+          {
+            "Id": "4185",
+            "Title": "سلفون مات"
+          },
+          {
+            "Id": "4186",
+            "Title": "سلفون براق"
+          },
+          {
+            "Id": "4187",
+            "Title": "سلفون مات مخملی"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,80 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "جنس",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1187",
+            "Title": "بروشور 2 لت تحریر 80گرمی"
+          },
+          {
+            "Id": "1188",
+            "Title": "بروشور3 لت تحریر80گرمی"
+          },
+          {
+            "Id": "1189",
+            "Title": "بروشور2لت 135گرمی"
+          },
+          {
+            "Id": "1190",
+            "Title": "بروشور3لت 135گرمی"
+          },
+          {
+            "Id": "1195",
+            "Title": "بروشور2لت 170گرمی"
+          },
+          {
+            "Id": "1196",
+            "Title": "بروشور3لت 170گرمی"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "روی چاپ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "2",
+            "Title": "دو رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1000",
+            "Title": "1000"
+          },
+          {
+            "Id": "2000",
+            "Title": "2000"
+          },
+          {
+            "Id": "5000",
+            "Title": "5000"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  }
+]

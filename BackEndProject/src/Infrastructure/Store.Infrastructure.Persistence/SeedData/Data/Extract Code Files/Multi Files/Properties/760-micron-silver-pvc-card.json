@@ -1,0 +1,102 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "جنس مصرفی",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "7103",
+            "Title": "کارت pvc760 میکرون نقره ای"
+          },
+          {
+            "Id": "7226",
+            "Title": "کارت pvc760 میکرون نقره ای مات"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "وجه",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          },
+          {
+            "Id": "2",
+            "Title": "دو رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "5548",
+            "Title": "50"
+          },
+          {
+            "Id": "5549",
+            "Title": "100"
+          },
+          {
+            "Id": "5550",
+            "Title": "200"
+          },
+          {
+            "Id": "5551",
+            "Title": "500"
+          },
+          {
+            "Id": "5552",
+            "Title": "750"
+          },
+          {
+            "Id": "5553",
+            "Title": "1000"
+          },
+          {
+            "Id": "5554",
+            "Title": "2000"
+          },
+          {
+            "Id": "0",
+            "Title": "تیراژ دلخواه"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": []
+  }
+]

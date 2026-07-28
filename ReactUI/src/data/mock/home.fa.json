@@ -1,0 +1,296 @@
+{
+  "promoAnnouncement": {
+    "id": "summer-sale-2026",
+    "message": "حراج تابستانه شروع شد! تا ۵۰٪ تخفیف",
+    "link": { "label": "مشاهده حراج", "href": "/sale" }
+  },
+  "utilityBar": {
+    "phoneLabel": "تماس: ۰۸۰۰ ۴۰۴ ۹۷۸۰",
+    "phoneHref": "tel:08004049780",
+    "links": [
+      { "label": "پایداری", "href": "/sustainability" },
+      { "label": "پیگیری سفارش", "href": "/track-order" }
+    ]
+  },
+  "header": {
+    "brandLabel": "دیبا گالری",
+    "searchPlaceholder": "جستجوی مبلمان، فرش، روشنایی…",
+    "accountLabel": "ورود",
+    "cartLabel": "سبد خرید",
+    "primaryNav": [
+      {
+        "id": "new",
+        "label": "جدید",
+        "children": [
+          { "label": "محصولات جدید", "href": "/new" },
+          { "label": "مبلمان جدید", "href": "/new/furniture" },
+          { "label": "مبل و صندلی جدید", "href": "/new/sofas" },
+          { "label": "کتاب تابستان", "href": "/lookbook" }
+        ]
+      },
+      {
+        "id": "furniture",
+        "label": "مبلمان",
+        "children": [
+          { "label": "مبل", "href": "/furniture/sofas" },
+          { "label": "میز ناهارخوری", "href": "/furniture/dining-tables" },
+          { "label": "تخت", "href": "/furniture/beds" },
+          { "label": "میز کار", "href": "/furniture/desks" }
+        ]
+      },
+      { "id": "sofas", "label": "مبل", "href": "/sofas" },
+      { "id": "garden", "label": "باغ و حیاط", "href": "/garden" },
+      { "id": "rugs", "label": "فرش و پرده", "href": "/rugs-curtains" },
+      { "id": "bed-linen", "label": "ملحفه", "href": "/bed-linen" },
+      { "id": "lighting", "label": "روشنایی", "href": "/lighting" },
+      { "id": "sale", "label": "حراج", "href": "/sale" }
+    ]
+  },
+  "designServices": {
+    "title": "خدمات طراحی رایگان",
+    "cta": { "label": "رزرو وقت رایگان", "href": "/design-services" },
+    "featuredLinks": [
+      { "label": "راهنمای پارچه و چرم", "href": "/guides/fabric" },
+      { "label": "اندازه‌گیری برای تحویل", "href": "/guides/measure" },
+      { "label": "راهنمای فرش", "href": "/guides/rugs" },
+      { "label": "راهنمای پرده", "href": "/guides/curtains" }
+    ]
+  },
+  "hero": {
+    "slides": [
+      {
+        "id": "hero-1",
+        "eyebrow": "فرصت محدود",
+        "title": "حراج تابستانه شروع شد!",
+        "subtitle": "تا ۵۰٪ تخفیف روی سبک‌های منتخب",
+        "image": {
+          "src": "/images/home/living-room.jpg",
+          "alt": "اتاق نشیمن مدرن"
+        },
+        "cta": { "label": "خرید از حراج", "href": "/sale" }
+      },
+      {
+        "id": "hero-2",
+        "title": "تا ۲۰٪ تخفیف اتاق خواب",
+        "subtitle": "فضایی آرام برای تابستان",
+        "image": {
+          "src": "/images/home/bedroom.jpg",
+          "alt": "اتاق خواب"
+        },
+        "cta": { "label": "مبلمان محبوب", "href": "/bedroom" }
+      },
+      {
+        "id": "hero-3",
+        "title": "مبل و صندلی موجود در انبار",
+        "subtitle": "تحویل ۱ تا ۳ هفته*",
+        "image": {
+          "src": "/images/home/velvet-sofa.jpg",
+          "alt": "مبل مخملی"
+        },
+        "cta": { "label": "خرید از موجودی", "href": "/in-stock/sofas" }
+      },
+      {
+        "id": "hero-4",
+        "title": "صندلی ناهارخوری زیر ۳.۵ میلیون",
+        "subtitle": "پذیرایی با استایل",
+        "image": {
+          "src": "/images/home/dining.jpg",
+          "alt": "میز ناهارخوری"
+        },
+        "cta": { "label": "خرید کنید", "href": "/dining/chairs" }
+      }
+    ]
+  },
+  "promoTiles": {
+    "tiles": [
+      {
+        "id": "tile-1",
+        "title": "تا ۲۰٪ تخفیف اتاق خواب",
+        "subtitle": "مبلمان محبوب",
+        "image": {
+          "src": "/images/home/bedroom-set.jpg",
+          "alt": "اتاق خواب"
+        },
+        "link": { "label": "خرید", "href": "/bedroom" }
+      },
+      {
+        "id": "tile-2",
+        "title": "صندلی ناهارخوری زیر ۳.۵ میلیون",
+        "image": {
+          "src": "/images/home/dining.jpg",
+          "alt": "صندلی"
+        },
+        "link": { "label": "خرید", "href": "/dining/chairs" }
+      },
+      {
+        "id": "tile-3",
+        "title": "مبل موجود در انبار",
+        "subtitle": "تحویل ۱ تا ۳ هفته*",
+        "image": {
+          "src": "/images/home/velvet-sofa.jpg",
+          "alt": "مبل"
+        },
+        "link": { "label": "خرید", "href": "/in-stock/sofas" }
+      },
+      {
+        "id": "tile-4",
+        "title": "حراج تابستانه",
+        "subtitle": "تا ۵۰٪ تخفیف",
+        "image": {
+          "src": "/images/home/living-room.jpg",
+          "alt": "نشیمن"
+        },
+        "link": { "label": "حراج", "href": "/sale" }
+      }
+    ],
+    "disclaimer": "*برخی استثناها اعمال می‌شود.",
+    "disclaimerLink": { "label": "جزئیات", "href": "/promo-terms" }
+  },
+  "categoryNav": {
+    "items": [
+      { "label": "جدید", "href": "/new" },
+      { "label": "مبل", "href": "/sofas" },
+      { "label": "اتاق خواب", "href": "/bedroom" },
+      { "label": "دفتر خانگی", "href": "/home-office" },
+      { "label": "فرش", "href": "/rugs" },
+      { "label": "ناهارخوری", "href": "/dining" },
+      { "label": "نشیمن", "href": "/living-room" },
+      { "label": "حراج تابستان", "href": "/sale" },
+      { "label": "میدسنچری", "href": "/mid-century" },
+      { "label": "باغ", "href": "/garden" },
+      { "label": "روشنایی", "href": "/lighting" },
+      { "label": "ملحفه", "href": "/bed-linen" },
+      { "label": "آشپزخانه", "href": "/kitchen-dining" },
+      { "label": "هدایا", "href": "/gifts" }
+    ]
+  },
+  "featuredShop": {
+    "sections": [
+      {
+        "id": "new-arrivals",
+        "title": "محصولات جدید",
+        "subtitle": "تازه‌ترین‌ها",
+        "image": {
+          "src": "/images/home/new-arrivals.jpg",
+          "alt": "محصول جدید"
+        },
+        "link": { "label": "مشاهده جدیدها", "href": "/new" },
+        "links": [
+          { "label": "مبلمان جدید", "href": "/new/furniture" },
+          { "label": "فرش جدید", "href": "/new/rugs" },
+          { "label": "روشنایی جدید", "href": "/new/lighting" }
+        ]
+      },
+      {
+        "id": "trade",
+        "title": "برنامه ترید",
+        "subtitle": "برای طراحان حرفه‌ای",
+        "image": {
+          "src": "/images/home/trade-interior.jpg",
+          "alt": "ترید"
+        },
+        "link": { "label": "بیشتر بدانید", "href": "/trade" },
+        "links": [
+          { "label": "عضویت", "href": "/trade/join" },
+          { "label": "ورود ترید", "href": "/trade/sign-in" }
+        ]
+      },
+      {
+        "id": "in-stock",
+        "title": "موجود و آماده ارسال",
+        "subtitle": "تحویل ۱ تا ۳ هفته",
+        "image": {
+          "src": "/images/home/in-stock.jpg",
+          "alt": "موجودی"
+        },
+        "link": { "label": "خرید از موجودی", "href": "/in-stock" },
+        "links": [
+          { "label": "مبل و صندلی", "href": "/in-stock/sofas" },
+          { "label": "فرش", "href": "/in-stock/rugs" }
+        ]
+      },
+      {
+        "id": "best-sellers",
+        "title": "پرفروش‌ها",
+        "image": {
+          "src": "/images/home/living-room.jpg",
+          "alt": "پرفروش"
+        },
+        "link": { "label": "مشاهده پرفروش‌ها", "href": "/best-sellers" },
+        "links": [
+          { "label": "مبلمان", "href": "/best-sellers/furniture" },
+          { "label": "روشنایی", "href": "/best-sellers/lighting" }
+        ]
+      },
+      {
+        "id": "collaborations",
+        "title": "همکاری‌ها",
+        "subtitle": "اما چمبرلین × دیبا گالری",
+        "image": {
+          "src": "/images/home/collaboration.jpg",
+          "alt": "همکاری"
+        },
+        "link": { "label": "کاوش همکاری‌ها", "href": "/collaborations" },
+        "links": [
+          { "label": "اما چمبرلین", "href": "/collaborations/emma-chamberlain" },
+          { "label": "پیرس و وارد", "href": "/collaborations/pierce-ward" }
+        ]
+      },
+      {
+        "id": "commercial",
+        "title": "درجه تجاری",
+        "subtitle": "مقاوم برای استفاده روزانه",
+        "image": {
+          "src": "/images/home/commercial-office.jpg",
+          "alt": "تجاری"
+        },
+        "link": { "label": "خرید درجه تجاری", "href": "/commercial" }
+      }
+    ]
+  },
+  "footer": {
+    "columns": [
+      {
+        "title": "خدمات مشتری",
+        "links": [
+          { "label": "تماس", "href": "/contact" },
+          { "label": "مرجوعی و تعویض", "href": "/returns" },
+          { "label": "اطلاعات ارسال", "href": "/delivery" }
+        ]
+      },
+      {
+        "title": "منابع",
+        "links": [
+          { "label": "کلیک و جمع‌آوری", "href": "/click-collect" },
+          { "label": "کلارنا", "href": "/klarna" },
+          { "label": "کلیرپی", "href": "/clearpay" }
+        ]
+      },
+      {
+        "title": "درباره ما",
+        "links": [
+          { "label": "مجله", "href": "/blog" },
+          { "label": "پایداری", "href": "/sustainability" },
+          { "label": "فرصت‌های شغلی", "href": "/careers" },
+          { "label": "شعب", "href": "/stores" }
+        ]
+      },
+      {
+        "title": "خدمات طراحی",
+        "links": [
+          { "label": "ملاقات با تیم طراحی", "href": "/design-services" },
+          { "label": "دیبا گالری TRADE", "href": "/trade" }
+        ]
+      }
+    ],
+    "newsletterTitle": "حراج‌ها و محصولات جدید",
+    "newsletterPlaceholder": "ایمیل",
+    "newsletterButton": "عضویت",
+    "copyright": "© ۲۰۲۶ Williams-Sonoma Inc. تمامی حقوق محفوظ است",
+    "legalLinks": [
+      { "label": "شرایط استفاده", "href": "/terms" },
+      { "label": "حریم خصوصی", "href": "/privacy" },
+      { "label": "بیانیه حقوقی", "href": "/legal" }
+    ]
+  }
+}

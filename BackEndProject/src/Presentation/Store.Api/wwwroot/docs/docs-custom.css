@@ -1,0 +1,38 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif;
+  background: #eef2f7;
+}
+
+.edition-docs-main {
+  position: fixed;
+  top: var(--edition-header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+}
+
+.edition-docs-panel {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #fff;
+}
+
+@media (max-width: 720px) {
+  .edition-header-end {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  #edition-docs-header {
+    height: auto;
+    min-height: var(--edition-header-height);
+    padding-block: 8px;
+  }
+}

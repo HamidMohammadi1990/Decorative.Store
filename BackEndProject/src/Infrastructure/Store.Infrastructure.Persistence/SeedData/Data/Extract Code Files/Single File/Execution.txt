@@ -1,0 +1,5 @@
+Requirements:
+	py -m pip install requests beautifulsoup4
+
+Run:
+	py "extract html to json script.py" page.html out.json

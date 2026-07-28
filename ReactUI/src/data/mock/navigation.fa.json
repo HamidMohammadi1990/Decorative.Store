@@ -1,0 +1,353 @@
+{
+  "primaryNav": [
+    {
+      "id": "blog",
+      "label": "مجله",
+      "href": "/blog"
+    },
+    {
+      "id": "new",
+      "label": "جدید",
+      "href": "/new",
+      "columns": [
+        {
+          "title": "محصولات جدید",
+          "links": [
+            { "label": "همه محصولات جدید", "href": "/new" },
+            { "label": "مبلمان جدید", "href": "/new/furniture" },
+            { "label": "مبل و صندلی جدید", "href": "/new/sofas" },
+            { "label": "فرش جدید", "href": "/new/rugs" },
+            { "label": "روشنایی جدید", "href": "/new/lighting" }
+          ]
+        },
+        {
+          "title": "بیشتر",
+          "links": [
+            { "label": "ملحفه جدید", "href": "/new/bed-linen" },
+            { "label": "کوسن و پتو جدید", "href": "/new/cushions" },
+            { "label": "آشپزخانه جدید", "href": "/new/kitchen-dining" },
+            { "label": "باغ جدید", "href": "/new/garden" }
+          ]
+        },
+        {
+          "title": "ویژه",
+          "links": [
+            { "label": "کتاب تابستان", "href": "/lookbook" },
+            { "label": "اما چمبرلین × دیبا گالری", "href": "/collaborations/emma-chamberlain" },
+            { "label": "سبک ساحلی", "href": "/shop/coastal" },
+            { "label": "مدرن مینیمال", "href": "/shop/modern" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "furniture",
+      "label": "مبلمان",
+      "href": "/furniture",
+      "columns": [
+        {
+          "title": "نشیمن",
+          "links": [
+            { "label": "مبل", "href": "/furniture/sofas" },
+            { "label": "صندلی راحتی", "href": "/furniture/armchairs" },
+            { "label": "میز جلو مبلی", "href": "/furniture/coffee-tables" },
+            { "label": "میز تلویزیون", "href": "/furniture/tv-stands" }
+          ]
+        },
+        {
+          "title": "ناهارخوری",
+          "links": [
+            { "label": "میز ناهارخوری", "href": "/furniture/dining-tables" },
+            { "label": "صندلی ناهارخوری", "href": "/furniture/dining-chairs" },
+            { "label": "صندلی بار", "href": "/furniture/bar-stools" },
+            { "label": "بوفه", "href": "/furniture/sideboards" }
+          ]
+        },
+        {
+          "title": "اتاق خواب",
+          "links": [
+            { "label": "تخت", "href": "/furniture/beds" },
+            { "label": "پاتختی", "href": "/furniture/bedside-tables" },
+            { "label": "کمد", "href": "/furniture/chests" },
+            { "label": "تشک", "href": "/furniture/mattresses" }
+          ]
+        },
+        {
+          "title": "دفتر خانگی",
+          "links": [
+            { "label": "میز کار", "href": "/furniture/desks" },
+            { "label": "صندلی اداری", "href": "/furniture/desk-chairs" },
+            { "label": "قفسه", "href": "/furniture/bookcases" },
+            { "label": "موجود در انبار", "href": "/in-stock/furniture" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sofas",
+      "label": "مبل",
+      "href": "/sofas",
+      "columns": [
+        {
+          "title": "همه",
+          "links": [
+            { "label": "همه مبل‌ها", "href": "/sofas" },
+            { "label": "مبل گوشه", "href": "/sofas/chaise-corner" },
+            { "label": "مبل تخت‌خواب‌شو", "href": "/sofas/sofa-beds" },
+            { "label": "صندلی راحتی", "href": "/sofas/armchairs" }
+          ]
+        },
+        {
+          "title": "بر اساس اندازه",
+          "links": [
+            { "label": "۲ نفره", "href": "/sofas/2-seater" },
+            { "label": "۳ نفره", "href": "/sofas/3-seater" },
+            { "label": "۴ نفره", "href": "/sofas/4-seater" },
+            { "label": "۵ نفره", "href": "/sofas/5-seater" }
+          ]
+        },
+        {
+          "title": "کلکسیون‌ها",
+          "links": [
+            { "label": "Andes", "href": "/sofas/andes" },
+            { "label": "Haven", "href": "/sofas/haven" },
+            { "label": "Harmony", "href": "/sofas/harmony" },
+            { "label": "موجود در انبار", "href": "/in-stock/sofas" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "garden",
+      "label": "باغ",
+      "href": "/garden",
+      "columns": [
+        {
+          "title": "مبلمان",
+          "links": [
+            { "label": "مبلمان فضای باز", "href": "/garden/lounge" },
+            { "label": "ناهارخوری باغ", "href": "/garden/dining" },
+            { "label": "کلکسیون Porto", "href": "/garden/porto" },
+            { "label": "موجود در انبار", "href": "/in-stock/garden" }
+          ]
+        },
+        {
+          "title": "گلدان و دکور",
+          "links": [
+            { "label": "گلدان بیرونی", "href": "/garden/planters-outdoor" },
+            { "label": "گلدان داخلی", "href": "/garden/planters-indoor" },
+            { "label": "کوسن بیرونی", "href": "/garden/cushions" },
+            { "label": "چتر آفتاب‌گیر", "href": "/garden/parasols" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rugs",
+      "label": "فرش و پرده",
+      "href": "/rugs-curtains",
+      "columns": [
+        {
+          "title": "فرش",
+          "links": [
+            { "label": "فرش اتاق", "href": "/rugs/area" },
+            { "label": "فرش پشمی", "href": "/rugs/wool" },
+            { "label": "فرش طرح‌دار", "href": "/rugs/patterned" },
+            { "label": "زیرانداز فرش", "href": "/rugs/pads" }
+          ]
+        },
+        {
+          "title": "پرده",
+          "links": [
+            { "label": "همه پرده‌ها", "href": "/curtains" },
+            { "label": "پرده ضد نور", "href": "/curtains/blackout" },
+            { "label": "پرده حریر", "href": "/curtains/sheer" },
+            { "label": "میله و یراق", "href": "/curtains/hardware" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bed-linen",
+      "label": "ملحفه",
+      "href": "/bed-linen",
+      "columns": [
+        {
+          "title": "دسته‌بندی",
+          "links": [
+            { "label": "روبالشی و لحاف", "href": "/bed-linen/duvet-covers" },
+            { "label": "ملحفه", "href": "/bed-linen/sheets" },
+            { "label": "پتو", "href": "/bed-linen/throws" },
+            { "label": "لحاف", "href": "/bed-linen/inserts" }
+          ]
+        },
+        {
+          "title": "جنس",
+          "links": [
+            { "label": "کتان", "href": "/bed-linen/linen" },
+            { "label": "TENCEL™", "href": "/bed-linen/tencel" },
+            { "label": "پنبه ارگانیک", "href": "/bed-linen/organic-cotton" },
+            { "label": "مخمل", "href": "/bed-linen/velvet" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bath",
+      "label": "حمام",
+      "href": "/bath",
+      "columns": [
+        {
+          "title": "مبلمان",
+          "links": [
+            { "label": "آینه و کابینت", "href": "/bath/cabinets" },
+            { "label": "یراق حمام", "href": "/bath/hardware" }
+          ]
+        },
+        {
+          "title": "ملزومات",
+          "links": [
+            { "label": "حوله", "href": "/bath/towels" },
+            { "label": "پادری حمام", "href": "/bath/mats" },
+            { "label": "اکسسوری", "href": "/bath/accessories" },
+            { "label": "سبد", "href": "/bath/baskets" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lighting",
+      "label": "روشنایی",
+      "href": "/lighting",
+      "columns": [
+        {
+          "title": "سقفی",
+          "links": [
+            { "label": "لوستر", "href": "/lighting/chandeliers" },
+            { "label": "آویز", "href": "/lighting/pendants" },
+            { "label": "چسبان سقفی", "href": "/lighting/flushmounts" }
+          ]
+        },
+        {
+          "title": "لامپ و دیواری",
+          "links": [
+            { "label": "لامپ رومیزی", "href": "/lighting/table-lamps" },
+            { "label": "لامپ ایستاده", "href": "/lighting/floor-lamps" },
+            { "label": "دیواری", "href": "/lighting/sconces" },
+            { "label": "موجود در انبار", "href": "/in-stock/lighting" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "decor",
+      "label": "کوسن و دکور",
+      "href": "/decor",
+      "columns": [
+        {
+          "title": "نساجی",
+          "links": [
+            { "label": "کوسن", "href": "/decor/cushions" },
+            { "label": "پتو", "href": "/decor/throws" },
+            { "label": "کوسن فضای باز", "href": "/decor/outdoor-cushions" }
+          ]
+        },
+        {
+          "title": "دکور",
+          "links": [
+            { "label": "گلدان تزئینی", "href": "/decor/vases" },
+            { "label": "شمع و عطر", "href": "/decor/fragrance" },
+            { "label": "سبد", "href": "/decor/baskets" },
+            { "label": "گلدان و گیاه مصنوعی", "href": "/decor/planters" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "art",
+      "label": "هنر و آینه",
+      "href": "/art-mirrors",
+      "columns": [
+        {
+          "title": "آینه",
+          "links": [
+            { "label": "آینه دیواری", "href": "/mirrors/wall" },
+            { "label": "آینه ایستاده", "href": "/mirrors/floor" },
+            { "label": "آینه تزئینی", "href": "/mirrors/decorative" }
+          ]
+        },
+        {
+          "title": "هنر",
+          "links": [
+            { "label": "تابلو", "href": "/art" },
+            { "label": "قاب عکس", "href": "/art/frames" },
+            { "label": "قفسه و آویز", "href": "/art/wall-org" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kitchen",
+      "label": "آشپزخانه",
+      "href": "/kitchen-dining",
+      "columns": [
+        {
+          "title": "سرو غذا",
+          "links": [
+            { "label": "ست سرو", "href": "/kitchen-dining/sets" },
+            { "label": "بشقاب", "href": "/kitchen-dining/plates" },
+            { "label": "کاسه", "href": "/kitchen-dining/bowls" },
+            { "label": "ماگ", "href": "/kitchen-dining/mugs" }
+          ]
+        },
+        {
+          "title": "پذیرایی",
+          "links": [
+            { "label": "لیوان و بار", "href": "/kitchen-dining/glassware" },
+            { "label": "سرویس پذیرایی", "href": "/kitchen-dining/serveware" },
+            { "label": "رومیزی", "href": "/kitchen-dining/table-linens" },
+            { "label": "قاشق و چنگال", "href": "/kitchen-dining/cutlery" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gifts",
+      "label": "هدایا",
+      "href": "/gifts",
+      "children": [
+        { "label": "همه هدایا", "href": "/gifts" },
+        { "label": "زیر ۵ میلیون", "href": "/gifts/under-5m" },
+        { "label": "۵ تا ۱۰ میلیون", "href": "/gifts/5m-10m" },
+        { "label": "بالای ۱۰ میلیون", "href": "/gifts/10m-15m" },
+        { "label": "هدایای خانه‌نو", "href": "/gifts/housewarming" },
+        { "label": "هدایای میزبان", "href": "/gifts/host" }
+      ]
+    },
+    {
+      "id": "sale",
+      "label": "حراج",
+      "href": "/sale",
+      "columns": [
+        {
+          "title": "حراج تابستان",
+          "links": [
+            { "label": "همه حراج", "href": "/sale" },
+            { "label": "مبلمان", "href": "/sale/furniture" },
+            { "label": "فرش و پرده", "href": "/sale/rugs-curtains" },
+            { "label": "روشنایی", "href": "/sale/lighting" }
+          ]
+        },
+        {
+          "title": "کلیرنس",
+          "links": [
+            { "label": "همه کلیرنس", "href": "/clearance" },
+            { "label": "۵۰٪ به بالا", "href": "/clearance/50-off" },
+            { "label": "مبلمان", "href": "/clearance/furniture" },
+            { "label": "باغ", "href": "/clearance/garden" }
+          ]
+        }
+      ]
+    }
+  ]
+}

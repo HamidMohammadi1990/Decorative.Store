@@ -1,0 +1,50 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "7046",
+            "Title": "10"
+          },
+          {
+            "Id": "7040",
+            "Title": "20"
+          },
+          {
+            "Id": "7041",
+            "Title": "50"
+          },
+          {
+            "Id": "7042",
+            "Title": "100"
+          },
+          {
+            "Id": "7043",
+            "Title": "150"
+          },
+          {
+            "Id": "7044",
+            "Title": "200"
+          },
+          {
+            "Id": "7045",
+            "Title": "250"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": []
+  }
+]

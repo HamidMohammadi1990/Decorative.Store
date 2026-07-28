@@ -1,0 +1,168 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "جنس مصرفی",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1127",
+            "Title": "تحریر  80 گرم"
+          },
+          {
+            "Id": "1128",
+            "Title": "تحریر  100 گرم"
+          },
+          {
+            "Id": "1129",
+            "Title": "کتان  100 گرم"
+          },
+          {
+            "Id": "1130",
+            "Title": "گلاسه  135 گرم"
+          },
+          {
+            "Id": "1131",
+            "Title": "گلاسه  150 گرم"
+          },
+          {
+            "Id": "1132",
+            "Title": "گلاسه  200 گرم"
+          },
+          {
+            "Id": "1133",
+            "Title": "گلاسه  250 گرم"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "وجه",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1",
+            "Title": "یک رو"
+          },
+          {
+            "Id": "2",
+            "Title": "دو رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "سایز",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "103",
+            "Title": "گسترده A3 (هر لت A4)"
+          },
+          {
+            "Id": "104",
+            "Title": "گسترده A4 (هر لت A5)"
+          },
+          {
+            "Id": "105",
+            "Title": "گسترده A5 (هر لت A6)"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "نوع چاپ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "1062",
+            "Title": "رنگی"
+          },
+          {
+            "Id": "1063",
+            "Title": "سیاه سفید"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": [
+      {
+        "Title": "روکش",
+        "Type": "select",
+        "IsRequired": false,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "0",
+            "Title": "بدون روکش"
+          },
+          {
+            "Id": "4234",
+            "Title": "سلفون مات"
+          },
+          {
+            "Id": "4235",
+            "Title": "سلفون براق"
+          },
+          {
+            "Id": "4236",
+            "Title": "سلفون مات مخملی"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "روکش",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "یک رو",
+            "Title": "یک رو"
+          },
+          {
+            "Id": "دو رو",
+            "Title": "دو رو"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  }
+]

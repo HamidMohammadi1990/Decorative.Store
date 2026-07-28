@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="OK" xml:space="preserve"><value>Operation completed successfully</value></data>
+  <data name="ServerError" xml:space="preserve"><value>Server error occurred</value></data>
+  <data name="InvalidId" xml:space="preserve"><value>Invalid identifier</value></data>
+  <data name="InvalidFinancialYearId" xml:space="preserve"><value>Invalid financial year identifier</value></data>
+  <data name="InvalidChartOfAccountId" xml:space="preserve"><value>Invalid account identifier</value></data>
+  <data name="InvalidSessionId" xml:space="preserve"><value>Session not found</value></data>
+  <data name="InvalidRequest" xml:space="preserve"><value>Invalid request</value></data>
+  <data name="InvalidToken" xml:space="preserve"><value>Invalid token</value></data>
+  <data name="InvalidAttachments" xml:space="preserve"><value>Uploaded files are not valid</value></data>
+  <data name="InvalidOperation" xml:space="preserve"><value>Operation is not allowed</value></data>
+  <data name="UserNotFound" xml:space="preserve"><value>User not found</value></data>
+  <data name="UserNameOrPasswordIsNotValid" xml:space="preserve"><value>Username or password is incorrect</value></data>
+  <data name="AnAccountWithThisInfoHasAleardyBeenRegistered" xml:space="preserve"><value>An account with this information has already been registered</value></data>
+  <data name="UserNameIsNotValid" xml:space="preserve"><value>Username is not valid</value></data>
+  <data name="UserIsInActive" xml:space="preserve"><value>User is inactive</value></data>
+  <data name="TheUserIsInActive" xml:space="preserve"><value>User is inactive</value></data>
+  <data name="AccessDenied" xml:space="preserve"><value>Access denied</value></data>
+  <data name="VerificationCodeIsNotCorrect" xml:space="preserve"><value>Verification code is incorrect</value></data>
+  <data name="VerificationCodeIsNotValid" xml:space="preserve"><value>Verification code is not valid</value></data>
+  <data name="VerificationCodeHasBeenSent" xml:space="preserve"><value>Verification code has been sent</value></data>
+  <data name="VerificationCodeSentSuccessfully" xml:space="preserve"><value>Verification code sent successfully</value></data>
+  <data name="VerificationCodeCouldNotBeSendSuccessfully" xml:space="preserve"><value>Verification code could not be sent</value></data>
+  <data name="TheSmsHasAleardyBeenSentToYou" xml:space="preserve"><value>An SMS was already sent. Please wait {0} seconds</value></data>
+  <data name="TheEmailHasAleardyBeenSentToYou" xml:space="preserve"><value>An email was already sent. Please wait {0} seconds</value></data>
+  <data name="ThereIsNoMobileRegisteredForYou" xml:space="preserve"><value>No mobile number is registered for you</value></data>
+  <data name="ThereIsNoEmailRegisteredForYou" xml:space="preserve"><value>No email is registered for you</value></data>
+  <data name="EmailOrMobileIsNotVerified" xml:space="preserve"><value>Email or mobile number is not verified</value></data>
+  <data name="MobileOrEmailIsNotVerified" xml:space="preserve"><value>Mobile or email is not verified</value></data>
+  <data name="MobileIsUsedByAnotherUser" xml:space="preserve"><value>Mobile number is used by another user</value></data>
+  <data name="ActivationCodeIsNotCorrect" xml:space="preserve"><value>Activation code is incorrect</value></data>
+  <data name="MismatchWithPreviousPassword" xml:space="preserve"><value>Does not match previous password</value></data>
+  <data name="SessionExpired" xml:space="preserve"><value>Session is invalid or expired</value></data>
+  <data name="CannotRevokeCurrentSession" xml:space="preserve"><value>Use sign-out to end the current session</value></data>
+  <data name="TokenIsInvalid" xml:space="preserve"><value>Token is invalid</value></data>
+  <data name="TokenIsNotExpired" xml:space="preserve"><value>Token has not expired yet</value></data>
+  <data name="TokenIsExpired" xml:space="preserve"><value>Token has expired</value></data>
+  <data name="OrderIsNotFound" xml:space="preserve"><value>Order not found</value></data>
+  <data name="OrderIsEmpty" xml:space="preserve"><value>Shopping cart is empty</value></data>
+  <data name="OrderItemNotFound" xml:space="preserve"><value>Order item not found</value></data>
+  <data name="OrderCannotBeDeleted" xml:space="preserve"><value>Order cannot be deleted due to financial records</value></data>
+  <data name="PaymentInProgress" xml:space="preserve"><value>Payment for this order is in progress. Complete or cancel payment first</value></data>
+  <data name="RequiredAttachments" xml:space="preserve"><value>File upload is required</value></data>
+  <data name="AttachmentsProcessingFailed" xml:space="preserve"><value>Attachment processing failed</value></data>
+  <data name="InvalidUploadedAttachmentFile" xml:space="preserve"><value>The uploaded file is not valid</value></data>
+  <data name="InvalidAttachmentFileSize" xml:space="preserve"><value>The file size is not valid</value></data>
+  <data name="ImageWidthBelowMinimum" xml:space="preserve"><value>Image width is below the allowed minimum</value></data>
+  <data name="ImageWidthAboveMaximum" xml:space="preserve"><value>Image width exceeds the allowed maximum</value></data>
+  <data name="ImageHeightBelowMinimum" xml:space="preserve"><value>Image height is below the allowed minimum</value></data>
+  <data name="ImageHeightAboveMaximum" xml:space="preserve"><value>Image height exceeds the allowed maximum</value></data>
+  <data name="ImageHorizontalResolutionBelowMinimum" xml:space="preserve"><value>Horizontal resolution is below the allowed minimum</value></data>
+  <data name="ImageHorizontalResolutionAboveMaximum" xml:space="preserve"><value>Horizontal resolution exceeds the allowed maximum</value></data>
+  <data name="ImageVerticalResolutionBelowMinimum" xml:space="preserve"><value>Vertical resolution is below the allowed minimum</value></data>
+  <data name="ImageVerticalResolutionAboveMaximum" xml:space="preserve"><value>Vertical resolution exceeds the allowed maximum</value></data>
+  <data name="InvalidImageColorMode" xml:space="preserve"><value>Image color mode is not valid</value></data>
+  <data name="DiscountNotFound" xml:space="preserve"><value>Discount code not found</value></data>
+  <data name="DiscountAlreadyConsumed" xml:space="preserve"><value>Another discount code was already used for this order</value></data>
+  <data name="DiscountInactive" xml:space="preserve"><value>Discount code is inactive</value></data>
+  <data name="DiscountExpired" xml:space="preserve"><value>Discount code has expired</value></data>
+  <data name="DiscountCooperationOnly" xml:space="preserve"><value>This discount is only for partner users</value></data>
+  <data name="DiscountUsageLimitReached" xml:space="preserve"><value>Discount usage limit has been reached</value></data>
+  <data name="DiscountUserNotEligible" xml:space="preserve"><value>This discount is not available for your account</value></data>
+  <data name="DiscountMinimumAmountNotMet" xml:space="preserve"><value>Order amount is below the minimum for this discount</value></data>
+  <data name="DiscountNoEligibleItems" xml:space="preserve"><value>No items in the order qualify for this discount</value></data>
+  <data name="DiscountInvalidType" xml:space="preserve"><value>Discount type is not configured</value></data>
+  <data name="DiscountIsNotValid" xml:space="preserve"><value>Discount code is not valid</value></data>
+  <data name="DuplicateLike" xml:space="preserve"><value>You have already liked this post</value></data>
+  <data name="HasChildren" xml:space="preserve"><value>Delete child permissions first</value></data>
+  <data name="InUse" xml:space="preserve"><value>This permission is assigned to roles</value></data>
+  <data name="NoAvailableMethodPasswordRecoveryDescription" xml:space="preserve"><value>No password recovery method is available. Please contact support</value></data>
+  <data name="ContactSupportToRecoverYourPassword" xml:space="preserve"><value>No password recovery method is available. Please contact support</value></data>
+  <data name="PasswordResetIsNotAvailableWithTheSelectedMethod" xml:space="preserve"><value>Password reset is not available with the selected method</value></data>
+  <data name="TheChosenMethodIsNotValid" xml:space="preserve"><value>The selected method is not valid</value></data>
+  <data name="GeneralException" xml:space="preserve"><value>An error occurred</value></data>
+  <data name="RecordHasDependencies" xml:space="preserve"><value>This record has related data and cannot be deleted</value></data>
+  <data name="InvalidReference" xml:space="preserve"><value>Related record was not found or is invalid</value></data>
+  <data name="RequiredFieldMissing" xml:space="preserve"><value>Required information is missing</value></data>
+  <data name="DataTooLong" xml:space="preserve"><value>The value exceeds the maximum allowed length</value></data>
+  <data name="ConcurrencyConflict" xml:space="preserve"><value>The record was modified by another user. Please try again</value></data>
+  <data name="DatabaseDeadlock" xml:space="preserve"><value>Operation could not be completed due to a temporary conflict. Please try again</value></data>
+  <data name="DatabaseTimeout" xml:space="preserve"><value>Database operation timed out. Please try again</value></data>
+  <data name="ValidationError" xml:space="preserve"><value>Validation error</value></data>
+  <data name="AuthException" xml:space="preserve"><value>Authentication error</value></data>
+  <data name="AuthenticationFailed" xml:space="preserve"><value>Authentication failed.</value></data>
+  <data name="AuthenticateFailure" xml:space="preserve"><value>Authentication failed.</value></data>
+  <data name="UnauthorizedResourceAccess" xml:space="preserve"><value>You are unauthorized to access this resource.</value></data>
+  <data name="UnhandledException" xml:space="preserve"><value>Unexpected error occurred</value></data>
+  <data name="InvalidIdValidator" xml:space="preserve"><value>Invalid identifier</value></data>
+  <data name="TitleRequired" xml:space="preserve"><value>Title is required</value></data>
+  <data name="NameRequired" xml:space="preserve"><value>Name is required</value></data>
+  <data name="AddressRequired" xml:space="preserve"><value>Address is required</value></data>
+  <data name="DescriptionRequired" xml:space="preserve"><value>Description is required</value></data>
+  <data name="DuplicateTitle" xml:space="preserve"><value>Title already exists</value></data>
+  <data name="DuplicateProduct" xml:space="preserve"><value>Product already exists</value></data>
+  <data name="DuplicateAddress" xml:space="preserve"><value>Address already exists</value></data>
+  <data name="DuplicateTag" xml:space="preserve"><value>Tag already exists</value></data>
+  <data name="MaxLengthExceeded" xml:space="preserve"><value>Maximum length exceeded</value></data>
+  <data name="MinLengthNotMet" xml:space="preserve"><value>Minimum length not met</value></data>
+  <data name="InvalidProductId" xml:space="preserve"><value>Invalid product identifier</value></data>
+  <data name="InvalidBankId" xml:space="preserve"><value>Invalid bank identifier</value></data>
+  <data name="InvalidStoreId" xml:space="preserve"><value>Invalid store identifier</value></data>
+  <data name="IpRequired" xml:space="preserve"><value>IP address is required</value></data>
+  <data name="StartDateMustBeBeforeEndDate" xml:space="preserve"><value>Start date must be before end date</value></data>
+  <data name="ImageMaxSizeExceeded" xml:space="preserve"><value>Image cannot exceed 5 MB</value></data>
+  <data name="ImageRequired" xml:space="preserve"><value>Image is required</value></data>
+  <data name="ProductCodeRequired" xml:space="preserve"><value>Product code is required</value></data>
+  <data name="PermissionIdInvalid" xml:space="preserve"><value>Invalid permission identifier</value></data>
+  <data name="PermissionTitleRequired" xml:space="preserve"><value>Permission title is required</value></data>
+  <data name="PermissionAddressRequired" xml:space="preserve"><value>Permission address is required</value></data>
+  <data name="PermissionNamespaceRequired" xml:space="preserve"><value>Permission namespace is required</value></data>
+  <data name="PermissionPriorityInvalid" xml:space="preserve"><value>Invalid permission priority</value></data>
+  <data name="ImageProcessingFailed" xml:space="preserve"><value>Image processing failed</value></data>
+  <data name="ImageFormatNotSupported" xml:space="preserve"><value>Image format is not supported</value></data>
+  <data name="ImageSizeInvalid" xml:space="preserve"><value>Image size is invalid</value></data>
+  <data name="InvalidFileExtension" xml:space="preserve"><value>Invalid file format</value></data>
+  <data name="InvalidFile" xml:space="preserve"><value>Invalid file</value></data>
+  <data name="InvalidCityId" xml:space="preserve"><value>Invalid city identifier</value></data>
+  <data name="InvalidIpAddress" xml:space="preserve"><value>Invalid IP address</value></data>
+  <data name="DiscountCodeRequired" xml:space="preserve"><value>Discount code is required</value></data>
+  <data name="DuplicateDiscountCode" xml:space="preserve"><value>Discount code already exists</value></data>
+  <data name="SlugRequired" xml:space="preserve"><value>Slug is required</value></data>
+  <data name="DuplicateSlug" xml:space="preserve"><value>Slug already exists</value></data>
+  <data name="IconRequired" xml:space="preserve"><value>Icon is required</value></data>
+  <data name="SectionTypeNotFound" xml:space="preserve"><value>Section type not found</value></data>
+  <data name="SectionCannotBeOwnParent" xml:space="preserve"><value>Section cannot be its own parent</value></data>
+  <data name="ParentSectionNotFound" xml:space="preserve"><value>Parent section not found</value></data>
+  <data name="DuplicateRecord" xml:space="preserve"><value>Record already exists</value></data>
+  <data name="DuplicateDelivery" xml:space="preserve"><value>Delivery option already exists</value></data>
+  <data name="DuplicateInformation" xml:space="preserve"><value>Information already exists</value></data>
+  <data name="DuplicateTitleOrAddress" xml:space="preserve"><value>Title or address already exists</value></data>
+  <data name="DuplicateRole" xml:space="preserve"><value>Role already exists</value></data>
+  <data name="MinLength5Characters" xml:space="preserve"><value>Minimum 5 characters required</value></data>
+  <data name="MinLength10Characters" xml:space="preserve"><value>Minimum 10 characters required</value></data>
+  <data name="MinLength11Characters" xml:space="preserve"><value>Minimum 11 characters required</value></data>
+  <data name="MinLength15Characters" xml:space="preserve"><value>Minimum 15 characters required</value></data>
+  <data name="MinLength50Characters" xml:space="preserve"><value>Minimum 50 characters required</value></data>
+  <data name="MaxLength6Characters" xml:space="preserve"><value>Maximum 6 characters allowed</value></data>
+  <data name="MaxLength10Characters" xml:space="preserve"><value>Maximum 10 characters allowed</value></data>
+  <data name="MaxLength11Characters" xml:space="preserve"><value>Maximum 11 characters allowed</value></data>
+  <data name="MaxLength12Characters" xml:space="preserve"><value>Maximum 12 characters allowed</value></data>
+  <data name="MaxLength20Characters" xml:space="preserve"><value>Maximum 20 characters allowed</value></data>
+  <data name="MaxLength25Characters" xml:space="preserve"><value>Maximum 25 characters allowed</value></data>
+  <data name="MaxLength30Characters" xml:space="preserve"><value>Maximum 30 characters allowed</value></data>
+  <data name="MaxLength35Characters" xml:space="preserve"><value>Maximum 35 characters allowed</value></data>
+  <data name="MaxLength50Characters" xml:space="preserve"><value>Maximum 50 characters allowed</value></data>
+  <data name="MaxLength100Characters" xml:space="preserve"><value>Maximum 100 characters allowed</value></data>
+  <data name="MaxLength120Characters" xml:space="preserve"><value>Maximum 120 characters allowed</value></data>
+  <data name="MaxLength150Characters" xml:space="preserve"><value>Maximum 150 characters allowed</value></data>
+  <data name="MaxLength200Characters" xml:space="preserve"><value>Maximum 200 characters allowed</value></data>
+  <data name="MaxLength250Characters" xml:space="preserve"><value>Maximum 250 characters allowed</value></data>
+  <data name="MaxLength300Characters" xml:space="preserve"><value>Maximum 300 characters allowed</value></data>
+  <data name="InvalidLatitude" xml:space="preserve"><value>Invalid latitude</value></data>
+  <data name="InvalidLongitude" xml:space="preserve"><value>Invalid longitude</value></data>
+  <data name="RatingRange0To5" xml:space="preserve"><value>Allowed range is 0 to 5</value></data>
+  <data name="MinDeliveryDays1" xml:space="preserve"><value>Minimum delivery days is 1</value></data>
+  <data name="EnterMobileOrEmailAsUserName" xml:space="preserve"><value>Please enter mobile number or email as username</value></data>
+  <data name="EnterMobileOrEmail" xml:space="preserve"><value>Please enter mobile number or email</value></data>
+  <data name="PasswordIsNotValid" xml:space="preserve"><value>Password is not valid</value></data>
+  <data name="UserNameRequired" xml:space="preserve"><value>Username is required</value></data>
+  <data name="UserNameMustBeMobile" xml:space="preserve"><value>Username must be a mobile number</value></data>
+  <data name="UserNameMustBeMobileOrEmail" xml:space="preserve"><value>Username must be a mobile number or email</value></data>
+  <data name="UserNameMaxLength11" xml:space="preserve"><value>Username must be at most 11 characters</value></data>
+  <data name="FirstNameRequired" xml:space="preserve"><value>First name is required</value></data>
+  <data name="FirstNameMaxLength50" xml:space="preserve"><value>First name must be at most 50 characters</value></data>
+  <data name="LastNameRequired" xml:space="preserve"><value>Last name is required</value></data>
+  <data name="LastNameMaxLength50" xml:space="preserve"><value>Last name must be at most 50 characters</value></data>
+  <data name="EmailRequired" xml:space="preserve"><value>Email is required</value></data>
+  <data name="EmailIsNotValid" xml:space="preserve"><value>Email is not valid</value></data>
+  <data name="MobileIsNotValid" xml:space="preserve"><value>Mobile number is not valid</value></data>
+  <data name="PasswordRequired" xml:space="preserve"><value>Password is required</value></data>
+  <data name="OtpRequired" xml:space="preserve"><value>One-time password is required</value></data>
+  <data name="GenderRequired" xml:space="preserve"><value>Gender is required</value></data>
+  <data name="InvalidUser" xml:space="preserve"><value>Invalid user</value></data>
+  <data name="InvalidRole" xml:space="preserve"><value>Invalid role</value></data>
+  <data name="RoleNotFound" xml:space="preserve"><value>Role not found</value></data>
+  <data name="UserRoleAlreadyAssigned" xml:space="preserve"><value>This role is already assigned to the user</value></data>
+  <data name="InvalidPermission" xml:space="preserve"><value>Invalid permission</value></data>
+  <data name="PermissionNotFound" xml:space="preserve"><value>Permission not found</value></data>
+  <data name="RolePermissionAlreadyAssigned" xml:space="preserve"><value>This permission is already assigned to the role</value></data>
+  <data name="DuplicatePermissionId" xml:space="preserve"><value>Permission identifier already exists</value></data>
+  <data name="InvalidPermissionLevel" xml:space="preserve"><value>Invalid permission level</value></data>
+  <data name="InvalidParentId" xml:space="preserve"><value>Invalid parent identifier</value></data>
+  <data name="PriceAlreadyRegistered" xml:space="preserve"><value>Price is already registered, please update the existing price</value></data>
+  <data name="StatusTypeRequired" xml:space="preserve"><value>Status type is required</value></data>
+  <data name="TitleMaxLength50" xml:space="preserve"><value>Title must not exceed 50 characters</value></data>
+  <data name="TitleMinLength10" xml:space="preserve"><value>Title must be at least 10 characters</value></data>
+  <data name="ValueRatingRequired" xml:space="preserve"><value>Value rating is required</value></data>
+  <data name="ReviewRateRequired" xml:space="preserve"><value>Review rate is required</value></data>
+  <data name="QualityRatingRequired" xml:space="preserve"><value>Quality rating is required</value></data>
+  <data name="TopicRequired" xml:space="preserve"><value>Topic is required</value></data>
+  <data name="ProductPropertyRuleAlreadyExists" xml:space="preserve"><value>A rule for this product property already exists</value></data>
+  <data name="DuplicateProductProperty" xml:space="preserve"><value>Property for this product already exists</value></data>
+  <data name="DuplicateProductAttachmentType" xml:space="preserve"><value>This attachment type for the product already exists</value></data>
+  <data name="BankNotSelected" xml:space="preserve"><value>Bank is not selected</value></data>
+  <data name="WalletNotSelected" xml:space="preserve"><value>Wallet is not selected</value></data>
+  <data name="InvalidPaymentOption" xml:space="preserve"><value>Invalid payment option</value></data>
+  <data name="WalletNotFound" xml:space="preserve"><value>Wallet not found</value></data>
+  <data name="WalletIsNotActive" xml:space="preserve"><value>Wallet is not active</value></data>
+  <data name="InsufficientWalletBalance" xml:space="preserve"><value>Insufficient wallet balance</value></data>
+  <data name="WalletChargeInProgress" xml:space="preserve"><value>A wallet charge is already in progress</value></data>
+  <data name="NoPendingWalletCharge" xml:space="preserve"><value>No pending wallet charge was found</value></data>
+  <data name="FinancialYearNotFound" xml:space="preserve"><value>Active financial year not found for this company</value></data>
+  <data name="NoPendingBankPayment" xml:space="preserve"><value>No pending bank payment was found for this order</value></data>
+  <data name="PaymentFailed" xml:space="preserve"><value>Payment was not successful</value></data>
+  <data name="BankTransactionNotFound" xml:space="preserve"><value>Bank transaction not found</value></data>
+  <data name="InvalidBlogPostId" xml:space="preserve"><value>Invalid blog post identifier</value></data>
+  <data name="InvalidCompanyStoryId" xml:space="preserve"><value>Invalid company story identifier</value></data>
+  <data name="InvalidRefreshToken" xml:space="preserve"><value>Invalid refresh token</value></data>
+  <data name="AccountCodeRequired" xml:space="preserve"><value>Account code is required</value></data>
+  <data name="AccountCodeMaxLength20" xml:space="preserve"><value>Account code must not exceed 20 characters</value></data>
+  <data name="AccountTitleRequired" xml:space="preserve"><value>Account title is required</value></data>
+  <data name="AccountTitleMaxLength50" xml:space="preserve"><value>Account title must not exceed 50 characters</value></data>
+  <data name="AccountCodeAlphanumericRequired" xml:space="preserve"><value>Account code must contain letters and numbers</value></data>
+  <data name="AccountTitleLettersAndSpacesRequired" xml:space="preserve"><value>Account title must contain letters and spaces</value></data>
+  <data name="InvalidAccountType" xml:space="preserve"><value>Invalid account type</value></data>
+  <data name="InvalidAccountDetail" xml:space="preserve"><value>Invalid account detail</value></data>
+  <data name="ContentPolicyScopeRequired" xml:space="preserve"><value>Specify either a role or a user, not both</value></data>
+  <data name="ContentPolicyEntityTypeRequired" xml:space="preserve"><value>Entity type is required</value></data>
+  <data name="ContentPolicyEntityTypeNotRegistered" xml:space="preserve"><value>Entity type is not registered for content policies</value></data>
+  <data name="ContentPolicyMergeModeInvalidForRole" xml:space="preserve"><value>Merge mode applies only to user-scoped policies</value></data>
+  <data name="EmailIsUsedByAnotherUser" xml:space="preserve"><value>Email is used by another user</value></data>
+  <data name="HasPageSections" xml:space="preserve"><value>Delete page sections first</value></data>
+  <data name="HasSections" xml:space="preserve"><value>Delete sections of this type first</value></data>
+  <data name="HasSectionItems" xml:space="preserve"><value>Delete section items first</value></data>
+  <data name="PageNotFound" xml:space="preserve"><value>Page not found</value></data>
+  <data name="WebSiteSettingsNotFound" xml:space="preserve"><value>Website settings have not been configured</value></data>
+  <data name="CannotDeleteRootPermission" xml:space="preserve"><value>Deleting the root permission is not allowed</value></data>
+</root>

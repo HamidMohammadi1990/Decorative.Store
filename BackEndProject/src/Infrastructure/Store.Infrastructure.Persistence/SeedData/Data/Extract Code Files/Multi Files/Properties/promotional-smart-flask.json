@@ -1,0 +1,80 @@
+[
+  {
+    "CategoryTitle": "General",
+    "Properties": [
+      {
+        "Title": "تیراژ",
+        "Type": "select",
+        "IsRequired": true,
+        "Min": 0,
+        "Max": 0,
+        "Items": [
+          {
+            "Id": "5434",
+            "Title": "10"
+          },
+          {
+            "Id": "5435",
+            "Title": "20"
+          },
+          {
+            "Id": "5436",
+            "Title": "30"
+          },
+          {
+            "Id": "5437",
+            "Title": "40"
+          },
+          {
+            "Id": "5438",
+            "Title": "50"
+          },
+          {
+            "Id": "5439",
+            "Title": "70"
+          },
+          {
+            "Id": "5440",
+            "Title": "100"
+          },
+          {
+            "Id": "5441",
+            "Title": "150"
+          },
+          {
+            "Id": "5442",
+            "Title": "200"
+          },
+          {
+            "Id": "5443",
+            "Title": "250"
+          },
+          {
+            "Id": "5444",
+            "Title": "300"
+          },
+          {
+            "Id": "0",
+            "Title": "تیراژ دلخواه"
+          }
+        ],
+        "Dependencies": [],
+        "Properties": []
+      },
+      {
+        "Title": "تیراژ",
+        "Type": "number",
+        "IsRequired": true,
+        "Min": 1,
+        "Max": 99999,
+        "Items": [],
+        "Dependencies": [],
+        "Properties": []
+      }
+    ]
+  },
+  {
+    "CategoryTitle": "روکش",
+    "Properties": []
+  }
+]

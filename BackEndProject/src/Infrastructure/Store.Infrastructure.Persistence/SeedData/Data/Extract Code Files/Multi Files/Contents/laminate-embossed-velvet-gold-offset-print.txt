@@ -1,0 +1,100 @@
+<div class="col-md-7 col-12">
+                    <h1 class="title-h2  pr-2 text-right  mt-4 mt-md-0 mb-4">  کارت ویزیت لمینت برجسته مخملی طلاکوب</h1>
+
+                    <div class="select_data  mb-3">
+                        <div class="line mb-3 d-flex align-items-center">
+                            <label class="text-secondary w-25 mb-0">
+                                عنوان سفارش
+                            </label>
+                            <input required="Required" class="form-control w-75" id="title" maxlength="150" minlength="1" name="title" type="text" value="" aria-required="true">
+                        </div>
+                        
+                            <div class="line mb-3 d-flex align-items-center" id="offsetSizeBox">
+                                <label class="text-secondary w-25 mb-0">
+                                    سایز
+                                </label>
+                                <select required="Required" class="custom-select w-75 valid" data-val="true" data-val-number="The field offsetSizeID must be a number." id="offsetSizeID" name="offsetSizeID" aria-required="true" aria-describedby="offsetSizeID-error" aria-invalid="false"><option value="">انتخاب کنید ...</option>
+<option value="3567">9.6  دور گرد(بعدازبرش8.5*5.5)</option>
+<option value="3614">6در6 </option>
+</select>
+                            </div>
+                        <div class="line mb-3 d-flex align-items-center " id="offsetSideBox">
+                            <label class="text-secondary w-25 mb-0">
+                                روی چاپ
+                            </label>
+                            <select class="custom-select w-75 valid" data-val="true" data-val-number="The field offsetSideID must be a number." data-val-required="The offsetSideID field is required." id="offsetSideID" name="offsetSideID" aria-required="true" aria-describedby="offsetSideID-error" aria-invalid="false"><option value="2">دو رو</option></select>
+                        </div>
+                        <div class="line mb-3 d-flex align-items-center" id="offsetTirazhBox">
+                            <label class="text-secondary w-25 mb-0">
+                                تیراژ
+                            </label>
+                            <select required="required" class="custom-select w-75 valid" data-val="true" data-val-number="The field offsetTirazhID must be a number." id="offsetTirazhID" name="offsetTirazhID" aria-required="true" aria-describedby="offsetTirazhID-error" aria-invalid="false"><option value="1000">1000</option></select>
+                        </div>
+
+                    </div>
+
+                            <div class="list" id="additionalList">
+                                
+
+
+
+    <input type="hidden" value="24" id="offsetAdtGeneral12530">
+    <input type="hidden" value="0" id="offsetAdtGettirazhType12530">
+    <input type="hidden" value="2" id="offsetAdtType12530">
+    <input type="hidden" id="offsetAdtPrice12530" name="offsetAdtPrice12530" class="adtPrice">
+    <input type="hidden" id="offsetAdtID12530" value="12530">
+    <input type="hidden" id="offsetAdtIsFile12530" value="False">
+    <input type="hidden" id="offsetAdtIsDuplex12530" value="False">
+        <input type="hidden" id="offsetAdtStartNumber12530" name="offsetAdtStartNumber12530" value="0">
+        <input type="hidden" id="offsetAdtRequired12530" value="true">
+            <!-- اجباری -->
+            <!-- بدون پارامتر یا یک پارامتر -->
+            <!-- یا دارای چند پارامتر و انتخاب توسط مشتری نباشد  -->
+                <input type="hidden" id="offsetAdtCount12530" name="offsetAdtCount12530" value="1">
+                <select class="d-none" id="offsetAdtStrCount12530" name="offsetAdtStrCount12530">
+                    <option selected=""></option>
+                </select>
+                <input type="hidden" id="offsetAdtParameter12530" name="offsetAdtParameter12530" value="0">
+                <input type="hidden" class="offsetAdt d-none" id="offsetAdt12530" checked="">
+    <input type="hidden" value="2" id="offsetAdtGeneral12531">
+    <input type="hidden" value="0" id="offsetAdtGettirazhType12531">
+    <input type="hidden" value="2" id="offsetAdtType12531">
+    <input type="hidden" id="offsetAdtPrice12531" name="offsetAdtPrice12531" class="adtPrice">
+    <input type="hidden" id="offsetAdtID12531" value="12531">
+    <input type="hidden" id="offsetAdtIsFile12531" value="True">
+    <input type="hidden" id="offsetAdtIsDuplex12531" value="True">
+        <input type="hidden" id="offsetAdtStartNumber12531" name="offsetAdtStartNumber12531" value="0">
+        <input type="hidden" id="offsetAdtRequired12531" value="true">
+            <!-- اجباری -->
+            <!-- بدون پارامتر یا یک پارامتر -->
+            <!-- یا دارای چند پارامتر و انتخاب توسط مشتری نباشد  -->
+                <select class="d-none" id="offsetAdtStrCount12531" name="offsetAdtStrCount12531">
+                    <option selected=""></option>
+                </select>
+                <input type="hidden" id="offsetAdtCount12531" name="offsetAdtCount12531">
+                <input type="hidden" id="offsetAdtParameter12531" name="offsetAdtParameter12531" value="0">
+                <input type="hidden" class="offsetAdt d-none" id="offsetAdt12531" checked="">
+    <input type="hidden" value="2" id="offsetAdtGeneral12532">
+    <input type="hidden" value="0" id="offsetAdtGettirazhType12532">
+    <input type="hidden" value="2" id="offsetAdtType12532">
+    <input type="hidden" id="offsetAdtPrice12532" name="offsetAdtPrice12532" class="adtPrice">
+    <input type="hidden" id="offsetAdtID12532" value="12532">
+    <input type="hidden" id="offsetAdtIsFile12532" value="True">
+    <input type="hidden" id="offsetAdtIsDuplex12532" value="True">
+        <input type="hidden" id="offsetAdtStartNumber12532" name="offsetAdtStartNumber12532" value="0">
+        <input type="hidden" id="offsetAdtRequired12532" value="true">
+            <!-- اجباری -->
+            <!-- بدون پارامتر یا یک پارامتر -->
+            <!-- یا دارای چند پارامتر و انتخاب توسط مشتری نباشد  -->
+                <select class="d-none" id="offsetAdtStrCount12532" name="offsetAdtStrCount12532">
+                    <option selected=""></option>
+                </select>
+                <input type="hidden" id="offsetAdtCount12532" name="offsetAdtCount12532">
+                <input type="hidden" id="offsetAdtParameter12532" name="offsetAdtParameter12532" value="0">
+                <input type="hidden" class="offsetAdt d-none" id="offsetAdt12532" checked="">
+                            </div>
+                    <div id="offsetDeliveryBox">
+
+                    </div>
+
+                </div>
