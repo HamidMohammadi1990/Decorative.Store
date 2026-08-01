@@ -6,13 +6,36 @@ namespace Edition.Application.Features.Categories.Commands;
 
 public class UpdateCategoryValidator : AbstractValidator<UpdateCategoryRequest>
 {
-    public UpdateCategoryValidator(ICategoryRepository categoryRepository)
+    public UpdateCategoryValidator(ICategoryRepository categoryRepository, ILanguageRepository languageRepository)
     {
-        RuleFor(x => new { x.Id, x.Title, x.Code })
-            .NotNull()
-            .WithMessage(MessageKeys.TitleRequired)
-            .MustAsync(async (x, CancellationToken)
-                   => !await categoryRepository.AnyAsync(c => c.Id != x.Id && (c.Title == x.Title.Trim() || c.Code == x.Code.Trim())))
+        RuleFor(x => x.LanguageId)
+            .GreaterThan(0)
+            .WithMessage(MessageKeys.InvalidRequest)
+            .MustAsync(async (languageId, cancellationToken) =>
+                await languageRepository.FindAsync(languageId, cancellationToken) is { IsActive: true })
+            .WithMessage(MessageKeys.InvalidRequest);
+
+        RuleFor(x => x.Title)
+            .NotEmpty()
+            .WithMessage(MessageKeys.TitleRequired);
+
+        RuleFor(x => x.Code)
+            .NotEmpty()
+            .WithMessage(MessageKeys.InvalidRequest);
+
+        RuleFor(x => x)
+            .MustAsync(async (request, cancellationToken) =>
+                !await categoryRepository.ExistsCodeAsync(request.Code, request.Id, cancellationToken))
+            .WithMessage(MessageKeys.DuplicateTitle);
+
+        RuleFor(x => x)
+            .MustAsync(async (request, cancellationToken) =>
+                !await categoryRepository.ExistsTranslationAsync(
+                    request.LanguageId,
+                    request.Title,
+                    request.Slug,
+                    request.Id,
+                    cancellationToken))
             .WithMessage(MessageKeys.DuplicateTitle);
     }
 }

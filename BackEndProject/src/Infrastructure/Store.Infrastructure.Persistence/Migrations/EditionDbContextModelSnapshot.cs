@@ -438,6 +438,25 @@ namespace Edition.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("Edition.Domain.Entities.CategoryTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasColumnType("VARCHAR(150)");
@@ -448,10 +467,13 @@ namespace Edition.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Slug")
+                    b.HasIndex("CategoryId", "LanguageId")
                         .IsUnique();
 
-                    b.ToTable("Category");
+                    b.HasIndex("LanguageId", "Slug")
+                        .IsUnique();
+
+                    b.ToTable("CategoryTranslation");
                 });
 
             modelBuilder.Entity("Edition.Domain.Entities.ChartOfAccount", b =>
@@ -2583,6 +2605,27 @@ namespace Edition.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("SubCategory");
+                });
+
+            modelBuilder.Entity("Edition.Domain.Entities.SubCategoryTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasColumnType("VARCHAR(150)");
@@ -2593,12 +2636,13 @@ namespace Edition.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("Slug")
+                    b.HasIndex("LanguageId", "Slug")
                         .IsUnique();
 
-                    b.ToTable("SubCategory");
+                    b.HasIndex("SubCategoryId", "LanguageId")
+                        .IsUnique();
+
+                    b.ToTable("SubCategoryTranslation");
                 });
 
             modelBuilder.Entity("Edition.Domain.Entities.Tag", b =>
@@ -3201,6 +3245,25 @@ namespace Edition.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Policy");
+                });
+
+            modelBuilder.Entity("Edition.Domain.Entities.CategoryTranslation", b =>
+                {
+                    b.HasOne("Edition.Domain.Entities.Category", "Category")
+                        .WithMany("Translations")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Edition.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("Edition.Domain.Entities.ChartOfAccount", b =>
@@ -4014,6 +4077,25 @@ namespace Edition.Infrastructure.Persistence.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Edition.Domain.Entities.SubCategoryTranslation", b =>
+                {
+                    b.HasOne("Edition.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Edition.Domain.Entities.SubCategory", "SubCategory")
+                        .WithMany("Translations")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("SubCategory");
+                });
+
             modelBuilder.Entity("Edition.Domain.Entities.User", b =>
                 {
                     b.HasOne("Edition.Domain.Entities.City", "City")
@@ -4184,6 +4266,8 @@ namespace Edition.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Edition.Domain.Entities.Category", b =>
                 {
                     b.Navigation("SubCategories");
+
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("Edition.Domain.Entities.ChartOfAccount", b =>
@@ -4451,6 +4535,8 @@ namespace Edition.Infrastructure.Persistence.Migrations
                     b.Navigation("Discounts");
 
                     b.Navigation("Products");
+
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("Edition.Domain.Entities.Tag", b =>

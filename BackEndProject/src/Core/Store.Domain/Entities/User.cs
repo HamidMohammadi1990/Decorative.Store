@@ -1,5 +1,4 @@
 using Store.Domain.Common;
-using Store.Domain.Enums;
 
 namespace Store.Domain.Entities;
 
@@ -20,11 +19,9 @@ public class User : BaseEntity
     public int AccessFailedCount { get; private set; }
     public RefundMethodType RefundMethod { get; private set; }
     public string SecurityStamp { get; private set; } = null!;
-    public int? CityId { get; private set; }
     public string? EconomicCode { get; private set; }
 
 
-    public City City { get; private set; } = default!;
     public ICollection<Order> Orders { get; private set; } = default!;
     public ICollection<Wallet> Wallets { get; private set; } = default!;
     public ICollection<Company> Companies { get; private set; } = default!;
@@ -49,13 +46,12 @@ public class User : BaseEntity
     public ICollection<CompanyStoryComment> CompanyStoryApprovedComments { get; private set; } = default!;
 
 
-    public static User Create(string email, int cityId, GenderType gender, string username,
+    public static User Create(string? email, GenderType gender, string username,
                               string firstName, string lastName, string phoneNumber,
                               string passwordHash, string securityStamp)
         => new()
         {
             Email = email,
-            CityId = cityId,
             Gender = gender,
             UserName = username,
             LastName = lastName,

@@ -9,9 +9,18 @@ public interface ISubCategoryRepository
 {
     void Add(SubCategory subCategory);
     ValueTask<SubCategory?> FindAsync(int id, CancellationToken cancellationToken = default);
+    Task<SubCategory?> FindWithTranslationsAsync(int id, CancellationToken cancellationToken = default);
+    Task<SubCategory?> GetWithTranslationsAsNoTrackingAsync(int id, CancellationToken cancellationToken = default);
     void Remove(SubCategory subCategory);
     Task<SubCategory?> GetAsNoTrackingAsync(int id, CancellationToken cancellationToken = default);
     Task<bool> AnyAsync(Expression<Func<SubCategory, bool>> expression, CancellationToken cancellationToken = default);
-    Task<PagedResult<GetAllSubCategoryResponseDto>> GetAllAsync(GetAllSubCategoryRequestDto request);
-    Task<PagedResult<SearchSubCategoryResponseDto>> SearchAsync(SearchSubCategoryRequestDto request);
+    Task<bool> ExistsCodeAsync(string code, int? excludeSubCategoryId = null, CancellationToken cancellationToken = default);
+    Task<bool> ExistsTranslationAsync(
+        int languageId,
+        string title,
+        string slug,
+        int? excludeSubCategoryId = null,
+        CancellationToken cancellationToken = default);
+    Task<PagedResult<GetAllSubCategoryResponseDto>> GetAllAsync(GetAllSubCategoryRequestDto request, CancellationToken cancellationToken = default);
+    Task<PagedResult<SearchSubCategoryResponseDto>> SearchAsync(SearchSubCategoryRequestDto request, CancellationToken cancellationToken = default);
 }

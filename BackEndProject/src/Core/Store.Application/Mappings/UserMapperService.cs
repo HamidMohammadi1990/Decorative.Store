@@ -1,6 +1,5 @@
 ﻿using Edition.Application.Models.Dtos;
 using Edition.Application.Common.Extensions;
-using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Contracts.Mapping;
 using Edition.Application.Features.Users.Queries;
 using Store.Domain.Dtos.Pagination;
@@ -54,8 +53,6 @@ public class UserMapperService : IUserMapperService
             {
                 Id = x.Id,
                 Email = x.Email,
-                CityId = x.CityId,
-                CityName = x.CityName,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
                 Gender = x.Gender,

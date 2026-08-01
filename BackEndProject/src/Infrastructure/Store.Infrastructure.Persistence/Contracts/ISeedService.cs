@@ -4,5 +4,6 @@ namespace Store.Infrastructure.Persistence.Contracts;
 
 public interface ISeedService
 {
-    Task SeedDataAsync(List<DynamicPermission> permissions);
+    Task SeedCatalogAsync(CancellationToken cancellationToken = default);
+    Task SeedDataAsync(List<DynamicPermission> permissions, CancellationToken cancellationToken = default);
 }

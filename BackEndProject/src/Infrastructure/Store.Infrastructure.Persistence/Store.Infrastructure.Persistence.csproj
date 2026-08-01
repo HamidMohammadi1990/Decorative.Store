@@ -26,4 +26,13 @@
 	<ItemGroup>
 		<InternalsVisibleTo Include="Store.Infrastructure.Persistence.Tests" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="SeedData\navigation.fa.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="SeedData\navigation.en.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 </Project>

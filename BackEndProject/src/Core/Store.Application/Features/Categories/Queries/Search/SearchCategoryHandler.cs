@@ -14,7 +14,7 @@ public class SearchCategoryHandler
     public async Task<OperationResult<PagedResult<SearchCategoryResponse>>> Handle(SearchCategoryRequest request, CancellationToken cancellationToken)
     {
         var requestModel = mapper.Map(request);
-        var categories = await categoryRepository.SearchAsync(requestModel);
+        var categories = await categoryRepository.SearchAsync(requestModel, cancellationToken);
         var result = mapper.Map(categories);
         return result;
     }

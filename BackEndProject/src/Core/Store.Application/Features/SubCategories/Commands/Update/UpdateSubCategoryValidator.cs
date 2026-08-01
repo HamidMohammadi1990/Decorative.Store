@@ -6,14 +6,34 @@ namespace Edition.Application.Features.SubCategories.Commands;
 
 public class UpdateSubCategoryValidator : AbstractValidator<UpdateSubCategoryRequest>
 {
-    public UpdateSubCategoryValidator(ISubCategoryRepository subCategoryRepository)
+    public UpdateSubCategoryValidator(ISubCategoryRepository subCategoryRepository, ILanguageRepository languageRepository)
     {
-        RuleFor(x => new { x.Id, x.Title, x.Code })
-        .NotNull()
-        .WithMessage(MessageKeys.TitleRequired)
-        .MustAsync(async (x, CancellationToken)
-               => !await subCategoryRepository.AnyAsync(c => c.Id != x.Id && (c.Title == x.Title.Trim() || c.Code == x.Code.Trim())))
-        .WithMessage(MessageKeys.DuplicateTitle)
-        .When(x => !string.IsNullOrEmpty(x.Title));
+        RuleFor(x => x.LanguageId)
+            .GreaterThan(0)
+            .WithMessage(MessageKeys.InvalidRequest)
+            .MustAsync(async (languageId, cancellationToken) =>
+                await languageRepository.FindAsync(languageId, cancellationToken) is { IsActive: true })
+            .WithMessage(MessageKeys.InvalidRequest);
+
+        RuleFor(x => x.Title)
+            .NotEmpty()
+            .WithMessage(MessageKeys.TitleRequired);
+
+        RuleFor(x => x)
+            .MustAsync(async (request, cancellationToken) =>
+                !await subCategoryRepository.ExistsCodeAsync(request.Code, request.Id, cancellationToken))
+            .WithMessage(MessageKeys.DuplicateTitle)
+            .When(x => !string.IsNullOrEmpty(x.Code));
+
+        RuleFor(x => x)
+            .MustAsync(async (request, cancellationToken) =>
+                !await subCategoryRepository.ExistsTranslationAsync(
+                    request.LanguageId,
+                    request.Title,
+                    request.Slug,
+                    request.Id,
+                    cancellationToken))
+            .WithMessage(MessageKeys.DuplicateTitle)
+            .When(x => !string.IsNullOrEmpty(x.Title));
     }
 }

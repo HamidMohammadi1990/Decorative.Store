@@ -2,6 +2,7 @@
 using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Contracts.Mapping;
 using Edition.Application.Features.Categories.Queries;
+using Edition.Application.Features.Localization;
 using Store.Domain.Dtos.Categories;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Entities;
@@ -34,14 +35,14 @@ public class CategoryMapperService : ICategoryMapperService
             })];
     }
 
-    public GetCategoryResponse Map(Category model)
+    public GetCategoryResponse Map(Category model, string title, string slug)
     {
         return new GetCategoryResponse
         {
             Id = model.Id,
             Code = model.Code,
-            Slug = model.Slug,
-            Title = model.Title,
+            Slug = slug,
+            Title = title,
             IsActive = model.IsActive
         };
     }
@@ -75,9 +76,15 @@ public class CategoryMapperService : ICategoryMapperService
             {
                 Id = x.Id,
                 Code = x.Code,
-                Slug = x.Slug,
-                Title = x.Title,
-                IsActive = x.IsActive
+                IsActive = x.IsActive,
+                Translations = x.Translations
+                    .Select(t => new TranslationItemResponse
+                    {
+                        LanguageId = t.LanguageId,
+                        Title = t.Title,
+                        Slug = t.Slug
+                    })
+                    .ToList()
             })
             .ToList();
 
@@ -93,7 +100,7 @@ public class CategoryMapperService : ICategoryMapperService
                 Id = x.Id,
                 Code = x.Code,
                 Slug = x.Slug,
-                Title = x.Title                
+                Title = x.Title
             })
             .ToList();
 

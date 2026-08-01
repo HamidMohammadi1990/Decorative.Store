@@ -17,8 +17,6 @@ public record GetAllUserDto
     public bool IsActive { get; init; }
     public DateTime? LastLoginDateOnUtc { get; init; }
     public int AccessFailedCount { get; init; }
-    public RefundMethodType RefundMethod { get; init; }    
-    public int? CityId { get; init; }
-    public string? CityName { get; set; }
+    public RefundMethodType RefundMethod { get; init; }
     public string? EconomicCode { get; init; }
 }

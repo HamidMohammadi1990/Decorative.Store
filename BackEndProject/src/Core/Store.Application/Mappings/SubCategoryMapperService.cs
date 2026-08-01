@@ -2,6 +2,7 @@
 using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Contracts.Mapping;
 using Edition.Application.Features.SubCategories.Queries;
+using Edition.Application.Features.Localization;
 using Store.Domain.Dtos.SubCategories;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Entities;
@@ -47,13 +48,11 @@ public class SubCategoryMapperService : ISubCategoryMapperService
             {
                 Id = x.Id,
                 Code = x.Code,
-                Slug = x.Slug,
-                Title = x.Title,
                 IsActive = x.IsActive,
                 CategoryId = x.CategoryId,
-                CategorySlug = x.CategorySlug,
                 CategoryCode = x.CategoryCode,
-                CategoryTitle = x.CategoryTitle
+                Translations = MapTranslations(x.Translations),
+                CategoryTranslations = MapTranslations(x.CategoryTranslations)
             })
             .ToList();
 
@@ -80,16 +79,26 @@ public class SubCategoryMapperService : ISubCategoryMapperService
         return PagedResult<SearchSubCategoryResponse>.Create(items, model);
     }
 
-    public GetSubCategoryResponse Map(SubCategory model)
+    public GetSubCategoryResponse Map(SubCategory model, string title, string slug)
     {
         return new GetSubCategoryResponse
         {
             Id = model.Id,
             Code = model.Code,
-            Slug = model.Slug,
-            Title = model.Title,
-            IsActive = !model.IsActive,
+            Slug = slug,
+            Title = title,
+            IsActive = model.IsActive,
             CategoryId = model.CategoryId
         };
     }
+
+    private static List<TranslationItemResponse> MapTranslations(IReadOnlyList<Store.Domain.Dtos.Localization.TranslationItemDto> translations)
+        => translations
+            .Select(t => new TranslationItemResponse
+            {
+                LanguageId = t.LanguageId,
+                Title = t.Title,
+                Slug = t.Slug
+            })
+            .ToList();
 }

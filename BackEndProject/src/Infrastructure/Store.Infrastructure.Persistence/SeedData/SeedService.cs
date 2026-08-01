@@ -9,13 +9,26 @@ namespace Store.Infrastructure.Persistence.SeedData;
 
 public class SeedService(EditionDbContext context) : ISeedService
 {
-    public async Task SeedDataAsync(List<DynamicPermission> dynamicPermissions)
-    {
-        if (dynamicPermissions.Count > 0)
-            await SeedPermissionsAsync(dynamicPermissions);
+    public Task SeedCatalogAsync(CancellationToken cancellationToken = default)
+        => SeedCategoriesAsync(cancellationToken);
 
-        //if (permissionIds.Count != 0)
-        //    await SeedRolePermissionsAsync(permissionIds, adminRoleId);
+    public async Task SeedDataAsync(List<DynamicPermission> dynamicPermissions, CancellationToken cancellationToken = default)
+    {
+        await SeedCatalogAsync(cancellationToken);
+
+        if (dynamicPermissions.Count > 0)
+        {
+            var permissionIds = await SeedPermissionsAsync(dynamicPermissions);
+
+            var adminRoleId = await SeedRolesAsync();
+            await SeedContentPoliciesAsync();
+
+            if (permissionIds.Count != 0)
+                await SeedRolePermissionsAsync(permissionIds, adminRoleId);
+
+
+            await SeedUsersAsync(adminRoleId);
+        }
     }
 
     private async Task SeedContentPoliciesAsync()
@@ -137,17 +150,13 @@ public class SeedService(EditionDbContext context) : ISeedService
            => fullName.Split(".").Last();
     }
 
-    private async Task SeedUsersAsync(int adminRoleId, int meshkinDashtCityId)
+    private async Task SeedUsersAsync(int adminRoleId)
     {
         var adminUserRole = UserRole.Create(adminRoleId);
 
         List<User> users =
             [
-                User.Create("hamidmohammadnian@gmail.com", meshkinDashtCityId, GenderType.Male, "09307653782", "Hamid", "Mohammadnian", "09307653782",
-                            SecurityUtility.GetSha256Hash("admin"), Guid.NewGuid().ToString())
-                    .SetUserRoles([ adminUserRole ]),
-
-                User.Create("hosseinojaq@gmail.com", meshkinDashtCityId, GenderType.Male, "09383109379", "Hossein", "Ojaq", "09383109379",
+                User.Create("hamidmohammadnian@gmail.com", GenderType.Male, "09307653782", "Hamid", "Mohammadnian", "09307653782",
                             SecurityUtility.GetSha256Hash("admin"), Guid.NewGuid().ToString())
                     .SetUserRoles([ adminUserRole ])
             ];
@@ -178,5 +187,44 @@ public class SeedService(EditionDbContext context) : ISeedService
         var rolePermissionsForAdmin = permissionIds.Select(x => RolePermission.Create(adminRoleId, (PermissionType)x!)).ToList();
         context.RolePermission.AddRange(rolePermissionsForAdmin);
         await context.SaveChangesAsync();
+    }
+
+    private async Task SeedCategoriesAsync(CancellationToken cancellationToken = default)
+    {
+        if (await context.Category.AnyAsync(cancellationToken))
+            return;
+
+        var faLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "fa-IR", cancellationToken);
+
+        var enLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "en-US", cancellationToken);
+
+        if (faLanguage is null || enLanguage is null)
+            throw new InvalidOperationException("Category seed requires fa-IR and en-US languages to be seeded first.");
+
+        foreach (var item in CategorySeedData.Items)
+        {
+            var category = Category.Create(item.Code);
+            category.UpsertTranslation(faLanguage.Id, item.FaTitle, item.FaSlug);
+            category.UpsertTranslation(enLanguage.Id, item.EnTitle, item.EnSlug);
+
+            var subCategories = item.SubCategories
+                .Select(sub =>
+                {
+                    var subCategory = SubCategory.Create(sub.Code, categoryId: 0);
+                    subCategory.UpsertTranslation(faLanguage.Id, sub.FaTitle, sub.FaSlug);
+                    subCategory.UpsertTranslation(enLanguage.Id, sub.EnTitle, sub.EnSlug);
+                    return subCategory;
+                })
+                .ToList();
+
+            category.AddSubCategories(subCategories);
+            context.Category.Add(category);
+        }
+
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

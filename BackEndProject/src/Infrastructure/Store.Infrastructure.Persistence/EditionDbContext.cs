@@ -12,6 +12,7 @@ public sealed class EditionDbContext
 {
     public DbSet<Language> Language { get; set; }
     public DbSet<Category> Category { get; set; }
+    public DbSet<CategoryTranslation> CategoryTranslation { get; set; }
     public DbSet<Company> Company { get; set; }
     public DbSet<CompanyComment> CompanyComment { get; set; }
     public DbSet<CompanyStory> CompanyStory { get; set; }
@@ -53,6 +54,7 @@ public sealed class EditionDbContext
     public DbSet<Role> Role { get; set; }
     public DbSet<RolePermission> RolePermission { get; set; }
     public DbSet<SubCategory> SubCategory { get; set; }
+    public DbSet<SubCategoryTranslation> SubCategoryTranslation { get; set; }
     public DbSet<User> User { get; set; }
     public DbSet<UserAddress> UserAddress { get; set; }
     public DbSet<UserRole> UserRole { get; set; }

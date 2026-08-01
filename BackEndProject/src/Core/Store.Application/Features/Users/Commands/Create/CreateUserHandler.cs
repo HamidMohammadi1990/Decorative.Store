@@ -1,8 +1,8 @@
-﻿using Edition.Application.Contracts.Persistence;
-using Store.Common.Models;
+﻿using Store.Common.Models;
 using Store.Common.Security;
-using Store.Domain.Repositories;
 using Store.Domain.Entities;
+using Store.Domain.Repositories;
+using Edition.Application.Contracts.Persistence;
 
 namespace Edition.Application.Features.Users.Commands;
 
@@ -24,7 +24,7 @@ public class CreateUserHandler
             return ErrorModel.Create("AnAccountWithThisInfoHasAleardyBeenRegistered");
 
         var passwordHash = passwordHasher.HashPassword(request.Password);
-        var user = User.Create(request.Email, request.CityId, request.Gender, request.UserName, request.FirstName, 
+        var user = User.Create(request.Email, request.Gender, request.UserName, request.FirstName, 
                                request.LastName, request.PhoneNumber, passwordHash, Guid.NewGuid().ToString());
 
         userRepository.Add(user);

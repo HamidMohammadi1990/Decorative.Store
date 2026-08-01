@@ -1,7 +1,5 @@
-﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Store.Infrastructure.Persistence.Extensions;
-using Store.Infrastructure.Persistence;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Dtos.Users;
 using Store.Domain.Repositories;
@@ -20,9 +18,7 @@ public class UserRepository
 
         var users =
             from user in userSource
-            join city in Context.City on user.CityId equals city.Id into joinCity
-            from city in joinCity.DefaultIfEmpty()
-            select new { user, city };
+            select user;
 
         users = users.ApplyQueryFilters(request);
 
@@ -30,23 +26,21 @@ public class UserRepository
             await users
                 .Select(x => new GetAllUserDto
                 {
-                    Id = x.user.Id,
-                    Email = x.user.Email,
-                    CityId = x.user.CityId,
-                    Gender = x.user.Gender,
-                    IsActive = x.user.IsActive,
-                    CityName = x.city.Name,
-                    FirstName = x.user.FirstName,
-                    LastName = x.user.LastName,
-                    UserName = x.user.UserName,
-                    PhoneNumber = x.user.PhoneNumber,
-                    RefundMethod = x.user.RefundMethod,
-                    EconomicCode = x.user.EconomicCode,
-                    EmailConfirmed = x.user.EmailConfirmed,
-                    LoginPermission = x.user.LoginPermission,
-                    AccessFailedCount = x.user.AccessFailedCount,
-                    LastLoginDateOnUtc = x.user.LastLoginDateOnUtc,
-                    PhoneNumberConfirmed = x.user.PhoneNumberConfirmed
+                    Id = x.Id,
+                    Email = x.Email,
+                    Gender = x.Gender,
+                    IsActive = x.IsActive,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    UserName = x.UserName,
+                    PhoneNumber = x.PhoneNumber,
+                    RefundMethod = x.RefundMethod,
+                    EconomicCode = x.EconomicCode,
+                    EmailConfirmed = x.EmailConfirmed,
+                    LoginPermission = x.LoginPermission,
+                    AccessFailedCount = x.AccessFailedCount,
+                    LastLoginDateOnUtc = x.LastLoginDateOnUtc,
+                    PhoneNumberConfirmed = x.PhoneNumberConfirmed
                 })
                 .AsNoTracking()
                 .ToPagedAsync(request.Pagination);

@@ -22,10 +22,5 @@ public record GetAllUserResponse
     public DateTime? LastLoginDateOnUtc { get; init; }
     public int AccessFailedCount { get; init; }
     public RefundMethodType RefundMethod { get; init; }
-
-    [JsonConverter(typeof(CityNullableEncryptor))]
-    public int? CityId { get; init; }
-
-    public string? CityName { get; set; }
     public string? EconomicCode { get; init; }
 }

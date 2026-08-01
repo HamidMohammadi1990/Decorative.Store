@@ -14,7 +14,7 @@ public class SearchSubCategoryHandler
     public async Task<OperationResult<PagedResult<SearchSubCategoryResponse>>> Handle(SearchSubCategoryRequest request, CancellationToken cancellationToken)
     {
         var requestModel = mapper.Map(request);
-        var subCategories = await subCategoryRepository.SearchAsync(requestModel);
+        var subCategories = await subCategoryRepository.SearchAsync(requestModel, cancellationToken);
         var result = mapper.Map(subCategories);
         return result;
     }

@@ -10,11 +10,11 @@ public class UpdateSubCategoryHandler
 {
     public async Task<OperationResult> Handle(UpdateSubCategoryRequest request, CancellationToken cancellationToken)
     {
-        var subCategory = await subCategoryRepository.FindAsync(request.Id);
+        var subCategory = await subCategoryRepository.FindWithTranslationsAsync(request.Id, cancellationToken);
         if (subCategory is null)
             return ErrorModel.Create("InvalidId");
 
-        subCategory.Update(request.Title, request.Slug, request.Code, request.CategoryId, request.IsActive);
+        subCategory.Update(request.Code, request.CategoryId, request.IsActive, request.LanguageId, request.Title, request.Slug);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

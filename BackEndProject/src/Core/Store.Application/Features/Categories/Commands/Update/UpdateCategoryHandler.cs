@@ -10,11 +10,11 @@ public class UpdateCategoryHandler
 {
     public async Task<OperationResult> Handle(UpdateCategoryRequest request, CancellationToken cancellationToken)
     {
-        var category = await categoryRepository.FindAsync(request.Id);
+        var category = await categoryRepository.FindWithTranslationsAsync(request.Id, cancellationToken);
         if (category is null)
             return ErrorModel.Create("InvalidId");
 
-        category.Update(request.Title, request.Slug, request.Code, request.IsActive);
+        category.Update(request.Code, request.IsActive, request.LanguageId, request.Title, request.Slug);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

@@ -9,6 +9,7 @@ public record UpdateCategoryRequest : IRequest<OperationResult>
     [JsonConverter(typeof(CategoryEncryptor))]
     public int Id { get; init; }
 
+    public int LanguageId { get; init; }
     public string Title { get; init; } = default!;
     public string Slug { get; init; } = default!;
     public string Code { get; init; } = default!;

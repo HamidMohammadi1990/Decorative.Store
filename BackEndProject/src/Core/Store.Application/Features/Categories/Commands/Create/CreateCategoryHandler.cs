@@ -11,7 +11,8 @@ public class CreateCategoryHandler
 {
     public async Task<OperationResult<CreateCategoryResponse>> Handle(CreateCategoryRequest request, CancellationToken cancellationToken)
     {
-        var category = Category.Create(request.Title, request.Slug, request.Code);
+        var category = Category.Create(request.Code);
+        category.UpsertTranslation(request.LanguageId, request.Title, request.Slug);
         categoryRepository.Add(category);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);

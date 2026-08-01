@@ -8,10 +8,7 @@ namespace Store.Domain.Dtos.Categories;
 
 public record GetAllCategoryRequestDto : IContentPolicyQueryDto<Category>
 {
-    [QueryFilter(Operator = FilterOperator.Contains)]
     public string? Title { get; init; }
-
-    [QueryFilter]
     public string? Slug { get; init; }
 
     [QueryFilter(Operator = FilterOperator.Contains)]

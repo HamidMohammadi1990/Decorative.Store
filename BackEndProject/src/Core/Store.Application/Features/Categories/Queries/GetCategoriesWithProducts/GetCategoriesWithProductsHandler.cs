@@ -11,7 +11,7 @@ public class GetCategoriesWithProductsHandler
 {
     public async Task<OperationResult<List<GetCategoriesWithProductsResponse>>> Handle(GetCategoriesWithProductsRequest request, CancellationToken cancellationToken)
     {
-        var categories = await categoryRepository.GetAllWithProductsAsync(ProductFeatureTypeCode.DisplayOnMenu);
+        var categories = await categoryRepository.GetAllWithProductsAsync(ProductFeatureTypeCode.DisplayOnMenu, cancellationToken);
         return mapper.Map(categories);
     }
 }

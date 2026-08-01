@@ -10,16 +10,6 @@ internal class SubCategoryConfig : IEntityTypeConfiguration<SubCategory>
     public void Configure(EntityTypeBuilder<SubCategory> builder)
     {
         builder
-           .Property(x => x.Title)
-           .HasNVarcharMaxLength(60)
-           .IsRequired();
-
-        builder
-            .Property(x => x.Slug)
-            .HasVarcharMaxLength(150)
-            .IsRequired();
-
-        builder
             .Property(x => x.Code)
             .HasVarcharMaxLength(12);
 
@@ -40,10 +30,6 @@ internal class SubCategoryConfig : IEntityTypeConfiguration<SubCategory>
             .WithOne(x => x.SubCategory)
             .HasForeignKey(x => x.SubCategoryId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        builder
-            .HasIndex(x => x.Slug)
-            .IsUnique();
 
         builder
             .HasIndex(x => x.CategoryId);

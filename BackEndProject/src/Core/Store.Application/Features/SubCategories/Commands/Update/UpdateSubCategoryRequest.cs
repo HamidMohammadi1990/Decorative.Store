@@ -12,8 +12,9 @@ public record UpdateSubCategoryRequest : IRequest<OperationResult>
     [JsonConverter(typeof(CategoryEncryptor))]
     public int CategoryId { get; init; }
 
+    public int LanguageId { get; init; }
     public string Title { get; init; } = default!;
     public string Slug { get; init; } = default!;
-    public string Code { get; init; } = default!;    
+    public string Code { get; init; } = default!;
     public bool IsActive { get; init; }
 }

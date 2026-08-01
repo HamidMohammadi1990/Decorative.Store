@@ -4,26 +4,35 @@ namespace Store.Domain.Entities;
 
 public class SubCategory : BaseEntity
 {
-    public string Title { get; private set; } = default!;
-    public string Slug { get; private set; } = default!;
     public string Code { get; private set; } = default!;
     public int CategoryId { get; private set; }
     public bool IsActive { get; private set; } = true;
 
-
     public Category Category { get; private set; } = null!;
     public ICollection<Product> Products { get; private set; } = [];
     public ICollection<Discount> Discounts { get; private set; } = [];
+    public ICollection<SubCategoryTranslation> Translations { get; private set; } = [];
 
-
-    public static SubCategory Create(string title, string slug, string code, int categoryid)
+    public static SubCategory Create(string code, int categoryId)
         => new()
         {
-            Title = title,
-            Slug = slug,
             Code = code,
-            CategoryId = categoryid
+            CategoryId = categoryId
         };
+
+    public SubCategoryTranslation UpsertTranslation(int languageId, string title, string slug)
+    {
+        var existing = Translations.FirstOrDefault(x => x.LanguageId == languageId);
+        if (existing is not null)
+        {
+            existing.Update(title, slug);
+            return existing;
+        }
+
+        var translation = SubCategoryTranslation.Create(title, slug, languageId);
+        Translations.Add(translation);
+        return translation;
+    }
 
     public void AddProducts(List<Product> products)
     {
@@ -31,12 +40,11 @@ public class SubCategory : BaseEntity
             Products.Add(product);
     }
 
-    public void Update(string title, string slug, string code, int categoryId, bool isActive)
+    public void Update(string code, int categoryId, bool isActive, int languageId, string title, string slug)
     {
         Code = code;
-        Slug = slug;
-        Title = title;
-        IsActive = isActive;
         CategoryId = categoryId;
+        IsActive = isActive;
+        UpsertTranslation(languageId, title, slug);
     }
 }

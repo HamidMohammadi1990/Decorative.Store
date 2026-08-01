@@ -11,7 +11,8 @@ public class CreateSubCategoryHandler
 {
     public async Task<OperationResult<CreateSubCategoryResponse>> Handle(CreateSubCategoryRequest request, CancellationToken cancellationToken)
     {
-        var subCategory = SubCategory.Create(request.Title, request.Slug, request.Code, request.CategoryId);
+        var subCategory = SubCategory.Create(request.Code, request.CategoryId);
+        subCategory.UpsertTranslation(request.LanguageId, request.Title, request.Slug);
         subCategoryRepository.Add(subCategory);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);

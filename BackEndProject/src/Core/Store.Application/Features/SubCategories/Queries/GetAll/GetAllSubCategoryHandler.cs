@@ -14,7 +14,7 @@ public class GetAllSubCategoryHandler
     public async Task<OperationResult<PagedResult<GetAllSubCategoryResponse>>> Handle(GetAllSubCategoryRequest request, CancellationToken cancellationToken)
     {
         var requestModel = mapper.Map(request);
-        var subCategories = await subCategoryRepository.GetAllAsync(requestModel);
+        var subCategories = await subCategoryRepository.GetAllAsync(requestModel, cancellationToken);
         var result = mapper.Map(subCategories);
         return result;
     }

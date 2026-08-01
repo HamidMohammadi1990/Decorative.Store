@@ -7,7 +7,7 @@ namespace Edition.Application.Contracts.Mapping;
 
 public interface ICategoryMapperService : IMapper
 {
-    GetCategoryResponse Map(Category model);
+    GetCategoryResponse Map(Category model, string title, string slug);
     GetAllCategoryRequestDto Map(GetAllCategoryRequest model);
     SearchCategoryRequestDto Map(SearchCategoryRequest model);
     PagedResult<GetAllCategoryResponse> Map(PagedResult<GetAllCategoryResponseDto> model);

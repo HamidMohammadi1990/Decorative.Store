@@ -1,6 +1,5 @@
 using Serilog;
 using Edition.Application;
-using Edition.Application.Contracts.Localization;
 using Store.WebFramework.Extensions;
 using Store.WebFramework.Swagger;
 using Store.Api.Middlewares;
@@ -51,11 +50,7 @@ serilogConfiguration!.UseSerilog(builder.Configuration);
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var languageBootstrap = scope.ServiceProvider.GetRequiredService<ILanguageBootstrapService>();
-    await languageBootstrap.EnsureLanguagesReadyAsync();
-}
+await app.SeedApplicationDataAsync();
 
 await app.ConfigureEditionLocalizationFromRegistryAsync();
 
@@ -65,10 +60,10 @@ app.UseMiddleware<BlockTokenControlMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
-    //using var scope = app.Services.CreateScope();
-    //var seedService = scope.ServiceProvider.GetRequiredService<ISeedService>();
-    //var permissions = PermissionModule.GetPermissions();
-    //await seedService.SeedDataAsync(permissions);
+    // using var scope = app.Services.CreateScope();
+    // var seedService = scope.ServiceProvider.GetRequiredService<ISeedService>();
+    // var permissions = PermissionModule.GetPermissions();
+    // await seedService.SeedDataAsync(permissions);
 }
 
 if (!builder.Environment.IsDevelopment())
