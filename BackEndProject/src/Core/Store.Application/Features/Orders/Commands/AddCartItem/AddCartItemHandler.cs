@@ -6,6 +6,7 @@ using Store.Common.Models;
 using Store.Domain.Repositories;
 using Store.Domain.Entities;
 using Store.Domain.Enums;
+using Edition.Application.Contracts.Orders;
 
 namespace Edition.Application.Features.Orders.Commands;
 

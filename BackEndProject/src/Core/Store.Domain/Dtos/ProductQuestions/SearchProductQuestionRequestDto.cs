@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Store.Domain.QueryFilters;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Entities;
+using Store.Domain.Dtos.ContentPolicies;
 
 namespace Store.Domain.Dtos.ProductQuestions;
 

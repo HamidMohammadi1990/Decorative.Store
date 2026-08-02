@@ -10,7 +10,7 @@ namespace Edition.Application.Mappings;
 public class ProductQuestionMapperService : IProductQuestionMapperService
 {
     public SearchProductQuestionRequestDto Map(SearchProductQuestionRequest model)
-        => new()
+        => new SearchProductQuestionRequestDto
         {
             ProductId = model.ProductId,
             Pagination = model.Pagination
