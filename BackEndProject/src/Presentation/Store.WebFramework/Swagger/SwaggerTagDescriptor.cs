@@ -26,7 +26,7 @@ internal sealed record SwaggerTagDescriptor(
     {
         var attribute = controllerType
             .GetCustomAttributes(inherit: true)
-            .FirstOrDefault(x => x.GetType().FullName == "Edition.Api.Attributes.ApiControllerCategoryAttribute");
+            .FirstOrDefault(x => x.GetType().FullName == "Store.Api.Attributes.ApiControllerCategoryAttribute");
 
         if (attribute is not null)
         {
