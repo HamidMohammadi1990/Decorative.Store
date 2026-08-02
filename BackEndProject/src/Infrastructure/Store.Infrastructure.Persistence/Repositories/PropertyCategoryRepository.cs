@@ -34,7 +34,7 @@ public class PropertyCategoryRepository
             cancellationToken);
     }
 
-    public async Task<PagedResult<GetAllPropertyCategoryDto>> GetAllAsync(GetAllPropertyCategoryRequestDto request)
+    public async Task<PagedResult<GetAllPropertyCategoryDto>> GetAllAsync(GetAllPropertyCategoryRequestDto request, CancellationToken cancellationToken = default)
     {
         var categories = Context.PropertyCategory
             .AsNoTracking()

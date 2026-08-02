@@ -21,7 +21,7 @@ public class CreateProductFileHandler
                 var productFile = ProductFile.Create(file.ProductId, filename.Result!, file.IsIndex);
                 productFile.UpsertTranslation(file.LanguageId, file.Title);
                 productFileRepository.Add(productFile);
-                return (productFile, file.Title);
+                return (productFile: productFile, title: file.Title);
             }
             return (productFile: (ProductFile?)null, title: (string?)null);
         });

@@ -39,7 +39,7 @@ public class PropertyItemRepository
             cancellationToken);
     }
 
-    public async Task<PagedResult<GetAllPropertyItemDto>> GetAllAsync(GetAllPropertyItemRequestDto request)
+    public async Task<PagedResult<GetAllPropertyItemDto>> GetAllAsync(GetAllPropertyItemRequestDto request, CancellationToken cancellationToken = default)
     {
         var propertyItemSource = Context.PropertyItem
             .AsNoTracking()

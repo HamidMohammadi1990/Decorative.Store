@@ -1,13 +1,11 @@
-﻿using Edition.Application.Contracts.Localization;
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using Store.Infrastructure.Persistence.Extensions;
-using Store.Infrastructure.Persistence;
-using Store.Domain.Dtos.ProductPrices;
-using Store.Domain.Dtos.Others;
-using Store.Domain.Dtos.Pagination;
-using Store.Domain.Entities;
+﻿using Store.Domain.Entities;
 using Store.Domain.Repositories;
+using Store.Domain.Dtos.Pagination;
+using Microsoft.EntityFrameworkCore;
+using Store.Domain.Dtos.ProductPrices;
+using Edition.Application.Contracts.Localization;
+using Store.Infrastructure.Persistence.Extensions;
+using Store.Domain.Dtos.Others;
 
 namespace Store.Infrastructure.Persistence.Repositories;
 
@@ -70,8 +68,8 @@ public class ProductPriceRepository
             .Select(x => new PurchaseProductPriceDto
             {
                 Id = x.Id,
-                Price = x.Price,
-                CooperationPrice = x.CooperationPrice
+                Price = PriceField.Create(x.Price),
+                CooperationPrice = PriceField.Create(x.CooperationPrice)
             })
             .SingleOrDefaultAsync();
     }
