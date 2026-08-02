@@ -15,7 +15,6 @@ public class City : BaseEntity
 
 
     public Province Province { get; set; } = default!;
-    public ICollection<Company> Companies { get; set; } = default!;
     public ICollection<UserAddress> UserAddresses { get; set; } = default!;
 
 

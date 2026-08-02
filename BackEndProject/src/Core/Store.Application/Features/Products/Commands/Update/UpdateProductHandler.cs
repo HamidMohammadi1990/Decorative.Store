@@ -18,6 +18,8 @@ public class UpdateProductHandler
             request.Status,
             request.ProductCode,
             request.SubCategoryId,
+            request.Price,
+            request.CompareAtPrice,
             request.LanguageId,
             request.Title,
             request.Slug,

@@ -18,7 +18,7 @@ public sealed class ContentPolicyRuleValidator
 
         var entityClrType = entityTypeRegistry.GetClrType(entityType);
         var entityParameter = System.Linq.Expressions.Expression.Parameter(entityClrType, "entity");
-        var context = new Models.ContentPolicies.ContentPolicyContext(1, [1, 2], [1]);
+        var context = new Models.ContentPolicies.ContentPolicyContext(1, [1, 2]);
 
         foreach (var rule in rules)
         {

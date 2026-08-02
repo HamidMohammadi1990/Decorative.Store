@@ -87,7 +87,6 @@ public class PropertyRepository
 
     public async Task<List<ProductPropertyDto>> GetByProductIdAsync(
         int productId,
-        int companyId,
         CancellationToken cancellationToken = default)
     {
         var defaultLanguage = await languageRegistry.GetDefaultAsync(cancellationToken);
@@ -101,8 +100,8 @@ public class PropertyRepository
                         new { PropertyId = Property.Id, ProductId = productId, Property.IsActive }
 
                    join PropertyPrice in Context.ProductPropertyPrice on
-                        new { ProductPropertyId = ProductProperty.Id, ProductProperty.IsActive, CompanyId = companyId } equals
-                        new { PropertyPrice.ProductPropertyId, PropertyPrice.IsActive, PropertyPrice.CompanyId }
+                        new { ProductPropertyId = ProductProperty.Id, ProductProperty.IsActive } equals
+                        new { PropertyPrice.ProductPropertyId, PropertyPrice.IsActive }
                    into PropertyPrices
                    from PropertyPrice in PropertyPrices.DefaultIfEmpty()
 
@@ -123,8 +122,8 @@ public class PropertyRepository
                    from ParentProductProperty in ParentProductProperties.DefaultIfEmpty()
 
                    join ParentPropertyPrice in Context.ProductPropertyPrice on
-                        new { ProductPropertyId = ParentProductProperty.Id, ParentProductProperty.IsActive, CompanyId = companyId } equals
-                        new { ParentPropertyPrice.ProductPropertyId, ParentPropertyPrice.IsActive, ParentPropertyPrice.CompanyId }
+                        new { ProductPropertyId = ParentProductProperty.Id, ParentProductProperty.IsActive } equals
+                        new { ParentPropertyPrice.ProductPropertyId, ParentPropertyPrice.IsActive }
                    into ParentPropertyPrices
                    from ParentPropertyPrice in ParentPropertyPrices.DefaultIfEmpty()
 
@@ -135,8 +134,8 @@ public class PropertyRepository
                    from PropertyItem in PropertyItems.DefaultIfEmpty()
 
                    join PropertyItemPrice in Context.PropertyItemPrice on
-                        new { PropertyItemId = PropertyItem.Id, CompanyId = companyId, PropertyItem.IsActive } equals
-                        new { PropertyItemPrice.PropertyItemId, PropertyItemPrice.CompanyId, PropertyItemPrice.IsActive }
+                        new { PropertyItemId = PropertyItem.Id, PropertyItem.IsActive } equals
+                        new { PropertyItemPrice.PropertyItemId, PropertyItemPrice.IsActive }
                    into PropertyItemPrices
                    from PropertyItemPrice in PropertyItemPrices.DefaultIfEmpty()
 
@@ -147,8 +146,8 @@ public class PropertyRepository
                    from ParentPropertyItem in ParentPropertyItems.DefaultIfEmpty()
 
                    join ParentPropertyItemPrice in Context.PropertyItemPrice on
-                        new { PropertyItemId = ParentPropertyItem.Id, CompanyId = companyId, ParentPropertyItem.IsActive } equals
-                        new { ParentPropertyItemPrice.PropertyItemId, ParentPropertyItemPrice.CompanyId, ParentPropertyItemPrice.IsActive }
+                        new { PropertyItemId = ParentPropertyItem.Id, ParentPropertyItem.IsActive } equals
+                        new { ParentPropertyItemPrice.PropertyItemId, ParentPropertyItemPrice.IsActive }
                    into ParentPropertyItemPrices
                    from ParentPropertyItemPrice in ParentPropertyItemPrices.DefaultIfEmpty()
 

@@ -28,7 +28,6 @@ public record OrderDetailItemDto
     public string DeliveryTypeTitle { get; init; } = default!;
     public string? PostTypeTitle { get; init; }
     public OrderItemProductSummaryDto Product { get; init; } = default!;
-    public OrderItemCompanySummaryDto Company { get; init; } = default!;
     public OrderItemUserAddressDto UserAddress { get; init; } = default!;
 
     public List<OrderItemAttachmentDetailDto> Attachments { get; init; } = [];
@@ -40,13 +39,6 @@ public record OrderItemProductSummaryDto
     public string Title { get; init; } = default!;
     public string Slug { get; init; } = default!;
     public string ProductCode { get; init; } = default!;
-}
-public record OrderItemCompanySummaryDto
-{
-    public int Id { get; init; }
-    public string Name { get; init; } = default!;
-    public string Code { get; init; } = default!;
-    public string PhoneNumber { get; init; } = default!;
 }
 public record OrderItemAttachmentDetailDto
 {

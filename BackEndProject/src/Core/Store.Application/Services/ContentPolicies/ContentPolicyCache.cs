@@ -30,7 +30,6 @@ public sealed class ContentPolicyCache
 
         var context = new CachedUserContentPolicyContext(
             contextData.Roles,
-            contextData.CompanyIds,
             [.. contextData.Roles.Select(x => x.Id)]);
 
         await SetUserContextAsync(userId, context, cancellationToken);

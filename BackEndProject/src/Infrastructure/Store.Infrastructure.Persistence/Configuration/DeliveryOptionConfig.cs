@@ -13,11 +13,5 @@ public class DeliveryOptionConfig : IEntityTypeConfiguration<DeliveryOption>
             .Property(x => x.Title)
             .HasNVarcharMaxLength(30)
             .IsRequired();
-
-        builder
-            .HasMany(x => x.ProductPriceDeliveryOptions)
-            .WithOne(x => x.DeliveryOption)
-            .HasForeignKey(x => x.DeliveryOptionId)
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

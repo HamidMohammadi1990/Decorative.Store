@@ -11,7 +11,7 @@ public class CreateProductHandler
 {
     public async Task<OperationResult<CreateProductResponse>> Handle(CreateProductRequest request, CancellationToken cancellationToken = default)
     {
-        var product = Product.Create(request.ProductCode, request.SubCategoryId);
+        var product = Product.Create(request.ProductCode, request.SubCategoryId, request.Price, request.CompareAtPrice);
         product.UpsertTranslation(request.LanguageId, request.Title, request.Slug, request.Description);
         productRepository.Add(product);
 

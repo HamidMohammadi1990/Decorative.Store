@@ -6,9 +6,6 @@ namespace Edition.Application.Features.ProductPropertyPrices.Commands;
 
 public record CreateProductPropertyPriceRequest : IRequest<OperationResult<CreateProductPropertyPriceResponse>>
 {
-    [JsonConverter(typeof(CompanyEncryptor))]
-    public int CompanyId { get; init; }
-
     [JsonConverter(typeof(ProductPropertyEncryptor))]
     public int ProductPropertyId { get; init; }
 

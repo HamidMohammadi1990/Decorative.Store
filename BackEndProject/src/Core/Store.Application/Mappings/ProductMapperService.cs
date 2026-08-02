@@ -21,7 +21,9 @@ public class ProductMapperService : IProductMapperService
             IsActive = model.IsActive,
             ProductCode = model.ProductCode,
             Description = description,
-            CreationDate = model.CreatedOnUtc
+            CreationDate = model.CreatedOnUtc,
+            Price = model.Price,
+            CompareAtPrice = model.CompareAtPrice
         };
     }
 

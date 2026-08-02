@@ -18,7 +18,7 @@ public class CreateWalletHandler
         if (request.IsDefault)
             await walletRepository.ClearDefaultForUserAsync(request.UserId, exceptWalletId: 0, cancellationToken);
 
-        var wallet = Wallet.Create(request.UserId, request.Title.Trim(), request.IsDefault, request.CompanyId);
+        var wallet = Wallet.Create(request.UserId, request.Title.Trim(), request.IsDefault);
         walletRepository.Add(wallet);
 
         var saveResult = await uow.SaveChangesAsync(cancellationToken);

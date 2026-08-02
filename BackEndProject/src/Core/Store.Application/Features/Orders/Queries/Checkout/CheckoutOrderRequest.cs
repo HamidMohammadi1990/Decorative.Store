@@ -8,7 +8,4 @@ public record CheckoutOrderRequest : IRequest<OperationResult<CheckoutOrderRespo
 {
     [JsonConverter(typeof(ProductEncryptor))]
     public int ProductId { get; init; }
-
-    [JsonConverter(typeof(CompanyEncryptor))]
-    public int CompanyId { get; init; }
 }

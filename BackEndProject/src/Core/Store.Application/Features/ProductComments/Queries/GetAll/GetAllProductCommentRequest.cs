@@ -15,9 +15,6 @@ public record GetAllProductCommentRequest : ContentPolicyRequest<ProductComment>
     [JsonConverter(typeof(UserNullableEncryptor))]
     public int? UserId { get; init; }
 
-    [JsonConverter(typeof(CompanyNullableEncryptor))]
-    public int? CompanyId { get; init; }
-
     [JsonConverter(typeof(CommentTopicNullableEncryptor))]
     public int? CommentTopicId { get; init; }
 

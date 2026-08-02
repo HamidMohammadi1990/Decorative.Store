@@ -16,7 +16,6 @@ public class FinancialYearMapperService : IFinancialYearMapperService
         {
             Name = model.Name,
             IsActive = model.IsActive,
-            CompanyId = model.CompanyId,
             Pagination = model.Pagination
         }.WithContentPolicy<FinancialYear, GetAllFinancialYearRequestDto>(model);
     }
@@ -29,8 +28,7 @@ public class FinancialYearMapperService : IFinancialYearMapperService
             Name = model.Name,
             IsActive = model.IsActive,
             StartDate = model.StartDate,
-            EndDate = model.EndDate,
-            CompanyId = model.CompanyId
+            EndDate = model.EndDate
         };
     }
 
@@ -45,7 +43,6 @@ public class FinancialYearMapperService : IFinancialYearMapperService
                 EndDate = x.EndDate,
                 IsActive = x.IsActive,
                 StartDate = x.StartDate,
-                CompanyId = x.CompanyId,
                 CreatedOnUtc = x.CreatedOnUtc
             })
             .ToList();

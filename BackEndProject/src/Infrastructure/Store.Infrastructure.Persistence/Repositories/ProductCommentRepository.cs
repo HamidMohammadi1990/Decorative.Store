@@ -24,10 +24,9 @@ public class ProductCommentRepository
         var productComments =
             from productComment in productCommentSource
             join topic in Context.CommentTopic on productComment.CommentTopicId equals topic.Id
-            join company in Context.Company on productComment.CompanyId equals company.Id
             join product in Context.Product on productComment.ProductId equals product.Id
             join user in Context.User on productComment.UserId equals user.Id
-            select new { productComment, topic, company, product, user };
+            select new { productComment, topic, product, user };
 
         productComments = productComments.ApplyQueryFilters(request);
 
@@ -40,7 +39,6 @@ public class ProductCommentRepository
                 UserId = x.productComment.UserId,
                 IsActive = x.productComment.IsActive,
                 ProductId = x.productComment.ProductId,
-                CompanyId = x.productComment.CompanyId,
                 Description = x.productComment.Description,
                 CommentRate = x.productComment.CommentRate,
                 ProductTitle = x.product.Translations
@@ -58,8 +56,7 @@ public class ProductCommentRepository
                 QualityRating = x.productComment.CommentRate,
                 CommentTopicId = x.productComment.CommentTopicId,
                 AffordableRating = x.productComment.AffordableRating,
-                CommentTopicTitle = x.topic.Title,
-                CompanyName = x.company.Name
+                CommentTopicTitle = x.topic.Title
             })
             .ToPagedAsync(request.Pagination, cancellationToken);
 
@@ -76,11 +73,10 @@ public class ProductCommentRepository
         var productComments =
             from productComment in productCommentSource
             join topic in Context.CommentTopic on productComment.CommentTopicId equals topic.Id
-            join company in Context.Company on productComment.CompanyId equals company.Id
             join product in Context.Product on productComment.ProductId equals product.Id
             join user in Context.User on productComment.UserId equals user.Id
             where productComment.IsActive
-            select new { productComment, topic, company, product, user };
+            select new { productComment, topic, product, user };
 
         productComments = productComments.ApplyQueryFilters(request);
 
@@ -92,7 +88,6 @@ public class ProductCommentRepository
                 Id = x.productComment.Id,
                 UserId = x.productComment.UserId,
                 ProductId = x.productComment.ProductId,
-                CompanyId = x.productComment.CompanyId,
                 Description = x.productComment.Description,
                 CommentRate = x.productComment.CommentRate,
                 ProductTitle = x.product.Translations
@@ -110,8 +105,7 @@ public class ProductCommentRepository
                 QualityRating = x.productComment.CommentRate,
                 CommentTopicId = x.productComment.CommentTopicId,
                 AffordableRating = x.productComment.AffordableRating,
-                CommentTopicTitle = x.topic.Title,
-                CompanyName = x.company.Name
+                CommentTopicTitle = x.topic.Title
             })
             .ToPagedAsync(request.Pagination, cancellationToken);
 

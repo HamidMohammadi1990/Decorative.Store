@@ -64,7 +64,6 @@ public sealed class ContentPolicyScenarioEvaluator
 
         var policyContext = new ContentPolicyContext(
             userId,
-            userContext.CompanyIds,
             userContext.RoleIds);
 
         var filter = ContentPolicyExpressionBuildInvoker.Build(

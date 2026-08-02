@@ -40,5 +40,4 @@ public record UserRolePolicyDto(
     bool RequireContentPolicy);
 
 public sealed record UserContentPolicyContextData(
-    IReadOnlyList<UserRolePolicyDto> Roles,
-    IReadOnlyList<int> CompanyIds);
+    IReadOnlyList<UserRolePolicyDto> Roles);

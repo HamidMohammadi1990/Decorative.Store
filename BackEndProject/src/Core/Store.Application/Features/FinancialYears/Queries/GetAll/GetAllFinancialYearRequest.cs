@@ -12,8 +12,5 @@ public record GetAllFinancialYearRequest : ContentPolicyRequest<FinancialYear>, 
     public string? Name { get; init; }
     public bool? IsActive { get; init; } = true;
 
-    [JsonConverter(typeof(CompanyEncryptor))]
-    public int? CompanyId { get; init; }
-
     public PagedRequest Pagination { get; init; } = default!;
 }

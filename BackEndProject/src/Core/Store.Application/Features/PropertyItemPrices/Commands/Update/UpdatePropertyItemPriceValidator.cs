@@ -8,10 +8,10 @@ public class UpdatePropertyItemPriceValidator : AbstractValidator<UpdateProperty
 {
     public UpdatePropertyItemPriceValidator(IPropertyItemPriceRepository propertyItemPriceRepository)
     {
-        RuleFor(x => new { x.Id, x.CompanyId, x.PropertyItemId })
-            .MustAsync(async (x, CancellationToken)
+        RuleFor(x => new { x.Id, x.PropertyItemId })
+            .MustAsync(async (x, cancellationToken)
                    => !await propertyItemPriceRepository
-                            .AnyAsync(p => p.Id != x.Id && p.CompanyId == x.CompanyId && p.PropertyItemId == x.PropertyItemId && p.IsActive))
+                            .AnyAsync(p => p.Id != x.Id && p.PropertyItemId == x.PropertyItemId && p.IsActive, cancellationToken))
             .WithMessage(MessageKeys.PriceAlreadyRegistered);
     }
 }

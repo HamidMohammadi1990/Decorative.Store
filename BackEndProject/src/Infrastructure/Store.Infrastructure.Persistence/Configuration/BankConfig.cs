@@ -26,12 +26,6 @@ public class BankConfig : IEntityTypeConfiguration<Bank>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasMany(x => x.CompanyPosDevices)
-            .WithOne(x => x.Bank)
-            .HasForeignKey(x => x.BankId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasMany(x => x.ChequeTransactions)
             .WithOne(x => x.Bank)
             .HasForeignKey(x => x.BankId)

@@ -14,9 +14,6 @@ public record GetAllFinancialYearRequestDto : IContentPolicyQueryDto<FinancialYe
     [QueryFilter]
     public bool? IsActive { get; init; } = true;
 
-    [QueryFilter]
-    public int? CompanyId { get; init; }
-
     public PagedRequest Pagination { get; init; } = default!;
 
     public Expression<Func<FinancialYear, bool>>? ContentFilter { get; set; }

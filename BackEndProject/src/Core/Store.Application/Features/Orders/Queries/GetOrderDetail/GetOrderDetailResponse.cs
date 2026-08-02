@@ -32,7 +32,6 @@ public record OrderItemResponse
 	public string DeliveryType { get; set; } = default!;
 	public string? PostType { get; set; }
 	public OrderItemProductSummaryResponse Product { get; set; } = default!;
-	public OrderItemCompanySummaryResponse Company { get; set; } = default!;
 	public OrderItemUserAddressResponse UserAddress { get; set; } = default!;
 	public List<OrderItemAttachmentResponse> Attachments { get; set; } = [];
 	public List<OrderItemPropertyResponse> Properties { get; set; } = [];
@@ -44,14 +43,6 @@ public record OrderItemProductSummaryResponse
 	public string Title { get; set; } = default!;
 	public string Slug { get; set; } = default!;
 	public string ProductCode { get; set; } = default!;
-}
-public class OrderItemCompanySummaryResponse
-{
-	[JsonConverter(typeof(CompanyEncryptor))]
-	public int Id { get; set; }
-	public string Name { get; set; } = default!;
-	public string Code { get; set; } = default!;
-	public string PhoneNumber { get; set; } = default!;
 }
 public record OrderItemUserAddressResponse
 {

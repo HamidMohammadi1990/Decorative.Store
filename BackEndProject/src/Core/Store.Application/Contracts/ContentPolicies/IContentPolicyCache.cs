@@ -20,7 +20,6 @@ public interface IContentPolicyCache
 
 public sealed record CachedUserContentPolicyContext(
     IReadOnlyList<UserRolePolicyDto> Roles,
-    IReadOnlyList<int> CompanyIds,
     IReadOnlyList<int> RoleIds);
 
 public sealed record CachedContentPolicyResolution(

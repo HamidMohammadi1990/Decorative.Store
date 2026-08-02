@@ -65,11 +65,9 @@ public sealed class ContentPolicyFilter
             queryAction,
             userId,
             roleIds,
-            userContext.CompanyIds,
             resolution);
         var policyContext = new Models.ContentPolicies.ContentPolicyContext(
             userId,
-            userContext.CompanyIds,
             userContext.RoleIds);
 
         var filter = compiledFilterCache.GetOrAdd(
@@ -126,13 +124,11 @@ public sealed class ContentPolicyFilter
         ContentPolicyQueryAction queryAction,
         int userId,
         IReadOnlyList<int> roleIds,
-        IReadOnlyList<int> companyIds,
         ContentPolicyResolutionResult resolution)
     {
         var builder = new StringBuilder(128);
         builder.Append(generation).Append(':').Append(entityType).Append(':').Append((int)queryAction).Append(':').Append(userId).Append(':');
         builder.Append(string.Join(',', roleIds.OrderBy(x => x))).Append(':');
-        builder.Append(string.Join(',', companyIds.OrderBy(x => x))).Append(':');
         builder.Append((int)resolution.EffectiveMergeMode).Append(':');
         builder.Append(string.Join(',', resolution.AppliedPolicies.OrderBy(x => x.Priority).ThenBy(x => x.Id).Select(x => x.Id)));
         builder.Append(':');

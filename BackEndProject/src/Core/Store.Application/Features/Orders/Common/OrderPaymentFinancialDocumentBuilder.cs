@@ -7,12 +7,11 @@ public static class OrderPaymentFinancialDocumentBuilder
 {
     public static FinancialDocument Build(
         Order order,
-        OrderCompanyPaymentSlice companySlice,
+        OrderPaymentSlice paymentSlice,
         int financialYearId,
         bool isFullyPaid)
     {
-        var trackingDescription =
-            $"سفارش با کد پیگیری {order.TrackingCode} (شرکت {companySlice.CompanyId})";
+        var trackingDescription = $"سفارش با کد پیگیری {order.TrackingCode}";
 
         var financialDocument = FinancialDocument.Create(
             order.Id,
@@ -21,13 +20,13 @@ public static class OrderPaymentFinancialDocumentBuilder
             string.Empty,
             financialYearId);
 
-        var withoutVatPrice = companySlice.FinalAmount - companySlice.VatAmount;
+        var withoutVatPrice = paymentSlice.FinalAmount - paymentSlice.VatAmount;
 
         financialDocument.AddDetail(FinancialDocumentDetail.Create(
             AccountPartyType.Customer,
             OrderPaymentConstants.CustomerChartOfAccountId,
             financialDocument.Id,
-            companySlice.FinalAmount,
+            paymentSlice.FinalAmount,
             0m,
             $"بدهکار شدن مشتری بابت {trackingDescription}"));
 
@@ -44,15 +43,15 @@ public static class OrderPaymentFinancialDocumentBuilder
             OrderPaymentConstants.VatChartOfAccountId,
             financialDocument.Id,
             0m,
-            companySlice.VatAmount,
+            paymentSlice.VatAmount,
             $"بستانکار شدن مالیات بابت {trackingDescription}"));
 
-        if (companySlice.VatAmount > 0)
+        if (paymentSlice.VatAmount > 0)
         {
             var orderVat = OrderVat.Create(
                 order.Id,
                 financialDocument.Id,
-                companySlice.VatAmount,
+                paymentSlice.VatAmount,
                 isFullyPaid ? OrderVatStatusType.Paid : OrderVatStatusType.Pending);
 
             financialDocument.OrderVats.Add(orderVat);

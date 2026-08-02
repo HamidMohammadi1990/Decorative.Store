@@ -14,8 +14,7 @@ public class CreateFinancialYearHandler
         var financialYear = FinancialYear.Create(
             request.Name,
             request.StartDate,
-            request.EndDate,
-            request.CompanyId);
+            request.EndDate);
 
         financialYearRepository.Add(financialYear);
 

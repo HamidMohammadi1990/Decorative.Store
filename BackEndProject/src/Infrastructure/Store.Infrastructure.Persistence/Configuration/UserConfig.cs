@@ -62,12 +62,6 @@ internal class UserConfig : IEntityTypeConfiguration<User>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasMany(x => x.Companies)
-            .WithOne(x => x.User)
-            .HasForeignKey(x => x.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasMany(x => x.UserAddresses)
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId)
@@ -137,12 +131,6 @@ internal class UserConfig : IEntityTypeConfiguration<User>
             .HasMany(x => x.BlogPostApprovedComments)
             .WithOne(x => x.ApprovedByUser)
             .HasForeignKey(x => x.ApprovedByUserId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
-            .HasMany(x => x.CompanyComments)
-            .WithOne(x => x.User)
-            .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder

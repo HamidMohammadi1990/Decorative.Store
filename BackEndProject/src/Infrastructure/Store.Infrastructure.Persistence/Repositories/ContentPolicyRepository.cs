@@ -46,15 +46,6 @@ public class ContentPolicyRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<List<int>> GetCompanyIdsByOwnerUserIdAsync(int userId, CancellationToken cancellationToken = default)
-    {
-        return await Context.Company
-            .AsNoTracking()
-            .Where(x => x.UserId == userId && x.IsActive)
-            .Select(x => x.Id)
-            .ToListAsync(cancellationToken);
-    }
-
     public async Task<UserContentPolicyContextData?> GetUserContentPolicyContextAsync(int userId, CancellationToken cancellationToken = default)
     {
         var userExists = await Context.User
@@ -64,8 +55,7 @@ public class ContentPolicyRepository
             return null;
 
         var roles = await GetUserRolesAsync(userId, cancellationToken);
-        var companyIds = await GetCompanyIdsByOwnerUserIdAsync(userId, cancellationToken);
-        return new UserContentPolicyContextData(roles, companyIds);
+        return new UserContentPolicyContextData(roles);
     }
 
     public async Task<ContentPolicyResolutionResult> ResolveActivePoliciesAsync(

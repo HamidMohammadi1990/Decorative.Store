@@ -15,18 +15,9 @@ public class FinancialYearConfig : IEntityTypeConfiguration<FinancialYear>
             .IsRequired();
 
         builder
-            .HasOne(x => x.Company)
-            .WithMany(x => x.FinancialYears)
-            .HasForeignKey(x => x.CompanyId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasMany(x => x.FinancialDocuments)
             .WithOne(x => x.FinancialYear)
             .HasForeignKey(x => x.FinancialYearId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        builder
-            .HasIndex(x => x.CompanyId);
     }
 }

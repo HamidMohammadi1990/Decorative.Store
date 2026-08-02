@@ -40,12 +40,6 @@ internal class OrderItemConfig : IEntityTypeConfiguration<OrderItem>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(x => x.Company)
-            .WithMany(p => p.OrderItems)
-            .HasForeignKey(x => x.CompanyId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
            .HasOne(d => d.DeliveryType)
            .WithMany(p => p.OrderItems)
            .HasForeignKey(x => x.DeliveryTypeId)
@@ -74,8 +68,5 @@ internal class OrderItemConfig : IEntityTypeConfiguration<OrderItem>
 
         builder
             .HasIndex(x => x.ProductId);
-
-        builder
-            .HasIndex(x => x.CompanyId);
     }
 }

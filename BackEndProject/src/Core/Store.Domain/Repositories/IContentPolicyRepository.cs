@@ -13,7 +13,6 @@ public interface IContentPolicyRepository
     Task<ContentPolicy?> FindWithRulesAsync(int id, CancellationToken cancellationToken = default);
     Task<PagedResult<ContentPolicy>> GetAllAsync(GetAllContentPolicyRequestDto request, CancellationToken cancellationToken = default);
     Task<List<UserRolePolicyDto>> GetUserRolesAsync(int userId, CancellationToken cancellationToken = default);
-    Task<List<int>> GetCompanyIdsByOwnerUserIdAsync(int userId, CancellationToken cancellationToken = default);
     Task<UserContentPolicyContextData?> GetUserContentPolicyContextAsync(int userId, CancellationToken cancellationToken = default);
     Task<ContentPolicyResolutionResult> ResolveActivePoliciesAsync(
         string entityType,

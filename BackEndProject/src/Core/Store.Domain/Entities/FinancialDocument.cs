@@ -19,7 +19,6 @@ public class FinancialDocument : BaseEntity
     public FinancialDocument RefundedFinancialDocument { get; set; } = default!;
     public ICollection<Expense> Expenses { get; set; } = default!;
     public ICollection<OrderVat> OrderVats { get; set; } = [];
-    public ICollection<PosTransaction> PosTransactions { get; set; } = default!;
     public ICollection<BankTransaction> BankTransactions { get; set; } = [];
     public ICollection<OrderCommission> OrderCommissions { get; set; } = default!;
     public ICollection<WalletTransaction> WalletTransactions { get; set; } = [];

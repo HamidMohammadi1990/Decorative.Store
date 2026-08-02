@@ -49,12 +49,6 @@ public class FinancialDocumentConfig : IEntityTypeConfiguration<FinancialDocumen
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasMany(x => x.PosTransactions)
-            .WithOne(x => x.FinancialDocument)
-            .HasForeignKey(x => x.FinancialDocumentId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasMany(x => x.BankTransactions)
             .WithOne(x => x.FinancialDocument)
             .HasForeignKey(x => x.FinancialDocumentId)

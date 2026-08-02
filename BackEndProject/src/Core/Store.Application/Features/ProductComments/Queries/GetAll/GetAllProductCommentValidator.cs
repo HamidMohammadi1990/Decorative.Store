@@ -10,7 +10,6 @@ public class GetAllProductCommentValidator : AbstractValidator<GetAllProductComm
         RuleFor(x => x.Pagination).MustBeValidPagination();
         RuleFor(x => x.ProductId).MustBeValidOptionalEntityId();
         RuleFor(x => x.UserId).MustBeValidOptionalEntityId();
-        RuleFor(x => x.CompanyId).MustBeValidOptionalEntityId();
         RuleFor(x => x.CommentTopicId).MustBeValidOptionalEntityId();
     }
 }

@@ -30,12 +30,6 @@ internal class BankTransactionConfig : IEntityTypeConfiguration<BankTransaction>
            .OnDelete(DeleteBehavior.Restrict);
 
         builder
-           .HasOne(x => x.Company)
-           .WithMany(x => x.BankTransactions)
-           .HasForeignKey(x => x.CompanyId)
-           .OnDelete(DeleteBehavior.Restrict);
-
-        builder
            .HasOne(x => x.BankAccount)
            .WithMany(x => x.BankTransactions)
            .HasForeignKey(x => x.BankAccountId)
@@ -61,8 +55,5 @@ internal class BankTransactionConfig : IEntityTypeConfiguration<BankTransaction>
 
         builder
             .HasIndex(x => x.UserId);
-
-        builder
-            .HasIndex(x => x.CompanyId);
     }
 }

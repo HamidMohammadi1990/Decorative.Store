@@ -18,9 +18,5 @@ public class CreateFinancialYearValidator : AbstractValidator<CreateFinancialYea
         RuleFor(x => x.StartDate)
             .LessThan(x => x.EndDate)
             .WithMessage(MessageKeys.StartDateMustBeBeforeEndDate);
-
-        RuleFor(x => x.CompanyId)
-            .GreaterThan(0)
-            .WithMessage(MessageKeys.InvalidIdValidator);
     }
 }

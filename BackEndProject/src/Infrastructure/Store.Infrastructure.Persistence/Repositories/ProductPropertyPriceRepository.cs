@@ -23,11 +23,9 @@ public class ProductPropertyPriceRepository
 
         var productPropertyPrices =
             from productPropertyPrice in productPropertyPriceSource
-            join company in Context.Company on productPropertyPrice.CompanyId equals company.Id
-            join user in Context.User on company.UserId equals user.Id
             join productProperty in Context.ProductProperty on productPropertyPrice.ProductPropertyId equals productProperty.Id
             join product in Context.Product on productProperty.ProductId equals product.Id
-            select new { productPropertyPrice, company, user, product };
+            select new { productPropertyPrice, product };
 
         productPropertyPrices = productPropertyPrices.ApplyQueryFilters(request);
 
@@ -37,12 +35,8 @@ public class ProductPropertyPriceRepository
             {
                 Id = x.productPropertyPrice.Id,
                 Price = x.productPropertyPrice.Price,
-                UserId = x.company.UserId,
-                UserFirstName = x.user.FirstName,
-                UserLastName = x.user.LastName,
                 IsActive = x.productPropertyPrice.IsActive,
                 ProductId = x.product.Id,
-                CompanyId = x.productPropertyPrice.CompanyId,
                 ProductTitle = x.product.Translations
                         .Where(t => t.LanguageId == languageId)
                         .Select(t => t.Title)

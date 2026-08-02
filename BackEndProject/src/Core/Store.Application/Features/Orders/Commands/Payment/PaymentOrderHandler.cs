@@ -89,22 +89,13 @@ public class PaymentOrderHandler
         if (order.FinalPrice <= 0)
             return ErrorModel.Create("OrderIsEmpty");
 
-        var companySlices = OrderPaymentCompanyAllocator.Allocate(order, OrderPaymentConstants.VatRate);
-        if (companySlices.Count == 0)
+        var paymentSlice = OrderPaymentAllocator.Allocate(order);
+        if (paymentSlice is null)
             return ErrorModel.Create("OrderIsEmpty");
 
-        var financialYearsByCompany = new Dictionary<int, int>(companySlices.Count);
-        foreach (var companySlice in companySlices)
-        {
-            if (financialYearsByCompany.ContainsKey(companySlice.CompanyId))
-                continue;
-
-            var financialYear = await financialYearRepository.GetByCompanyIdAsync(companySlice.CompanyId);
-            if (financialYear is null)
-                return ErrorModel.Create("FinancialYearNotFound");
-
-            financialYearsByCompany[companySlice.CompanyId] = financialYear.Id;
-        }
+        var financialYear = await financialYearRepository.GetFirstActiveAsync(cancellationToken);
+        if (financialYear is null)
+            return ErrorModel.Create("FinancialYearNotFound");
 
         Wallet? wallet = null;
         if (request.PaymentOption is PaymentOptionType.WalletOnly or PaymentOptionType.WalletAndBank)
@@ -136,43 +127,28 @@ public class PaymentOrderHandler
 
         var isFullyPaid = paymentAmounts.BankPaymentAmount == 0;
         var trackingDescription = $"سفارش با کد پیگیری {order.TrackingCode}";
-        var sliceWeights = companySlices.Select(slice => slice.FinalAmount).ToList();
-        var walletShares = OrderPaymentCompanyAllocator.DistributeAmount(
-            paymentAmounts.WalletDeduction,
-            sliceWeights);
 
-        FinancialDocument? primaryFinancialDocument = null;
-        BankTransaction? bankTransaction = null;
+        var financialDocument = OrderPaymentFinancialDocumentBuilder.Build(
+            order,
+            paymentSlice,
+            financialYear.Id,
+            isFullyPaid);
 
-        for (var index = 0; index < companySlices.Count; index++)
+        if (paymentAmounts.WalletDeduction > 0)
         {
-            var companySlice = companySlices[index];
-            var financialDocument = OrderPaymentFinancialDocumentBuilder.Build(
-                order,
-                companySlice,
-                financialYearsByCompany[companySlice.CompanyId],
-                isFullyPaid);
+            wallet!.DecreaseBalance(paymentAmounts.WalletDeduction);
 
-            primaryFinancialDocument ??= financialDocument;
+            var walletTransaction = WalletTransaction.CreateDecremental(
+                wallet.Id,
+                paymentAmounts.WalletDeduction,
+                $"پرداخت از کیف پول بابت {trackingDescription}",
+                WalletTransactionStatusType.Completed,
+                userId);
 
-            var walletShare = walletShares[index];
-            if (walletShare > 0)
-            {
-                wallet!.DecreaseBalance(walletShare);
-
-                var walletTransaction = WalletTransaction.CreateDecremental(
-                    wallet.Id,
-                    walletShare,
-                    $"پرداخت از کیف پول بابت {trackingDescription} (شرکت {companySlice.CompanyId})",
-                    WalletTransactionStatusType.Completed,
-                    userId);
-
-                financialDocument.AddWalletTransaction(walletTransaction);
-            }
-
-            financialDocumentRepository.Add(financialDocument);
+            financialDocument.AddWalletTransaction(walletTransaction);
         }
 
+        BankTransaction? bankTransaction = null;
         if (paymentAmounts.BankPaymentAmount > 0)
         {
             bankTransaction = BankTransaction.Create(
@@ -183,8 +159,10 @@ public class PaymentOrderHandler
                 string.Empty,
                 $"پرداخت بابت {trackingDescription}");
 
-            primaryFinancialDocument!.AddBankTransaction(bankTransaction);
+            financialDocument.AddBankTransaction(bankTransaction);
         }
+
+        financialDocumentRepository.Add(financialDocument);
 
         if (appliedDiscount is not null)
             order.ConsumeDiscountUsage(appliedDiscount);

@@ -11,7 +11,5 @@ public interface IFinancialYearRepository
     Task<PagedResult<FinancialYear>> GetAllAsync(GetAllFinancialYearRequestDto request);
     ValueTask<FinancialYear?> FindAsync(int id, CancellationToken cancellationToken = default);
     Task<FinancialYear?> GetAsNoTrackingAsync(int id, CancellationToken cancellationToken = default);
-    Task<FinancialYear?> GetByCompanyIdAsync(int companyId);
-
     Task<FinancialYear?> GetFirstActiveAsync(CancellationToken cancellationToken = default);
 }

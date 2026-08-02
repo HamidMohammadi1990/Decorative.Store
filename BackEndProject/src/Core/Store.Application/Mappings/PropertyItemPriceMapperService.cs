@@ -15,7 +15,6 @@ public class PropertyItemPriceMapperService : IPropertyItemPriceMapperService
         return new GetAllPropertyItemPriceRequestDto
         {
             IsActive = model.IsActive,
-            CompanyId = model.CompanyId,
             Pagination = model.Pagination,
             PropertyId = model.PropertyId,
             PropertyItemId = model.PropertyItemId,
@@ -32,9 +31,7 @@ public class PropertyItemPriceMapperService : IPropertyItemPriceMapperService
                 Id = x.Id,
                 IsActive = x.IsActive,
                 Price = x.Price,
-                CompanyId = x.CompanyId,
                 PropertyId = x.PropertyId,
-                CompanyName = x.CompanyName,
                 CreatedOnUtc = x.CreatedOnUtc,
                 PropertyTitle = x.PropertyTitle,
                 PropertyItemId = x.PropertyItemId,
@@ -55,7 +52,6 @@ public class PropertyItemPriceMapperService : IPropertyItemPriceMapperService
             Id = model.Id,
             Price = model.Price,
             IsActive = model.IsActive,
-            CompanyId = model.CompanyId,
             CreatedOnUtc = model.CreatedOnUtc,
             PropertyItemId = model.PropertyItemId,
             CooperationPrice = model.CooperationPrice

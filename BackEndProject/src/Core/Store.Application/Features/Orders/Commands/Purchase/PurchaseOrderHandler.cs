@@ -26,7 +26,7 @@ public class PurchaseOrderHandler
     private readonly IPropertyRepository propertyRepository;
     private readonly IOrderMapperService orderMapperService;
     private readonly ICurrentUserContext currentUser;
-    private readonly IProductPriceRepository productPriceRepository;
+    private readonly IProductRepository productRepository;
     private readonly IProductOrderItemAttachmentTypeRepository productOrderItemAttachmentTypeRepository;
     private readonly IDiscountRepository discountRepository;
     private readonly IOrderTrackingCodeGenerator trackingCodeGenerator;
@@ -39,7 +39,7 @@ public class PurchaseOrderHandler
         IPropertyRepository propertyRepository,
         IOrderMapperService orderMapperService,
         ICurrentUserContext currentUser,
-        IProductPriceRepository productPriceRepository,
+        IProductRepository productRepository,
         IProductOrderItemAttachmentTypeRepository productOrderItemAttachmentTypeRepository,
         IDiscountRepository discountRepository,
         IOrderTrackingCodeGenerator trackingCodeGenerator)
@@ -51,7 +51,7 @@ public class PurchaseOrderHandler
         this.propertyRepository = propertyRepository;
         this.orderMapperService = orderMapperService;
         this.currentUser = currentUser;
-        this.productPriceRepository = productPriceRepository;
+        this.productRepository = productRepository;
         this.productOrderItemAttachmentTypeRepository = productOrderItemAttachmentTypeRepository;
         this.discountRepository = discountRepository;
         this.trackingCodeGenerator = trackingCodeGenerator;
@@ -60,7 +60,7 @@ public class PurchaseOrderHandler
     public async Task<OperationResult<PurchaseOrderResponse>> Handle(PurchaseOrderRequest request, CancellationToken cancellationToken)
     {
         var userIsCooperation = currentUser.IsCooperation;
-        var productProperties = await propertyRepository.GetByProductIdAsync(request.ProductId, request.CompanyId);
+        var productProperties = await propertyRepository.GetByProductIdAsync(request.ProductId, cancellationToken);
         var orderProperties = orderMapperService.ToOrderItemProperties(request.Properties, productProperties, userIsCooperation);
 
         var validateProperties = PurchaseOrderPropertyValidator.Validate(productProperties, orderProperties);
@@ -72,9 +72,12 @@ public class PurchaseOrderHandler
         if (validationFiles.Length != 0)
             return validationFiles;
 
-        var productPrice = await productPriceRepository.GetPriceByProductId(request.ProductId, request.CompanyId);
-        var orderProductPrice = (!userIsCooperation ? productPrice?.Price.Amount : productPrice?.CooperationPrice.Amount) ?? 0;
-        var orderItem = OrderItem.Create(request.ProductId, request.CompanyId, request.Quantity, request.PostTypeId,
+        var product = await productRepository.GetAsNoTrackingAsync(request.ProductId, cancellationToken);
+        if (product is null)
+            return ErrorModel.Create("InvalidId");
+
+        var orderProductPrice = product.Price;
+        var orderItem = OrderItem.Create(request.ProductId, request.Quantity, request.PostTypeId,
                                          request.DeliveryTypeId, request.UserAddressId,
                                          request.Description, request.EmergencyPhoneNumber,
                                          orderProductPrice, request.IsNeedToDesign);

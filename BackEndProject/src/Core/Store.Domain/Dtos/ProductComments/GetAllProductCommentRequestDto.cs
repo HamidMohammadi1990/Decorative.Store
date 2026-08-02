@@ -14,9 +14,6 @@ public record GetAllProductCommentRequestDto : IContentPolicyQueryDto<ProductCom
     [QueryFilter(MemberPath = "productComment.UserId")]
     public int? UserId { get; init; }
 
-    [QueryFilter(MemberPath = "productComment.CompanyId")]
-    public int? CompanyId { get; init; }
-
     [QueryFilter(MemberPath = "productComment.CommentTopicId")]
     public int? CommentTopicId { get; init; }
 

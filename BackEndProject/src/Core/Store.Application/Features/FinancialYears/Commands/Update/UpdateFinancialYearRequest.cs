@@ -9,9 +9,6 @@ public record UpdateFinancialYearRequest : IRequest<OperationResult>
     [JsonConverter(typeof(FinancialYearEncryptor))]
     public int Id { get; init; }
 
-    [JsonConverter(typeof(CompanyEncryptor))]
-    public int CompanyId { get; init; }
-
     public string Name { get; init; } = default!;
     public DateTime StartDate { get; init; }
     public DateTime EndDate { get; init; }

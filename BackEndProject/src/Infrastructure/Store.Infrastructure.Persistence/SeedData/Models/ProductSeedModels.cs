@@ -21,6 +21,18 @@ internal sealed class ProductSeedJsonItem
 
     [JsonPropertyName("subcategorySlug")]
     public string? SubCategorySlug { get; set; }
+
+    [JsonPropertyName("price")]
+    public ProductSeedMoney? Price { get; set; }
+
+    [JsonPropertyName("compareAtPrice")]
+    public ProductSeedMoney? CompareAtPrice { get; set; }
+}
+
+internal sealed class ProductSeedMoney
+{
+    [JsonPropertyName("amount")]
+    public decimal Amount { get; set; }
 }
 
 internal sealed class ProductSeedImage

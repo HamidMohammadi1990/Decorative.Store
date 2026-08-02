@@ -15,6 +15,4 @@ public record SearchProductCommentResponseDto
     public int AffordableRating { get; init; }
     public int ProductId { get; init; }
     public string ProductTitle { get; init; } = default!;
-    public int CompanyId { get; init; }
-    public string CompanyName { get; init; } = default!;    
 }

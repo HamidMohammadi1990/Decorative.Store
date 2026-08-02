@@ -9,12 +9,6 @@ namespace Edition.Application.Features.ProductPropertyPrices.Queries;
 
 public record GetAllProductPropertyPriceRequest : ContentPolicyRequest<ProductPropertyPrice>, IRequest<OperationResult<PagedResult<GetAllProductPropertyPriceResponse>>>
 {
-    [JsonConverter(typeof(CompanyNullableEncryptor))]
-    public int? CompanyId { get; init; }
-
-    [JsonConverter(typeof(UserNullableEncryptor))]
-    public int? UserId { get; init; }
-
     [JsonConverter(typeof(ProductPropertyNullableEncryptor))]
     public int? ProductPropertyId { get; init; }
 

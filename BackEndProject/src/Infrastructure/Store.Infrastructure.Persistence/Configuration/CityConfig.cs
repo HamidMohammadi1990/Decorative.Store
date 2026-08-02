@@ -30,12 +30,6 @@ internal class CityConfig : IEntityTypeConfiguration<City>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasMany(x => x.Companies)
-            .WithOne(x => x.City)
-            .HasForeignKey(x => x.CityId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasMany(x => x.UserAddresses)
             .WithOne(x => x.City)
             .HasForeignKey(x => x.CityId)

@@ -73,7 +73,7 @@ public static class ContentPolicyValueResolver
     public static object? ResolveContextCollection(string path, ContentPolicyContext context)
         => ResolveContextValue(path, context);
 
-    private static readonly ContentPolicyContext ValidationContext = new(1, [1, 2], [1]);
+    private static readonly ContentPolicyContext ValidationContext = new(1, [1, 2]);
 
     private static object? ResolveContextScalar(string path, Type targetType, ContentPolicyContext context)
     {

@@ -40,12 +40,6 @@ public class ChequeTransactionConfig : IEntityTypeConfiguration<ChequeTransactio
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(x => x.Company)
-            .WithMany(x => x.ChequeTransactions)
-            .HasForeignKey(x => x.CompanyId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasOne(x => x.FinancialDocument)
             .WithMany(x => x.ChequeTransactions)
             .HasForeignKey(x => x.FinancialDocumentId)
@@ -59,9 +53,6 @@ public class ChequeTransactionConfig : IEntityTypeConfiguration<ChequeTransactio
 
         builder
             .HasIndex(x => x.UserId);
-
-        builder
-            .HasIndex(x => x.CompanyId);
 
         builder
             .HasIndex(x => x.FinancialDocumentId);

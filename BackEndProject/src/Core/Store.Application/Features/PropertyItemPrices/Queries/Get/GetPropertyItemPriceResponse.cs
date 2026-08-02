@@ -8,8 +8,6 @@ public record GetPropertyItemPriceResponse
     [JsonConverter(typeof(PropertyItemPriceEncryptor))]
     public int Id { get; init; }
 
-    public int CompanyId { get; init; }
-
     [JsonConverter(typeof(PropertyItemEncryptor))]
     public int PropertyItemId { get; init; }
 

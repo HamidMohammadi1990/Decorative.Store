@@ -11,7 +11,4 @@ public record CreateWalletRequest : IRequest<OperationResult<CreateWalletRespons
 
     public string Title { get; init; } = default!;
     public bool IsDefault { get; init; }
-
-    [JsonConverter(typeof(CompanyEncryptor))]
-    public int? CompanyId { get; init; }
 }

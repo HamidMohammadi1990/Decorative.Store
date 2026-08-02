@@ -25,11 +25,10 @@ public class PropertyItemPriceRepository
 
         var itemPrices =
             from propertyItemPrice in propertyItemPriceSource
-            join company in Context.Company on propertyItemPrice.CompanyId equals company.Id
             join propertyItem in Context.PropertyItem on propertyItemPrice.PropertyItemId equals propertyItem.Id
             join property in Context.Property on propertyItem.PropertyId equals property.Id
             join propertyCategory in Context.PropertyCategory on property.PropertyCategoryId equals propertyCategory.Id
-            select new { propertyItemPrice, company, propertyItem, property, propertyCategory };
+            select new { propertyItemPrice, propertyItem, property, propertyCategory };
 
         itemPrices = itemPrices.ApplyQueryFilters(request);
 
@@ -40,9 +39,7 @@ public class PropertyItemPriceRepository
                 Id = x.propertyItemPrice.Id,
                 Price = x.propertyItemPrice.Price,
                 IsActive = x.propertyItemPrice.IsActive,
-                CompanyId = x.propertyItemPrice.CompanyId,
                 PropertyId = x.property.Id,
-                CompanyName = x.company.Name,
                 CreatedOnUtc = x.propertyItemPrice.CreatedOnUtc,
                 PropertyTitle = x.property.Translations
                         .Where(t => t.LanguageId == languageId)

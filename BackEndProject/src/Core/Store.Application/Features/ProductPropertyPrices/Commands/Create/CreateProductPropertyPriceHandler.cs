@@ -11,7 +11,7 @@ public class CreateProductPropertyPriceHandler
 {
     public async Task<OperationResult<CreateProductPropertyPriceResponse>> Handle(CreateProductPropertyPriceRequest request, CancellationToken cancellationToken)
     {
-        var productPropertyPrice = ProductPropertyPrice.Create(request.CompanyId, request.ProductPropertyId, request.Price, request.CooperationPrice);
+        var productPropertyPrice = ProductPropertyPrice.Create(request.ProductPropertyId, request.Price, request.CooperationPrice);
         productPropertyPriceRepository.Add(productPropertyPrice);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);

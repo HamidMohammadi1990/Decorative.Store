@@ -8,10 +8,6 @@ public class DeliveryOption : BaseEntity
     public int DeliveryDays { get; private set; }
     public bool IsActive { get; private set; } = true;
 
-
-    public ICollection<ProductPriceDeliveryOption> ProductPriceDeliveryOptions { get; private set; } = default!;
-
-
     public static DeliveryOption Create(string title, int deliveryDays)
         => new()
         {

@@ -8,7 +8,6 @@ public class OrderItem : BaseEntity
     public int OrderId { get; private set; }
     public int Quantity { get; private set; }
     public int ProductId { get; private set; }
-    public int CompanyId { get; private set; }
     public decimal ProductPrice { get; private set; }
     public bool IsNeedToDesign { get; private set; }
     public int DeliveryTypeId { get; private set; }
@@ -22,7 +21,6 @@ public class OrderItem : BaseEntity
 
     public Order Order { get; private set; } = default!;
     public Product Product { get; private set; } = default!;
-    public Company Company { get; private set; } = default!;
     public PostType PostType { get; private set; } = default!;
     public UserAddress UserAddress { get; private set; } = default!;
     public DeliveryType DeliveryType { get; private set; } = default!;
@@ -30,12 +28,11 @@ public class OrderItem : BaseEntity
     public ICollection<OrderItemAttachment> OrderItemAttachments { get; private set; } = default!;
 
 
-    public static OrderItem Create(int productId, int companyId, int quantity, int? postTypeId, int deliveryTypeId, int userAddressId,
+    public static OrderItem Create(int productId, int quantity, int? postTypeId, int deliveryTypeId, int userAddressId,
                                    string? description, string? emergencyPhoneNumber, decimal productPrice, bool isNeedToDesign)
         => new()
         {
             ProductId = productId,
-            CompanyId = companyId,
             PostTypeId = postTypeId,
             DeliveryTypeId = deliveryTypeId,
             UserAddressId = userAddressId,

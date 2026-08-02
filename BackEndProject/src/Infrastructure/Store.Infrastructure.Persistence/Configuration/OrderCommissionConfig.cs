@@ -19,12 +19,6 @@ public class OrderCommissionConfig : IEntityTypeConfiguration<OrderCommission>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(x => x.Company)
-            .WithMany(x => x.OrderCommissions)
-            .HasForeignKey(x => x.CompanyId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasOne(x => x.FinancialDocument)
             .WithMany(x => x.OrderCommissions)
             .HasForeignKey(x => x.FinancialDocumentId)
@@ -32,9 +26,6 @@ public class OrderCommissionConfig : IEntityTypeConfiguration<OrderCommission>
 
         builder
             .HasIndex(x => x.OrderId);
-
-        builder
-            .HasIndex(x => x.CompanyId);
 
         builder
             .HasIndex(x => x.FinancialDocumentId);

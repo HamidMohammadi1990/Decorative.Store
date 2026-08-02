@@ -16,7 +16,6 @@ public class ProductCommentMapperService : IProductCommentMapperService
         {
             Id = model.Id,
             UserId = model.UserId,
-            CompanyId = model.CompanyId,
             ProductId = model.ProductId,
             CommentRate = model.CommentRate,
             Description = model.Description,
@@ -35,8 +34,6 @@ public class ProductCommentMapperService : IProductCommentMapperService
                 Id = x.Id,
                 UserId = x.UserId,
                 ProductId = x.ProductId,
-                CompanyId = x.CompanyId,
-                CompanyName = x.CompanyName,
                 Description = x.Description,
                 CommentRate = x.CommentRate,
                 QualityRating = x.CommentRate,
@@ -62,8 +59,6 @@ public class ProductCommentMapperService : IProductCommentMapperService
                 Id = x.Id,
                 UserId = x.UserId,
                 ProductId = x.ProductId,
-                CompanyId = x.CompanyId,
-                CompanyName = x.CompanyName,
                 Description = x.Description,
                 CommentRate = x.CommentRate,
                 QualityRating = x.CommentRate,
@@ -86,7 +81,6 @@ public class ProductCommentMapperService : IProductCommentMapperService
         {
             UserId = model.UserId,
             IsActive = model.IsActive,
-            CompanyId = model.CompanyId,
             ProductId = model.ProductId,
             Pagination = model.Pagination,
             CommentTopicId = model.CommentTopicId
@@ -98,7 +92,6 @@ public class ProductCommentMapperService : IProductCommentMapperService
         return new SearchProductCommentRequestDto
         {
             UserId = model.UserId,            
-            CompanyId = model.CompanyId,
             ProductId = model.ProductId,
             Pagination = model.Pagination,
             CommentTopicId = model.CommentTopicId

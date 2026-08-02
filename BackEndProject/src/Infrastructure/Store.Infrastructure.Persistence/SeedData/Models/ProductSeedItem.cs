@@ -9,6 +9,8 @@ public sealed record ProductSeedItem(
     string FaDescription,
     string EnDescription,
     string SubCategorySlug,
+    decimal Price,
+    decimal? CompareAtPrice,
     string ImageBaseName,
     string FaImageTitle,
     string EnImageTitle);

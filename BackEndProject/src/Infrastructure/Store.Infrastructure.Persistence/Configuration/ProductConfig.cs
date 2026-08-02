@@ -15,6 +15,14 @@ internal class ProductConfig : IEntityTypeConfiguration<Product>
             .IsRequired();
 
         builder
+            .Property(x => x.Price)
+            .HasPrecision(18, 2);
+
+        builder
+            .Property(x => x.CompareAtPrice)
+            .HasPrecision(18, 2);
+
+        builder
             .HasOne(x => x.SubCategory)
             .WithMany(x => x.Products)
             .HasForeignKey(x => x.SubCategoryId)
@@ -45,12 +53,6 @@ internal class ProductConfig : IEntityTypeConfiguration<Product>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasMany(x => x.ProductPrices)
-            .WithOne(x => x.Product)
-            .HasForeignKey(x => x.ProductId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasMany(x => x.ProductProperties)
             .WithOne(x => x.Product)
             .HasForeignKey(x => x.ProductId)
@@ -58,12 +60,6 @@ internal class ProductConfig : IEntityTypeConfiguration<Product>
 
         builder
             .HasMany(x => x.ProductDiscounts)
-            .WithOne(x => x.Product)
-            .HasForeignKey(x => x.ProductId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
-            .HasMany(x => x.CompanyProducts)
             .WithOne(x => x.Product)
             .HasForeignKey(x => x.ProductId)
             .OnDelete(DeleteBehavior.Restrict);

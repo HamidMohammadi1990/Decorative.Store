@@ -11,7 +11,7 @@ public class CreatePropertyItemPriceHandler
 {
     public async Task<OperationResult<CreatePropertyItemPriceResponse>> Handle(CreatePropertyItemPriceRequest request, CancellationToken cancellationToken)
     {
-        var propertyItemPrice = PropertyItemPrice.Create(request.CompanyId, request.PropertyItemId, request.Price, request.CooperationPrice);
+        var propertyItemPrice = PropertyItemPrice.Create(request.PropertyItemId, request.Price, request.CooperationPrice);
 
         propertyItemPriceRepository.Add(propertyItemPrice);
 

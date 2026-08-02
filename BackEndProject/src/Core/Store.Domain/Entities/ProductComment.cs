@@ -11,22 +11,17 @@ public class ProductComment : BaseEntity
     public int QualityRating { get; private set; }
     public int AffordableRating { get; private set; }
     public int ProductId { get; private set; }
-    public int CompanyId { get; private set; }
     public bool IsActive { get; private set; }
 
-
     public User User { get; private set; } = default!;
-    public Company Company { get; private set; } = default!;
     public Product Product { get; private set; } = default!;
     public CommentTopic CommentTopic { get; private set; } = default!;
 
-
-    public static ProductComment Create(int userId, int productId, int companyId, int commentRate, int qualityRating,
+    public static ProductComment Create(int userId, int productId, int commentRate, int qualityRating,
                                         int commentTopicId, string description, int affordableRating)
         => new()
         {
             UserId = userId,
-            CompanyId = companyId,
             ProductId = productId,
             CommentRate = commentRate,
             Description = description,

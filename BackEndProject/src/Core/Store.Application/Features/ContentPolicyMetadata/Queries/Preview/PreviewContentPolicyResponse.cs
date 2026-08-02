@@ -13,7 +13,6 @@ public record PreviewContentPolicyResponse
     public bool BypassContentPolicy { get; init; }
     public bool RequireContentPolicy { get; init; }
     public IReadOnlyList<UserRolePolicyDto> Roles { get; init; } = [];
-    public IReadOnlyList<int> CompanyIds { get; init; } = [];
     public IReadOnlyList<ContentPolicyPreviewPolicyDto> AppliedPolicies { get; init; } = [];
     public IReadOnlyList<ContentPolicyPreviewPolicyDto> ExcludedRolePolicies { get; init; } = [];
     public int TotalEntityCount { get; init; }

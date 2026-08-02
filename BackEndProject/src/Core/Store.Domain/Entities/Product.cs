@@ -7,6 +7,8 @@ public class Product : BaseEntity
 {
     public bool IsActive { get; private set; } = true;
     public string ProductCode { get; private set; } = default!;
+    public decimal Price { get; private set; }
+    public decimal? CompareAtPrice { get; private set; }
     public DateTime CreatedOnUtc { get; private set; } = DateTime.UtcNow;
     public int SubCategoryId { get; private set; }
 
@@ -14,8 +16,6 @@ public class Product : BaseEntity
     public ICollection<OrderItem> OrderItems { get; private set; } = default!;
     public ICollection<ProductFile> ProductFiles { get; private set; } = default!;
     public ICollection<Discount> ProductDiscounts { get; private set; } = default!;
-    public ICollection<ProductPrice> ProductPrices { get; private set; } = default!;
-    public ICollection<CompanyProduct> CompanyProducts { get; private set; } = default!;
     public ICollection<ProductComment> ProductComments { get; private set; } = default!;
     public ICollection<ProductFeature> ProductFeatures { get; private set; } = [];
     public ICollection<ProductProperty> ProductProperties { get; private set; } = default!;
@@ -23,11 +23,13 @@ public class Product : BaseEntity
     public ICollection<ProductOrderItemAttachmentType> ProductOrderItemAttachmentTypes { get; private set; } = default!;
     public ICollection<ProductTranslation> Translations { get; private set; } = [];
 
-    public static Product Create(string productCode, int subCategoryId)
+    public static Product Create(string productCode, int subCategoryId, decimal price, decimal? compareAtPrice = null)
         => new()
         {
             ProductCode = productCode,
-            SubCategoryId = subCategoryId
+            SubCategoryId = subCategoryId,
+            Price = price,
+            CompareAtPrice = compareAtPrice
         };
 
     public ProductTranslation UpsertTranslation(int languageId, string title, string slug, string description)
@@ -48,6 +50,8 @@ public class Product : BaseEntity
         bool isActive,
         string productCode,
         int subCategoryId,
+        decimal price,
+        decimal? compareAtPrice,
         int languageId,
         string title,
         string slug,
@@ -56,12 +60,20 @@ public class Product : BaseEntity
         IsActive = isActive;
         ProductCode = productCode;
         SubCategoryId = subCategoryId;
+        Price = price;
+        CompareAtPrice = compareAtPrice;
         UpsertTranslation(languageId, title, slug, description);
     }
 
     public void DeActive()
     {
         IsActive = false;
+    }
+
+    public void SetPricing(decimal price, decimal? compareAtPrice = null)
+    {
+        Price = price;
+        CompareAtPrice = compareAtPrice;
     }
 
     public void AddFeature(ProductFeature productFeature)

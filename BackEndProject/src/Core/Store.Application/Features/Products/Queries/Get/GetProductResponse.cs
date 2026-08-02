@@ -13,4 +13,6 @@ public record GetProductResponse
     public string Description { get; init; } = default!;
     public DateTime CreationDate { get; init; }
     public string ProductCode { get; init; } = default!;
+    public decimal Price { get; init; }
+    public decimal? CompareAtPrice { get; init; }
 }

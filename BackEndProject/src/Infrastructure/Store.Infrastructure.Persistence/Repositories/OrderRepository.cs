@@ -149,7 +149,6 @@ public class OrderRepository
             where order.Id == orderId && order.UserId == userId
             join item in Context.OrderItem on order.Id equals item.OrderId
             join product in Context.Product on item.ProductId equals product.Id
-            join company in Context.Company on item.CompanyId equals company.Id
             join deliveryType in Context.DeliveryType on item.DeliveryTypeId equals deliveryType.Id
             join postType in Context.PostType on item.PostTypeId equals postType.Id into postTypeJoin
             from postType in postTypeJoin.DefaultIfEmpty()
@@ -181,12 +180,10 @@ public class OrderRepository
                 CityName = city.Name,
                 AddressId = address.Id,
                 ProductId = product.Id,
-                CompanyId = company.Id,
                 OrderTitle = order.Title,
                 address.RecipientLastName,
                 address.RecipientFirstName,
                 PostTitle = postType.Title,
-                CompanyCode = company.Code,
                 ProductSlug = product.Translations
                         .Where(t => t.LanguageId == languageId)
                         .Select(t => t.Slug)
@@ -196,7 +193,6 @@ public class OrderRepository
                         .Select(t => t.Slug)
                         .FirstOrDefault()
                     ?? string.Empty,
-                CompanyName = company.Name,
                 OrderStatus = order.Status,
                 ProductTitle = product.Translations
                         .Where(t => t.LanguageId == languageId)
@@ -242,7 +238,6 @@ public class OrderRepository
                         .Select(t => t.Title)
                         .FirstOrDefault()
                     ?? string.Empty,
-                CompanyPhoneNumber = company.PhoneNumber,
                 AttachmentFileName = orderItemAttachment.FileName,
                 ItemIsNeedToDesign = item.IsNeedToDesign,
                 AttachmentTypeTitle = orderItemAttachmentType.Title,
@@ -290,13 +285,6 @@ public class OrderRepository
                                 Title = orderItem.ProductTitle,
                                 Slug = orderItem.ProductSlug,
                                 ProductCode = orderItem.ProductCode
-                            },
-                            Company = new OrderItemCompanySummaryDto
-                            {
-                                Id = orderItem.CompanyId,
-                                Name = orderItem.CompanyName,
-                                Code = orderItem.CompanyCode,
-                                PhoneNumber = orderItem.CompanyPhoneNumber
                             },
                             UserAddress = new OrderItemUserAddressDto
                             {

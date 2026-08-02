@@ -31,12 +31,6 @@ internal class WalletTransactionConfig : IEntityTypeConfiguration<WalletTransact
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(x => x.Company)
-            .WithMany(x => x.WalletTransactions)
-            .HasForeignKey(x => x.CompanyId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasOne(x => x.DestinationWallet)
             .WithMany(x => x.DestinationWalletTransactions)
             .HasForeignKey(x => x.DestinationWalletId)
@@ -56,9 +50,6 @@ internal class WalletTransactionConfig : IEntityTypeConfiguration<WalletTransact
 
         builder
             .HasIndex(x => x.UserId);
-
-        builder
-            .HasIndex(x => x.CompanyId);
 
         builder
             .HasIndex(x => x.FinancialDocumentId);

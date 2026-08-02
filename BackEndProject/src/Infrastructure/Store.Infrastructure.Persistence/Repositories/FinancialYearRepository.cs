@@ -28,14 +28,6 @@ public class FinancialYearRepository
         return result;
     }
 
-    public async Task<FinancialYear?> GetByCompanyIdAsync(int companyId)
-    {
-        return await Context
-            .FinancialYear
-            .AsNoTracking()
-            .SingleOrDefaultAsync(x => x.CompanyId == companyId && x.IsActive);
-    }
-
     public async Task<FinancialYear?> GetFirstActiveAsync(CancellationToken cancellationToken = default)
     {
         return await Context.FinancialYear

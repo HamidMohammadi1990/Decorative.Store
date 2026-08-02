@@ -45,7 +45,7 @@ public class CheckoutOrderHandler
         if (productDetail is null)
             return ErrorModel.Create("InvalidId");
 
-        var properties = await propertyRepository.GetByProductIdAsync(request.ProductId, request.CompanyId);
+        var properties = await propertyRepository.GetByProductIdAsync(request.ProductId, cancellationToken);
         var deliveryTypes = await deliveryTypeRepository.GetAllAsync();
         var postTypes = await postTypeRepository.GetAllAsync();
 

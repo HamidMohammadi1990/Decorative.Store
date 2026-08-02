@@ -12,7 +12,6 @@ public static class SecurityKeyConstant
     public static string Order => SecurityKeyRegistry.Get(nameof(Order));
     public static string Wallet => SecurityKeyRegistry.Get(nameof(Wallet));
     public static string WalletTransaction => SecurityKeyRegistry.Get(nameof(WalletTransaction));
-    public static string Company => SecurityKeyRegistry.Get(nameof(Company));
     public static string Product => SecurityKeyRegistry.Get(nameof(Product));
     public static string Province => SecurityKeyRegistry.Get(nameof(Province));
     public static string Currency => SecurityKeyRegistry.Get(nameof(Currency));
@@ -31,11 +30,9 @@ public static class SecurityKeyConstant
     public static string BlogPostLike => SecurityKeyRegistry.Get(nameof(BlogPostLike));
     public static string CommentTopic => SecurityKeyRegistry.Get(nameof(CommentTopic));
     public static string DeliveryType => SecurityKeyRegistry.Get(nameof(DeliveryType));
-    public static string ProductPrice => SecurityKeyRegistry.Get(nameof(ProductPrice));
     public static string PropertyItem => SecurityKeyRegistry.Get(nameof(PropertyItem));
     public static string FinancialYear => SecurityKeyRegistry.Get(nameof(FinancialYear));
     public static string DeliveryOption => SecurityKeyRegistry.Get(nameof(DeliveryOption));
-    public static string CompanyComment => SecurityKeyRegistry.Get(nameof(CompanyComment));
     public static string ProductComment => SecurityKeyRegistry.Get(nameof(ProductComment));
     public static string BlogPostComment => SecurityKeyRegistry.Get(nameof(BlogPostComment));
     public static string ChartOfAccount => SecurityKeyRegistry.Get(nameof(ChartOfAccount));
@@ -44,15 +41,10 @@ public static class SecurityKeyConstant
     public static string ProductCategory => SecurityKeyRegistry.Get(nameof(ProductCategory));
     public static string PropertyCategory => SecurityKeyRegistry.Get(nameof(PropertyCategory));
     public static string BlogPostCategory => SecurityKeyRegistry.Get(nameof(BlogPostCategory));
-    public static string CompanyPosDevice => SecurityKeyRegistry.Get(nameof(CompanyPosDevice));
-    public static string CompanyStory => SecurityKeyRegistry.Get(nameof(CompanyStory));
-    public static string CompanyStoryComment => SecurityKeyRegistry.Get(nameof(CompanyStoryComment));
-    public static string CompanyStoryLike => SecurityKeyRegistry.Get(nameof(CompanyStoryLike));
     public static string PropertyItemPrice => SecurityKeyRegistry.Get(nameof(PropertyItemPrice));
     public static string ProductDescription => SecurityKeyRegistry.Get(nameof(ProductDescription));
     public static string OrderItemAttachment => SecurityKeyRegistry.Get(nameof(OrderItemAttachment));
     public static string ProductPropertyPrice => SecurityKeyRegistry.Get(nameof(ProductPropertyPrice));
-    public static string ProductPriceDeliveryOption => SecurityKeyRegistry.Get(nameof(ProductPriceDeliveryOption));
     public static string RolePermission => SecurityKeyRegistry.Get(nameof(RolePermission));
     public static string UserRole => SecurityKeyRegistry.Get(nameof(UserRole));
     public static string UserSession => SecurityKeyRegistry.Get(nameof(UserSession));

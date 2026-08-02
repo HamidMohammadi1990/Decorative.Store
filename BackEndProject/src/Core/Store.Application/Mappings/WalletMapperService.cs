@@ -17,7 +17,6 @@ public class WalletMapperService : IWalletMapperService
             Id = model.Id,
             Title = model.Title,
             UserId = model.UserId,
-            CompanyId = model.CompanyId,
             Balance = model.Balance,
             IsDefault = model.IsDefault,
             Status = model.Status,
@@ -48,7 +47,6 @@ public class WalletMapperService : IWalletMapperService
             Id = x.Id,
             Title = x.Title,
             UserId = x.UserId,
-            CompanyId = x.CompanyId,
             Balance = x.Balance,
             IsDefault = x.IsDefault,
             Status = x.Status,
@@ -94,7 +92,6 @@ public class WalletMapperService : IWalletMapperService
         {
             Title = model.Title,
             UserId = model.UserId,
-            CompanyId = model.CompanyId,
             Status = model.Status,
             IsDefault = model.IsDefault,
             Pagination = model.Pagination

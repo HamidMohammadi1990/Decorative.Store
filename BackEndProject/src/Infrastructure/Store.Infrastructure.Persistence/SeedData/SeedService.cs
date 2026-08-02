@@ -17,6 +17,7 @@ public class SeedService(EditionDbContext context) : ISeedService
         await SeedCategoriesAsync(cancellationToken);
         await SeedPropertiesAsync(cancellationToken);
         await SeedProductsAsync(cancellationToken);
+        await SeedProductPricesAsync(cancellationToken);
         await SeedProductFilesAsync(cancellationToken);
         await SeedProductPropertiesAsync(cancellationToken);
     }
@@ -267,13 +268,40 @@ public class SeedService(EditionDbContext context) : ISeedService
                 throw new InvalidOperationException(
                     $"SubCategory slug '{item.SubCategorySlug}' was not found for product '{item.ProductCode}'.");
 
-            var product = Product.Create(item.ProductCode, subCategoryId);
+            var product = Product.Create(item.ProductCode, subCategoryId, item.Price, item.CompareAtPrice);
             product.UpsertTranslation(faLanguage.Id, item.FaTitle, item.FaSlug, item.FaDescription);
             product.UpsertTranslation(enLanguage.Id, item.EnTitle, item.EnSlug, item.EnDescription);
             context.Product.Add(product);
         }
 
         await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SeedProductPricesAsync(CancellationToken cancellationToken = default)
+    {
+        var products = await context.Product.ToListAsync(cancellationToken);
+        if (products.Count == 0)
+            return;
+
+        var priceByCode = ProductSeedData.Items.ToDictionary(
+            item => item.ProductCode,
+            StringComparer.OrdinalIgnoreCase);
+        var changed = false;
+
+        foreach (var product in products)
+        {
+            if (!priceByCode.TryGetValue(product.ProductCode, out var seedItem))
+                continue;
+
+            if (product.Price == seedItem.Price && product.CompareAtPrice == seedItem.CompareAtPrice)
+                continue;
+
+            product.SetPricing(seedItem.Price, seedItem.CompareAtPrice);
+            changed = true;
+        }
+
+        if (changed)
+            await context.SaveChangesAsync(cancellationToken);
     }
 
     private async Task SeedProductFilesAsync(CancellationToken cancellationToken = default)

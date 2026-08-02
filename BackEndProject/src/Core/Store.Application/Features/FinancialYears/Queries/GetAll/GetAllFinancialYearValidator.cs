@@ -8,7 +8,6 @@ public class GetAllFinancialYearValidator : AbstractValidator<GetAllFinancialYea
     public GetAllFinancialYearValidator()
     {
         RuleFor(x => x.Pagination).MustBeValidPagination();
-        RuleFor(x => x.CompanyId).MustBeValidOptionalEntityId();
         RuleFor(x => x.Name).MaximumLengthWhenNotEmpty(EntityFieldLengths.FinancialYear.Title);
     }
 }

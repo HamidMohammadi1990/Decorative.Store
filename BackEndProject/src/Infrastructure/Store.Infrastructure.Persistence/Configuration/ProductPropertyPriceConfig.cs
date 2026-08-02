@@ -17,21 +17,12 @@ internal class ProductPropertyPriceConfig : IEntityTypeConfiguration<ProductProp
             .HasPrecision(18, 2);
 
         builder
-            .HasOne(x => x.Company)
-            .WithMany(x => x.ProductPropertyPrices)
-            .HasForeignKey(x => x.CompanyId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasOne(d => d.ProductProperty)
             .WithOne(p => p.ProductPropertyPrice)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
             .ToTable(x => x.IsTemporal());
-
-        builder
-            .HasIndex(x => x.CompanyId);
 
         builder
             .HasIndex(x => x.ProductPropertyId);

@@ -14,9 +14,6 @@ public record GetAllWalletResponse
     [JsonConverter(typeof(UserEncryptor))]
     public int? UserId { get; init; }
 
-    [JsonConverter(typeof(CompanyEncryptor))]
-    public int? CompanyId { get; init; }
-
     public decimal Balance { get; init; }
     public bool IsDefault { get; init; }
     public WalletStatusType Status { get; init; }

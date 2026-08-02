@@ -15,7 +15,5 @@ public record GetAllProductCommentResponseDto
     public int AffordableRating { get; init; }
     public int ProductId { get; init; }
     public string ProductTitle { get; init; } = default!;
-    public int CompanyId { get; init; }
-    public string CompanyName { get; init; } = default!;
     public bool IsActive { get; init; }
 }

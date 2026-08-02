@@ -437,13 +437,6 @@ public class OrderMapperService : IOrderMapperService
                     Title = item.Product.Title,
                     ProductCode = item.Product.ProductCode
                 },
-                Company = new OrderItemCompanySummaryResponse
-                {
-                    Id = item.Company.Id,
-                    Name = item.Company.Name,
-                    Code = item.Company.Code,
-                    PhoneNumber = item.Company.PhoneNumber
-                },
                 UserAddress = new OrderItemUserAddressResponse
                 {
                     Title = item.UserAddress.Title,

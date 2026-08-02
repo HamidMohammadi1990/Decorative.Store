@@ -3,8 +3,6 @@
 public record GetAllPropertyItemPriceDto
 {
     public int Id { get; init; }
-    public int CompanyId { get; init; }
-    public string CompanyName { get; init; } = default!;
     public int PropertyItemId { get; init; }
     public string PropertyItemTitle { get; init; } = default!;
     public int PropertyId { get; init; }

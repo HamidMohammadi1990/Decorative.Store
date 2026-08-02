@@ -15,7 +15,7 @@ public class UpdateFinancialYearHandler
         if (financialYear is null)
             return ErrorModel.Create("InvalidFinancialYearId");
 
-        financialYear.Update(request.Name, request.StartDate, request.EndDate, request.IsActive, request.CompanyId);
+        financialYear.Update(request.Name, request.StartDate, request.EndDate, request.IsActive);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

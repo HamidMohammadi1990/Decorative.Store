@@ -13,14 +13,7 @@ public sealed class EditionDbContext
     public DbSet<Language> Language { get; set; }
     public DbSet<Category> Category { get; set; }
     public DbSet<CategoryTranslation> CategoryTranslation { get; set; }
-    public DbSet<Company> Company { get; set; }
-    public DbSet<CompanyComment> CompanyComment { get; set; }
-    public DbSet<CompanyStory> CompanyStory { get; set; }
-    public DbSet<CompanyStoryItem> CompanyStoryItem { get; set; }
-    public DbSet<CompanyStoryComment> CompanyStoryComment { get; set; }
-    public DbSet<CompanyStoryLike> CompanyStoryLike { get; set; }
     public DbSet<DeliveryOption> DeliveryOption { get; set; }
-    public DbSet<CompanyProduct> CompanyProduct { get; set; }
     public DbSet<CommentTopic> CommentTopic { get; set; }
     public DbSet<DeliveryType> DeliveryType { get; set; }
     public DbSet<Order> Order { get; set; }
@@ -42,10 +35,8 @@ public sealed class EditionDbContext
     public DbSet<Discount> Discount { get; set; }
     public DbSet<ProductFile> ProductFile { get; set; }
     public DbSet<ProductFileTranslation> ProductFileTranslation { get; set; }
-    public DbSet<ProductPrice> ProductPrice { get; set; }
     public DbSet<ProductProperty> ProductProperty { get; set; }
     public DbSet<ProductPropertyPrice> ProductPropertyPrice { get; set; }
-    public DbSet<ProductPriceDeliveryOption> ProductPriceDeliveryOption { get; set; }
     public DbSet<Property> Property { get; set; }
     public DbSet<PropertyTranslation> PropertyTranslation { get; set; }
     public DbSet<PropertyCategory> PropertyCategory { get; set; }
@@ -85,7 +76,6 @@ public sealed class EditionDbContext
     public DbSet<Bank> Bank { get; set; }
     public DbSet<ChartOfAccount> ChartOfAccount { get; set; }
     public DbSet<ChequeTransaction> ChequeTransaction { get; set; }
-    public DbSet<CompanyPosDevice> CompanyPosDevice { get; set; }
     public DbSet<Expense> Expense { get; set; }
     public DbSet<ExpenseType> ExpenseType { get; set; }
     public DbSet<FinancialDocument> FinancialDocument { get; set; }
@@ -93,7 +83,6 @@ public sealed class EditionDbContext
     public DbSet<FinancialYear> FinancialYear { get; set; }
     public DbSet<OrderCommission> OrderCommission { get; set; }
     public DbSet<OrderVat> OrderVat { get; set; }
-    public DbSet<PosTransaction> PosTransaction { get; set; }
     public DbSet<Page> Page { get; set; }
     public DbSet<Section> Section { get; set; }
     public DbSet<SectionItem> SectionItem { get; set; }

@@ -8,11 +8,6 @@ public record GetAllPropertyItemPriceResponse
     [JsonConverter(typeof(PropertyItemPriceEncryptor))]
     public int Id { get; init; }
 
-    [JsonConverter(typeof(CompanyEncryptor))]
-    public int CompanyId { get; init; }
-
-    public string CompanyName { get; init; } = default!;
-
     [JsonConverter(typeof(PropertyItemEncryptor))]
     public int PropertyItemId { get; init; }
 

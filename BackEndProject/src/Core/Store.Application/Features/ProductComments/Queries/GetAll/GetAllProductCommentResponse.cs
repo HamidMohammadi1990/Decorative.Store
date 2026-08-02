@@ -8,11 +8,6 @@ public record GetAllProductCommentResponse
     [JsonConverter(typeof(ProductCommentEncryptor))]
     public int Id { get; init; }
 
-    [JsonConverter(typeof(CompanyEncryptor))]
-    public int CompanyId { get; init; }
-
-    public string CompanyName { get; init; } = default!;
-
     [JsonConverter(typeof(CommentTopicEncryptor))]
     public int CommentTopicId { get; init; }
 

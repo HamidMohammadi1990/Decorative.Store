@@ -24,7 +24,6 @@ public class User : BaseEntity
 
     public ICollection<Order> Orders { get; private set; } = default!;
     public ICollection<Wallet> Wallets { get; private set; } = default!;
-    public ICollection<Company> Companies { get; private set; } = default!;
     public ICollection<UserRole> UserRoles { get; private set; } = default!;
     public ICollection<BlogPost> BlogPosts { get; private set; } = default!;
     public ICollection<OrderNote> OrderNotes { get; private set; } = default!;
@@ -34,16 +33,11 @@ public class User : BaseEntity
     public ICollection<RefreshToken> RefreshTokens { get; private set; } = default!;
     public ICollection<UserSession> UserSessions { get; private set; } = default!;
     public ICollection<ProductComment> ProductComments { get; private set; } = default!;
-    public ICollection<CompanyComment> CompanyComments { get; private set; } = default!;
     public ICollection<BlogPostComment> BlogPostComments { get; private set; } = default!;
     public ICollection<BankTransaction> BankTransactions { get; private set; } = default!;
     public ICollection<ChequeTransaction> ChequeTransactions { get; private set; } = default!;
     public ICollection<WalletTransaction> WalletTransactions { get; private set; } = default!;
     public ICollection<BlogPostComment> BlogPostApprovedComments { get; private set; } = default!;
-    public ICollection<CompanyStory> CreatedCompanyStories { get; private set; } = default!;
-    public ICollection<CompanyStoryLike> CompanyStoryLikes { get; private set; } = default!;
-    public ICollection<CompanyStoryComment> CompanyStoryComments { get; private set; } = default!;
-    public ICollection<CompanyStoryComment> CompanyStoryApprovedComments { get; private set; } = default!;
 
 
     public static User Create(string? email, GenderType gender, string username,

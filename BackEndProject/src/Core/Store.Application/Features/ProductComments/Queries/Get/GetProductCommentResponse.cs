@@ -14,9 +14,6 @@ public record GetProductCommentResponse
     [JsonConverter(typeof(ProductEncryptor))]
     public int ProductId { get; init; }
 
-    [JsonConverter(typeof(CompanyEncryptor))]
-    public int CompanyId { get; init; }
-
     public int CommentRate { get; init; }
     public int QualityRating { get; init; }
     public int CommentTopicId { get; init; }

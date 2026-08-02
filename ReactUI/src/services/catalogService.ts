@@ -25,6 +25,8 @@ import {
   productMatchesPathSegments,
   resolveListingPath,
 } from '@/extensions/resolveListingPath'
+import { catalogListingService } from '@/services/catalogListingService'
+import { mapCatalogListingProduct } from '@/services/mappers/catalogListingMapper'
 
 const PAGE_SIZE = 12
 
@@ -449,33 +451,108 @@ function buildFacets(
   return facets
 }
 
+async function getMockListing(
+  query: ListingQuery,
+  locale: Locale,
+): Promise<ProductListingResult> {
+  const { pathname, searchParams } = query
+  const { collection, segments } = resolveListingPath(pathname)
+  const allProducts = getProductsMock(locale) as ProductSummary[]
+
+  let filtered = allProducts.filter((product) => {
+    if (
+      !productMatchesCollection(collection, {
+        onSale: product.onSale,
+        isNew: product.isNew,
+        inStock: product.inStock,
+      })
+    ) {
+      return false
+    }
+    return productMatchesPathSegments(
+      product.categorySlugs,
+      product.subcategorySlug,
+      product.facets,
+      segments,
+    )
+  })
+
+  const parsedFilters = parseListingFilters(searchParams)
+  filtered = filtered.filter((p) => productMatchesFilters(p, parsedFilters))
+
+  const sort = (searchParams.get('sort') as SortOptionId) || 'featured'
+  filtered = sortProducts(filtered, sort)
+
+  const page = Math.max(1, Number(searchParams.get('page')) || 1)
+  const totalCount = filtered.length
+  const start = (page - 1) * PAGE_SIZE
+  const pageProducts = filtered.slice(start, start + PAGE_SIZE)
+
+  const categoryProducts = allProducts.filter((product) => {
+    if (
+      !productMatchesCollection(collection, {
+        onSale: product.onSale,
+        isNew: product.isNew,
+        inStock: product.inStock,
+      })
+    ) {
+      return false
+    }
+    return productMatchesPathSegments(
+      product.categorySlugs,
+      product.subcategorySlug,
+      product.facets,
+      segments,
+    )
+  })
+
+  const facets = buildFacets(locale, categoryProducts, parsedFilters)
+
+  const pathNotFound =
+    segments.length > 0 &&
+    categoryProducts.length === 0 &&
+    collection !== 'collaborations'
+
+  return {
+    title: buildTitle(locale, collection, segments),
+    breadcrumbs: buildBreadcrumbs(locale, collection, segments),
+    products: pageProducts,
+    facets,
+    sortOptions: getSortOptions(locale),
+    totalCount,
+    page,
+    pageSize: PAGE_SIZE,
+    activeFilters: toActiveFiltersRecord(parsedFilters),
+    pathNotFound,
+  }
+}
+
 export const catalogService = {
   async getListing(query: ListingQuery, locale: Locale): Promise<ProductListingResult> {
-    return mockFetch(async () => {
-      const { pathname, searchParams } = query
-      const { collection, segments } = resolveListingPath(pathname)
-      const allProducts = getProductsMock(locale) as ProductSummary[]
+    const { pathname, searchParams } = query
+    const catalogPath = pathname.replace(/^\/+/, '').replace(/\/+$/, '')
 
-      let filtered = allProducts.filter((product) => {
-        if (
-          !productMatchesCollection(collection, {
-            onSale: product.onSale,
-            isNew: product.isNew,
-            inStock: product.inStock,
-          })
-        ) {
-          return false
+    try {
+      const listing = await catalogListingService.getListing(catalogPath, locale)
+
+      if (listing.pathNotFound) {
+        return {
+          title: listing.title,
+          breadcrumbs: listing.breadcrumbs,
+          products: [],
+          facets: [],
+          sortOptions: getSortOptions(locale),
+          totalCount: 0,
+          page: 1,
+          pageSize: PAGE_SIZE,
+          activeFilters: {},
+          pathNotFound: true,
         }
-        return productMatchesPathSegments(
-          product.categorySlugs,
-          product.subcategorySlug,
-          product.facets,
-          segments,
-        )
-      })
+      }
 
+      let filtered = listing.products.map(mapCatalogListingProduct)
       const parsedFilters = parseListingFilters(searchParams)
-      filtered = filtered.filter((p) => productMatchesFilters(p, parsedFilters))
+      filtered = filtered.filter((product) => productMatchesFilters(product, parsedFilters))
 
       const sort = (searchParams.get('sort') as SortOptionId) || 'featured'
       filtered = sortProducts(filtered, sort)
@@ -484,35 +561,11 @@ export const catalogService = {
       const totalCount = filtered.length
       const start = (page - 1) * PAGE_SIZE
       const pageProducts = filtered.slice(start, start + PAGE_SIZE)
-
-      const categoryProducts = allProducts.filter((product) => {
-        if (
-          !productMatchesCollection(collection, {
-            onSale: product.onSale,
-            isNew: product.isNew,
-            inStock: product.inStock,
-          })
-        ) {
-          return false
-        }
-        return productMatchesPathSegments(
-          product.categorySlugs,
-          product.subcategorySlug,
-          product.facets,
-          segments,
-        )
-      })
-
-      const facets = buildFacets(locale, categoryProducts, parsedFilters)
-
-      const pathNotFound =
-        segments.length > 0 &&
-        categoryProducts.length === 0 &&
-        collection !== 'collaborations'
+      const facets = buildFacets(locale, listing.products.map(mapCatalogListingProduct), parsedFilters)
 
       return {
-        title: buildTitle(locale, collection, segments),
-        breadcrumbs: buildBreadcrumbs(locale, collection, segments),
+        title: listing.title,
+        breadcrumbs: listing.breadcrumbs,
         products: pageProducts,
         facets,
         sortOptions: getSortOptions(locale),
@@ -520,9 +573,11 @@ export const catalogService = {
         page,
         pageSize: PAGE_SIZE,
         activeFilters: toActiveFiltersRecord(parsedFilters),
-        pathNotFound,
+        pathNotFound: false,
       }
-    })
+    } catch {
+      return mockFetch(async () => getMockListing(query, locale))
+    }
   },
 
   async getProduct(slug: string, locale: Locale): Promise<ProductDetail | null> {

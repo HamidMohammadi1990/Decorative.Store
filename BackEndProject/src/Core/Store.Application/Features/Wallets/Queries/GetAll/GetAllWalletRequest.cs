@@ -10,7 +10,6 @@ public record GetAllWalletRequest : ContentPolicyRequest<Wallet>, IRequest<Opera
 {
     public string? Title { get; init; }
     public int? UserId { get; init; }
-    public int? CompanyId { get; init; }
     public WalletStatusType? Status { get; init; }
     public bool? IsDefault { get; init; }
     public PagedRequest Pagination { get; init; } = default!;

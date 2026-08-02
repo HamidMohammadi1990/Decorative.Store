@@ -7,7 +7,6 @@ namespace Store.Domain.Dtos.Products;
 
 public record GetAllProductRequestDto : IContentPolicyQueryDto<Product>
 {
-    public int? CompanyId { get; set; }
     public int? CategoryId { get; init; }
     public string? CategorySlug { get; set; }
     public int? SubCategoryId { get; init; }

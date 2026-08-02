@@ -14,7 +14,7 @@ public class UpdateProductPropertyPriceHandler
         if (productPropertyPrice is null)
             return ErrorModel.Create("InvalidId");
 
-        if (productPropertyPrice.CompanyId != request.CompanyId || productPropertyPrice.ProductPropertyId != request.ProductPropertyId)
+        if (productPropertyPrice.ProductPropertyId != request.ProductPropertyId)
             return ErrorModel.Create("InvalidRequest");
 
         productPropertyPrice.Update(request.Price, request.CooperationPrice, request.IsActive);

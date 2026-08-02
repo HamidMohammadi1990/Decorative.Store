@@ -7,26 +7,21 @@ public class Wallet : BaseEntity
 {
     public string Title { get; private set; } = default!;
     public int? UserId { get; private set; }
-    public int? CompanyId { get; private set; }
     public bool IsDefault { get; private set; }
     public decimal Balance { get; private set; }
     public WalletStatusType Status { get; private set; } = WalletStatusType.Active;
     public DateTime CreatedOnUtc { get; private set; } = DateTime.UtcNow;
 
-
     public User User { get; set; } = default!;
-    public Company Company { get; set; } = default!;
     public ICollection<WalletTransaction> WalletTransactions { get; set; } = default!;
     public ICollection<WalletTransaction> DestinationWalletTransactions { get; set; } = default!;
 
-
-    public static Wallet Create(int userId, string title, bool isDefault = false, int? companyId = null)
+    public static Wallet Create(int userId, string title, bool isDefault = false)
         => new()
         {
             Title = title,
             UserId = userId,
-            IsDefault = isDefault,
-            CompanyId = companyId
+            IsDefault = isDefault
         };
 
     public void Update(string title, bool isDefault)

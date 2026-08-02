@@ -36,9 +36,7 @@ public class ChargeWalletHandler
         if (bankAccount is null)
             return ErrorModel.Create("InvalidBankId");
 
-        var financialYear = wallet.CompanyId.HasValue
-            ? await financialYearRepository.GetByCompanyIdAsync(wallet.CompanyId.Value)
-            : await financialYearRepository.GetFirstActiveAsync(cancellationToken);
+        var financialYear = await financialYearRepository.GetFirstActiveAsync(cancellationToken);
 
         if (financialYear is null)
             return ErrorModel.Create("FinancialYearNotFound");

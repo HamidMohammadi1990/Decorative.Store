@@ -16,7 +16,6 @@ public class CreateProductCommentHandler
         var productComment = ProductComment.Create(
             currentUser.UserId,
             request.ProductId,
-            request.CompanyId,
             request.CommentRate,
             request.QualityRating,
             request.CommentTopicId,

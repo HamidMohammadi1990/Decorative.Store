@@ -58,6 +58,8 @@ internal static class ProductSeedData
                 FaDescription: TruncateDescription(faProduct.Image.Alt),
                 EnDescription: TruncateDescription(enProduct.Image.Alt),
                 SubCategorySlug: subCategorySlug,
+                Price: faProduct.Price?.Amount ?? 0m,
+                CompareAtPrice: faProduct.CompareAtPrice?.Amount,
                 ImageBaseName: imageBaseName,
                 FaImageTitle: TruncateImageTitle(faProduct.Image.Alt),
                 EnImageTitle: TruncateImageTitle(enProduct.Image.Alt)));

@@ -16,9 +16,6 @@ public record GetAllWalletRequestDto : IContentPolicyQueryDto<Wallet>
     public int? UserId { get; init; }
 
     [QueryFilter]
-    public int? CompanyId { get; init; }
-
-    [QueryFilter]
     public WalletStatusType? Status { get; init; }
 
     [QueryFilter]

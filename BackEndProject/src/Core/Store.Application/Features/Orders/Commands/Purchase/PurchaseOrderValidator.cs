@@ -22,10 +22,6 @@ public class PurchaseOrderValidator : AbstractValidator<PurchaseOrderRequest>
             .NotEqual(0)
             .WithMessage(MessageKeys.InvalidProductId);
 
-        RuleFor(x => x.CompanyId)
-            .NotEqual(0)
-            .WithMessage(MessageKeys.InvalidRequest);
-
         RuleFor(x => x.UserAddressId)
             .NotEqual(0)
             .WithMessage(MessageKeys.InvalidRequest);

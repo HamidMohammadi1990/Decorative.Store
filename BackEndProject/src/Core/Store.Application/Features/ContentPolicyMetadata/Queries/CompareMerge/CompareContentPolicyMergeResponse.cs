@@ -12,7 +12,6 @@ public record CompareContentPolicyMergeResponse
     public bool RequireContentPolicy { get; init; }
     public bool IncludesDraftPolicy { get; init; }
     public IReadOnlyList<UserRolePolicyDto> Roles { get; init; } = [];
-    public IReadOnlyList<int> CompanyIds { get; init; } = [];
     public ContentPolicyMergeCompareScenarioDto Current { get; init; } = default!;
     public ContentPolicyMergeCompareScenarioDto RoleOnly { get; init; } = default!;
     public ContentPolicyMergeCompareScenarioDto Additive { get; init; } = default!;

@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Store.Domain.Dtos.Catalog;
 using Store.Domain.Dtos.Products;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Entities;
@@ -22,4 +23,5 @@ public interface IProductRepository
         int? excludeProductId = null,
         CancellationToken cancellationToken = default);
     Task<PagedResult<GetAllProductResponseDto>> GetAllAsync(GetAllProductRequestDto request, CancellationToken cancellationToken = default);
+    Task<CatalogListingDto> GetCatalogListingByPathAsync(string catalogPath, CancellationToken cancellationToken = default);
 }

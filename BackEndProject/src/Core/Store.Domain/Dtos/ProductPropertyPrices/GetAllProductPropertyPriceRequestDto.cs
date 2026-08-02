@@ -8,12 +8,6 @@ namespace Store.Domain.Dtos.ProductPropertyPrices;
 
 public record GetAllProductPropertyPriceRequestDto : IContentPolicyQueryDto<ProductPropertyPrice>
 {
-    [QueryFilter(MemberPath = "productPropertyPrice.CompanyId")]
-    public int? CompanyId { get; init; }
-
-    [QueryFilter(MemberPath = "company.UserId")]
-    public int? UserId { get; init; }
-
     [QueryFilter(MemberPath = "productPropertyPrice.ProductPropertyId")]
     public int? ProductPropertyId { get; init; }
 

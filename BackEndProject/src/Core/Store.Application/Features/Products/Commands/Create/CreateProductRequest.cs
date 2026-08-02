@@ -12,6 +12,10 @@ public record CreateProductRequest : IRequest<OperationResult<CreateProductRespo
     public string Description { get; init; } = default!;
     public string ProductCode { get; init; } = default!;
 
+    public decimal Price { get; init; }
+
+    public decimal? CompareAtPrice { get; init; }
+
     [JsonConverter(typeof(SubCategoryEncryptor))]
     public int SubCategoryId { get; init; }
 }
