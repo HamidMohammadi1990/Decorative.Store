@@ -14,12 +14,12 @@ import { StoriesStrip } from '@/components/stories/StoriesStrip'
 import { useTheme } from '@/hooks/useTheme'
 import { Container } from '@/components/ui/Container'
 import { Spinner } from '@/components/ui/Spinner'
-import { useHomePage } from '@/hooks/useHomePage'
+import { HomePageProvider, useHomePage } from '@/providers/HomePageProvider'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { useShopChromeHeight } from '@/hooks/useShopChromeHeight'
 import { AiAssistantWidget } from '@/components/assistant/AiAssistantWidget'
 
-export function ShopLayout() {
+function ShopLayoutContent() {
   const { t } = useTranslation()
   const chromeRef = useRef<HTMLDivElement>(null)
   useLocaleSettings()
@@ -59,5 +59,13 @@ export function ShopLayout() {
       <StoryViewerModal />
       <AiAssistantWidget />
     </>
+  )
+}
+
+export function ShopLayout() {
+  return (
+    <HomePageProvider>
+      <ShopLayoutContent />
+    </HomePageProvider>
   )
 }

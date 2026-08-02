@@ -9,10 +9,10 @@ import { ThemeSwitcher } from '@/components/layout/ThemeSwitcher'
 import { useTheme } from '@/hooks/useTheme'
 import { Container } from '@/components/ui/Container'
 import { Spinner } from '@/components/ui/Spinner'
-import { useHomePage } from '@/hooks/useHomePage'
+import { HomePageProvider, useHomePage } from '@/providers/HomePageProvider'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 
-export function AuthLayout() {
+function AuthLayoutContent() {
   const { t } = useTranslation()
   useLocaleSettings()
   useTheme()
@@ -47,5 +47,13 @@ export function AuthLayout() {
       <CartDrawer />
       <AddressBookModal />
     </>
+  )
+}
+
+export function AuthLayout() {
+  return (
+    <HomePageProvider>
+      <AuthLayoutContent />
+    </HomePageProvider>
   )
 }
