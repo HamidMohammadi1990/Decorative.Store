@@ -10,11 +10,6 @@ internal class ProductFileConfig : IEntityTypeConfiguration<ProductFile>
     public void Configure(EntityTypeBuilder<ProductFile> builder)
     {
         builder
-            .Property(x => x.Title)
-            .HasNVarcharMaxLength(30)
-            .IsRequired();
-
-        builder
             .Property(x => x.FileName)
             .HasVarcharMaxLength(35)
             .IsRequired();

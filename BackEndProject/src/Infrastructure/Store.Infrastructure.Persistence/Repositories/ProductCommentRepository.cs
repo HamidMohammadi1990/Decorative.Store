@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Edition.Application.Contracts.Localization;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Store.Infrastructure.Persistence.Extensions;
 using Store.Infrastructure.Persistence;
@@ -10,11 +11,13 @@ using Store.Domain.Entities;
 namespace Store.Infrastructure.Persistence.Repositories;
 
 public class ProductCommentRepository
-      (EditionDbContext context)
+      (EditionDbContext context, ICurrentLanguageContext languageContext, ILanguageRegistry languageRegistry)
     : Repository<ProductComment>(context), IProductCommentRepository
-{    
+{
     public async Task<PagedResult<GetAllProductCommentResponseDto>> GetAllAsync(GetAllProductCommentRequestDto request, CancellationToken cancellationToken = default)
     {
+        var (languageId, defaultLanguageId) = await ResolveLanguageIdsAsync(cancellationToken);
+
         var productCommentSource = Context.ProductComment
             .ApplyContentPolicyFilter(request.ContentFilter);
 
@@ -40,7 +43,15 @@ public class ProductCommentRepository
                 CompanyId = x.productComment.CompanyId,
                 Description = x.productComment.Description,
                 CommentRate = x.productComment.CommentRate,
-                ProductTitle = x.product.Title,
+                ProductTitle = x.product.Translations
+                        .Where(t => t.LanguageId == languageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? x.product.Translations
+                        .Where(t => t.LanguageId == defaultLanguageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? string.Empty,
                 UserName = x.user.UserName,
                 UserFirstName = x.user.FirstName,
                 UserLastName = x.user.LastName,
@@ -57,6 +68,8 @@ public class ProductCommentRepository
 
     public async Task<PagedResult<SearchProductCommentResponseDto>> SearchAsync(SearchProductCommentRequestDto request, CancellationToken cancellationToken = default)
     {
+        var (languageId, defaultLanguageId) = await ResolveLanguageIdsAsync(cancellationToken);
+
         var productCommentSource = Context.ProductComment
             .ApplyContentPolicyFilter(request.ContentFilter);
 
@@ -77,12 +90,20 @@ public class ProductCommentRepository
             .Select(x => new SearchProductCommentResponseDto
             {
                 Id = x.productComment.Id,
-                UserId = x.productComment.UserId,                
+                UserId = x.productComment.UserId,
                 ProductId = x.productComment.ProductId,
                 CompanyId = x.productComment.CompanyId,
                 Description = x.productComment.Description,
                 CommentRate = x.productComment.CommentRate,
-                ProductTitle = x.product.Title,
+                ProductTitle = x.product.Translations
+                        .Where(t => t.LanguageId == languageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? x.product.Translations
+                        .Where(t => t.LanguageId == defaultLanguageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? string.Empty,
                 UserName = x.user.UserName,
                 UserFirstName = x.user.FirstName,
                 UserLastName = x.user.LastName,
@@ -95,5 +116,12 @@ public class ProductCommentRepository
             .ToPagedAsync(request.Pagination, cancellationToken);
 
         return result;
+    }
+
+    private async Task<(int LanguageId, int DefaultLanguageId)> ResolveLanguageIdsAsync(CancellationToken cancellationToken)
+    {
+        var defaultLanguage = await languageRegistry.GetDefaultAsync(cancellationToken);
+        var languageId = languageContext.IsResolved ? languageContext.LanguageId : defaultLanguage.Id;
+        return (languageId, defaultLanguage.Id);
     }
 }

@@ -4,22 +4,34 @@ namespace Store.Domain.Entities;
 
 public class PropertyCategory : BaseEntity
 {
-    public string Title { get; private set; } = default!;
+    public string Code { get; private set; } = default!;
     public bool IsActive { get; private set; } = true;
 
-
     public ICollection<Property> Properties { get; private set; } = default!;
+    public ICollection<PropertyCategoryTranslation> Translations { get; private set; } = [];
 
+    public static PropertyCategory Create(string code)
+        => new() { Code = code };
 
-    public static PropertyCategory Create(string title)
-        => new()
-        {
-            Title = title
-        };
-
-    public void Update(string title)
+    public PropertyCategoryTranslation UpsertTranslation(int languageId, string title)
     {
-        Title = title;
+        var existing = Translations.FirstOrDefault(x => x.LanguageId == languageId);
+        if (existing is not null)
+        {
+            existing.Update(title);
+            return existing;
+        }
+
+        var translation = PropertyCategoryTranslation.Create(title, languageId);
+        Translations.Add(translation);
+        return translation;
+    }
+
+    public void Update(string code, bool isActive, int languageId, string title)
+    {
+        Code = code;
+        IsActive = isActive;
+        UpsertTranslation(languageId, title);
     }
 
     public void DeActive()

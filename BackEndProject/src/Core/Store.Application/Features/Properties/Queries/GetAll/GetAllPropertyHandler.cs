@@ -14,7 +14,7 @@ public class GetAllPropertyHandler
     public async Task<OperationResult<PagedResult<GetAllPropertyResponse>>> Handle(GetAllPropertyRequest request, CancellationToken cancellationToken)
     {
         var requestModel = mapper.Map(request);
-        var properties = await propertyRepository.GetAllAsync(requestModel);
+        var properties = await propertyRepository.GetAllAsync(requestModel, cancellationToken);
         var result = mapper.Map(properties);
         return result;
     }

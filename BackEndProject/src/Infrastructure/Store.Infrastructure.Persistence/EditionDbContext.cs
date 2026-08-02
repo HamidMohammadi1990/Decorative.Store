@@ -33,6 +33,7 @@ public sealed class EditionDbContext
     public DbSet<Permission> Permission { get; set; }
     public DbSet<PostType> PostType { get; set; }
     public DbSet<Product> Product { get; set; }
+    public DbSet<ProductTranslation> ProductTranslation { get; set; }
     public DbSet<ProductComment> ProductComment { get; set; }
     public DbSet<ProductDescription> ProductDescription { get; set; }
     public DbSet<ProductOrderItemAttachmentType> ProductOrderItemAttachmentType { get; set; }
@@ -40,13 +41,17 @@ public sealed class EditionDbContext
     public DbSet<ProductFeatureType> ProductFeatureType { get; set; }
     public DbSet<Discount> Discount { get; set; }
     public DbSet<ProductFile> ProductFile { get; set; }
+    public DbSet<ProductFileTranslation> ProductFileTranslation { get; set; }
     public DbSet<ProductPrice> ProductPrice { get; set; }
     public DbSet<ProductProperty> ProductProperty { get; set; }
     public DbSet<ProductPropertyPrice> ProductPropertyPrice { get; set; }
     public DbSet<ProductPriceDeliveryOption> ProductPriceDeliveryOption { get; set; }
     public DbSet<Property> Property { get; set; }
+    public DbSet<PropertyTranslation> PropertyTranslation { get; set; }
     public DbSet<PropertyCategory> PropertyCategory { get; set; }
+    public DbSet<PropertyCategoryTranslation> PropertyCategoryTranslation { get; set; }
     public DbSet<PropertyItem> PropertyItem { get; set; }
+    public DbSet<PropertyItemTranslation> PropertyItemTranslation { get; set; }
     public DbSet<PropertyItemPrice> PropertyItemPrice { get; set; }
     public DbSet<PropertyItemDependency> PropertyItemDependency { get; set; }
     public DbSet<RefreshToken> RefreshToken { get; set; }
@@ -67,6 +72,7 @@ public sealed class EditionDbContext
     public DbSet<Province> Province { get; set; }
     public DbSet<City> City { get; set; }
     public DbSet<ProductPropertyRule> ProductPropertyRule { get; set; }
+    public DbSet<ProductPropertyRuleTranslation> ProductPropertyRuleTranslation { get; set; }
     public DbSet<Tag> Tag { get; set; }
     public DbSet<BlogPost> BlogPost { get; set; }
     public DbSet<BlogPostTag> BlogPostTag { get; set; }

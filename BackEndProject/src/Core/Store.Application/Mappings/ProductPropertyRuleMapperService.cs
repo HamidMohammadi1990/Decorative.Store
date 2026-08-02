@@ -1,4 +1,5 @@
 using Edition.Application.Common.Extensions;
+using Edition.Application.Common.Localization;
 using Edition.Application.Contracts.Mapping;
 using Edition.Application.Features.ProductPropertyRules.Queries;
 using Store.Domain.Dtos.Pagination;
@@ -26,7 +27,7 @@ public class ProductPropertyRuleMapperService : IProductPropertyRuleMapperServic
             Pagination = model.Pagination
         }.WithContentPolicy<ProductPropertyRule, SearchProductPropertyRuleRequestDto>(model);
 
-    public GetProductPropertyRuleResponse Map(ProductPropertyRule model)
+    public GetProductPropertyRuleResponse Map(ProductPropertyRule model, string? description)
     {
         var payload = model.Get();
         return new GetProductPropertyRuleResponse
@@ -35,7 +36,7 @@ public class ProductPropertyRuleMapperService : IProductPropertyRuleMapperServic
             ProductPropertyId = model.ProductPropertyId,
             PropertyType = model.PropertyType,
             IsMandatory = model.IsMandatory,
-            Description = model.Description,
+            Description = description,
             IsActive = model.IsActive,
             MinLength = payload.MinLength,
             MaxLength = payload.MaxLength,
@@ -48,7 +49,10 @@ public class ProductPropertyRuleMapperService : IProductPropertyRuleMapperServic
         };
     }
 
-    public PagedResult<GetAllProductPropertyRuleResponse> Map(PagedResult<ProductPropertyRule> model)
+    public PagedResult<GetAllProductPropertyRuleResponse> Map(
+        PagedResult<ProductPropertyRule> model,
+        int languageId,
+        int defaultLanguageId)
     {
         var items = model.Items.Select(x =>
         {
@@ -59,7 +63,7 @@ public class ProductPropertyRuleMapperService : IProductPropertyRuleMapperServic
                 ProductPropertyId = x.ProductPropertyId,
                 PropertyType = x.PropertyType,
                 IsMandatory = x.IsMandatory,
-                Description = x.Description,
+                Description = TranslationResolver.ResolveDescription(x.Translations, languageId, defaultLanguageId),
                 IsActive = x.IsActive,
                 MinLength = payload.MinLength,
                 MaxLength = payload.MaxLength,
@@ -75,7 +79,10 @@ public class ProductPropertyRuleMapperService : IProductPropertyRuleMapperServic
         return PagedResult<GetAllProductPropertyRuleResponse>.Create(items, model);
     }
 
-    public PagedResult<SearchProductPropertyRuleResponse> MapToSearch(PagedResult<ProductPropertyRule> model)
+    public PagedResult<SearchProductPropertyRuleResponse> MapToSearch(
+        PagedResult<ProductPropertyRule> model,
+        int languageId,
+        int defaultLanguageId)
     {
         var items = model.Items.Select(x =>
         {
@@ -86,7 +93,7 @@ public class ProductPropertyRuleMapperService : IProductPropertyRuleMapperServic
                 ProductPropertyId = x.ProductPropertyId,
                 PropertyType = x.PropertyType,
                 IsMandatory = x.IsMandatory,
-                Description = x.Description,
+                Description = TranslationResolver.ResolveDescription(x.Translations, languageId, defaultLanguageId),
                 MinLength = payload.MinLength,
                 MaxLength = payload.MaxLength,
                 MinQuantity = payload.MinQuantity,

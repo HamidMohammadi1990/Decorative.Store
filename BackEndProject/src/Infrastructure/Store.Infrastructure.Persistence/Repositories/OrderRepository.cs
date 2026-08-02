@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Edition.Application.Contracts.Localization;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Store.Infrastructure.Persistence.Extensions;
 using Store.Infrastructure.Persistence;
@@ -11,7 +12,7 @@ using Store.Domain.Enums;
 namespace Store.Infrastructure.Persistence.Repositories;
 
 public class OrderRepository
-    (EditionDbContext context)
+    (EditionDbContext context, ICurrentLanguageContext languageContext, ILanguageRegistry languageRegistry)
     : Repository<Order>(context), IOrderRepository
 {
     public async Task<PagedResult<GetAllOrderDto>> GetAllAsync(GetAllOrderRequestDto request)
@@ -139,6 +140,10 @@ public class OrderRepository
 
     public async Task<OrderDetailDto?> GetOrderDetailAsync(int orderId, int userId, CancellationToken cancellationToken = default)
     {
+        var defaultLanguage = await languageRegistry.GetDefaultAsync(cancellationToken);
+        var languageId = languageContext.IsResolved ? languageContext.LanguageId : defaultLanguage.Id;
+        var defaultLanguageId = defaultLanguage.Id;
+
         var query =
             from order in Context.Order
             where order.Id == orderId && order.UserId == userId
@@ -182,13 +187,37 @@ public class OrderRepository
                 address.RecipientFirstName,
                 PostTitle = postType.Title,
                 CompanyCode = company.Code,
-                ProductSlug = product.Slug,
+                ProductSlug = product.Translations
+                        .Where(t => t.LanguageId == languageId)
+                        .Select(t => t.Slug)
+                        .FirstOrDefault()
+                    ?? product.Translations
+                        .Where(t => t.LanguageId == defaultLanguageId)
+                        .Select(t => t.Slug)
+                        .FirstOrDefault()
+                    ?? string.Empty,
                 CompanyName = company.Name,
                 OrderStatus = order.Status,
-                ProductTitle = product.Title,
+                ProductTitle = product.Translations
+                        .Where(t => t.LanguageId == languageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? product.Translations
+                        .Where(t => t.LanguageId == defaultLanguageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? string.Empty,
                 ItemQuantity = item.Quantity,
                 AddressTitle = address.Title,
-                PropertyTitle = property.Title,
+                PropertyTitle = property.Translations
+                        .Where(t => t.LanguageId == languageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? property.Translations
+                        .Where(t => t.LanguageId == defaultLanguageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? string.Empty,
                 orderItemProperty.PropertyType,
                 OrderIsFinaly = order.IsFinaly,
                 orderItemProperty.PropertyPrice,
@@ -204,7 +233,15 @@ public class OrderRepository
                 ItemProductPrice = item.ProductPrice,
                 OrderTrackingCode = order.TrackingCode,
                 OrderCreatedOnUtc = order.CreatedOnUtc,
-                PropertyItemTitle = propertyItem.Title,
+                PropertyItemTitle = propertyItem.Translations
+                        .Where(t => t.LanguageId == languageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? propertyItem.Translations
+                        .Where(t => t.LanguageId == defaultLanguageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? string.Empty,
                 CompanyPhoneNumber = company.PhoneNumber,
                 AttachmentFileName = orderItemAttachment.FileName,
                 ItemIsNeedToDesign = item.IsNeedToDesign,

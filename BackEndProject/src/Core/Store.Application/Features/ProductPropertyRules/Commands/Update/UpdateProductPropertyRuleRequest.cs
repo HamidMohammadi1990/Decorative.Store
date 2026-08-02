@@ -12,6 +12,7 @@ public record UpdateProductPropertyRuleRequest : IRequest<OperationResult>
     [JsonConverter(typeof(ProductPropertyEncryptor))]
     public int ProductPropertyId { get; init; }
 
+    public int LanguageId { get; init; }
     public bool IsMandatory { get; init; }
     public string? Description { get; init; }
     public bool IsActive { get; init; }

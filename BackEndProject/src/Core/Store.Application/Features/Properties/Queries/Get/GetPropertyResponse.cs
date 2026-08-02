@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using Edition.Application.Common.Utilities.Security.Attributes;
+using Edition.Application.Features.Localization;
 using Store.Domain.Enums;
 
 namespace Edition.Application.Features.Properties.Queries;
@@ -12,6 +13,7 @@ public record GetPropertyResponse
     [JsonConverter(typeof(PropertyNullableEncryptor))]
     public int? ParentId { get; init; }
 
+    public string Code { get; init; } = default!;
     public string Title { get; init; } = default!;
 
     [JsonConverter(typeof(PropertyCategoryEncryptor))]

@@ -9,7 +9,6 @@ namespace Store.Domain.Dtos.PropertyItems;
 
 public record GetAllPropertyItemRequestDto : IContentPolicyQueryDto<PropertyItem>
 {
-    [QueryFilter(MemberPath = "propertyItem.Title", Operator = FilterOperator.Contains)]
     public string? Title { get; init; }
 
     [QueryFilter(MemberPath = "propertyItem.PropertyId")]
@@ -18,7 +17,6 @@ public record GetAllPropertyItemRequestDto : IContentPolicyQueryDto<PropertyItem
     [QueryFilter(MemberPath = "propertyItem.IsActive")]
     public bool? IsActive { get; init; }
 
-    [QueryFilter(MemberPath = "property.Title", Operator = FilterOperator.Contains)]
     public string? PropertyTitle { get; init; }
 
     [QueryFilter(MemberPath = "property.PropertyCategoryId")]

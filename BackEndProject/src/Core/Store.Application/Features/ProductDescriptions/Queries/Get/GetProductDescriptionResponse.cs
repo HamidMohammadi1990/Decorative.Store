@@ -10,6 +10,6 @@ public record GetProductDescriptionResponse
 
     [JsonConverter(typeof(ProductEncryptor))]
     public int ProductId { get; init; }
-
+    public int LanguageId { get; init; }
     public string Description { get; init; } = default!;
 }

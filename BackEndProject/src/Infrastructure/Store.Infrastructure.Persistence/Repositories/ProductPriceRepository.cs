@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Edition.Application.Contracts.Localization;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Store.Infrastructure.Persistence.Extensions;
 using Store.Infrastructure.Persistence;
@@ -11,11 +12,13 @@ using Store.Domain.Repositories;
 namespace Store.Infrastructure.Persistence.Repositories;
 
 public class ProductPriceRepository
-    (EditionDbContext context)
+    (EditionDbContext context, ICurrentLanguageContext languageContext, ILanguageRegistry languageRegistry)
     : Repository<ProductPrice>(context), IProductPriceRepository
 {
     public async Task<PagedResult<GetAllProductPriceDto>> GetAllAsync(GetAllProductPriceRequestDto request)
     {
+        var (languageId, defaultLanguageId) = await ResolveLanguageIdsAsync();
+
         var productPriceSource = Context.ProductPrice
             .ApplyContentPolicyFilter(request.ContentFilter);
 
@@ -37,7 +40,15 @@ public class ProductPriceRepository
                 ProductId = x.productPrice.ProductId,
                 CompanyId = x.productPrice.CompanyId,
                 CompanyName = x.company.Name,
-                ProductTitle = x.product.Title,
+                ProductTitle = x.product.Translations
+                        .Where(t => t.LanguageId == languageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? x.product.Translations
+                        .Where(t => t.LanguageId == defaultLanguageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? string.Empty,
                 UserFirstName = x.user.FirstName!,
                 UserLastName = x.user.LastName!,
                 UserId = x.user.Id,
@@ -54,8 +65,21 @@ public class ProductPriceRepository
     {
         return await
             Context.ProductPrice
+            .AsNoTracking()
             .Where(x => x.ProductId == productId && x.CompanyId == companyId && x.IsActive)
-            .Select(x => PurchaseProductPriceDto.Create(PriceField.Create("", x.Price), PriceField.Create("", x.CooperationPrice)))
-            .FirstOrDefaultAsync();
+            .Select(x => new PurchaseProductPriceDto
+            {
+                Id = x.Id,
+                Price = x.Price,
+                CooperationPrice = x.CooperationPrice
+            })
+            .SingleOrDefaultAsync();
+    }
+
+    private async Task<(int LanguageId, int DefaultLanguageId)> ResolveLanguageIdsAsync(CancellationToken cancellationToken = default)
+    {
+        var defaultLanguage = await languageRegistry.GetDefaultAsync(cancellationToken);
+        var languageId = languageContext.IsResolved ? languageContext.LanguageId : defaultLanguage.Id;
+        return (languageId, defaultLanguage.Id);
     }
 }

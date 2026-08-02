@@ -9,6 +9,8 @@ public record UpdatePropertyItemRequest : IRequest<OperationResult>
     [JsonConverter(typeof(PropertyItemEncryptor))]
     public int Id { get; init; }
 
+    public int LanguageId { get; init; }
+    public string Code { get; init; } = default!;
     public string Title { get; init; } = default!;
 
     [JsonConverter(typeof(PropertyEncryptor))]

@@ -6,17 +6,15 @@ namespace Store.Domain.Entities;
 public abstract class ProductPropertyRule : BaseEntity
 {
 	public bool IsMandatory { get; private set; }
-	public string? Description { get; private set; }
 	public int ProductPropertyId { get; private set; }
 	public PropertyType PropertyType { get; private set; }
 	public bool IsActive { get; private set; } = true;
 
-
 	public ProductProperty ProductProperty { get; private set; } = default!;
+	public ICollection<ProductPropertyRuleTranslation> Translations { get; private set; } = [];
 
 	public static ProductPropertyRule Create(
 		bool isMandatory,
-		string? description,
 		int productPropertyId,
 		PropertyType propertyType,
 		bool isActive,
@@ -34,7 +32,6 @@ public abstract class ProductPropertyRule : BaseEntity
 			PropertyType.Text => new TextProductPropertyRule
 			{
 				IsMandatory = isMandatory,
-				Description = description,
 				ProductPropertyId = productPropertyId,
 				PropertyType = propertyType,
 				IsActive = isActive,
@@ -44,7 +41,6 @@ public abstract class ProductPropertyRule : BaseEntity
 			PropertyType.Numeric or PropertyType.NumericWithItem => new NumericProductPropertyRule
 			{
 				IsMandatory = isMandatory,
-				Description = description,
 				ProductPropertyId = productPropertyId,
 				PropertyType = propertyType,
 				IsActive = isActive,
@@ -54,7 +50,6 @@ public abstract class ProductPropertyRule : BaseEntity
 			PropertyType.Dimensions => new DimensionsProductPropertyRule
 			{
 				IsMandatory = isMandatory,
-				Description = description,
 				ProductPropertyId = productPropertyId,
 				PropertyType = propertyType,
 				IsActive = isActive,
@@ -67,11 +62,26 @@ public abstract class ProductPropertyRule : BaseEntity
 		};
 	}
 
+	public ProductPropertyRuleTranslation UpsertTranslation(int languageId, string? description)
+	{
+		var existing = Translations.FirstOrDefault(x => x.LanguageId == languageId);
+		if (existing is not null)
+		{
+			existing.Update(description);
+			return existing;
+		}
+
+		var translation = ProductPropertyRuleTranslation.Create(description, languageId);
+		Translations.Add(translation);
+		return translation;
+	}
+
 	public void Update(
 		bool isMandatory,
-		string? description,
 		int productPropertyId,
 		bool isActive,
+		int languageId,
+		string? description,
 		int? minLength = null,
 		int? maxLength = null,
 		decimal? minQuantity = null,
@@ -82,9 +92,9 @@ public abstract class ProductPropertyRule : BaseEntity
 		decimal? maxHeight = null)
 	{
 		IsMandatory = isMandatory;
-		Description = description;
 		ProductPropertyId = productPropertyId;
 		IsActive = isActive;
+		UpsertTranslation(languageId, description);
 
 		switch (this)
 		{

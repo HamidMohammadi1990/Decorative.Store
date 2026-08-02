@@ -11,7 +11,8 @@ public class CreatePropertyItemHandler
 {
     public async Task<OperationResult<CreatePropertyItemResponse>> Handle(CreatePropertyItemRequest request, CancellationToken cancellationToken)
     {
-        var propertyItem = PropertyItem.Create(request.Title, request.PropertyId, request.Priority);
+        var propertyItem = PropertyItem.Create(request.Code, request.PropertyId, request.Priority);
+        propertyItem.UpsertTranslation(request.LanguageId, request.Title);
         propertyItemrepository.Add(propertyItem);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);

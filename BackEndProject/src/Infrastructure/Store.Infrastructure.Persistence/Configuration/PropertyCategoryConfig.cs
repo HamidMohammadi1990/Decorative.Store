@@ -10,8 +10,8 @@ internal class PropertyCategoryConfig : IEntityTypeConfiguration<PropertyCategor
     public void Configure(EntityTypeBuilder<PropertyCategory> builder)
     {
         builder
-            .Property(x => x.Title)
-            .HasNVarcharMaxLength(30)
+            .Property(x => x.Code)
+            .HasVarcharMaxLength(20)
             .IsRequired();
 
         builder
@@ -19,5 +19,9 @@ internal class PropertyCategoryConfig : IEntityTypeConfiguration<PropertyCategor
             .WithOne(x => x.PropertyCategory)
             .HasForeignKey(x => x.PropertyCategoryId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasIndex(x => x.Code)
+            .IsUnique();
     }
 }

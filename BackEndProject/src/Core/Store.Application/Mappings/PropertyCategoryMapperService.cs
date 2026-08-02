@@ -1,6 +1,7 @@
 ﻿using Edition.Application.Common.Extensions;
 using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Contracts.Mapping;
+using Edition.Application.Features.Localization;
 using Edition.Application.Features.PropertyCategories.Queries;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Dtos.PropertyCategories;
@@ -19,25 +20,34 @@ public class PropertyCategoryMapperService : IPropertyCategoryMapperService
         }.WithContentPolicy<PropertyCategory, GetAllPropertyCategoryRequestDto>(model);
     }
 
-    public GetPropertyCategoryResponse Map(PropertyCategory model)
+    public GetPropertyCategoryResponse Map(PropertyCategory model, string title)
     {
         return new GetPropertyCategoryResponse
         {
             Id = model.Id,
-            Title = model.Title,
+            Code = model.Code,
+            Title = title,
             IsActive = model.IsActive
         };
     }
 
-    public PagedResult<GetAllPropertyCategoryResponse> Map(PagedResult<PropertyCategory> model)
+    public PagedResult<GetAllPropertyCategoryResponse> Map(PagedResult<GetAllPropertyCategoryDto> model)
     {
         var items = model
             .Items
             .Select(x => new GetAllPropertyCategoryResponse
             {
                 Id = x.Id,
-                Title = x.Title,
-                IsActive = x.IsActive
+                Code = x.Code,
+                IsActive = x.IsActive,
+                Translations = x.Translations
+                    .Select(t => new TranslationItemResponse
+                    {
+                        LanguageId = t.LanguageId,
+                        Title = t.Title,
+                        Slug = string.Empty
+                    })
+                    .ToList()
             })
             .ToList();
 

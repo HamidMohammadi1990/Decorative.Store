@@ -1,6 +1,7 @@
 ﻿using Edition.Application.Common.Extensions;
 using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Contracts.Mapping;
+using Edition.Application.Features.Localization;
 using Edition.Application.Features.Products.Queries;
 using Store.Domain.Dtos.Products;
 using Store.Domain.Dtos.Pagination;
@@ -10,33 +11,33 @@ namespace Edition.Application.Mappings;
 
 public class ProductMapperService : IProductMapperService
 {
-    public GetProductResponse Map(Product model)
+    public GetProductResponse Map(Product model, string title, string slug, string description)
     {
         return new GetProductResponse
         {
             Id = model.Id,
-            Title = model.Title,
+            Title = title,
+            Slug = slug,
             IsActive = model.IsActive,
             ProductCode = model.ProductCode,
-            Description = model.Description,
+            Description = description,
             CreationDate = model.CreatedOnUtc
         };
     }
 
-    public PagedResult<GetAllProductResponse> Map(PagedResult<Product> model)
+    public PagedResult<GetAllProductResponse> Map(PagedResult<GetAllProductResponseDto> model)
     {
         var items = model
             .Items
-           .Select(x => new GetAllProductResponse
-           {
-               Id = x.Id,
-               Title = x.Title,
-               IsActive = x.IsActive,
-               Description = x.Description,
-               CreationDate = x.CreatedOnUtc,
-               ProductCode = x.ProductCode
-           })
-           .ToList();
+            .Select(x => new GetAllProductResponse
+            {
+                Id = x.Id,
+                IsActive = x.IsActive,
+                CreationDate = x.CreatedOnUtc,
+                ProductCode = x.ProductCode,
+                Translations = MapTranslations(x.Translations)
+            })
+            .ToList();
 
         return PagedResult<GetAllProductResponse>.Create(items, model);
     }
@@ -55,4 +56,16 @@ public class ProductMapperService : IProductMapperService
             SubCategorySlug = model.SubCategorySlug
         }.WithContentPolicy<Product, GetAllProductRequestDto>(model);
     }
+
+    private static List<ProductTranslationItemResponse> MapTranslations(
+        IReadOnlyList<Store.Domain.Dtos.Localization.ProductTranslationItemDto> translations)
+        => translations
+            .Select(t => new ProductTranslationItemResponse
+            {
+                LanguageId = t.LanguageId,
+                Title = t.Title,
+                Slug = t.Slug,
+                Description = t.Description
+            })
+            .ToList();
 }

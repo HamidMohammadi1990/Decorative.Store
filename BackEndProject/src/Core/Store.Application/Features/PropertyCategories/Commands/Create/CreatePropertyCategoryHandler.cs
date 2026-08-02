@@ -11,7 +11,8 @@ public class CreatePropertyCategoryHandler
 {
     public async Task<OperationResult<CreatePropertyCategoryResponse>> Handle(CreatePropertyCategoryRequest request, CancellationToken cancellationToken)
     {
-        var propertyCategory = PropertyCategory.Create(request.Title);
+        var propertyCategory = PropertyCategory.Create(request.Code);
+        propertyCategory.UpsertTranslation(request.LanguageId, request.Title);
         propertyCategoryRepository.Add(propertyCategory);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);

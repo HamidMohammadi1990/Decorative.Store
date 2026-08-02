@@ -7,7 +7,7 @@ namespace Edition.Application.Contracts.Mapping;
 
 public interface IProductFileMapperService : IMapper
 {
-    GetProductFileResponse Map(ProductFile model);
+    GetProductFileResponse Map(ProductFile model, string title);
     GetAllProductFileRequestDto Map(GetAllProductFileRequest model);
     SearchProductFileRequestDto Map(SearchProductFileRequest model);
     PagedResult<GetAllProductFileResponse> Map(PagedResult<GetAllProductFileResponseDto> model);

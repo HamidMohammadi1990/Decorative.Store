@@ -1,7 +1,7 @@
-﻿using Edition.Application.Common.Extensions;
+﻿using Edition.Application.Common.Directories;
+using Edition.Application.Common.Extensions;
 using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Contracts.Mapping;
-using Edition.Application.Common.Directories;
 using Edition.Application.Features.ProductFiles.Queries;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Dtos.ProductFiles;
@@ -11,11 +11,11 @@ namespace Edition.Application.Mappings;
 
 public class ProductFileMapperService : IProductFileMapperService
 {
-    public GetProductFileResponse Map(ProductFile model)
+    public GetProductFileResponse Map(ProductFile model, string title)
     {
         return new GetProductFileResponse
         {
-            Title = model.Title,
+            Title = title,
             ImageUrl = ProductDirectory.GetImageUrl(model.FileName),
             FileName = model.FileName,
             ProductId = model.ProductId
@@ -72,9 +72,9 @@ public class ProductFileMapperService : IProductFileMapperService
             {
                 Id = x.Id,
                 Title = x.Title,
-                IsMain = x.IsMain,                
+                IsMain = x.IsMain,
                 FileName = x.FileName,
-                ProductId = x.ProductId                
+                ProductId = x.ProductId
             })
             .ToList();
 

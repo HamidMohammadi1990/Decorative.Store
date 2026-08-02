@@ -8,6 +8,7 @@ public record GetProductResponse
     [JsonConverter(typeof(ProductEncryptor))]
     public int Id { get; init; }
     public string Title { get; init; } = default!;
+    public string Slug { get; init; } = default!;
     public bool IsActive { get; init; }
     public string Description { get; init; } = default!;
     public DateTime CreationDate { get; init; }

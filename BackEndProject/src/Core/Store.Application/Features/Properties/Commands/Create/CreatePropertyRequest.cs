@@ -7,7 +7,10 @@ namespace Edition.Application.Features.Properties.Commands;
 
 public record CreatePropertyRequest : IRequest<OperationResult<CreatePropertyResponse>>
 {
+    public int LanguageId { get; init; }
+    public string Code { get; init; } = default!;
     public string Title { get; init; } = default!;
+    public string? Description { get; init; }
 
     [JsonConverter(typeof(PropertyEncryptor))]
     public int? ParentId { get; init; }
@@ -16,8 +19,6 @@ public record CreatePropertyRequest : IRequest<OperationResult<CreatePropertyRes
 
     [JsonConverter(typeof(PropertyCategoryEncryptor))]
     public int PropertyCategoryId { get; init; }
-
-    public string? Description { get; set; }
 
     public PropertyType PropertyType { get; init; }
 }

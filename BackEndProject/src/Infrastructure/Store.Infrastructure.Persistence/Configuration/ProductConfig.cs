@@ -10,21 +10,6 @@ internal class ProductConfig : IEntityTypeConfiguration<Product>
     public void Configure(EntityTypeBuilder<Product> builder)
     {
         builder
-            .Property(x => x.Title)
-            .HasNVarcharMaxLength(150)
-            .IsRequired();
-
-        builder
-            .Property(x => x.Slug)
-            .HasVarcharMaxLength(150)
-            .IsRequired();
-
-        builder
-            .Property(x => x.Description)
-            .HasNVarcharMaxLength(400)
-            .IsRequired();
-
-        builder
             .Property(x => x.ProductCode)
             .HasVarcharMaxLength(10)
             .IsRequired();
@@ -96,11 +81,7 @@ internal class ProductConfig : IEntityTypeConfiguration<Product>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasIndex(x => x.Title)
-            .IsUnique();
-
-        builder
-            .HasIndex(x => x.Slug)
+            .HasIndex(x => x.ProductCode)
             .IsUnique();
 
         builder

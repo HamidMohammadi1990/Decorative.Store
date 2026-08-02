@@ -32,8 +32,9 @@ public class ProductDescriptionMapperService : IProductDescriptionMapperService
     {
         return new GetProductDescriptionResponse
         {
-            Id = model.ProductId,
+            Id = model.Id,
             ProductId = model.ProductId,
+            LanguageId = model.LanguageId,
             Description = model.Description
         };
     }
@@ -46,6 +47,7 @@ public class ProductDescriptionMapperService : IProductDescriptionMapperService
             {
                 Id = x.Id,
                 ProductId = x.ProductId,
+                LanguageId = x.LanguageId,
                 Description = x.Description,
                 ProductTitle = x.ProductTitle
             })
@@ -62,6 +64,7 @@ public class ProductDescriptionMapperService : IProductDescriptionMapperService
             {
                 Id = x.Id,
                 ProductId = x.ProductId,
+                LanguageId = x.LanguageId,
                 Description = x.Description
             })
             .ToList();

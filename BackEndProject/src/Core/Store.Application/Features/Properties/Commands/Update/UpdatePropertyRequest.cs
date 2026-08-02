@@ -10,7 +10,10 @@ public record UpdatePropertyRequest : IRequest<OperationResult>
     [JsonConverter(typeof(PropertyEncryptor))]
     public int Id { get; init; }
 
+    public int LanguageId { get; init; }
+    public string Code { get; init; } = default!;
     public string Title { get; init; } = default!;
+    public string? Description { get; init; }
 
     [JsonConverter(typeof(PropertyEncryptor))]
     public int? ParentId { get; init; }

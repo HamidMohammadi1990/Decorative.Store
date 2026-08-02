@@ -11,7 +11,7 @@ public class CreateProductDescriptionHandler
 {
     public async Task<OperationResult<CreateProductDescriptionResponse>> Handle(CreateProductDescriptionRequest request, CancellationToken cancellationToken)
     {
-        var productDescription = ProductDescription.Create(request.Description, request.ProductId);
+        var productDescription = ProductDescription.Create(request.Description, request.ProductId, request.LanguageId);
         productDescriptionRepository.Add(productDescription);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);

@@ -11,10 +11,6 @@ internal class ProductPropertyRuleConfig : IEntityTypeConfiguration<ProductPrope
 	public void Configure(EntityTypeBuilder<ProductPropertyRule> builder)
 	{
 		builder
-			.Property(x => x.Description)
-			.HasNVarcharMaxLength(250);
-
-		builder
 			.HasDiscriminator(x => x.PropertyType)
 			.HasValue<ProductPropertyRule>(PropertyType.Select)
 			.HasValue<ProductPropertyRule>(PropertyType.Boolean)

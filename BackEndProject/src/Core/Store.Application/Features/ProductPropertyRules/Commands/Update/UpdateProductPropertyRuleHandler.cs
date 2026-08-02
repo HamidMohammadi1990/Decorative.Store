@@ -10,15 +10,16 @@ public class UpdateProductPropertyRuleHandler
 {
     public async Task<OperationResult> Handle(UpdateProductPropertyRuleRequest request, CancellationToken cancellationToken)
     {
-        var productPropertyRule = await productPropertyRuleRepository.FindAsync(request.Id);
+        var productPropertyRule = await productPropertyRuleRepository.FindWithTranslationsAsync(request.Id, cancellationToken);
         if (productPropertyRule is null)
             return ErrorModel.Create("InvalidId");
 
         productPropertyRule.Update(
             request.IsMandatory,
-            request.Description,
             request.ProductPropertyId,
             request.IsActive,
+            request.LanguageId,
+            request.Description,
             request.MinLength,
             request.MaxLength,
             request.MinQuantity,

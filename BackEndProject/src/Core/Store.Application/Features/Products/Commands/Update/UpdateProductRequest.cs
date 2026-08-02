@@ -9,6 +9,8 @@ public record UpdateProductRequest : IRequest<OperationResult>
     [JsonConverter(typeof(ProductEncryptor))]
     public int Id { get; init; }
 
+    public int LanguageId { get; init; }
+
     [JsonConverter(typeof(SubCategoryEncryptor))]
     public int SubCategoryId { get; init; }
 

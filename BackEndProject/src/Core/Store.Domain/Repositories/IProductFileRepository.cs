@@ -10,7 +10,8 @@ public interface IProductFileRepository
     void Add(ProductFile productFile);
     void Remove(ProductFile productFile);
     Task<ProductFile?> GetAsNoTrackingAsync(int id, CancellationToken cancellationToken = default);
+    Task<ProductFile?> GetWithTranslationsAsNoTrackingAsync(int id, CancellationToken cancellationToken = default);
     ValueTask<ProductFile?> FindAsync(int productFileId, CancellationToken cancellationToken = default);
-    Task<PagedResult<GetAllProductFileResponseDto>> GetAllAsync(GetAllProductFileRequestDto request);
-    Task<PagedResult<SearchProductFileResponseDto>> SearchAsync(SearchProductFileRequestDto request);
+    Task<PagedResult<GetAllProductFileResponseDto>> GetAllAsync(GetAllProductFileRequestDto request, CancellationToken cancellationToken = default);
+    Task<PagedResult<SearchProductFileResponseDto>> SearchAsync(SearchProductFileRequestDto request, CancellationToken cancellationToken = default);
 }

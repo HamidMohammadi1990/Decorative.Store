@@ -1,0 +1,66 @@
+{
+  "category": {
+    "code": "product-facets",
+    "title": "Product facets"
+  },
+  "properties": [
+    {
+      "code": "color",
+      "title": "Colour",
+      "values": {
+        "green": "Green",
+        "grey": "Grey",
+        "walnut": "Walnut",
+        "oak": "Oak",
+        "white": "White",
+        "beige": "Beige",
+        "cream": "Cream",
+        "natural": "Natural",
+        "brass": "Brass",
+        "clear": "Clear",
+        "neutral": "Neutral",
+        "taupe": "Taupe",
+        "charcoal": "Charcoal",
+        "teak": "Teak"
+      }
+    },
+    {
+      "code": "size",
+      "title": "Size",
+      "values": {
+        "3-seater": "3 Seater",
+        "2-seater": "2 Seater",
+        "armchair": "Armchair",
+        "sectional": "Sectional"
+      }
+    },
+    {
+      "code": "material",
+      "title": "Material",
+      "values": {
+        "velvet": "Velvet",
+        "linen": "Linen",
+        "wood": "Wood",
+        "wool": "Wool",
+        "ceramic": "Ceramic",
+        "rattan": "Rattan",
+        "metal": "Metal",
+        "glass": "Glass",
+        "cotton": "Cotton",
+        "fabric": "Fabric",
+        "performance-fabric": "Performance fabric"
+      }
+    },
+    {
+      "code": "room",
+      "title": "Room",
+      "values": {
+        "living-room": "Living room",
+        "bedroom": "Bedroom",
+        "dining": "Dining",
+        "garden": "Garden",
+        "home-office": "Home office"
+      }
+    }
+  ]
+}

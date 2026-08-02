@@ -1,23 +1,53 @@
-﻿using Store.Domain.Entities;
-using System.Linq.Expressions;
+﻿using Edition.Application.Contracts.Localization;
 using Microsoft.EntityFrameworkCore;
+using Store.Domain.Entities;
+using System.Linq.Expressions;
 using Store.Infrastructure.Persistence.Extensions;
 using Store.Infrastructure.Persistence;
 using Store.Domain.Dtos.Products;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Repositories;
 using Store.Domain.Dtos.Properties;
-using Store.Domain.Entities;
+using Store.Domain.Dtos.Localization;
 
 namespace Store.Infrastructure.Persistence.Repositories;
 
 public class PropertyRepository
-    (EditionDbContext context)
+    (EditionDbContext context, ICurrentLanguageContext languageContext, ILanguageRegistry languageRegistry)
     : Repository<Property>(context), IPropertyRepository
 {
-    public async Task<PagedResult<GetAllPropertyDto>> GetAllAsync(GetAllPropertyRequestDto request)
+    public Task<Property?> GetWithTranslationsAsNoTrackingAsync(int id, CancellationToken cancellationToken = default)
+        => Context.Property
+            .AsNoTracking()
+            .Include(x => x.Translations)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+    public Task<Property?> FindWithTranslationsAsync(int id, CancellationToken cancellationToken = default)
+        => Context.Property
+            .Include(x => x.Translations)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+    public Task<bool> ExistsCodeAsync(
+        string code,
+        int propertyCategoryId,
+        int? excludePropertyId = null,
+        CancellationToken cancellationToken = default)
+    {
+        var normalizedCode = code.Trim();
+        return Context.Property.AnyAsync(
+            x => x.Code == normalizedCode &&
+                 x.PropertyCategoryId == propertyCategoryId &&
+                 (!excludePropertyId.HasValue || x.Id != excludePropertyId.Value),
+            cancellationToken);
+    }
+
+    public async Task<PagedResult<GetAllPropertyDto>> GetAllAsync(
+        GetAllPropertyRequestDto request,
+        CancellationToken cancellationToken = default)
     {
         var propertySource = Context.Property
+            .AsNoTracking()
+            .Include(x => x.Translations)
             .ApplyContentPolicyFilter(request.ContentFilter);
 
         var properties =
@@ -27,28 +57,43 @@ public class PropertyRepository
 
         properties = properties.ApplyQueryFilters(request);
 
-        var result = await
-            properties
+        if (!string.IsNullOrWhiteSpace(request.Title))
+            properties = properties.Where(x => x.property.Translations.Any(t => t.Title.Contains(request.Title)));
+
+        var result = await properties
             .Select(x => new GetAllPropertyDto
             {
                 Id = x.property.Id,
-                Title = x.property.Title,
+                Code = x.property.Code,
                 Priority = x.property.Priority,
                 ParentId = x.property.ParentId,
                 IsActive = x.property.IsActive,
-                Description = x.property.Description,
                 PropertyType = x.property.PropertyType,
                 PropertyCategoryId = x.property.PropertyCategoryId,
-                PropertyCategoryTitle = x.propertyCategory.Title
+                PropertyCategoryCode = x.propertyCategory.Code,
+                Translations = x.property.Translations
+                    .Select(t => new PropertyTranslationItemDto
+                    {
+                        LanguageId = t.LanguageId,
+                        Title = t.Title,
+                        Description = t.Description
+                    })
+                    .ToList()
             })
-            .AsNoTracking()
             .ToPagedAsync(request.Pagination);
 
         return result;
     }
 
-    public async Task<List<ProductPropertyDto>> GetByProductIdAsync(int productId, int companyId)
+    public async Task<List<ProductPropertyDto>> GetByProductIdAsync(
+        int productId,
+        int companyId,
+        CancellationToken cancellationToken = default)
     {
+        var defaultLanguage = await languageRegistry.GetDefaultAsync(cancellationToken);
+        var languageId = languageContext.IsResolved ? languageContext.LanguageId : defaultLanguage.Id;
+        var defaultLanguageId = defaultLanguage.Id;
+
         var properties =
             await (from ProductProperty in Context.ProductProperty
                    join Property in Context.Property on
@@ -123,60 +168,92 @@ public class PropertyRepository
                    into PropertyItemDependencies
                    from PropertyItemDependency in PropertyItemDependencies.DefaultIfEmpty()
 
-                   select new ProductPropertyDto
+                   select new
                    {
-                       // ProductProperty
                        ProductPropertyId = ProductProperty.Id,
-
-                       // Parent ProductProperty
                        ParentProductPropertyId = ParentProductProperty.Id,
-
-                       // Property
-                       CategoryTitle = PropertyCategory.Title,
+                       CategoryTitle = PropertyCategory.Translations
+                           .Where(t => t.LanguageId == languageId)
+                           .Select(t => t.Title)
+                           .FirstOrDefault()
+                           ?? PropertyCategory.Translations
+                               .Where(t => t.LanguageId == defaultLanguageId)
+                               .Select(t => t.Title)
+                               .FirstOrDefault()
+                           ?? string.Empty,
                        PropertyId = Property.Id,
-                       PropertyTitle = Property.Title,
+                       PropertyTitle = Property.Translations
+                           .Where(t => t.LanguageId == languageId)
+                           .Select(t => t.Title)
+                           .FirstOrDefault()
+                           ?? Property.Translations
+                               .Where(t => t.LanguageId == defaultLanguageId)
+                               .Select(t => t.Title)
+                               .FirstOrDefault()
+                           ?? string.Empty,
                        PropertyPriority = Property.Priority,
                        PropertyType = Property.PropertyType,
                        PropertyParentId = Property.ParentId,
                        PropertyPriceId = PropertyPrice.Id,
                        PropertyPrice = PropertyPrice.Price,
                        PropertyCooperationPrice = PropertyPrice.CooperationPrice,
-
-                       // Parent Property
                        ParentPropertyId = ParentProperty.Id,
-                       ParentPropertyTitle = ParentProperty.Title,
+                       ParentPropertyTitle = ParentProperty.Translations
+                           .Where(t => t.LanguageId == languageId)
+                           .Select(t => t.Title)
+                           .FirstOrDefault()
+                           ?? ParentProperty.Translations
+                               .Where(t => t.LanguageId == defaultLanguageId)
+                               .Select(t => t.Title)
+                               .FirstOrDefault()
+                           ?? string.Empty,
                        ParentPropertyPriority = Property.Priority,
                        ParentPropertyType = Property.PropertyType,
                        ParentPropertyPriceId = ParentPropertyPrice.Id,
                        ParentPropertyPrice = ParentPropertyPrice.Price,
                        ParentPropertyCooperationPrice = ParentPropertyPrice.CooperationPrice,
-
-                       // Property item
                        PropertyItemId = PropertyItem.Id,
                        PropertyItemPropertyId = PropertyItem.PropertyId,
-                       PropertyItemTitle = PropertyItem.Title,
+                       PropertyItemTitle = PropertyItem.Translations
+                           .Where(t => t.LanguageId == languageId)
+                           .Select(t => t.Title)
+                           .FirstOrDefault()
+                           ?? PropertyItem.Translations
+                               .Where(t => t.LanguageId == defaultLanguageId)
+                               .Select(t => t.Title)
+                               .FirstOrDefault()
+                           ?? string.Empty,
                        PropertyItemPriority = PropertyItem.Priority,
                        PropertyItemPriceId = PropertyItemPrice.Id,
                        PropertyItemPrice = PropertyItemPrice.Price,
                        PropertyItemCooperationPrice = PropertyItemPrice.CooperationPrice,
-
-                       // Dependency Property item
                        DependencyParentPropertyItemId = PropertyItemDependency.ParentPropertyItemId,
                        DependencyDependentPropertyItemId = PropertyItemDependency.DependentPropertyItemId,
-
-                       // Parent Property item
                        ParentPropertyItemId = ParentPropertyItem.Id,
                        ParentPropertyItemPropertyId = ParentPropertyItem.PropertyId,
-                       ParentPropertyItemTitle = ParentPropertyItem.Title,
+                       ParentPropertyItemTitle = ParentPropertyItem.Translations
+                           .Where(t => t.LanguageId == languageId)
+                           .Select(t => t.Title)
+                           .FirstOrDefault()
+                           ?? ParentPropertyItem.Translations
+                               .Where(t => t.LanguageId == defaultLanguageId)
+                               .Select(t => t.Title)
+                               .FirstOrDefault()
+                           ?? string.Empty,
                        ParentPropertyItemPriority = ParentPropertyItem.Priority,
                        ParentPropertyItemPriceId = ParentPropertyItemPrice.Id,
                        ParentPropertyItemPrice = ParentPropertyItemPrice.Price,
                        ParentPropertyItemCooperationPrice = ParentPropertyItemPrice.CooperationPrice,
-
-                       // Property Rule
                        PropertyRuleProductPropertyId = ProductPropertyRule.ProductPropertyId,
                        PropertyRuleIsMandatory = ProductPropertyRule.IsMandatory,
-                       PropertyRuleDescription = ProductPropertyRule.Description,
+                       PropertyRuleDescription = ProductPropertyRule.Translations
+                           .Where(t => t.LanguageId == languageId)
+                           .Select(t => t.Description)
+                           .FirstOrDefault()
+                           ?? ProductPropertyRule.Translations
+                               .Where(t => t.LanguageId == defaultLanguageId)
+                               .Select(t => t.Description)
+                               .FirstOrDefault(),
                        PropertyRulePropertyType = ProductPropertyRule.PropertyType,
                        PropertyRuleMinQuantity = ((NumericProductPropertyRule)ProductPropertyRule).MinQuantity,
                        PropertyRuleMaxQuantity = ((NumericProductPropertyRule)ProductPropertyRule).MaxQuantity,
@@ -186,11 +263,16 @@ public class PropertyRepository
                        PropertyRuleMaxHeight = ((DimensionsProductPropertyRule)ProductPropertyRule).MaxHeight,
                        PropertyRuleMinLength = ((TextProductPropertyRule)ProductPropertyRule).MinLength,
                        PropertyRuleMaxLength = ((TextProductPropertyRule)ProductPropertyRule).MaxLength,
-
-                       // Parent Property rule
                        ParentPropertyRuleProductPropertyId = ParentProductPropertyRule.ProductPropertyId,
                        ParentPropertyRuleIsMandatory = ParentProductPropertyRule.IsMandatory,
-                       ParentPropertyRuleDescription = ParentProductPropertyRule.Description,
+                       ParentPropertyRuleDescription = ParentProductPropertyRule.Translations
+                           .Where(t => t.LanguageId == languageId)
+                           .Select(t => t.Description)
+                           .FirstOrDefault()
+                           ?? ParentProductPropertyRule.Translations
+                               .Where(t => t.LanguageId == defaultLanguageId)
+                               .Select(t => t.Description)
+                               .FirstOrDefault(),
                        ParentPropertyRulePropertyType = ParentProductPropertyRule.PropertyType,
                        ParentPropertyRuleMinQuantity = ((NumericProductPropertyRule)ParentProductPropertyRule).MinQuantity,
                        ParentPropertyRuleMaxQuantity = ((NumericProductPropertyRule)ParentProductPropertyRule).MaxQuantity,
@@ -202,8 +284,70 @@ public class PropertyRepository
                        ParentPropertyRuleMaxLength = ((TextProductPropertyRule)ParentProductPropertyRule).MaxLength,
                    })
                     .AsNoTracking()
-                    .ToListAsync();
+                    .ToListAsync(cancellationToken);
 
-        return properties;
+        return properties
+            .Select(x => new ProductPropertyDto
+            {
+                ProductPropertyId = x.ProductPropertyId,
+                ParentProductPropertyId = x.ParentProductPropertyId,
+                CategoryTitle = x.CategoryTitle,
+                PropertyId = x.PropertyId,
+                PropertyTitle = x.PropertyTitle,
+                PropertyPriority = x.PropertyPriority,
+                PropertyType = x.PropertyType,
+                PropertyParentId = x.PropertyParentId,
+                PropertyPriceId = x.PropertyPriceId,
+                PropertyPrice = x.PropertyPrice,
+                PropertyCooperationPrice = x.PropertyCooperationPrice,
+                ParentPropertyId = x.ParentPropertyId,
+                ParentPropertyTitle = x.ParentPropertyTitle,
+                ParentPropertyPriority = x.ParentPropertyPriority,
+                ParentPropertyType = x.ParentPropertyType,
+                ParentPropertyPriceId = x.ParentPropertyPriceId,
+                ParentPropertyPrice = x.ParentPropertyPrice,
+                ParentPropertyCooperationPrice = x.ParentPropertyCooperationPrice,
+                PropertyItemId = x.PropertyItemId,
+                PropertyItemPropertyId = x.PropertyItemPropertyId,
+                PropertyItemTitle = x.PropertyItemTitle,
+                PropertyItemPriority = x.PropertyItemPriority,
+                PropertyItemPriceId = x.PropertyItemPriceId,
+                PropertyItemPrice = x.PropertyItemPrice,
+                PropertyItemCooperationPrice = x.PropertyItemCooperationPrice,
+                DependencyParentPropertyItemId = x.DependencyParentPropertyItemId,
+                DependencyDependentPropertyItemId = x.DependencyDependentPropertyItemId,
+                ParentPropertyItemId = x.ParentPropertyItemId,
+                ParentPropertyItemPropertyId = x.ParentPropertyItemPropertyId,
+                ParentPropertyItemTitle = x.ParentPropertyItemTitle,
+                ParentPropertyItemPriority = x.ParentPropertyItemPriority,
+                ParentPropertyItemPriceId = x.ParentPropertyItemPriceId,
+                ParentPropertyItemPrice = x.ParentPropertyItemPrice,
+                ParentPropertyItemCooperationPrice = x.ParentPropertyItemCooperationPrice,
+                PropertyRuleProductPropertyId = x.PropertyRuleProductPropertyId,
+                PropertyRuleIsMandatory = x.PropertyRuleIsMandatory,
+                PropertyRuleDescription = x.PropertyRuleDescription,
+                PropertyRulePropertyType = x.PropertyRulePropertyType,
+                PropertyRuleMinQuantity = x.PropertyRuleMinQuantity,
+                PropertyRuleMaxQuantity = x.PropertyRuleMaxQuantity,
+                PropertyRuleMinWidth = x.PropertyRuleMinWidth,
+                PropertyRuleMaxWidth = x.PropertyRuleMaxWidth,
+                PropertyRuleMinHeight = x.PropertyRuleMinHeight,
+                PropertyRuleMaxHeight = x.PropertyRuleMaxHeight,
+                PropertyRuleMinLength = x.PropertyRuleMinLength,
+                PropertyRuleMaxLength = x.PropertyRuleMaxLength,
+                ParentPropertyRuleProductPropertyId = x.ParentPropertyRuleProductPropertyId,
+                ParentPropertyRuleIsMandatory = x.ParentPropertyRuleIsMandatory,
+                ParentPropertyRuleDescription = x.ParentPropertyRuleDescription,
+                ParentPropertyRulePropertyType = x.ParentPropertyRulePropertyType,
+                ParentPropertyRuleMinQuantity = x.ParentPropertyRuleMinQuantity,
+                ParentPropertyRuleMaxQuantity = x.ParentPropertyRuleMaxQuantity,
+                ParentPropertyRuleMinWidth = x.ParentPropertyRuleMinWidth,
+                ParentPropertyRuleMaxWidth = x.ParentPropertyRuleMaxWidth,
+                ParentPropertyRuleMinHeight = x.ParentPropertyRuleMinHeight,
+                ParentPropertyRuleMaxHeight = x.ParentPropertyRuleMaxHeight,
+                ParentPropertyRuleMinLength = x.ParentPropertyRuleMinLength,
+                ParentPropertyRuleMaxLength = x.ParentPropertyRuleMaxLength,
+            })
+            .ToList();
     }
 }

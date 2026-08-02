@@ -1,0 +1,66 @@
+{
+  "category": {
+    "code": "product-facets",
+    "title": "ویژگی‌های محصول"
+  },
+  "properties": [
+    {
+      "code": "color",
+      "title": "رنگ",
+      "values": {
+        "green": "سبز",
+        "grey": "خاکستری",
+        "walnut": "گردویی",
+        "oak": "بلوط",
+        "white": "سفید",
+        "beige": "بژ",
+        "cream": "کرم",
+        "natural": "طبیعی",
+        "brass": "برنجی",
+        "clear": "شفاف",
+        "neutral": "خنثی",
+        "taupe": "قهوه‌ای روشن",
+        "charcoal": "ذغالی",
+        "teak": "چوبی"
+      }
+    },
+    {
+      "code": "size",
+      "title": "اندازه",
+      "values": {
+        "3-seater": "۳ نفره",
+        "2-seater": "۲ نفره",
+        "armchair": "صندلی راحتی",
+        "sectional": "گوشه"
+      }
+    },
+    {
+      "code": "material",
+      "title": "جنس",
+      "values": {
+        "velvet": "مخمل",
+        "linen": "کتان",
+        "wood": "چوب",
+        "wool": "پشم",
+        "ceramic": "سرامیک",
+        "rattan": "حصیری",
+        "metal": "فلز",
+        "glass": "شیشه",
+        "cotton": "نخی",
+        "fabric": "پارچه",
+        "performance-fabric": "پارچه مقاوم"
+      }
+    },
+    {
+      "code": "room",
+      "title": "اتاق",
+      "values": {
+        "living-room": "نشیمن",
+        "bedroom": "خواب",
+        "dining": "ناهارخوری",
+        "garden": "باغ",
+        "home-office": "دفتر"
+      }
+    }
+  ]
+}

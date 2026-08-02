@@ -11,7 +11,8 @@ public class CreateProductHandler
 {
     public async Task<OperationResult<CreateProductResponse>> Handle(CreateProductRequest request, CancellationToken cancellationToken = default)
     {
-        var product = Product.Create(request.Title, request.Slug, request.Description, request.ProductCode, request.SubCategoryId);
+        var product = Product.Create(request.ProductCode, request.SubCategoryId);
+        product.UpsertTranslation(request.LanguageId, request.Title, request.Slug, request.Description);
         productRepository.Add(product);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);

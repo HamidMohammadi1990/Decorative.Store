@@ -1,6 +1,7 @@
 ﻿using Edition.Application.Common.Extensions;
 using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Contracts.Mapping;
+using Edition.Application.Features.Localization;
 using Edition.Application.Features.Properties.Queries;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Dtos.Properties;
@@ -23,16 +24,17 @@ public class PropertyMapperService : IPropertyMapperService
         }.WithContentPolicy<Property, GetAllPropertyRequestDto>(model);
     }
 
-    public GetPropertyResponse Map(Property model)
+    public GetPropertyResponse Map(Property model, string title, string? description)
     {
         return new GetPropertyResponse
         {
             Id = model.Id,
-            Title = model.Title,
+            Code = model.Code,
+            Title = title,
             ParentId = model.ParentId,
             Priority = model.Priority,
             IsActive = model.IsActive,
-            Description = model.Description,
+            Description = description,
             PropertyType = model.PropertyType,
             PropertyCategoryId = model.PropertyCategoryId
         };
@@ -45,14 +47,21 @@ public class PropertyMapperService : IPropertyMapperService
             .Select(x => new GetAllPropertyResponse
             {
                 Id = x.Id,
-                Title = x.Title,
+                Code = x.Code,
                 Priority = x.Priority,
                 ParentId = x.ParentId,
                 IsActive = x.IsActive,
-                Description = x.Description,
                 PropertyType = x.PropertyType,
                 PropertyCategoryId = x.PropertyCategoryId,
-                PropertyCategoryTitle = x.PropertyCategoryTitle
+                PropertyCategoryCode = x.PropertyCategoryCode,
+                Translations = x.Translations
+                    .Select(t => new PropertyTranslationItemResponse
+                    {
+                        LanguageId = t.LanguageId,
+                        Title = t.Title,
+                        Description = t.Description
+                    })
+                    .ToList()
             })
             .ToList();
 

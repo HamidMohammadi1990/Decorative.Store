@@ -14,6 +14,7 @@ public record ProductFileRequest
 {
     [JsonConverter(typeof(ProductEncryptor))]
     public int ProductId { get; init; }
+    public int LanguageId { get; init; }
     public string Title { get; init; } = default!;
     public IFormFile Image { get; init; } = default!;
     public bool IsIndex { get; init; }

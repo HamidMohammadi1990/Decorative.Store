@@ -21,6 +21,13 @@ internal class ProductDescriptionConfig : IEntityTypeConfiguration<ProductDescri
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasIndex(x => x.ProductId);
+            .HasOne(d => d.Language)
+            .WithMany()
+            .HasForeignKey(d => d.LanguageId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasIndex(x => new { x.ProductId, x.LanguageId })
+            .IsUnique();
     }
 }

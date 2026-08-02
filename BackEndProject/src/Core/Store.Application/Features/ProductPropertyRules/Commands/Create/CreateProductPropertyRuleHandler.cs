@@ -13,7 +13,6 @@ public class CreateProductPropertyRuleHandler
     {
         var productPropertyRule = ProductPropertyRule.Create(
             request.IsMandatory,
-            request.Description,
             request.ProductPropertyId,
             request.PropertyType,
             request.IsActive,
@@ -26,6 +25,7 @@ public class CreateProductPropertyRuleHandler
             request.MinHeight,
             request.MaxHeight);
 
+        productPropertyRule.UpsertTranslation(request.LanguageId, request.Description);
         productPropertyRuleRepository.Add(productPropertyRule);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);

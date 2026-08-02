@@ -18,11 +18,12 @@ public class CreateProductFileHandler
             var filename = await localFileService.SaveFileAsync(file.Image, ProductDirectory.ProductImage);
             if (filename.IsSuccess)
             {
-                var productFile = ProductFile.Create(file.Title, file.ProductId, filename.Result!, file.IsIndex);
+                var productFile = ProductFile.Create(file.ProductId, filename.Result!, file.IsIndex);
+                productFile.UpsertTranslation(file.LanguageId, file.Title);
                 productFileRepository.Add(productFile);
-                return productFile;
+                return (productFile, file.Title);
             }
-            return null;
+            return (productFile: (ProductFile?)null, title: (string?)null);
         });
 
         var productFiles = await Task.WhenAll(productFilesTask);
@@ -33,12 +34,12 @@ public class CreateProductFileHandler
 
         var result =
              productFiles
-            .Where(x => x is not null)
+            .Where(x => x.productFile is not null)
             .Select(x => new CreateProductFileResponse
             {
-                Id = x.Id,
-                Title = x.Title,
-                ImageUrl = ProductDirectory.GetImageUrl(x.FileName)
+                Id = x.productFile!.Id,
+                Title = x.title!,
+                ImageUrl = ProductDirectory.GetImageUrl(x.productFile.FileName)
             }).ToList();
         return result;
     }

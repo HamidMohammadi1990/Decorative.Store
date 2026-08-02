@@ -1,6 +1,7 @@
 ﻿using Edition.Application.Common.Extensions;
 using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Contracts.Mapping;
+using Edition.Application.Features.Localization;
 using Edition.Application.Features.PropertyItems.Queries;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Dtos.PropertyItems;
@@ -24,12 +25,13 @@ public class PropertyItemMapperService : IPropertyItemMapperService
         }.WithContentPolicy<PropertyItem, GetAllPropertyItemRequestDto>(model);
     }
 
-    public GetPropertyItemResponse Map(PropertyItem model)
+    public GetPropertyItemResponse Map(PropertyItem model, string title)
     {
         return new GetPropertyItemResponse
         {
             Id = model.Id,
-            Title = model.Title,
+            Code = model.Code,
+            Title = title,
             Priority = model.Priority,
             IsActive = model.IsActive,
             PropertyId = model.PropertyId
@@ -43,13 +45,21 @@ public class PropertyItemMapperService : IPropertyItemMapperService
             .Select(x => new GetAllPropertyItemResponse
             {
                 Id = x.Id,
-                Title = x.Title,
+                Code = x.Code,
                 Priority = x.Priority,
                 IsActive = x.IsActive,
                 PropertyId = x.PropertyId,
+                PropertyCode = x.PropertyCode,
                 PropertyType = x.PropertyType,
-                PropertyTitle = x.PropertyTitle,
-                PropertyCategoryId = x.PropertyCategoryId
+                PropertyCategoryId = x.PropertyCategoryId,
+                Translations = x.Translations
+                    .Select(t => new TranslationItemResponse
+                    {
+                        LanguageId = t.LanguageId,
+                        Title = t.Title,
+                        Slug = string.Empty
+                    })
+                    .ToList()
             })
             .ToList();
 

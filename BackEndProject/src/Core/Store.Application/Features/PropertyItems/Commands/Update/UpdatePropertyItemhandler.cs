@@ -10,15 +10,17 @@ public class UpdatePropertyItemhandler
 {
     public async Task<OperationResult> Handle(UpdatePropertyItemRequest request, CancellationToken cancellationToken)
     {
-        var propertyItem = await propertyItemrepository.FindAsync(request.Id);
+        var propertyItem = await propertyItemrepository.FindWithTranslationsAsync(request.Id, cancellationToken);
         if (propertyItem is null)
             return ErrorModel.Create("InvalidId");
 
-        propertyItem
-            .Update(request.Title,            
+        propertyItem.Update(
+            request.Code,
             request.PropertyId,
             request.Status,
-            request.Priority);
+            request.Priority,
+            request.LanguageId,
+            request.Title);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

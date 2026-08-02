@@ -10,11 +10,11 @@ public class UpdatePropertyCategoryHandler
 {
     public async Task<OperationResult> Handle(UpdatePropertyCategoryRequest request, CancellationToken cancellationToken)
     {
-        var productDescription = await propertyCategoryRepository.FindAsync(request.Id);
-        if (productDescription is null)
+        var propertyCategory = await propertyCategoryRepository.FindWithTranslationsAsync(request.Id, cancellationToken);
+        if (propertyCategory is null)
             return ErrorModel.Create("InvalidId");
 
-        productDescription.Update(request.Title);
+        propertyCategory.Update(request.Code, request.IsActive, request.LanguageId, request.Title);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

@@ -148,6 +148,7 @@ public class CategoryRepository
              select new
              {
                  product,
+                 productTranslations = product.Translations,
                  subCategory,
                  category,
                  categoryTranslations = category.Translations,
@@ -185,15 +186,63 @@ public class CategoryRepository
                                 Slug = subCategoryTranslation.Slug,
                                 Products = group
                                     .Where(x => x.subCategory.Id == item.subCategory.Id)
-                                    .Select(x => x.product)
-                                    .DistinctBy(x => x.Id)
-                                    .Select(product => new ProductDto
+                                    .Select(x => new { x.product, x.productTranslations })
+                                    .DistinctBy(x => x.product.Id)
+                                    .Select(item => new ProductDto
                                     {
-                                        Id = product.Id,
-                                        Title = product.Title,
-                                        Slug = product.Slug
+                                        Id = item.product.Id,
+                                        Title = ProductTranslationHelper.ResolveTitle(
+                                            item.productTranslations, languageId, defaultLanguageId),
+                                        Slug = ProductTranslationHelper.ResolveSlug(
+                                            item.productTranslations, languageId, defaultLanguageId)
                                     })
                                     .ToList()
+                            };
+                        })
+                        .ToList()
+                };
+            })
+            .ToList();
+    }
+
+    public async Task<List<CategoryWithSubCategoriesDto>> GetTreeAsync(CancellationToken cancellationToken = default)
+    {
+        var (languageId, defaultLanguageId) = await ResolveLanguageIdsAsync(cancellationToken);
+
+        var categories = await Context.Category
+            .AsNoTracking()
+            .Where(x => x.IsActive)
+            .Include(x => x.Translations)
+            .Include(x => x.SubCategories.Where(sub => sub.IsActive))
+            .ThenInclude(sub => sub.Translations)
+            .OrderBy(x => x.Id)
+            .ToListAsync(cancellationToken);
+
+        return categories
+            .Select(category =>
+            {
+                var categoryTranslation = ResolveTranslation(category.Translations, languageId, defaultLanguageId);
+
+                return new CategoryWithSubCategoriesDto
+                {
+                    Id = category.Id,
+                    Title = categoryTranslation.Title,
+                    Slug = categoryTranslation.Slug,
+                    SubCategories = category.SubCategories
+                        .OrderBy(sub => sub.Id)
+                        .Select(subCategory =>
+                        {
+                            var subCategoryTranslation = ResolveTranslation(
+                                subCategory.Translations,
+                                languageId,
+                                defaultLanguageId);
+
+                            return new SubCategoryWithProductsDto
+                            {
+                                Id = subCategory.Id,
+                                Title = subCategoryTranslation.Title,
+                                Slug = subCategoryTranslation.Slug,
+                                Products = []
                             };
                         })
                         .ToList()

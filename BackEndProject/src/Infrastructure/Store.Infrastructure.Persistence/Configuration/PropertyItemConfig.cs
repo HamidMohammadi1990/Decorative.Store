@@ -10,8 +10,8 @@ internal class PropertyItemConfig : IEntityTypeConfiguration<PropertyItem>
     public void Configure(EntityTypeBuilder<PropertyItem> builder)
     {
         builder
-            .Property(x => x.Title)
-            .HasNVarcharMaxLength(30)
+            .Property(x => x.Code)
+            .HasVarcharMaxLength(30)
             .IsRequired();
 
         builder
@@ -45,5 +45,9 @@ internal class PropertyItemConfig : IEntityTypeConfiguration<PropertyItem>
 
         builder
             .HasIndex(x => x.PropertyId);
+
+        builder
+            .HasIndex(x => new { x.PropertyId, x.Code })
+            .IsUnique();
     }
 }

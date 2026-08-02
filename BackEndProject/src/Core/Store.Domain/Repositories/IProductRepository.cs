@@ -11,6 +11,15 @@ public interface IProductRepository
     void Add(Product product);
     Task<bool> AnyAsync(Expression<Func<Product, bool>> expression, CancellationToken cancellationToken = default);
     ValueTask<Product?> FindAsync(int productid, CancellationToken cancellationToken = default);
+    Task<Product?> FindWithTranslationsAsync(int id, CancellationToken cancellationToken = default);
     Task<Product?> GetAsNoTrackingAsync(int id, CancellationToken cancellationToken = default);
-    Task<PagedResult<Product>> GetAllAsync(GetAllProductRequestDto request, CancellationToken cancellationToken = default);
+    Task<Product?> GetWithTranslationsAsNoTrackingAsync(int id, CancellationToken cancellationToken = default);
+    Task<bool> ExistsProductCodeAsync(string productCode, int? excludeProductId = null, CancellationToken cancellationToken = default);
+    Task<bool> ExistsTranslationAsync(
+        int languageId,
+        string title,
+        string slug,
+        int? excludeProductId = null,
+        CancellationToken cancellationToken = default);
+    Task<PagedResult<GetAllProductResponseDto>> GetAllAsync(GetAllProductRequestDto request, CancellationToken cancellationToken = default);
 }

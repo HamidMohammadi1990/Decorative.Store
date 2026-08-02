@@ -10,11 +10,11 @@ public class UpdateProductDescriptionHandler
 {
     public async Task<OperationResult> Handle(UpdateProductDescriptionRequest request, CancellationToken cancellationToken)
     {
-        var productDescription = await productDescriptionRepository.FindAsync(request.Id);
+        var productDescription = await productDescriptionRepository.FindAsync(request.Id, cancellationToken);
         if (productDescription is null)
             return ErrorModel.Create("InvalidId");
 
-        productDescription.Update(request.Description, request.ProductId);
+        productDescription.Update(request.Description, request.LanguageId);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

@@ -10,5 +10,9 @@ public record CreateProductPropertyRequest : IRequest<OperationResult<CreateProd
     public int ProductId { get; init; }
     [JsonConverter(typeof(PropertyEncryptor))]
     public int PropertyId { get; init; }
+
+    [JsonConverter(typeof(PropertyItemEncryptor))]
+    public int? PropertyItemId { get; init; }
+
     public bool IsActive { get; init; }
 }

@@ -12,7 +12,6 @@ public record GetAllPropertyRequestDto : IContentPolicyQueryDto<Property>
     [QueryFilter(MemberPath = "property.ParentId")]
     public int? ParentId { get; init; }
 
-    [QueryFilter(MemberPath = "property.Title", Operator = FilterOperator.Contains)]
     public string? Title { get; init; }
 
     [QueryFilter(MemberPath = "property.PropertyCategoryId")]

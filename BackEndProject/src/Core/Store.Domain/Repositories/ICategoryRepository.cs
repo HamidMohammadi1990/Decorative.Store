@@ -27,4 +27,5 @@ public interface ICategoryRepository
     Task<List<CategoryWithSubCategoriesDto>> GetAllWithProductsAsync(
         ProductFeatureTypeCode featureType,
         CancellationToken cancellationToken = default);
+    Task<List<CategoryWithSubCategoriesDto>> GetTreeAsync(CancellationToken cancellationToken = default);
 }

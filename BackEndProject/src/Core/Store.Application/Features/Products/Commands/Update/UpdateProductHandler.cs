@@ -10,17 +10,18 @@ public class UpdateProductHandler
 {
     public async Task<OperationResult> Handle(UpdateProductRequest request, CancellationToken cancellationToken)
     {
-        var product = await productRepository.FindAsync(request.Id, cancellationToken);
+        var product = await productRepository.FindWithTranslationsAsync(request.Id, cancellationToken);
         if (product is null)
             return ErrorModel.Create("InvalidId");
 
         product.Update(
+            request.Status,
+            request.ProductCode,
+            request.SubCategoryId,
+            request.LanguageId,
             request.Title,
             request.Slug,
-            request.Status,
-            request.Description,
-            request.ProductCode,
-            request.SubCategoryId);
+            request.Description);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

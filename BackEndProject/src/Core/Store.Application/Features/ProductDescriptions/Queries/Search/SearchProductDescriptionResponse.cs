@@ -12,4 +12,6 @@ public record SearchProductDescriptionResponse
 
     [JsonConverter(typeof(ProductEncryptor))]
     public int ProductId { get; init; }
+
+    public int LanguageId { get; init; }
 }

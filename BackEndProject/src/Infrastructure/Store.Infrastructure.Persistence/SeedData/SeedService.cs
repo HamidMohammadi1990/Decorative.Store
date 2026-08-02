@@ -10,7 +10,16 @@ namespace Store.Infrastructure.Persistence.SeedData;
 public class SeedService(EditionDbContext context) : ISeedService
 {
     public Task SeedCatalogAsync(CancellationToken cancellationToken = default)
-        => SeedCategoriesAsync(cancellationToken);
+        => SeedCatalogInternalAsync(cancellationToken);
+
+    private async Task SeedCatalogInternalAsync(CancellationToken cancellationToken = default)
+    {
+        await SeedCategoriesAsync(cancellationToken);
+        await SeedPropertiesAsync(cancellationToken);
+        await SeedProductsAsync(cancellationToken);
+        await SeedProductFilesAsync(cancellationToken);
+        await SeedProductPropertiesAsync(cancellationToken);
+    }
 
     public async Task SeedDataAsync(List<DynamicPermission> dynamicPermissions, CancellationToken cancellationToken = default)
     {
@@ -223,6 +232,189 @@ public class SeedService(EditionDbContext context) : ISeedService
 
             category.AddSubCategories(subCategories);
             context.Category.Add(category);
+        }
+
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SeedProductsAsync(CancellationToken cancellationToken = default)
+    {
+        if (await context.Product.AnyAsync(cancellationToken))
+            return;
+
+        if (!await context.Category.AnyAsync(cancellationToken))
+            throw new InvalidOperationException("Product seed requires categories to be seeded first.");
+
+        var faLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "fa-IR", cancellationToken);
+
+        var enLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "en-US", cancellationToken);
+
+        if (faLanguage is null || enLanguage is null)
+            throw new InvalidOperationException("Product seed requires fa-IR and en-US languages to be seeded first.");
+
+        var subCategorySlugMap = await context.SubCategoryTranslation
+            .AsNoTracking()
+            .Where(x => x.LanguageId == faLanguage.Id)
+            .ToDictionaryAsync(x => x.Slug, x => x.SubCategoryId, cancellationToken);
+
+        foreach (var item in ProductSeedData.Items)
+        {
+            if (!subCategorySlugMap.TryGetValue(item.SubCategorySlug, out var subCategoryId))
+                throw new InvalidOperationException(
+                    $"SubCategory slug '{item.SubCategorySlug}' was not found for product '{item.ProductCode}'.");
+
+            var product = Product.Create(item.ProductCode, subCategoryId);
+            product.UpsertTranslation(faLanguage.Id, item.FaTitle, item.FaSlug, item.FaDescription);
+            product.UpsertTranslation(enLanguage.Id, item.EnTitle, item.EnSlug, item.EnDescription);
+            context.Product.Add(product);
+        }
+
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SeedProductFilesAsync(CancellationToken cancellationToken = default)
+    {
+        if (await context.ProductFile.AnyAsync(cancellationToken))
+            return;
+
+        if (!await context.Product.AnyAsync(cancellationToken))
+            throw new InvalidOperationException("Product file seed requires products to be seeded first.");
+
+        var faLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "fa-IR", cancellationToken);
+
+        var enLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "en-US", cancellationToken);
+
+        if (faLanguage is null || enLanguage is null)
+            throw new InvalidOperationException("Product file seed requires fa-IR and en-US languages to be seeded first.");
+
+        var productMap = await context.Product
+            .AsNoTracking()
+            .ToDictionaryAsync(x => x.ProductCode, x => x.Id, StringComparer.OrdinalIgnoreCase, cancellationToken);
+
+        var copiedImages = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var item in ProductSeedData.Items)
+        {
+            if (!productMap.TryGetValue(item.ProductCode, out var productId))
+                throw new InvalidOperationException($"Product '{item.ProductCode}' was not found for image seed.");
+
+            if (!copiedImages.TryGetValue(item.ImageBaseName, out var fileName))
+            {
+                fileName = ProductImageSeedAssets.EnsureCopiedToUploads(item.ImageBaseName);
+                copiedImages[item.ImageBaseName] = fileName;
+            }
+
+            var productFile = ProductFile.Create(productId, fileName, isMain: true);
+            productFile.UpsertTranslation(faLanguage.Id, item.FaImageTitle);
+            productFile.UpsertTranslation(enLanguage.Id, item.EnImageTitle);
+            context.ProductFile.Add(productFile);
+        }
+
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SeedPropertiesAsync(CancellationToken cancellationToken = default)
+    {
+        if (await context.PropertyCategory.AnyAsync(cancellationToken))
+            return;
+
+        var faLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "fa-IR", cancellationToken);
+
+        var enLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "en-US", cancellationToken);
+
+        if (faLanguage is null || enLanguage is null)
+            throw new InvalidOperationException("Property seed requires fa-IR and en-US languages to be seeded first.");
+
+        var catalog = PropertySeedData.Catalog;
+        var category = PropertyCategory.Create(catalog.CategoryCode);
+        category.UpsertTranslation(faLanguage.Id, catalog.FaCategoryTitle);
+        category.UpsertTranslation(enLanguage.Id, catalog.EnCategoryTitle);
+        context.PropertyCategory.Add(category);
+        await context.SaveChangesAsync(cancellationToken);
+
+        foreach (var propertySeed in catalog.Properties)
+        {
+            var property = Property.Create(
+                PropertyType.Select,
+                parentId: null,
+                propertySeed.Code,
+                category.Id,
+                propertySeed.Priority);
+            property.UpsertTranslation(faLanguage.Id, propertySeed.FaTitle, description: null);
+            property.UpsertTranslation(enLanguage.Id, propertySeed.EnTitle, description: null);
+            context.Property.Add(property);
+            await context.SaveChangesAsync(cancellationToken);
+
+            foreach (var valueSeed in propertySeed.Values)
+            {
+                var propertyItem = PropertyItem.Create(valueSeed.Code, property.Id, valueSeed.Priority);
+                propertyItem.UpsertTranslation(faLanguage.Id, valueSeed.FaTitle);
+                propertyItem.UpsertTranslation(enLanguage.Id, valueSeed.EnTitle);
+                context.PropertyItem.Add(propertyItem);
+            }
+        }
+
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SeedProductPropertiesAsync(CancellationToken cancellationToken = default)
+    {
+        if (await context.ProductProperty.AnyAsync(cancellationToken))
+            return;
+
+        if (!await context.Product.AnyAsync(cancellationToken))
+            throw new InvalidOperationException("Product property seed requires products to be seeded first.");
+
+        if (!await context.Property.AnyAsync(cancellationToken))
+            throw new InvalidOperationException("Product property seed requires properties to be seeded first.");
+
+        var propertyMap = await context.Property
+            .AsNoTracking()
+            .ToDictionaryAsync(x => x.Code, x => x.Id, StringComparer.OrdinalIgnoreCase, cancellationToken);
+
+        var propertyItemMap = await context.PropertyItem
+            .AsNoTracking()
+            .Join(
+                context.Property.AsNoTracking(),
+                item => item.PropertyId,
+                property => property.Id,
+                (item, property) => new { PropertyCode = property.Code, ValueCode = item.Code, item.Id })
+            .ToDictionaryAsync(
+                x => $"{x.PropertyCode}:{x.ValueCode}",
+                x => x.Id,
+                StringComparer.OrdinalIgnoreCase,
+                cancellationToken);
+
+        var productMap = await context.Product
+            .AsNoTracking()
+            .ToDictionaryAsync(x => x.ProductCode, x => x.Id, StringComparer.OrdinalIgnoreCase, cancellationToken);
+
+        foreach (var assignment in PropertySeedData.ProductAssignments)
+        {
+            if (!productMap.TryGetValue(assignment.ProductCode, out var productId))
+                throw new InvalidOperationException($"Product '{assignment.ProductCode}' was not found for facet seed.");
+
+            if (!propertyMap.TryGetValue(assignment.PropertyCode, out var propertyId))
+                throw new InvalidOperationException($"Property '{assignment.PropertyCode}' was not found for facet seed.");
+
+            if (!propertyItemMap.TryGetValue($"{assignment.PropertyCode}:{assignment.ValueCode}", out var propertyItemId))
+                throw new InvalidOperationException(
+                    $"Property item '{assignment.PropertyCode}:{assignment.ValueCode}' was not found for facet seed.");
+
+            var productProperty = ProductProperty.Create(productId, propertyId, isActive: true, propertyItemId);
+            context.ProductProperty.Add(productProperty);
         }
 
         await context.SaveChangesAsync(cancellationToken);
