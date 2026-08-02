@@ -9,6 +9,6 @@ public class EnumResources
 
     public static ResourceManager ResourceManager =>
         _resourceManager ??= new ResourceManager(
-            "Edition.Application.Resources.EnumResources",
+            "Store.Application.Resources.EnumResources",
             typeof(EnumResources).Assembly);
 }

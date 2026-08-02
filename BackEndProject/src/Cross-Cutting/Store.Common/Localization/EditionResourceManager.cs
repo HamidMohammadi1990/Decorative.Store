@@ -6,7 +6,7 @@ namespace Store.Common.Localization;
 public sealed class EditionResourceManager : IResourceManager
 {
     private static readonly ResourceManager ResourceManager = new(
-        "Edition.Common.Resources.Messages",
+        "Store.Common.Resources.Messages",
         typeof(EditionResourceManager).Assembly);
 
     public string GetString(string key)

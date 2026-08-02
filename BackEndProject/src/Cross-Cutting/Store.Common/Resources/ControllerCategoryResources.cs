@@ -8,6 +8,6 @@ public class ControllerCategoryResources
 
     public static ResourceManager ResourceManager =>
         _resourceManager ??= new ResourceManager(
-            "Edition.Common.Resources.ControllerCategoryResources",
+            "Store.Common.Resources.ControllerCategoryResources",
             typeof(ControllerCategoryResources).Assembly);
 }
