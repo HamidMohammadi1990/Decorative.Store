@@ -28,6 +28,7 @@ interface CheckoutFulfillmentSectionProps {
   onSelectedAddressChange: (address: SavedAddress | null) => void
   onAddressFieldsChange: (fields: CheckoutAddressFields) => void
   addressErrors: Partial<Record<keyof CheckoutAddressFields, string>>
+  addressesOverride?: SavedAddress[]
 }
 
 export function CheckoutFulfillmentSection({
@@ -37,9 +38,11 @@ export function CheckoutFulfillmentSection({
   onSelectedAddressChange,
   onAddressFieldsChange,
   addressErrors,
+  addressesOverride,
 }: CheckoutFulfillmentSectionProps) {
   const { t } = useTranslation()
-  const addresses = useAddressStore((s) => s.addresses)
+  const storeAddresses = useAddressStore((s) => s.addresses)
+  const addresses = addressesOverride?.length ? addressesOverride : storeAddresses
   const openModal = useAddressStore((s) => s.openModal)
   const getDefaultAddress = useAddressStore((s) => s.getDefaultAddress)
 

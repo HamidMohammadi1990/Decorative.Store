@@ -22,8 +22,7 @@ export function DashboardLayout() {
   }
 
   const handleLogout = () => {
-    logout()
-    navigate('/account')
+    void logout().then(() => navigate('/account'))
   }
 
   const initials = user.firstName.charAt(0).toUpperCase()

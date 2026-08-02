@@ -1,14 +1,12 @@
-import type { MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { ProductSummary } from '@/models/catalog/product.model'
+import { AddToBagButton } from '@/components/cart/AddToBagButton'
 import { CompareButton } from '@/components/compare/CompareButton'
 import { WishlistButton } from '@/components/wishlist/WishlistButton'
-import { Button } from '@/components/ui/Button'
 import { LocalImage } from '@/components/ui/LocalImage'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
-import { useCartStore } from '@/stores/cartStore'
 
 interface ProductCardProps {
   product: ProductSummary
@@ -17,20 +15,7 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const { t } = useTranslation()
   const { currency } = useLocaleSettings()
-  const addLine = useCartStore((s) => s.addLine)
   const productPath = `/product/${product.slug}`
-
-  const handleAdd = (e: MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    addLine({
-      sku: product.id,
-      title: product.title,
-      image: product.image,
-      unitPrice: product.price,
-      quantity: 1,
-    })
-  }
 
   return (
     <article className="group flex flex-col overflow-hidden rounded-sm border border-border bg-surface transition-shadow hover:shadow-md">
@@ -93,14 +78,18 @@ export function ProductCard({ product }: ProductCardProps) {
         </p>
 
         <div className="mt-auto flex items-stretch gap-2 pt-4">
-          <Button
-            type="button"
-            variant="warm"
+          <AddToBagButton
+            item={{
+              sku: product.id,
+              title: product.title,
+              image: product.image,
+              unitPrice: product.price,
+              quantity: 1,
+              inStock: product.inStock,
+              productSlug: product.slug,
+            }}
             className="min-w-0 flex-1 py-2.5 text-sm"
-            onClick={handleAdd}
-          >
-            {t('listing.addToBag')}
-          </Button>
+          />
           <CompareButton slug={product.slug} variant="icon" className="size-10 shrink-0" />
         </div>
       </div>

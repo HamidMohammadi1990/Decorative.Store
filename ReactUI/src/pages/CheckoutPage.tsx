@@ -1,9 +1,11 @@
-import { useMemo, useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { CartLine } from '@/models/cart/cartLine.model'
 import type { CurrencyConfig } from '@/models/shared/currency.model'
 import type { CheckoutTotals } from '@/extensions/calculateCheckoutTotals'
+import type { CheckoutPropertyValues } from '@/components/checkout/CheckoutProductOptionsSection'
 import { AuthField } from '@/components/auth/AuthField'
+import { CheckoutDeliveryTypeOptions } from '@/components/checkout/CheckoutDeliveryTypeOptions'
 import { CheckoutEmptyState } from '@/components/checkout/CheckoutEmptyState'
 import { CheckoutFormSection } from '@/components/checkout/CheckoutFormSection'
 import {
@@ -12,6 +14,7 @@ import {
 } from '@/components/checkout/CheckoutFulfillmentSection'
 import { CheckoutOrderSummary } from '@/components/checkout/CheckoutOrderSummary'
 import { CheckoutPaymentPanel } from '@/components/checkout/CheckoutPaymentPanel'
+import { CheckoutProductOptionsSection } from '@/components/checkout/CheckoutProductOptionsSection'
 import { CheckoutReviewPanel } from '@/components/checkout/CheckoutReviewPanel'
 import {
   CheckoutSteps,
@@ -19,16 +22,21 @@ import {
 } from '@/components/checkout/CheckoutSteps'
 import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
+import { InlineLoading } from '@/components/ui/Spinner'
 import {
   calculateCheckoutTotals,
   type DeliveryMethod,
   type FulfillmentType,
 } from '@/extensions/calculateCheckoutTotals'
+import { mergeCheckoutAddresses } from '@/extensions/mapCheckoutAddress'
+import { validateCheckoutProperties } from '@/extensions/validateCheckoutProperties'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
+import { useCheckoutData } from '@/hooks/useCheckoutData'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import type { SavedAddress } from '@/models/address/savedAddress.model'
 import { useAddressStore } from '@/stores/addressStore'
 import { useCartStore } from '@/stores/cartStore'
+import { useUserStore } from '@/stores/userStore'
 
 interface ContactFormValues {
   email: string
@@ -52,12 +60,21 @@ export function CheckoutPage() {
   const { t } = useTranslation()
   const { currency } = useLocaleSettings()
   const lines = useCartStore((s) => s.lines)
-  const savedAddresses = useAddressStore((s) => s.addresses)
+  const localAddresses = useAddressStore((s) => s.addresses)
+  const user = useUserStore((s) => s.user)
+  const { sessions, deliveryTypes, addresses: apiAddresses, loading, error } = useCheckoutData(lines)
+  const checkoutAddresses = useMemo(
+    () => mergeCheckoutAddresses(localAddresses, apiAddresses),
+    [apiAddresses, localAddresses],
+  )
 
   const [step, setStep] = useState<CheckoutFlowStep>('details')
   const [fulfillment, setFulfillment] = useState<FulfillmentType>('delivery')
   const [delivery, setDelivery] = useState<DeliveryMethod>('standard')
-  const [contactForm, setContactForm] = useState<ContactFormValues>({ email: '' })
+  const [deliveryTypeId, setDeliveryTypeId] = useState<string | null>(null)
+  const [propertyValues, setPropertyValues] = useState<CheckoutPropertyValues>({})
+  const [propertyErrors, setPropertyErrors] = useState<Record<string, Record<string, string>>>({})
+  const [contactForm, setContactForm] = useState<ContactFormValues>({ email: user?.email ?? '' })
   const [addressFields, setAddressFields] = useState<CheckoutAddressFields>(emptyAddressFields)
   const [selectedAddress, setSelectedAddress] = useState<SavedAddress | null>(null)
   const [contactErrors, setContactErrors] = useState<Partial<Record<keyof ContactFormValues, string>>>({})
@@ -66,6 +83,18 @@ export function CheckoutPage() {
   const [processing, setProcessing] = useState(false)
 
   const selectedAddressId = selectedAddress?.id ?? null
+
+  useEffect(() => {
+    if (deliveryTypes.length > 0 && !deliveryTypeId) {
+      setDeliveryTypeId(deliveryTypes[0].id)
+    }
+  }, [deliveryTypeId, deliveryTypes])
+
+  useEffect(() => {
+    if (user?.email && !contactForm.email) {
+      setContactForm((prev) => ({ ...prev, email: user.email }))
+    }
+  }, [contactForm.email, user?.email])
 
   const totals = useMemo(
     () => calculateCheckoutTotals(lines, fulfillment, delivery),
@@ -76,7 +105,43 @@ export function CheckoutPage() {
     return <CheckoutEmptyState />
   }
 
+  if (loading) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center bg-surface-muted">
+        <InlineLoading label={t('checkout.loadingOptions')} />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center bg-surface-muted px-4">
+        <p className="text-center text-sm text-sale">{t(error)}</p>
+      </div>
+    )
+  }
+
   if (!currency) return null
+
+  const updatePropertyValue = (productId: string, propertyId: string, value: unknown) => {
+    setPropertyValues((prev) => ({
+      ...prev,
+      [productId]: {
+        ...prev[productId],
+        [propertyId]: value,
+      },
+    }))
+    setPropertyErrors((prev) => {
+      const productErrors = prev[productId]
+      if (!productErrors?.[propertyId]) return prev
+      const nextProductErrors = { ...productErrors }
+      delete nextProductErrors[propertyId]
+      return {
+        ...prev,
+        [productId]: nextProductErrors,
+      }
+    })
+  }
 
   const updateContactField = (field: keyof ContactFormValues, value: string) => {
     setContactForm((prev) => ({ ...prev, [field]: value }))
@@ -102,7 +167,7 @@ export function CheckoutPage() {
 
     if (fulfillment === 'delivery') {
       const hasSelectedAddress =
-        savedAddresses.length > 0 &&
+        checkoutAddresses.length > 0 &&
         selectedAddress != null &&
         addressFields.firstName.trim() &&
         addressFields.address.trim()
@@ -112,12 +177,21 @@ export function CheckoutPage() {
       }
     }
 
+    const nextPropertyErrors = validateCheckoutProperties(sessions, propertyValues)
+    setPropertyErrors(nextPropertyErrors)
+
     setContactErrors(nextContact)
     setAddressErrors(nextAddress)
 
-    return (
-      Object.keys(nextContact).length === 0 && Object.keys(nextAddress).length === 0
-    )
+    if (
+      Object.keys(nextContact).length > 0 ||
+      Object.keys(nextAddress).length > 0 ||
+      Object.keys(nextPropertyErrors).length > 0
+    ) {
+      return false
+    }
+
+    return true
   }
 
   const goToReview = (e?: FormEvent) => {
@@ -183,15 +257,51 @@ export function CheckoutPage() {
                   onSelectedAddressChange={setSelectedAddress}
                   onAddressFieldsChange={setAddressFields}
                   addressErrors={addressErrors}
+                  addressesOverride={checkoutAddresses}
                 />
+
+                {sessions
+                  .filter((session) => session.data.properties.length > 0)
+                  .map((session) => (
+                  <CheckoutFormSection
+                    key={session.productId}
+                    step={3}
+                    title={t('checkout.productOptionsTitle')}
+                    description={t('checkout.productOptionsDescription')}
+                  >
+                    <CheckoutProductOptionsSection
+                      productTitle={session.productTitle}
+                      propertyGroups={session.data.properties}
+                      values={propertyValues[session.productId] ?? {}}
+                      errors={Object.fromEntries(
+                        Object.entries(propertyErrors[session.productId] ?? {}).map(
+                          ([propertyId, code]) => [
+                            propertyId,
+                            code === 'required' ? t('checkout.validation.required') : code,
+                          ],
+                        ),
+                      )}
+                      onChange={(propertyId, value) =>
+                        updatePropertyValue(session.productId, propertyId, value)
+                      }
+                    />
+                  </CheckoutFormSection>
+                ))}
 
                 {fulfillment === 'delivery' && (
                   <CheckoutFormSection
-                    step={3}
+                    step={4}
                     title={t('checkout.deliveryTitle')}
                     description={t('checkout.deliveryDescription')}
                   >
-                    <div className="grid gap-3 sm:grid-cols-2">
+                    {deliveryTypes.length > 0 ? (
+                      <CheckoutDeliveryTypeOptions
+                        deliveryTypes={deliveryTypes}
+                        selectedId={deliveryTypeId}
+                        onSelect={setDeliveryTypeId}
+                      />
+                    ) : (
+                      <div className="grid gap-3 sm:grid-cols-2">
                       <DeliveryOption
                         id="standard"
                         name="delivery"
@@ -231,12 +341,13 @@ export function CheckoutPage() {
                         onChange={() => setDelivery('express')}
                       />
                     </div>
+                    )}
                   </CheckoutFormSection>
                 )}
 
                 {fulfillment === 'pickup' && (
                   <CheckoutFormSection
-                    step={3}
+                    step={4}
                     title={t('checkout.pickupReadyTitle')}
                     description={t('checkout.pickupReadyDescription')}
                   >

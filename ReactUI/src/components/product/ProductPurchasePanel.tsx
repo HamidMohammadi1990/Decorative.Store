@@ -5,7 +5,7 @@ import { PriceDisplay } from '@/components/ui/PriceDisplay'
 import { getColorSwatch } from '@/extensions/colorSwatches'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { CompareButton } from '@/components/compare/CompareButton'
-import { useCartStore } from '@/stores/cartStore'
+import { useAddToBag } from '@/hooks/useAddToBag'
 
 interface ProductPurchasePanelProps {
   product: ProductDetail
@@ -14,18 +14,29 @@ interface ProductPurchasePanelProps {
 export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
   const { t } = useTranslation()
   const { currency } = useLocaleSettings()
-  const addLine = useCartStore((s) => s.addLine)
+  const { addToBag, status } = useAddToBag()
   const [quantity, setQuantity] = useState(1)
 
   const handleAdd = () => {
-    addLine({
+    void addToBag({
       sku: product.id,
       title: product.title,
       image: product.image,
       unitPrice: product.price,
       quantity,
+      inStock: product.inStock,
+      productSlug: product.slug,
     })
   }
+
+  const addLabel =
+    status === 'adding'
+      ? t('cart.adding')
+      : status === 'added'
+        ? t('cart.added')
+        : product.inStock
+          ? t('listing.addToBag')
+          : t('cart.configureOnProduct')
 
   const decrement = () => setQuantity((q) => Math.max(1, q - 1))
   const increment = () => setQuantity((q) => Math.min(99, q + 1))
@@ -136,9 +147,11 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
           <button
             type="button"
             onClick={handleAdd}
-            className="h-11 flex-1 bg-text px-8 text-sm font-medium tracking-wide text-text-inverse transition-opacity hover:opacity-90"
+            disabled={status === 'adding'}
+            aria-live="polite"
+            className="h-11 flex-1 bg-text px-8 text-sm font-medium tracking-wide text-text-inverse transition-opacity hover:opacity-90 disabled:opacity-60"
           >
-            {t('listing.addToBag')}
+            {addLabel}
           </button>
           <CompareButton
             slug={product.slug}

@@ -17,6 +17,8 @@ import { Spinner } from '@/components/ui/Spinner'
 import { HomePageProvider, useHomePage } from '@/providers/HomePageProvider'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { useShopChromeHeight } from '@/hooks/useShopChromeHeight'
+import { useResumePendingCartAdd } from '@/hooks/useResumePendingCartAdd'
+import { useCartSync } from '@/hooks/useCartSync'
 import { AiAssistantWidget } from '@/components/assistant/AiAssistantWidget'
 
 function ShopLayoutContent() {
@@ -24,6 +26,8 @@ function ShopLayoutContent() {
   const chromeRef = useRef<HTMLDivElement>(null)
   useLocaleSettings()
   useTheme()
+  useResumePendingCartAdd()
+  useCartSync()
   const { data, loading } = useHomePage()
   useShopChromeHeight(chromeRef, !loading && !!data)
 

@@ -15,6 +15,7 @@ import {
   type SignupField,
   type SignupFormValues,
 } from '@/extensions/validateAuthForm'
+import { resolveReturnUrl } from '@/extensions/resolveReturnUrl'
 import { useUserStore } from '@/stores/userStore'
 
 type AuthMode = 'signin' | 'signup'
@@ -23,6 +24,7 @@ export function AuthPage() {
   const { t } = useTranslation()
   const user = useUserStore((s) => s.user)
   const [searchParams, setSearchParams] = useSearchParams()
+  const returnUrl = resolveReturnUrl(searchParams.get('returnUrl'))
   const initialMode = searchParams.get('mode') === 'signup' ? 'signup' : 'signin'
   const [mode, setMode] = useState<AuthMode>(initialMode)
 
@@ -31,7 +33,7 @@ export function AuthPage() {
   }, [searchParams])
 
   if (user) {
-    return <Navigate to="/account/dashboard/wallet" replace />
+    return <Navigate to={returnUrl ?? '/account/dashboard/wallet'} replace />
   }
 
   const switchMode = (next: AuthMode) => {
@@ -100,9 +102,9 @@ export function AuthPage() {
 
           <div className="rounded-lg border border-border bg-surface p-6 shadow-sm sm:p-8">
             {mode === 'signin' ? (
-              <LoginForm onSwitchToSignUp={() => switchMode('signup')} />
+              <LoginForm returnUrl={returnUrl} onSwitchToSignUp={() => switchMode('signup')} />
             ) : (
-              <SignupForm onSwitchToSignIn={() => switchMode('signin')} />
+              <SignupForm returnUrl={returnUrl} onSwitchToSignIn={() => switchMode('signin')} />
             )}
           </div>
 
@@ -168,10 +170,19 @@ function BenefitItem({ text }: { text: string }) {
   )
 }
 
-function LoginForm({ onSwitchToSignUp }: { onSwitchToSignUp: () => void }) {
+function LoginForm({
+  returnUrl,
+  onSwitchToSignUp,
+}: {
+  returnUrl: string | null
+  onSwitchToSignUp: () => void
+}) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const login = useUserStore((s) => s.login)
+  const authLoading = useUserStore((s) => s.authLoading)
+  const authError = useUserStore((s) => s.authError)
+  const clearAuthError = useUserStore((s) => s.clearAuthError)
   const [values, setValues] = useState<LoginFormValues>({ email: '', password: '' })
   const [errors, setErrors] = useState<Partial<Record<LoginField, string>>>({})
   const [touched, setTouched] = useState<Partial<Record<LoginField, boolean>>>({})
@@ -198,14 +209,19 @@ function LoginForm({ onSwitchToSignUp }: { onSwitchToSignUp: () => void }) {
     })
   }
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     const nextErrors = validateLoginForm(values, t)
     setErrors(nextErrors)
     setTouched({ email: true, password: true })
     if (hasErrors(nextErrors)) return
-    login({ email: values.email })
-    navigate('/account/dashboard/wallet')
+
+    try {
+      await login({ email: values.email, password: values.password })
+      navigate(returnUrl ?? '/account/dashboard/wallet')
+    } catch {
+      // Error state is stored in userStore.authError.
+    }
   }
 
   return (
@@ -217,7 +233,10 @@ function LoginForm({ onSwitchToSignUp }: { onSwitchToSignUp: () => void }) {
         autoComplete="email"
         placeholder={t('auth.emailPlaceholder')}
         value={values.email}
-        onChange={(e) => updateField('email', e.target.value)}
+        onChange={(e) => {
+          clearAuthError()
+          updateField('email', e.target.value)
+        }}
         onBlur={() => handleBlur('email')}
         error={touched.email ? errors.email : undefined}
       />
@@ -230,7 +249,10 @@ function LoginForm({ onSwitchToSignUp }: { onSwitchToSignUp: () => void }) {
         showLabel={t('auth.showPassword')}
         hideLabel={t('auth.hidePassword')}
         value={values.password}
-        onChange={(e) => updateField('password', e.target.value)}
+        onChange={(e) => {
+          clearAuthError()
+          updateField('password', e.target.value)
+        }}
         onBlur={() => handleBlur('password')}
         error={touched.password ? errors.password : undefined}
       />
@@ -242,9 +264,15 @@ function LoginForm({ onSwitchToSignUp }: { onSwitchToSignUp: () => void }) {
         </a>
       </div>
 
-      <Button type="submit" variant="warm" className="w-full py-2.5">
-        {t('auth.signInButton')}
+      <Button type="submit" variant="warm" className="w-full py-2.5" disabled={authLoading}>
+        {authLoading ? t('auth.signingIn') : t('auth.signInButton')}
       </Button>
+
+      {authError && (
+        <p className="text-center text-sm text-sale" role="alert">
+          {t(authError)}
+        </p>
+      )}
 
       <p className="text-center text-sm text-text-muted">
         {t('auth.noAccount')}{' '}
@@ -260,10 +288,20 @@ function LoginForm({ onSwitchToSignUp }: { onSwitchToSignUp: () => void }) {
   )
 }
 
-function SignupForm({ onSwitchToSignIn }: { onSwitchToSignIn: () => void }) {
+function SignupForm({
+  returnUrl,
+  onSwitchToSignIn,
+}: {
+  returnUrl: string | null
+  onSwitchToSignIn: () => void
+}) {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const login = useUserStore((s) => s.login)
+  const loginDemo = useUserStore((s) => s.loginDemo)
+  const authLoading = useUserStore((s) => s.authLoading)
+  const authError = useUserStore((s) => s.authError)
+  const useMockAuth = import.meta.env.VITE_AUTH_USE_MOCK === 'true'
   const [values, setValues] = useState<SignupFormValues>({
     firstName: '',
     lastName: '',
@@ -295,7 +333,7 @@ function SignupForm({ onSwitchToSignIn }: { onSwitchToSignIn: () => void }) {
     })
   }
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     const nextErrors = validateSignupForm(values, t)
     setErrors(nextErrors)
@@ -306,12 +344,21 @@ function SignupForm({ onSwitchToSignIn }: { onSwitchToSignIn: () => void }) {
       password: true,
     })
     if (hasErrors(nextErrors)) return
-    login({
-      email: values.email,
-      firstName: values.firstName,
-      lastName: values.lastName,
-    })
-    navigate('/account/dashboard/wallet')
+
+    try {
+      if (useMockAuth) {
+        loginDemo({
+          email: values.email,
+          firstName: values.firstName,
+          lastName: values.lastName,
+        })
+      } else {
+        await login({ email: values.email, password: values.password })
+      }
+      navigate(returnUrl ?? '/account/dashboard/wallet')
+    } catch {
+      // Error state is stored in userStore.authError.
+    }
   }
 
   return (
@@ -366,9 +413,15 @@ function SignupForm({ onSwitchToSignIn }: { onSwitchToSignIn: () => void }) {
 
       <AuthCheckbox label={t('auth.marketingOptIn')} name="marketing" />
 
-      <Button type="submit" variant="warm" className="w-full py-2.5">
-        {t('auth.signUpButton')}
+      <Button type="submit" variant="warm" className="w-full py-2.5" disabled={authLoading}>
+        {authLoading ? t('auth.signingUp') : t('auth.signUpButton')}
       </Button>
+
+      {authError && (
+        <p className="text-center text-sm text-sale" role="alert">
+          {t(authError)}
+        </p>
+      )}
 
       <p className="text-center text-sm text-text-muted">
         {t('auth.hasAccount')}{' '}

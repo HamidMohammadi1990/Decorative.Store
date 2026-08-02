@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { CompareButton } from '@/components/compare/CompareButton'
+import { AddToBagButton } from '@/components/cart/AddToBagButton'
 import { CompareIcon } from '@/components/compare/CompareIcon'
 import { Container } from '@/components/ui/Container'
 import { Button } from '@/components/ui/Button'
@@ -14,7 +15,6 @@ import { calcDiscountPercent } from '@/extensions/calcDiscountPercent'
 import { useCompareProducts } from '@/hooks/useCompareProducts'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { useCompareStore } from '@/stores/compareStore'
-import { useCartStore } from '@/stores/cartStore'
 import { MAX_COMPARE_PRODUCTS } from '@/models/catalog/compare.model'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import type { CompareRow } from '@/models/catalog/compare.model'
@@ -147,7 +147,6 @@ function ProductColumnHeader({
 }) {
   const { t } = useTranslation()
   const { currency } = useLocaleSettings()
-  const addLine = useCartStore((s) => s.addLine)
   const discount = product.compareAtPrice
     ? calcDiscountPercent(product.price, product.compareAtPrice)
     : null
@@ -210,21 +209,18 @@ function ProductColumnHeader({
       </p>
 
       <div className="mt-4 space-y-2">
-        <Button
-          variant="warm"
+        <AddToBagButton
+          item={{
+            sku: product.id,
+            title: product.title,
+            image: product.image,
+            unitPrice: product.price,
+            quantity: 1,
+            inStock: product.inStock,
+            productSlug: product.slug,
+          }}
           className="w-full py-2 text-xs"
-          onClick={() =>
-            addLine({
-              sku: product.id,
-              title: product.title,
-              image: product.image,
-              unitPrice: product.price,
-              quantity: 1,
-            })
-          }
-        >
-          {t('listing.addToBag')}
-        </Button>
+        />
         <CompareButton slug={product.slug} variant="compact" className="w-full" />
       </div>
     </div>

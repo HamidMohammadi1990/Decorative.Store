@@ -7,9 +7,18 @@ const MAX_LENGTH = 100
 interface QuestionSubmitModalProps {
   isOpen: boolean
   onClose: () => void
+  onSubmit: (question: string) => Promise<void>
+  submitting?: boolean
+  submitError?: string | null
 }
 
-export function QuestionSubmitModal({ isOpen, onClose }: QuestionSubmitModalProps) {
+export function QuestionSubmitModal({
+  isOpen,
+  onClose,
+  onSubmit,
+  submitting = false,
+  submitError = null,
+}: QuestionSubmitModalProps) {
   const { t, i18n } = useTranslation()
   const labelId = useId()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -42,11 +51,11 @@ export function QuestionSubmitModal({ isOpen, onClose }: QuestionSubmitModalProp
   if (!isOpen) return null
 
   const trimmed = question.trim()
-  const canSubmit = trimmed.length > 0
+  const canSubmit = trimmed.length > 0 && !submitting
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!canSubmit) return
-    onClose()
+    await onSubmit(trimmed)
   }
 
   return (
@@ -101,15 +110,19 @@ export function QuestionSubmitModal({ isOpen, onClose }: QuestionSubmitModalProp
             <button
               type="button"
               disabled={!canSubmit}
-              onClick={handleSubmit}
+              onClick={() => void handleSubmit()}
               className={`w-full rounded-lg py-3.5 text-sm font-semibold transition-colors ${
                 canSubmit
                   ? 'bg-warm text-warm-text hover:bg-warm-hover'
                   : 'cursor-not-allowed bg-border text-text-muted'
               }`}
             >
-              {t('product.questionModalTitle')}
+              {submitting ? t('common.loading') : t('product.questionModalTitle')}
             </button>
+
+            {submitError && (
+              <p className="mt-3 text-center text-xs text-red-600">{submitError}</p>
+            )}
 
             <p className="mt-3 text-center text-xs leading-relaxed text-text-muted">
               {t('product.questionDisclaimer')}{' '}

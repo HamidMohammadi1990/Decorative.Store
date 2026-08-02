@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Store.Common.Localization;
+using Edition.Application.Common.Validation;
 
 namespace Edition.Application.Features.ProductComments.Commands;
 
@@ -7,24 +7,16 @@ public class CreateProductCommentValidator : AbstractValidator<CreateProductComm
 {
     public CreateProductCommentValidator()
     {
-        RuleFor(x => x.ProductId)
-          .Equal(0)
-          .WithMessage(MessageKeys.InvalidProductId);
+        RuleFor(x => x.ProductId).MustBeValidEntityId();
 
-        RuleFor(x => x.AffordableRating)
-         .Equal(0)
-         .WithMessage(MessageKeys.ValueRatingRequired);
+        RuleFor(x => x.CommentTopicId).MustBeValidEntityId();
 
-        RuleFor(x => x.CommentRate)
-          .Equal(0)
-          .WithMessage(MessageKeys.ReviewRateRequired);
+        RuleFor(x => x.Description)
+            .NotEmpty()
+            .MaximumLength(250);
 
-        RuleFor(x => x.QualityRating)
-          .Equal(0)
-          .WithMessage(MessageKeys.QualityRatingRequired);
-
-        RuleFor(x => x.CommentTopicId)
-          .Equal(0)
-          .WithMessage(MessageKeys.TopicRequired);
+        RuleFor(x => x.CommentRate).InclusiveBetween(1, 5);
+        RuleFor(x => x.QualityRating).InclusiveBetween(1, 5);
+        RuleFor(x => x.AffordableRating).InclusiveBetween(1, 5);
     }
 }

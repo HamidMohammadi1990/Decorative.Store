@@ -5,7 +5,7 @@ import { calcDiscountPercent } from '@/extensions/calcDiscountPercent'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { WishlistButton } from '@/components/wishlist/WishlistButton'
-import { useCartStore } from '@/stores/cartStore'
+import { useAddToBag } from '@/hooks/useAddToBag'
 
 interface ProductBuyBoxProps {
   product: ProductDetail
@@ -14,7 +14,7 @@ interface ProductBuyBoxProps {
 export function ProductBuyBox({ product }: ProductBuyBoxProps) {
   const { t } = useTranslation()
   const { currency } = useLocaleSettings()
-  const addLine = useCartStore((s) => s.addLine)
+  const { addToBag, status } = useAddToBag()
   const [quantity, setQuantity] = useState(1)
 
   const discount =
@@ -23,14 +23,25 @@ export function ProductBuyBox({ product }: ProductBuyBoxProps) {
       : null
 
   const handleAdd = () => {
-    addLine({
+    void addToBag({
       sku: product.id,
       title: product.title,
       image: product.image,
       unitPrice: product.price,
       quantity,
+      inStock: product.inStock,
+      productSlug: product.slug,
     })
   }
+
+  const addLabel =
+    status === 'adding'
+      ? t('cart.adding')
+      : status === 'added'
+        ? t('cart.added')
+        : product.inStock
+          ? t('listing.addToBag')
+          : t('cart.configureOnProduct')
 
   return (
     <aside className="lg:sticky lg:top-24 lg:self-start">
@@ -104,9 +115,11 @@ export function ProductBuyBox({ product }: ProductBuyBoxProps) {
         <button
           type="button"
           onClick={handleAdd}
-          className="mt-4 w-full rounded-md bg-warm py-3 text-sm font-semibold text-warm-text transition-colors hover:bg-warm-hover"
+          disabled={status === 'adding'}
+          aria-live="polite"
+          className="mt-4 w-full rounded-md bg-warm py-3 text-sm font-semibold text-warm-text transition-colors hover:bg-warm-hover disabled:opacity-60"
         >
-          {t('listing.addToBag')}
+          {addLabel}
         </button>
 
         <WishlistButton slug={product.slug} variant="card" className="mt-3" />

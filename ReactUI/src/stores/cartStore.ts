@@ -7,6 +7,7 @@ interface CartState {
   isOpen: boolean
   openCart: () => void
   closeCart: () => void
+  setLines: (lines: CartLine[]) => void
   addLine: (line: Omit<CartLine, 'lineId'>) => void
   removeLine: (lineId: string) => void
   updateQuantity: (lineId: string, quantity: number) => void
@@ -22,6 +23,8 @@ export const useCartStore = create<CartState>()(
 
       openCart: () => set({ isOpen: true }),
       closeCart: () => set({ isOpen: false }),
+
+      setLines: (lines) => set({ lines, isOpen: lines.length > 0 ? true : false }),
 
       addLine: (line) => {
         set((state) => {

@@ -43,6 +43,18 @@ public class OrderItem : BaseEntity
             Quantity = quantity,
         };
 
+    public static OrderItem CreateForQuickAdd(int productId, int quantity, int deliveryTypeId, decimal productPrice)
+        => new()
+        {
+            ProductId = productId,
+            DeliveryTypeId = deliveryTypeId,
+            UserAddressId = null,
+            PostTypeId = null,
+            ProductPrice = productPrice,
+            Quantity = quantity,
+            IsNeedToDesign = false,
+        };
+
     public void AddProperties(List<OrderItemProperty> orderItemProperties)
     {
         foreach (var orderItemProperty in orderItemProperties)

@@ -10,9 +10,19 @@ interface ReviewSubmitModalProps {
   product: ProductDetail
   isOpen: boolean
   onClose: () => void
+  onSubmit: (comment: string) => Promise<void>
+  submitting?: boolean
+  submitError?: string | null
 }
 
-export function ReviewSubmitModal({ product, isOpen, onClose }: ReviewSubmitModalProps) {
+export function ReviewSubmitModal({
+  product,
+  isOpen,
+  onClose,
+  onSubmit,
+  submitting = false,
+  submitError = null,
+}: ReviewSubmitModalProps) {
   const { t } = useTranslation()
   const labelId = useId()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -51,11 +61,11 @@ export function ReviewSubmitModal({ product, isOpen, onClose }: ReviewSubmitModa
 
   if (!isOpen) return null
 
-  const canSubmit = comment.trim().length > 0
+  const canSubmit = comment.trim().length > 0 && !submitting
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!canSubmit) return
-    onClose()
+    await onSubmit(comment.trim())
   }
 
   const displayName =
@@ -143,15 +153,19 @@ export function ReviewSubmitModal({ product, isOpen, onClose }: ReviewSubmitModa
             <button
               type="button"
               disabled={!canSubmit}
-              onClick={handleSubmit}
+              onClick={() => void handleSubmit()}
               className={`mt-5 w-full rounded-lg py-3 text-sm font-semibold transition-colors ${
                 canSubmit
                   ? 'bg-warm text-warm-text hover:bg-warm-hover'
                   : 'cursor-not-allowed bg-border text-text-muted'
               }`}
             >
-              {t('product.reviewModalTitle')}
+              {submitting ? t('common.loading') : t('product.reviewModalTitle')}
             </button>
+
+            {submitError && (
+              <p className="mt-3 text-center text-xs text-red-600">{submitError}</p>
+            )}
 
             <p className="mt-4 text-center text-xs leading-relaxed text-text-muted">
               {t('product.reviewDisclaimer')}{' '}

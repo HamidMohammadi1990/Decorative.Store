@@ -97,9 +97,10 @@ export function UserAccountMenu({ accountLabel }: UserAccountMenuProps) {
   }, [open, user])
 
   const handleLogout = () => {
-    logout()
-    setOpen(false)
-    navigate('/account')
+    void logout().then(() => {
+      setOpen(false)
+      navigate('/account')
+    })
   }
 
   const displayName = user

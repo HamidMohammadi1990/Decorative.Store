@@ -28,6 +28,7 @@ public sealed class EditionDbContext
     public DbSet<Product> Product { get; set; }
     public DbSet<ProductTranslation> ProductTranslation { get; set; }
     public DbSet<ProductComment> ProductComment { get; set; }
+    public DbSet<ProductQuestion> ProductQuestion { get; set; }
     public DbSet<ProductDescription> ProductDescription { get; set; }
     public DbSet<ProductOrderItemAttachmentType> ProductOrderItemAttachmentType { get; set; }
     public DbSet<ProductFeature> ProductFeature { get; set; }

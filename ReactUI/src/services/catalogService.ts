@@ -26,7 +26,12 @@ import {
   resolveListingPath,
 } from '@/extensions/resolveListingPath'
 import { catalogListingService } from '@/services/catalogListingService'
+import { catalogProductService } from '@/services/catalogProductService'
 import { mapCatalogListingProduct } from '@/services/mappers/catalogListingMapper'
+import {
+  mapCatalogProductToDetail,
+  mapRelatedCatalogProducts,
+} from '@/services/mappers/catalogProductMapper'
 
 const PAGE_SIZE = 12
 
@@ -581,6 +586,15 @@ export const catalogService = {
   },
 
   async getProduct(slug: string, locale: Locale): Promise<ProductDetail | null> {
+    try {
+      const product = await catalogProductService.getProduct(slug, locale)
+      if (product.notFound) return null
+      const detail = mapCatalogProductToDetail(product, locale)
+      if (detail) return detail
+    } catch {
+      // fall back to mock catalog data
+    }
+
     return mockFetch(async () => {
       const products = getProductsMock(locale) as ProductSummary[]
       const product = products.find((p) => p.slug === slug)
@@ -606,19 +620,24 @@ export const catalogService = {
     locale: Locale,
     limit = 4,
   ): Promise<ProductSummary[]> {
-    return mockFetch(async () => {
-      const products = getProductsMock(locale) as ProductSummary[]
-      const current = products.find((p) => p.slug === slug)
-      if (!current) return []
+    try {
+      const products = await catalogProductService.getRelatedProducts(slug, locale, limit)
+      return mapRelatedCatalogProducts(products)
+    } catch {
+      return mockFetch(async () => {
+        const products = getProductsMock(locale) as ProductSummary[]
+        const current = products.find((p) => p.slug === slug)
+        if (!current) return []
 
-      const primaryCategory = current.categorySlugs[0]
-      return products
-        .filter(
-          (p) =>
-            p.slug !== slug &&
-            p.categorySlugs.some((c) => c === primaryCategory),
-        )
-        .slice(0, limit)
-    })
+        const primaryCategory = current.categorySlugs[0]
+        return products
+          .filter(
+            (p) =>
+              p.slug !== slug &&
+              p.categorySlugs.some((c) => c === primaryCategory),
+          )
+          .slice(0, limit)
+      })
+    }
   },
 }

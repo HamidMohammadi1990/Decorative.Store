@@ -70,6 +70,11 @@ public class AccountController
     public async Task<ApiResult<OperationResult>> Register(RegisterUserRequest request)
         => await mediator.Send(request);
 
+    [Authorize]
+    [HttpGet("me")]
+    public async Task<ApiResult<GetUserResponse?>> GetCurrentUser()
+        => await mediator.Send(new GetCurrentUserRequest());
+
     [Authorize]    
     [HttpPost("is-authenticated")]
     public ApiResult<bool> IsAuthenticated()

@@ -19,4 +19,14 @@ public class CatalogController(ISender mediator) : BaseApiController
     [HttpGet("listing")]
     public async Task<ApiResult<GetCatalogListingResponse>> Listing([FromQuery] string path = "")
         => await mediator.Send(new GetCatalogListingRequest(path));
+
+    [HttpGet("product")]
+    public async Task<ApiResult<GetCatalogProductResponse>> Product([FromQuery] string slug)
+        => await mediator.Send(new GetCatalogProductRequest(slug));
+
+    [HttpGet("product/related")]
+    public async Task<ApiResult<GetRelatedCatalogProductsResponse>> Related(
+        [FromQuery] string slug,
+        [FromQuery] int limit = 4)
+        => await mediator.Send(new GetRelatedCatalogProductsRequest(slug, limit));
 }

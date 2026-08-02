@@ -34,6 +34,7 @@ public static class SecurityKeyConstant
     public static string FinancialYear => SecurityKeyRegistry.Get(nameof(FinancialYear));
     public static string DeliveryOption => SecurityKeyRegistry.Get(nameof(DeliveryOption));
     public static string ProductComment => SecurityKeyRegistry.Get(nameof(ProductComment));
+    public static string ProductQuestion => SecurityKeyRegistry.Get(nameof(ProductQuestion));
     public static string BlogPostComment => SecurityKeyRegistry.Get(nameof(BlogPostComment));
     public static string ChartOfAccount => SecurityKeyRegistry.Get(nameof(ChartOfAccount));
     public static string ProductProperty => SecurityKeyRegistry.Get(nameof(ProductProperty));

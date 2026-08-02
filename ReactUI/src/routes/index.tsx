@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { RequireAuth } from '@/components/auth/RequireAuth'
 import { AuthLayout } from '@/layouts/AuthLayout'
 import { DashboardLayout } from '@/layouts/DashboardLayout'
 import { ShopLayout } from '@/layouts/ShopLayout'
@@ -34,7 +35,11 @@ export const router = createBrowserRouter([
       },
       {
         path: '/checkout',
-        element: <CheckoutPage />,
+        element: (
+          <RequireAuth>
+            <CheckoutPage />
+          </RequireAuth>
+        ),
       },
       {
         path: '/product/:slug',
