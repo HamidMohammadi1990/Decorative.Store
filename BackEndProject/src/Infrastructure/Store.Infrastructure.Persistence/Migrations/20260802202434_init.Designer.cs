@@ -12,7 +12,7 @@ using Store.Infrastructure.Persistence;
 namespace Store.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(EditionDbContext))]
-    [Migration("20260802130455_init")]
+    [Migration("20260802202434_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -1930,6 +1930,47 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.ToTable("ProductPropertyRuleTranslation", (string)null);
                 });
 
+            modelBuilder.Entity("Store.Domain.Entities.ProductQuestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Answer")
+                        .HasColumnType("NVARCHAR(2500)");
+
+                    b.Property<int?>("AnsweredByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(500)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnsweredByUserId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProductQuestion");
+                });
+
             modelBuilder.Entity("Store.Domain.Entities.ProductTranslation", b =>
                 {
                     b.Property<int>("Id")
@@ -3727,6 +3768,32 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Navigation("Language");
 
                     b.Navigation("ProductPropertyRule");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.ProductQuestion", b =>
+                {
+                    b.HasOne("Store.Domain.Entities.User", "AnsweredByUser")
+                        .WithMany()
+                        .HasForeignKey("AnsweredByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Store.Domain.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Store.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("AnsweredByUser");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Store.Domain.Entities.ProductTranslation", b =>

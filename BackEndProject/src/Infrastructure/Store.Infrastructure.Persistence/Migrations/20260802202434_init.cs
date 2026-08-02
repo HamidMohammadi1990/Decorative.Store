@@ -1335,6 +1335,43 @@ namespace Store.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductQuestion",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Question = table.Column<string>(type: "NVARCHAR(500)", nullable: false),
+                    Answer = table.Column<string>(type: "NVARCHAR(2500)", nullable: true),
+                    AnsweredByUserId = table.Column<int>(type: "int", nullable: true),
+                    CreatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductQuestion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductQuestion_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductQuestion_User_AnsweredByUserId",
+                        column: x => x.AnsweredByUserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductQuestion_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductTranslation",
                 columns: table => new
                 {
@@ -2611,6 +2648,21 @@ namespace Store.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductQuestion_AnsweredByUserId",
+                table: "ProductQuestion",
+                column: "AnsweredByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductQuestion_ProductId",
+                table: "ProductQuestion",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductQuestion_UserId",
+                table: "ProductQuestion",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductTranslation_LanguageId_Slug",
                 table: "ProductTranslation",
                 columns: new[] { "LanguageId", "Slug" },
@@ -2915,6 +2967,9 @@ namespace Store.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductPropertyRuleTranslation");
+
+            migrationBuilder.DropTable(
+                name: "ProductQuestion");
 
             migrationBuilder.DropTable(
                 name: "ProductTranslation");
