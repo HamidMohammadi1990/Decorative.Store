@@ -1,6 +1,7 @@
 ﻿using Edition.Application.Contracts.Localization;
 using Microsoft.EntityFrameworkCore;
 using Store.Domain.Entities;
+using Store.Domain.Enums;
 using System.Linq.Expressions;
 using Store.Infrastructure.Persistence.Extensions;
 using Store.Infrastructure.Persistence;
@@ -170,7 +171,7 @@ public class PropertyRepository
                    select new
                    {
                        ProductPropertyId = ProductProperty.Id,
-                       ParentProductPropertyId = ParentProductProperty.Id,
+                       ParentProductPropertyId = (int?)ParentProductProperty.Id,
                        CategoryTitle = PropertyCategory.Translations
                            .Where(t => t.LanguageId == languageId)
                            .Select(t => t.Title)
@@ -193,10 +194,10 @@ public class PropertyRepository
                        PropertyPriority = Property.Priority,
                        PropertyType = Property.PropertyType,
                        PropertyParentId = Property.ParentId,
-                       PropertyPriceId = PropertyPrice.Id,
-                       PropertyPrice = PropertyPrice.Price,
-                       PropertyCooperationPrice = PropertyPrice.CooperationPrice,
-                       ParentPropertyId = ParentProperty.Id,
+                       PropertyPriceId = (int?)PropertyPrice.Id,
+                       PropertyPrice = (decimal?)PropertyPrice.Price,
+                       PropertyCooperationPrice = (decimal?)PropertyPrice.CooperationPrice,
+                       ParentPropertyId = (int?)ParentProperty.Id,
                        ParentPropertyTitle = ParentProperty.Translations
                            .Where(t => t.LanguageId == languageId)
                            .Select(t => t.Title)
@@ -206,13 +207,13 @@ public class PropertyRepository
                                .Select(t => t.Title)
                                .FirstOrDefault()
                            ?? string.Empty,
-                       ParentPropertyPriority = ParentProperty.Priority,
-                       ParentPropertyType = ParentProperty.PropertyType,
-                       ParentPropertyPriceId = ParentPropertyPrice.Id,
-                       ParentPropertyPrice = ParentPropertyPrice.Price,
-                       ParentPropertyCooperationPrice = ParentPropertyPrice.CooperationPrice,
-                       PropertyItemId = PropertyItem.Id,
-                       PropertyItemPropertyId = PropertyItem.PropertyId,
+                       ParentPropertyPriority = (int?)ParentProperty.Priority,
+                       ParentPropertyType = (PropertyType?)ParentProperty.PropertyType,
+                       ParentPropertyPriceId = (int?)ParentPropertyPrice.Id,
+                       ParentPropertyPrice = (decimal?)ParentPropertyPrice.Price,
+                       ParentPropertyCooperationPrice = (decimal?)ParentPropertyPrice.CooperationPrice,
+                       PropertyItemId = (int?)PropertyItem.Id,
+                       PropertyItemPropertyId = (int?)PropertyItem.PropertyId,
                        PropertyItemTitle = PropertyItem.Translations
                            .Where(t => t.LanguageId == languageId)
                            .Select(t => t.Title)
@@ -222,14 +223,14 @@ public class PropertyRepository
                                .Select(t => t.Title)
                                .FirstOrDefault()
                            ?? string.Empty,
-                       PropertyItemPriority = PropertyItem.Priority,
-                       PropertyItemPriceId = PropertyItemPrice.Id,
-                       PropertyItemPrice = PropertyItemPrice.Price,
-                       PropertyItemCooperationPrice = PropertyItemPrice.CooperationPrice,
-                       DependencyParentPropertyItemId = PropertyItemDependency.ParentPropertyItemId,
-                       DependencyDependentPropertyItemId = PropertyItemDependency.DependentPropertyItemId,
-                       ParentPropertyItemId = ParentPropertyItem.Id,
-                       ParentPropertyItemPropertyId = ParentPropertyItem.PropertyId,
+                       PropertyItemPriority = (int?)PropertyItem.Priority,
+                       PropertyItemPriceId = (int?)PropertyItemPrice.Id,
+                       PropertyItemPrice = (decimal?)PropertyItemPrice.Price,
+                       PropertyItemCooperationPrice = (decimal?)PropertyItemPrice.CooperationPrice,
+                       DependencyParentPropertyItemId = (int?)PropertyItemDependency.ParentPropertyItemId,
+                       DependencyDependentPropertyItemId = (int?)PropertyItemDependency.DependentPropertyItemId,
+                       ParentPropertyItemId = (int?)ParentPropertyItem.Id,
+                       ParentPropertyItemPropertyId = (int?)ParentPropertyItem.PropertyId,
                        ParentPropertyItemTitle = ParentPropertyItem.Translations
                            .Where(t => t.LanguageId == languageId)
                            .Select(t => t.Title)
@@ -239,12 +240,12 @@ public class PropertyRepository
                                .Select(t => t.Title)
                                .FirstOrDefault()
                            ?? string.Empty,
-                       ParentPropertyItemPriority = ParentPropertyItem.Priority,
-                       ParentPropertyItemPriceId = ParentPropertyItemPrice.Id,
-                       ParentPropertyItemPrice = ParentPropertyItemPrice.Price,
-                       ParentPropertyItemCooperationPrice = ParentPropertyItemPrice.CooperationPrice,
-                       PropertyRuleProductPropertyId = ProductPropertyRule.ProductPropertyId,
-                       PropertyRuleIsMandatory = ProductPropertyRule.IsMandatory,
+                       ParentPropertyItemPriority = (int?)ParentPropertyItem.Priority,
+                       ParentPropertyItemPriceId = (int?)ParentPropertyItemPrice.Id,
+                       ParentPropertyItemPrice = (decimal?)ParentPropertyItemPrice.Price,
+                       ParentPropertyItemCooperationPrice = (decimal?)ParentPropertyItemPrice.CooperationPrice,
+                       PropertyRuleProductPropertyId = (int?)ProductPropertyRule.ProductPropertyId,
+                       PropertyRuleIsMandatory = (bool?)ProductPropertyRule.IsMandatory,
                        PropertyRuleDescription = ProductPropertyRule.Translations
                            .Where(t => t.LanguageId == languageId)
                            .Select(t => t.Description)
@@ -253,9 +254,9 @@ public class PropertyRepository
                                .Where(t => t.LanguageId == defaultLanguageId)
                                .Select(t => t.Description)
                                .FirstOrDefault(),
-                       PropertyRulePropertyType = ProductPropertyRule.PropertyType,
-                       ParentPropertyRuleProductPropertyId = ParentProductPropertyRule.ProductPropertyId,
-                       ParentPropertyRuleIsMandatory = ParentProductPropertyRule.IsMandatory,
+                       PropertyRulePropertyType = (PropertyType?)ProductPropertyRule.PropertyType,
+                       ParentPropertyRuleProductPropertyId = (int?)ParentProductPropertyRule.ProductPropertyId,
+                       ParentPropertyRuleIsMandatory = (bool?)ParentProductPropertyRule.IsMandatory,
                        ParentPropertyRuleDescription = ParentProductPropertyRule.Translations
                            .Where(t => t.LanguageId == languageId)
                            .Select(t => t.Description)
@@ -264,14 +265,15 @@ public class PropertyRepository
                                .Where(t => t.LanguageId == defaultLanguageId)
                                .Select(t => t.Description)
                                .FirstOrDefault(),
-                       ParentPropertyRulePropertyType = ParentProductPropertyRule.PropertyType,
+                       ParentPropertyRulePropertyType = (PropertyType?)ParentProductPropertyRule.PropertyType,
                    })
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
 
         var productPropertyIds = properties
             .SelectMany(x => new[] { x.PropertyRuleProductPropertyId, x.ParentPropertyRuleProductPropertyId })
-            .Where(id => id > 0)
+            .Where(id => id.HasValue && id.Value > 0)
+            .Select(id => id!.Value)
             .Distinct()
             .ToList();
 
