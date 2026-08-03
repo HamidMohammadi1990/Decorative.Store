@@ -59,6 +59,7 @@ public static class SecurityServiceCollectionExtensions
             options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(options =>
         {
+            options.MapInboundClaims = true;
             options.RequireHttpsMetadata = !environment.IsDevelopment();
             options.SaveToken = true;
             options.TokenValidationParameters = tokenValidationParameters;

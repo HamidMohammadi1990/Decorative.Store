@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Edition.Application.Contracts;
 using Edition.Application.Models.Constants;
@@ -24,11 +25,11 @@ public sealed class AuthContextValidator(
 
     private async Task<bool> ValidateInternalAsync(ClaimsPrincipal principal, CancellationToken cancellationToken)
     {
-        var userIdValue = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userIdValue = ResolveUserId(principal);
         if (!int.TryParse(userIdValue, out var userId))
             return false;
 
-        var tokenSecurityStamp = principal.FindFirstValue(SecurityStampClaimType);
+        var tokenSecurityStamp = ResolveSecurityStamp(principal);
         if (string.IsNullOrWhiteSpace(tokenSecurityStamp))
             return false;
 
@@ -39,10 +40,22 @@ public sealed class AuthContextValidator(
         if (string.IsNullOrWhiteSpace(sessionIdValue) || !Guid.TryParse(sessionIdValue, out var sessionId))
             return true;
 
-        var jwtId = principal.FindFirstValue(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti);
+        var jwtId = ResolveJwtId(principal);
         if (string.IsNullOrWhiteSpace(jwtId))
             return false;
 
         return await userAuthCache.ValidateSessionAsync(sessionId, userId, jwtId, cancellationToken);
     }
+
+    private static string? ResolveUserId(ClaimsPrincipal principal)
+        => principal.FindFirstValue(ClaimTypes.NameIdentifier)
+           ?? principal.FindFirstValue(JwtRegisteredClaimNames.Sub);
+
+    private static string? ResolveSecurityStamp(ClaimsPrincipal principal)
+        => principal.FindFirstValue(SecurityStampClaimType)
+           ?? principal.FindFirstValue("AspNet.Identity.SecurityStamp");
+
+    private static string? ResolveJwtId(ClaimsPrincipal principal)
+        => principal.FindFirstValue(JwtRegisteredClaimNames.Jti)
+           ?? principal.FindFirstValue("jti");
 }
