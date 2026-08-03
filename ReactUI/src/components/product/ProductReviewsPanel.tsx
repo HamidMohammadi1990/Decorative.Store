@@ -71,7 +71,12 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
 
   const openReviewModal = () => {
     if (!isAuthenticated) {
-      openLoginModal()
+      openLoginModal({
+        onSuccess: () => {
+          setSubmitError(null)
+          setReviewModalOpen(true)
+        },
+      })
       return
     }
     setSubmitError(null)

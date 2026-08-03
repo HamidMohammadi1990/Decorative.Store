@@ -15,6 +15,7 @@ export function LoginModal() {
   const isOpen = useAuthModalStore((s) => s.isOpen)
   const mode = useAuthModalStore((s) => s.mode)
   const closeModal = useAuthModalStore((s) => s.closeModal)
+  const consumeSuccessAction = useAuthModalStore((s) => s.consumeSuccessAction)
   const setMode = useAuthModalStore((s) => s.setMode)
   const clearAuthError = useUserStore((s) => s.clearAuthError)
 
@@ -38,8 +39,9 @@ export function LoginModal() {
   if (!isOpen) return null
 
   const handleAuthSuccess = () => {
+    const onSuccess = consumeSuccessAction()
     closeModal()
-    window.location.reload()
+    onSuccess?.()
   }
 
   return (

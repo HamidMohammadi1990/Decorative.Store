@@ -55,7 +55,12 @@ export function ProductQuestionsPanel({ product }: ProductQuestionsPanelProps) {
 
   const openQuestionModal = () => {
     if (!isAuthenticated) {
-      openLoginModal()
+      openLoginModal({
+        onSuccess: () => {
+          setSubmitError(null)
+          setQuestionModalOpen(true)
+        },
+      })
       return
     }
     setSubmitError(null)

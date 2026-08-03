@@ -15,7 +15,16 @@ function Bootstrap() {
   const restoreSession = useUserStore((s) => s.restoreSession)
 
   useEffect(() => {
-    void restoreSession()
+    const runRestore = () => {
+      void restoreSession()
+    }
+
+    if (useUserStore.persist.hasHydrated()) {
+      runRestore()
+      return
+    }
+
+    return useUserStore.persist.onFinishHydration(runRestore)
   }, [restoreSession])
 
   return <App />

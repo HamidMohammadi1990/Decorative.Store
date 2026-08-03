@@ -137,11 +137,11 @@ export const useUserStore = create<UserState>()(
       },
 
       restoreSession: async () => {
-        const { accessToken, refreshToken, tokenExpiresAt } = get()
+        const { accessToken, refreshToken, tokenExpiresAt, user } = get()
         if (!accessToken) return false
 
         if (accessToken === 'mock-access-token') {
-          return get().user !== null
+          return user !== null
         }
 
         const shouldRefresh =
@@ -149,10 +149,10 @@ export const useUserStore = create<UserState>()(
           tokenExpiresAt !== null &&
           Date.now() > tokenExpiresAt - 60_000
 
-        try {
-          let activeToken = accessToken
+        let activeToken = accessToken
 
-          if (shouldRefresh && refreshToken) {
+        if (shouldRefresh && refreshToken) {
+          try {
             const refreshed = await authService.refreshToken(accessToken, refreshToken)
             activeToken = refreshed.accessToken
             set({
@@ -160,23 +160,28 @@ export const useUserStore = create<UserState>()(
               refreshToken: refreshed.refreshToken,
               tokenExpiresAt: Date.now() + refreshed.expiresIn * 1000,
             })
+          } catch {
+            useCartStore.getState().clearCart()
+            set({
+              user: null,
+              accessToken: null,
+              refreshToken: null,
+              tokenExpiresAt: null,
+            })
+            return false
           }
+        }
 
+        try {
           const profile = await authService.getCurrentUser(activeToken)
           if (profile) {
             set({ user: mapCurrentUserToDashboardUser(profile) })
           }
-          return true
         } catch {
-          useCartStore.getState().clearCart()
-          set({
-            user: null,
-            accessToken: null,
-            refreshToken: null,
-            tokenExpiresAt: null,
-          })
-          return false
+          // Keep persisted session when /me is temporarily unavailable.
         }
+
+        return get().accessToken !== null && get().user !== null
       },
     }),
     {
