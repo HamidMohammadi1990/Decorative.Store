@@ -1,6 +1,6 @@
+using Edition.Application.Common.Security;
 using Edition.Application.Common.Utilities;
 using Edition.Application.Contracts;
-using Edition.Application.Models.Constants;
 using Edition.Application.Models.Services;
 using Microsoft.AspNetCore.Http;
 using Store.Common.Extensions;
@@ -10,13 +10,17 @@ namespace Store.Infrastructure.Identity;
 public sealed class HttpCurrentUserContext(IHttpContextAccessor httpContextAccessor) : ICurrentUserContext
 {
     public int UserId =>
-        httpContextAccessor.HttpContext?.User.Identity?.GetUserId<int>() ?? 0;
+        httpContextAccessor.HttpContext?.User.GetUserId<int>() ?? 0;
 
     public Guid? SessionId
     {
         get
         {
-            var sessionIdValue = httpContextAccessor.HttpContext?.User?.FindFirst(AuthClaimTypes.SessionId)?.Value;
+            var user = httpContextAccessor.HttpContext?.User;
+            if (user is null)
+                return null;
+
+            var sessionIdValue = AuthClaimResolver.GetSessionId(user);
             return Guid.TryParse(sessionIdValue, out var sessionId) ? sessionId : null;
         }
     }

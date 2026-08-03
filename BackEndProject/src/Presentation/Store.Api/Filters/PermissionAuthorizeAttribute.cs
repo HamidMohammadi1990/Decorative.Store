@@ -51,7 +51,7 @@ public class PermissionAuthorizeAttribute
         }
 
         var permissionType = AdminActionPermissionResolver.Resolve(actionDescriptor.MethodInfo, metadata);
-        var userId = claimsIdentity.GetUserId<int>();
+        var userId = context.HttpContext.User.GetUserId<int>();
         var hasPermission = await accountingService.Value.HasPermissionAsync(userId, permissionType);
         if (!hasPermission)
             context.Result = new ForbidResult();
