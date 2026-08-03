@@ -7,6 +7,7 @@ using Edition.Application.Configurations.Email;
 using Edition.Application.Configurations.ContentPolicies;
 using Edition.Application.Configurations.Localization;
 using Store.Api.Filters;
+using Store.WebFramework.Api;
 
 namespace Store.Api.Extensions;
 
@@ -16,6 +17,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddControllers(options =>
         {
+            options.Conventions.Add(new ControllerNameRouteConvention());
             options.Filters.Add<PermissionAuthorizeAttribute>();
             options.Filters.Add<LocalizationResultFilter>();
         }).AddNewtonsoftJson(option =>
