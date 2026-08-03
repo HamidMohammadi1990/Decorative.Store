@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Dtos.PropertyItems;
 using Store.Domain.Entities;

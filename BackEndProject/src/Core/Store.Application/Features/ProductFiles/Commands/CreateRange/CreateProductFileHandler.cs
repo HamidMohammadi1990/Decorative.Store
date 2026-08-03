@@ -1,4 +1,4 @@
-﻿using Edition.Application.Common.Directories;
+using Edition.Application.Common.Directories;
 using Edition.Application.Common.Utilities.Contracts;
 using Edition.Application.Contracts.Persistence;
 using Store.Common.Models;

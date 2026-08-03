@@ -270,9 +270,10 @@ public class Order : BaseEntity
 
     private static int GetCirculationOrMeterOrCount(OrderItem item)
     {
-        var numericQuantities = item.OrderItemProperties
+        var numericQuantities = item.OrderItemProperties?
             .OfType<NumericOrderItemProperty>()
-            .Select(property => property.Quantity);
+            .Select(property => property.Quantity)
+            ?? Enumerable.Empty<int>();
 
         return numericQuantities.DefaultIfEmpty(item.Quantity).Max();
     }

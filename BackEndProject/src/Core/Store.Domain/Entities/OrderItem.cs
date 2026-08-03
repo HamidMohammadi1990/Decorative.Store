@@ -24,8 +24,8 @@ public class OrderItem : BaseEntity
     public PostType PostType { get; private set; } = default!;
     public UserAddress UserAddress { get; private set; } = default!;
     public DeliveryType DeliveryType { get; private set; } = default!;
-    public ICollection<OrderItemProperty> OrderItemProperties { get; private set; } = default!;
-    public ICollection<OrderItemAttachment> OrderItemAttachments { get; private set; } = default!;
+    public ICollection<OrderItemProperty> OrderItemProperties { get; private set; } = [];
+    public ICollection<OrderItemAttachment> OrderItemAttachments { get; private set; } = [];
 
 
     public static OrderItem Create(int productId, int quantity, int? postTypeId, int deliveryTypeId, int userAddressId,
@@ -67,6 +67,9 @@ public class OrderItem : BaseEntity
     }
     public decimal GetSumPrices()
     {
+        if (OrderItemProperties is null || OrderItemProperties.Count == 0)
+            return ProductPrice;
+
         var sumPrices = ProductPrice;
         foreach (var orderitemProperty in OrderItemProperties)
         {
