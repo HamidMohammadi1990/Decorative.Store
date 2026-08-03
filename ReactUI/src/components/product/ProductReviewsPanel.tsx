@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
@@ -7,7 +7,6 @@ import type { ProductReviewItem } from '@/extensions/productReviews'
 import { useHorizontalDragScroll } from '@/hooks/useHorizontalDragScroll'
 import { useProductReviews } from '@/hooks/useProductReviews'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
-import { commentTopicService } from '@/services/commentTopicService'
 import { submitProductReview } from '@/services/reviewSubmitService'
 import { openLoginModal } from '@/stores/authModalStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -51,28 +50,6 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
   const [reviewModalOpen, setReviewModalOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
-  const [defaultCommentTopicId, setDefaultCommentTopicId] = useState<string | null>(null)
-
-  useEffect(() => {
-    let cancelled = false
-
-    void commentTopicService
-      .getDefaultTopicId(locale)
-      .then((topicId) => {
-        if (!cancelled) {
-          setDefaultCommentTopicId(topicId)
-        }
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setDefaultCommentTopicId(null)
-        }
-      })
-
-    return () => {
-      cancelled = true
-    }
-  }, [locale])
 
   const sortedReviews = useMemo(() => {
     const list = [...allReviews]
@@ -105,7 +82,7 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
   }
 
   const handleSubmitReview = useCallback(
-    async (description: string) => {
+    async (description: string, commentTopicId: string) => {
       setSubmitting(true)
       setSubmitError(null)
 
@@ -114,7 +91,7 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
           product,
           locale,
           description,
-          cachedCommentTopicId: defaultCommentTopicId,
+          commentTopicId,
         })
 
         setReviewModalOpen(false)
@@ -125,7 +102,7 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
         setSubmitting(false)
       }
     },
-    [defaultCommentTopicId, locale, product, reload, t],
+    [locale, product, reload, t],
   )
 
   return (

@@ -4,13 +4,14 @@ import { ReviewPostAsModal, type ReviewPostAsMode } from '@/components/product/R
 import { LocalImage } from '@/components/ui/LocalImage'
 import { Portal } from '@/components/ui/Portal'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
+import { useCommentTopics } from '@/hooks/useCommentTopics'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 
 interface ReviewSubmitModalProps {
   product: ProductDetail
   isOpen: boolean
   onClose: () => void
-  onSubmit: (comment: string) => Promise<void>
+  onSubmit: (comment: string, commentTopicId: string) => Promise<void>
   submitting?: boolean
   submitError?: string | null
 }
@@ -26,14 +27,17 @@ export function ReviewSubmitModal({
   const { t } = useTranslation()
   const labelId = useId()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const { topics, loading: topicsLoading, error: topicsError } = useCommentTopics(isOpen)
 
   const [comment, setComment] = useState('')
+  const [commentTopicId, setCommentTopicId] = useState('')
   const [postAs, setPostAs] = useState<ReviewPostAsMode>('named')
   const [postAsModalOpen, setPostAsModalOpen] = useState(false)
 
   useEffect(() => {
     if (!isOpen) {
       setComment('')
+      setCommentTopicId('')
       setPostAs('named')
       setPostAsModalOpen(false)
       return
@@ -42,6 +46,17 @@ export function ReviewSubmitModal({
     const timer = window.setTimeout(() => textareaRef.current?.focus(), 120)
     return () => window.clearTimeout(timer)
   }, [isOpen])
+
+  useEffect(() => {
+    if (!isOpen || topics.length === 0) return
+
+    setCommentTopicId((current) => {
+      if (current && topics.some((topic) => topic.id === current)) {
+        return current
+      }
+      return topics[0]?.id ?? ''
+    })
+  }, [isOpen, topics])
 
   useEffect(() => {
     if (!isOpen) return
@@ -61,11 +76,12 @@ export function ReviewSubmitModal({
 
   if (!isOpen) return null
 
-  const canSubmit = comment.trim().length > 0 && !submitting
+  const canSubmit =
+    comment.trim().length > 0 && commentTopicId.length > 0 && !submitting && !topicsLoading
 
   const handleSubmit = async () => {
     if (!canSubmit) return
-    await onSubmit(comment.trim())
+    await onSubmit(comment.trim(), commentTopicId)
   }
 
   const displayName =
@@ -114,6 +130,34 @@ export function ReviewSubmitModal({
                 <LocalImage image={product.image} className="size-full object-cover" />
               </div>
               <p className="min-w-0 flex-1 text-sm leading-relaxed text-text">{product.title}</p>
+            </div>
+
+            <div className="mt-5">
+              <label htmlFor="review-topic" className="text-sm font-medium text-text">
+                {t('product.reviewTopicLabel')}
+                <span className="text-warm">*</span>
+              </label>
+
+              {topicsLoading ? (
+                <p className="mt-2 text-sm text-text-muted">{t('common.loading')}</p>
+              ) : topicsError ? (
+                <p className="mt-2 text-sm text-red-600">{t('product.reviewTopicsLoadFailed')}</p>
+              ) : topics.length === 0 ? (
+                <p className="mt-2 text-sm text-text-muted">{t('product.reviewTopicsEmpty')}</p>
+              ) : (
+                <select
+                  id="review-topic"
+                  value={commentTopicId}
+                  onChange={(e) => setCommentTopicId(e.target.value)}
+                  className="mt-2 w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm text-text outline-none focus:border-warm"
+                >
+                  {topics.map((topic) => (
+                    <option key={topic.id} value={topic.id}>
+                      {topic.title}
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
 
             <div className="mt-5">
