@@ -330,8 +330,6 @@ public class ProductRepository
             .Include(x => x.SubCategory)
             .ThenInclude(subCategory => subCategory.Category)
             .ThenInclude(category => category.Translations)
-            .Include(x => x.ProductFeatures)
-            .ThenInclude(feature => feature.ProductFeatureType)
             .FirstOrDefaultAsync(
                 x => x.Translations.Any(t => t.Slug.ToLower() == normalizedSlug),
                 cancellationToken);
@@ -407,16 +405,11 @@ public class ProductRepository
             })
             .ToList();
 
-        var features = product.ProductFeatures
-            .Where(feature => feature.ProductFeatureType.IsActive)
-            .OrderBy(feature => feature.ProductFeatureType.Name)
-            .Select(feature => new CatalogProductFeatureDto
-            {
-                Label = feature.ProductFeatureType.Name,
-                Value = feature.Value,
-                GroupTitle = feature.ProductFeatureType.Description
-            })
-            .ToList();
+        var features = await LoadCatalogFeaturesByProductIdAsync(
+            product.Id,
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
 
         return new CatalogProductDto
         {
@@ -679,5 +672,57 @@ public class ProductRepository
         var defaultLanguage = await languageRegistry.GetDefaultAsync(cancellationToken);
         var languageId = languageContext.IsResolved ? languageContext.LanguageId : defaultLanguage.Id;
         return (languageId, defaultLanguage.Id);
+    }
+
+    private async Task<List<CatalogProductFeatureDto>> LoadCatalogFeaturesByProductIdAsync(
+        int productId,
+        int languageId,
+        int defaultLanguageId,
+        CancellationToken cancellationToken)
+    {
+        return await (
+                from productProperty in Context.ProductProperty.AsNoTracking()
+                where productProperty.ProductId == productId && productProperty.IsActive
+                join property in Context.Property.AsNoTracking() on productProperty.PropertyId equals property.Id
+                where property.IsActive && property.ParentId == null
+                join propertyCategory in Context.PropertyCategory.AsNoTracking() on property.PropertyCategoryId equals propertyCategory.Id
+                where propertyCategory.IsActive
+                join propertyItem in Context.PropertyItem.AsNoTracking() on productProperty.PropertyItemId equals propertyItem.Id into propertyItems
+                from propertyItem in propertyItems.DefaultIfEmpty()
+                where productProperty.PropertyItemId == null || propertyItem.IsActive
+                orderby property.Priority, property.Id
+                select new CatalogProductFeatureDto
+                {
+                    Label = property.Translations
+                        .Where(t => t.LanguageId == languageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                        ?? property.Translations
+                            .Where(t => t.LanguageId == defaultLanguageId)
+                            .Select(t => t.Title)
+                            .FirstOrDefault()
+                        ?? string.Empty,
+                    Value = productProperty.PropertyItemId == null
+                        ? string.Empty
+                        : propertyItem.Translations
+                            .Where(t => t.LanguageId == languageId)
+                            .Select(t => t.Title)
+                            .FirstOrDefault()
+                            ?? propertyItem.Translations
+                                .Where(t => t.LanguageId == defaultLanguageId)
+                                .Select(t => t.Title)
+                                .FirstOrDefault()
+                            ?? string.Empty,
+                    GroupTitle = propertyCategory.Translations
+                        .Where(t => t.LanguageId == languageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                        ?? propertyCategory.Translations
+                            .Where(t => t.LanguageId == defaultLanguageId)
+                            .Select(t => t.Title)
+                            .FirstOrDefault()
+                })
+            .Where(feature => !string.IsNullOrWhiteSpace(feature.Label) && !string.IsNullOrWhiteSpace(feature.Value))
+            .ToListAsync(cancellationToken);
     }
 }
