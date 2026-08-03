@@ -74,10 +74,10 @@ if (!builder.Environment.IsDevelopment())
 app.UserCustomeForwardedHeaders();
 
 app.UseCustomExceptionHandler();
-app.UseCors("CustomCors");
 app.UseHttpsRedirection();
 app.UseSwaggerAndUI();
 app.UseRouting();
+app.UseCors("CustomCors");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

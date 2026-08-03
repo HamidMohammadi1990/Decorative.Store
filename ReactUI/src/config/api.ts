@@ -1,2 +1,1 @@
-export const API_BASE_URL =
-  (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? 'https://localhost:60927'
+export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? ''
