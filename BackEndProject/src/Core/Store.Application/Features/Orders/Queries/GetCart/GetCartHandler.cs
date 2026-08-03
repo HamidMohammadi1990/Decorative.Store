@@ -2,6 +2,7 @@ using Edition.Application.Contracts;
 using Edition.Application.Features.Orders.Commands;
 using Edition.Application.Features.Orders.Common;
 using Store.Common.Models;
+using Store.Domain.Dtos.Orders;
 using Store.Domain.Repositories;
 
 namespace Edition.Application.Features.Orders.Queries;

@@ -25,6 +25,7 @@ public class RedisCacheService
         if (typeof(T).IsPrimitive)
         {
             var cacheValue = await db.StringGetAsync(key);
+            if (!cacheValue.HasValue) return default;
             var decompressCacheValue = GZipUtility.DeCompress(cacheValue!);
             return GetValue<T>(decompressCacheValue);
         }
