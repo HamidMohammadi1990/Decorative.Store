@@ -138,18 +138,20 @@ export const useUserStore = create<UserState>()(
       },
 
       restoreSession: async () => {
-        const { accessToken, refreshToken, tokenExpiresAt, user } = get()
+        const { accessToken, user } = get()
         if (!accessToken) return false
 
         if (accessToken === 'mock-access-token') {
           return user !== null
         }
 
-        const refreshedToken = await get().refreshAccessToken()
-        if (!refreshedToken) return false
+        const activeToken = await get().refreshAccessToken()
+        if (!activeToken) {
+          return get().accessToken !== null
+        }
 
         try {
-          const profile = await authService.getCurrentUser(refreshedToken)
+          const profile = await authService.getCurrentUser(activeToken)
           if (profile) {
             set({ user: mapCurrentUserToDashboardUser(profile) })
           }
@@ -157,7 +159,7 @@ export const useUserStore = create<UserState>()(
           // Keep persisted session when /me is temporarily unavailable.
         }
 
-        return get().accessToken !== null && get().user !== null
+        return get().accessToken !== null
       },
 
       refreshAccessToken: async (force = false) => {
@@ -167,7 +169,7 @@ export const useUserStore = create<UserState>()(
         }
 
         if (!refreshToken) {
-          return force ? null : accessToken
+          return accessToken
         }
 
         const shouldRefresh =
@@ -187,13 +189,6 @@ export const useUserStore = create<UserState>()(
           })
           return refreshed.accessToken
         } catch {
-          useCartStore.getState().clearCart()
-          set({
-            user: null,
-            accessToken: null,
-            refreshToken: null,
-            tokenExpiresAt: null,
-          })
           return null
         }
       },
@@ -211,7 +206,7 @@ export const useUserStore = create<UserState>()(
 )
 
 export function useIsAuthenticated() {
-  return useUserStore((s) => s.user !== null && s.accessToken !== null)
+  return useUserStore((s) => s.accessToken !== null)
 }
 
 export function useAccessToken() {

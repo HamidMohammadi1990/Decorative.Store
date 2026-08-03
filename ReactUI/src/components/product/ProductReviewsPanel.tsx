@@ -10,7 +10,7 @@ import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import { submitProductReview } from '@/services/reviewSubmitService'
 import { openLoginModal } from '@/stores/authModalStore'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { useIsAuthenticated } from '@/stores/userStore'
+import { useAccessToken } from '@/stores/userStore'
 
 interface ProductReviewsPanelProps {
   product: ProductDetail
@@ -38,7 +38,7 @@ function computeReviewStats(reviews: ProductReviewItem[]) {
 export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
-  const isAuthenticated = useIsAuthenticated()
+  const accessToken = useAccessToken()
   const mobileDrag = useHorizontalDragScroll<HTMLDivElement>()
   const { reviews: allReviews, loading, reload } = useProductReviews(product.id)
   const stats = computeReviewStats(allReviews)
@@ -68,7 +68,7 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
   ]
 
   const openReviewModal = () => {
-    if (!isAuthenticated) {
+    if (!accessToken) {
       openLoginModal({
         onSuccess: () => {
           setSubmitError(null)

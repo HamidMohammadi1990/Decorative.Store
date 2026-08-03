@@ -54,16 +54,23 @@ async function requestApi<T>(
     accessToken &&
     accessToken !== 'mock-access-token'
   ) {
-    const refreshedToken = await tryRefreshAccessToken(true)
-    if (refreshedToken && refreshedToken !== accessToken) {
-      return requestApi<T>(
-        path,
-        {
-          ...options,
-          accessToken: refreshedToken,
-        },
-        false,
-      )
+    const { useUserStore } = await import('@/stores/userStore')
+    const { tokenExpiresAt } = useUserStore.getState()
+    const shouldTryRefresh =
+      tokenExpiresAt !== null && Date.now() > tokenExpiresAt - 60_000
+
+    if (shouldTryRefresh) {
+      const refreshedToken = await tryRefreshAccessToken(true)
+      if (refreshedToken && refreshedToken !== accessToken) {
+        return requestApi<T>(
+          path,
+          {
+            ...options,
+            accessToken: refreshedToken,
+          },
+          false,
+        )
+      }
     }
   }
 
