@@ -255,29 +255,29 @@ public class PropertyRepository
                                .FirstOrDefault(),
                        PropertyRulePropertyType = ProductPropertyRule.PropertyType,
                        PropertyRuleMinQuantity = ProductPropertyRule is NumericProductPropertyRule numericRule
-                           ? numericRule.MinQuantity
-                           : null,
+                           ? (decimal?)numericRule.MinQuantity
+                           : (decimal?)null,
                        PropertyRuleMaxQuantity = ProductPropertyRule is NumericProductPropertyRule numericRuleMax
-                           ? numericRuleMax.MaxQuantity
-                           : null,
+                           ? (decimal?)numericRuleMax.MaxQuantity
+                           : (decimal?)null,
                        PropertyRuleMinWidth = ProductPropertyRule is DimensionsProductPropertyRule dimensionsRuleMinWidth
-                           ? dimensionsRuleMinWidth.MinWidth
-                           : null,
+                           ? (decimal?)dimensionsRuleMinWidth.MinWidth
+                           : (decimal?)null,
                        PropertyRuleMaxWidth = ProductPropertyRule is DimensionsProductPropertyRule dimensionsRuleMaxWidth
-                           ? dimensionsRuleMaxWidth.MaxWidth
-                           : null,
+                           ? (decimal?)dimensionsRuleMaxWidth.MaxWidth
+                           : (decimal?)null,
                        PropertyRuleMinHeight = ProductPropertyRule is DimensionsProductPropertyRule dimensionsRuleMinHeight
-                           ? dimensionsRuleMinHeight.MinHeight
-                           : null,
+                           ? (decimal?)dimensionsRuleMinHeight.MinHeight
+                           : (decimal?)null,
                        PropertyRuleMaxHeight = ProductPropertyRule is DimensionsProductPropertyRule dimensionsRuleMaxHeight
-                           ? dimensionsRuleMaxHeight.MaxHeight
-                           : null,
+                           ? (decimal?)dimensionsRuleMaxHeight.MaxHeight
+                           : (decimal?)null,
                        PropertyRuleMinLength = ProductPropertyRule is TextProductPropertyRule textRuleMinLength
-                           ? textRuleMinLength.MinLength
-                           : null,
+                           ? (int?)textRuleMinLength.MinLength
+                           : (int?)null,
                        PropertyRuleMaxLength = ProductPropertyRule is TextProductPropertyRule textRuleMaxLength
-                           ? textRuleMaxLength.MaxLength
-                           : null,
+                           ? (int?)textRuleMaxLength.MaxLength
+                           : (int?)null,
                        ParentPropertyRuleProductPropertyId = ParentProductPropertyRule.ProductPropertyId,
                        ParentPropertyRuleIsMandatory = ParentProductPropertyRule.IsMandatory,
                        ParentPropertyRuleDescription = ParentProductPropertyRule.Translations
@@ -290,29 +290,29 @@ public class PropertyRepository
                                .FirstOrDefault(),
                        ParentPropertyRulePropertyType = ParentProductPropertyRule.PropertyType,
                        ParentPropertyRuleMinQuantity = ParentProductPropertyRule is NumericProductPropertyRule parentNumericRule
-                           ? parentNumericRule.MinQuantity
-                           : null,
+                           ? (decimal?)parentNumericRule.MinQuantity
+                           : (decimal?)null,
                        ParentPropertyRuleMaxQuantity = ParentProductPropertyRule is NumericProductPropertyRule parentNumericRuleMax
-                           ? parentNumericRuleMax.MaxQuantity
-                           : null,
+                           ? (decimal?)parentNumericRuleMax.MaxQuantity
+                           : (decimal?)null,
                        ParentPropertyRuleMinWidth = ParentProductPropertyRule is DimensionsProductPropertyRule parentDimensionsMinWidth
-                           ? parentDimensionsMinWidth.MinWidth
-                           : null,
+                           ? (decimal?)parentDimensionsMinWidth.MinWidth
+                           : (decimal?)null,
                        ParentPropertyRuleMaxWidth = ParentProductPropertyRule is DimensionsProductPropertyRule parentDimensionsMaxWidth
-                           ? parentDimensionsMaxWidth.MaxWidth
-                           : null,
+                           ? (decimal?)parentDimensionsMaxWidth.MaxWidth
+                           : (decimal?)null,
                        ParentPropertyRuleMinHeight = ParentProductPropertyRule is DimensionsProductPropertyRule parentDimensionsMinHeight
-                           ? parentDimensionsMinHeight.MinHeight
-                           : null,
+                           ? (decimal?)parentDimensionsMinHeight.MinHeight
+                           : (decimal?)null,
                        ParentPropertyRuleMaxHeight = ParentProductPropertyRule is DimensionsProductPropertyRule parentDimensionsMaxHeight
-                           ? parentDimensionsMaxHeight.MaxHeight
-                           : null,
+                           ? (decimal?)parentDimensionsMaxHeight.MaxHeight
+                           : (decimal?)null,
                        ParentPropertyRuleMinLength = ParentProductPropertyRule is TextProductPropertyRule parentTextMinLength
-                           ? parentTextMinLength.MinLength
-                           : null,
+                           ? (int?)parentTextMinLength.MinLength
+                           : (int?)null,
                        ParentPropertyRuleMaxLength = ParentProductPropertyRule is TextProductPropertyRule parentTextMaxLength
-                           ? parentTextMaxLength.MaxLength
-                           : null,
+                           ? (int?)parentTextMaxLength.MaxLength
+                           : (int?)null,
                    })
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
