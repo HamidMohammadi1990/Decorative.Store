@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
 import { ReviewSubmitModal } from '@/components/product/ReviewSubmitModal'
 import type { ProductReviewItem } from '@/extensions/productReviews'
@@ -10,6 +9,7 @@ import { useProductReviews } from '@/hooks/useProductReviews'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import { commentTopicService } from '@/services/commentTopicService'
 import { productCommentService } from '@/services/productCommentService'
+import { openLoginModal } from '@/stores/authModalStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useAccessToken, useIsAuthenticated } from '@/stores/userStore'
 
@@ -39,8 +39,6 @@ function computeReviewStats(reviews: ProductReviewItem[]) {
 export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
-  const navigate = useNavigate()
-  const location = useLocation()
   const isAuthenticated = useIsAuthenticated()
   const accessToken = useAccessToken()
   const mobileDrag = useHorizontalDragScroll<HTMLDivElement>()
@@ -73,8 +71,7 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
 
   const openReviewModal = () => {
     if (!isAuthenticated) {
-      const returnUrl = `${location.pathname}${location.search}`
-      navigate(`/account?returnUrl=${encodeURIComponent(returnUrl)}`)
+      openLoginModal()
       return
     }
     setSubmitError(null)

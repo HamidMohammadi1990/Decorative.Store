@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
 import { QuestionSubmitModal } from '@/components/product/QuestionSubmitModal'
 import type { ProductQuestionItem } from '@/extensions/productQuestions'
@@ -9,6 +8,7 @@ import { useHorizontalDragScroll } from '@/hooks/useHorizontalDragScroll'
 import { useProductQuestions } from '@/hooks/useProductQuestions'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import { productQuestionService } from '@/services/productQuestionService'
+import { openLoginModal } from '@/stores/authModalStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useAccessToken, useIsAuthenticated } from '@/stores/userStore'
 
@@ -24,8 +24,6 @@ const MOBILE_ANSWER_LIMIT = 90
 export function ProductQuestionsPanel({ product }: ProductQuestionsPanelProps) {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
-  const navigate = useNavigate()
-  const location = useLocation()
   const isAuthenticated = useIsAuthenticated()
   const accessToken = useAccessToken()
   const { questions: allQuestions, loading, reload } = useProductQuestions(product.id)
@@ -57,8 +55,7 @@ export function ProductQuestionsPanel({ product }: ProductQuestionsPanelProps) {
 
   const openQuestionModal = () => {
     if (!isAuthenticated) {
-      const returnUrl = `${location.pathname}${location.search}`
-      navigate(`/account?returnUrl=${encodeURIComponent(returnUrl)}`)
+      openLoginModal()
       return
     }
     setSubmitError(null)

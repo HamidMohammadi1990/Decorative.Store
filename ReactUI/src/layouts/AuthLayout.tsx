@@ -4,6 +4,7 @@ import { PromoAnnouncementBar } from '@/components/home/PromoAnnouncementBar'
 import { SiteHeader } from '@/components/home/SiteHeader'
 import { CartDrawer } from '@/components/cart/CartDrawer'
 import { AddressBookModal } from '@/components/address/AddressBookModal'
+import { LoginModal } from '@/components/auth/LoginModal'
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
 import { ThemeSwitcher } from '@/components/layout/ThemeSwitcher'
 import { useTheme } from '@/hooks/useTheme'
@@ -46,6 +47,7 @@ function AuthLayoutContent() {
 
       <CartDrawer />
       <AddressBookModal />
+      <LoginModal />
     </>
   )
 }

@@ -1,5 +1,7 @@
-import { Navigate, Outlet, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { AuthGate } from '@/components/auth/LoginModal'
 import { Container } from '@/components/ui/Container'
 import { InlineLoading } from '@/components/ui/Spinner'
 import {
@@ -8,6 +10,7 @@ import {
 } from '@/components/dashboard/DashboardSidebar'
 import { ProfileCompletionBanner } from '@/components/dashboard/ProfileCompletionBanner'
 import { useDashboard } from '@/hooks/useDashboard'
+import { useAuthModalStore } from '@/stores/authModalStore'
 import { useUserStore } from '@/stores/userStore'
 
 export function DashboardLayout() {
@@ -15,14 +18,27 @@ export function DashboardLayout() {
   const navigate = useNavigate()
   const user = useUserStore((s) => s.user)
   const logout = useUserStore((s) => s.logout)
+  const openModal = useAuthModalStore((s) => s.openModal)
   const { data, loading, error } = useDashboard()
 
-  if (!user) {
-    return <Navigate to="/account" replace />
-  }
+  useEffect(() => {
+    if (!user) {
+      openModal({ mode: 'signin' })
+    }
+  }, [openModal, user])
 
   const handleLogout = () => {
     void logout().then(() => navigate('/account'))
+  }
+
+  if (!user) {
+    return (
+      <div className="flex-1 bg-gradient-to-b from-surface-muted/60 via-surface to-surface py-6 md:py-10">
+        <Container>
+          <AuthGate message={t('auth.dashboardGateMessage')} />
+        </Container>
+      </div>
+    )
   }
 
   const initials = user.firstName.charAt(0).toUpperCase()

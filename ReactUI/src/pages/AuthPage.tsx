@@ -1,20 +1,9 @@
-import { useEffect, useState, type FormEvent } from 'react'
-import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Navigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { AuthCheckbox, AuthField } from '@/components/auth/AuthField'
-import { PasswordField } from '@/components/auth/PasswordField'
-import { Button } from '@/components/ui/Button'
-import {
-  hasErrors,
-  validateLoginField,
-  validateLoginForm,
-  validateSignupField,
-  validateSignupForm,
-  type LoginField,
-  type LoginFormValues,
-  type SignupField,
-  type SignupFormValues,
-} from '@/extensions/validateAuthForm'
+import { AuthTab } from '@/components/auth/AuthTab'
+import { LoginForm } from '@/components/auth/LoginForm'
+import { SignupForm } from '@/components/auth/SignupForm'
 import { resolveReturnUrl } from '@/extensions/resolveReturnUrl'
 import { useUserStore } from '@/stores/userStore'
 
@@ -102,9 +91,15 @@ export function AuthPage() {
 
           <div className="rounded-lg border border-border bg-surface p-6 shadow-sm sm:p-8">
             {mode === 'signin' ? (
-              <LoginForm returnUrl={returnUrl} onSwitchToSignUp={() => switchMode('signup')} />
+              <LoginForm
+                returnUrl={returnUrl}
+                onSwitchToSignUp={() => switchMode('signup')}
+              />
             ) : (
-              <SignupForm returnUrl={returnUrl} onSwitchToSignIn={() => switchMode('signin')} />
+              <SignupForm
+                returnUrl={returnUrl}
+                onSwitchToSignIn={() => switchMode('signin')}
+              />
             )}
           </div>
 
@@ -125,32 +120,6 @@ export function AuthPage() {
   )
 }
 
-function AuthTab({
-  active,
-  onClick,
-  label,
-}: {
-  active: boolean
-  onClick: () => void
-  label: string
-}) {
-  return (
-    <button
-      type="button"
-      role="tab"
-      aria-selected={active}
-      onClick={onClick}
-      className={`flex-1 rounded-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
-        active
-          ? 'bg-warm text-warm-text shadow-sm'
-          : 'text-text-muted hover:text-warm'
-      }`}
-    >
-      {label}
-    </button>
-  )
-}
-
 function BenefitItem({ text }: { text: string }) {
   return (
     <li className="flex items-center gap-2.5">
@@ -167,272 +136,5 @@ function BenefitItem({ text }: { text: string }) {
       </span>
       {text}
     </li>
-  )
-}
-
-function LoginForm({
-  returnUrl,
-  onSwitchToSignUp,
-}: {
-  returnUrl: string | null
-  onSwitchToSignUp: () => void
-}) {
-  const { t } = useTranslation()
-  const navigate = useNavigate()
-  const login = useUserStore((s) => s.login)
-  const authLoading = useUserStore((s) => s.authLoading)
-  const authError = useUserStore((s) => s.authError)
-  const clearAuthError = useUserStore((s) => s.clearAuthError)
-  const [values, setValues] = useState<LoginFormValues>({ email: '', password: '' })
-  const [errors, setErrors] = useState<Partial<Record<LoginField, string>>>({})
-  const [touched, setTouched] = useState<Partial<Record<LoginField, boolean>>>({})
-
-  const updateField = (field: LoginField, value: string) => {
-    setValues((prev) => ({ ...prev, [field]: value }))
-    if (touched[field]) {
-      const nextErrors = { ...errors }
-      const message = validateLoginField(field, { ...values, [field]: value }, t)
-      if (message) nextErrors[field] = message
-      else delete nextErrors[field]
-      setErrors(nextErrors)
-    }
-  }
-
-  const handleBlur = (field: LoginField) => {
-    setTouched((prev) => ({ ...prev, [field]: true }))
-    const message = validateLoginField(field, values, t)
-    setErrors((prev) => {
-      const next = { ...prev }
-      if (message) next[field] = message
-      else delete next[field]
-      return next
-    })
-  }
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    const nextErrors = validateLoginForm(values, t)
-    setErrors(nextErrors)
-    setTouched({ email: true, password: true })
-    if (hasErrors(nextErrors)) return
-
-    try {
-      await login({ email: values.email, password: values.password })
-      navigate(returnUrl ?? '/account/dashboard/wallet')
-    } catch {
-      // Error state is stored in userStore.authError.
-    }
-  }
-
-  return (
-    <form className="space-y-5" noValidate onSubmit={handleSubmit}>
-      <AuthField
-        label={t('auth.emailLabel')}
-        name="email"
-        type="email"
-        autoComplete="email"
-        placeholder={t('auth.emailPlaceholder')}
-        value={values.email}
-        onChange={(e) => {
-          clearAuthError()
-          updateField('email', e.target.value)
-        }}
-        onBlur={() => handleBlur('email')}
-        error={touched.email ? errors.email : undefined}
-      />
-
-      <PasswordField
-        label={t('auth.passwordLabel')}
-        name="password"
-        autoComplete="current-password"
-        placeholder={t('auth.passwordPlaceholder')}
-        showLabel={t('auth.showPassword')}
-        hideLabel={t('auth.hidePassword')}
-        value={values.password}
-        onChange={(e) => {
-          clearAuthError()
-          updateField('password', e.target.value)
-        }}
-        onBlur={() => handleBlur('password')}
-        error={touched.password ? errors.password : undefined}
-      />
-
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <AuthCheckbox label={t('auth.rememberMe')} name="remember" />
-        <a href="/account/forgot-password" className="text-sm font-medium text-warm hover:underline">
-          {t('auth.forgotPassword')}
-        </a>
-      </div>
-
-      <Button type="submit" variant="warm" className="w-full py-2.5" disabled={authLoading}>
-        {authLoading ? t('auth.signingIn') : t('auth.signInButton')}
-      </Button>
-
-      {authError && (
-        <p className="text-center text-sm text-sale" role="alert">
-          {t(authError)}
-        </p>
-      )}
-
-      <p className="text-center text-sm text-text-muted">
-        {t('auth.noAccount')}{' '}
-        <button
-          type="button"
-          className="font-semibold text-warm hover:underline"
-          onClick={onSwitchToSignUp}
-        >
-          {t('auth.createAccountLink')}
-        </button>
-      </p>
-    </form>
-  )
-}
-
-function SignupForm({
-  returnUrl,
-  onSwitchToSignIn,
-}: {
-  returnUrl: string | null
-  onSwitchToSignIn: () => void
-}) {
-  const { t } = useTranslation()
-  const navigate = useNavigate()
-  const login = useUserStore((s) => s.login)
-  const loginDemo = useUserStore((s) => s.loginDemo)
-  const authLoading = useUserStore((s) => s.authLoading)
-  const authError = useUserStore((s) => s.authError)
-  const useMockAuth = import.meta.env.VITE_AUTH_USE_MOCK === 'true'
-  const [values, setValues] = useState<SignupFormValues>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-  })
-  const [errors, setErrors] = useState<Partial<Record<SignupField, string>>>({})
-  const [touched, setTouched] = useState<Partial<Record<SignupField, boolean>>>({})
-
-  const updateField = (field: SignupField, value: string) => {
-    setValues((prev) => ({ ...prev, [field]: value }))
-    if (touched[field]) {
-      const nextErrors = { ...errors }
-      const message = validateSignupField(field, { ...values, [field]: value }, t)
-      if (message) nextErrors[field] = message
-      else delete nextErrors[field]
-      setErrors(nextErrors)
-    }
-  }
-
-  const handleBlur = (field: SignupField) => {
-    setTouched((prev) => ({ ...prev, [field]: true }))
-    const message = validateSignupField(field, values, t)
-    setErrors((prev) => {
-      const next = { ...prev }
-      if (message) next[field] = message
-      else delete next[field]
-      return next
-    })
-  }
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    const nextErrors = validateSignupForm(values, t)
-    setErrors(nextErrors)
-    setTouched({
-      firstName: true,
-      lastName: true,
-      email: true,
-      password: true,
-    })
-    if (hasErrors(nextErrors)) return
-
-    try {
-      if (useMockAuth) {
-        loginDemo({
-          email: values.email,
-          firstName: values.firstName,
-          lastName: values.lastName,
-        })
-      } else {
-        await login({ email: values.email, password: values.password })
-      }
-      navigate(returnUrl ?? '/account/dashboard/wallet')
-    } catch {
-      // Error state is stored in userStore.authError.
-    }
-  }
-
-  return (
-    <form className="space-y-5" noValidate onSubmit={handleSubmit}>
-      <div className="grid gap-5 sm:grid-cols-2">
-        <AuthField
-          label={t('auth.firstNameLabel')}
-          name="firstName"
-          autoComplete="given-name"
-          placeholder={t('auth.firstNamePlaceholder')}
-          value={values.firstName}
-          onChange={(e) => updateField('firstName', e.target.value)}
-          onBlur={() => handleBlur('firstName')}
-          error={touched.firstName ? errors.firstName : undefined}
-        />
-        <AuthField
-          label={t('auth.lastNameLabel')}
-          name="lastName"
-          autoComplete="family-name"
-          placeholder={t('auth.lastNamePlaceholder')}
-          value={values.lastName}
-          onChange={(e) => updateField('lastName', e.target.value)}
-          onBlur={() => handleBlur('lastName')}
-          error={touched.lastName ? errors.lastName : undefined}
-        />
-      </div>
-
-      <AuthField
-        label={t('auth.emailLabel')}
-        name="email"
-        type="email"
-        autoComplete="email"
-        placeholder={t('auth.emailPlaceholder')}
-        value={values.email}
-        onChange={(e) => updateField('email', e.target.value)}
-        onBlur={() => handleBlur('email')}
-        error={touched.email ? errors.email : undefined}
-      />
-
-      <PasswordField
-        label={t('auth.passwordLabel')}
-        name="password"
-        autoComplete="new-password"
-        placeholder={t('auth.createPasswordPlaceholder')}
-        showLabel={t('auth.showPassword')}
-        hideLabel={t('auth.hidePassword')}
-        value={values.password}
-        onChange={(e) => updateField('password', e.target.value)}
-        onBlur={() => handleBlur('password')}
-        error={touched.password ? errors.password : undefined}
-      />
-
-      <AuthCheckbox label={t('auth.marketingOptIn')} name="marketing" />
-
-      <Button type="submit" variant="warm" className="w-full py-2.5" disabled={authLoading}>
-        {authLoading ? t('auth.signingUp') : t('auth.signUpButton')}
-      </Button>
-
-      {authError && (
-        <p className="text-center text-sm text-sale" role="alert">
-          {t(authError)}
-        </p>
-      )}
-
-      <p className="text-center text-sm text-text-muted">
-        {t('auth.hasAccount')}{' '}
-        <button
-          type="button"
-          className="font-semibold text-warm hover:underline"
-          onClick={onSwitchToSignIn}
-        >
-          {t('auth.signInLink')}
-        </button>
-      </p>
-    </form>
   )
 }

@@ -4,6 +4,7 @@ import type { ImageAsset } from '@/models/shared/image.model'
 import type { Money } from '@/models/shared/money.model'
 import { savePendingCartAdd } from '@/extensions/pendingCartAdd'
 import { cartService, mapServerCartToLines } from '@/services/cartService'
+import { openLoginModal } from '@/stores/authModalStore'
 import { useCartStore } from '@/stores/cartStore'
 import { useAccessToken, useIsAuthenticated } from '@/stores/userStore'
 
@@ -47,7 +48,7 @@ export function useAddToBag() {
           quantity,
           returnUrl,
         })
-        navigate(`/account?returnUrl=${encodeURIComponent(returnUrl)}`)
+        openLoginModal()
         return false
       }
 

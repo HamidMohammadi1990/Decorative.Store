@@ -7,6 +7,7 @@ import { SiteHeader } from '@/components/home/SiteHeader'
 import { CompareFloatingBar } from '@/components/compare/CompareFloatingBar'
 import { CartDrawer } from '@/components/cart/CartDrawer'
 import { AddressBookModal } from '@/components/address/AddressBookModal'
+import { LoginModal } from '@/components/auth/LoginModal'
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher'
 import { ThemeSwitcher } from '@/components/layout/ThemeSwitcher'
 import { StoryViewerModal } from '@/components/stories/StoryViewerModal'
@@ -60,6 +61,7 @@ function ShopLayoutContent() {
       <CartDrawer />
       <CompareFloatingBar />
       <AddressBookModal />
+      <LoginModal />
       <StoryViewerModal />
       <AiAssistantWidget />
     </>
