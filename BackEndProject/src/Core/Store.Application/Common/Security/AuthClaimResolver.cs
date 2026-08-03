@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Edition.Application.Models.Constants;
+using Microsoft.AspNetCore.Identity;
 
 namespace Edition.Application.Common.Security;
 
