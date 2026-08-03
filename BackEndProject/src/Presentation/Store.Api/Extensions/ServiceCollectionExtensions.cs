@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Edition.Application.Common.Utilities.JsonAttributes;
 using Microsoft.AspNetCore.Identity;
 using Edition.Application.Configurations.SMS;
 using Edition.Application.Configurations.Email;
@@ -19,6 +20,7 @@ public static class ServiceCollectionExtensions
             options.Filters.Add<LocalizationResultFilter>();
         }).AddNewtonsoftJson(option =>
         {
+            option.SerializerSettings.ContractResolver = new EncryptorContractResolver();
             option.SerializerSettings.Converters.Add(new StringEnumConverter());
             option.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
         });
