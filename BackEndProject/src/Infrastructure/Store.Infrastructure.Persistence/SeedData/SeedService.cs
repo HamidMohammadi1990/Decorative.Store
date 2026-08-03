@@ -175,7 +175,14 @@ public class SeedService(EditionDbContext context) : ISeedService
         foreach (var user in users)
         {
             if (!await context.User.AnyAsync(x => x.UserName == user.UserName))
+            {
                 context.User.Add(user);
+                continue;
+            }
+
+            var existingUser = await context.User.FirstOrDefaultAsync(x => x.UserName == user.UserName);
+            if (existingUser is not null && existingUser.EnsureSecurityStamp())
+                context.User.Update(existingUser);
         }
         await context.SaveChangesAsync();
     }

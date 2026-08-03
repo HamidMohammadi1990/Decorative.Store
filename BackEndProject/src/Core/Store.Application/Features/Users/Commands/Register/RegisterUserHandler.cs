@@ -42,6 +42,7 @@ public class RegisterUserHandler
             return ErrorModel.Create("VerificationCodeIsNotValid");
 
         var user = User.Create(request.UserName, isMobile ? null : request.UserName, isMobile ? request.UserName : null);
+        user.EnsureSecurityStamp();
 
         if (isMobile)
             user.ConfirmPhoneNumber();

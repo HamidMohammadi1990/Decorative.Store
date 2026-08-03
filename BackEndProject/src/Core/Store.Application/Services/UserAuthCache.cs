@@ -63,10 +63,7 @@ public sealed class UserAuthCache
         state ??= await HydrateSessionFromDbAsync(sessionId, userId, cancellationToken);
 
         if (state is null)
-        {
-            await MarkSessionRevokedAsync(sessionId, DateTime.UtcNow.AddMinutes(5), cancellationToken);
             return false;
-        }
 
         if (state.UserId != userId)
             return false;

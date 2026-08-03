@@ -91,4 +91,13 @@ public class User : BaseEntity
     {
         PhoneNumberConfirmed = true;
     }
+
+    public bool EnsureSecurityStamp()
+    {
+        if (!string.IsNullOrWhiteSpace(SecurityStamp))
+            return false;
+
+        SecurityStamp = Guid.NewGuid().ToString("N");
+        return true;
+    }
 }

@@ -1,10 +1,8 @@
 using System.Security.Claims;
 using Edition.Application.Contracts;
 using Edition.Application.Common.Security;
-using Edition.Application.Models.Constants;
 
-namespace Store.Infrastructure.Identity;
-public sealed class AuthContextValidator(
+namespace Store.Infrastructure.Identity;public sealed class AuthContextValidator(
     IUserAuthCache userAuthCache,
     IAuthValidationState authValidationState)
     : IAuthContextValidator
@@ -32,7 +30,7 @@ public sealed class AuthContextValidator(
         if (!await userAuthCache.ValidateSecurityStampAsync(userId, tokenSecurityStamp, cancellationToken))
             return false;
 
-        var sessionIdValue = principal.FindFirstValue(AuthClaimTypes.SessionId);
+        var sessionIdValue = AuthClaimResolver.GetSessionId(principal);
         if (string.IsNullOrWhiteSpace(sessionIdValue) || !Guid.TryParse(sessionIdValue, out var sessionId))
             return true;
 

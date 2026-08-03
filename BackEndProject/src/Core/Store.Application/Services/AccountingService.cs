@@ -141,7 +141,8 @@ public class AccountingService
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var securityToken = tokenHandler.CreateJwtSecurityToken(descriptor);
-        return new AccessTokenResponse(securityToken, jwtId, sessionId);
+        var resolvedJwtId = string.IsNullOrWhiteSpace(securityToken.Id) ? jwtId : securityToken.Id;
+        return new AccessTokenResponse(securityToken, resolvedJwtId, sessionId);
     }
 
     public async Task<OperationResult<AccessTokenResponse>> IssueTokenPairAsync(
@@ -150,6 +151,13 @@ public class AccountingService
         Guid? sessionId = null,
         CancellationToken cancellationToken = default)
     {
+        if (user.EnsureSecurityStamp())
+        {
+            var saveStampResult = await uow.SaveChangesAsync(cancellationToken);
+            if (!saveStampResult.IsSuccess)
+                return saveStampResult.ToGenericFailure<AccessTokenResponse>();
+        }
+
         var effectiveSessionId = sessionId ?? Guid.CreateVersion7();
         var tokenResponse = GenerateTokenAsync(user, effectiveSessionId);
         var jwtId = tokenResponse.Result!.RefreshToken;
