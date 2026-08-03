@@ -254,30 +254,6 @@ public class PropertyRepository
                                .Select(t => t.Description)
                                .FirstOrDefault(),
                        PropertyRulePropertyType = ProductPropertyRule.PropertyType,
-                       PropertyRuleMinQuantity = ProductPropertyRule is NumericProductPropertyRule numericRule
-                           ? (decimal?)numericRule.MinQuantity
-                           : (decimal?)null,
-                       PropertyRuleMaxQuantity = ProductPropertyRule is NumericProductPropertyRule numericRuleMax
-                           ? (decimal?)numericRuleMax.MaxQuantity
-                           : (decimal?)null,
-                       PropertyRuleMinWidth = ProductPropertyRule is DimensionsProductPropertyRule dimensionsRuleMinWidth
-                           ? (decimal?)dimensionsRuleMinWidth.MinWidth
-                           : (decimal?)null,
-                       PropertyRuleMaxWidth = ProductPropertyRule is DimensionsProductPropertyRule dimensionsRuleMaxWidth
-                           ? (decimal?)dimensionsRuleMaxWidth.MaxWidth
-                           : (decimal?)null,
-                       PropertyRuleMinHeight = ProductPropertyRule is DimensionsProductPropertyRule dimensionsRuleMinHeight
-                           ? (decimal?)dimensionsRuleMinHeight.MinHeight
-                           : (decimal?)null,
-                       PropertyRuleMaxHeight = ProductPropertyRule is DimensionsProductPropertyRule dimensionsRuleMaxHeight
-                           ? (decimal?)dimensionsRuleMaxHeight.MaxHeight
-                           : (decimal?)null,
-                       PropertyRuleMinLength = ProductPropertyRule is TextProductPropertyRule textRuleMinLength
-                           ? (int?)textRuleMinLength.MinLength
-                           : (int?)null,
-                       PropertyRuleMaxLength = ProductPropertyRule is TextProductPropertyRule textRuleMaxLength
-                           ? (int?)textRuleMaxLength.MaxLength
-                           : (int?)null,
                        ParentPropertyRuleProductPropertyId = ParentProductPropertyRule.ProductPropertyId,
                        ParentPropertyRuleIsMandatory = ParentProductPropertyRule.IsMandatory,
                        ParentPropertyRuleDescription = ParentProductPropertyRule.Translations
@@ -289,33 +265,22 @@ public class PropertyRepository
                                .Select(t => t.Description)
                                .FirstOrDefault(),
                        ParentPropertyRulePropertyType = ParentProductPropertyRule.PropertyType,
-                       ParentPropertyRuleMinQuantity = ParentProductPropertyRule is NumericProductPropertyRule parentNumericRule
-                           ? (decimal?)parentNumericRule.MinQuantity
-                           : (decimal?)null,
-                       ParentPropertyRuleMaxQuantity = ParentProductPropertyRule is NumericProductPropertyRule parentNumericRuleMax
-                           ? (decimal?)parentNumericRuleMax.MaxQuantity
-                           : (decimal?)null,
-                       ParentPropertyRuleMinWidth = ParentProductPropertyRule is DimensionsProductPropertyRule parentDimensionsMinWidth
-                           ? (decimal?)parentDimensionsMinWidth.MinWidth
-                           : (decimal?)null,
-                       ParentPropertyRuleMaxWidth = ParentProductPropertyRule is DimensionsProductPropertyRule parentDimensionsMaxWidth
-                           ? (decimal?)parentDimensionsMaxWidth.MaxWidth
-                           : (decimal?)null,
-                       ParentPropertyRuleMinHeight = ParentProductPropertyRule is DimensionsProductPropertyRule parentDimensionsMinHeight
-                           ? (decimal?)parentDimensionsMinHeight.MinHeight
-                           : (decimal?)null,
-                       ParentPropertyRuleMaxHeight = ParentProductPropertyRule is DimensionsProductPropertyRule parentDimensionsMaxHeight
-                           ? (decimal?)parentDimensionsMaxHeight.MaxHeight
-                           : (decimal?)null,
-                       ParentPropertyRuleMinLength = ParentProductPropertyRule is TextProductPropertyRule parentTextMinLength
-                           ? (int?)parentTextMinLength.MinLength
-                           : (int?)null,
-                       ParentPropertyRuleMaxLength = ParentProductPropertyRule is TextProductPropertyRule parentTextMaxLength
-                           ? (int?)parentTextMaxLength.MaxLength
-                           : (int?)null,
                    })
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
+
+        var productPropertyIds = properties
+            .SelectMany(x => new[] { x.PropertyRuleProductPropertyId, x.ParentPropertyRuleProductPropertyId })
+            .Where(id => id > 0)
+            .Distinct()
+            .ToList();
+
+        var rulePayloads = productPropertyIds.Count == 0
+            ? new Dictionary<int, ProductPropertyRulePayload>()
+            : await Context.ProductPropertyRule
+                .AsNoTracking()
+                .Where(rule => productPropertyIds.Contains(rule.ProductPropertyId) && rule.IsActive)
+                .ToDictionaryAsync(rule => rule.ProductPropertyId, rule => rule.Get(), cancellationToken);
 
         return properties
             .Select(x => new ProductPropertyDto
@@ -358,27 +323,34 @@ public class PropertyRepository
                 PropertyRuleIsMandatory = x.PropertyRuleIsMandatory,
                 PropertyRuleDescription = x.PropertyRuleDescription,
                 PropertyRulePropertyType = x.PropertyRulePropertyType,
-                PropertyRuleMinQuantity = x.PropertyRuleMinQuantity,
-                PropertyRuleMaxQuantity = x.PropertyRuleMaxQuantity,
-                PropertyRuleMinWidth = x.PropertyRuleMinWidth,
-                PropertyRuleMaxWidth = x.PropertyRuleMaxWidth,
-                PropertyRuleMinHeight = x.PropertyRuleMinHeight,
-                PropertyRuleMaxHeight = x.PropertyRuleMaxHeight,
-                PropertyRuleMinLength = x.PropertyRuleMinLength,
-                PropertyRuleMaxLength = x.PropertyRuleMaxLength,
+                PropertyRuleMinQuantity = GetRulePayload(x.PropertyRuleProductPropertyId, rulePayloads)?.MinQuantity,
+                PropertyRuleMaxQuantity = GetRulePayload(x.PropertyRuleProductPropertyId, rulePayloads)?.MaxQuantity,
+                PropertyRuleMinWidth = GetRulePayload(x.PropertyRuleProductPropertyId, rulePayloads)?.MinWidth,
+                PropertyRuleMaxWidth = GetRulePayload(x.PropertyRuleProductPropertyId, rulePayloads)?.MaxWidth,
+                PropertyRuleMinHeight = GetRulePayload(x.PropertyRuleProductPropertyId, rulePayloads)?.MinHeight,
+                PropertyRuleMaxHeight = GetRulePayload(x.PropertyRuleProductPropertyId, rulePayloads)?.MaxHeight,
+                PropertyRuleMinLength = GetRulePayload(x.PropertyRuleProductPropertyId, rulePayloads)?.MinLength,
+                PropertyRuleMaxLength = GetRulePayload(x.PropertyRuleProductPropertyId, rulePayloads)?.MaxLength,
                 ParentPropertyRuleProductPropertyId = x.ParentPropertyRuleProductPropertyId,
                 ParentPropertyRuleIsMandatory = x.ParentPropertyRuleIsMandatory,
                 ParentPropertyRuleDescription = x.ParentPropertyRuleDescription,
                 ParentPropertyRulePropertyType = x.ParentPropertyRulePropertyType,
-                ParentPropertyRuleMinQuantity = x.ParentPropertyRuleMinQuantity,
-                ParentPropertyRuleMaxQuantity = x.ParentPropertyRuleMaxQuantity,
-                ParentPropertyRuleMinWidth = x.ParentPropertyRuleMinWidth,
-                ParentPropertyRuleMaxWidth = x.ParentPropertyRuleMaxWidth,
-                ParentPropertyRuleMinHeight = x.ParentPropertyRuleMinHeight,
-                ParentPropertyRuleMaxHeight = x.ParentPropertyRuleMaxHeight,
-                ParentPropertyRuleMinLength = x.ParentPropertyRuleMinLength,
-                ParentPropertyRuleMaxLength = x.ParentPropertyRuleMaxLength,
+                ParentPropertyRuleMinQuantity = GetRulePayload(x.ParentPropertyRuleProductPropertyId, rulePayloads)?.MinQuantity,
+                ParentPropertyRuleMaxQuantity = GetRulePayload(x.ParentPropertyRuleProductPropertyId, rulePayloads)?.MaxQuantity,
+                ParentPropertyRuleMinWidth = GetRulePayload(x.ParentPropertyRuleProductPropertyId, rulePayloads)?.MinWidth,
+                ParentPropertyRuleMaxWidth = GetRulePayload(x.ParentPropertyRuleProductPropertyId, rulePayloads)?.MaxWidth,
+                ParentPropertyRuleMinHeight = GetRulePayload(x.ParentPropertyRuleProductPropertyId, rulePayloads)?.MinHeight,
+                ParentPropertyRuleMaxHeight = GetRulePayload(x.ParentPropertyRuleProductPropertyId, rulePayloads)?.MaxHeight,
+                ParentPropertyRuleMinLength = GetRulePayload(x.ParentPropertyRuleProductPropertyId, rulePayloads)?.MinLength,
+                ParentPropertyRuleMaxLength = GetRulePayload(x.ParentPropertyRuleProductPropertyId, rulePayloads)?.MaxLength,
             })
             .ToList();
     }
+
+    private static ProductPropertyRulePayload? GetRulePayload(
+        int? productPropertyId,
+        IReadOnlyDictionary<int, ProductPropertyRulePayload> rulePayloads)
+        => productPropertyId is > 0 && rulePayloads.TryGetValue(productPropertyId.Value, out var payload)
+            ? payload
+            : null;
 }
