@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text;
 using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 using Store.Common.Exceptions;
 using Microsoft.Extensions.Options;
 using Edition.Application.Contracts;
@@ -32,6 +33,9 @@ public static class SecurityServiceCollectionExtensions
         JwtSettings jwtSettings,
         IHostEnvironment environment)
     {
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+        JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
         var secretKey = Encoding.UTF8.GetBytes(jwtSettings.SecretKey);
         var encryptionKey = Encoding.UTF8.GetBytes(jwtSettings.EncryptKey);
         var tokenValidationParameters = new TokenValidationParameters
@@ -46,7 +50,9 @@ public static class SecurityServiceCollectionExtensions
             ValidAudience = jwtSettings.Audience,
             ValidateIssuer = true,
             ValidIssuer = jwtSettings.Issuer,
-            TokenDecryptionKey = new SymmetricSecurityKey(encryptionKey)
+            TokenDecryptionKey = new SymmetricSecurityKey(encryptionKey),
+            NameClaimType = JwtRegisteredClaimNames.Sub,
+            RoleClaimType = ClaimTypes.Role
         };
 
         services.AddSingleton(tokenValidationParameters);
