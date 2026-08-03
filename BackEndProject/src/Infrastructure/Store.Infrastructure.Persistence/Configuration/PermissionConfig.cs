@@ -17,7 +17,7 @@ internal class PermissionConfig : IEntityTypeConfiguration<Permission>
 
         builder
             .Property(p => p.Title)
-            .HasNVarcharMaxLength(40)
+            .HasNVarcharMaxLength(100)
             .IsRequired();
 
         builder

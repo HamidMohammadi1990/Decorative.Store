@@ -14,7 +14,7 @@ public sealed class EncryptorContractResolver : CamelCasePropertyNamesContractRe
     {
         var property = base.CreateProperty(member, memberSerialization);
 
-        var converterAttribute = member.GetCustomAttribute<JsonConverterAttribute>();
+        var converterAttribute = member.GetCustomAttribute<System.Text.Json.Serialization.JsonConverterAttribute>();
         if (converterAttribute?.ConverterType is null)
             return property;
 

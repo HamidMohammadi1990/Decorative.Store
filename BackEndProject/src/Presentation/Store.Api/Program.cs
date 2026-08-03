@@ -9,6 +9,8 @@ using Store.Infrastructure.Configurations;
 using Store.Infrastructure;
 using Store.Infrastructure.Persistence;
 using Store.Common.Models;
+using Store.Infrastructure.Persistence.Contracts;
+using Store.Api.Modules;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,10 +62,10 @@ app.UseMiddleware<BlockTokenControlMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
-    // using var scope = app.Services.CreateScope();
-    // var seedService = scope.ServiceProvider.GetRequiredService<ISeedService>();
-    // var permissions = PermissionModule.GetPermissions();
-    // await seedService.SeedDataAsync(permissions);
+    using var scope = app.Services.CreateScope();
+    var seedService = scope.ServiceProvider.GetRequiredService<ISeedService>();
+    var permissions = PermissionModule.GetPermissions();
+    await seedService.SeedDataAsync(permissions);
 }
 
 if (!builder.Environment.IsDevelopment())
