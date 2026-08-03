@@ -84,8 +84,13 @@ public class AccountingService
         if (expiredDate < DateTime.UtcNow)
             return new LogOutTokenResponseDto(true);
 
-        var userId = int.Parse(principal.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value);
-        var jwtId = principal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+        var userIdValue = AuthClaimResolver.GetUserId(principal);
+        if (string.IsNullOrWhiteSpace(userIdValue) || !int.TryParse(userIdValue, out var userId))
+            return new LogOutTokenResponseDto(true);
+
+        var jwtId = AuthClaimResolver.GetJwtId(principal);
+        if (string.IsNullOrWhiteSpace(jwtId))
+            return new LogOutTokenResponseDto(true);
         var cacheKey = GetBlockedTokenCacheKey(userId.ToString(), jwtId);
         var cachedToken = await cache.GetAsync<string>(cacheKey, CacheInstanceType.UserTokens);
         if (string.IsNullOrEmpty(cachedToken))
@@ -206,11 +211,16 @@ public class AccountingService
         if (storedToken.ExpiredDateOnUtc < DateTime.UtcNow)
             return ErrorModel.Create("TokenIsExpired");
 
-        var jti = validateToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+        var jti = AuthClaimResolver.GetJwtId(validateToken);
+        if (string.IsNullOrWhiteSpace(jti))
+            return ErrorModel.Create("TokenIsInvalid");
+
         if (storedToken.JwtId != jti)
             return ErrorModel.Create("TokenIsInvalid");
 
-        var userId = Convert.ToInt32(validateToken.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value);
+        var userIdValue = AuthClaimResolver.GetUserId(validateToken);
+        if (string.IsNullOrWhiteSpace(userIdValue) || !int.TryParse(userIdValue, out var userId))
+            return ErrorModel.Create("TokenIsInvalid");
         if (storedToken.UserId != userId)
             return ErrorModel.Create("TokenIsInvalid");
 
@@ -339,8 +349,8 @@ public class AccountingService
         var securityStampClaimType = new ClaimsIdentityOptions().SecurityStampClaimType;
         return
         [
-            new(ClaimTypes.Name, user.UserName),
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new(JwtRegisteredClaimNames.UniqueName, user.UserName),
+            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(JwtRegisteredClaimNames.Jti, jwtId),
             new(AuthClaimTypes.SessionId, sessionId.ToString()),
             new(securityStampClaimType, user.SecurityStamp)
@@ -350,7 +360,7 @@ public class AccountingService
     private static bool TryGetSessionId(ClaimsPrincipal principal, out Guid sessionId)
     {
         sessionId = Guid.Empty;
-        var claim = principal.Claims.FirstOrDefault(x => x.Type == AuthClaimTypes.SessionId)?.Value;
+        var claim = AuthClaimResolver.GetSessionId(principal);
         return !string.IsNullOrWhiteSpace(claim) && Guid.TryParse(claim, out sessionId);
     }
 

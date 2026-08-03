@@ -9,9 +9,15 @@ public static class AuthClaimResolver
     private static readonly string SecurityStampClaimType = new ClaimsIdentityOptions().SecurityStampClaimType;
 
     public static string? GetUserId(ClaimsPrincipal principal)
-        => principal.FindFirstValue(ClaimTypes.NameIdentifier)
-           ?? principal.FindFirstValue(JwtRegisteredClaimNames.Sub)
-           ?? FindClaimValue(principal, "nameidentifier");
+    {
+        foreach (var claim in principal.Claims)
+        {
+            if (IsUserIdClaimType(claim.Type))
+                return claim.Value;
+        }
+
+        return null;
+    }
 
     public static string? GetJwtId(ClaimsPrincipal principal)
         => principal.FindFirstValue(JwtRegisteredClaimNames.Jti)
@@ -27,6 +33,11 @@ public static class AuthClaimResolver
         => principal.FindFirstValue(SecurityStampClaimType)
            ?? principal.FindFirstValue("AspNet.Identity.SecurityStamp")
            ?? FindClaimValue(principal, "securitystamp", "serialnumber");
+
+    private static bool IsUserIdClaimType(string claimType)
+        => claimType is JwtRegisteredClaimNames.Sub or "sub" or ClaimTypes.NameIdentifier
+           || claimType.Contains("nameidentifier", StringComparison.OrdinalIgnoreCase)
+           || claimType.EndsWith("/sub", StringComparison.OrdinalIgnoreCase);
 
     private static string? FindClaimValue(ClaimsPrincipal principal, params string[] markers)
     {
