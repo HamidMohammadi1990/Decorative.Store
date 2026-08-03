@@ -110,8 +110,8 @@ public class PropertyRepository
                         new { PropertyCategoryId = PropertyCategory.Id, PropertyCategory.IsActive }
 
                    join ParentProperty in Context.Property on
-                        new { ParentPropertyId = Property.Id, Property.IsActive } equals
-                        new { ParentPropertyId = ParentProperty.ParentId ?? 0, ParentProperty.IsActive }
+                        new { Id = Property.ParentId ?? 0, Property.IsActive } equals
+                        new { ParentProperty.Id, ParentProperty.IsActive }
                    into ParentProperties
                    from ParentProperty in ParentProperties.DefaultIfEmpty()
 
@@ -206,8 +206,8 @@ public class PropertyRepository
                                .Select(t => t.Title)
                                .FirstOrDefault()
                            ?? string.Empty,
-                       ParentPropertyPriority = Property.Priority,
-                       ParentPropertyType = Property.PropertyType,
+                       ParentPropertyPriority = ParentProperty.Priority,
+                       ParentPropertyType = ParentProperty.PropertyType,
                        ParentPropertyPriceId = ParentPropertyPrice.Id,
                        ParentPropertyPrice = ParentPropertyPrice.Price,
                        ParentPropertyCooperationPrice = ParentPropertyPrice.CooperationPrice,
@@ -254,14 +254,30 @@ public class PropertyRepository
                                .Select(t => t.Description)
                                .FirstOrDefault(),
                        PropertyRulePropertyType = ProductPropertyRule.PropertyType,
-                       PropertyRuleMinQuantity = ((NumericProductPropertyRule)ProductPropertyRule).MinQuantity,
-                       PropertyRuleMaxQuantity = ((NumericProductPropertyRule)ProductPropertyRule).MaxQuantity,
-                       PropertyRuleMinWidth = ((DimensionsProductPropertyRule)ProductPropertyRule).MinWidth,
-                       PropertyRuleMaxWidth = ((DimensionsProductPropertyRule)ProductPropertyRule).MaxWidth,
-                       PropertyRuleMinHeight = ((DimensionsProductPropertyRule)ProductPropertyRule).MinHeight,
-                       PropertyRuleMaxHeight = ((DimensionsProductPropertyRule)ProductPropertyRule).MaxHeight,
-                       PropertyRuleMinLength = ((TextProductPropertyRule)ProductPropertyRule).MinLength,
-                       PropertyRuleMaxLength = ((TextProductPropertyRule)ProductPropertyRule).MaxLength,
+                       PropertyRuleMinQuantity = ProductPropertyRule is NumericProductPropertyRule numericRule
+                           ? numericRule.MinQuantity
+                           : null,
+                       PropertyRuleMaxQuantity = ProductPropertyRule is NumericProductPropertyRule numericRuleMax
+                           ? numericRuleMax.MaxQuantity
+                           : null,
+                       PropertyRuleMinWidth = ProductPropertyRule is DimensionsProductPropertyRule dimensionsRuleMinWidth
+                           ? dimensionsRuleMinWidth.MinWidth
+                           : null,
+                       PropertyRuleMaxWidth = ProductPropertyRule is DimensionsProductPropertyRule dimensionsRuleMaxWidth
+                           ? dimensionsRuleMaxWidth.MaxWidth
+                           : null,
+                       PropertyRuleMinHeight = ProductPropertyRule is DimensionsProductPropertyRule dimensionsRuleMinHeight
+                           ? dimensionsRuleMinHeight.MinHeight
+                           : null,
+                       PropertyRuleMaxHeight = ProductPropertyRule is DimensionsProductPropertyRule dimensionsRuleMaxHeight
+                           ? dimensionsRuleMaxHeight.MaxHeight
+                           : null,
+                       PropertyRuleMinLength = ProductPropertyRule is TextProductPropertyRule textRuleMinLength
+                           ? textRuleMinLength.MinLength
+                           : null,
+                       PropertyRuleMaxLength = ProductPropertyRule is TextProductPropertyRule textRuleMaxLength
+                           ? textRuleMaxLength.MaxLength
+                           : null,
                        ParentPropertyRuleProductPropertyId = ParentProductPropertyRule.ProductPropertyId,
                        ParentPropertyRuleIsMandatory = ParentProductPropertyRule.IsMandatory,
                        ParentPropertyRuleDescription = ParentProductPropertyRule.Translations
@@ -273,14 +289,30 @@ public class PropertyRepository
                                .Select(t => t.Description)
                                .FirstOrDefault(),
                        ParentPropertyRulePropertyType = ParentProductPropertyRule.PropertyType,
-                       ParentPropertyRuleMinQuantity = ((NumericProductPropertyRule)ParentProductPropertyRule).MinQuantity,
-                       ParentPropertyRuleMaxQuantity = ((NumericProductPropertyRule)ParentProductPropertyRule).MaxQuantity,
-                       ParentPropertyRuleMinWidth = ((DimensionsProductPropertyRule)ParentProductPropertyRule).MinWidth,
-                       ParentPropertyRuleMaxWidth = ((DimensionsProductPropertyRule)ParentProductPropertyRule).MaxWidth,
-                       ParentPropertyRuleMinHeight = ((DimensionsProductPropertyRule)ParentProductPropertyRule).MinHeight,
-                       ParentPropertyRuleMaxHeight = ((DimensionsProductPropertyRule)ParentProductPropertyRule).MaxHeight,
-                       ParentPropertyRuleMinLength = ((TextProductPropertyRule)ParentProductPropertyRule).MinLength,
-                       ParentPropertyRuleMaxLength = ((TextProductPropertyRule)ParentProductPropertyRule).MaxLength,
+                       ParentPropertyRuleMinQuantity = ParentProductPropertyRule is NumericProductPropertyRule parentNumericRule
+                           ? parentNumericRule.MinQuantity
+                           : null,
+                       ParentPropertyRuleMaxQuantity = ParentProductPropertyRule is NumericProductPropertyRule parentNumericRuleMax
+                           ? parentNumericRuleMax.MaxQuantity
+                           : null,
+                       ParentPropertyRuleMinWidth = ParentProductPropertyRule is DimensionsProductPropertyRule parentDimensionsMinWidth
+                           ? parentDimensionsMinWidth.MinWidth
+                           : null,
+                       ParentPropertyRuleMaxWidth = ParentProductPropertyRule is DimensionsProductPropertyRule parentDimensionsMaxWidth
+                           ? parentDimensionsMaxWidth.MaxWidth
+                           : null,
+                       ParentPropertyRuleMinHeight = ParentProductPropertyRule is DimensionsProductPropertyRule parentDimensionsMinHeight
+                           ? parentDimensionsMinHeight.MinHeight
+                           : null,
+                       ParentPropertyRuleMaxHeight = ParentProductPropertyRule is DimensionsProductPropertyRule parentDimensionsMaxHeight
+                           ? parentDimensionsMaxHeight.MaxHeight
+                           : null,
+                       ParentPropertyRuleMinLength = ParentProductPropertyRule is TextProductPropertyRule parentTextMinLength
+                           ? parentTextMinLength.MinLength
+                           : null,
+                       ParentPropertyRuleMaxLength = ParentProductPropertyRule is TextProductPropertyRule parentTextMaxLength
+                           ? parentTextMaxLength.MaxLength
+                           : null,
                    })
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
