@@ -1,6 +1,7 @@
 import { API_BASE_URL } from '@/config/api'
 import type { Locale } from '@/models/shared/locale.model'
-import { ApiError, type ApiResult } from '@/services/api/apiTypes'
+import { ApiError } from '@/services/api/apiTypes'
+import { normalizeApiEnvelope } from '@/services/api/apiNormalize'
 
 export function toAcceptLanguage(locale: Locale): string {
   return locale === 'fa' ? 'fa-IR' : 'en-US'
@@ -38,13 +39,14 @@ async function requestApi<T>(path: string, options: RequestOptions = {}): Promis
     body: body !== undefined ? JSON.stringify(body) : undefined,
   })
 
-  const responseBody = (await response.json()) as ApiResult<T>
+  const responseBody = await response.json()
+  const { isSuccess, data, messages } = normalizeApiEnvelope<T>(responseBody)
 
-  if (!response.ok || !responseBody.isSuccess || responseBody.data === undefined) {
-    throw new ApiError(response.status, responseBody.messages ?? [])
+  if (!response.ok || !isSuccess || data === undefined) {
+    throw new ApiError(response.status, messages)
   }
 
-  return responseBody.data
+  return data
 }
 
 export async function apiGet<T>(

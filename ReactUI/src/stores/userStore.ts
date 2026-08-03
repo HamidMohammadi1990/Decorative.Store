@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import type { DashboardUser } from '@/models/dashboard/dashboard.model'
 import {
   authService,
+  createFallbackDashboardUser,
   mapCurrentUserToDashboardUser,
 } from '@/services/authService'
 import { useCartStore } from '@/stores/cartStore'
@@ -82,10 +83,23 @@ export const useUserStore = create<UserState>()(
 
         try {
           const tokens = await authService.signIn(input.userName.trim(), input.password)
-          const profile = await authService.getCurrentUser(tokens.accessToken)
+          let profileUser = createFallbackDashboardUser(
+            input.userName,
+            input.firstName,
+            input.lastName,
+          )
+
+          try {
+            const profile = await authService.getCurrentUser(tokens.accessToken)
+            if (profile) {
+              profileUser = mapCurrentUserToDashboardUser(profile)
+            }
+          } catch {
+            // Keep fallback profile when /me is temporarily unavailable.
+          }
 
           set({
-            user: mapCurrentUserToDashboardUser(profile),
+            user: profileUser,
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,
             tokenExpiresAt: Date.now() + tokens.expiresIn * 1000,
@@ -149,7 +163,9 @@ export const useUserStore = create<UserState>()(
           }
 
           const profile = await authService.getCurrentUser(activeToken)
-          set({ user: mapCurrentUserToDashboardUser(profile) })
+          if (profile) {
+            set({ user: mapCurrentUserToDashboardUser(profile) })
+          }
           return true
         } catch {
           useCartStore.getState().clearCart()
