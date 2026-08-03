@@ -20,7 +20,7 @@ public sealed class UserAuthCache
     private const CacheInstanceType CacheInstance = CacheInstanceType.UserTokens;
 
     public Task SetSessionStateAsync(Guid sessionId, CachedSessionState state, DateTime expiresOnUtc, CancellationToken cancellationToken = default)
-        => cache.SetAsync(GetSessionStateKey(sessionId), state, expiresOnUtc, CacheInstance, token: cancellationToken);
+        => cache.SetAsync(GetSessionStateKey(sessionId), state, expiresOnUtc, CacheInstance, extend: true, token: cancellationToken);
 
     public async Task UpdateSessionJwtIdAsync(Guid sessionId, int userId, string jwtId, DateTime expiresOnUtc, CancellationToken cancellationToken = default)
     {
@@ -77,7 +77,7 @@ public sealed class UserAuthCache
     public Task SetSecurityStampAsync(int userId, string securityStamp, CancellationToken cancellationToken = default)
     {
         var ttl = GetSecurityStampCacheTtl();
-        return cache.SetAsync(GetSecurityStampKey(userId), securityStamp, ttl, CacheInstance, token: cancellationToken);
+        return cache.SetAsync(GetSecurityStampKey(userId), securityStamp, ttl, CacheInstance, extend: true, token: cancellationToken);
     }
 
     public async Task<bool> ValidateSecurityStampAsync(int userId, string tokenSecurityStamp, CancellationToken cancellationToken = default)
@@ -85,13 +85,15 @@ public sealed class UserAuthCache
         if (string.IsNullOrWhiteSpace(tokenSecurityStamp))
             return false;
 
-        var currentStamp = await cache.GetAsync<string>(GetSecurityStampKey(userId), CacheInstance, cancellationToken);
-        currentStamp ??= await HydrateSecurityStampFromDbAsync(userId, cancellationToken);
+        var cachedStamp = await cache.GetAsync<string>(GetSecurityStampKey(userId), CacheInstance, cancellationToken);
+        if (!string.IsNullOrWhiteSpace(cachedStamp) && FixedTimeEquals(tokenSecurityStamp, cachedStamp))
+            return true;
 
-        if (string.IsNullOrWhiteSpace(currentStamp))
+        var dbStamp = await HydrateSecurityStampFromDbAsync(userId, cancellationToken);
+        if (string.IsNullOrWhiteSpace(dbStamp))
             return false;
 
-        return FixedTimeEquals(tokenSecurityStamp, currentStamp);
+        return FixedTimeEquals(tokenSecurityStamp, dbStamp);
     }
 
     private async Task<CachedSessionState?> HydrateSessionFromDbAsync(Guid sessionId, int userId, CancellationToken cancellationToken)
