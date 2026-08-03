@@ -20,6 +20,7 @@ public class SeedService(EditionDbContext context) : ISeedService
         await SeedProductPricesAsync(cancellationToken);
         await SeedProductFilesAsync(cancellationToken);
         await SeedProductPropertiesAsync(cancellationToken);
+        await SeedCommentTopicsAsync(cancellationToken);
     }
 
     public async Task SeedDataAsync(List<DynamicPermission> dynamicPermissions, CancellationToken cancellationToken = default)
@@ -445,6 +446,15 @@ public class SeedService(EditionDbContext context) : ISeedService
             context.ProductProperty.Add(productProperty);
         }
 
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SeedCommentTopicsAsync(CancellationToken cancellationToken = default)
+    {
+        if (await context.CommentTopic.AnyAsync(cancellationToken))
+            return;
+
+        context.CommentTopic.Add(CommentTopic.Create("General review", priority: 1));
         await context.SaveChangesAsync(cancellationToken);
     }
 }

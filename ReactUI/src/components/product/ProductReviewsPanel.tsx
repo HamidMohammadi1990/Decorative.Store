@@ -8,10 +8,10 @@ import { useHorizontalDragScroll } from '@/hooks/useHorizontalDragScroll'
 import { useProductReviews } from '@/hooks/useProductReviews'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import { commentTopicService } from '@/services/commentTopicService'
-import { productCommentService } from '@/services/productCommentService'
+import { submitProductReview } from '@/services/reviewSubmitService'
 import { openLoginModal } from '@/stores/authModalStore'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { useAccessToken, useIsAuthenticated } from '@/stores/userStore'
+import { useIsAuthenticated } from '@/stores/userStore'
 
 interface ProductReviewsPanelProps {
   product: ProductDetail
@@ -40,7 +40,6 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
   const isAuthenticated = useIsAuthenticated()
-  const accessToken = useAccessToken()
   const mobileDrag = useHorizontalDragScroll<HTMLDivElement>()
   const { reviews: allReviews, loading, reload } = useProductReviews(product.id)
   const stats = computeReviewStats(allReviews)
@@ -57,11 +56,18 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
   useEffect(() => {
     let cancelled = false
 
-    void commentTopicService.getDefaultTopicId(locale).then((topicId) => {
-      if (!cancelled) {
-        setDefaultCommentTopicId(topicId)
-      }
-    })
+    void commentTopicService
+      .getDefaultTopicId(locale)
+      .then((topicId) => {
+        if (!cancelled) {
+          setDefaultCommentTopicId(topicId)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setDefaultCommentTopicId(null)
+        }
+      })
 
     return () => {
       cancelled = true
@@ -100,37 +106,16 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
 
   const handleSubmitReview = useCallback(
     async (description: string) => {
-      if (!accessToken) {
-        setSubmitError(t('product.reviewSubmitFailed'))
-        return
-      }
-
-      if (!product.id) {
-        setSubmitError(t('product.reviewSubmitFailed'))
-        return
-      }
-
-      if (!defaultCommentTopicId) {
-        setSubmitError(t('product.reviewSubmitFailed'))
-        return
-      }
-
       setSubmitting(true)
       setSubmitError(null)
 
       try {
-        await productCommentService.create(
-          {
-            productId: product.id,
-            commentTopicId: defaultCommentTopicId,
-            description,
-            commentRate: 5,
-            qualityRating: 5,
-            affordableRating: 5,
-          },
+        await submitProductReview({
+          product,
           locale,
-          accessToken,
-        )
+          description,
+          cachedCommentTopicId: defaultCommentTopicId,
+        })
 
         setReviewModalOpen(false)
         await reload()
@@ -140,7 +125,7 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
         setSubmitting(false)
       }
     },
-    [accessToken, defaultCommentTopicId, locale, product.id, reload, t],
+    [defaultCommentTopicId, locale, product, reload, t],
   )
 
   return (
