@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
@@ -52,6 +52,21 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
   const [reviewModalOpen, setReviewModalOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [defaultCommentTopicId, setDefaultCommentTopicId] = useState<string | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+
+    void commentTopicService.getDefaultTopicId(locale).then((topicId) => {
+      if (!cancelled) {
+        setDefaultCommentTopicId(topicId)
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [locale])
 
   const sortedReviews = useMemo(() => {
     const list = [...allReviews]
@@ -85,22 +100,29 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
 
   const handleSubmitReview = useCallback(
     async (description: string) => {
-      if (!accessToken) return
+      if (!accessToken) {
+        setSubmitError(t('product.reviewSubmitFailed'))
+        return
+      }
+
+      if (!product.id) {
+        setSubmitError(t('product.reviewSubmitFailed'))
+        return
+      }
+
+      if (!defaultCommentTopicId) {
+        setSubmitError(t('product.reviewSubmitFailed'))
+        return
+      }
 
       setSubmitting(true)
       setSubmitError(null)
 
       try {
-        const commentTopicId = await commentTopicService.getDefaultTopicId(locale)
-        if (!commentTopicId) {
-          setSubmitError(t('product.reviewSubmitFailed'))
-          return
-        }
-
         await productCommentService.create(
           {
             productId: product.id,
-            commentTopicId,
+            commentTopicId: defaultCommentTopicId,
             description,
             commentRate: 5,
             qualityRating: 5,
@@ -118,7 +140,7 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
         setSubmitting(false)
       }
     },
-    [accessToken, locale, product.id, reload, t],
+    [accessToken, defaultCommentTopicId, locale, product.id, reload, t],
   )
 
   return (

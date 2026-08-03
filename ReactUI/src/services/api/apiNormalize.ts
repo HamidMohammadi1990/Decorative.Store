@@ -10,6 +10,8 @@ function readRecord(value: unknown): Record<string, unknown> | null {
   return value && typeof value === 'object' ? (value as Record<string, unknown>) : null
 }
 
+export { readRecord }
+
 function readMessages(raw: unknown): ApiMessage[] {
   if (!Array.isArray(raw)) return []
 
@@ -40,6 +42,7 @@ export function readStringField(record: Record<string, unknown>, ...keys: string
   for (const key of keys) {
     const value = record[key]
     if (typeof value === 'string' && value.length > 0) return value
+    if (typeof value === 'number' && Number.isFinite(value)) return String(value)
   }
   return ''
 }
@@ -63,4 +66,28 @@ export function readNumberField(record: Record<string, unknown>, ...keys: string
     }
   }
   return 0
+}
+
+export function readOptionalNumberField(
+  record: Record<string, unknown>,
+  ...keys: string[]
+): number | undefined {
+  for (const key of keys) {
+    const value = record[key]
+    if (value === null || value === undefined) continue
+    if (typeof value === 'number' && Number.isFinite(value)) return value
+    if (typeof value === 'string' && value.trim().length > 0) {
+      const parsed = Number(value)
+      if (Number.isFinite(parsed)) return parsed
+    }
+  }
+  return undefined
+}
+
+export function readBooleanField(record: Record<string, unknown>, ...keys: string[]) {
+  for (const key of keys) {
+    const value = record[key]
+    if (typeof value === 'boolean') return value
+  }
+  return false
 }
