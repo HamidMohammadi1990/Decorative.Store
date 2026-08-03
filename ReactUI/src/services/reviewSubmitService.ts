@@ -20,9 +20,14 @@ export async function submitProductReview(input: {
   description: string
   commentTopicId: string
 }) {
-  const accessToken = useUserStore.getState().accessToken
+  let accessToken = useUserStore.getState().accessToken
   if (!accessToken) {
     throw new Error('missing-access-token')
+  }
+
+  const refreshedToken = await useUserStore.getState().refreshAccessToken()
+  if (refreshedToken) {
+    accessToken = refreshedToken
   }
 
   const productId = await resolveReviewProductId(input.product, input.locale)

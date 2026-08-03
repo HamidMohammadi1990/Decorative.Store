@@ -26,6 +26,7 @@ interface UserState {
   loginDemo: (input: Omit<LoginInput, 'password'>) => void
   logout: () => Promise<void>
   restoreSession: () => Promise<boolean>
+  refreshAccessToken: (force?: boolean) => Promise<string | null>
   clearAuthError: () => void
 }
 
@@ -144,36 +145,11 @@ export const useUserStore = create<UserState>()(
           return user !== null
         }
 
-        const shouldRefresh =
-          refreshToken &&
-          tokenExpiresAt !== null &&
-          Date.now() > tokenExpiresAt - 60_000
-
-        let activeToken = accessToken
-
-        if (shouldRefresh && refreshToken) {
-          try {
-            const refreshed = await authService.refreshToken(accessToken, refreshToken)
-            activeToken = refreshed.accessToken
-            set({
-              accessToken: refreshed.accessToken,
-              refreshToken: refreshed.refreshToken,
-              tokenExpiresAt: Date.now() + refreshed.expiresIn * 1000,
-            })
-          } catch {
-            useCartStore.getState().clearCart()
-            set({
-              user: null,
-              accessToken: null,
-              refreshToken: null,
-              tokenExpiresAt: null,
-            })
-            return false
-          }
-        }
+        const refreshedToken = await get().refreshAccessToken()
+        if (!refreshedToken) return false
 
         try {
-          const profile = await authService.getCurrentUser(activeToken)
+          const profile = await authService.getCurrentUser(refreshedToken)
           if (profile) {
             set({ user: mapCurrentUserToDashboardUser(profile) })
           }
@@ -182,6 +158,44 @@ export const useUserStore = create<UserState>()(
         }
 
         return get().accessToken !== null && get().user !== null
+      },
+
+      refreshAccessToken: async (force = false) => {
+        const { accessToken, refreshToken, tokenExpiresAt } = get()
+        if (!accessToken || accessToken === 'mock-access-token') {
+          return accessToken
+        }
+
+        if (!refreshToken) {
+          return force ? null : accessToken
+        }
+
+        const shouldRefresh =
+          force ||
+          (tokenExpiresAt !== null && Date.now() > tokenExpiresAt - 60_000)
+
+        if (!shouldRefresh) {
+          return accessToken
+        }
+
+        try {
+          const refreshed = await authService.refreshToken(accessToken, refreshToken)
+          set({
+            accessToken: refreshed.accessToken,
+            refreshToken: refreshed.refreshToken,
+            tokenExpiresAt: Date.now() + refreshed.expiresIn * 1000,
+          })
+          return refreshed.accessToken
+        } catch {
+          useCartStore.getState().clearCart()
+          set({
+            user: null,
+            accessToken: null,
+            refreshToken: null,
+            tokenExpiresAt: null,
+          })
+          return null
+        }
       },
     }),
     {

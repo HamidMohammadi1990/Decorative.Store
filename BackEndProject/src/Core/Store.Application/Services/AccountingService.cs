@@ -9,6 +9,7 @@ using Edition.Application.Models.Dtos;
 using Edition.Application.Models.Services;
 using Edition.Application.Models.Constants;
 using Edition.Application.Common.Extensions;
+using Edition.Application.Common.Security;
 using Edition.Application.Configurations.SMS;
 using Edition.Application.Configurations.Email;
 using Edition.Application.Common.Caching.Enums;
@@ -107,15 +108,15 @@ public class AccountingService
     {
         var principal = GetPrincipalFromTokenWithoutAlgorithmValidation(request.Token);
         if (principal is null)
-            return true;
+            return false;
 
-        var userId = int.Parse(principal.Claims.Single(x => x.Type == ClaimTypes.NameIdentifier).Value);
-        var jwtId = principal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
-        var cacheKey = GetBlockedTokenCacheKey(userId.ToString(), jwtId);
-        if (await cache.ExistsAsync(cacheKey, CacheInstanceType.UserTokens))
-            return true;
+        var userId = AuthClaimResolver.GetUserId(principal);
+        var jwtId = AuthClaimResolver.GetJwtId(principal);
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(jwtId))
+            return false;
 
-        return !await authContextValidator.ValidateAsync(principal);
+        var cacheKey = GetBlockedTokenCacheKey(userId, jwtId);
+        return await cache.ExistsAsync(cacheKey, CacheInstanceType.UserTokens);
     }
 
     public OperationResult<AccessTokenResponse> GenerateTokenAsync(User user, Guid sessionId)

@@ -14,7 +14,16 @@ interface RequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 }
 
-async function requestApi<T>(path: string, options: RequestOptions = {}): Promise<T> {
+async function tryRefreshAccessToken(force = false): Promise<string | null> {
+  const { useUserStore } = await import('@/stores/userStore')
+  return useUserStore.getState().refreshAccessToken(force)
+}
+
+async function requestApi<T>(
+  path: string,
+  options: RequestOptions = {},
+  allowRefreshRetry = true,
+): Promise<T> {
   const { locale, accessToken, body, method = 'GET' } = options
 
   const headers: Record<string, string> = {
@@ -38,6 +47,25 @@ async function requestApi<T>(path: string, options: RequestOptions = {}): Promis
     headers,
     body: body !== undefined ? JSON.stringify(body) : undefined,
   })
+
+  if (
+    response.status === 401 &&
+    allowRefreshRetry &&
+    accessToken &&
+    accessToken !== 'mock-access-token'
+  ) {
+    const refreshedToken = await tryRefreshAccessToken(true)
+    if (refreshedToken && refreshedToken !== accessToken) {
+      return requestApi<T>(
+        path,
+        {
+          ...options,
+          accessToken: refreshedToken,
+        },
+        false,
+      )
+    }
+  }
 
   const responseBody = await response.json()
   const { isSuccess, data, messages } = normalizeApiEnvelope<T>(responseBody)
