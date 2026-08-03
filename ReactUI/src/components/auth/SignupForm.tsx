@@ -34,7 +34,7 @@ export function SignupForm({
   const [values, setValues] = useState<SignupFormValues>({
     firstName: '',
     lastName: '',
-    email: '',
+    userName: '',
     password: '',
   })
   const [errors, setErrors] = useState<Partial<Record<SignupField, string>>>({})
@@ -69,7 +69,7 @@ export function SignupForm({
     setTouched({
       firstName: true,
       lastName: true,
-      email: true,
+      userName: true,
       password: true,
     })
     if (hasErrors(nextErrors)) return
@@ -77,12 +77,12 @@ export function SignupForm({
     try {
       if (useMockAuth) {
         loginDemo({
-          email: values.email,
+          userName: values.userName,
           firstName: values.firstName,
           lastName: values.lastName,
         })
       } else {
-        await login({ email: values.email, password: values.password })
+        await login({ userName: values.userName, password: values.password })
       }
 
       if (onSuccess) {
@@ -121,15 +121,16 @@ export function SignupForm({
       </div>
 
       <AuthField
-        label={t('auth.emailLabel')}
-        name="email"
-        type="email"
-        autoComplete="email"
-        placeholder={t('auth.emailPlaceholder')}
-        value={values.email}
-        onChange={(e) => updateField('email', e.target.value)}
-        onBlur={() => handleBlur('email')}
-        error={touched.email ? errors.email : undefined}
+        label={t('auth.userNameLabel')}
+        name="userName"
+        type="text"
+        autoComplete="username"
+        inputMode="email"
+        placeholder={t('auth.userNamePlaceholder')}
+        value={values.userName}
+        onChange={(e) => updateField('userName', e.target.value)}
+        onBlur={() => handleBlur('userName')}
+        error={touched.userName ? errors.userName : undefined}
       />
 
       <PasswordField

@@ -56,7 +56,9 @@ public class UserRepository
     public async Task<User?> FindByLoginAsync(string userNameOrEmail, CancellationToken cancellationToken = default)
     {
         return await Context.User.FirstOrDefaultAsync(
-            x => (x.UserName == userNameOrEmail || x.Email == userNameOrEmail) && x.IsActive,
+            x => (x.UserName == userNameOrEmail
+                  || x.Email == userNameOrEmail
+                  || x.PhoneNumber == userNameOrEmail) && x.IsActive,
             cancellationToken);
     }
 

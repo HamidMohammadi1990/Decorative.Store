@@ -420,6 +420,8 @@
     "benefitWishlist": "ذخیره علاقه‌مندی‌ها",
     "benefitOffers": "حراج‌ها و محصولات جدید",
     "emailLabel": "ایمیل",
+    "userNameLabel": "ایمیل یا شماره موبایل",
+    "userNamePlaceholder": "you@example.com یا ۰۹۱۲۳۴۵۶۷۸۹",
     "emailPlaceholder": "you@example.com",
     "passwordLabel": "رمز عبور",
     "passwordPlaceholder": "رمز عبور را وارد کنید",
@@ -433,7 +435,7 @@
     "signInButton": "ورود",
     "signingIn": "در حال ورود…",
     "signingUp": "در حال ایجاد حساب…",
-    "signInFailed": "ایمیل یا رمز عبور نادرست است.",
+    "signInFailed": "نام کاربری یا رمز عبور نادرست است.",
     "signUpButton": "ایجاد حساب",
     "noAccount": "حساب ندارید؟",
     "createAccountLink": "ثبت‌نام کنید",
@@ -449,6 +451,7 @@
     "validation": {
       "required": "پر کردن این فیلد الزامی است",
       "emailInvalid": "لطفاً یک ایمیل معتبر وارد کنید",
+      "userNameInvalid": "ایمیل یا شماره موبایل معتبر وارد کنید",
       "passwordMin": "رمز عبور باید حداقل {{count}} کاراکتر باشد",
       "nameMin": "حداقل ۲ کاراکتر وارد کنید"
     }

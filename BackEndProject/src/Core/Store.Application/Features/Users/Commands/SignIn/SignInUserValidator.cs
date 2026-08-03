@@ -17,7 +17,7 @@ public class SignInUserValidator : AbstractValidator<SignInUserRequest>
 
         RuleFor(x => x.Password)
             .NotNull()
-            .Must(x => x.Length > 0)
+            .MinimumLength(5)
             .WithMessage(MessageKeys.PasswordIsNotValid);
     }
 }

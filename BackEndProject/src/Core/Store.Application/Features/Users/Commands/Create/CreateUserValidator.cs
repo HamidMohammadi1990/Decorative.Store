@@ -40,7 +40,9 @@ public class CreateUserValidator : AbstractValidator<CreateUserRequest>
 
         RuleFor(u => u.Password)
            .NotNull()
-           .WithMessage(MessageKeys.PasswordRequired);
+           .WithMessage(MessageKeys.PasswordRequired)
+           .MinimumLength(5)
+           .WithMessage(MessageKeys.PasswordIsNotValid);
 
         RuleFor(u => u.Gender)
           .IsInEnum()

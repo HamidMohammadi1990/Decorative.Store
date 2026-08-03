@@ -8,7 +8,7 @@ import {
 import { useCartStore } from '@/stores/cartStore'
 
 interface LoginInput {
-  email: string
+  userName: string
   password: string
   firstName?: string
   lastName?: string
@@ -29,14 +29,15 @@ interface UserState {
 }
 
 function createDemoUser(input: Omit<LoginInput, 'password'>): DashboardUser {
-  const firstName = input.firstName?.trim() || input.email.split('@')[0]
+  const userName = input.userName.trim()
+  const firstName = input.firstName?.trim() || userName.split('@')[0] || userName
   const lastName = input.lastName?.trim() || ''
 
   return {
     id: `user-${Date.now().toString(36)}`,
     firstName,
     lastName,
-    email: input.email.trim(),
+    email: userName,
     memberSince: new Date().toISOString().slice(0, 10),
   }
 }
@@ -80,7 +81,7 @@ export const useUserStore = create<UserState>()(
         }
 
         try {
-          const tokens = await authService.signIn(input.email.trim(), input.password)
+          const tokens = await authService.signIn(input.userName.trim(), input.password)
           const profile = await authService.getCurrentUser(tokens.accessToken)
 
           set({

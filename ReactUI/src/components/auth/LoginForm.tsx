@@ -32,7 +32,7 @@ export function LoginForm({
   const authLoading = useUserStore((s) => s.authLoading)
   const authError = useUserStore((s) => s.authError)
   const clearAuthError = useUserStore((s) => s.clearAuthError)
-  const [values, setValues] = useState<LoginFormValues>({ email: '', password: '' })
+  const [values, setValues] = useState<LoginFormValues>({ userName: '', password: '' })
   const [errors, setErrors] = useState<Partial<Record<LoginField, string>>>({})
   const [touched, setTouched] = useState<Partial<Record<LoginField, boolean>>>({})
 
@@ -62,11 +62,11 @@ export function LoginForm({
     e.preventDefault()
     const nextErrors = validateLoginForm(values, t)
     setErrors(nextErrors)
-    setTouched({ email: true, password: true })
+    setTouched({ userName: true, password: true })
     if (hasErrors(nextErrors)) return
 
     try {
-      await login({ email: values.email, password: values.password })
+      await login({ userName: values.userName, password: values.password })
       if (onSuccess) {
         onSuccess()
       } else {
@@ -80,18 +80,19 @@ export function LoginForm({
   return (
     <form className="space-y-5" noValidate onSubmit={handleSubmit}>
       <AuthField
-        label={t('auth.emailLabel')}
-        name="email"
-        type="email"
-        autoComplete="email"
-        placeholder={t('auth.emailPlaceholder')}
-        value={values.email}
+        label={t('auth.userNameLabel')}
+        name="userName"
+        type="text"
+        autoComplete="username"
+        inputMode="email"
+        placeholder={t('auth.userNamePlaceholder')}
+        value={values.userName}
         onChange={(e) => {
           clearAuthError()
-          updateField('email', e.target.value)
+          updateField('userName', e.target.value)
         }}
-        onBlur={() => handleBlur('email')}
-        error={touched.email ? errors.email : undefined}
+        onBlur={() => handleBlur('userName')}
+        error={touched.userName ? errors.userName : undefined}
       />
 
       <PasswordField

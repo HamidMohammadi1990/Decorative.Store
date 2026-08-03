@@ -420,6 +420,8 @@
     "benefitWishlist": "Save favourites to your wishlist",
     "benefitOffers": "Exclusive sales & new arrivals",
     "emailLabel": "Email address",
+    "userNameLabel": "Email or mobile number",
+    "userNamePlaceholder": "you@example.com or 09123456789",
     "emailPlaceholder": "you@example.com",
     "passwordLabel": "Password",
     "passwordPlaceholder": "Enter your password",
@@ -433,7 +435,7 @@
     "signInButton": "Sign in",
     "signingIn": "Signing in…",
     "signingUp": "Creating account…",
-    "signInFailed": "Invalid email or password. Please try again.",
+    "signInFailed": "Invalid username or password. Please try again.",
     "signUpButton": "Create account",
     "noAccount": "Don't have an account?",
     "createAccountLink": "Create one",
@@ -449,6 +451,7 @@
     "validation": {
       "required": "This field is required",
       "emailInvalid": "Please enter a valid email address",
+      "userNameInvalid": "Enter a valid email address or mobile number",
       "passwordMin": "Password must be at least {{count}} characters",
       "nameMin": "Please enter at least 2 characters"
     }
