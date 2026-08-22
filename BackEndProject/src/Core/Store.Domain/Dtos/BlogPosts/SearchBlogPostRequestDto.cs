@@ -11,10 +11,8 @@ public record SearchBlogPostRequestDto : IContentPolicyQueryDto<BlogPost>
     [QueryFilter(MemberPath = "blogPost.BlogPostCategoryId")]
     public int? CategoryId { get; init; }
 
-    [QueryFilter(MemberPath = "blogPost.Title", Operator = FilterOperator.Contains)]
     public string? Title { get; init; }
 
-    [QueryFilter(MemberPath = "blogPost.Slug", Operator = FilterOperator.Contains)]
     public string? Slug { get; init; }
 
     public PagedRequest Pagination { get; init; } = default!;

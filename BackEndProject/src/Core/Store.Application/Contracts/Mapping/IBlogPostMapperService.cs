@@ -7,7 +7,10 @@ namespace Edition.Application.Contracts.Mapping;
 
 public interface IBlogPostMapperService : IMapper
 {
-    GetBlogPostResponse Map(BlogPost model);
+    GetBlogPostResponse Map(
+        BlogPost model,
+        (string Title, string Slug, string MetaDescription, string SeoKeywords, string Content) fields);
+
     GetAllBlogPostRequestDto Map(GetAllBlogPostRequest model);
     SearchBlogPostRequestDto Map(SearchBlogPostRequest model);
     PagedResult<GetAllBlogPostResponse> Map(PagedResult<GetAllBlogPostDto> model);

@@ -16,6 +16,7 @@ import { CartIcon, LocationIcon } from '@/components/ui/HeaderIcons'
 import { useCompareStore } from '@/stores/compareStore'
 import { useCartStore } from '@/stores/cartStore'
 import { useAddressStore } from '@/stores/addressStore'
+import { useIsAuthenticated } from '@/stores/userStore'
 
 interface SiteHeaderProps {
   data: SiteHeaderModel
@@ -29,8 +30,9 @@ export function SiteHeader({ data }: SiteHeaderProps) {
     enabled: onBlogRoute,
   })
   const [mobileOpen, setMobileOpen] = useState(false)
+  const isAuthenticated = useIsAuthenticated()
   const itemCount = useCartStore((s) =>
-    s.lines.reduce((sum, line) => sum + line.quantity, 0),
+    isAuthenticated ? s.lines.reduce((sum, line) => sum + line.quantity, 0) : 0,
   )
   const openCart = useCartStore((s) => s.openCart)
   const openAddressModal = useAddressStore((s) => s.openModal)
@@ -66,14 +68,16 @@ export function SiteHeader({ data }: SiteHeaderProps) {
           <div className="ms-auto flex shrink-0 items-center gap-2 text-sm sm:gap-3">
             <ThemeSwitcher />
             <LanguageSwitcher />
-            <button
-              type="button"
-              onClick={openAddressModal}
-              className="inline-flex p-0.5 hover:text-warm"
-              aria-label={t('address.headerLabel')}
-            >
-              <LocationIcon size={22} />
-            </button>
+            {isAuthenticated && (
+              <button
+                type="button"
+                onClick={openAddressModal}
+                className="inline-flex p-0.5 hover:text-warm"
+                aria-label={t('address.headerLabel')}
+              >
+                <LocationIcon size={22} />
+              </button>
+            )}
             <UserAccountMenu accountLabel={data.accountLabel} />
             <Link
               to="/compare"
@@ -92,24 +96,26 @@ export function SiteHeader({ data }: SiteHeaderProps) {
                 {compareCount > 9 ? '9+' : compareCount}
               </span>
             </Link>
-            <button
-              type="button"
-              onClick={openCart}
-              className="relative inline-flex p-0.5 hover:text-accent"
-              aria-label={`${data.cartLabel} (${itemCount})`}
-            >
-              <CartIcon size={22} />
-              <span
-                aria-hidden
-                className={`pointer-events-none absolute -top-0.5 -end-0.5 flex h-3.5 min-w-3.5 items-center justify-center rounded-full border-2 border-surface px-0.5 text-[9px] leading-none font-semibold tabular-nums shadow-sm ${
-                  itemCount > 0
-                    ? 'bg-accent text-text-inverse'
-                    : 'border-border bg-surface text-text-muted'
-                }`}
+            {isAuthenticated && (
+              <button
+                type="button"
+                onClick={openCart}
+                className="relative inline-flex p-0.5 hover:text-accent"
+                aria-label={`${data.cartLabel} (${itemCount})`}
               >
-                {itemCount > 99 ? '99+' : itemCount}
-              </span>
-            </button>
+                <CartIcon size={22} />
+                <span
+                  aria-hidden
+                  className={`pointer-events-none absolute -top-0.5 -end-0.5 flex h-3.5 min-w-3.5 items-center justify-center rounded-full border-2 border-surface px-0.5 text-[9px] leading-none font-semibold tabular-nums shadow-sm ${
+                    itemCount > 0
+                      ? 'bg-accent text-text-inverse'
+                      : 'border-border bg-surface text-text-muted'
+                  }`}
+                >
+                  {itemCount > 99 ? '99+' : itemCount}
+                </span>
+              </button>
+            )}
           </div>
         </div>
 

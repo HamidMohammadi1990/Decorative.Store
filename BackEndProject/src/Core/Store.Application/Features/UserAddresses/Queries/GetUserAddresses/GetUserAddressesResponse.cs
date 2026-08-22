@@ -8,10 +8,10 @@ public record GetUserAddressesResponse
     [JsonConverter(typeof(UserAddressEncryptor))]
     public int Id { get; init; }
 
-    [JsonConverter(typeof(CityEncryptor))]
-    public int CityId { get; init; }
+    [JsonConverter(typeof(CityNullableEncryptor))]
+    public int? CityId { get; init; }
 
-    public string CityName { get; init; } = default!;
+    public string? CityName { get; init; }
 
     public string? RecipientFirstName { get; init; }
     public string? RecipientLastName { get; init; }

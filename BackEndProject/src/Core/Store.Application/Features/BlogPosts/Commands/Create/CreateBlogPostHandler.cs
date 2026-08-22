@@ -13,8 +13,20 @@ public class CreateBlogPostHandler
     public async Task<OperationResult<CreateBlogPostResponse>> Handle(CreateBlogPostRequest request, CancellationToken cancellationToken)
     {
         var userId = currentUser.UserId;
-        var blogPost = BlogPost.Create(request.Title, request.Slug, request.CategoryId, request.MetaDescription,
-                                       request.SeoKeywords, request.Content, userId, request.ReadingTimeInMinutes);
+        var blogPost = BlogPost.Create(
+            request.Code,
+            request.CategoryId,
+            userId,
+            request.ReadingTimeInMinutes,
+            request.IsFeatured);
+
+        blogPost.UpsertTranslation(
+            request.LanguageId,
+            request.Title,
+            request.Slug,
+            request.MetaDescription,
+            request.SeoKeywords,
+            request.Content);
 
         blogPostRepository.Add(blogPost);
 

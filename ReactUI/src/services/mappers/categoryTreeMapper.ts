@@ -1,4 +1,5 @@
 import type { CategoryTreeItem } from '@/models/catalog/categoryTree.model'
+import type { CategoryNav } from '@/models/home/categoryNav.model'
 import type { NavLinkGroup } from '@/models/shared/link.model'
 
 function slugToNavId(slug: string): string {
@@ -32,4 +33,13 @@ export function mapCategoryTreeToNav(items: CategoryTreeItem[]): NavLinkGroup[] 
 
     return navItem
   })
+}
+
+export function mapCategoryTreeToCategoryNav(items: CategoryTreeItem[]): CategoryNav {
+  return {
+    items: items.map((category) => ({
+      label: category.title,
+      href: toHref(category.slug),
+    })),
+  }
 }

@@ -16,7 +16,6 @@ public class CheckoutOrderHandler
     private readonly IPostTypeRepository postTypeRepository;
     private readonly ICurrentUserContext currentUser;
     private readonly IUserAddressRepository userAddressRepository;
-    private readonly IDeliveryTypeRepository deliveryTypeRepository;
     private readonly IProductOrderItemAttachmentTypeRepository productOrderItemAttachmentTypeRepository;
 
     public CheckoutOrderHandler(
@@ -26,7 +25,6 @@ public class CheckoutOrderHandler
         IPostTypeRepository postTypeRepository,
         ICurrentUserContext currentUser,
         IUserAddressRepository userAddressRepository,
-        IDeliveryTypeRepository deliveryTypeRepository,
         IProductOrderItemAttachmentTypeRepository productOrderItemAttachmentTypeRepository)
     {
         this.mapper = mapper;
@@ -35,7 +33,6 @@ public class CheckoutOrderHandler
         this.postTypeRepository = postTypeRepository;
         this.currentUser = currentUser;
         this.userAddressRepository = userAddressRepository;
-        this.deliveryTypeRepository = deliveryTypeRepository;
         this.productOrderItemAttachmentTypeRepository = productOrderItemAttachmentTypeRepository;
     }
 
@@ -46,7 +43,6 @@ public class CheckoutOrderHandler
             return ErrorModel.Create("InvalidId");
 
         var properties = await propertyRepository.GetByProductIdAsync(request.ProductId, cancellationToken);
-        var deliveryTypes = await deliveryTypeRepository.GetAllAsync();
         var postTypes = await postTypeRepository.GetAllAsync();
 
         var userAddresses = new List<UserAddressSummaryDto>();
@@ -56,6 +52,6 @@ public class CheckoutOrderHandler
         var attachments = await productOrderItemAttachmentTypeRepository.GetCheckoutProductAttachmentsAsync(request.ProductId);
 
         var userIsCooperation = currentUser.IsCooperation;
-        return mapper.Map(properties, deliveryTypes, postTypes, userAddresses, productDetail, attachments, userIsCooperation);
+        return mapper.Map(properties, postTypes, userAddresses, productDetail, attachments, userIsCooperation);
     }
 }

@@ -10,11 +10,21 @@ public class UpdateBlogPostHandler
 {
     public async Task<OperationResult> Handle(UpdateBlogPostRequest request, CancellationToken cancellationToken)
     {
-        var blogPost = await blogPostRepository.FindAsync(request.Id);
+        var blogPost = await blogPostRepository.FindWithTranslationsAsync(request.Id, cancellationToken);
         if (blogPost is null)
             return ErrorModel.Create("InvalidId");
 
-        blogPost.Update(request.Title, request.Slug, request.CategoryId, request.MetaDescription, request.SeoKeywords, request.Content, request.ReadingTimeInMinutes);
+        blogPost.Update(
+            request.Code,
+            request.CategoryId,
+            request.ReadingTimeInMinutes,
+            request.IsFeatured,
+            request.LanguageId,
+            request.Title,
+            request.Slug,
+            request.MetaDescription,
+            request.SeoKeywords,
+            request.Content);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

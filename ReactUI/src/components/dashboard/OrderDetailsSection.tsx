@@ -21,9 +21,15 @@ export function OrderDetailsSection({ order, formatAmount }: OrderDetailsSection
             {t('dashboard.orders.detailsShipping')}
           </h3>
           <div className="mt-3 space-y-1 text-sm">
-            <p className="font-semibold text-text">
-              {order.shippingAddress.label} · {order.shippingAddress.recipient}
-            </p>
+            {order.shippingAddress.label || order.shippingAddress.recipient ? (
+              <p className="font-semibold text-text">
+                {[order.shippingAddress.label, order.shippingAddress.recipient]
+                  .filter(Boolean)
+                  .join(' · ')}
+              </p>
+            ) : (
+              <p className="text-text-muted">{t('dashboard.orders.shippingPending')}</p>
+            )}
             {order.shippingAddress.lines.map((line) => (
               <p key={line} className="text-text-muted">
                 {line}
@@ -128,13 +134,64 @@ export function OrderDetailsSection({ order, formatAmount }: OrderDetailsSection
                 </p>
               )}
             </div>
-            <a
-              href={`#track-${order.id}`}
-              className="text-xs font-semibold text-warm hover:underline"
-              onClick={(e) => e.preventDefault()}
-            >
-              {t('dashboard.orders.trackLink')}
-            </a>
+          </div>
+        </section>
+      )}
+
+      {order.items.some(
+        (item) =>
+          item.properties?.length ||
+          item.attachments?.length ||
+          item.postType ||
+          item.deliveryType ||
+          item.description,
+      ) && (
+        <section className="mt-5 rounded-sm border border-border bg-surface p-4">
+          <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">
+            {t('dashboard.orders.detailsItems')}
+          </h3>
+          <div className="mt-4 space-y-4">
+            {order.items.map((item, index) => (
+              <div key={`${order.id}-detail-${index}`} className="rounded-sm border border-border/70 p-3">
+                <p className="text-sm font-semibold text-text">{item.title}</p>
+                {item.description && (
+                  <p className="mt-1 text-sm text-text-muted">{item.description}</p>
+                )}
+                {(item.postType || item.deliveryType) && (
+                  <div className="mt-2 flex flex-wrap gap-3 text-xs text-text-muted">
+                    {item.postType && (
+                      <span>
+                        {t('dashboard.orders.postType')}: {item.postType}
+                      </span>
+                    )}
+                    {item.deliveryType && (
+                      <span>
+                        {t('dashboard.orders.deliveryType')}: {item.deliveryType}
+                      </span>
+                    )}
+                  </div>
+                )}
+                {item.properties && item.properties.length > 0 && (
+                  <dl className="mt-3 space-y-1 text-sm">
+                    {item.properties.map((property) => (
+                      <div key={`${property.title}-${property.value}`} className="flex justify-between gap-3">
+                        <dt className="text-text-muted">{property.title}</dt>
+                        <dd className="font-medium text-text">{property.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+                {item.attachments && item.attachments.length > 0 && (
+                  <ul className="mt-3 space-y-1 text-xs text-text-muted">
+                    {item.attachments.map((attachment) => (
+                      <li key={`${attachment.title}-${attachment.fileName}`}>
+                        {attachment.title}: {attachment.fileName}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))}
           </div>
         </section>
       )}

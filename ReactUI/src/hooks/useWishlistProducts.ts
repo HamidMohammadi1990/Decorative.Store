@@ -39,9 +39,7 @@ export function useWishlistProducts(): UseWishlistProductsResult {
 
       const missing = slugs.filter((slug) => !details.some((p) => p.slug === slug))
       if (missing.length > 0) {
-        useWishlistStore.setState({
-          slugs: slugs.filter((slug) => !missing.includes(slug)),
-        })
+        missing.forEach((slug) => useWishlistStore.getState().removeSlug(slug))
       }
     } catch {
       setError('failed')

@@ -8,7 +8,7 @@ namespace Store.Api.Extensions;
 public static class WebApplicationExtensions
 {
     /// <summary>
-    /// Seeds required reference data on startup: Language (fa-IR, en-US) then catalog (Category/SubCategory).
+    /// Seeds required reference data on startup: Language (fa-IR, en-US) then catalog and blog categories.
     /// </summary>
     public static async Task SeedApplicationDataAsync(
         this WebApplication app,

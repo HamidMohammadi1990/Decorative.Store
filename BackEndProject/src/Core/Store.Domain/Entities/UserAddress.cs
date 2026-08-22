@@ -4,7 +4,7 @@ namespace Store.Domain.Entities;
 
 public class UserAddress : BaseEntity
 {
-    public int CityId { get; private set; }
+    public int? CityId { get; private set; }
     public string? RecipientFirstName { get; private set; }
     public string? RecipientLastName { get; private set; }
     public string Title { get; private set; } = default!;
@@ -16,11 +16,11 @@ public class UserAddress : BaseEntity
 
 
     public User User { get; private set; } = default!;
-    public City City { get; private set; } = default!;
+    public City? City { get; private set; } = default!;
     public ICollection<OrderItem> OrderItems { get; private set; } = default!;
 
 
-    public static UserAddress Create(string title, int userId, string address, string? postalCode, int cityId,
+    public static UserAddress Create(string title, int userId, string address, string? postalCode, int? cityId,
                                      string? recipientFirstName, string? recipientLastName, string phoneNumber)
         => new()
         {
@@ -34,7 +34,7 @@ public class UserAddress : BaseEntity
             PhoneNumber = phoneNumber
         };
 
-    public void Update(string title, bool isActive, string address, string? postalCode, int cityId,
+    public void Update(string title, bool isActive, string address, string? postalCode, int? cityId,
                        string? recipientFirstName, string? recipientLastName, string phoneNumber)
     {
         Title = title;

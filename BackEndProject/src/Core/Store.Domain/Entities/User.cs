@@ -33,6 +33,8 @@ public class User : BaseEntity
     public ICollection<RefreshToken> RefreshTokens { get; private set; } = default!;
     public ICollection<UserSession> UserSessions { get; private set; } = default!;
     public ICollection<ProductComment> ProductComments { get; private set; } = default!;
+    public ICollection<ProductWishlist> ProductWishlists { get; private set; } = default!;
+    public ICollection<UserStory> UserStories { get; private set; } = default!;
     public ICollection<BlogPostComment> BlogPostComments { get; private set; } = default!;
     public ICollection<BankTransaction> BankTransactions { get; private set; } = default!;
     public ICollection<ChequeTransaction> ChequeTransactions { get; private set; } = default!;

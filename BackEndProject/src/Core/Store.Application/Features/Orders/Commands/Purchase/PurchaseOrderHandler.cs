@@ -78,7 +78,7 @@ public class PurchaseOrderHandler
 
         var orderProductPrice = product.Price;
         var orderItem = OrderItem.Create(request.ProductId, request.Quantity, request.PostTypeId,
-                                         request.DeliveryTypeId, request.UserAddressId,
+                                         null, request.UserAddressId,
                                          request.Description, request.EmergencyPhoneNumber,
                                          orderProductPrice, request.IsNeedToDesign);
         orderItem.AddProperties(orderProperties);

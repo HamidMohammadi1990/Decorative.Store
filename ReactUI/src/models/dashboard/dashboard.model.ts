@@ -24,6 +24,11 @@ export interface DashboardOrderItem {
   imageUrl?: string
   quantity: number
   price: number
+  description?: string
+  postType?: string
+  deliveryType?: string
+  properties?: { title: string; value: string }[]
+  attachments?: { title: string; fileName: string }[]
 }
 
 export type OrderPaymentMethod = 'card' | 'wallet' | 'cod'
@@ -42,6 +47,7 @@ export interface DashboardOrderTimelineStep {
 
 export interface DashboardOrder {
   id: string
+  displayId?: string
   date: string
   status: OrderStatus
   total: number
@@ -54,6 +60,12 @@ export interface DashboardOrder {
   trackingNumber?: string
   carrier?: string
   estimatedDelivery?: string
+  detailsLoaded?: boolean
+}
+
+export interface OrderStatusOption {
+  id: number
+  title: string
 }
 
 export type OrderStatusFilter = OrderStatus | 'all'

@@ -5,6 +5,7 @@ import { AddressFormFields } from '@/components/address/AddressFormFields'
 import { Button } from '@/components/ui/Button'
 import { CloseIcon } from '@/components/ui/CloseIcon'
 import { Portal } from '@/components/ui/Portal'
+import { InlineLoading } from '@/components/ui/Spinner'
 import type { SavedAddress } from '@/models/address/savedAddress.model'
 import {
   addressFormToInput,
@@ -13,6 +14,7 @@ import {
   type AddressFormField,
   type AddressFormValues,
 } from '@/extensions/validateAddressForm'
+import { useAddressMutations } from '@/hooks/useAddressMutations'
 import { useAddressStore } from '@/stores/addressStore'
 
 type ModalMode = 'list' | 'add' | 'edit'
@@ -22,10 +24,10 @@ export function AddressBookModal() {
   const isOpen = useAddressStore((s) => s.isModalOpen)
   const closeModal = useAddressStore((s) => s.closeModal)
   const addresses = useAddressStore((s) => s.addresses)
-  const addAddress = useAddressStore((s) => s.addAddress)
-  const updateAddress = useAddressStore((s) => s.updateAddress)
-  const removeAddress = useAddressStore((s) => s.removeAddress)
+  const isLoading = useAddressStore((s) => s.isLoading)
   const setDefaultAddress = useAddressStore((s) => s.setDefaultAddress)
+  const { isSaving, mutationError, saveAddress, deleteAddress, clearMutationError } =
+    useAddressMutations()
 
   const [mode, setMode] = useState<ModalMode>('list')
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -40,12 +42,14 @@ export function AddressBookModal() {
       setForm(emptyAddressForm)
       setErrors({})
       setMakeDefault(false)
+      clearMutationError()
     }
-  }, [isOpen])
+  }, [clearMutationError, isOpen])
 
   if (!isOpen) return null
 
   const startAdd = () => {
+    clearMutationError()
     setMode('add')
     setEditingId(null)
     setForm(emptyAddressForm)
@@ -54,6 +58,7 @@ export function AddressBookModal() {
   }
 
   const startEdit = (address: SavedAddress) => {
+    clearMutationError()
     setMode('edit')
     setEditingId(address.id)
     setForm({
@@ -62,7 +67,6 @@ export function AddressBookModal() {
       lastName: address.lastName,
       address: address.address,
       apartment: address.apartment,
-      city: address.city,
       postcode: address.postcode,
       phone: address.phone,
     })
@@ -81,7 +85,7 @@ export function AddressBookModal() {
     }
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const nextErrors = validateAddressForm(form, {
       required: t('address.validation.required'),
     })
@@ -89,17 +93,21 @@ export function AddressBookModal() {
     if (Object.keys(nextErrors).length > 0) return
 
     const input = addressFormToInput(form, makeDefault)
+    const saved = await saveAddress(input, {
+      editingId,
+      makeDefault,
+    })
 
-    if (mode === 'edit' && editingId) {
-      updateAddress(editingId, input)
-    } else {
-      addAddress(input)
-    }
+    if (!saved) return
 
     setMode('list')
     setEditingId(null)
     setForm(emptyAddressForm)
     setMakeDefault(false)
+  }
+
+  const handleDelete = async (id: string) => {
+    await deleteAddress(id)
   }
 
   return (
@@ -141,9 +149,19 @@ export function AddressBookModal() {
         </header>
 
         <div className="overflow-y-auto px-5 py-4">
+          {mutationError && (
+            <p className="mb-4 rounded-sm border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+              {mutationError}
+            </p>
+          )}
+
           {mode === 'list' ? (
             <>
-              {addresses.length === 0 ? (
+              {isLoading ? (
+                <div className="flex justify-center py-10">
+                  <InlineLoading label={t('address.loading')} />
+                </div>
+              ) : addresses.length === 0 ? (
                 <div className="rounded-sm border border-dashed border-border bg-surface-muted px-4 py-10 text-center">
                   <p className="text-sm font-medium text-text">{t('address.emptyTitle')}</p>
                   <p className="mt-1 text-sm text-text-muted">{t('address.emptyMessage')}</p>
@@ -155,7 +173,7 @@ export function AddressBookModal() {
                       <AddressCard
                         address={address}
                         onEdit={() => startEdit(address)}
-                        onDelete={() => removeAddress(address.id)}
+                        onDelete={() => void handleDelete(address.id)}
                         onSetDefault={() => setDefaultAddress(address.id)}
                       />
                     </li>
@@ -163,7 +181,7 @@ export function AddressBookModal() {
                 </ul>
               )}
 
-              <Button variant="warm" className="mt-4 w-full" onClick={startAdd}>
+              <Button variant="warm" className="mt-4 w-full" onClick={startAdd} disabled={isSaving}>
                 {t('address.addNew')}
               </Button>
             </>
@@ -178,16 +196,18 @@ export function AddressBookModal() {
                 onDefaultChange={setMakeDefault}
               />
               <div className="mt-5 flex gap-3">
-                <Button variant="warm" className="flex-1" onClick={handleSave}>
-                  {t('address.save')}
+                <Button variant="warm" className="flex-1" onClick={() => void handleSave()} disabled={isSaving}>
+                  {isSaving ? <InlineLoading label={t('address.save')} /> : t('address.save')}
                 </Button>
                 <Button
                   variant="secondary"
                   className="flex-1"
+                  disabled={isSaving}
                   onClick={() => {
                     setMode('list')
                     setEditingId(null)
                     setErrors({})
+                    clearMutationError()
                   }}
                 >
                   {t('address.cancel')}

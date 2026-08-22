@@ -10,21 +10,18 @@ public class BlogPostCategoryConfig : IEntityTypeConfiguration<BlogPostCategory>
     public void Configure(EntityTypeBuilder<BlogPostCategory> builder)
     {
         builder
-            .Property(x => x.Title)
-            .HasNVarcharMaxLength(70);
+            .Property(x => x.Code)
+            .HasVarcharMaxLength(30)
+            .IsRequired();
 
         builder
-            .Property(x => x.Slug)
-            .HasVarcharMaxLength(150);
+            .HasIndex(x => x.Code)
+            .IsUnique();
 
         builder
             .HasMany(x => x.BlogPosts)
             .WithOne(x => x.BlogPostCategory)
             .HasForeignKey(x => x.BlogPostCategoryId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        builder
-            .HasIndex(x => x.Slug)
-            .IsUnique();
     }
 }

@@ -8,7 +8,6 @@ export interface AddressFormValues {
   lastName: string
   address: string
   apartment: string
-  city: string
   postcode: string
   phone: string
 }
@@ -19,7 +18,6 @@ export const emptyAddressForm: AddressFormValues = {
   lastName: '',
   address: '',
   apartment: '',
-  city: '',
   postcode: '',
   phone: '',
 }
@@ -36,7 +34,6 @@ export function validateAddressForm(
     'firstName',
     'lastName',
     'address',
-    'city',
     'postcode',
     'phone',
   ]
@@ -60,7 +57,6 @@ export function addressFormToInput(
     lastName: values.lastName.trim(),
     address: values.address.trim(),
     apartment: values.apartment.trim(),
-    city: values.city.trim(),
     postcode: values.postcode.trim(),
     phone: values.phone.trim(),
     isDefault,

@@ -8,6 +8,7 @@ public record GetBlogPostResponse
     [JsonConverter(typeof(BlogPostEncryptor))]
     public int Id { get; init; }
 
+    public string Code { get; init; } = default!;
     public string Title { get; init; } = default!;
     public string Slug { get; init; } = default!;
 
@@ -27,4 +28,5 @@ public record GetBlogPostResponse
     public DateTime? PublishedOnUtc { get; init; }
     public bool IsActive { get; init; }
     public bool IsPublished { get; init; }
+    public bool IsFeatured { get; init; }
 }

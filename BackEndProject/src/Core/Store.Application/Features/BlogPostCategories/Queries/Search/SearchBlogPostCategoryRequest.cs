@@ -7,6 +7,7 @@ namespace Edition.Application.Features.BlogPostCategories.Queries;
 
 public record SearchBlogPostCategoryRequest : ContentPolicyRequest<BlogPostCategory>, IRequest<OperationResult<PagedResult<SearchBlogPostCategoryResponse>>>
 {
+    public string? Code { get; set; }
     public string? Title { get; set; }
     public string? Slug { get; set; }
 

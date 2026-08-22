@@ -10,7 +10,7 @@ public class OrderItem : BaseEntity
     public int ProductId { get; private set; }
     public decimal ProductPrice { get; private set; }
     public bool IsNeedToDesign { get; private set; }
-    public int DeliveryTypeId { get; private set; }
+    public int? DeliveryTypeId { get; private set; }
     public int? PostTypeId { get; private set; }
     public int? UserAddressId { get; private set; }
     public OrderItemStatusType Status { get; private set; } = OrderItemStatusType.Pending;
@@ -23,12 +23,12 @@ public class OrderItem : BaseEntity
     public Product Product { get; private set; } = default!;
     public PostType PostType { get; private set; } = default!;
     public UserAddress UserAddress { get; private set; } = default!;
-    public DeliveryType DeliveryType { get; private set; } = default!;
+    public DeliveryType? DeliveryType { get; private set; }
     public ICollection<OrderItemProperty> OrderItemProperties { get; private set; } = [];
     public ICollection<OrderItemAttachment> OrderItemAttachments { get; private set; } = [];
 
 
-    public static OrderItem Create(int productId, int quantity, int? postTypeId, int deliveryTypeId, int userAddressId,
+    public static OrderItem Create(int productId, int quantity, int? postTypeId, int? deliveryTypeId, int userAddressId,
                                    string? description, string? emergencyPhoneNumber, decimal productPrice, bool isNeedToDesign)
         => new()
         {
@@ -43,11 +43,11 @@ public class OrderItem : BaseEntity
             Quantity = quantity,
         };
 
-    public static OrderItem CreateForQuickAdd(int productId, int quantity, int deliveryTypeId, decimal productPrice)
+    public static OrderItem CreateForQuickAdd(int productId, int quantity, decimal productPrice)
         => new()
         {
             ProductId = productId,
-            DeliveryTypeId = deliveryTypeId,
+            DeliveryTypeId = null,
             UserAddressId = null,
             PostTypeId = null,
             ProductPrice = productPrice,

@@ -9,7 +9,6 @@ export function mapCheckoutAddressToSaved(address: CheckoutUserAddress): SavedAd
     lastName: '',
     address: address.address,
     apartment: '',
-    city: '',
     postcode: '',
     phone: '',
     isDefault: false,

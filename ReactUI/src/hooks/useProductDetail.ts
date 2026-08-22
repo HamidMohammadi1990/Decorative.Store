@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import type { ProductSummary } from '@/models/catalog/product.model'
@@ -20,40 +20,47 @@ export function useProductDetail(): UseProductDetailResult {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const load = useCallback(async () => {
+  useEffect(() => {
     if (!slug) {
       setError('not-found')
       setLoading(false)
       return
     }
 
+    let cancelled = false
+
     setLoading(true)
     setError(null)
 
-    try {
-      const [detail, relatedProducts] = await Promise.all([
-        catalogService.getProduct(slug, locale),
-        catalogService.getRelatedProducts(slug, locale),
-      ])
+    void Promise.all([
+      catalogService.getProduct(slug, locale),
+      catalogService.getRelatedProducts(slug, locale),
+    ])
+      .then(([detail, relatedProducts]) => {
+        if (cancelled) return
 
-      if (!detail) {
-        setError('not-found')
-        setProduct(null)
-        setRelated([])
-      } else {
-        setProduct(detail)
-        setRelated(relatedProducts)
-      }
-    } catch {
-      setError('failed')
-    } finally {
-      setLoading(false)
+        if (!detail) {
+          setError('not-found')
+          setProduct(null)
+          setRelated([])
+        } else {
+          setProduct(detail)
+          setRelated(relatedProducts)
+        }
+      })
+      .catch(() => {
+        if (cancelled) return
+        setError('failed')
+      })
+      .finally(() => {
+        if (cancelled) return
+        setLoading(false)
+      })
+
+    return () => {
+      cancelled = true
     }
   }, [locale, slug])
-
-  useEffect(() => {
-    void load()
-  }, [load])
 
   return { product, related, loading, error }
 }

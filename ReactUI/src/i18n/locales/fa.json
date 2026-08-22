@@ -1,6 +1,7 @@
 {
   "common": {
     "loading": "در حال بارگذاری…",
+    "retry": "تلاش دوباره",
     "error": "خطایی رخ داد. دوباره تلاش کنید.",
     "close": "بستن",
     "closePromo": "بستن اعلان",
@@ -66,6 +67,8 @@
     }
   },
   "home": {
+    "heroEyebrow": "جدید",
+    "heroCta": "مشاهده محصول",
     "journalTitle": "از مجله دیبا گالری",
     "journalSubtitle": "ایده‌های دکوراسیون، نکات چیدمان و الهام فصلی از استودیوی طراحی ما.",
     "viewJournal": "مشاهده همه مقالات"
@@ -114,7 +117,7 @@
     "added": "به سبد اضافه شد",
     "adding": "در حال افزودن…",
     "signInRequired": "برای افزودن به سبد وارد شوید",
-    "configureOnProduct": "تنظیم در صفحه محصول"
+    "viewProductToOrder": "مشاهده و سفارش"
   },
   "roomLayout": {
     "eyebrow": "استودیو چیدمان",
@@ -593,7 +596,12 @@
     "setAsDefault": "تنظیم به‌عنوان آدرس پیش‌فرض",
     "validation": {
       "required": "این فیلد الزامی است"
-    }
+    },
+    "errors": {
+      "saveFailed": "ذخیره آدرس انجام نشد. دوباره تلاش کنید.",
+      "deleteFailed": "حذف آدرس انجام نشد. دوباره تلاش کنید."
+    },
+    "loading": "در حال بارگذاری آدرس‌ها..."
   },
   "dashboard": {
     "breadcrumb": "حساب کاربری",
@@ -637,6 +645,8 @@
       "hideDetails": "بستن جزئیات",
       "emptyTitle": "هنوز سفارشی ندارید",
       "emptyMessage": "پس از ثبت سفارش، اینجا نمایش داده می‌شود.",
+      "loadFailedTitle": "بارگذاری سفارش‌ها ناموفق بود",
+      "loadFailedMessage": "اتصال به سرور برقرار نشد. لطفاً دوباره تلاش کنید.",
       "noResultsTitle": "سفارشی پیدا نشد",
       "noResultsMessage": "فیلتر وضعیت یا عبارت جستجو را تغییر دهید.",
       "clearFilters": "پاک کردن فیلترها",
@@ -659,8 +669,12 @@
         "amountLow": "کمترین مبلغ"
       },
       "detailsShipping": "آدرس ارسال",
+      "shippingPending": "پس از بارگذاری جزئیات نمایش داده می‌شود.",
       "detailsPayment": "خلاصه پرداخت",
       "detailsTimeline": "روند سفارش",
+      "detailsItems": "جزئیات اقلام",
+      "postType": "نوع ارسال",
+      "deliveryType": "روش تحویل",
       "paymentMethod": "روش پرداخت",
       "subtotal": "جمع کالاها",
       "shippingCost": "هزینه ارسال",
@@ -697,7 +711,9 @@
       "title": "نظرات",
       "description": "امتیازها و بازخوردهای شما درباره محصولات.",
       "emptyTitle": "هنوز نظری ثبت نکرده‌اید",
-      "emptyMessage": "نظر خود را درباره محصولات خریداری‌شده بنویسید."
+      "emptyMessage": "نظر خود را درباره محصولات خریداری‌شده بنویسید.",
+      "loadFailedTitle": "بارگذاری نظرات انجام نشد",
+      "loadFailedMessage": "در دریافت نظرات شما مشکلی پیش آمد. دوباره تلاش کنید."
     },
     "wishlist": {
       "title": "علاقه‌مندی‌ها",
@@ -735,7 +751,10 @@
       "typeVideo": "ویدیو",
       "hide": "مخفی کردن",
       "show": "نمایش",
-      "delete": "حذف"
+      "delete": "حذف",
+      "saveFailed": "ذخیره استوری انجام نشد. دوباره تلاش کنید.",
+      "deleteFailed": "حذف استوری انجام نشد. دوباره تلاش کنید.",
+      "uploadFailed": "آپلود فایل انجام نشد. دوباره تلاش کنید."
     },
     "addresses": {
       "title": "آدرس‌های ذخیره‌شده",
@@ -837,6 +856,8 @@
   },
   "blog": {
     "title": "مجله",
+    "listingTitle": "مجله دیبا گالری",
+    "listingDescription": "ایده‌های طراحی داخلی، نکات چیدمان و الهام فصلی از استودیوی دیبا گالری.",
     "navLabel": "منوی مجله",
     "backToShop": "فروشگاه",
     "readArticle": "مطالعه مقاله",
@@ -863,6 +884,9 @@
     "addComment": "نظر خود را بنویسید",
     "commentPlaceholder": "نظر یا سوال خود را بنویسید...",
     "postComment": "ثبت نظر",
+    "commentSubmitFailed": "ثبت نظر انجام نشد. لطفاً دوباره تلاش کنید.",
+    "signInToComment": "برای ثبت نظر وارد حساب کاربری خود شوید.",
+    "commentAsUser": "ثبت نظر با نام {{name}}",
     "guestAuthor": "کاربر مهمان",
     "likeComment": "پسندیدن نظر",
     "relatedTitle": "مطالب مرتبط",

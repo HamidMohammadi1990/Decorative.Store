@@ -46,6 +46,8 @@ function createDemoUser(input: Omit<LoginInput, 'password'>): DashboardUser {
 
 const useMockAuth = import.meta.env.VITE_AUTH_USE_MOCK === 'true'
 
+let refreshInFlight: Promise<string | null> | null = null
+
 export const useUserStore = create<UserState>()(
   persist(
     (set, get) => ({
@@ -163,33 +165,53 @@ export const useUserStore = create<UserState>()(
       },
 
       refreshAccessToken: async (force = false) => {
-        const { accessToken, refreshToken, tokenExpiresAt } = get()
-        if (!accessToken || accessToken === 'mock-access-token') {
-          return accessToken
+        if (refreshInFlight) {
+          return refreshInFlight
         }
 
-        if (!refreshToken) {
-          return accessToken
-        }
+        refreshInFlight = (async () => {
+          const { accessToken, refreshToken, tokenExpiresAt } = get()
+          if (!accessToken || accessToken === 'mock-access-token') {
+            return accessToken
+          }
 
-        const shouldRefresh =
-          force ||
-          (tokenExpiresAt !== null && Date.now() > tokenExpiresAt - 60_000)
+          if (!refreshToken) {
+            return accessToken
+          }
 
-        if (!shouldRefresh) {
-          return accessToken
-        }
+          const shouldRefresh =
+            force ||
+            tokenExpiresAt === null ||
+            Date.now() > tokenExpiresAt - 60_000
+
+          if (!shouldRefresh) {
+            return accessToken
+          }
+
+          try {
+            const refreshed = await authService.refreshToken(accessToken, refreshToken)
+            set({
+              accessToken: refreshed.accessToken,
+              refreshToken: refreshed.refreshToken,
+              tokenExpiresAt: Date.now() + refreshed.expiresIn * 1000,
+            })
+            return refreshed.accessToken
+          } catch {
+            useCartStore.getState().clearCart()
+            set({
+              user: null,
+              accessToken: null,
+              refreshToken: null,
+              tokenExpiresAt: null,
+            })
+            return null
+          }
+        })()
 
         try {
-          const refreshed = await authService.refreshToken(accessToken, refreshToken)
-          set({
-            accessToken: refreshed.accessToken,
-            refreshToken: refreshed.refreshToken,
-            tokenExpiresAt: Date.now() + refreshed.expiresIn * 1000,
-          })
-          return refreshed.accessToken
-        } catch {
-          return null
+          return await refreshInFlight
+        } finally {
+          refreshInFlight = null
         }
       },
     }),

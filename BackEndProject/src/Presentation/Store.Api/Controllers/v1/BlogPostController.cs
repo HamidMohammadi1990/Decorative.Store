@@ -20,6 +20,10 @@ public class BlogPostController
     (ISender mediator)
     : BaseApiController
 {
+    [HttpGet("detail")]
+    public async Task<ApiResult<GetBlogPostDetailResponse>> Detail([FromQuery] string slug)
+        => await mediator.Send(new GetBlogPostDetailRequest(slug));
+
     [HttpPost("search")]
     public async Task<ApiResult<PagedResult<SearchBlogPostResponse>>> Search(SearchBlogPostRequest request)
         => await mediator.Send(request);

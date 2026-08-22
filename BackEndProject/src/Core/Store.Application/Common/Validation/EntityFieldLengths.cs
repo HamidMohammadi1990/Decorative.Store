@@ -18,12 +18,14 @@ public static class EntityFieldLengths
         public const int Summary = 200;
         public const int MetaTitle = 150;
         public const int Content = 2500;
+        public const int Code = 30;
     }
 
     public static class BlogPostCategory
     {
         public const int Title = 70;
         public const int Slug = 150;
+        public const int Code = 30;
     }
 
     public static class BlogPostComment

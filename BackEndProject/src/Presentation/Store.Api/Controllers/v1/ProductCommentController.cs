@@ -28,6 +28,11 @@ public class ProductCommentController
         => await mediator.Send(request);
 
     [Authorize]
+    [HttpGet("my")]
+    public async Task<ApiResult<GetMyProductCommentsResponse>> My()
+        => await mediator.Send(new GetMyProductCommentsRequest());
+
+    [Authorize]
     [HttpPost("create")]
     public async Task<ApiResult<CreateProductCommentResponse>> Create(CreateProductCommentRequest request)
         => await mediator.Send(request);

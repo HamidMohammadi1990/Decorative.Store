@@ -64,24 +64,14 @@ export function AddressFormFields({
         value={values.apartment}
         onChange={(e) => onChange('apartment', e.target.value)}
       />
-      <div className="grid gap-4 sm:grid-cols-2">
-        <AuthField
-          name="city"
-          autoComplete="address-level2"
-          label={t('checkout.cityLabel')}
-          value={values.city}
-          onChange={(e) => onChange('city', e.target.value)}
-          error={errors.city}
-        />
-        <AuthField
-          name="postcode"
-          autoComplete="postal-code"
-          label={t('checkout.postcodeLabel')}
-          value={values.postcode}
-          onChange={(e) => onChange('postcode', e.target.value)}
-          error={errors.postcode}
-        />
-      </div>
+      <AuthField
+        name="postcode"
+        autoComplete="postal-code"
+        label={t('checkout.postcodeLabel')}
+        value={values.postcode}
+        onChange={(e) => onChange('postcode', e.target.value)}
+        error={errors.postcode}
+      />
       <AuthField
         name="phone"
         type="tel"

@@ -33,7 +33,7 @@ public class BlogPostTagRepository
                 TagId = x.blogPostTag.TagId,
                 TagTitle = x.tag.Title,
                 BlogPostId = x.blogPostTag.BlogPostId,
-                BlogPostTitle = x.blogPost.Title
+                BlogPostTitle = x.blogPost.Translations.Select(t => t.Title).FirstOrDefault() ?? string.Empty
             })
             .AsNoTracking()
             .ToPagedAsync(request.Pagination);
@@ -62,7 +62,7 @@ public class BlogPostTagRepository
                 TagId = x.blogPostTag.TagId,
                 TagTitle = x.tag.Title,
                 BlogPostId = x.blogPostTag.BlogPostId,
-                BlogPostTitle = x.blogPost.Title
+                BlogPostTitle = x.blogPost.Translations.Select(t => t.Title).FirstOrDefault() ?? string.Empty
             })
             .AsNoTracking()
             .ToPagedAsync(request.Pagination);

@@ -67,10 +67,14 @@ public sealed class EditionDbContext
     public DbSet<ProductPropertyRuleTranslation> ProductPropertyRuleTranslation { get; set; }
     public DbSet<Tag> Tag { get; set; }
     public DbSet<BlogPost> BlogPost { get; set; }
+    public DbSet<BlogPostTranslation> BlogPostTranslation { get; set; }
     public DbSet<BlogPostTag> BlogPostTag { get; set; }
     public DbSet<BlogPostLike> BlogPostLike { get; set; }
+    public DbSet<ProductWishlist> ProductWishlist { get; set; }
+    public DbSet<UserStory> UserStory { get; set; }
     public DbSet<BlogPostComment> BlogPostComment { get; set; }
     public DbSet<BlogPostCategory> BlogPostCategory { get; set; }
+    public DbSet<BlogPostCategoryTranslation> BlogPostCategoryTranslation { get; set; }
     public DbSet<ContentPolicy> ContentPolicy { get; set; }
     public DbSet<ContentPolicyRule> ContentPolicyRule { get; set; }
     public DbSet<ContentPolicyRecordAccess> ContentPolicyRecordAccess { get; set; }

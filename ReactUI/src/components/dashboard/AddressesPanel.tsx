@@ -6,6 +6,7 @@ import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
 import { AddressesIcon } from '@/components/dashboard/DashboardIcons'
 import { Button } from '@/components/ui/Button'
+import { InlineLoading } from '@/components/ui/Spinner'
 import type { SavedAddress } from '@/models/address/savedAddress.model'
 import {
   addressFormToInput,
@@ -14,6 +15,7 @@ import {
   type AddressFormField,
   type AddressFormValues,
 } from '@/extensions/validateAddressForm'
+import { useAddressMutations } from '@/hooks/useAddressMutations'
 import { useAddressStore } from '@/stores/addressStore'
 
 type PanelMode = 'list' | 'add' | 'edit'
@@ -21,10 +23,10 @@ type PanelMode = 'list' | 'add' | 'edit'
 export function AddressesPanel() {
   const { t } = useTranslation()
   const addresses = useAddressStore((s) => s.addresses)
-  const addAddress = useAddressStore((s) => s.addAddress)
-  const updateAddress = useAddressStore((s) => s.updateAddress)
-  const removeAddress = useAddressStore((s) => s.removeAddress)
+  const isLoading = useAddressStore((s) => s.isLoading)
   const setDefaultAddress = useAddressStore((s) => s.setDefaultAddress)
+  const { isSaving, mutationError, saveAddress, deleteAddress, clearMutationError } =
+    useAddressMutations()
 
   const [mode, setMode] = useState<PanelMode>('list')
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -38,10 +40,12 @@ export function AddressesPanel() {
       setForm(emptyAddressForm)
       setErrors({})
       setMakeDefault(false)
+      clearMutationError()
     }
-  }, [mode])
+  }, [clearMutationError, mode])
 
   const startAdd = () => {
+    clearMutationError()
     setMode('add')
     setForm(emptyAddressForm)
     setErrors({})
@@ -49,6 +53,7 @@ export function AddressesPanel() {
   }
 
   const startEdit = (address: SavedAddress) => {
+    clearMutationError()
     setMode('edit')
     setEditingId(address.id)
     setForm({
@@ -57,7 +62,6 @@ export function AddressesPanel() {
       lastName: address.lastName,
       address: address.address,
       apartment: address.apartment,
-      city: address.city,
       postcode: address.postcode,
       phone: address.phone,
     })
@@ -76,7 +80,7 @@ export function AddressesPanel() {
     }
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const nextErrors = validateAddressForm(form, {
       required: t('address.validation.required'),
     })
@@ -84,12 +88,17 @@ export function AddressesPanel() {
     if (Object.keys(nextErrors).length > 0) return
 
     const input = addressFormToInput(form, makeDefault)
-    if (mode === 'edit' && editingId) {
-      updateAddress(editingId, input)
-    } else {
-      addAddress(input)
-    }
+    const saved = await saveAddress(input, {
+      editingId,
+      makeDefault,
+    })
+
+    if (!saved) return
     setMode('list')
+  }
+
+  const handleDelete = async (id: string) => {
+    await deleteAddress(id)
   }
 
   if (mode === 'add' || mode === 'edit') {
@@ -102,6 +111,12 @@ export function AddressesPanel() {
         />
 
         <div className="rounded-sm border border-border bg-surface-muted/20 p-5 shadow-sm ring-1 ring-border/50 sm:p-6">
+          {mutationError && (
+            <p className="mb-4 rounded-sm border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+              {mutationError}
+            </p>
+          )}
+
           <AddressFormFields
             values={form}
             errors={errors}
@@ -112,10 +127,10 @@ export function AddressesPanel() {
           />
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button variant="warm" onClick={handleSave}>
-              {t('address.save')}
+            <Button variant="warm" onClick={() => void handleSave()} disabled={isSaving}>
+              {isSaving ? <InlineLoading label={t('address.save')} /> : t('address.save')}
             </Button>
-            <Button variant="secondary" onClick={() => setMode('list')}>
+            <Button variant="secondary" onClick={() => setMode('list')} disabled={isSaving}>
               {t('address.cancel')}
             </Button>
           </div>
@@ -131,13 +146,23 @@ export function AddressesPanel() {
         description={t('dashboard.addresses.description')}
         icon={<AddressesIcon size={22} />}
         action={
-          <Button variant="warm" onClick={startAdd}>
+          <Button variant="warm" onClick={startAdd} disabled={isSaving}>
             {t('address.addNew')}
           </Button>
         }
       />
 
-      {addresses.length === 0 ? (
+      {mutationError && (
+        <p className="mb-4 rounded-sm border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+          {mutationError}
+        </p>
+      )}
+
+      {isLoading ? (
+        <div className="flex justify-center py-16">
+          <InlineLoading label={t('address.loading')} />
+        </div>
+      ) : addresses.length === 0 ? (
         <DashboardEmptyState
           icon={<AddressesIcon size={28} />}
           title={t('address.emptyTitle')}
@@ -155,7 +180,7 @@ export function AddressesPanel() {
               key={address.id}
               address={address}
               onEdit={() => startEdit(address)}
-              onDelete={() => removeAddress(address.id)}
+              onDelete={() => void handleDelete(address.id)}
               onSetDefault={() => setDefaultAddress(address.id)}
             />
           ))}

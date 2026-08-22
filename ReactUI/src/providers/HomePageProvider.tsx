@@ -7,7 +7,10 @@ import {
   useState,
   type ReactNode,
 } from 'react'
+import { useLocation } from 'react-router-dom'
 import type { HomePage } from '@/models/home/homePage.model'
+import { isBlogRoute } from '@/extensions/blogRoute'
+import { isHomeRoute } from '@/extensions/homeRoute'
 import { homeService } from '@/services/homeService'
 import { useSettingsStore } from '@/stores/settingsStore'
 
@@ -22,6 +25,9 @@ const HomePageContext = createContext<HomePageContextValue | null>(null)
 
 export function HomePageProvider({ children }: { children: ReactNode }) {
   const locale = useSettingsStore((s) => s.locale)
+  const location = useLocation()
+  const skipCatalogNav = isBlogRoute(location.pathname)
+  const skipHomeCatalogContent = !isHomeRoute(location.pathname)
   const [data, setData] = useState<HomePage | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -31,7 +37,7 @@ export function HomePageProvider({ children }: { children: ReactNode }) {
       setLoading(true)
       setError(null)
       try {
-        const page = await homeService.getPage(locale, force)
+        const page = await homeService.getPage(locale, { force, skipCatalogNav, skipHomeCatalogContent })
         setData(page)
       } catch {
         setError('failed')
@@ -39,7 +45,7 @@ export function HomePageProvider({ children }: { children: ReactNode }) {
         setLoading(false)
       }
     },
-    [locale],
+    [locale, skipCatalogNav, skipHomeCatalogContent],
   )
 
   useEffect(() => {

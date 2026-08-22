@@ -198,26 +198,7 @@
           "src": "/images/home/new-arrivals.jpg",
           "alt": "New arrivals living space"
         },
-        "link": { "label": "Shop New Arrivals", "href": "/new" },
-        "links": [
-          { "label": "New Furniture", "href": "/new/furniture" },
-          { "label": "New Rugs", "href": "/new/rugs" },
-          { "label": "New Lighting", "href": "/new/lighting" }
-        ]
-      },
-      {
-        "id": "trade",
-        "title": "Trade Programme",
-        "subtitle": "For design professionals",
-        "image": {
-          "src": "/images/home/trade-interior.jpg",
-          "alt": "Trade programme interior"
-        },
-        "link": { "label": "Learn more", "href": "/trade" },
-        "links": [
-          { "label": "Join today", "href": "/trade/join" },
-          { "label": "Sign in to shop", "href": "/trade/sign-in" }
-        ]
+        "link": { "label": "Shop New Arrivals", "href": "/new" }
       },
       {
         "id": "in-stock",
@@ -227,11 +208,7 @@
           "src": "/images/home/in-stock.jpg",
           "alt": "In-stock furniture"
         },
-        "link": { "label": "Shop in stock", "href": "/in-stock" },
-        "links": [
-          { "label": "Sofas & Armchairs", "href": "/in-stock/sofas" },
-          { "label": "Rugs", "href": "/in-stock/rugs" }
-        ]
+        "link": { "label": "Shop in stock", "href": "/in-stock" }
       },
       {
         "id": "best-sellers",
@@ -240,35 +217,7 @@
           "src": "/images/home/living-room.jpg",
           "alt": "Best selling sofa"
         },
-        "link": { "label": "Shop best sellers", "href": "/best-sellers" },
-        "links": [
-          { "label": "Furniture", "href": "/best-sellers/furniture" },
-          { "label": "Lighting", "href": "/best-sellers/lighting" }
-        ]
-      },
-      {
-        "id": "collaborations",
-        "title": "Collaborations",
-        "subtitle": "emma chamberlain × Diba Gallery",
-        "image": {
-          "src": "/images/home/collaboration.jpg",
-          "alt": "Collaboration collection"
-        },
-        "link": { "label": "Explore collaborations", "href": "/collaborations" },
-        "links": [
-          { "label": "emma chamberlain", "href": "/collaborations/emma-chamberlain" },
-          { "label": "Pierce & Ward", "href": "/collaborations/pierce-ward" }
-        ]
-      },
-      {
-        "id": "commercial",
-        "title": "Commercial Grade",
-        "subtitle": "Built for everyday use",
-        "image": {
-          "src": "/images/home/commercial-office.jpg",
-          "alt": "Commercial grade office"
-        },
-        "link": { "label": "Shop commercial grade", "href": "/commercial" }
+        "link": { "label": "Shop best sellers", "href": "/best-sellers" }
       }
     ]
   },

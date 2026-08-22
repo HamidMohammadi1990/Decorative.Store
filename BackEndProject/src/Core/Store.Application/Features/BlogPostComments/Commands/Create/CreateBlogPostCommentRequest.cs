@@ -6,7 +6,7 @@ namespace Edition.Application.Features.BlogPostComments.Commands;
 
 public record CreateBlogPostCommentRequest : IRequest<OperationResult<CreateBlogPostCommentResponse>>
 {
-    [JsonConverter(typeof(BlogPostCommentEncryptor))]
+    [JsonConverter(typeof(BlogPostCommentNullableEncryptor))]
     public int? ParentId { get; init; }
 
     [JsonConverter(typeof(BlogPostEncryptor))]

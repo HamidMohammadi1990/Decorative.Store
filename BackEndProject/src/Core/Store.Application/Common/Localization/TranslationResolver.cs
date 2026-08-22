@@ -4,6 +4,29 @@ namespace Edition.Application.Common.Localization;
 
 public static class TranslationResolver
 {
+    public static (string Title, string Slug, string MetaDescription, string SeoKeywords, string Content) Resolve(
+        IEnumerable<BlogPostTranslation> translations,
+        int languageId,
+        int defaultLanguageId)
+    {
+        var list = translations as IList<BlogPostTranslation> ?? translations.ToList();
+        var current = list.FirstOrDefault(t => t.LanguageId == languageId);
+        var fallback = list.FirstOrDefault(t => t.LanguageId == defaultLanguageId);
+
+        return (
+            current?.Title ?? fallback?.Title ?? string.Empty,
+            current?.Slug ?? fallback?.Slug ?? string.Empty,
+            current?.MetaDescription ?? fallback?.MetaDescription ?? string.Empty,
+            current?.SeoKeywords ?? fallback?.SeoKeywords ?? string.Empty,
+            current?.Content ?? fallback?.Content ?? string.Empty);
+    }
+
+    public static (string Title, string Slug) Resolve(
+        IEnumerable<BlogPostCategoryTranslation> translations,
+        int languageId,
+        int defaultLanguageId)
+        => ResolveCore(translations, languageId, defaultLanguageId, t => t.LanguageId, t => t.Title, t => t.Slug);
+
     public static (string Title, string Slug) Resolve(
         IEnumerable<CategoryTranslation> translations,
         int languageId,

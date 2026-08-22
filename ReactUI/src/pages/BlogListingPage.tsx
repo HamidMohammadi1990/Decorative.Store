@@ -63,11 +63,13 @@ export function BlogListingPage() {
 
         <div className="max-w-3xl">
           <h1 className="text-2xl font-bold text-text md:text-3xl">
-            {activeCategoryLabel ?? data.title}
+            {activeCategoryLabel ?? t('blog.listingTitle')}
           </h1>
-          <p className="mt-3 text-sm leading-relaxed text-text-muted md:text-base">
-            {data.description}
-          </p>
+          {!activeCategoryLabel && (
+            <p className="mt-3 text-sm leading-relaxed text-text-muted md:text-base">
+              {t('blog.listingDescription')}
+            </p>
+          )}
         </div>
 
         <div className="mt-8">

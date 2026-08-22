@@ -36,7 +36,7 @@ public class BlogPostLikeRepository
                 ClientIP = x.blogPostLike.ClientIP,
                 BlogPostId = x.blogPostLike.BlogPostId,
                 CreatedOnUtc = x.blogPostLike.CreatedOnUtc,
-                BlogPostTitle = x.blogPost.Title,
+                BlogPostTitle = x.blogPost.Translations.Select(t => t.Title).FirstOrDefault() ?? string.Empty,
             })
             .AsNoTracking()
             .ToPagedAsync(request.Pagination);

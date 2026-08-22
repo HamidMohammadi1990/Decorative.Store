@@ -5,7 +5,6 @@ import type { CurrencyConfig } from '@/models/shared/currency.model'
 import type { CheckoutTotals } from '@/extensions/calculateCheckoutTotals'
 import type { CheckoutPropertyValues } from '@/components/checkout/CheckoutProductOptionsSection'
 import { AuthField } from '@/components/auth/AuthField'
-import { CheckoutDeliveryTypeOptions } from '@/components/checkout/CheckoutDeliveryTypeOptions'
 import { CheckoutEmptyState } from '@/components/checkout/CheckoutEmptyState'
 import { CheckoutFormSection } from '@/components/checkout/CheckoutFormSection'
 import {
@@ -60,9 +59,10 @@ export function CheckoutPage() {
   const { t } = useTranslation()
   const { currency } = useLocaleSettings()
   const lines = useCartStore((s) => s.lines)
+  const closeCart = useCartStore((s) => s.closeCart)
   const localAddresses = useAddressStore((s) => s.addresses)
   const user = useUserStore((s) => s.user)
-  const { sessions, deliveryTypes, addresses: apiAddresses, loading, error } = useCheckoutData(lines)
+  const { sessions, addresses: apiAddresses, loading, error } = useCheckoutData(lines)
   const checkoutAddresses = useMemo(
     () => mergeCheckoutAddresses(localAddresses, apiAddresses),
     [apiAddresses, localAddresses],
@@ -71,7 +71,6 @@ export function CheckoutPage() {
   const [step, setStep] = useState<CheckoutFlowStep>('details')
   const [fulfillment, setFulfillment] = useState<FulfillmentType>('delivery')
   const [delivery, setDelivery] = useState<DeliveryMethod>('standard')
-  const [deliveryTypeId, setDeliveryTypeId] = useState<string | null>(null)
   const [propertyValues, setPropertyValues] = useState<CheckoutPropertyValues>({})
   const [propertyErrors, setPropertyErrors] = useState<Record<string, Record<string, string>>>({})
   const [contactForm, setContactForm] = useState<ContactFormValues>({ email: user?.email ?? '' })
@@ -85,10 +84,8 @@ export function CheckoutPage() {
   const selectedAddressId = selectedAddress?.id ?? null
 
   useEffect(() => {
-    if (deliveryTypes.length > 0 && !deliveryTypeId) {
-      setDeliveryTypeId(deliveryTypes[0].id)
-    }
-  }, [deliveryTypeId, deliveryTypes])
+    closeCart()
+  }, [closeCart])
 
   useEffect(() => {
     if (user?.email && !contactForm.email) {
@@ -294,14 +291,7 @@ export function CheckoutPage() {
                     title={t('checkout.deliveryTitle')}
                     description={t('checkout.deliveryDescription')}
                   >
-                    {deliveryTypes.length > 0 ? (
-                      <CheckoutDeliveryTypeOptions
-                        deliveryTypes={deliveryTypes}
-                        selectedId={deliveryTypeId}
-                        onSelect={setDeliveryTypeId}
-                      />
-                    ) : (
-                      <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="grid gap-3 sm:grid-cols-2">
                       <DeliveryOption
                         id="standard"
                         name="delivery"
@@ -341,7 +331,6 @@ export function CheckoutPage() {
                         onChange={() => setDelivery('express')}
                       />
                     </div>
-                    )}
                   </CheckoutFormSection>
                 )}
 

@@ -6,13 +6,36 @@ namespace Edition.Application.Features.BlogPosts.Commands;
 
 public class UpdateBlogPostValidator : AbstractValidator<UpdateBlogPostRequest>
 {
-    public UpdateBlogPostValidator(IBlogPostRepository blogPostRepository)
+    public UpdateBlogPostValidator(IBlogPostRepository blogPostRepository, ILanguageRepository languageRepository)
     {
-        RuleFor(x => new { x.Title, x.Slug, x.Id, x.CategoryId })
-           .NotNull()
-           .WithMessage(MessageKeys.TitleRequired)
-           .MustAsync(async (x, CancellationToken)
-                  => !await blogPostRepository.AnyAsync(c => c.Id != x.Id && c.BlogPostCategoryId == x.CategoryId && c.Title == x.Title.Trim() || c.Slug == x.Slug.Trim()))
-           .WithMessage(MessageKeys.DuplicateTitle);
+        RuleFor(x => x.LanguageId)
+            .GreaterThan(0)
+            .WithMessage(MessageKeys.InvalidRequest)
+            .MustAsync(async (languageId, cancellationToken) =>
+                await languageRepository.FindAsync(languageId, cancellationToken) is { IsActive: true })
+            .WithMessage(MessageKeys.InvalidRequest);
+
+        RuleFor(x => x.Title)
+            .NotEmpty()
+            .WithMessage(MessageKeys.TitleRequired);
+
+        RuleFor(x => x.Code)
+            .NotEmpty()
+            .WithMessage(MessageKeys.InvalidRequest);
+
+        RuleFor(x => x)
+            .MustAsync(async (request, cancellationToken) =>
+                !await blogPostRepository.ExistsCodeAsync(request.Code, request.Id, cancellationToken))
+            .WithMessage(MessageKeys.DuplicateTitle);
+
+        RuleFor(x => x)
+            .MustAsync(async (request, cancellationToken) =>
+                !await blogPostRepository.ExistsTranslationAsync(
+                    request.LanguageId,
+                    request.Title,
+                    request.Slug,
+                    request.Id,
+                    cancellationToken))
+            .WithMessage(MessageKeys.DuplicateTitle);
     }
 }

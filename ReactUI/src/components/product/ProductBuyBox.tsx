@@ -39,9 +39,7 @@ export function ProductBuyBox({ product }: ProductBuyBoxProps) {
       ? t('cart.adding')
       : status === 'added'
         ? t('cart.added')
-        : product.inStock
-          ? t('listing.addToBag')
-          : t('cart.configureOnProduct')
+        : t('listing.addToBag')
 
   return (
     <aside className="lg:sticky lg:top-24 lg:self-start">

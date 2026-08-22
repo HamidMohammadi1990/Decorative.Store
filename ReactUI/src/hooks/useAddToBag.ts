@@ -27,6 +27,7 @@ export function useAddToBag() {
   const accessToken = useAccessToken()
   const addLine = useCartStore((s) => s.addLine)
   const setLines = useCartStore((s) => s.setLines)
+  const openCart = useCartStore((s) => s.openCart)
   const [status, setStatus] = useState<AddToBagStatus>('idle')
 
   const addToBag = useCallback(
@@ -35,8 +36,11 @@ export function useAddToBag() {
       const returnUrl = `${location.pathname}${location.search}`
 
       if (item.inStock === false && item.productSlug) {
-        navigate(`/product/${item.productSlug}`)
-        return false
+        const productPath = `/product/${item.productSlug}`
+        if (location.pathname !== productPath) {
+          navigate(productPath)
+          return false
+        }
       }
 
       if (!isAuthenticated) {
@@ -58,6 +62,7 @@ export function useAddToBag() {
         if (accessToken && accessToken !== 'mock-access-token') {
           const cart = await cartService.addItem(accessToken, item.sku, quantity)
           setLines(mapServerCartToLines(cart))
+          openCart()
         } else {
           addLine({
             sku: item.sku,
@@ -89,6 +94,7 @@ export function useAddToBag() {
       location.pathname,
       location.search,
       navigate,
+      openCart,
       setLines,
     ],
   )

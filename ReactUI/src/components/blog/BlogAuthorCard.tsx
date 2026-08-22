@@ -18,8 +18,12 @@ export function BlogAuthorCard({ author, label }: BlogAuthorCardProps) {
 
         <div className="min-w-0">
           <h3 className="text-base font-bold text-text">{author.name}</h3>
-          <p className="mt-0.5 text-sm font-medium text-warm">{author.role}</p>
-          <p className="mt-3 text-sm leading-relaxed text-text-muted">{author.bio}</p>
+          {author.role ? (
+            <p className="mt-0.5 text-sm font-medium text-warm">{author.role}</p>
+          ) : null}
+          {author.bio ? (
+            <p className="mt-3 text-sm leading-relaxed text-text-muted">{author.bio}</p>
+          ) : null}
         </div>
       </div>
     </aside>

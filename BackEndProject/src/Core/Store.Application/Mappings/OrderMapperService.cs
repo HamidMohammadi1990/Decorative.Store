@@ -32,7 +32,7 @@ public class OrderMapperService : IOrderMapperService
         }.WithContentPolicy<Order, GetAllOrderRequestDto>(model);
     }
 
-    public CheckoutOrderResponse Map(List<ProductPropertyDto> properties, List<DeliveryType> deliveryTypes,
+    public CheckoutOrderResponse Map(List<ProductPropertyDto> properties,
          List<PostType> postTypes, List<UserAddressSummaryDto> userAddresses,
          ProductSummaryDto productDetail, List<ProductOrderAttachmentDto> orderAttachments, bool userIsCooperation)
     {
@@ -52,14 +52,6 @@ public class OrderMapperService : IOrderMapperService
         };
 
         var checkoutProperties = ToCheckoutProperties(properties, userIsCooperation);
-
-        var checkoutDeliveryTypes =
-            deliveryTypes
-            .Select(x => new CheckoutDeliveryTypeResponse
-            {
-                Id = x.Id,
-                Title = x.Title
-            }).ToList();
 
         var checkoutPostTypes =
             postTypes
@@ -105,7 +97,6 @@ public class OrderMapperService : IOrderMapperService
         {
             Product = checkoutProduct,
             Properties = checkoutProperties,
-            DeliveryTypes = checkoutDeliveryTypes,
             PostTypes = checkoutPostTypes,
             Addresses = checkoutUserAddresses,
             Attachments = attachments,
@@ -391,6 +382,7 @@ public class OrderMapperService : IOrderMapperService
                 {
                     Id = order.OrderId,
                     Title = order.Title,
+                    Status = order.Status,
                     FinalPrice = order.FinalPrice,
                     TrackingCode = order.TrackingCode,
                     CreatedOnUtc = order.CreatedOnUtc,
@@ -398,6 +390,8 @@ public class OrderMapperService : IOrderMapperService
                     {
                         Id = i.OrderItemId,
                         Quantity = i.ItemQuantity,
+                        ProductTitle = i.ProductTitle,
+                        ProductPrice = i.ProductPrice,
                         ProductImage = i.ProductImage
                     })]
                 };

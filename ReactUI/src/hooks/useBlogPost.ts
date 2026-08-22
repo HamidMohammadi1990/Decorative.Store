@@ -9,6 +9,7 @@ export function useBlogPost() {
   const locale = useSettingsStore((s) => s.locale)
   const [post, setPost] = useState<BlogPostDetail | null>(null)
   const [related, setRelated] = useState<BlogPostSummary[]>([])
+  const [categoryMap, setCategoryMap] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -23,19 +24,20 @@ export function useBlogPost() {
     setError(null)
 
     try {
-      const [detail, relatedPosts] = await Promise.all([
-        blogService.getPost(slug, locale),
-        blogService.getRelatedPosts(slug, locale),
-      ])
+      const { post: detail, related: relatedPosts, categoryMap: labels } =
+        await blogService.getPostDetail(slug, locale)
 
       if (!detail) {
         setError('not-found')
         setPost(null)
         setRelated([])
-      } else {
-        setPost(detail)
-        setRelated(relatedPosts)
+        setCategoryMap(labels)
+        return
       }
+
+      setPost(detail)
+      setRelated(relatedPosts)
+      setCategoryMap(labels)
     } catch {
       setError('failed')
     } finally {
@@ -43,9 +45,22 @@ export function useBlogPost() {
     }
   }, [locale, slug])
 
+  const reload = useCallback(async () => {
+    if (!slug) return
+
+    const { post: detail, related: relatedPosts, categoryMap: labels } =
+      await blogService.getPostDetail(slug, locale, true)
+
+    if (!detail) return
+
+    setPost(detail)
+    setRelated(relatedPosts)
+    setCategoryMap(labels)
+  }, [locale, slug])
+
   useEffect(() => {
     void load()
   }, [load])
 
-  return { post, related, loading, error }
+  return { post, related, categoryMap, loading, error, reload }
 }

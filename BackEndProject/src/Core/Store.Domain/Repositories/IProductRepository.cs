@@ -26,4 +26,8 @@ public interface IProductRepository
     Task<CatalogListingDto> GetCatalogListingByPathAsync(string catalogPath, CancellationToken cancellationToken = default);
     Task<CatalogProductDto?> GetCatalogProductBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<List<CatalogListingProductDto>> GetRelatedCatalogProductsBySlugAsync(string slug, int limit, CancellationToken cancellationToken = default);
+    Task<List<CatalogListingProductDto>> GetNewestCatalogProductsAsync(int limit, CancellationToken cancellationToken = default);
+    Task<List<CatalogListingProductDto>> GetNewArrivalsCatalogProductsAsync(int? limit = null, CancellationToken cancellationToken = default);
+    Task<List<CatalogListingProductDto>> GetInStockCatalogProductsAsync(int? limit = null, CancellationToken cancellationToken = default);
+    Task<List<CatalogListingProductDto>> GetBestSellingCatalogProductsAsync(int? limit = null, CancellationToken cancellationToken = default);
 }

@@ -5,7 +5,6 @@ export interface SavedAddress {
   lastName: string
   address: string
   apartment: string
-  city: string
   postcode: string
   phone: string
   isDefault: boolean

@@ -1,6 +1,7 @@
 {
   "common": {
     "loading": "Loading…",
+    "retry": "Try again",
     "error": "Something went wrong. Please try again.",
     "close": "Close",
     "closePromo": "Dismiss announcement",
@@ -66,6 +67,8 @@
     }
   },
   "home": {
+    "heroEyebrow": "New arrival",
+    "heroCta": "View product",
     "journalTitle": "From the Journal",
     "journalSubtitle": "Interior ideas, styling tips, and seasonal inspiration from our design studio.",
     "viewJournal": "View all articles"
@@ -114,7 +117,7 @@
     "added": "Added to your bag",
     "adding": "Adding…",
     "signInRequired": "Sign in to add items to your bag",
-    "configureOnProduct": "Configure on product page"
+    "viewProductToOrder": "View & order"
   },
   "roomLayout": {
     "eyebrow": "Room studio",
@@ -593,7 +596,12 @@
     "setAsDefault": "Set as default address",
     "validation": {
       "required": "This field is required"
-    }
+    },
+    "errors": {
+      "saveFailed": "Could not save the address. Please try again.",
+      "deleteFailed": "Could not delete the address. Please try again."
+    },
+    "loading": "Loading addresses..."
   },
   "dashboard": {
     "breadcrumb": "My account",
@@ -637,6 +645,8 @@
       "hideDetails": "Hide details",
       "emptyTitle": "No orders yet",
       "emptyMessage": "When you place an order, it will appear here.",
+      "loadFailedTitle": "Could not load orders",
+      "loadFailedMessage": "We couldn't reach the server. Please try again.",
       "noResultsTitle": "No matching orders",
       "noResultsMessage": "Try a different status filter or search term.",
       "clearFilters": "Clear filters",
@@ -659,8 +669,12 @@
         "amountLow": "Lowest amount"
       },
       "detailsShipping": "Shipping address",
+      "shippingPending": "Will appear after details are loaded.",
       "detailsPayment": "Payment summary",
       "detailsTimeline": "Order progress",
+      "detailsItems": "Item details",
+      "postType": "Shipping type",
+      "deliveryType": "Delivery method",
       "paymentMethod": "Payment method",
       "subtotal": "Subtotal",
       "shippingCost": "Shipping",
@@ -697,7 +711,9 @@
       "title": "Reviews",
       "description": "Your product ratings and feedback.",
       "emptyTitle": "No reviews yet",
-      "emptyMessage": "Share your thoughts on products you've purchased."
+      "emptyMessage": "Share your thoughts on products you've purchased.",
+      "loadFailedTitle": "Could not load reviews",
+      "loadFailedMessage": "Something went wrong while loading your reviews. Please try again."
     },
     "wishlist": {
       "title": "Wishlist",
@@ -735,7 +751,10 @@
       "typeVideo": "Video",
       "hide": "Hide",
       "show": "Show",
-      "delete": "Delete"
+      "delete": "Delete",
+      "saveFailed": "Could not save your story. Please try again.",
+      "deleteFailed": "Could not delete your story. Please try again.",
+      "uploadFailed": "Could not upload the file. Please try again."
     },
     "addresses": {
       "title": "Saved addresses",
@@ -837,6 +856,8 @@
   },
   "blog": {
     "title": "Journal",
+    "listingTitle": "Diba Gallery Journal",
+    "listingDescription": "Interior design ideas, styling tips, and seasonal inspiration from the Diba Gallery studio.",
     "navLabel": "Journal navigation",
     "backToShop": "Shop",
     "readArticle": "Read article",
@@ -863,6 +884,9 @@
     "addComment": "Join the conversation",
     "commentPlaceholder": "Share your thoughts...",
     "postComment": "Post comment",
+    "commentSubmitFailed": "Could not post your comment. Please try again.",
+    "signInToComment": "Sign in to leave a comment.",
+    "commentAsUser": "Posting as {{name}}",
     "guestAuthor": "Guest reader",
     "likeComment": "Like comment",
     "relatedTitle": "You may also like",

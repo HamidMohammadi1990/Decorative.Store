@@ -34,9 +34,7 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
       ? t('cart.adding')
       : status === 'added'
         ? t('cart.added')
-        : product.inStock
-          ? t('listing.addToBag')
-          : t('cart.configureOnProduct')
+        : t('listing.addToBag')
 
   const decrement = () => setQuantity((q) => Math.max(1, q - 1))
   const increment = () => setQuantity((q) => Math.min(99, q + 1))

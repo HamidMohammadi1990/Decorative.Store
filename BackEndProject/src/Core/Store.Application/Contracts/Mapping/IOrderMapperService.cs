@@ -14,9 +14,9 @@ public interface IOrderMapperService : IMapper
 
     PagedResult<GetAllOrderResponse> Map(PagedResult<GetAllOrderDto> model);
 
-    CheckoutOrderResponse Map(List<ProductPropertyDto> properties, List<DeliveryType> deliveryTypes,
-							  List<PostType> postTypes, List<UserAddressSummaryDto> userAddresses,
-							  ProductSummaryDto productDetail, List<ProductOrderAttachmentDto> orderAttachments, bool userIsCooperation);
+    CheckoutOrderResponse Map(List<ProductPropertyDto> properties,
+         List<PostType> postTypes, List<UserAddressSummaryDto> userAddresses,
+         ProductSummaryDto productDetail, List<ProductOrderAttachmentDto> orderAttachments, bool userIsCooperation);
 
 	GetOrderResponse Map(Order model);
 

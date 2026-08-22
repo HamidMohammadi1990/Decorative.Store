@@ -604,10 +604,27 @@ export const catalogService = {
   },
 
   async getProductsBySlugs(slugs: string[], locale: Locale): Promise<ProductDetail[]> {
+    if (slugs.length === 0) return []
+
+    const order = new Map(slugs.map((slug, index) => [slug, index]))
+
+    const loadFromApi = async () => {
+      const products = await catalogProductService.getProductsBySlugs(slugs, locale)
+      return products
+        .map((product) => mapCatalogProductToDetail(product, locale))
+        .filter((product): product is ProductDetail => product !== null)
+        .sort((a, b) => (order.get(a.slug) ?? 0) - (order.get(b.slug) ?? 0))
+    }
+
+    try {
+      const details = await loadFromApi()
+      if (details.length > 0) return details
+    } catch {
+      // fall back to mock catalog data
+    }
+
     return mockFetch(async () => {
-      if (slugs.length === 0) return []
       const products = getProductsMock(locale) as ProductSummary[]
-      const order = new Map(slugs.map((slug, index) => [slug, index]))
       return products
         .filter((p) => slugs.includes(p.slug))
         .sort((a, b) => (order.get(a.slug) ?? 0) - (order.get(b.slug) ?? 0))

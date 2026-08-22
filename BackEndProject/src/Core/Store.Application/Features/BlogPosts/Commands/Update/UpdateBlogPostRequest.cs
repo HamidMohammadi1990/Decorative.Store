@@ -9,6 +9,10 @@ public record UpdateBlogPostRequest : IRequest<OperationResult>
     [JsonConverter(typeof(BlogPostEncryptor))]
     public int Id { get; init; }
 
+    public int LanguageId { get; init; }
+
+    public string Code { get; init; } = default!;
+
     [JsonConverter(typeof(BlogPostCategoryEncryptor))]
     public int CategoryId { get; init; }
 
@@ -18,4 +22,5 @@ public record UpdateBlogPostRequest : IRequest<OperationResult>
     public string SeoKeywords { get; init; } = default!;
     public string Content { get; init; } = default!;
     public int ReadingTimeInMinutes { get; set; }
+    public bool IsFeatured { get; init; }
 }

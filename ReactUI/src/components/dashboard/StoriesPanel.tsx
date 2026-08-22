@@ -4,10 +4,13 @@ import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { StoriesIcon } from '@/components/dashboard/DashboardIcons'
 import { Button } from '@/components/ui/Button'
+import { InlineLoading } from '@/components/ui/Spinner'
 import { LocalImage } from '@/components/ui/LocalImage'
 import type { UserStoryDraft } from '@/models/stories/story.model'
-import { getProductsMock } from '@/data/mock'
-import { readMediaFile, useUserStoryStore } from '@/stores/userStoryStore'
+import { useUserStoryMutations } from '@/hooks/useUserStoryMutations'
+import { useUserStorySync } from '@/hooks/useUserStorySync'
+import { catalogListingService } from '@/services/catalogListingService'
+import { useUserStoryStore } from '@/stores/userStoryStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 
 type PanelMode = 'list' | 'create'
@@ -15,12 +18,21 @@ type PanelMode = 'list' | 'create'
 const MAX_FILE_MB = 8
 
 export function StoriesPanel() {
+  useUserStorySync()
+
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
   const stories = useUserStoryStore((s) => s.stories)
-  const addStory = useUserStoryStore((s) => s.addStory)
-  const removeStory = useUserStoryStore((s) => s.removeStory)
-  const toggleActive = useUserStoryStore((s) => s.toggleActive)
+  const isLoading = useUserStoryStore((s) => s.isLoading)
+  const {
+    isSaving,
+    mutationError,
+    publishStory,
+    toggleStoryActive,
+    deleteStory,
+    uploadMedia,
+    clearMutationError,
+  } = useUserStoryMutations()
 
   const [mode, setMode] = useState<PanelMode>('list')
   const [title, setTitle] = useState('')
@@ -28,12 +40,23 @@ export function StoriesPanel() {
   const [productSlug, setProductSlug] = useState('')
   const [preview, setPreview] = useState<string | null>(null)
   const [mediaType, setMediaType] = useState<'image' | 'video'>('image')
-  const [mediaSrc, setMediaSrc] = useState('')
+  const [mediaPath, setMediaPath] = useState('')
   const [mediaAlt, setMediaAlt] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const [saving, setSaving] = useState(false)
+  const [products, setProducts] = useState<{ slug: string; title: string }[]>([])
 
-  const products = getProductsMock(locale).slice(0, 12)
+  useEffect(() => {
+    if (mode !== 'create') return
+
+    void catalogListingService.getListing('', locale).then((listing) => {
+      setProducts(
+        listing.products.slice(0, 12).map((item) => ({
+          slug: item.slug,
+          title: item.title,
+        })),
+      )
+    })
+  }, [locale, mode])
 
   useEffect(() => {
     if (mode === 'list') {
@@ -41,11 +64,12 @@ export function StoriesPanel() {
       setCaption('')
       setProductSlug('')
       setPreview(null)
-      setMediaSrc('')
+      setMediaPath('')
       setMediaAlt('')
       setError(null)
+      clearMutationError()
     }
-  }, [mode])
+  }, [clearMutationError, mode])
 
   const handleFile = async (file: File | null) => {
     if (!file) return
@@ -64,35 +88,35 @@ export function StoriesPanel() {
     }
 
     try {
-      setSaving(true)
-      const media = await readMediaFile(file)
+      const media = await uploadMedia(file)
       setMediaType(media.mediaType)
-      setMediaSrc(media.mediaSrc)
+      setMediaPath(media.mediaPath)
       setMediaAlt(file.name)
       setPreview(media.mediaSrc)
     } catch {
-      setError(t('common.error'))
-    } finally {
-      setSaving(false)
+      setError(t('dashboard.stories.uploadFailed'))
     }
   }
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
     const trimmedTitle = title.trim()
-    if (!trimmedTitle || !mediaSrc) {
+    if (!trimmedTitle || !mediaPath) {
       setError(t('dashboard.stories.validationRequired'))
       return
     }
 
-    addStory({
+    const success = await publishStory({
       title: trimmedTitle,
       caption: caption.trim(),
       mediaType,
-      mediaSrc,
+      mediaPath,
       mediaAlt: mediaAlt || trimmedTitle,
-      productSlugs: productSlug ? [productSlug] : [],
+      productSlug: productSlug || undefined,
     })
-    setMode('list')
+
+    if (success) {
+      setMode('list')
+    }
   }
 
   if (mode === 'create') {
@@ -148,6 +172,7 @@ export function StoriesPanel() {
                 accept="image/*,video/*"
                 className="sr-only"
                 onChange={(e) => void handleFile(e.target.files?.[0] ?? null)}
+                disabled={isSaving}
               />
             </label>
           </Field>
@@ -167,13 +192,15 @@ export function StoriesPanel() {
             </select>
           </Field>
 
-          {error && <p className="text-sm text-sale">{error}</p>}
+          {(error || mutationError) && (
+            <p className="text-sm text-sale">{error ?? mutationError}</p>
+          )}
 
           <div className="flex flex-wrap gap-3">
-            <Button variant="warm" onClick={handlePublish} disabled={saving || !mediaSrc}>
-              {t('dashboard.stories.publish')}
+            <Button variant="warm" onClick={() => void handlePublish()} disabled={isSaving || !mediaPath}>
+              {isSaving ? <InlineLoading label={t('dashboard.stories.publish')} /> : t('dashboard.stories.publish')}
             </Button>
-            <Button variant="secondary" onClick={() => setMode('list')}>
+            <Button variant="secondary" onClick={() => setMode('list')} disabled={isSaving}>
               {t('address.cancel')}
             </Button>
           </div>
@@ -195,7 +222,9 @@ export function StoriesPanel() {
         }
       />
 
-      {stories.length === 0 ? (
+      {isLoading ? (
+        <InlineLoading label={t('common.loading')} />
+      ) : stories.length === 0 ? (
         <DashboardEmptyState
           icon={<StoriesIcon size={28} />}
           title={t('dashboard.stories.emptyTitle')}
@@ -207,16 +236,20 @@ export function StoriesPanel() {
           }
         />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {stories.map((story) => (
-            <StoryManageCard
-              key={story.id}
-              story={story}
-              onToggle={() => toggleActive(story.id)}
-              onDelete={() => removeStory(story.id)}
-            />
-          ))}
-        </div>
+        <>
+          {mutationError && <p className="mb-4 text-sm text-sale">{mutationError}</p>}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {stories.map((story) => (
+              <StoryManageCard
+                key={story.id}
+                story={story}
+                disabled={isSaving}
+                onToggle={() => void toggleStoryActive(story)}
+                onDelete={() => void deleteStory(story.id)}
+              />
+            ))}
+          </div>
+        </>
       )}
     </div>
   )
@@ -224,10 +257,12 @@ export function StoriesPanel() {
 
 function StoryManageCard({
   story,
+  disabled,
   onToggle,
   onDelete,
 }: {
   story: UserStoryDraft
+  disabled: boolean
   onToggle: () => void
   onDelete: () => void
 }) {
@@ -265,10 +300,15 @@ function StoryManageCard({
         </p>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          <Button variant="secondary" className="py-2 text-xs" onClick={onToggle}>
+          <Button variant="secondary" className="py-2 text-xs" onClick={onToggle} disabled={disabled}>
             {story.isActive ? t('dashboard.stories.hide') : t('dashboard.stories.show')}
           </Button>
-          <Button variant="ghost" className="py-2 text-xs text-sale hover:bg-sale/10" onClick={onDelete}>
+          <Button
+            variant="ghost"
+            className="py-2 text-xs text-sale hover:bg-sale/10"
+            onClick={onDelete}
+            disabled={disabled}
+          >
             {t('dashboard.stories.delete')}
           </Button>
         </div>

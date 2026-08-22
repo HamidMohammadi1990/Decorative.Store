@@ -62,7 +62,8 @@ internal static class ProductSeedData
                 CompareAtPrice: faProduct.CompareAtPrice?.Amount,
                 ImageBaseName: imageBaseName,
                 FaImageTitle: TruncateImageTitle(faProduct.Image.Alt),
-                EnImageTitle: TruncateImageTitle(enProduct.Image.Alt)));
+                EnImageTitle: TruncateImageTitle(enProduct.Image.Alt),
+                InStock: faProduct.InStock));
         }
 
         return items;

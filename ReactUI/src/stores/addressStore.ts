@@ -1,99 +1,82 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { SavedAddress, SavedAddressInput } from '@/models/address/savedAddress.model'
+import type { SavedAddress } from '@/models/address/savedAddress.model'
+import type { Locale } from '@/models/shared/locale.model'
+import { userAddressService } from '@/services/userAddressService'
 
 interface AddressState {
   addresses: SavedAddress[]
+  defaultAddressId: string | null
+  isLoading: boolean
   isModalOpen: boolean
   openModal: () => void
   closeModal: () => void
-  addAddress: (input: SavedAddressInput) => SavedAddress
-  updateAddress: (id: string, input: Partial<SavedAddressInput>) => void
-  removeAddress: (id: string) => void
+  setAddresses: (addresses: SavedAddress[]) => void
+  clearAddresses: () => void
+  loadAddresses: (accessToken: string, locale: Locale) => Promise<void>
   setDefaultAddress: (id: string) => void
   getDefaultAddress: () => SavedAddress | undefined
 }
 
-function createId() {
-  return `addr-${Date.now().toString(36)}`
+function applyDefaultFlags(
+  addresses: SavedAddress[],
+  defaultAddressId: string | null,
+): SavedAddress[] {
+  if (addresses.length === 0) return []
+
+  const effectiveDefaultId =
+    defaultAddressId && addresses.some((address) => address.id === defaultAddressId)
+      ? defaultAddressId
+      : addresses[0].id
+
+  return addresses.map((address) => ({
+    ...address,
+    isDefault: address.id === effectiveDefaultId,
+  }))
 }
 
 export const useAddressStore = create<AddressState>()(
   persist(
     (set, get) => ({
       addresses: [],
+      defaultAddressId: null,
+      isLoading: false,
       isModalOpen: false,
 
       openModal: () => set({ isModalOpen: true }),
       closeModal: () => set({ isModalOpen: false }),
 
-      addAddress: (input) => {
-        const shouldBeDefault = input.isDefault ?? get().addresses.length === 0
-        const newAddress: SavedAddress = {
-          id: createId(),
-          label: input.label,
-          firstName: input.firstName,
-          lastName: input.lastName,
-          address: input.address,
-          apartment: input.apartment,
-          city: input.city,
-          postcode: input.postcode,
-          phone: input.phone,
-          isDefault: shouldBeDefault,
-        }
-
+      setAddresses: (addresses) =>
         set((state) => ({
-          addresses: shouldBeDefault
-            ? [...state.addresses.map((a) => ({ ...a, isDefault: false })), newAddress]
-            : [...state.addresses, newAddress],
-        }))
+          addresses: applyDefaultFlags(addresses, state.defaultAddressId),
+        })),
 
-        return newAddress
+      clearAddresses: () => set({ addresses: [], isLoading: false }),
+
+      loadAddresses: async (accessToken, locale) => {
+        set({ isLoading: true })
+        try {
+          const addresses = await userAddressService.getMyAddresses(accessToken, locale)
+          set((state) => ({
+            addresses: applyDefaultFlags(addresses, state.defaultAddressId),
+            isLoading: false,
+          }))
+        } catch {
+          set({ isLoading: false })
+        }
       },
-
-      updateAddress: (id, input) =>
-        set((state) => {
-          const makeDefault = input.isDefault === true
-          return {
-            addresses: state.addresses.map((address) => {
-              if (address.id === id) {
-                return {
-                  ...address,
-                  ...input,
-                  isDefault: makeDefault ? true : input.isDefault === false ? false : address.isDefault,
-                }
-              }
-              if (makeDefault) return { ...address, isDefault: false }
-              return address
-            }),
-          }
-        }),
-
-      removeAddress: (id) =>
-        set((state) => {
-          const remaining = state.addresses.filter((a) => a.id !== id)
-          const removedWasDefault = state.addresses.find((a) => a.id === id)?.isDefault
-          if (removedWasDefault && remaining.length > 0) {
-            return {
-              addresses: remaining.map((a, i) => ({ ...a, isDefault: i === 0 })),
-            }
-          }
-          return { addresses: remaining }
-        }),
 
       setDefaultAddress: (id) =>
         set((state) => ({
-          addresses: state.addresses.map((a) => ({
-            ...a,
-            isDefault: a.id === id,
-          })),
+          defaultAddressId: id,
+          addresses: applyDefaultFlags(state.addresses, id),
         })),
 
-      getDefaultAddress: () => get().addresses.find((a) => a.isDefault),
+      getDefaultAddress: () => get().addresses.find((address) => address.isDefault),
     }),
     {
       name: 'westelm-addresses',
-      partialize: (state) => ({ addresses: state.addresses }),
+      partialize: (state) => ({ defaultAddressId: state.defaultAddressId }),
     },
   ),
 )

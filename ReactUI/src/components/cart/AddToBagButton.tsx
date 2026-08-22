@@ -33,7 +33,7 @@ export function AddToBagButton({
       : status === 'added'
         ? t('cart.added')
         : item.inStock === false
-          ? t('cart.configureOnProduct')
+          ? t('cart.viewProductToOrder')
           : t('listing.addToBag')
 
   return (

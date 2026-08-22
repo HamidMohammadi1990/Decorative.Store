@@ -1,9 +1,9 @@
-﻿using System.Text.Json.Serialization;
-using Edition.Application.Common.Utilities.Security.Attributes;
-using Edition.Application.Contracts.ContentPolicies;
-using Store.Common.Models;
-using Store.Domain.Dtos.Pagination;
+﻿using Store.Common.Models;
 using Store.Domain.Entities;
+using Store.Domain.Dtos.Pagination;
+using System.Text.Json.Serialization;
+using Edition.Application.Contracts.ContentPolicies;
+using Edition.Application.Common.Utilities.Security.Attributes;
 
 namespace Edition.Application.Features.BlogPosts.Queries;
 
@@ -12,7 +12,7 @@ public record SearchBlogPostRequest : ContentPolicyRequest<BlogPost>, IRequest<O
     public string? Title { get; init; }
     public string? Slug { get; init; }
 
-    [JsonConverter(typeof(CategoryNullableEncryptor))]
+    [JsonConverter(typeof(BlogPostCategoryEncryptor))]
     public int? CategoryId { get; init; }
 
     [JsonConverter(typeof(UserNullableEncryptor))]

@@ -4,9 +4,9 @@ import type { ImageAsset } from '@/models/shared/image.model'
 import { ImageLightbox } from '@/components/ui/ImageLightbox'
 import { LocalImage } from '@/components/ui/LocalImage'
 import { ScrollArrowButton } from '@/components/ui/ScrollArrowButton'
+import { WishlistButton } from '@/components/wishlist/WishlistButton'
 import { copyToClipboard } from '@/extensions/copyToClipboard'
 import { useCompareStore } from '@/stores/compareStore'
-import { useWishlistStore } from '@/stores/wishlistStore'
 
 interface ProductGalleryProps {
   images: ImageAsset[]
@@ -25,8 +25,6 @@ export function ProductGallery({ images, title, slug, onSale }: ProductGalleryPr
   const touchStartX = useRef(0)
   const slideCount = images.length
 
-  const toggleWishlist = useWishlistStore((s) => s.toggle)
-  const isInWishlist = useWishlistStore((s) => s.isInWishlist(slug))
   const toggleCompare = useCompareStore((s) => s.toggle)
   const isInCompare = useCompareStore((s) => s.isInCompare(slug))
 
@@ -55,7 +53,6 @@ export function ProductGallery({ images, title, slug, onSale }: ProductGalleryPr
     }
   }
 
-  const wishlistLabel = isInWishlist ? t('product.inWishlist') : t('product.wishlist')
   const compareLabel = isInCompare ? t('compare.inCompare') : t('product.compare')
 
   const goTo = useCallback(
@@ -86,12 +83,7 @@ export function ProductGallery({ images, title, slug, onSale }: ProductGalleryPr
     <div className="min-w-0">
       <div className="relative flex gap-2">
         <div className="hidden shrink-0 flex-col gap-2 sm:flex">
-          <GalleryActionButton
-            label={wishlistLabel}
-            icon="heart"
-            active={isInWishlist}
-            onClick={() => toggleWishlist(slug)}
-          />
+          <WishlistButton slug={slug} variant="icon" />
           <GalleryActionButton
             label={t('product.share')}
             icon="share"

@@ -10,7 +10,6 @@ public record CheckoutOrderResponse
 {
     public CheckoutProductResponse Product { get; init; } = default!;
     public List<CheckoutPropertiesResponse> Properties { get; init; } = default!;
-    public List<CheckoutDeliveryTypeResponse> DeliveryTypes { get; init; } = default!;
     public List<CheckoutPostTypeResponse> PostTypes { get; init; } = default!;
     public List<CheckoutUserAddressResponse> Addresses { get; init; } = default!;
     public List<CheckoutOrderAttachmentResponse> Attachments { get; init; } = default!;
@@ -32,13 +31,6 @@ public record CheckoutProductImageResponse
 {
     public string Title { get; init; } = null!;
     public string Url { get; init; } = null!;
-}
-
-public record CheckoutDeliveryTypeResponse
-{
-    [JsonConverter(typeof(DeliveryTypeEncryptor))]
-    public int Id { get; init; }
-    public string Title { get; init; } = null!;
 }
 
 public record CheckoutPostTypeResponse

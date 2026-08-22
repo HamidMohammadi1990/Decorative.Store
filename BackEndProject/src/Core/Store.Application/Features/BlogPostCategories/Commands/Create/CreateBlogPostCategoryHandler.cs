@@ -11,7 +11,8 @@ public class CreateBlogPostCategoryHandler
 {
     public async Task<OperationResult<CreateBlogPostCategoryResponse>> Handle(CreateBlogPostCategoryRequest request, CancellationToken cancellationToken)
     {
-        var blogPostCategory = BlogPostCategory.Create(request.Title, request.Slug);
+        var blogPostCategory = BlogPostCategory.Create(request.Code);
+        blogPostCategory.UpsertTranslation(request.LanguageId, request.Title, request.Slug);
         blogPostCategoryRepository.Add(blogPostCategory);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);

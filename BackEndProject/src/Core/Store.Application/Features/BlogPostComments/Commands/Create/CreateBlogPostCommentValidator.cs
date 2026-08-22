@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Edition.Application.Common.Validation;
 using Store.Common.Localization;
 
 namespace Edition.Application.Features.BlogPostComments.Commands;
@@ -10,5 +11,9 @@ public class CreateBlogPostCommentValidator : AbstractValidator<CreateBlogPostCo
         RuleFor(x => x.BlogPostId)
             .NotEqual(0)
             .WithMessage(MessageKeys.InvalidBlogPostId);
+
+        RuleFor(x => x.Content)
+            .NotEmpty()
+            .MaximumLength(EntityFieldLengths.BlogPostComment.Comment);
     }
 }

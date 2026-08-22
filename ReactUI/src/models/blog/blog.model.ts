@@ -30,6 +30,7 @@ export interface BlogPostSummary {
   excerpt: string
   coverImage: ImageAsset
   categorySlug: string
+  categoryLabel?: string
   authorId: string
   publishedAt: string
   readTimeMinutes: number
@@ -40,16 +41,15 @@ export interface BlogPostSummary {
 }
 
 export interface BlogPostDetail extends BlogPostSummary {
+  categoryId: string
+  categoryLabel: string
   content: string[]
   gallery: ImageAsset[]
   author: BlogAuthor
   comments: BlogComment[]
-  relatedSlugs: string[]
 }
 
 export interface BlogListingResult {
-  title: string
-  description: string
   categories: BlogCategory[]
   featuredPosts: BlogPostSummary[]
   posts: BlogPostSummary[]

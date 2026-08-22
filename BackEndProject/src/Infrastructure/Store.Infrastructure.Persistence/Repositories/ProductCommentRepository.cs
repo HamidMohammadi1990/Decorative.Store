@@ -112,6 +112,46 @@ public class ProductCommentRepository
         return result;
     }
 
+    public async Task<List<GetMyProductCommentDto>> GetByUserIdAsync(
+        int userId,
+        int languageId,
+        int defaultLanguageId,
+        CancellationToken cancellationToken = default)
+    {
+        return await
+            (from productComment in Context.ProductComment.AsNoTracking()
+             join product in Context.Product on productComment.ProductId equals product.Id
+             where productComment.UserId == userId
+             orderby productComment.Id descending
+             select new GetMyProductCommentDto
+             {
+                 Id = productComment.Id,
+                 ProductId = productComment.ProductId,
+                 Description = productComment.Description,
+                 CommentRate = productComment.CommentRate,
+                 IsActive = productComment.IsActive,
+                 ProductTitle = product.Translations
+                         .Where(t => t.LanguageId == languageId)
+                         .Select(t => t.Title)
+                         .FirstOrDefault()
+                     ?? product.Translations
+                         .Where(t => t.LanguageId == defaultLanguageId)
+                         .Select(t => t.Title)
+                         .FirstOrDefault()
+                     ?? string.Empty,
+                 ProductSlug = product.Translations
+                         .Where(t => t.LanguageId == languageId)
+                         .Select(t => t.Slug)
+                         .FirstOrDefault()
+                     ?? product.Translations
+                         .Where(t => t.LanguageId == defaultLanguageId)
+                         .Select(t => t.Slug)
+                         .FirstOrDefault()
+                     ?? string.Empty,
+             })
+            .ToListAsync(cancellationToken);
+    }
+
     private async Task<(int LanguageId, int DefaultLanguageId)> ResolveLanguageIdsAsync(CancellationToken cancellationToken)
     {
         var defaultLanguage = await languageRegistry.GetDefaultAsync(cancellationToken);

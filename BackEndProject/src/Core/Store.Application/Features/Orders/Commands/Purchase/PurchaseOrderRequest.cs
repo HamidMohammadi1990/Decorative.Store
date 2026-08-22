@@ -22,9 +22,6 @@ public record PurchaseOrderRequest : IRequest<OperationResult<PurchaseOrderRespo
 
     public string? Description { get; init; }
 
-    [JsonConverter(typeof(DeliveryTypeEncryptor))]
-    public int DeliveryTypeId { get; init; }
-
     [JsonConverter(typeof(PostTypeEncryptor))]
     public int? PostTypeId { get; init; }
     public bool IsNeedToDesign { get; init; }

@@ -25,7 +25,7 @@ public record OrderDetailItemDto
     public string? Description { get; init; }
     public OrderItemStatusType Status { get; init; }
     public DateTime CreatedOnUtc { get; init; }
-    public string DeliveryTypeTitle { get; init; } = default!;
+    public string? DeliveryTypeTitle { get; init; }
     public string? PostTypeTitle { get; init; }
     public OrderItemProductSummaryDto Product { get; init; } = default!;
     public OrderItemUserAddressDto UserAddress { get; init; } = default!;

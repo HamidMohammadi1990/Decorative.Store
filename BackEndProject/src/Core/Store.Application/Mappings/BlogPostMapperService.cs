@@ -32,7 +32,7 @@ public class BlogPostMapperService : IBlogPostMapperService
                 UserLastName = x.UserLastName,
                 CategoryTitle = x.CategoryTitle,
                 MetaDescription = x.MetaDescription,
-                ReadingTimeInMinutes = x.ReadingTimeInMinutes
+                ReadingTimeInMinutes = x.ReadingTimeInMinutes,
             })
             .ToList();
 
@@ -59,31 +59,35 @@ public class BlogPostMapperService : IBlogPostMapperService
                 UserLastName = x.UserLastName,
                 CategoryTitle = x.CategoryTitle,
                 MetaDescription = x.MetaDescription,
-                ReadingTimeInMinutes = x.ReadingTimeInMinutes
+                ReadingTimeInMinutes = x.ReadingTimeInMinutes,
             })
             .ToList();
 
         return PagedResult<SearchBlogPostResponse>.Create(items, model);
     }
 
-    public GetBlogPostResponse Map(BlogPost model)
+    public GetBlogPostResponse Map(
+        BlogPost model,
+        (string Title, string Slug, string MetaDescription, string SeoKeywords, string Content) fields)
     {
         return new GetBlogPostResponse
         {
             Id = model.Id,
-            Slug = model.Slug,
-            Title = model.Title,
+            Code = model.Code,
+            Slug = fields.Slug,
+            Title = fields.Title,
             UserId = model.UserId,
-            Content = model.Content,
+            Content = fields.Content,
             IsActive = model.IsActive,
             IsPublished = model.IsPublished,
-            SeoKeywords = model.SeoKeywords,
+            IsFeatured = model.IsFeatured,
+            SeoKeywords = fields.SeoKeywords,
             UpdatedOnUtc = model.UpdatedOnUtc,
             CreatedOnUtc = model.CreatedOnUtc,
             PublishedOnUtc = model.PublishedOnUtc,
-            MetaDescription = model.MetaDescription,
+            MetaDescription = fields.MetaDescription,
             BlogPostCategoryId = model.BlogPostCategoryId,
-            ReadingTimeInMinutes = model.ReadingTimeInMinutes
+            ReadingTimeInMinutes = model.ReadingTimeInMinutes,
         };
     }
 
@@ -108,7 +112,7 @@ public class BlogPostMapperService : IBlogPostMapperService
             Slug = model.Slug,
             Title = model.Title,
             CategoryId = model.CategoryId,
-            Pagination = model.Pagination
+            Pagination = model.Pagination,
         }.WithContentPolicy<BlogPost, SearchBlogPostRequestDto>(model);
     }
 }

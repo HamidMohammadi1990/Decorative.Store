@@ -18,7 +18,6 @@ public class AddCartItemHandler
     private readonly IProductRepository productRepository;
     private readonly IPropertyRepository propertyRepository;
     private readonly IProductOrderItemAttachmentTypeRepository productOrderItemAttachmentTypeRepository;
-    private readonly IDeliveryTypeRepository deliveryTypeRepository;
     private readonly IDiscountRepository discountRepository;
     private readonly IOrderTrackingCodeGenerator trackingCodeGenerator;
     private readonly ICurrentUserContext currentUser;
@@ -29,7 +28,6 @@ public class AddCartItemHandler
         IProductRepository productRepository,
         IPropertyRepository propertyRepository,
         IProductOrderItemAttachmentTypeRepository productOrderItemAttachmentTypeRepository,
-        IDeliveryTypeRepository deliveryTypeRepository,
         IDiscountRepository discountRepository,
         IOrderTrackingCodeGenerator trackingCodeGenerator,
         ICurrentUserContext currentUser)
@@ -39,7 +37,6 @@ public class AddCartItemHandler
         this.productRepository = productRepository;
         this.propertyRepository = propertyRepository;
         this.productOrderItemAttachmentTypeRepository = productOrderItemAttachmentTypeRepository;
-        this.deliveryTypeRepository = deliveryTypeRepository;
         this.discountRepository = discountRepository;
         this.trackingCodeGenerator = trackingCodeGenerator;
         this.currentUser = currentUser;
@@ -63,11 +60,6 @@ public class AddCartItemHandler
         if (product is null)
             return ErrorModel.Create("InvalidId");
 
-        var deliveryTypes = await deliveryTypeRepository.GetAllAsync();
-        var deliveryType = deliveryTypes.FirstOrDefault();
-        if (deliveryType is null)
-            return ErrorModel.Create("DeliveryTypeNotConfigured");
-
         var productSummary = await productRepository.GetProductSummaryByIdAsync(request.ProductId);
         var orderTitle = productSummary?.Title ?? "Cart";
 
@@ -83,7 +75,6 @@ public class AddCartItemHandler
         var orderItem = OrderItem.CreateForQuickAdd(
             request.ProductId,
             request.Quantity,
-            deliveryType.Id,
             product.Price);
 
         order.AddOrderItem(orderItem);

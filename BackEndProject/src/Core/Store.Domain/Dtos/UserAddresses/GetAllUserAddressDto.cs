@@ -3,8 +3,8 @@
 public record GetAllUserAddressDto
 {
     public int Id { get; init; }
-    public int CityId { get; init; }
-    public string CityName { get; init; } = default!;
+    public int? CityId { get; init; }
+    public string? CityName { get; init; }
     public string? RecipientFirstName { get; init; }
     public string? RecipientLastName { get; init; }
     public string Title { get; init; } = default!;

@@ -10,8 +10,8 @@ public record CreateUserAddressRequest : IRequest<OperationResult<CreateUserAddr
     public string Address { get; init; } = default!;
     public string? PostalCode { get; init; }
 
-    [JsonConverter(typeof(CityEncryptor))]
-    public int CityId { get; init; }
+    [JsonConverter(typeof(CityNullableEncryptor))]
+    public int? CityId { get; init; }
     public string RecipientFirstName { get; init; } = default!;
     public string RecipientLastName { get; init; } = default!;
     public string PhoneNumber { get; init; } = default!;

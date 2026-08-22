@@ -64,4 +64,23 @@ public class OrderController
     [HttpDelete("item")]
     public async Task<ApiResult<RemoveOrderItemResponse>> RemoveItem(RemoveOrderItemRequest request)
         => await mediator.Send(request);
+
+    [Authorize]
+    [HttpPost("by-status")]
+    public async Task<ApiResult<List<GetOrderByStatusResponse>>> GetByStatus(GetOrderByStatusRequest request)
+        => await mediator.Send(request);
+
+    [Authorize]
+    [HttpPost("detail")]
+    public async Task<ApiResult<GetOrderDetailResponse?>> GetDetail(GetOrderDetailRequest request)
+        => await mediator.Send(request);
+    
+    [HttpGet("statuses")]
+    public async Task<ApiResult<List<GetOrderStatusResponse>>> GetStatuses()
+        => await mediator.Send(new GetOrderStatusesRequest());
+
+    [Authorize]
+    [HttpGet("status-summary")]
+    public async Task<ApiResult<List<GetStatusSummaryOrderResponse>>> StatusSummary()
+        => await mediator.Send(new GetStatusSummaryOrderRequest());
 }

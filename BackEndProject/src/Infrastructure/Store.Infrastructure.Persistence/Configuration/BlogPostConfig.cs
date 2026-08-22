@@ -10,24 +10,13 @@ public class BlogPostConfig : IEntityTypeConfiguration<BlogPost>
     public void Configure(EntityTypeBuilder<BlogPost> builder)
     {
         builder
-            .Property(x => x.Title)
-            .HasNVarcharMaxLength(70);
+            .Property(x => x.Code)
+            .HasVarcharMaxLength(30)
+            .IsRequired();
 
         builder
-            .Property(x => x.Slug)
-            .HasVarcharMaxLength(150);
-
-        builder
-            .Property(x => x.MetaDescription)
-            .HasNVarcharMaxLength(200);
-
-        builder
-            .Property(x => x.SeoKeywords)
-            .HasNVarcharMaxLength(150);
-
-        builder
-            .Property(x => x.Content)
-            .HasNVarcharMaxLength(2500);
+            .HasIndex(x => x.Code)
+            .IsUnique();
 
         builder
             .HasOne(x => x.BlogPostCategory)
@@ -64,9 +53,5 @@ public class BlogPostConfig : IEntityTypeConfiguration<BlogPost>
 
         builder
             .HasIndex(x => x.UserId);
-
-        builder
-            .HasIndex(x => x.Slug)
-            .IsUnique();
     }
 }

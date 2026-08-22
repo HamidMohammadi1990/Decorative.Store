@@ -23,6 +23,10 @@ internal class ProductConfig : IEntityTypeConfiguration<Product>
             .HasPrecision(18, 2);
 
         builder
+            .Property(x => x.InStock)
+            .HasDefaultValue(true);
+
+        builder
             .HasOne(x => x.SubCategory)
             .WithMany(x => x.Products)
             .HasForeignKey(x => x.SubCategoryId)

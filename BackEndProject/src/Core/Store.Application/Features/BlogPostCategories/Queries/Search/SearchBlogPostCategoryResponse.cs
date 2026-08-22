@@ -7,7 +7,10 @@ public record SearchBlogPostCategoryResponse
 {
     [JsonConverter(typeof(BlogPostCategoryEncryptor))]
     public int Id { get; init; }
+
+    public string Code { get; init; } = default!;
     public string Title { get; init; } = default!;
     public string Slug { get; init; } = default!;
     public bool IsActive { get; init; }
+    public int PostCount { get; init; }
 }

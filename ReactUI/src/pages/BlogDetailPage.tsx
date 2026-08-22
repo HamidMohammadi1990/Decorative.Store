@@ -18,7 +18,7 @@ import { useSettingsStore } from '@/stores/settingsStore'
 export function BlogDetailPage() {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
-  const { post, related, loading, error } = useBlogPost()
+  const { post, related, categoryMap, loading, error, reload } = useBlogPost()
 
   if (loading) {
     return <PageLoading />
@@ -37,12 +37,9 @@ export function BlogDetailPage() {
   }
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : `/blog/${post.slug}`
-  const categoryLabel =
-    t(`blog.categories.${post.categorySlug}`, { defaultValue: post.categorySlug }) ||
-    post.categorySlug
+  const categoryLabel = post.categoryLabel || post.categorySlug
 
-  const getCategoryLabel = (slug: string) =>
-    t(`blog.categories.${slug}`, { defaultValue: slug })
+  const getCategoryLabel = (slug: string) => categoryMap[slug] ?? slug
 
   return (
     <article className="bg-surface pb-16">
@@ -117,7 +114,11 @@ export function BlogDetailPage() {
             </div>
 
             <div className="mt-10">
-              <BlogComments postId={post.id} comments={post.comments} />
+              <BlogComments
+                postId={post.id}
+                comments={post.comments}
+                onCommentCreated={reload}
+              />
             </div>
 
             <BlogRelatedSlider posts={related} getCategoryLabel={getCategoryLabel} />

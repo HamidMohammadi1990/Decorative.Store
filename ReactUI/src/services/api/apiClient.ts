@@ -55,13 +55,11 @@ async function requestApi<T>(
     accessToken !== 'mock-access-token'
   ) {
     const { useUserStore } = await import('@/stores/userStore')
-    const { tokenExpiresAt } = useUserStore.getState()
-    const shouldTryRefresh =
-      tokenExpiresAt !== null && Date.now() > tokenExpiresAt - 60_000
+    const { refreshToken } = useUserStore.getState()
 
-    if (shouldTryRefresh) {
+    if (refreshToken) {
       const refreshedToken = await tryRefreshAccessToken(true)
-      if (refreshedToken && refreshedToken !== accessToken) {
+      if (refreshedToken) {
         return requestApi<T>(
           path,
           {
@@ -106,6 +104,19 @@ export async function apiPost<T>(
     accessToken: options.accessToken,
     body,
     method: 'POST',
+  })
+}
+
+export async function apiPut<T>(
+  path: string,
+  body: unknown,
+  options: { locale?: Locale; accessToken?: string | null } = {},
+): Promise<T> {
+  return requestApi<T>(path, {
+    locale: options.locale,
+    accessToken: options.accessToken,
+    body,
+    method: 'PUT',
   })
 }
 

@@ -28,6 +28,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+        <None Update="SeedData\blog.fa.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="SeedData\blog.en.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="SeedData\navigation.fa.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

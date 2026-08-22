@@ -32,8 +32,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "NVARCHAR(70)", nullable: false),
-                    Slug = table.Column<string>(type: "VARCHAR(150)", nullable: false),
+                    Code = table.Column<string>(type: "VARCHAR(30)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -225,7 +224,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "NVARCHAR(40)", nullable: false),
+                    Title = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
                     Url = table.Column<string>(type: "VARCHAR(100)", nullable: false),
                     NameSpace = table.Column<string>(type: "VARCHAR(150)", nullable: false),
                     ParentId = table.Column<int>(type: "int", nullable: true),
@@ -465,6 +464,34 @@ namespace Store.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BlogPostCategoryTranslation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BlogPostCategoryId = table.Column<int>(type: "int", nullable: false),
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "NVARCHAR(70)", nullable: false),
+                    Slug = table.Column<string>(type: "VARCHAR(150)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlogPostCategoryTranslation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BlogPostCategoryTranslation_BlogPostCategory_BlogPostCategoryId",
+                        column: x => x.BlogPostCategoryId,
+                        principalTable: "BlogPostCategory",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BlogPostCategoryTranslation_Language_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Language",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CategoryTranslation",
                 columns: table => new
                 {
@@ -640,14 +667,11 @@ namespace Store.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "NVARCHAR(70)", nullable: false),
-                    Slug = table.Column<string>(type: "VARCHAR(150)", nullable: false),
+                    Code = table.Column<string>(type: "VARCHAR(30)", nullable: false),
                     BlogPostCategoryId = table.Column<int>(type: "int", nullable: false),
-                    MetaDescription = table.Column<string>(type: "NVARCHAR(200)", nullable: false),
-                    SeoKeywords = table.Column<string>(type: "NVARCHAR(150)", nullable: false),
-                    Content = table.Column<string>(type: "NVARCHAR(2500)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     ReadingTimeInMinutes = table.Column<int>(type: "int", nullable: false),
+                    IsFeatured = table.Column<bool>(type: "bit", nullable: false),
                     CreatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
                     PublishedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -792,6 +816,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    InStock = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     ProductCode = table.Column<string>(type: "VARCHAR(10)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     CompareAtPrice = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
@@ -893,7 +918,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CityId = table.Column<int>(type: "int", nullable: false),
+                    CityId = table.Column<int>(type: "int", nullable: true),
                     RecipientFirstName = table.Column<string>(type: "NVARCHAR(20)", nullable: true),
                     RecipientLastName = table.Column<string>(type: "NVARCHAR(30)", nullable: true),
                     Title = table.Column<string>(type: "NVARCHAR(30)", nullable: false),
@@ -1067,6 +1092,37 @@ namespace Store.Infrastructure.Persistence.Migrations
                         name: "FK_BlogPostTag_Tag_TagId",
                         column: x => x.TagId,
                         principalTable: "Tag",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BlogPostTranslation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BlogPostId = table.Column<int>(type: "int", nullable: false),
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "NVARCHAR(70)", nullable: false),
+                    Slug = table.Column<string>(type: "VARCHAR(150)", nullable: false),
+                    MetaDescription = table.Column<string>(type: "NVARCHAR(200)", nullable: false),
+                    SeoKeywords = table.Column<string>(type: "NVARCHAR(150)", nullable: false),
+                    Content = table.Column<string>(type: "NVARCHAR(2500)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlogPostTranslation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BlogPostTranslation_BlogPost_BlogPostId",
+                        column: x => x.BlogPostId,
+                        principalTable: "BlogPost",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BlogPostTranslation_Language_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Language",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -1733,7 +1789,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     ProductPrice = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     IsNeedToDesign = table.Column<bool>(type: "bit", nullable: false),
-                    DeliveryTypeId = table.Column<int>(type: "int", nullable: false),
+                    DeliveryTypeId = table.Column<int>(type: "int", nullable: true),
                     PostTypeId = table.Column<int>(type: "int", nullable: true),
                     UserAddressId = table.Column<int>(type: "int", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
@@ -2199,9 +2255,9 @@ namespace Store.Infrastructure.Persistence.Migrations
                 column: "BlogPostCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BlogPost_Slug",
+                name: "IX_BlogPost_Code",
                 table: "BlogPost",
-                column: "Slug",
+                column: "Code",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -2210,9 +2266,21 @@ namespace Store.Infrastructure.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BlogPostCategory_Slug",
+                name: "IX_BlogPostCategory_Code",
                 table: "BlogPostCategory",
-                column: "Slug",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BlogPostCategoryTranslation_BlogPostCategoryId_LanguageId",
+                table: "BlogPostCategoryTranslation",
+                columns: new[] { "BlogPostCategoryId", "LanguageId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BlogPostCategoryTranslation_LanguageId_Slug",
+                table: "BlogPostCategoryTranslation",
+                columns: new[] { "LanguageId", "Slug" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -2254,6 +2322,18 @@ namespace Store.Infrastructure.Persistence.Migrations
                 name: "IX_BlogPostTag_TagId",
                 table: "BlogPostTag",
                 column: "TagId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BlogPostTranslation_BlogPostId_LanguageId",
+                table: "BlogPostTranslation",
+                columns: new[] { "BlogPostId", "LanguageId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BlogPostTranslation_LanguageId_Slug",
+                table: "BlogPostTranslation",
+                columns: new[] { "LanguageId", "Slug" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_CategoryTranslation_CategoryId_LanguageId",
@@ -2898,6 +2978,9 @@ namespace Store.Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "BlogPostCategoryTranslation");
+
+            migrationBuilder.DropTable(
                 name: "BlogPostComment");
 
             migrationBuilder.DropTable(
@@ -2905,6 +2988,9 @@ namespace Store.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "BlogPostTag");
+
+            migrationBuilder.DropTable(
+                name: "BlogPostTranslation");
 
             migrationBuilder.DropTable(
                 name: "CategoryTranslation");
@@ -3013,10 +3099,10 @@ namespace Store.Infrastructure.Persistence.Migrations
                 name: "WebSiteSetting");
 
             migrationBuilder.DropTable(
-                name: "BlogPost");
+                name: "Tag");
 
             migrationBuilder.DropTable(
-                name: "Tag");
+                name: "BlogPost");
 
             migrationBuilder.DropTable(
                 name: "ContentPolicy");

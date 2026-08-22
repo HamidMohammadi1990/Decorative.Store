@@ -7,6 +7,7 @@ namespace Edition.Application.Features.BlogPostCategories.Queries;
 
 public record GetAllBlogPostCategoryRequest : ContentPolicyRequest<BlogPostCategory>, IRequest<OperationResult<PagedResult<GetAllBlogPostCategoryResponse>>>
 {
+    public string? Code { get; set; }
     public string? Title { get; set; }
     public string? Slug { get; set; }
     public bool? IsActive { get; set; }

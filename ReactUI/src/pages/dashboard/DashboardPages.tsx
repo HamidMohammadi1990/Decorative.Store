@@ -20,8 +20,7 @@ export function DashboardWalletPage() {
 }
 
 export function DashboardOrdersPage() {
-  const data = useDashboardContext()
-  return <OrdersPanel orders={data.orders} />
+  return <OrdersPanel />
 }
 
 export function DashboardTransactionsPage() {
@@ -30,8 +29,7 @@ export function DashboardTransactionsPage() {
 }
 
 export function DashboardReviewsPage() {
-  const data = useDashboardContext()
-  return <ReviewsPanel reviews={data.reviews} />
+  return <ReviewsPanel />
 }
 
 export function DashboardProfilePage() {

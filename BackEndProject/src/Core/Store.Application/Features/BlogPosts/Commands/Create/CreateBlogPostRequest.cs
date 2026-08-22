@@ -6,12 +6,18 @@ namespace Edition.Application.Features.BlogPosts.Commands;
 
 public record CreateBlogPostRequest : IRequest<OperationResult<CreateBlogPostResponse>>
 {
+    public int LanguageId { get; init; }
+
+    public string Code { get; init; } = default!;
+
     [JsonConverter(typeof(BlogPostCategoryEncryptor))]
     public int CategoryId { get; init; }
+
     public string Title { get; init; } = default!;
     public string Slug { get; init; } = default!;
     public string MetaDescription { get; init; } = default!;
     public string SeoKeywords { get; init; } = default!;
     public string Content { get; init; } = default!;
     public int ReadingTimeInMinutes { get; set; }
+    public bool IsFeatured { get; init; }
 }

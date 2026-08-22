@@ -6,6 +6,7 @@ namespace Store.Domain.Entities;
 public class Product : BaseEntity
 {
     public bool IsActive { get; private set; } = true;
+    public bool InStock { get; private set; } = true;
     public string ProductCode { get; private set; } = default!;
     public decimal Price { get; private set; }
     public decimal? CompareAtPrice { get; private set; }
@@ -17,6 +18,8 @@ public class Product : BaseEntity
     public ICollection<ProductFile> ProductFiles { get; private set; } = default!;
     public ICollection<Discount> ProductDiscounts { get; private set; } = default!;
     public ICollection<ProductComment> ProductComments { get; private set; } = default!;
+    public ICollection<ProductWishlist> ProductWishlists { get; private set; } = default!;
+    public ICollection<UserStory> UserStories { get; private set; } = default!;
     public ICollection<ProductFeature> ProductFeatures { get; private set; } = [];
     public ICollection<ProductProperty> ProductProperties { get; private set; } = default!;
     public ICollection<ProductDescription> ProductDescriptions { get; private set; } = default!;
@@ -74,6 +77,11 @@ public class Product : BaseEntity
     {
         Price = price;
         CompareAtPrice = compareAtPrice;
+    }
+
+    public void SetInStock(bool inStock)
+    {
+        InStock = inStock;
     }
 
     public void AddFeature(ProductFeature productFeature)

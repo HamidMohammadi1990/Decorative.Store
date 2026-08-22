@@ -14,17 +14,13 @@ export function BlogHomeSection() {
   const locale = useSettingsStore((s) => s.locale)
   const drag = useHorizontalDragScroll<HTMLDivElement>()
   const [posts, setPosts] = useState<BlogPostSummary[]>([])
-  const [categoryMap, setCategoryMap] = useState<Record<string, string>>({})
 
   useEffect(() => {
     let cancelled = false
 
-    void blogService.getListing(locale).then((data) => {
+    void blogService.getFeaturedPosts(locale, 3).then((featuredPosts) => {
       if (cancelled) return
-      setPosts(data.featuredPosts.slice(0, 3))
-      setCategoryMap(
-        Object.fromEntries(data.categories.map((category) => [category.slug, category.label])),
-      )
+      setPosts(featuredPosts)
     })
 
     return () => {
@@ -33,8 +29,6 @@ export function BlogHomeSection() {
   }, [locale])
 
   if (posts.length === 0) return null
-
-  const getCategoryLabel = (slug: string) => categoryMap[slug] ?? slug
 
   return (
     <section className="border-t border-border bg-surface-muted/40 py-12 md:py-16">
@@ -61,7 +55,7 @@ export function BlogHomeSection() {
             <BlogCard
               key={post.id}
               post={post}
-              categoryLabel={getCategoryLabel(post.categorySlug)}
+              categoryLabel={post.categoryLabel ?? post.categorySlug}
             />
           ))}
         </div>
@@ -85,7 +79,7 @@ export function BlogHomeSection() {
             >
               <BlogCard
                 post={post}
-                categoryLabel={getCategoryLabel(post.categorySlug)}
+                categoryLabel={post.categoryLabel ?? post.categorySlug}
               />
             </div>
           ))}

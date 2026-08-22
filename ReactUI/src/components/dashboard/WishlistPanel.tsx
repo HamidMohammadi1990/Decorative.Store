@@ -7,13 +7,26 @@ import { ProductGrid } from '@/components/listing/ProductGrid'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { useWishlistProducts } from '@/hooks/useWishlistProducts'
+import { wishlistService } from '@/services/wishlistService'
 import { useWishlistStore } from '@/stores/wishlistStore'
+import { useUserStore } from '@/stores/userStore'
 
 export function WishlistPanel() {
   const { t } = useTranslation()
+  const accessToken = useUserStore((state) => state.accessToken)
   const slugs = useWishlistStore((s) => s.slugs)
   const clear = useWishlistStore((s) => s.clear)
   const { products, loading, error } = useWishlistProducts()
+
+  const handleClearAll = async () => {
+    if (!accessToken || accessToken === 'mock-access-token') {
+      clear()
+      return
+    }
+
+    await Promise.all(slugs.map((slug) => wishlistService.remove(accessToken, slug)))
+    clear()
+  }
 
   if (slugs.length === 0 && !loading) {
     return (
@@ -51,7 +64,7 @@ export function WishlistPanel() {
               </span>
               <button
                 type="button"
-                onClick={clear}
+                onClick={() => void handleClearAll()}
                 className="text-sm font-medium text-text-muted transition-colors hover:text-text"
               >
                 {t('dashboard.wishlist.clearAll')}

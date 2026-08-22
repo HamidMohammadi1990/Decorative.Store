@@ -1,44 +1,76 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatBlogDate } from '@/extensions/formatBlogDate'
+import type { BlogComment } from '@/models/blog/blog.model'
+import { submitBlogComment } from '@/services/blogCommentSubmitService'
+import { openLoginModal } from '@/stores/authModalStore'
 import { useBlogInteractionStore } from '@/stores/blogInteractionStore'
 import { useSettingsStore } from '@/stores/settingsStore'
-import type { BlogComment } from '@/models/blog/blog.model'
-
-const EMPTY_COMMENTS: BlogComment[] = []
+import { useAccessToken, useUserStore } from '@/stores/userStore'
 
 interface BlogCommentsProps {
   postId: string
   comments: BlogComment[]
+  onCommentCreated?: () => Promise<void> | void
 }
 
-export function BlogComments({ postId, comments }: BlogCommentsProps) {
+export function BlogComments({ postId, comments, onCommentCreated }: BlogCommentsProps) {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
+  const accessToken = useAccessToken()
+  const user = useUserStore((s) => s.user)
   const [text, setText] = useState('')
-  const addComment = useBlogInteractionStore((s) => s.addComment)
-  const userComments = useBlogInteractionStore(
-    (s) => s.userComments[postId] ?? EMPTY_COMMENTS,
-  )
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
-  const allComments = useMemo(
-    () => [...userComments, ...comments],
-    [comments, userComments],
+  const submitComment = useCallback(
+    async (content: string) => {
+      setSubmitting(true)
+      setSubmitError(null)
+
+      try {
+        await submitBlogComment({
+          blogPostId: postId,
+          content,
+          locale,
+        })
+        setText('')
+        await onCommentCreated?.()
+      } catch {
+        setSubmitError(t('blog.commentSubmitFailed'))
+      } finally {
+        setSubmitting(false)
+      }
+    },
+    [locale, onCommentCreated, postId, t],
   )
 
   const handleSubmit = () => {
     const trimmed = text.trim()
-    if (!trimmed) return
-    addComment(postId, trimmed, t('blog.guestAuthor'))
-    setText('')
+    if (!trimmed || submitting) return
+
+    if (!accessToken) {
+      openLoginModal({
+        onSuccess: () => {
+          void submitComment(trimmed)
+        },
+      })
+      return
+    }
+
+    void submitComment(trimmed)
   }
+
+  const authorLabel = user
+    ? [user.firstName, user.lastName].filter(Boolean).join(' ') || user.email
+    : null
 
   return (
     <section className="rounded-2xl border border-border bg-surface p-5 md:p-6">
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-lg font-bold text-text">{t('blog.commentsTitle')}</h2>
         <span className="rounded-full bg-surface-muted px-3 py-1 text-xs font-medium text-text-muted">
-          {t('blog.commentCount', { count: allComments.length })}
+          {t('blog.commentCount', { count: comments.length })}
         </span>
       </div>
 
@@ -46,30 +78,44 @@ export function BlogComments({ postId, comments }: BlogCommentsProps) {
         <label htmlFor="blog-comment" className="text-sm font-medium text-text">
           {t('blog.addComment')}
         </label>
+        {!accessToken && (
+          <p className="mt-2 text-xs text-text-muted">{t('blog.signInToComment')}</p>
+        )}
+        {authorLabel && (
+          <p className="mt-2 text-xs text-text-muted">
+            {t('blog.commentAsUser', { name: authorLabel })}
+          </p>
+        )}
         <textarea
           id="blog-comment"
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder={t('blog.commentPlaceholder')}
           rows={4}
-          className="mt-2 block w-full resize-none rounded-lg border border-border bg-surface px-3 py-3 text-sm leading-relaxed text-text outline-none transition-colors placeholder:text-text-muted focus:border-warm"
+          disabled={submitting}
+          className="mt-2 block w-full resize-none rounded-lg border border-border bg-surface px-3 py-3 text-sm leading-relaxed text-text outline-none transition-colors placeholder:text-text-muted focus:border-warm disabled:cursor-not-allowed disabled:opacity-70"
         />
+        {submitError && (
+          <p className="mt-2 text-sm text-red-600" role="alert">
+            {submitError}
+          </p>
+        )}
         <button
           type="button"
           onClick={handleSubmit}
-          disabled={!text.trim()}
+          disabled={!text.trim() || submitting}
           className={`mt-3 rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors ${
-            text.trim()
+            text.trim() && !submitting
               ? 'bg-warm text-warm-text hover:bg-warm-hover'
               : 'cursor-not-allowed bg-border text-text-muted'
           }`}
         >
-          {t('blog.postComment')}
+          {submitting ? t('common.loading') : t('blog.postComment')}
         </button>
       </div>
 
       <ul className="mt-6 space-y-4">
-        {allComments.map((comment) => (
+        {comments.map((comment) => (
           <CommentItem key={comment.id} comment={comment} locale={locale} />
         ))}
       </ul>
@@ -88,16 +134,17 @@ function CommentItem({
   const liked = useBlogInteractionStore((s) => s.likedCommentIds.includes(comment.id))
   const toggleLike = useBlogInteractionStore((s) => s.toggleCommentLike)
   const likes = comment.likes + (liked ? 1 : 0)
+  const authorName = comment.authorName.trim() || t('blog.guestAuthor')
 
   return (
     <li className="rounded-xl border border-border bg-surface-muted/30 p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-warm-soft text-sm font-bold text-warm">
-            {comment.authorName.trim().charAt(0) || '?'}
+            {authorName.charAt(0) || '?'}
           </span>
           <div>
-            <p className="text-sm font-semibold text-text">{comment.authorName}</p>
+            <p className="text-sm font-semibold text-text">{authorName}</p>
             <p className="text-xs text-text-muted">{formatBlogDate(comment.date, locale)}</p>
           </div>
         </div>

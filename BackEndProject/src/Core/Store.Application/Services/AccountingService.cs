@@ -199,11 +199,6 @@ public class AccountingService
         if (validateToken is null)
             return ErrorModel.Create("TokenIsInvalid");
 
-        var expiredDate = validateToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value;
-        var expiredDateUtc = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expiredDate)).UtcDateTime;
-        if (expiredDateUtc > DateTime.UtcNow)
-            return ErrorModel.Create("TokenIsNotExpired");
-
         var storedToken = await refreshTokenRepository.GetByToken(refreshToken);
         if (storedToken is null)
             return ErrorModel.Create("TokenIsInvalid");

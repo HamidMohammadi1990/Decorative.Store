@@ -13,8 +13,11 @@ syncI18nLocale(useSettingsStore.getState().locale)
 
 function Bootstrap() {
   const restoreSession = useUserStore((s) => s.restoreSession)
+  const accessToken = useUserStore((s) => s.accessToken)
 
   useEffect(() => {
+    if (!accessToken) return
+
     const runRestore = () => {
       void restoreSession()
     }
@@ -25,7 +28,7 @@ function Bootstrap() {
     }
 
     return useUserStore.persist.onFinishHydration(runRestore)
-  }, [restoreSession])
+  }, [accessToken, restoreSession])
 
   return <App />
 }

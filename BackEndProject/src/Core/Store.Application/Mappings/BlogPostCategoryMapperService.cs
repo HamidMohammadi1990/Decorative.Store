@@ -2,6 +2,7 @@
 using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Contracts.Mapping;
 using Edition.Application.Features.BlogPostCategories.Queries;
+using Edition.Application.Features.Localization;
 using Store.Domain.Dtos.BlogPostCategories;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Entities;
@@ -17,9 +18,16 @@ public class BlogPostCategoryMapperService : IBlogPostCategoryMapperService
             .Select(x => new GetAllBlogPostCategoryResponse
             {
                 Id = x.Id,
-                Slug = x.Slug,
-                Title = x.Title,
-                IsActive = x.IsActive
+                Code = x.Code,
+                IsActive = x.IsActive,
+                Translations = x.Translations
+                    .Select(t => new TranslationItemResponse
+                    {
+                        LanguageId = t.LanguageId,
+                        Title = t.Title,
+                        Slug = t.Slug,
+                    })
+                    .ToList(),
             })
             .ToList();
 
@@ -33,23 +41,26 @@ public class BlogPostCategoryMapperService : IBlogPostCategoryMapperService
             .Select(x => new SearchBlogPostCategoryResponse
             {
                 Id = x.Id,
+                Code = x.Code,
                 Slug = x.Slug,
                 Title = x.Title,
-                IsActive = x.IsActive
+                IsActive = x.IsActive,
+                PostCount = x.PostCount,
             })
             .ToList();
 
         return PagedResult<SearchBlogPostCategoryResponse>.Create(items, model);
     }
 
-    public GetBlogPostCategoryResponse Map(BlogPostCategory model)
+    public GetBlogPostCategoryResponse Map(BlogPostCategory model, string title, string slug)
     {
         return new GetBlogPostCategoryResponse
         {
             Id = model.Id,
-            Slug = model.Slug,
-            Title = model.Title,
-            IsActive = model.IsActive
+            Code = model.Code,
+            Slug = slug,
+            Title = title,
+            IsActive = model.IsActive,
         };
     }
 
@@ -57,10 +68,11 @@ public class BlogPostCategoryMapperService : IBlogPostCategoryMapperService
     {
         return new GetAllBlogPostCategoryRequestDto
         {
+            Code = model.Code,
             Slug = model.Slug,
             Title = model.Title,
             IsActive = model.IsActive,
-            Pagination = model.Pagination
+            Pagination = model.Pagination,
         }.WithContentPolicy<BlogPostCategory, GetAllBlogPostCategoryRequestDto>(model);
     }
 
@@ -68,9 +80,10 @@ public class BlogPostCategoryMapperService : IBlogPostCategoryMapperService
     {
         return new SearchBlogPostCategoryRequestDto
         {
+            Code = model.Code,
             Slug = model.Slug,
             Title = model.Title,
-            Pagination = model.Pagination
+            Pagination = model.Pagination,
         }.WithContentPolicy<BlogPostCategory, SearchBlogPostCategoryRequestDto>(model);
     }
 }

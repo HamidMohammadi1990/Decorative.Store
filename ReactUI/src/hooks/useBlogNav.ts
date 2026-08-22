@@ -7,13 +7,17 @@ interface UseBlogNavOptions {
   enabled?: boolean
 }
 
-export function useBlogNav({ enabled = true }: UseBlogNavOptions = {}) {
+export function useBlogNav({ enabled = false }: UseBlogNavOptions = {}) {
   const locale = useSettingsStore((s) => s.locale)
   const [categories, setCategories] = useState<BlogCategory[]>([])
   const [loading, setLoading] = useState(enabled)
 
   const load = useCallback(async () => {
-    if (!enabled) return
+    if (!enabled) {
+      setCategories([])
+      setLoading(false)
+      return
+    }
 
     setLoading(true)
 

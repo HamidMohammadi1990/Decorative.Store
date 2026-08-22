@@ -19,7 +19,8 @@ public class UserAddressRepository
 
         var userAddresses =
             from address in addressSource
-            join city in Context.City on address.CityId equals city.Id
+            join city in Context.City on address.CityId equals city.Id into cityJoin
+            from city in cityJoin.DefaultIfEmpty()
             join user in Context.User on address.UserId equals user.Id
             select new { address, city, user };
 
@@ -37,7 +38,7 @@ public class UserAddressRepository
                 UserName = x.user.UserName,
                 UserFirstName = x.user.FirstName,
                 UserLastName = x.user.LastName,
-                CityName = x.city.Name,
+                CityName = x.city != null ? x.city.Name : null,
                 PostalCode = x.address.PostalCode,
                 PhoneNumber = x.address.PhoneNumber,
                 RecipientLastName = x.address.RecipientLastName,
@@ -57,7 +58,8 @@ public class UserAddressRepository
 
         var userAddresses =
             from address in addressSource
-            join city in Context.City on address.CityId equals city.Id
+            join city in Context.City on address.CityId equals city.Id into cityJoin
+            from city in cityJoin.DefaultIfEmpty()
             select new { address, city };
 
         userAddresses = userAddresses.ApplyQueryFilters(request);
@@ -71,7 +73,7 @@ public class UserAddressRepository
                 UserId = x.address.UserId,
                 CityId = x.address.CityId,
                 Address = x.address.Address,
-                CityName = x.city.Name,
+                CityName = x.city != null ? x.city.Name : null,
                 PostalCode = x.address.PostalCode,
                 PhoneNumber = x.address.PhoneNumber,
                 RecipientLastName = x.address.RecipientLastName,

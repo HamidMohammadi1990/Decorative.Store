@@ -13,7 +13,7 @@ public record SearchBlogPostResponse
     public string CategoryTitle { get; set; } = default!;
 
 
-    [JsonConverter(typeof(CategoryEncryptor))]
+    [JsonConverter(typeof(BlogPostCategoryEncryptor))]
     public int CategoryId { get; init; }
 
     public string MetaDescription { get; init; } = default!;

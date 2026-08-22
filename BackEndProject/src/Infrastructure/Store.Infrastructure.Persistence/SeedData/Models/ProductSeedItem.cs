@@ -13,4 +13,5 @@ public sealed record ProductSeedItem(
     decimal? CompareAtPrice,
     string ImageBaseName,
     string FaImageTitle,
-    string EnImageTitle);
+    string EnImageTitle,
+    bool InStock);

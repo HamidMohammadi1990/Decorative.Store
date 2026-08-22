@@ -43,6 +43,7 @@ internal class OrderItemConfig : IEntityTypeConfiguration<OrderItem>
            .HasOne(d => d.DeliveryType)
            .WithMany(p => p.OrderItems)
            .HasForeignKey(x => x.DeliveryTypeId)
+           .IsRequired(false)
            .OnDelete(DeleteBehavior.Restrict);
 
         builder

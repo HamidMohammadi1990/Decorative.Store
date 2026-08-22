@@ -1,16 +1,14 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import type { DashboardReview } from '@/models/dashboard/dashboard.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
 import { ReviewStatusBadge } from '@/components/dashboard/StatusBadge'
 import { ReviewsIcon } from '@/components/dashboard/DashboardIcons'
+import { Button } from '@/components/ui/Button'
+import { InlineLoading } from '@/components/ui/Spinner'
 import { formatBlogDate } from '@/extensions/formatBlogDate'
-import { useSettingsStore } from '@/stores/settingsStore'
-
-interface ReviewsPanelProps {
-  reviews: DashboardReview[]
-}
+import { useLocaleSettings } from '@/hooks/useLocaleSettings'
+import { useMyReviews } from '@/hooks/useMyReviews'
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -34,9 +32,45 @@ function StarRating({ rating }: { rating: number }) {
   )
 }
 
-export function ReviewsPanel({ reviews }: ReviewsPanelProps) {
+export function ReviewsPanel() {
   const { t } = useTranslation()
-  const locale = useSettingsStore((s) => s.locale)
+  const { locale } = useLocaleSettings()
+  const { reviews, loading, error, reload } = useMyReviews()
+
+  if (loading) {
+    return (
+      <div>
+        <DashboardPageHeader
+          title={t('dashboard.reviews.title')}
+          description={t('dashboard.reviews.description')}
+          icon={<ReviewsIcon size={22} />}
+        />
+        <InlineLoading label={t('common.loading')} />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div>
+        <DashboardPageHeader
+          title={t('dashboard.reviews.title')}
+          description={t('dashboard.reviews.description')}
+          icon={<ReviewsIcon size={22} />}
+        />
+        <DashboardEmptyState
+          icon={<ReviewsIcon size={28} />}
+          title={t('dashboard.reviews.loadFailedTitle')}
+          message={t('dashboard.reviews.loadFailedMessage')}
+          action={
+            <Button variant="warm" onClick={() => void reload()}>
+              {t('common.retry')}
+            </Button>
+          }
+        />
+      </div>
+    )
+  }
 
   if (reviews.length === 0) {
     return (
@@ -75,24 +109,32 @@ export function ReviewsPanel({ reviews }: ReviewsPanelProps) {
             />
             <div className="flex flex-wrap items-start justify-between gap-3 ps-2">
               <div>
-                <Link
-                  to={`/product/${review.productSlug}`}
-                  className="text-sm font-semibold text-text transition-colors hover:text-warm"
-                >
-                  {review.productTitle}
-                </Link>
+                {review.productSlug ? (
+                  <Link
+                    to={`/product/${review.productSlug}`}
+                    className="text-sm font-semibold text-text transition-colors hover:text-warm"
+                  >
+                    {review.productTitle}
+                  </Link>
+                ) : (
+                  <p className="text-sm font-semibold text-text">{review.productTitle}</p>
+                )}
                 <div className="mt-2 flex flex-wrap items-center gap-3">
                   <StarRating rating={review.rating} />
-                  <span className="text-xs text-text-muted">
-                    {formatBlogDate(review.date, locale)}
-                  </span>
+                  {review.date && (
+                    <span className="text-xs text-text-muted">
+                      {formatBlogDate(review.date, locale)}
+                    </span>
+                  )}
                 </div>
               </div>
               <ReviewStatusBadge status={review.status} />
             </div>
-            <p className="mt-4 border-s-2 border-warm-soft ps-4 text-sm leading-relaxed text-text-muted">
-              {review.comment}
-            </p>
+            {review.comment && (
+              <p className="mt-4 border-s-2 border-warm-soft ps-4 text-sm leading-relaxed text-text-muted">
+                {review.comment}
+              </p>
+            )}
           </article>
         ))}
       </div>

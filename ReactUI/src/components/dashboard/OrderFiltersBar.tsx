@@ -1,14 +1,13 @@
 import { useTranslation } from 'react-i18next'
-import type { OrderSortOption, OrderStatusFilter } from '@/models/dashboard/dashboard.model'
-import { ORDER_STATUS_FILTERS } from '@/extensions/filterDashboardOrders'
+import type { OrderSortOption, OrderStatusOption } from '@/models/dashboard/dashboard.model'
 
 interface OrderFiltersBarProps {
-  status: OrderStatusFilter
+  statuses: OrderStatusOption[]
+  selectedStatusId: number | null
   query: string
   sort: OrderSortOption
-  counts: Record<OrderStatusFilter, number>
   resultCount: number
-  onStatusChange: (status: OrderStatusFilter) => void
+  onStatusChange: (statusId: number) => void
   onQueryChange: (query: string) => void
   onSortChange: (sort: OrderSortOption) => void
 }
@@ -16,10 +15,10 @@ interface OrderFiltersBarProps {
 const SORT_OPTIONS: OrderSortOption[] = ['newest', 'oldest', 'amountHigh', 'amountLow']
 
 export function OrderFiltersBar({
-  status,
+  statuses,
+  selectedStatusId,
   query,
   sort,
-  counts,
   resultCount,
   onStatusChange,
   onQueryChange,
@@ -58,34 +57,27 @@ export function OrderFiltersBar({
       />
 
       <div
-        role="group"
+        role="tablist"
         aria-label={t('dashboard.orders.filterByStatus')}
         className="scrollbar-none -mx-1 flex gap-2 overflow-x-auto px-1 pb-1"
       >
-        {ORDER_STATUS_FILTERS.map((filter) => {
-          const isActive = status === filter
-          const count = counts[filter]
+        {statuses.map((status) => {
+          const isActive = selectedStatusId === status.id
 
           return (
             <button
-              key={filter}
+              key={status.id}
               type="button"
-              aria-pressed={isActive}
-              onClick={() => onStatusChange(filter)}
+              role="tab"
+              aria-selected={isActive}
+              onClick={() => onStatusChange(status.id)}
               className={`inline-flex shrink-0 items-center gap-2 rounded-sm border px-3.5 py-2 text-xs font-semibold transition-all duration-150 ${
                 isActive
                   ? 'border-warm bg-warm text-warm-text shadow-sm'
                   : 'border-border bg-surface text-text-muted hover:border-warm/40 hover:bg-warm-soft hover:text-warm'
               }`}
             >
-              {t(`dashboard.orders.filters.${filter}`)}
-              <span
-                className={`rounded-full px-1.5 py-0.5 text-[10px] tabular-nums ${
-                  isActive ? 'bg-warm-text/15 text-warm-text' : 'bg-surface-muted text-text-muted'
-                }`}
-              >
-                {count}
-              </span>
+              {status.title}
             </button>
           )
         })}

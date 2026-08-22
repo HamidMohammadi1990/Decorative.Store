@@ -13,4 +13,5 @@ public interface IProductCommentRepository
     ValueTask<ProductComment?> FindAsync(int id, CancellationToken cancellationToken = default);
     Task<PagedResult<GetAllProductCommentResponseDto>> GetAllAsync(GetAllProductCommentRequestDto request, CancellationToken cancellationToken = default);
     Task<PagedResult<SearchProductCommentResponseDto>> SearchAsync(SearchProductCommentRequestDto request, CancellationToken cancellationToken = default);
+    Task<List<GetMyProductCommentDto>> GetByUserIdAsync(int userId, int languageId, int defaultLanguageId, CancellationToken cancellationToken = default);
 }

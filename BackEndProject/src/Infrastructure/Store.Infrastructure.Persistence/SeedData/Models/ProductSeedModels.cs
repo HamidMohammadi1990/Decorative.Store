@@ -27,6 +27,9 @@ internal sealed class ProductSeedJsonItem
 
     [JsonPropertyName("compareAtPrice")]
     public ProductSeedMoney? CompareAtPrice { get; set; }
+
+    [JsonPropertyName("inStock")]
+    public bool InStock { get; set; } = true;
 }
 
 internal sealed class ProductSeedMoney

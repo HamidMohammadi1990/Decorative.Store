@@ -29,7 +29,7 @@ public record OrderItemResponse
 	public OrderItemStatusType Status { get; set; }
 	public string? Description { get; set; }
 	public DateTime CreatedOnUtc { get; set; }
-	public string DeliveryType { get; set; } = default!;
+	public string? DeliveryType { get; set; }
 	public string? PostType { get; set; }
 	public OrderItemProductSummaryResponse Product { get; set; } = default!;
 	public OrderItemUserAddressResponse UserAddress { get; set; } = default!;

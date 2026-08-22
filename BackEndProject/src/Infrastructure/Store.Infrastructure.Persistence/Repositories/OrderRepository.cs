@@ -97,7 +97,7 @@ public class OrderRepository
     public async Task<List<GetStatusSummaryPropertiesDto>> GetUserOrderStatusSummaryAsync(int userId)
     {
         var result = await (from order in Context.Order
-                            where order.UserId == userId
+                            where order.UserId == userId && order.IsFinaly
                             group order by order.Status
                             into statusSummary
                             select new GetStatusSummaryPropertiesDto
@@ -112,21 +112,36 @@ public class OrderRepository
 
     public async Task<List<GetUserOrdersByStatusDto>> GetUserOrdersByStatusAsync(int userId, OrderStatusType status, PagedRequest pagination)
     {
+        var defaultLanguage = await languageRegistry.GetDefaultAsync();
+        var languageId = languageContext.IsResolved ? languageContext.LanguageId : defaultLanguage.Id;
+        var defaultLanguageId = defaultLanguage.Id;
+
         var result = await (from order in Context.Order
                             join orderItem in Context.OrderItem
                             on order.Id equals orderItem.OrderId
                             join product in Context.Product
                             on orderItem.ProductId equals product.Id
-                            where order.UserId == userId && order.Status == status
+                            where order.UserId == userId && order.Status == status && order.IsFinaly
                             select new GetUserOrdersByStatusDto
                             {
                                 OrderId = order.Id,
                                 Title = order.Title,
+                                Status = order.Status,
                                 OrderItemId = orderItem.Id,
                                 FinalPrice = order.FinalPrice,
                                 ItemQuantity = orderItem.Quantity,
                                 TrackingCode = order.TrackingCode,
-                                CreatedOnUtc = orderItem.CreatedOnUtc,
+                                CreatedOnUtc = order.CreatedOnUtc,
+                                ProductPrice = orderItem.ProductPrice,
+                                ProductTitle = product.Translations
+                                        .Where(t => t.LanguageId == languageId)
+                                        .Select(t => t.Title)
+                                        .FirstOrDefault()
+                                    ?? product.Translations
+                                        .Where(t => t.LanguageId == defaultLanguageId)
+                                        .Select(t => t.Title)
+                                        .FirstOrDefault()
+                                    ?? string.Empty,
                                 ProductImage = product.ProductFiles
                                                 .Where(pf => pf.IsMain)
                                                 .Select(pf => pf.FileName)
@@ -149,7 +164,8 @@ public class OrderRepository
             where order.Id == orderId && order.UserId == userId
             join item in Context.OrderItem on order.Id equals item.OrderId
             join product in Context.Product on item.ProductId equals product.Id
-            join deliveryType in Context.DeliveryType on item.DeliveryTypeId equals deliveryType.Id
+            join deliveryType in Context.DeliveryType on item.DeliveryTypeId equals deliveryType.Id into deliveryTypeJoin
+            from deliveryType in deliveryTypeJoin.DefaultIfEmpty()
             join postType in Context.PostType on item.PostTypeId equals postType.Id into postTypeJoin
             from postType in postTypeJoin.DefaultIfEmpty()
             join address in Context.UserAddress on item.UserAddressId equals address.Id into addressJoin
@@ -221,7 +237,7 @@ public class OrderRepository
                 OrderItemStatusType = item.Status,
                 PropertyId = orderItemProperty.Id,
                 ItemDescription = item.Description,
-                DeliveryTitle = deliveryType.Title,
+                DeliveryTitle = deliveryType != null ? deliveryType.Title : null,
                 OrderFinalPrice = order.FinalPrice,
                 OrderTotalPrice = order.TotalPrice,
                 orderItemProperty.PropertyItemPrice,

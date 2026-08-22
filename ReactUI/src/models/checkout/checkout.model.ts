@@ -71,11 +71,6 @@ export interface CheckoutProduct {
   images: CheckoutProductImage[]
 }
 
-export interface CheckoutDeliveryType {
-  id: string
-  title: string
-}
-
 export interface CheckoutPostType {
   id: string
   title: string
@@ -112,7 +107,6 @@ export interface CheckoutAttachment {
 export interface CheckoutOrderData {
   product: CheckoutProduct
   properties: CheckoutPropertyGroup[]
-  deliveryTypes: CheckoutDeliveryType[]
   postTypes: CheckoutPostType[]
   addresses: CheckoutUserAddress[]
   attachments: CheckoutAttachment[]

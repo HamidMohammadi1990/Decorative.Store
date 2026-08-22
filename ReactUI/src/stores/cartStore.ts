@@ -24,7 +24,7 @@ export const useCartStore = create<CartState>()(
       openCart: () => set({ isOpen: true }),
       closeCart: () => set({ isOpen: false }),
 
-      setLines: (lines) => set({ lines, isOpen: lines.length > 0 ? true : false }),
+      setLines: (lines) => set({ lines }),
 
       addLine: (line) => {
         set((state) => {

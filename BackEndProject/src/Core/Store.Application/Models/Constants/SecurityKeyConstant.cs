@@ -59,4 +59,5 @@ public static class SecurityKeyConstant
     public static string ProductFeatureType => SecurityKeyRegistry.Get(nameof(ProductFeatureType));
     public static string ProductPropertyRule => SecurityKeyRegistry.Get(nameof(ProductPropertyRule));
     public static string ProductOrderItemAttachmentType => SecurityKeyRegistry.Get(nameof(ProductOrderItemAttachmentType));
+    public static string UserStory => SecurityKeyRegistry.Get(nameof(UserStory));
 }

@@ -20,15 +20,21 @@ import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { useShopChromeHeight } from '@/hooks/useShopChromeHeight'
 import { useResumePendingCartAdd } from '@/hooks/useResumePendingCartAdd'
 import { useCartSync } from '@/hooks/useCartSync'
+import { useAddressSync } from '@/hooks/useAddressSync'
+import { useWishlistSync } from '@/hooks/useWishlistSync'
+import { useIsAuthenticated } from '@/stores/userStore'
 import { AiAssistantWidget } from '@/components/assistant/AiAssistantWidget'
 
 function ShopLayoutContent() {
   const { t } = useTranslation()
   const chromeRef = useRef<HTMLDivElement>(null)
+  const isAuthenticated = useIsAuthenticated()
   useLocaleSettings()
   useTheme()
   useResumePendingCartAdd()
   useCartSync()
+  useAddressSync()
+  useWishlistSync()
   const { data, loading } = useHomePage()
   useShopChromeHeight(chromeRef, !loading && !!data)
 
@@ -58,9 +64,9 @@ function ShopLayoutContent() {
       <Outlet />
 
       {data && <SiteFooter data={data.footer} />}
-      <CartDrawer />
+      {isAuthenticated && <CartDrawer />}
       <CompareFloatingBar />
-      <AddressBookModal />
+      {isAuthenticated && <AddressBookModal />}
       <LoginModal />
       <StoryViewerModal />
       <AiAssistantWidget />

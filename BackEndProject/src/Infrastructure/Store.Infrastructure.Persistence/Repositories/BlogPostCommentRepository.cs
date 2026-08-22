@@ -39,7 +39,7 @@ public class BlogPostCommentRepository
                 BlogPostId = x.blogPostComment.BlogPostId,
                 CreatedOnUtc = x.blogPostComment.CreatedOnUtc,
                 ApprovedOnUtc = x.blogPostComment.ApprovedOnUtc,
-                BlogPostTitle = x.blogPost.Title,
+                BlogPostTitle = x.blogPost.Translations.Select(t => t.Title).FirstOrDefault() ?? string.Empty,
                 CreatedByUserFirstName = x.createdByUser.FirstName,
                 CreatedByUserLastName = x.createdByUser.LastName,
                 ApprovedByUserFirstName = x.approvedByUser.FirstName,

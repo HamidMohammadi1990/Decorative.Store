@@ -1,7 +1,9 @@
 import { useState, type MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { WishlistIcon } from '@/components/wishlist/WishlistIcon'
+import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { useWishlistStore } from '@/stores/wishlistStore'
+import { useIsAuthenticated, useUserStore } from '@/stores/userStore'
 
 interface WishlistButtonProps {
   slug: string
@@ -11,17 +13,32 @@ interface WishlistButtonProps {
 
 export function WishlistButton({ slug, variant = 'pill', className = '' }: WishlistButtonProps) {
   const { t } = useTranslation()
-  const toggle = useWishlistStore((s) => s.toggle)
+  const { locale } = useLocaleSettings()
+  const isAuthenticated = useIsAuthenticated()
+  const accessToken = useUserStore((state) => state.accessToken)
+  const toggleRemote = useWishlistStore((s) => s.toggleRemote)
   const isInWishlist = useWishlistStore((s) => s.isInWishlist(slug))
   const [notice, setNotice] = useState<string | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
 
-  const handleClick = (e: MouseEvent) => {
+  if (!isAuthenticated) return null
+
+  const handleClick = async (e: MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    const result = toggle(slug)
-    if (result === 'added') {
-      setNotice(t('wishlist.added'))
-      window.setTimeout(() => setNotice(null), 1800)
+    if (!accessToken || accessToken === 'mock-access-token' || isSaving) return
+
+    setIsSaving(true)
+    try {
+      const result = await toggleRemote(accessToken, locale, slug)
+      if (result === 'added') {
+        setNotice(t('wishlist.added'))
+        window.setTimeout(() => setNotice(null), 1800)
+      }
+    } catch {
+      // Keep current state when the API call fails.
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -31,7 +48,8 @@ export function WishlistButton({ slug, variant = 'pill', className = '' }: Wishl
     return (
       <button
         type="button"
-        onClick={handleClick}
+        onClick={(event) => void handleClick(event)}
+        disabled={isSaving}
         aria-pressed={isInWishlist}
         aria-label={label}
         title={notice ?? label}
@@ -53,7 +71,8 @@ export function WishlistButton({ slug, variant = 'pill', className = '' }: Wishl
       <div className={className}>
         <button
           type="button"
-          onClick={handleClick}
+          onClick={(event) => void handleClick(event)}
+          disabled={isSaving}
           aria-pressed={isInWishlist}
           className={`inline-flex w-full items-center justify-center gap-2 rounded-sm border px-3 py-2.5 text-sm font-medium transition-all ${
             isInWishlist
@@ -77,7 +96,8 @@ export function WishlistButton({ slug, variant = 'pill', className = '' }: Wishl
     return (
       <button
         type="button"
-        onClick={handleClick}
+        onClick={(event) => void handleClick(event)}
+        disabled={isSaving}
         aria-pressed={isInWishlist}
         title={notice ?? label}
         className={`inline-flex items-center gap-2 rounded-sm border px-3 py-2 text-xs font-semibold transition-all ${
@@ -95,7 +115,8 @@ export function WishlistButton({ slug, variant = 'pill', className = '' }: Wishl
   return (
     <button
       type="button"
-      onClick={handleClick}
+      onClick={(event) => void handleClick(event)}
+      disabled={isSaving}
       aria-pressed={isInWishlist}
       className={`inline-flex w-full items-center justify-center gap-2 rounded-sm border px-4 py-2.5 text-sm font-medium transition-all ${
         isInWishlist

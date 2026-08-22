@@ -174,26 +174,7 @@
           "src": "/images/home/new-arrivals.jpg",
           "alt": "محصول جدید"
         },
-        "link": { "label": "مشاهده جدیدها", "href": "/new" },
-        "links": [
-          { "label": "مبلمان جدید", "href": "/new/furniture" },
-          { "label": "فرش جدید", "href": "/new/rugs" },
-          { "label": "روشنایی جدید", "href": "/new/lighting" }
-        ]
-      },
-      {
-        "id": "trade",
-        "title": "برنامه ترید",
-        "subtitle": "برای طراحان حرفه‌ای",
-        "image": {
-          "src": "/images/home/trade-interior.jpg",
-          "alt": "ترید"
-        },
-        "link": { "label": "بیشتر بدانید", "href": "/trade" },
-        "links": [
-          { "label": "عضویت", "href": "/trade/join" },
-          { "label": "ورود ترید", "href": "/trade/sign-in" }
-        ]
+        "link": { "label": "مشاهده جدیدها", "href": "/new" }
       },
       {
         "id": "in-stock",
@@ -203,11 +184,7 @@
           "src": "/images/home/in-stock.jpg",
           "alt": "موجودی"
         },
-        "link": { "label": "خرید از موجودی", "href": "/in-stock" },
-        "links": [
-          { "label": "مبل و صندلی", "href": "/in-stock/sofas" },
-          { "label": "فرش", "href": "/in-stock/rugs" }
-        ]
+        "link": { "label": "خرید از موجودی", "href": "/in-stock" }
       },
       {
         "id": "best-sellers",
@@ -216,35 +193,7 @@
           "src": "/images/home/living-room.jpg",
           "alt": "پرفروش"
         },
-        "link": { "label": "مشاهده پرفروش‌ها", "href": "/best-sellers" },
-        "links": [
-          { "label": "مبلمان", "href": "/best-sellers/furniture" },
-          { "label": "روشنایی", "href": "/best-sellers/lighting" }
-        ]
-      },
-      {
-        "id": "collaborations",
-        "title": "همکاری‌ها",
-        "subtitle": "اما چمبرلین × دیبا گالری",
-        "image": {
-          "src": "/images/home/collaboration.jpg",
-          "alt": "همکاری"
-        },
-        "link": { "label": "کاوش همکاری‌ها", "href": "/collaborations" },
-        "links": [
-          { "label": "اما چمبرلین", "href": "/collaborations/emma-chamberlain" },
-          { "label": "پیرس و وارد", "href": "/collaborations/pierce-ward" }
-        ]
-      },
-      {
-        "id": "commercial",
-        "title": "درجه تجاری",
-        "subtitle": "مقاوم برای استفاده روزانه",
-        "image": {
-          "src": "/images/home/commercial-office.jpg",
-          "alt": "تجاری"
-        },
-        "link": { "label": "خرید درجه تجاری", "href": "/commercial" }
+        "link": { "label": "مشاهده پرفروش‌ها", "href": "/best-sellers" }
       }
     ]
   },

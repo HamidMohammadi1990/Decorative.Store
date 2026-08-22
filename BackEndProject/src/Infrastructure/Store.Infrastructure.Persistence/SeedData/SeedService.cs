@@ -18,9 +18,12 @@ public class SeedService(EditionDbContext context) : ISeedService
         await SeedPropertiesAsync(cancellationToken);
         await SeedProductsAsync(cancellationToken);
         await SeedProductPricesAsync(cancellationToken);
+        await SeedProductStockAsync(cancellationToken);
         await SeedProductFilesAsync(cancellationToken);
         await SeedProductPropertiesAsync(cancellationToken);
         await SeedCommentTopicsAsync(cancellationToken);
+        await SeedBlogPostCategoriesAsync(cancellationToken);
+        await SeedBlogPostsAsync(cancellationToken);
     }
 
     public async Task SeedDataAsync(List<DynamicPermission> dynamicPermissions, CancellationToken cancellationToken = default)
@@ -39,6 +42,7 @@ public class SeedService(EditionDbContext context) : ISeedService
 
 
             await SeedUsersAsync(adminRoleId);
+            await SeedBlogPostsAsync(cancellationToken);
         }
     }
 
@@ -277,6 +281,7 @@ public class SeedService(EditionDbContext context) : ISeedService
                     $"SubCategory slug '{item.SubCategorySlug}' was not found for product '{item.ProductCode}'.");
 
             var product = Product.Create(item.ProductCode, subCategoryId, item.Price, item.CompareAtPrice);
+            product.SetInStock(item.InStock);
             product.UpsertTranslation(faLanguage.Id, item.FaTitle, item.FaSlug, item.FaDescription);
             product.UpsertTranslation(enLanguage.Id, item.EnTitle, item.EnSlug, item.EnDescription);
             context.Product.Add(product);
@@ -305,6 +310,34 @@ public class SeedService(EditionDbContext context) : ISeedService
                 continue;
 
             product.SetPricing(seedItem.Price, seedItem.CompareAtPrice);
+            changed = true;
+        }
+
+        if (changed)
+            await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SeedProductStockAsync(CancellationToken cancellationToken = default)
+    {
+        var products = await context.Product.ToListAsync(cancellationToken);
+        if (products.Count == 0)
+            return;
+
+        var stockByCode = ProductSeedData.Items.ToDictionary(
+            item => item.ProductCode,
+            item => item.InStock,
+            StringComparer.OrdinalIgnoreCase);
+        var changed = false;
+
+        foreach (var product in products)
+        {
+            if (!stockByCode.TryGetValue(product.ProductCode, out var inStock))
+                continue;
+
+            if (product.InStock == inStock)
+                continue;
+
+            product.SetInStock(inStock);
             changed = true;
         }
 
@@ -462,6 +495,100 @@ public class SeedService(EditionDbContext context) : ISeedService
             return;
 
         context.CommentTopic.Add(CommentTopic.Create("General review", priority: 1));
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SeedBlogPostCategoriesAsync(CancellationToken cancellationToken = default)
+    {
+        if (await context.BlogPostCategory.AnyAsync(cancellationToken))
+            return;
+
+        var faLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "fa-IR", cancellationToken);
+
+        var enLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "en-US", cancellationToken);
+
+        if (faLanguage is null || enLanguage is null)
+            throw new InvalidOperationException("Blog post category seed requires fa-IR and en-US languages to be seeded first.");
+
+        foreach (var item in BlogPostCategorySeedData.Items)
+        {
+            var category = BlogPostCategory.Create(item.Code);
+            category.UpsertTranslation(faLanguage.Id, item.FaTitle, item.FaSlug);
+            category.UpsertTranslation(enLanguage.Id, item.EnTitle, item.EnSlug);
+            context.BlogPostCategory.Add(category);
+        }
+
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SeedBlogPostsAsync(CancellationToken cancellationToken = default)
+    {
+        if (await context.BlogPost.AnyAsync(cancellationToken))
+            return;
+
+        if (!await context.User.AnyAsync(cancellationToken))
+            return;
+
+        var faLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "fa-IR", cancellationToken);
+
+        var enLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "en-US", cancellationToken);
+
+        if (faLanguage is null || enLanguage is null)
+            throw new InvalidOperationException("Blog post seed requires fa-IR and en-US languages to be seeded first.");
+
+        var author = await context.User.AsNoTracking().FirstOrDefaultAsync(cancellationToken)
+            ?? throw new InvalidOperationException("Blog post seed requires at least one user.");
+
+        var categories = await context.BlogPostCategory
+            .AsNoTracking()
+            .Include(x => x.Translations)
+            .ToListAsync(cancellationToken);
+
+        var categoryBySlug = categories
+            .SelectMany(category => category.Translations.Select(translation => new { translation.Slug, CategoryId = category.Id }))
+            .GroupBy(x => x.Slug, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(x => x.Key, x => x.First().CategoryId, StringComparer.OrdinalIgnoreCase);
+
+        foreach (var item in BlogPostSeedData.Items)
+        {
+            if (!categoryBySlug.TryGetValue(item.CategorySlug, out var categoryId))
+                throw new InvalidOperationException($"Blog category '{item.CategorySlug}' was not found for post '{item.Code}'.");
+
+            var blogPost = BlogPost.Create(
+                item.Code,
+                categoryId,
+                author.Id,
+                item.ReadingTimeMinutes,
+                item.IsFeatured);
+
+            blogPost.UpsertTranslation(
+                faLanguage.Id,
+                item.FaTitle,
+                item.FaSlug,
+                item.FaMetaDescription,
+                item.FaSeoKeywords,
+                item.FaContent);
+
+            blogPost.UpsertTranslation(
+                enLanguage.Id,
+                item.EnTitle,
+                item.EnSlug,
+                item.EnMetaDescription,
+                item.EnSeoKeywords,
+                item.EnContent);
+
+            blogPost.Publish(item.PublishedOnUtc);
+            context.BlogPost.Add(blogPost);
+        }
+
         await context.SaveChangesAsync(cancellationToken);
     }
 }

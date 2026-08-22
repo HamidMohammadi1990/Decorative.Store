@@ -10,6 +10,7 @@ export function useResumePendingCartAdd() {
   const accessToken = useAccessToken()
   const addLine = useCartStore((s) => s.addLine)
   const setLines = useCartStore((s) => s.setLines)
+  const openCart = useCartStore((s) => s.openCart)
 
   useEffect(() => {
     if (!user || !accessToken) return
@@ -30,7 +31,10 @@ export function useResumePendingCartAdd() {
 
     void cartService
       .addItem(accessToken, pending.sku, pending.quantity)
-      .then((cart) => setLines(mapServerCartToLines(cart)))
+      .then((cart) => {
+        setLines(mapServerCartToLines(cart))
+        openCart()
+      })
       .catch(() => {
         addLine({
           sku: pending.sku,
@@ -40,5 +44,5 @@ export function useResumePendingCartAdd() {
           quantity: pending.quantity,
         })
       })
-  }, [accessToken, addLine, setLines, user])
+  }, [accessToken, addLine, openCart, setLines, user])
 }

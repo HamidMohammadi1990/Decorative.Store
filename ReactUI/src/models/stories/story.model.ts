@@ -52,3 +52,13 @@ export interface UserStoryDraft {
   createdAt: string
   isActive: boolean
 }
+
+export type UserStoryInput = {
+  title: string
+  caption: string
+  mediaType: StoryMediaType
+  mediaPath: string
+  mediaAlt: string
+  posterPath?: string
+  productSlug?: string
+}

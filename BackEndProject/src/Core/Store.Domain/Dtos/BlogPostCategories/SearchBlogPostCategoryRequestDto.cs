@@ -9,9 +9,10 @@ namespace Store.Domain.Dtos.BlogPostCategories;
 public record SearchBlogPostCategoryRequestDto : IContentPolicyQueryDto<BlogPostCategory>
 {
     [QueryFilter(Operator = FilterOperator.Contains)]
+    public string? Code { get; init; }
+
     public string? Title { get; init; }
 
-    [QueryFilter]
     public string? Slug { get; init; }
 
     public PagedRequest Pagination { get; init; } = default!;

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react'
 import type { StoryGroup } from '@/models/stories/story.model'
 import { storiesService } from '@/services/storiesService'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { useUserStoryStore } from '@/stores/userStoryStore'
 
 interface UseStoriesResult {
   stories: StoryGroup[]
@@ -13,7 +12,6 @@ interface UseStoriesResult {
 
 export function useStories(): UseStoriesResult {
   const locale = useSettingsStore((s) => s.locale)
-  const userStories = useUserStoryStore((s) => s.stories)
   const [stories, setStories] = useState<StoryGroup[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -30,7 +28,7 @@ export function useStories(): UseStoriesResult {
     } finally {
       setLoading(false)
     }
-  }, [locale, userStories])
+  }, [locale])
 
   useEffect(() => {
     void load()

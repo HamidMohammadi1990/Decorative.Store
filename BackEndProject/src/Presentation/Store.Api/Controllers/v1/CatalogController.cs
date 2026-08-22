@@ -29,4 +29,12 @@ public class CatalogController(ISender mediator) : BaseApiController
         [FromQuery] string slug,
         [FromQuery] int limit = 4)
         => await mediator.Send(new GetRelatedCatalogProductsRequest(slug, limit));
+
+    [HttpGet("newest")]
+    public async Task<ApiResult<GetNewestCatalogProductsResponse>> Newest([FromQuery] int limit = 4)
+        => await mediator.Send(new GetNewestCatalogProductsRequest(limit));
+
+    [HttpGet("featured-collections")]
+    public async Task<ApiResult<GetFeaturedCatalogCollectionsResponse>> FeaturedCollections()
+        => await mediator.Send(new GetFeaturedCatalogCollectionsRequest());
 }
