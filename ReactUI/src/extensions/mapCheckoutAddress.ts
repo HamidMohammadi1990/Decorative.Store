@@ -5,7 +5,7 @@ export function mapCheckoutAddressToSaved(address: CheckoutUserAddress): SavedAd
   return {
     id: address.id,
     label: address.title,
-    firstName: address.title,
+    firstName: '',
     lastName: '',
     address: address.address,
     apartment: '',
@@ -15,14 +15,11 @@ export function mapCheckoutAddressToSaved(address: CheckoutUserAddress): SavedAd
   }
 }
 
+/** Prefer fully-hydrated dashboard addresses; keep checkout-only stubs as fallback. */
 export function mergeCheckoutAddresses(
   localAddresses: SavedAddress[],
   apiAddresses: CheckoutUserAddress[],
 ): SavedAddress[] {
-  if (apiAddresses.length === 0) return localAddresses
-
-  const apiMapped = apiAddresses.map(mapCheckoutAddressToSaved)
-  const apiIds = new Set(apiMapped.map((address) => address.id))
-  const remainingLocal = localAddresses.filter((address) => !apiIds.has(address.id))
-  return [...apiMapped, ...remainingLocal]
+  if (localAddresses.length > 0) return localAddresses
+  return apiAddresses.map(mapCheckoutAddressToSaved)
 }

@@ -31,4 +31,8 @@ public class ProductWishlistController(ISender mediator) : BaseApiController
     [HttpDelete("delete")]
     public async Task<ApiResult<OperationResult>> Delete(DeleteProductWishlistRequest request)
         => await mediator.Send(request);
+
+    [HttpDelete("clear")]
+    public async Task<ApiResult<OperationResult>> Clear()
+        => await mediator.Send(new ClearMyProductWishlistRequest());
 }

@@ -55,4 +55,42 @@ public class DiscountRepository
     {
         return Context.Discount.SingleOrDefaultAsync(x => x.Id == id);
     }
+
+    public async Task<List<GetAllDiscountResponseDto>> GetAvailableForUserAsync(
+        int userId,
+        CancellationToken cancellationToken = default)
+    {
+        var now = DateTime.UtcNow;
+
+        return await Context.Discount
+            .AsNoTracking()
+            .Where(x =>
+                x.IsActive &&
+                x.RemainingUses > 0 &&
+                (x.UserId == null || x.UserId == userId) &&
+                (x.ExpiryDateOnUtc == null || x.ExpiryDateOnUtc > now))
+            .OrderByDescending(x => x.UserId == userId)
+            .ThenBy(x => x.ExpiryDateOnUtc ?? DateTime.MaxValue)
+            .ThenByDescending(x => x.Id)
+            .Select(x => new GetAllDiscountResponseDto
+            {
+                Id = x.Id,
+                Code = x.Code,
+                UserId = x.UserId,
+                Amount = x.Amount,
+                IsActive = x.IsActive,
+                ProductId = x.ProductId,
+                UsageLimit = x.UsageLimit,
+                Percentage = x.Percentage,
+                RemainingUses = x.RemainingUses,
+                MinimumAmount = x.MinimumAmount,
+                SubCategoryId = x.SubCategoryId,
+                IsCooperation = x.IsCooperation,
+                ExpiryDateOnUtc = x.ExpiryDateOnUtc,
+                MaxDiscountAmount = x.MaxDiscountAmount,
+                ToCirculationOrMeterOrCount = x.ToCirculationOrMeterOrCount,
+                FromCirculationOrMeterOrCount = x.FromCirculationOrMeterOrCount
+            })
+            .ToListAsync(cancellationToken);
+    }
 }

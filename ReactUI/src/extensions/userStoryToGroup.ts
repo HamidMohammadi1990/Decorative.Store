@@ -2,13 +2,14 @@ import type { StoryGroup, UserStoryDraft } from '@/models/stories/story.model'
 
 export function userStoryToGroup(draft: UserStoryDraft): StoryGroup {
   const slideId = `${draft.id}-slide`
+  const coverSrc = draft.posterSrc ?? draft.mediaSrc
 
   return {
     id: draft.id,
     slug: draft.id,
-    title: draft.title,
-    avatar: { src: draft.mediaSrc, alt: draft.title },
-    coverImage: { src: draft.posterSrc ?? draft.mediaSrc, alt: draft.title },
+    title: draft.ownerName || draft.title,
+    avatar: { src: coverSrc, alt: draft.title },
+    coverImage: { src: coverSrc, alt: draft.title },
     slides: [
       {
         id: slideId,
@@ -16,7 +17,7 @@ export function userStoryToGroup(draft: UserStoryDraft): StoryGroup {
         media: {
           type: draft.mediaType,
           src: draft.mediaSrc,
-          alt: draft.mediaAlt,
+          alt: draft.mediaAlt || draft.title,
           poster: draft.posterSrc,
           durationMs: draft.mediaType === 'video' ? 15000 : 5000,
         },
@@ -26,6 +27,6 @@ export function userStoryToGroup(draft: UserStoryDraft): StoryGroup {
     likes: 0,
     comments: [],
     publishedAt: draft.createdAt.slice(0, 10),
-    ownerId: 'user',
+    ownerId: draft.ownerName || 'user',
   }
 }

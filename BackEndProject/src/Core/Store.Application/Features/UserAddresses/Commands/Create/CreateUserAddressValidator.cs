@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Edition.Application.Contracts;
 using Store.Common.Localization;
 using Store.Domain.Repositories;
 
@@ -6,15 +7,19 @@ namespace Edition.Application.Features.UserAddresses.Commands;
 
 public class CreateUserAddressValidator : AbstractValidator<CreateUserAddressRequest>
 {
-    public CreateUserAddressValidator(IUserAddressRepository userAddressRepository)
+    public CreateUserAddressValidator(IUserAddressRepository userAddressRepository, ICurrentUserContext currentUser)
     {
         RuleFor(x => new { x.Title, x.PostalCode })
-        .NotNull()
-        .WithMessage(MessageKeys.TitleRequired)
-        .MustAsync(async (x, CancellationToken)
-               => !await userAddressRepository.AnyAsync(c => c.PostalCode == x.PostalCode || c.Title == x.Title.Trim()))
-        .WithMessage(MessageKeys.DuplicateAddress)
-        .When(x => !string.IsNullOrEmpty(x.Title));
+            .NotNull()
+            .WithMessage(MessageKeys.TitleRequired)
+            .MustAsync(async (x, cancellationToken)
+                => !await userAddressRepository.AnyAsync(
+                    c => c.UserId == currentUser.UserId
+                         && (c.Title == x.Title.Trim()
+                             || (!string.IsNullOrWhiteSpace(x.PostalCode) && c.PostalCode == x.PostalCode)),
+                    cancellationToken))
+            .WithMessage(MessageKeys.DuplicateAddress)
+            .When(x => !string.IsNullOrEmpty(x.Title));
 
         RuleFor(x => x.Title)
             .NotNull()
@@ -43,5 +48,10 @@ public class CreateUserAddressValidator : AbstractValidator<CreateUserAddressReq
             .WithMessage(MessageKeys.AddressRequired)
             .MaximumLength(150)
             .WithMessage(MessageKeys.MaxLength150Characters);
+
+        RuleFor(x => x.Apartment)
+            .MaximumLength(50)
+            .WithMessage(MessageKeys.MaxLength50Characters)
+            .When(x => !string.IsNullOrEmpty(x.Apartment));
     }
 }

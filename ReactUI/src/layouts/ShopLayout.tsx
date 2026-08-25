@@ -57,9 +57,11 @@ function ShopLayoutContent() {
         <div ref={chromeRef}>
           <PromoAnnouncementBar data={data.promoAnnouncement} />
           <SiteHeader data={data.header} />
-          <StoriesStrip />
         </div>
       )}
+
+      {/* Stories load from backend independently of homepage CMS data */}
+      <StoriesStrip />
 
       <Outlet />
 

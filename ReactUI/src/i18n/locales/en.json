@@ -111,7 +111,8 @@
     }
   },
   "wishlist": {
-    "added": "Added to wishlist"
+    "added": "Added to wishlist",
+    "removed": "Removed from wishlist"
   },
   "cart": {
     "added": "Added to your bag",
@@ -722,13 +723,20 @@
       "emptyMessage": "Tap the heart on any product to save it here.",
       "browseProducts": "Browse products",
       "itemCount": "{{count}} items",
-      "clearAll": "Clear all"
+      "clearAll": "Clear all",
+      "clearing": "Clearing…",
+      "clearFailed": "Could not clear your wishlist. Please try again.",
+      "loading": "Loading wishlist…",
+      "loadFailed": "Could not load wishlist products.",
+      "retry": "Try again"
     },
     "stories": {
       "title": "My stories",
       "description": "Publish photo and video stories for shoppers to discover.",
       "createTitle": "Create a story",
       "createDescription": "Upload an image or short video and link a product.",
+      "editTitle": "Edit story",
+      "editDescription": "Update the title, caption, media, or linked product.",
       "addStory": "New story",
       "emptyTitle": "No stories yet",
       "emptyMessage": "Share styling tips, new arrivals, or behind-the-scenes moments.",
@@ -740,8 +748,12 @@
       "captionPlaceholder": "What should viewers know?",
       "uploadHint": "Tap to upload",
       "uploadFormats": "JPG, PNG, MP4 · max {{max}} MB",
+      "replaceMediaHint": "Tap again to replace the media file.",
       "noProduct": "No product link",
       "publish": "Publish story",
+      "saveChanges": "Save changes",
+      "publishLive": "Show on homepage",
+      "edit": "Edit",
       "validationRequired": "Add a title and media file.",
       "fileTooLarge": "File must be under {{max}} MB.",
       "invalidFile": "Please choose an image or video file.",
@@ -832,10 +844,15 @@
       "description": "Your available promo codes and offers.",
       "discount": "Discount",
       "expires": "Expires",
+      "noExpiry": "No expiry date",
       "copy": "Copy code",
       "copied": "Copied!",
+      "itemCount": "{{count}} codes",
+      "loading": "Loading discount codes…",
+      "loadFailed": "Could not load discount codes.",
+      "retry": "Try again",
       "emptyTitle": "No discount codes",
-      "emptyMessage": "Check back for seasonal offers and member perks."
+      "emptyMessage": "Active store codes and profile rewards will appear here."
     },
     "orderStatus": {
       "pending": "Pending",

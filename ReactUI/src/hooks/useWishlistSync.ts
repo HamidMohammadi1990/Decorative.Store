@@ -9,11 +9,11 @@ export function useWishlistSync() {
   const { locale } = useLocaleSettings()
   const loadWishlist = useWishlistStore((state) => state.loadWishlist)
   const clear = useWishlistStore((state) => state.clear)
-  const syncedTokenRef = useRef<string | null>(null)
+  const syncedKeyRef = useRef<string | null>(null)
 
   useEffect(() => {
     if (!isAuthenticated) {
-      syncedTokenRef.current = null
+      syncedKeyRef.current = null
       clear()
       return
     }
@@ -21,10 +21,16 @@ export function useWishlistSync() {
     void (async () => {
       const accessToken = useUserStore.getState().accessToken
       if (!accessToken || accessToken === 'mock-access-token') return
-      if (syncedTokenRef.current === accessToken) return
 
-      syncedTokenRef.current = accessToken
-      await loadWishlist(accessToken, locale)
+      const syncKey = `${accessToken}:${locale}`
+      if (syncedKeyRef.current === syncKey) return
+
+      syncedKeyRef.current = syncKey
+      try {
+        await loadWishlist(accessToken, locale)
+      } catch {
+        syncedKeyRef.current = null
+      }
     })()
   }, [clear, isAuthenticated, loadWishlist, locale])
 }

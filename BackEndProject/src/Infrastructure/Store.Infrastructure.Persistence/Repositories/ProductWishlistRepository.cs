@@ -16,6 +16,11 @@ public class ProductWishlistRepository
         => Context.ProductWishlist
             .FirstOrDefaultAsync(x => x.UserId == userId && x.ProductId == productId, cancellationToken);
 
+    public Task<List<ProductWishlist>> GetByUserIdAsync(int userId, CancellationToken cancellationToken = default)
+        => Context.ProductWishlist
+            .Where(x => x.UserId == userId)
+            .ToListAsync(cancellationToken);
+
     public async Task<List<string>> GetSlugsByUserIdAsync(
         int userId,
         int languageId,

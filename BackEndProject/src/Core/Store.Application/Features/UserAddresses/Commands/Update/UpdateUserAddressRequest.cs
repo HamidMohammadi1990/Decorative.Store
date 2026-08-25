@@ -12,6 +12,7 @@ public class UpdateUserAddressRequest : IRequest<OperationResult>
     public string Title { get; init; } = default!;
     public bool IsActive { get; init; }
     public string Address { get; init; } = default!;
+    public string? Apartment { get; init; }
     public string? PostalCode { get; init; }
 
     [JsonConverter(typeof(CityNullableEncryptor))]
@@ -19,4 +20,5 @@ public class UpdateUserAddressRequest : IRequest<OperationResult>
     public string RecipientFirstName { get; init; } = default!;
     public string RecipientLastName { get; init; } = default!;
     public string PhoneNumber { get; init; } = default!;
+    public bool IsDefault { get; init; }
 }

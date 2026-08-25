@@ -2781,10 +2781,16 @@ namespace Store.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR(150)");
 
+                    b.Property<string>("Apartment")
+                        .HasColumnType("NVARCHAR(50)");
+
                     b.Property<int?>("CityId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
                     b.Property<string>("PhoneNumber")
@@ -2810,6 +2816,8 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
+
+                    b.HasIndex("UserId", "IsDefault");
 
                     b.HasIndex("UserId");
 

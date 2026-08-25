@@ -104,6 +104,47 @@ export function CouponsIcon(props: DashboardIconProps) {
   )
 }
 
+export function CategoriesIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M4 5.5h7v7H4v-7ZM13 5.5h7v7h-7v-7ZM4 13.5h7v7H4v-7ZM13 13.5h7v7h-7v-7Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </IconBase>
+  )
+}
+
+export function SubCategoriesIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M5 6h6v6H5V6Zm8 0h6M13 10h6M13 14h6M5 16h6v4H5v-4Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </IconBase>
+  )
+}
+
+export function ProductsIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M5 8.5 12 4l7 4.5v7L12 20l-7-4.5v-7Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="M12 12v8M5 8.5l7 3.5 7-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+    </IconBase>
+  )
+}
+
 export function ProfileCompletionIcon(props: DashboardIconProps) {
   return (
     <IconBase {...props}>

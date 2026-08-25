@@ -32,8 +32,16 @@ internal class UserAddressConfig : IEntityTypeConfiguration<UserAddress>
             .IsRequired();
 
         builder
+            .Property(x => x.Apartment)
+            .HasNVarcharMaxLength(50);
+
+        builder
             .Property(x => x.PhoneNumber)
             .HasVarcharMaxLength(11);
+
+        builder
+            .Property(x => x.IsDefault)
+            .IsRequired();
 
         builder
             .HasOne(x => x.User)
@@ -58,5 +66,8 @@ internal class UserAddressConfig : IEntityTypeConfiguration<UserAddress>
 
         builder
             .HasIndex(x => x.CityId);
+
+        builder
+            .HasIndex(x => new { x.UserId, x.IsDefault });
     }
 }

@@ -19,10 +19,12 @@ public class UserAddressMapperService : IUserAddressMapperService
             UserId = model.UserId,
             CityId = model.CityId,
             Address = model.Address,
+            Apartment = model.Apartment,
             PostalCode = model.PostalCode,
             PhoneNumber = model.PhoneNumber,
             RecipientFirstName = model.RecipientFirstName,
-            RecipientLastName = model.RecipientLastName
+            RecipientLastName = model.RecipientLastName,
+            IsDefault = model.IsDefault
         };
     }
 
@@ -62,7 +64,9 @@ public class UserAddressMapperService : IUserAddressMapperService
                 Title = x.Title,
                 UserId = x.UserId,
                 CityId = x.CityId,
+                ProvinceId = x.ProvinceId,
                 Address = x.Address,
+                Apartment = x.Apartment,
                 CityName = x.CityName,
                 UserName = x.UserName,
                 UserFirstName = x.UserFirstName,
@@ -70,7 +74,8 @@ public class UserAddressMapperService : IUserAddressMapperService
                 PostalCode = x.PostalCode,
                 PhoneNumber = x.PhoneNumber,
                 RecipientLastName = x.RecipientLastName,
-                RecipientFirstName = x.RecipientFirstName
+                RecipientFirstName = x.RecipientFirstName,
+                IsDefault = x.IsDefault
             })
             .ToList();
 
@@ -87,12 +92,15 @@ public class UserAddressMapperService : IUserAddressMapperService
                 Title = x.Title,
                 UserId = x.UserId,
                 CityId = x.CityId,
+                ProvinceId = x.ProvinceId,
                 Address = x.Address,
+                Apartment = x.Apartment,
                 CityName = x.CityName,
                 PostalCode = x.PostalCode,
                 PhoneNumber = x.PhoneNumber,
                 RecipientLastName = x.RecipientLastName,
-                RecipientFirstName = x.RecipientFirstName
+                RecipientFirstName = x.RecipientFirstName,
+                IsDefault = x.IsDefault
             })
             .ToList();
 

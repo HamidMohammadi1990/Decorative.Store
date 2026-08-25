@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { SavedAddressInput } from '@/models/address/savedAddress.model'
+import type { SavedAddress, SavedAddressInput } from '@/models/address/savedAddress.model'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { ApiError } from '@/services/api/apiTypes'
+import { savedAddressToInput } from '@/services/mappers/userAddressMapper'
 import { userAddressService } from '@/services/userAddressService'
 import { useAddressStore } from '@/stores/addressStore'
 import { useUserStore } from '@/stores/userStore'
@@ -20,7 +21,6 @@ export function useAddressMutations() {
   const { locale } = useLocaleSettings()
   const accessToken = useUserStore((state) => state.accessToken)
   const loadAddresses = useAddressStore((state) => state.loadAddresses)
-  const setDefaultAddress = useAddressStore((state) => state.setDefaultAddress)
   const [isSaving, setIsSaving] = useState(false)
   const [mutationError, setMutationError] = useState<string | null>(null)
 
@@ -38,27 +38,18 @@ export function useAddressMutations() {
       setMutationError(null)
 
       try {
-        let savedId: string | undefined
+        const payload: SavedAddressInput = {
+          ...input,
+          isDefault: options.makeDefault ?? input.isDefault ?? false,
+        }
 
         if (options.editingId) {
-          const updated = await userAddressService.updateAddress(
-            accessToken,
-            locale,
-            options.editingId,
-            input,
-          )
-          savedId = updated.id
+          await userAddressService.updateAddress(accessToken, locale, options.editingId, payload)
         } else {
-          const created = await userAddressService.createAddress(accessToken, locale, input)
-          savedId = created.id
+          await userAddressService.createAddress(accessToken, locale, payload)
         }
 
         await loadAddresses(accessToken, locale)
-
-        if (options.makeDefault && savedId) {
-          setDefaultAddress(savedId)
-        }
-
         return true
       } catch (error) {
         const message = resolveMutationError(error, t('address.errors.saveFailed'))
@@ -68,7 +59,37 @@ export function useAddressMutations() {
         setIsSaving(false)
       }
     },
-    [accessToken, locale, loadAddresses, setDefaultAddress, t],
+    [accessToken, locale, loadAddresses, t],
+  )
+
+  const setAsDefault = useCallback(
+    async (address: SavedAddress) => {
+      if (!accessToken || accessToken === 'mock-access-token') {
+        setMutationError(t('address.errors.saveFailed'))
+        return false
+      }
+
+      setIsSaving(true)
+      setMutationError(null)
+
+      try {
+        await userAddressService.updateAddress(
+          accessToken,
+          locale,
+          address.id,
+          savedAddressToInput(address, true),
+        )
+        await loadAddresses(accessToken, locale)
+        return true
+      } catch (error) {
+        const message = resolveMutationError(error, t('address.errors.saveFailed'))
+        setMutationError(message)
+        return false
+      } finally {
+        setIsSaving(false)
+      }
+    },
+    [accessToken, locale, loadAddresses, t],
   )
 
   const deleteAddress = useCallback(
@@ -84,12 +105,6 @@ export function useAddressMutations() {
       try {
         await userAddressService.deleteAddress(accessToken, id)
         await loadAddresses(accessToken, locale)
-
-        const { defaultAddressId, addresses } = useAddressStore.getState()
-        if (defaultAddressId === id && addresses.length > 0) {
-          setDefaultAddress(addresses[0].id)
-        }
-
         return true
       } catch (error) {
         const message = resolveMutationError(error, t('address.errors.deleteFailed'))
@@ -99,7 +114,7 @@ export function useAddressMutations() {
         setIsSaving(false)
       }
     },
-    [accessToken, locale, loadAddresses, setDefaultAddress, t],
+    [accessToken, locale, loadAddresses, t],
   )
 
   const clearMutationError = useCallback(() => setMutationError(null), [])
@@ -108,6 +123,7 @@ export function useAddressMutations() {
     isSaving,
     mutationError,
     saveAddress,
+    setAsDefault,
     deleteAddress,
     clearMutationError,
   }

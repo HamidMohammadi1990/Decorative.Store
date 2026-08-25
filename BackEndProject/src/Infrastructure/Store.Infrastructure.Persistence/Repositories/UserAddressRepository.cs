@@ -28,13 +28,17 @@ public class UserAddressRepository
 
         var result = await
             userAddresses
+            .OrderByDescending(x => x.address.IsDefault)
+            .ThenByDescending(x => x.address.Id)
             .Select(x => new GetAllUserAddressDto
             {
                 Id = x.address.Id,
                 Title = x.address.Title,
                 UserId = x.address.UserId,
                 CityId = x.address.CityId,
+                ProvinceId = x.city != null ? x.city.ProvinceId : null,
                 Address = x.address.Address,
+                Apartment = x.address.Apartment,
                 UserName = x.user.UserName,
                 UserFirstName = x.user.FirstName,
                 UserLastName = x.user.LastName,
@@ -42,7 +46,8 @@ public class UserAddressRepository
                 PostalCode = x.address.PostalCode,
                 PhoneNumber = x.address.PhoneNumber,
                 RecipientLastName = x.address.RecipientLastName,
-                RecipientFirstName = x.address.RecipientFirstName
+                RecipientFirstName = x.address.RecipientFirstName,
+                IsDefault = x.address.IsDefault
             })
             .AsNoTracking()
             .ToPagedAsync(request.Pagination);
@@ -66,18 +71,23 @@ public class UserAddressRepository
 
         var result = await
             userAddresses
+            .OrderByDescending(x => x.address.IsDefault)
+            .ThenByDescending(x => x.address.Id)
             .Select(x => new GetUserAddressDto
             {
                 Id = x.address.Id,
                 Title = x.address.Title,
                 UserId = x.address.UserId,
                 CityId = x.address.CityId,
+                ProvinceId = x.city != null ? x.city.ProvinceId : null,
                 Address = x.address.Address,
+                Apartment = x.address.Apartment,
                 CityName = x.city != null ? x.city.Name : null,
                 PostalCode = x.address.PostalCode,
                 PhoneNumber = x.address.PhoneNumber,
                 RecipientLastName = x.address.RecipientLastName,
-                RecipientFirstName = x.address.RecipientFirstName
+                RecipientFirstName = x.address.RecipientFirstName,
+                IsDefault = x.address.IsDefault
             })
             .AsNoTracking()
             .ToPagedAsync(request.Pagination);
@@ -91,6 +101,8 @@ public class UserAddressRepository
             Context
             .UserAddress
             .Where(x => x.UserId == userId)
+            .OrderByDescending(x => x.IsDefault)
+            .ThenByDescending(x => x.Id)
             .Select(x => new UserAddressSummaryDto
             {
                 Id = x.Id,
@@ -99,5 +111,44 @@ public class UserAddressRepository
             })
             .AsNoTracking()
             .ToListAsync();
+    }
+
+    public Task<bool> AnyDefaultAsync(int userId, CancellationToken cancellationToken = default)
+        => Context.UserAddress.AnyAsync(x => x.UserId == userId && x.IsDefault, cancellationToken);
+
+    public async Task ClearDefaultForUserAsync(int userId, int exceptAddressId, CancellationToken cancellationToken = default)
+    {
+        var addresses = await Context.UserAddress
+            .Where(x => x.UserId == userId && x.IsDefault && x.Id != exceptAddressId)
+            .ToListAsync(cancellationToken);
+
+        foreach (var address in addresses)
+            address.SetDefault(false);
+    }
+
+    public async Task PromoteNextDefaultAsync(int userId, int? exceptAddressId = null, CancellationToken cancellationToken = default)
+    {
+        var query = Context.UserAddress
+            .Where(x => x.UserId == userId && x.IsActive);
+
+        if (exceptAddressId.HasValue)
+            query = query.Where(x => x.Id != exceptAddressId.Value);
+
+        var next = await query
+            .OrderByDescending(x => x.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (next is not null)
+        {
+            next.SetDefault(true);
+            return;
+        }
+
+        if (exceptAddressId.HasValue)
+        {
+            var fallback = await Context.UserAddress
+                .FirstOrDefaultAsync(x => x.Id == exceptAddressId.Value && x.UserId == userId, cancellationToken);
+            fallback?.SetDefault(true);
+        }
     }
 }

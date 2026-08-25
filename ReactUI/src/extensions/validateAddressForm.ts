@@ -1,6 +1,6 @@
 import type { SavedAddressInput } from '@/models/address/savedAddress.model'
 
-export type AddressFormField = keyof SavedAddressInput
+export type AddressFormField = keyof AddressFormValues
 
 export interface AddressFormValues {
   label: string
@@ -49,7 +49,7 @@ export function validateAddressForm(
 
 export function addressFormToInput(
   values: AddressFormValues,
-  isDefault?: boolean,
+  options: { isDefault?: boolean } = {},
 ): SavedAddressInput {
   return {
     label: values.label.trim(),
@@ -59,6 +59,6 @@ export function addressFormToInput(
     apartment: values.apartment.trim(),
     postcode: values.postcode.trim(),
     phone: values.phone.trim(),
-    isDefault,
+    isDefault: options.isDefault,
   }
 }

@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import { catalogService } from '@/services/catalogService'
+import { wishlistService } from '@/services/wishlistService'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useWishlistStore } from '@/stores/wishlistStore'
+import { useUserStore } from '@/stores/userStore'
 
 interface UseWishlistProductsResult {
   products: ProductDetail[]
@@ -14,6 +16,8 @@ interface UseWishlistProductsResult {
 export function useWishlistProducts(): UseWishlistProductsResult {
   const locale = useSettingsStore((s) => s.locale)
   const slugs = useWishlistStore((s) => s.slugs)
+  const removeSlug = useWishlistStore((s) => s.removeSlug)
+  const accessToken = useUserStore((s) => s.accessToken)
   const [products, setProducts] = useState<ProductDetail[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -39,7 +43,16 @@ export function useWishlistProducts(): UseWishlistProductsResult {
 
       const missing = slugs.filter((slug) => !details.some((p) => p.slug === slug))
       if (missing.length > 0) {
-        missing.forEach((slug) => useWishlistStore.getState().removeSlug(slug))
+        for (const slug of missing) {
+          removeSlug(slug)
+          if (accessToken && accessToken !== 'mock-access-token') {
+            try {
+              await wishlistService.remove(accessToken, slug)
+            } catch {
+              // Best-effort cleanup for deleted catalog products.
+            }
+          }
+        }
       }
     } catch {
       setError('failed')
@@ -47,7 +60,7 @@ export function useWishlistProducts(): UseWishlistProductsResult {
     } finally {
       setLoading(false)
     }
-  }, [locale, slugs])
+  }, [accessToken, locale, removeSlug, slugs])
 
   useEffect(() => {
     void load()

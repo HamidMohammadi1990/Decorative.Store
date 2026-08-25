@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { UserStoryInput } from '@/models/stories/story.model'
+import type { UserStoryDraft, UserStoryInput } from '@/models/stories/story.model'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { ApiError } from '@/services/api/apiTypes'
 import { userStoryService } from '@/services/userStoryService'
@@ -47,8 +47,8 @@ export function useUserStoryMutations() {
     [accessToken, locale, loadStories, t],
   )
 
-  const toggleStoryActive = useCallback(
-    async (story: UserStoryDraft) => {
+  const updateStory = useCallback(
+    async (id: string, input: UserStoryInput) => {
       if (!accessToken || accessToken === 'mock-access-token') {
         setMutationError(t('dashboard.stories.saveFailed'))
         return false
@@ -58,10 +58,7 @@ export function useUserStoryMutations() {
       setMutationError(null)
 
       try {
-        await userStoryService.update(accessToken, locale, story.id, {
-          ...story,
-          isActive: !story.isActive,
-        })
+        await userStoryService.update(accessToken, locale, id, input)
         await loadStories(accessToken, locale)
         return true
       } catch (error) {
@@ -72,6 +69,21 @@ export function useUserStoryMutations() {
       }
     },
     [accessToken, locale, loadStories, t],
+  )
+
+  const toggleStoryActive = useCallback(
+    async (story: UserStoryDraft) => {
+      return updateStory(story.id, {
+        title: story.title,
+        caption: story.caption,
+        mediaType: story.mediaType,
+        mediaPath: story.mediaPath,
+        mediaAlt: story.mediaAlt,
+        productSlug: story.productSlugs[0],
+        isActive: !story.isActive,
+      })
+    },
+    [updateStory],
   )
 
   const deleteStory = useCallback(
@@ -115,6 +127,7 @@ export function useUserStoryMutations() {
     isSaving,
     mutationError,
     publishStory,
+    updateStory,
     toggleStoryActive,
     deleteStory,
     uploadMedia,

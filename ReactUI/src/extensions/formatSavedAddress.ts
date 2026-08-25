@@ -3,9 +3,8 @@ import type { SavedAddress } from '@/models/address/savedAddress.model'
 export function formatSavedAddressLines(address: SavedAddress) {
   const name = `${address.firstName} ${address.lastName}`.trim()
   const street = [address.address, address.apartment].filter(Boolean).join(', ')
-  const locality = address.postcode
 
-  return [name, street, locality, address.phone].filter(Boolean)
+  return [name, street, address.postcode, address.phone].filter(Boolean)
 }
 
 export function savedAddressToCheckoutFields(address: SavedAddress) {

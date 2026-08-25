@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Edition.Application.Contracts;
 using Store.Common.Localization;
 using Store.Domain.Repositories;
 
@@ -6,13 +7,18 @@ namespace Edition.Application.Features.UserAddresses.Commands;
 
 public class UpdateUserAddressValidator : AbstractValidator<UpdateUserAddressRequest>
 {
-    public UpdateUserAddressValidator(IUserAddressRepository userAddressRepository)
+    public UpdateUserAddressValidator(IUserAddressRepository userAddressRepository, ICurrentUserContext currentUser)
     {
         RuleFor(x => new { x.Id, x.Title, x.PostalCode })
             .NotNull()
             .WithMessage(MessageKeys.TitleRequired)
-            .MustAsync(async (x, CancellationToken)
-                   => !await userAddressRepository.AnyAsync(c => c.Id != x.Id && c.PostalCode == x.PostalCode || c.Title == x.Title.Trim()))
+            .MustAsync(async (x, cancellationToken)
+                => !await userAddressRepository.AnyAsync(
+                    c => c.UserId == currentUser.UserId
+                         && c.Id != x.Id
+                         && (c.Title == x.Title.Trim()
+                             || (!string.IsNullOrWhiteSpace(x.PostalCode) && c.PostalCode == x.PostalCode)),
+                    cancellationToken))
             .WithMessage(MessageKeys.DuplicateAddress)
             .When(x => !string.IsNullOrEmpty(x.Title));
 
@@ -43,5 +49,10 @@ public class UpdateUserAddressValidator : AbstractValidator<UpdateUserAddressReq
             .WithMessage(MessageKeys.AddressRequired)
             .MaximumLength(150)
             .WithMessage(MessageKeys.MaxLength150Characters);
+
+        RuleFor(x => x.Apartment)
+            .MaximumLength(50)
+            .WithMessage(MessageKeys.MaxLength50Characters)
+            .When(x => !string.IsNullOrEmpty(x.Apartment));
     }
 }

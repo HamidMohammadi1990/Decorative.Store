@@ -3,8 +3,7 @@ import type { Locale } from '@/models/shared/locale.model'
 import type { StoryMediaType, UserStoryDraft, UserStoryInput } from '@/models/stories/story.model'
 import { ApiError } from '@/services/api/apiTypes'
 import { normalizeApiEnvelope, readRecord, readStringField } from '@/services/api/apiNormalize'
-import { apiDelete, apiGet, apiPost, apiPut } from '@/services/api/apiClient'
-import { toAcceptLanguage } from '@/services/api/apiClient'
+import { apiDelete, apiGet, apiPost, apiPut, toAcceptLanguage } from '@/services/api/apiClient'
 
 const USER_STORY_MY_PATH = '/api/v1/user-story/my'
 const USER_STORY_CREATE_PATH = '/api/v1/user-story/create'
@@ -28,22 +27,27 @@ function readMediaType(value: unknown): StoryMediaType {
 export function normalizeUserStoryItem(data: unknown): UserStoryDraft {
   const record = readRecord(data) ?? {}
 
-  const mediaUrl = readStringField(record, 'mediaUrl', 'MediaUrl')
-  const posterUrl = readStringField(record, 'posterUrl', 'PosterUrl')
+  const mediaPath = readStringField(record, 'mediaUrl', 'MediaUrl', 'mediaPath', 'MediaPath')
+  const posterUrl = readStringField(record, 'posterUrl', 'PosterUrl', 'posterPath', 'PosterPath')
   const productSlug = readStringField(record, 'productSlug', 'ProductSlug')
   const createdOnUtc = readStringField(record, 'createdOnUtc', 'CreatedOnUtc')
+  const ownerFirstName = readStringField(record, 'ownerFirstName', 'OwnerFirstName')
+  const ownerLastName = readStringField(record, 'ownerLastName', 'OwnerLastName')
+  const ownerName = `${ownerFirstName} ${ownerLastName}`.trim()
 
   return {
     id: readStringField(record, 'id', 'Id'),
     title: readStringField(record, 'title', 'Title'),
     caption: readStringField(record, 'caption', 'Caption'),
     mediaType: readMediaType(record.mediaType ?? record.MediaType),
-    mediaSrc: resolveMediaUrl(mediaUrl),
+    mediaPath,
+    mediaSrc: resolveMediaUrl(mediaPath),
     mediaAlt: readStringField(record, 'mediaAlt', 'MediaAlt'),
     posterSrc: posterUrl ? resolveMediaUrl(posterUrl) : undefined,
     productSlugs: productSlug ? [productSlug] : [],
     createdAt: createdOnUtc || new Date().toISOString(),
     isActive: Boolean(record.isActive ?? record.IsActive ?? true),
+    ownerName: ownerName || undefined,
   }
 }
 
@@ -58,7 +62,7 @@ export const userStoryService = {
     return items.map(normalizeUserStoryItem).filter((story) => story.id)
   },
 
-  async searchActive(locale: Locale, limit = 20): Promise<UserStoryDraft[]> {
+  async searchActive(locale: Locale, limit = 40): Promise<UserStoryDraft[]> {
     const result = await apiPost<{ items?: unknown[]; Items?: unknown[] }>(
       USER_STORY_SEARCH_ACTIVE_PATH,
       { limit },
@@ -123,18 +127,17 @@ export const userStoryService = {
     await apiPost(USER_STORY_CREATE_PATH, payload, { locale, accessToken })
   },
 
-  async update(
-    accessToken: string,
-    locale: Locale,
-    id: string,
-    input: Pick<UserStoryDraft, 'title' | 'caption' | 'isActive' | 'productSlugs'>,
-  ) {
+  async update(accessToken: string, locale: Locale, id: string, input: UserStoryInput) {
     const payload = {
       id,
       title: input.title.trim(),
       caption: input.caption.trim() || null,
-      isActive: input.isActive,
-      productSlug: input.productSlugs[0]?.trim() || null,
+      isActive: input.isActive ?? true,
+      productSlug: input.productSlug?.trim() || null,
+      mediaType: input.mediaType === 'video' ? 2 : 1,
+      mediaPath: input.mediaPath,
+      mediaAlt: input.mediaAlt.trim(),
+      posterPath: input.posterPath ?? null,
     }
 
     await apiPut(USER_STORY_UPDATE_PATH, payload, { locale, accessToken })

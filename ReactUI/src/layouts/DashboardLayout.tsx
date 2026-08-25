@@ -10,6 +10,8 @@ import {
 } from '@/components/dashboard/DashboardSidebar'
 import { ProfileCompletionBanner } from '@/components/dashboard/ProfileCompletionBanner'
 import { useDashboard } from '@/hooks/useDashboard'
+import { useWishlistSync } from '@/hooks/useWishlistSync'
+import { useAddressSync } from '@/hooks/useAddressSync'
 import { useAuthModalStore } from '@/stores/authModalStore'
 import { useUserStore } from '@/stores/userStore'
 
@@ -20,6 +22,8 @@ export function DashboardLayout() {
   const logout = useUserStore((s) => s.logout)
   const openModal = useAuthModalStore((s) => s.openModal)
   const { data, loading, error } = useDashboard()
+  useWishlistSync()
+  useAddressSync()
 
   useEffect(() => {
     if (!user) {

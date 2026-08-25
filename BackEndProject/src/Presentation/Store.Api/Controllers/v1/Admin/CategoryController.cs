@@ -24,12 +24,12 @@ public class CategoryController
     : BaseApiAdminController
 {
     [ActionInfo(PermissionType.ListCategory)]
-    [HttpGet("get-all")]
+    [HttpPost("get-all")]
     public async Task<ApiResult<PagedResult<GetAllCategoryResponse>>> GetAll(GetAllCategoryRequest request)
         => await mediator.Send(request);
 
     [ActionInfo(PermissionType.GetCategoryById)]
-    [HttpGet("get")]
+    [HttpPost("get")]
     public async Task<ApiResult<GetCategoryResponse?>> Get(GetCategoryRequest request)
         => await mediator.Send(request);
 

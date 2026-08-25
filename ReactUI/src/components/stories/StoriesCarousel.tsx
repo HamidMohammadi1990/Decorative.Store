@@ -111,13 +111,25 @@ function StoryRing({ story, onOpen }: { story: StoryGroup; onOpen: () => void })
 
         <span className="relative flex size-[calc(100%-4px)] items-center justify-center overflow-hidden rounded-full bg-surface p-[2px] shadow-sm ring-1 ring-black/5 transition-transform duration-300 group-hover:scale-[1.05] group-active:scale-[0.97]">
           <span className="relative size-full overflow-hidden rounded-full">
-            <LocalImage
-              image={story.coverImage}
-              className={`size-full object-cover transition-all duration-300 ${
-                viewed ? 'opacity-75 saturate-[0.8]' : 'group-hover:scale-105'
-              }`}
-              loading="eager"
-            />
+            {hasVideo && !story.slides[0]?.media.poster ? (
+              <video
+                src={story.slides[0]?.media.src}
+                className={`size-full object-cover transition-all duration-300 ${
+                  viewed ? 'opacity-75 saturate-[0.8]' : 'group-hover:scale-105'
+                }`}
+                muted
+                playsInline
+                preload="metadata"
+              />
+            ) : (
+              <LocalImage
+                image={story.coverImage}
+                className={`size-full object-cover transition-all duration-300 ${
+                  viewed ? 'opacity-75 saturate-[0.8]' : 'group-hover:scale-105'
+                }`}
+                loading="eager"
+              />
+            )}
             <span className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-full bg-black/0 opacity-0 transition-all duration-300 group-hover:bg-black/25 group-hover:opacity-100">
               <span className="flex size-7 items-center justify-center rounded-full bg-white text-neutral-900 shadow-md ring-1 ring-black/10">
                 <PlayIcon />

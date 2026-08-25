@@ -24,8 +24,7 @@ export function AddressesPanel() {
   const { t } = useTranslation()
   const addresses = useAddressStore((s) => s.addresses)
   const isLoading = useAddressStore((s) => s.isLoading)
-  const setDefaultAddress = useAddressStore((s) => s.setDefaultAddress)
-  const { isSaving, mutationError, saveAddress, deleteAddress, clearMutationError } =
+  const { isSaving, mutationError, saveAddress, setAsDefault, deleteAddress, clearMutationError } =
     useAddressMutations()
 
   const [mode, setMode] = useState<PanelMode>('list')
@@ -87,7 +86,7 @@ export function AddressesPanel() {
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) return
 
-    const input = addressFormToInput(form, makeDefault)
+    const input = addressFormToInput(form, { isDefault: makeDefault })
     const saved = await saveAddress(input, {
       editingId,
       makeDefault,
@@ -112,7 +111,7 @@ export function AddressesPanel() {
 
         <div className="rounded-sm border border-border bg-surface-muted/20 p-5 shadow-sm ring-1 ring-border/50 sm:p-6">
           {mutationError && (
-            <p className="mb-4 rounded-sm border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+            <p className="mb-4 rounded-sm border border-red-200 bg-red-50 px-3 py-2 text-sm text-sale">
               {mutationError}
             </p>
           )}
@@ -153,7 +152,7 @@ export function AddressesPanel() {
       />
 
       {mutationError && (
-        <p className="mb-4 rounded-sm border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+        <p className="mb-4 rounded-sm border border-red-200 bg-red-50 px-3 py-2 text-sm text-sale">
           {mutationError}
         </p>
       )}
@@ -181,7 +180,7 @@ export function AddressesPanel() {
               address={address}
               onEdit={() => startEdit(address)}
               onDelete={() => void handleDelete(address.id)}
-              onSetDefault={() => setDefaultAddress(address.id)}
+              onSetDefault={() => void setAsDefault(address)}
             />
           ))}
         </div>

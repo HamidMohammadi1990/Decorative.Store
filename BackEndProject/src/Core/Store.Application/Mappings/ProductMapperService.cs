@@ -16,6 +16,7 @@ public class ProductMapperService : IProductMapperService
         return new GetProductResponse
         {
             Id = model.Id,
+            SubCategoryId = model.SubCategoryId,
             Title = title,
             Slug = slug,
             IsActive = model.IsActive,

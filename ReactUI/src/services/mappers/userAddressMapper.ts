@@ -1,5 +1,5 @@
 import type { SavedAddress, SavedAddressInput } from '@/models/address/savedAddress.model'
-import { readRecord, readStringField } from '@/services/api/apiNormalize'
+import { readBooleanField, readRecord, readStringField } from '@/services/api/apiNormalize'
 
 export function normalizeUserAddress(data: unknown): SavedAddress {
   const record = readRecord(data) ?? {}
@@ -10,22 +10,20 @@ export function normalizeUserAddress(data: unknown): SavedAddress {
     firstName: readStringField(record, 'recipientFirstName', 'RecipientFirstName'),
     lastName: readStringField(record, 'recipientLastName', 'RecipientLastName'),
     address: readStringField(record, 'address', 'Address'),
-    apartment: '',
+    apartment: readStringField(record, 'apartment', 'Apartment'),
     postcode: readStringField(record, 'postalCode', 'PostalCode'),
     phone: readStringField(record, 'phoneNumber', 'PhoneNumber'),
-    isDefault: false,
+    isDefault: readBooleanField(record, 'isDefault', 'IsDefault'),
   }
 }
 
 export function buildSavedAddressFromInput(id: string, input: SavedAddressInput): SavedAddress {
-  const addressLine = [input.address.trim(), input.apartment.trim()].filter(Boolean).join(', ')
-
   return {
     id,
     label: input.label.trim(),
     firstName: input.firstName.trim(),
     lastName: input.lastName.trim(),
-    address: addressLine || input.address.trim(),
+    address: input.address.trim(),
     apartment: input.apartment.trim(),
     postcode: input.postcode.trim(),
     phone: input.phone.trim(),
@@ -34,15 +32,16 @@ export function buildSavedAddressFromInput(id: string, input: SavedAddressInput)
 }
 
 export function buildCreateUserAddressPayload(input: SavedAddressInput) {
-  const addressLine = [input.address.trim(), input.apartment.trim()].filter(Boolean).join(', ')
-
   return {
     title: input.label.trim(),
-    address: addressLine,
+    address: input.address.trim(),
+    apartment: input.apartment.trim() || null,
     postalCode: input.postcode.trim() || null,
+    cityId: null,
     recipientFirstName: input.firstName.trim(),
     recipientLastName: input.lastName.trim(),
     phoneNumber: input.phone.trim(),
+    isDefault: input.isDefault ?? false,
   }
 }
 
@@ -55,5 +54,18 @@ export function buildUpdateUserAddressPayload(
     id,
     ...buildCreateUserAddressPayload(input),
     isActive,
+  }
+}
+
+export function savedAddressToInput(address: SavedAddress, isDefault?: boolean): SavedAddressInput {
+  return {
+    label: address.label,
+    firstName: address.firstName,
+    lastName: address.lastName,
+    address: address.address,
+    apartment: address.apartment,
+    postcode: address.postcode,
+    phone: address.phone,
+    isDefault: isDefault ?? address.isDefault,
   }
 }

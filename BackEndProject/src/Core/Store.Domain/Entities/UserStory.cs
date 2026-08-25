@@ -49,5 +49,17 @@ public class UserStory : BaseEntity
         ProductId = productId;
     }
 
+    public void UpdateMedia(
+        StoryMediaType mediaType,
+        string mediaPath,
+        string mediaAlt,
+        string? posterPath)
+    {
+        MediaType = mediaType;
+        MediaPath = mediaPath;
+        MediaAlt = mediaAlt;
+        PosterPath = posterPath;
+    }
+
     public void SetActive(bool isActive) => IsActive = isActive;
 }

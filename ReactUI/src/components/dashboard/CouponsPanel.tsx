@@ -6,28 +6,44 @@ import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
 import { CouponStatusBadge } from '@/components/dashboard/StatusBadge'
 import { CouponsIcon } from '@/components/dashboard/DashboardIcons'
 import { Button } from '@/components/ui/Button'
+import { InlineLoading } from '@/components/ui/Spinner'
 import { formatBlogDate } from '@/extensions/formatBlogDate'
+import { useMyDiscounts } from '@/hooks/useMyDiscounts'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { useEarnedCouponsStore } from '@/stores/earnedCouponsStore'
 
-interface CouponsPanelProps {
-  coupons: DashboardCoupon[]
+function mergeCoupons(
+  apiCoupons: DashboardCoupon[],
+  earnedCoupons: DashboardCoupon[],
+): DashboardCoupon[] {
+  const seenCodes = new Set<string>()
+  const merged: DashboardCoupon[] = []
+
+  for (const coupon of [...earnedCoupons, ...apiCoupons]) {
+    const key = coupon.code.trim().toUpperCase()
+    if (!key || seenCodes.has(key)) continue
+    seenCodes.add(key)
+    merged.push(coupon)
+  }
+
+  return merged.sort((a, b) => {
+    if (a.status === 'active' && b.status !== 'active') return -1
+    if (a.status !== 'active' && b.status === 'active') return 1
+    return a.expiresAt.localeCompare(b.expiresAt)
+  })
 }
 
-export function CouponsPanel({ coupons }: CouponsPanelProps) {
+export function CouponsPanel() {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
   const earnedCoupons = useEarnedCouponsStore((s) => s.coupons)
+  const { coupons: apiCoupons, loading, error, reload } = useMyDiscounts()
   const [copiedId, setCopiedId] = useState<string | null>(null)
 
-  const allCoupons = useMemo(() => {
-    const seen = new Set<string>()
-    return [...earnedCoupons, ...coupons].filter((coupon) => {
-      if (seen.has(coupon.id)) return false
-      seen.add(coupon.id)
-      return true
-    })
-  }, [coupons, earnedCoupons])
+  const allCoupons = useMemo(
+    () => mergeCoupons(apiCoupons, earnedCoupons),
+    [apiCoupons, earnedCoupons],
+  )
 
   const handleCopy = async (coupon: DashboardCoupon) => {
     try {
@@ -37,6 +53,39 @@ export function CouponsPanel({ coupons }: CouponsPanelProps) {
     } catch {
       /* clipboard unavailable */
     }
+  }
+
+  if (loading && allCoupons.length === 0) {
+    return (
+      <div>
+        <DashboardPageHeader
+          title={t('dashboard.coupons.title')}
+          description={t('dashboard.coupons.description')}
+          icon={<CouponsIcon size={22} />}
+        />
+        <div className="flex justify-center py-16">
+          <InlineLoading label={t('dashboard.coupons.loading')} />
+        </div>
+      </div>
+    )
+  }
+
+  if (error && allCoupons.length === 0) {
+    return (
+      <div>
+        <DashboardPageHeader
+          title={t('dashboard.coupons.title')}
+          description={t('dashboard.coupons.description')}
+          icon={<CouponsIcon size={22} />}
+        />
+        <div className="rounded-sm border border-dashed border-border bg-surface-muted/30 px-4 py-12 text-center">
+          <p className="text-sm text-text-muted">{t('dashboard.coupons.loadFailed')}</p>
+          <Button variant="secondary" className="mt-4" onClick={() => void reload()}>
+            {t('dashboard.coupons.retry')}
+          </Button>
+        </div>
+      </div>
+    )
   }
 
   if (allCoupons.length === 0) {
@@ -62,7 +111,21 @@ export function CouponsPanel({ coupons }: CouponsPanelProps) {
         title={t('dashboard.coupons.title')}
         description={t('dashboard.coupons.description')}
         icon={<CouponsIcon size={22} />}
+        action={
+          <span className="rounded-sm bg-warm-soft px-2.5 py-1 text-xs font-semibold text-warm">
+            {t('dashboard.coupons.itemCount', { count: allCoupons.length })}
+          </span>
+        }
       />
+
+      {error && (
+        <p className="mb-4 text-sm text-sale">
+          {t('dashboard.coupons.loadFailed')}{' '}
+          <button type="button" className="underline" onClick={() => void reload()}>
+            {t('dashboard.coupons.retry')}
+          </button>
+        </p>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2">
         {allCoupons.map((coupon) => {
@@ -104,7 +167,9 @@ export function CouponsPanel({ coupons }: CouponsPanelProps) {
                       {t('dashboard.coupons.expires')}
                     </p>
                     <p className="mt-1 text-sm text-text-muted">
-                      {formatBlogDate(coupon.expiresAt, locale)}
+                      {coupon.expiresAt
+                        ? formatBlogDate(coupon.expiresAt, locale)
+                        : t('dashboard.coupons.noExpiry')}
                     </p>
                   </div>
                 </div>

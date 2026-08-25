@@ -9,8 +9,10 @@ public class UserAddress : BaseEntity
     public string? RecipientLastName { get; private set; }
     public string Title { get; private set; } = default!;
     public bool IsActive { get; private set; } = true;
+    public bool IsDefault { get; private set; }
     public int UserId { get; private set; }
     public string Address { get; private set; } = default!;
+    public string? Apartment { get; private set; }
     public string? PostalCode { get; private set; }
     public string PhoneNumber { get; private set; } = default!;
 
@@ -20,30 +22,37 @@ public class UserAddress : BaseEntity
     public ICollection<OrderItem> OrderItems { get; private set; } = default!;
 
 
-    public static UserAddress Create(string title, int userId, string address, string? postalCode, int? cityId,
-                                     string? recipientFirstName, string? recipientLastName, string phoneNumber)
+    public static UserAddress Create(string title, int userId, string address, string? apartment, string? postalCode,
+                                     int? cityId, string? recipientFirstName, string? recipientLastName,
+                                     string phoneNumber, bool isDefault)
         => new()
         {
             Title = title,
             UserId = userId,
             Address = address,
+            Apartment = apartment,
             PostalCode = postalCode,
             CityId = cityId,
             RecipientFirstName = recipientFirstName,
             RecipientLastName = recipientLastName,
-            PhoneNumber = phoneNumber
+            PhoneNumber = phoneNumber,
+            IsDefault = isDefault
         };
 
-    public void Update(string title, bool isActive, string address, string? postalCode, int? cityId,
-                       string? recipientFirstName, string? recipientLastName, string phoneNumber)
+    public void Update(string title, bool isActive, string address, string? apartment, string? postalCode, int? cityId,
+                       string? recipientFirstName, string? recipientLastName, string phoneNumber, bool isDefault)
     {
         Title = title;
         CityId = cityId;
         Address = address;
+        Apartment = apartment;
         IsActive = isActive;
+        IsDefault = isDefault;
         PostalCode = postalCode;
         PhoneNumber = phoneNumber;
         RecipientLastName = recipientLastName;
         RecipientFirstName = recipientFirstName;
     }
+
+    public void SetDefault(bool isDefault) => IsDefault = isDefault;
 }

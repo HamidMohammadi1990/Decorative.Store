@@ -11,6 +11,9 @@ public record GetUserAddressesResponse
     [JsonConverter(typeof(CityNullableEncryptor))]
     public int? CityId { get; init; }
 
+    [JsonConverter(typeof(ProvinceNullableEncryptor))]
+    public int? ProvinceId { get; init; }
+
     public string? CityName { get; init; }
 
     public string? RecipientFirstName { get; init; }
@@ -20,6 +23,8 @@ public record GetUserAddressesResponse
     [JsonConverter(typeof(UserEncryptor))]
     public int UserId { get; init; }
     public string Address { get; init; } = default!;
+    public string? Apartment { get; init; }
     public string? PostalCode { get; init; }
     public string PhoneNumber { get; init; } = default!;
+    public bool IsDefault { get; init; }
 }

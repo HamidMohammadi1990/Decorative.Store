@@ -14,19 +14,38 @@ public class UpdateUserAddressHandler
         if (userAddress is null)
             return ErrorModel.Create("InvalidId");
 
+        var wasDefault = userAddress.IsDefault;
+        var makeDefault = request.IsDefault;
+
+        if (makeDefault)
+            await userAddressRepository.ClearDefaultForUserAsync(userAddress.UserId, userAddress.Id, cancellationToken);
+
         userAddress.Update(
             request.Title,
             request.IsActive,
             request.Address,
+            request.Apartment,
             request.PostalCode,
             request.CityId,
             request.RecipientFirstName,
             request.RecipientLastName,
-            request.PhoneNumber);
+            request.PhoneNumber,
+            makeDefault);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)
             return saveChangesResult;
+
+        if (!makeDefault && wasDefault)
+        {
+            await userAddressRepository.PromoteNextDefaultAsync(
+                userAddress.UserId,
+                exceptAddressId: userAddress.Id,
+                cancellationToken);
+            saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
+            if (!saveChangesResult.IsSuccess)
+                return saveChangesResult;
+        }
 
         return OperationResult.Success();
     }

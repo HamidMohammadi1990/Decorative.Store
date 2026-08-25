@@ -13,6 +13,7 @@ interface WishlistState {
   count: () => number
   loadWishlist: (accessToken: string, locale: Locale) => Promise<void>
   toggleRemote: (accessToken: string, locale: Locale, slug: string) => Promise<'added' | 'removed'>
+  clearAllRemote: (accessToken: string) => Promise<void>
 }
 
 export const useWishlistStore = create<WishlistState>()((set, get) => ({
@@ -44,6 +45,7 @@ export const useWishlistStore = create<WishlistState>()((set, get) => ({
       set({ slugs, isLoading: false })
     } catch {
       set({ isLoading: false })
+      throw new Error('wishlist_load_failed')
     }
   },
 
@@ -59,5 +61,10 @@ export const useWishlistStore = create<WishlistState>()((set, get) => ({
     await wishlistService.add(accessToken, locale, slug)
     get().addSlug(slug)
     return 'added'
+  },
+
+  clearAllRemote: async (accessToken) => {
+    await wishlistService.clearAll(accessToken)
+    set({ slugs: [] })
   },
 }))

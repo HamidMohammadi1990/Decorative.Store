@@ -7,6 +7,10 @@ public record GetProductResponse
 {
     [JsonConverter(typeof(ProductEncryptor))]
     public int Id { get; init; }
+
+    [JsonConverter(typeof(SubCategoryEncryptor))]
+    public int SubCategoryId { get; init; }
+
     public string Title { get; init; } = default!;
     public string Slug { get; init; } = default!;
     public bool IsActive { get; init; }

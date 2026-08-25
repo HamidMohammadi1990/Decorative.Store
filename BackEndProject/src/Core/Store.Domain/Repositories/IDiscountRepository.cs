@@ -15,4 +15,5 @@ public interface IDiscountRepository
     Task<Discount?> GetAsNoTrackingAsync(int id, CancellationToken cancellationToken = default);
     Task<Discount?> GetByCodeAsync(string code);
     Task<Discount?> GetByIdAsync(int id);
+    Task<List<GetAllDiscountResponseDto>> GetAvailableForUserAsync(int userId, CancellationToken cancellationToken = default);
 }

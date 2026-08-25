@@ -49,6 +49,5 @@ export function DashboardAddressesPage() {
 }
 
 export function DashboardCouponsPage() {
-  const data = useDashboardContext()
-  return <CouponsPanel coupons={data.coupons} />
+  return <CouponsPanel />
 }

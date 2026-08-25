@@ -13,8 +13,24 @@ public class CreateUserAddressHandler
 {
     public async Task<OperationResult<CreateUserAddressResponse>> Handle(CreateUserAddressRequest request, CancellationToken cancellationToken)
     {
-        var userAddress = UserAddress.Create(request.Title, currentUser.UserId, request.Address, request.PostalCode,
-                                      request.CityId, request.RecipientFirstName, request.RecipientLastName, request.PhoneNumber);
+        var userId = currentUser.UserId;
+        var makeDefault = request.IsDefault
+            || !await userAddressRepository.AnyDefaultAsync(userId, cancellationToken);
+
+        if (makeDefault)
+            await userAddressRepository.ClearDefaultForUserAsync(userId, exceptAddressId: 0, cancellationToken);
+
+        var userAddress = UserAddress.Create(
+            request.Title,
+            userId,
+            request.Address,
+            request.Apartment,
+            request.PostalCode,
+            request.CityId,
+            request.RecipientFirstName,
+            request.RecipientLastName,
+            request.PhoneNumber,
+            makeDefault);
 
         userAddressRepository.Add(userAddress);
 

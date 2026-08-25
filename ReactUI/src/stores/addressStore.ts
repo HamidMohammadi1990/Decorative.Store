@@ -1,12 +1,10 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
 import type { SavedAddress } from '@/models/address/savedAddress.model'
 import type { Locale } from '@/models/shared/locale.model'
 import { userAddressService } from '@/services/userAddressService'
 
 interface AddressState {
   addresses: SavedAddress[]
-  defaultAddressId: string | null
   isLoading: boolean
   isModalOpen: boolean
   openModal: () => void
@@ -14,69 +12,43 @@ interface AddressState {
   setAddresses: (addresses: SavedAddress[]) => void
   clearAddresses: () => void
   loadAddresses: (accessToken: string, locale: Locale) => Promise<void>
-  setDefaultAddress: (id: string) => void
   getDefaultAddress: () => SavedAddress | undefined
 }
 
-function applyDefaultFlags(
-  addresses: SavedAddress[],
-  defaultAddressId: string | null,
-): SavedAddress[] {
+function withFallbackDefault(addresses: SavedAddress[]): SavedAddress[] {
   if (addresses.length === 0) return []
+  if (addresses.some((address) => address.isDefault)) return addresses
 
-  const effectiveDefaultId =
-    defaultAddressId && addresses.some((address) => address.id === defaultAddressId)
-      ? defaultAddressId
-      : addresses[0].id
-
-  return addresses.map((address) => ({
+  return addresses.map((address, index) => ({
     ...address,
-    isDefault: address.id === effectiveDefaultId,
+    isDefault: index === 0,
   }))
 }
 
-export const useAddressStore = create<AddressState>()(
-  persist(
-    (set, get) => ({
-      addresses: [],
-      defaultAddressId: null,
-      isLoading: false,
-      isModalOpen: false,
+export const useAddressStore = create<AddressState>()((set, get) => ({
+  addresses: [],
+  isLoading: false,
+  isModalOpen: false,
 
-      openModal: () => set({ isModalOpen: true }),
-      closeModal: () => set({ isModalOpen: false }),
+  openModal: () => set({ isModalOpen: true }),
+  closeModal: () => set({ isModalOpen: false }),
 
-      setAddresses: (addresses) =>
-        set((state) => ({
-          addresses: applyDefaultFlags(addresses, state.defaultAddressId),
-        })),
+  setAddresses: (addresses) => set({ addresses: withFallbackDefault(addresses) }),
 
-      clearAddresses: () => set({ addresses: [], isLoading: false }),
+  clearAddresses: () => set({ addresses: [], isLoading: false }),
 
-      loadAddresses: async (accessToken, locale) => {
-        set({ isLoading: true })
-        try {
-          const addresses = await userAddressService.getMyAddresses(accessToken, locale)
-          set((state) => ({
-            addresses: applyDefaultFlags(addresses, state.defaultAddressId),
-            isLoading: false,
-          }))
-        } catch {
-          set({ isLoading: false })
-        }
-      },
+  loadAddresses: async (accessToken, locale) => {
+    set({ isLoading: true })
+    try {
+      const addresses = await userAddressService.getMyAddresses(accessToken, locale)
+      set({
+        addresses: withFallbackDefault(addresses),
+        isLoading: false,
+      })
+    } catch {
+      set({ isLoading: false })
+    }
+  },
 
-      setDefaultAddress: (id) =>
-        set((state) => ({
-          defaultAddressId: id,
-          addresses: applyDefaultFlags(state.addresses, id),
-        })),
-
-      getDefaultAddress: () => get().addresses.find((address) => address.isDefault),
-    }),
-    {
-      name: 'westelm-addresses',
-      partialize: (state) => ({ defaultAddressId: state.defaultAddressId }),
-    },
-  ),
-)
+  getDefaultAddress: () => get().addresses.find((address) => address.isDefault),
+}))

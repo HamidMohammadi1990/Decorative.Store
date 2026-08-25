@@ -13,7 +13,7 @@ import { catalogListingService } from '@/services/catalogListingService'
 import { useUserStoryStore } from '@/stores/userStoryStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 
-type PanelMode = 'list' | 'create'
+type PanelMode = 'list' | 'create' | 'edit'
 
 const MAX_FILE_MB = 8
 
@@ -28,6 +28,7 @@ export function StoriesPanel() {
     isSaving,
     mutationError,
     publishStory,
+    updateStory,
     toggleStoryActive,
     deleteStory,
     uploadMedia,
@@ -35,9 +36,11 @@ export function StoriesPanel() {
   } = useUserStoryMutations()
 
   const [mode, setMode] = useState<PanelMode>('list')
+  const [editingId, setEditingId] = useState<string | null>(null)
   const [title, setTitle] = useState('')
   const [caption, setCaption] = useState('')
   const [productSlug, setProductSlug] = useState('')
+  const [isActive, setIsActive] = useState(true)
   const [preview, setPreview] = useState<string | null>(null)
   const [mediaType, setMediaType] = useState<'image' | 'video'>('image')
   const [mediaPath, setMediaPath] = useState('')
@@ -46,30 +49,69 @@ export function StoriesPanel() {
   const [products, setProducts] = useState<{ slug: string; title: string }[]>([])
 
   useEffect(() => {
-    if (mode !== 'create') return
+    if (mode === 'list') return
 
     void catalogListingService.getListing('', locale).then((listing) => {
-      setProducts(
-        listing.products.slice(0, 12).map((item) => ({
-          slug: item.slug,
-          title: item.title,
-        })),
-      )
+      const next = listing.products.slice(0, 40).map((item) => ({
+        slug: item.slug,
+        title: item.title,
+      }))
+
+      if (productSlug && !next.some((item) => item.slug === productSlug)) {
+        next.unshift({ slug: productSlug, title: productSlug })
+      }
+
+      setProducts(next)
     })
-  }, [locale, mode])
+  }, [locale, mode, productSlug])
 
   useEffect(() => {
     if (mode === 'list') {
+      setEditingId(null)
       setTitle('')
       setCaption('')
       setProductSlug('')
+      setIsActive(true)
       setPreview(null)
       setMediaPath('')
       setMediaAlt('')
+      setMediaType('image')
       setError(null)
       clearMutationError()
     }
   }, [clearMutationError, mode])
+
+  const resetToList = () => setMode('list')
+
+  const startCreate = () => {
+    clearMutationError()
+    setEditingId(null)
+    setTitle('')
+    setCaption('')
+    setProductSlug('')
+    setIsActive(true)
+    setPreview(null)
+    setMediaPath('')
+    setMediaAlt('')
+    setMediaType('image')
+    setError(null)
+    setMode('create')
+  }
+
+  const startEdit = (story: UserStoryDraft) => {
+    clearMutationError()
+    setEditingId(story.id)
+    setTitle(story.title)
+    setCaption(story.caption)
+    setProductSlug(story.productSlugs[0] ?? '')
+    setIsActive(story.isActive)
+    setPreview(story.mediaSrc)
+    setMediaPath(story.mediaPath)
+    setMediaAlt(story.mediaAlt)
+    setMediaType(story.mediaType)
+    setError(null)
+    setMode('edit')
+  }
 
   const handleFile = async (file: File | null) => {
     if (!file) return
@@ -98,33 +140,43 @@ export function StoriesPanel() {
     }
   }
 
-  const handlePublish = async () => {
+  const handleSave = async () => {
     const trimmedTitle = title.trim()
     if (!trimmedTitle || !mediaPath) {
       setError(t('dashboard.stories.validationRequired'))
       return
     }
 
-    const success = await publishStory({
+    const payload = {
       title: trimmedTitle,
       caption: caption.trim(),
       mediaType,
       mediaPath,
       mediaAlt: mediaAlt || trimmedTitle,
       productSlug: productSlug || undefined,
-    })
-
-    if (success) {
-      setMode('list')
+      isActive,
     }
+
+    const success =
+      mode === 'edit' && editingId
+        ? await updateStory(editingId, payload)
+        : await publishStory(payload)
+
+    if (success) resetToList()
   }
 
-  if (mode === 'create') {
+  if (mode === 'create' || mode === 'edit') {
     return (
       <div>
         <DashboardPageHeader
-          title={t('dashboard.stories.createTitle')}
-          description={t('dashboard.stories.createDescription')}
+          title={
+            mode === 'edit' ? t('dashboard.stories.editTitle') : t('dashboard.stories.createTitle')
+          }
+          description={
+            mode === 'edit'
+              ? t('dashboard.stories.editDescription')
+              : t('dashboard.stories.createDescription')
+          }
           icon={<StoriesIcon size={22} />}
         />
 
@@ -175,6 +227,9 @@ export function StoriesPanel() {
                 disabled={isSaving}
               />
             </label>
+            {mode === 'edit' && preview && (
+              <p className="mt-2 text-xs text-text-muted">{t('dashboard.stories.replaceMediaHint')}</p>
+            )}
           </Field>
 
           <Field label={t('dashboard.stories.fieldProduct')}>
@@ -192,15 +247,37 @@ export function StoriesPanel() {
             </select>
           </Field>
 
+          {mode === 'edit' && (
+            <label className="flex items-center gap-2 text-sm text-text">
+              <input
+                type="checkbox"
+                checked={isActive}
+                onChange={(e) => setIsActive(e.target.checked)}
+                className="size-4 rounded border-border text-warm focus:ring-warm"
+              />
+              {t('dashboard.stories.publishLive')}
+            </label>
+          )}
+
           {(error || mutationError) && (
             <p className="text-sm text-sale">{error ?? mutationError}</p>
           )}
 
           <div className="flex flex-wrap gap-3">
-            <Button variant="warm" onClick={() => void handlePublish()} disabled={isSaving || !mediaPath}>
-              {isSaving ? <InlineLoading label={t('dashboard.stories.publish')} /> : t('dashboard.stories.publish')}
+            <Button variant="warm" onClick={() => void handleSave()} disabled={isSaving || !mediaPath}>
+              {isSaving ? (
+                <InlineLoading
+                  label={
+                    mode === 'edit' ? t('dashboard.stories.saveChanges') : t('dashboard.stories.publish')
+                  }
+                />
+              ) : mode === 'edit' ? (
+                t('dashboard.stories.saveChanges')
+              ) : (
+                t('dashboard.stories.publish')
+              )}
             </Button>
-            <Button variant="secondary" onClick={() => setMode('list')} disabled={isSaving}>
+            <Button variant="secondary" onClick={resetToList} disabled={isSaving}>
               {t('address.cancel')}
             </Button>
           </div>
@@ -216,7 +293,7 @@ export function StoriesPanel() {
         description={t('dashboard.stories.description')}
         icon={<StoriesIcon size={22} />}
         action={
-          <Button variant="warm" onClick={() => setMode('create')}>
+          <Button variant="warm" onClick={startCreate}>
             {t('dashboard.stories.addStory')}
           </Button>
         }
@@ -230,7 +307,7 @@ export function StoriesPanel() {
           title={t('dashboard.stories.emptyTitle')}
           message={t('dashboard.stories.emptyMessage')}
           action={
-            <Button variant="warm" onClick={() => setMode('create')}>
+            <Button variant="warm" onClick={startCreate}>
               {t('dashboard.stories.addStory')}
             </Button>
           }
@@ -244,6 +321,7 @@ export function StoriesPanel() {
                 key={story.id}
                 story={story}
                 disabled={isSaving}
+                onEdit={() => startEdit(story)}
                 onToggle={() => void toggleStoryActive(story)}
                 onDelete={() => void deleteStory(story.id)}
               />
@@ -258,11 +336,13 @@ export function StoriesPanel() {
 function StoryManageCard({
   story,
   disabled,
+  onEdit,
   onToggle,
   onDelete,
 }: {
   story: UserStoryDraft
   disabled: boolean
+  onEdit: () => void
   onToggle: () => void
   onDelete: () => void
 }) {
@@ -281,9 +361,7 @@ function StoryManageCard({
         )}
         <span
           className={`absolute start-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide ${
-            story.isActive
-              ? 'bg-accent/90 text-text-inverse'
-              : 'bg-black/50 text-white'
+            story.isActive ? 'bg-accent/90 text-text-inverse' : 'bg-black/50 text-white'
           }`}
         >
           {story.isActive ? t('dashboard.stories.statusActive') : t('dashboard.stories.statusHidden')}
@@ -300,6 +378,9 @@ function StoryManageCard({
         </p>
 
         <div className="mt-4 flex flex-wrap gap-2">
+          <Button variant="secondary" className="py-2 text-xs" onClick={onEdit} disabled={disabled}>
+            {t('dashboard.stories.edit')}
+          </Button>
           <Button variant="secondary" className="py-2 text-xs" onClick={onToggle} disabled={disabled}>
             {story.isActive ? t('dashboard.stories.hide') : t('dashboard.stories.show')}
           </Button>

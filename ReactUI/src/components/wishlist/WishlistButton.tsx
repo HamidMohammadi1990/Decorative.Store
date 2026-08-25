@@ -34,6 +34,9 @@ export function WishlistButton({ slug, variant = 'pill', className = '' }: Wishl
       if (result === 'added') {
         setNotice(t('wishlist.added'))
         window.setTimeout(() => setNotice(null), 1800)
+      } else {
+        setNotice(t('wishlist.removed'))
+        window.setTimeout(() => setNotice(null), 1800)
       }
     } catch {
       // Keep current state when the API call fails.

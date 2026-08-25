@@ -14,11 +14,22 @@ public class DeleteUserAddressHandler
         if (userAddress is null)
             return ErrorModel.Create("InvalidId");
 
+        var userId = userAddress.UserId;
+        var wasDefault = userAddress.IsDefault;
+
         userAddressRepository.Remove(userAddress);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)
             return saveChangesResult;
+
+        if (wasDefault)
+        {
+            await userAddressRepository.PromoteNextDefaultAsync(userId, cancellationToken);
+            saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
+            if (!saveChangesResult.IsSuccess)
+                return saveChangesResult;
+        }
 
         return OperationResult.Success();
     }
