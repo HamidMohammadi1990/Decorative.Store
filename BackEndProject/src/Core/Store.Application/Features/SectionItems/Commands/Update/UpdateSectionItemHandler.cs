@@ -10,19 +10,20 @@ public class UpdateSectionItemHandler
 {
     public async Task<OperationResult> Handle(UpdateSectionItemRequest request, CancellationToken cancellationToken)
     {
-        var model = await repository.FindAsync(request.Id);
+        var model = await repository.FindWithTranslationsAsync(request.Id, cancellationToken);
         if (model is null)
             return ErrorModel.Create("InvalidId");
 
         model.Update(
             request.SectionId,
-            request.Title,
             request.Priority,
             request.Icon,
             request.ImageUrl,
-            request.Url,
+            request.IsActive,
+            request.LanguageId,
+            request.Title,
             request.Description,
-            request.IsActive);
+            request.Url);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

@@ -37,14 +37,12 @@ public sealed class EditionDbContext
     public DbSet<ProductFile> ProductFile { get; set; }
     public DbSet<ProductFileTranslation> ProductFileTranslation { get; set; }
     public DbSet<ProductProperty> ProductProperty { get; set; }
-    public DbSet<ProductPropertyPrice> ProductPropertyPrice { get; set; }
     public DbSet<Property> Property { get; set; }
     public DbSet<PropertyTranslation> PropertyTranslation { get; set; }
     public DbSet<PropertyCategory> PropertyCategory { get; set; }
     public DbSet<PropertyCategoryTranslation> PropertyCategoryTranslation { get; set; }
     public DbSet<PropertyItem> PropertyItem { get; set; }
     public DbSet<PropertyItemTranslation> PropertyItemTranslation { get; set; }
-    public DbSet<PropertyItemPrice> PropertyItemPrice { get; set; }
     public DbSet<PropertyItemDependency> PropertyItemDependency { get; set; }
     public DbSet<RefreshToken> RefreshToken { get; set; }
     public DbSet<UserSession> UserSession { get; set; }
@@ -63,8 +61,6 @@ public sealed class EditionDbContext
     public DbSet<WalletTransaction> WalletTransaction { get; set; }
     public DbSet<Province> Province { get; set; }
     public DbSet<City> City { get; set; }
-    public DbSet<ProductPropertyRule> ProductPropertyRule { get; set; }
-    public DbSet<ProductPropertyRuleTranslation> ProductPropertyRuleTranslation { get; set; }
     public DbSet<Tag> Tag { get; set; }
     public DbSet<BlogPost> BlogPost { get; set; }
     public DbSet<BlogPostTranslation> BlogPostTranslation { get; set; }
@@ -89,9 +85,13 @@ public sealed class EditionDbContext
     public DbSet<OrderCommission> OrderCommission { get; set; }
     public DbSet<OrderVat> OrderVat { get; set; }
     public DbSet<Page> Page { get; set; }
+    public DbSet<PageTranslation> PageTranslation { get; set; }
     public DbSet<Section> Section { get; set; }
+    public DbSet<SectionTranslation> SectionTranslation { get; set; }
     public DbSet<SectionItem> SectionItem { get; set; }
+    public DbSet<SectionItemTranslation> SectionItemTranslation { get; set; }
     public DbSet<SectionType> SectionType { get; set; }
+    public DbSet<SectionTypeTranslation> SectionTypeTranslation { get; set; }
     public DbSet<PageSection> PageSection { get; set; }
 
 

@@ -13,17 +13,18 @@ function toHref(slug: string): string {
 
 export function mapCategoryTreeToNav(items: CategoryTreeItem[]): NavLinkGroup[] {
   return items.map((category) => {
+    const subCategories = category.subCategories ?? []
     const navItem: NavLinkGroup = {
       id: slugToNavId(category.slug),
       label: category.title,
       href: toHref(category.slug),
     }
 
-    if (category.subCategories.length > 0) {
+    if (subCategories.length > 0) {
       navItem.columns = [
         {
           title: category.title,
-          links: category.subCategories.map((subCategory) => ({
+          links: subCategories.map((subCategory) => ({
             label: subCategory.title,
             href: toHref(subCategory.slug),
           })),

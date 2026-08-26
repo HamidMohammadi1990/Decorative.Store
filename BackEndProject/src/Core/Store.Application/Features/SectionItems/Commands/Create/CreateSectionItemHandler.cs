@@ -13,13 +13,16 @@ public class CreateSectionItemHandler
     {
         var model = SectionItem.Create(
             request.SectionId,
-            request.Title,
             request.Priority,
             request.Icon,
             request.ImageUrl,
-            request.Url,
-            request.Description,
             request.IsActive);
+
+        model.UpsertTranslation(
+            request.LanguageId,
+            request.Title,
+            request.Description,
+            request.Url);
 
         repository.Add(model);
 

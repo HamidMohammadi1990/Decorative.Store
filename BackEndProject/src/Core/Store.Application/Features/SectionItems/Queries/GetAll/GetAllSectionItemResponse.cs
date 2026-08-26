@@ -1,4 +1,5 @@
 using Edition.Application.Common.Utilities.Security.Attributes;
+using Store.Domain.Dtos.Localization;
 using System.Text.Json.Serialization;
 
 namespace Edition.Application.Features.SectionItems.Queries;
@@ -9,11 +10,9 @@ public record GetAllSectionItemResponse
     public int Id { get; init; }
     [JsonConverter(typeof(SectionEncryptor))]
     public int SectionId { get; init; }
-    public string Title { get; init; } = default!;
     public int Priority { get; init; }
     public string? Icon { get; init; }
     public string? ImageUrl { get; init; }
-    public string? Url { get; init; }
-    public string? Description { get; init; }
     public bool IsActive { get; init; }
+    public List<SectionItemTranslationItemDto> Translations { get; init; } = [];
 }

@@ -15,6 +15,9 @@ public record SearchBlogPostRequestDto : IContentPolicyQueryDto<BlogPost>
 
     public string? Slug { get; init; }
 
+    [QueryFilter(MemberPath = "blogPost.IsFeatured")]
+    public bool? IsFeatured { get; init; }
+
     public PagedRequest Pagination { get; init; } = default!;
 
     public Expression<Func<BlogPost, bool>>? ContentFilter { get; set; }

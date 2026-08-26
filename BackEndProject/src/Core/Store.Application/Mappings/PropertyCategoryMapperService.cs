@@ -16,7 +16,8 @@ public class PropertyCategoryMapperService : IPropertyCategoryMapperService
         return new GetAllPropertyCategoryRequestDto
         {
             Title = model.Title,
-            IsActive = model.IsActive
+            IsActive = model.IsActive,
+            Pagination = model.Pagination,
         }.WithContentPolicy<PropertyCategory, GetAllPropertyCategoryRequestDto>(model);
     }
 

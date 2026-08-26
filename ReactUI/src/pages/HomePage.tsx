@@ -11,13 +11,13 @@ import { useHomePage } from '@/hooks/useHomePage'
 
 export function HomePage() {
   const { t } = useTranslation()
-  const { data, loading, error } = useHomePage()
+  const { data, loading } = useHomePage()
 
-  if (loading) {
+  if (loading && !data) {
     return <PageLoading />
   }
 
-  if (error || !data) {
+  if (!data) {
     return (
       <Container className="py-20 text-center text-sm text-sale">
         {t('common.error')}

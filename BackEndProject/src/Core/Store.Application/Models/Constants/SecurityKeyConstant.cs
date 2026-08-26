@@ -42,10 +42,8 @@ public static class SecurityKeyConstant
     public static string ProductCategory => SecurityKeyRegistry.Get(nameof(ProductCategory));
     public static string PropertyCategory => SecurityKeyRegistry.Get(nameof(PropertyCategory));
     public static string BlogPostCategory => SecurityKeyRegistry.Get(nameof(BlogPostCategory));
-    public static string PropertyItemPrice => SecurityKeyRegistry.Get(nameof(PropertyItemPrice));
     public static string ProductDescription => SecurityKeyRegistry.Get(nameof(ProductDescription));
     public static string OrderItemAttachment => SecurityKeyRegistry.Get(nameof(OrderItemAttachment));
-    public static string ProductPropertyPrice => SecurityKeyRegistry.Get(nameof(ProductPropertyPrice));
     public static string RolePermission => SecurityKeyRegistry.Get(nameof(RolePermission));
     public static string UserRole => SecurityKeyRegistry.Get(nameof(UserRole));
     public static string UserSession => SecurityKeyRegistry.Get(nameof(UserSession));
@@ -57,7 +55,6 @@ public static class SecurityKeyConstant
     public static string WebSiteSetting => SecurityKeyRegistry.Get(nameof(WebSiteSetting));
     public static string Discount => SecurityKeyRegistry.Get(nameof(Discount));
     public static string ProductFeatureType => SecurityKeyRegistry.Get(nameof(ProductFeatureType));
-    public static string ProductPropertyRule => SecurityKeyRegistry.Get(nameof(ProductPropertyRule));
     public static string ProductOrderItemAttachmentType => SecurityKeyRegistry.Get(nameof(ProductOrderItemAttachmentType));
     public static string UserStory => SecurityKeyRegistry.Get(nameof(UserStory));
 }

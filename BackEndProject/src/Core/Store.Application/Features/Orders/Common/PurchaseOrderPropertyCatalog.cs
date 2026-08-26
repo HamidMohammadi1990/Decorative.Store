@@ -12,12 +12,11 @@ internal sealed class PurchaseOrderPropertyCatalog
     private PurchaseOrderPropertyCatalog(
         IReadOnlyList<ProductPropertyDto> rows,
         Dictionary<int, PropertyDefinition> definitions,
-        HashSet<int> mandatoryPropertyIds,
         Dictionary<int, HashSet<int>> itemIdsByPropertyId)
     {
         this.rows = rows;
         this.definitions = definitions;
-        MandatoryPropertyIds = mandatoryPropertyIds;
+        MandatoryPropertyIds = [];
         this.itemIdsByPropertyId = itemIdsByPropertyId;
     }
 
@@ -26,17 +25,12 @@ internal sealed class PurchaseOrderPropertyCatalog
     public static PurchaseOrderPropertyCatalog Create(IReadOnlyList<ProductPropertyDto> rows)
     {
         var definitions = new Dictionary<int, PropertyDefinition>();
-        var mandatoryPropertyIds = new HashSet<int>();
         var itemIdsByPropertyId = new Dictionary<int, HashSet<int>>();
 
         foreach (var group in rows.GroupBy(x => x.PropertyId))
         {
             var row = group.First();
             definitions[row.PropertyId] = new PropertyDefinition(false, row);
-
-            if (row.PropertyRuleIsMandatory == true)
-                mandatoryPropertyIds.Add(row.PropertyId);
-
             AddItemIds(itemIdsByPropertyId, row.PropertyId, group.Select(x => x.PropertyItemId));
         }
 
@@ -48,14 +42,10 @@ internal sealed class PurchaseOrderPropertyCatalog
 
             var row = group.First();
             definitions[parentId] = new PropertyDefinition(true, row);
-
-            if (row.ParentPropertyRuleIsMandatory == true)
-                mandatoryPropertyIds.Add(parentId);
-
             AddItemIds(itemIdsByPropertyId, parentId, group.Select(x => x.ParentPropertyItemId));
         }
 
-        return new PurchaseOrderPropertyCatalog(rows, definitions, mandatoryPropertyIds, itemIdsByPropertyId);
+        return new PurchaseOrderPropertyCatalog(rows, definitions, itemIdsByPropertyId);
     }
 
     public bool TryGetDefinition(int propertyId, out PropertyDefinition definition)
@@ -102,44 +92,6 @@ internal sealed class PurchaseOrderPropertyCatalog
         public PropertyType PropertyType
             => IsParent ? Row.ParentPropertyType ?? PropertyType.Boolean : Row.PropertyType;
 
-        public bool IsMandatory
-            => IsParent ? Row.ParentPropertyRuleIsMandatory == true : Row.PropertyRuleIsMandatory == true;
-
-        public PropertyType? RulePropertyType
-            => IsParent ? Row.ParentPropertyRulePropertyType : Row.PropertyRulePropertyType;
-
-        public decimal? MinQuantity
-            => IsParent ? Row.ParentPropertyRuleMinQuantity : Row.PropertyRuleMinQuantity;
-
-        public decimal? MaxQuantity
-            => IsParent ? Row.ParentPropertyRuleMaxQuantity : Row.PropertyRuleMaxQuantity;
-
-        public decimal? MinWidth
-            => IsParent ? Row.ParentPropertyRuleMinWidth : Row.PropertyRuleMinWidth;
-
-        public decimal? MaxWidth
-            => IsParent ? Row.ParentPropertyRuleMaxWidth : Row.PropertyRuleMaxWidth;
-
-        public decimal? MinHeight
-            => IsParent ? Row.ParentPropertyRuleMinHeight : Row.PropertyRuleMinHeight;
-
-        public decimal? MaxHeight
-            => IsParent ? Row.ParentPropertyRuleMaxHeight : Row.PropertyRuleMaxHeight;
-
-        public int? MinLength
-            => IsParent ? Row.ParentPropertyRuleMinLength : Row.PropertyRuleMinLength;
-
-        public int? MaxLength
-            => IsParent ? Row.ParentPropertyRuleMaxLength : Row.PropertyRuleMaxLength;
-
-        public decimal? PropertyPrice(bool userIsCooperation)
-            => IsParent
-                ? userIsCooperation ? Row.ParentPropertyCooperationPrice : Row.ParentPropertyPrice
-                : userIsCooperation ? Row.PropertyCooperationPrice : Row.PropertyPrice;
-
-        public decimal? PropertyItemPrice(bool userIsCooperation, ProductPropertyDto itemRow)
-            => IsParent
-                ? userIsCooperation ? itemRow.ParentPropertyItemCooperationPrice : itemRow.ParentPropertyItemPrice
-                : userIsCooperation ? itemRow.PropertyItemCooperationPrice : itemRow.PropertyItemPrice;
+        public bool IsMandatory => false;
     }
 }

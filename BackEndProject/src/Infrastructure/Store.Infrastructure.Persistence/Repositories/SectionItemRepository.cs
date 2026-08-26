@@ -1,37 +1,121 @@
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
-using Store.Infrastructure.Persistence.Extensions;
-using Store.Infrastructure.Persistence;
-using Store.Domain.Dtos.Pagination;
-using Store.Domain.Entities;
-using Store.Domain.Dtos.SectionItems;
-using Store.Domain.Repositories;
-
-namespace Store.Infrastructure.Persistence.Repositories;
-
-public class SectionItemRepository
-    (EditionDbContext context)
-    : Repository<SectionItem>(context), ISectionItemRepository
-{
-    public async Task<PagedResult<SectionItem>> GetAllAsync(GetAllSectionItemRequestDto request)
-    {
-        var sectionItems = Context.SectionItem
-            .ApplyContentPolicyFilter(request.ContentFilter)
-            .ApplyQueryFilters(request);
-
-        return await sectionItems
-            .AsNoTracking()
-            .ToPagedAsync(request.Pagination);
-    }
-
-    public async Task<PagedResult<SectionItem>> SearchAsync(SearchSectionItemRequestDto request)
-    {
-        var sectionItems = await Context.SectionItem
-            .ApplyContentPolicyFilter(request.ContentFilter)
-            .ApplyQueryFilters(request)
-            .AsNoTracking()
-            .ToPagedAsync(request.Pagination);
-
-        return sectionItems;
-    }
-}
+using Edition.Application.Contracts.Localization;
+using Microsoft.EntityFrameworkCore;
+using Store.Domain.Dtos.Localization;
+using Store.Domain.Dtos.Pagination;
+using Store.Domain.Dtos.SectionItems;
+using Store.Domain.Entities;
+using Store.Domain.Repositories;
+using Store.Infrastructure.Persistence.Extensions;
+
+namespace Store.Infrastructure.Persistence.Repositories;
+
+public class SectionItemRepository
+    (EditionDbContext context, ICurrentLanguageContext languageContext, ILanguageRegistry languageRegistry)
+    : Repository<SectionItem>(context), ISectionItemRepository
+{
+    public Task<SectionItem?> FindWithTranslationsAsync(int id, CancellationToken cancellationToken = default)
+        => Context.SectionItem
+            .Include(x => x.Translations)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+    public Task<SectionItem?> GetWithTranslationsAsNoTrackingAsync(int id, CancellationToken cancellationToken = default)
+        => Context.SectionItem
+            .AsNoTracking()
+            .Include(x => x.Translations)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+    public async Task<PagedResult<GetAllSectionItemResponseDto>> GetAllAsync(
+        GetAllSectionItemRequestDto request,
+        CancellationToken cancellationToken = default)
+    {
+        var sectionItems = Context.SectionItem
+            .AsNoTracking()
+            .Include(x => x.Translations)
+            .ApplyContentPolicyFilter(request.ContentFilter)
+            .ApplyQueryFilters(request);
+
+        if (!string.IsNullOrWhiteSpace(request.Title))
+            sectionItems = sectionItems.Where(x => x.Translations.Any(t => t.Title.Contains(request.Title)));
+
+        return await sectionItems
+            .Select(x => new GetAllSectionItemResponseDto
+            {
+                Id = x.Id,
+                SectionId = x.SectionId,
+                Priority = x.Priority,
+                Icon = x.Icon,
+                ImageUrl = x.ImageUrl,
+                IsActive = x.IsActive,
+                Translations = x.Translations
+                    .Select(t => new SectionItemTranslationItemDto
+                    {
+                        LanguageId = t.LanguageId,
+                        Title = t.Title,
+                        Description = t.Description,
+                        Url = t.Url,
+                    })
+                    .ToList(),
+            })
+            .ToPagedAsync(request.Pagination);
+    }
+
+    public async Task<PagedResult<SearchSectionItemResponseDto>> SearchAsync(
+        SearchSectionItemRequestDto request,
+        CancellationToken cancellationToken = default)
+    {
+        var (languageId, defaultLanguageId) = await ResolveLanguageIdsAsync(cancellationToken);
+
+        var sectionItems = Context.SectionItem
+            .AsNoTracking()
+            .ApplyContentPolicyFilter(request.ContentFilter)
+            .ApplyQueryFilters(request);
+
+        if (!string.IsNullOrWhiteSpace(request.Title))
+            sectionItems = sectionItems.Where(x => x.Translations.Any(t => t.Title.Contains(request.Title)));
+
+        return await sectionItems
+            .Select(x => new SearchSectionItemResponseDto
+            {
+                Id = x.Id,
+                SectionId = x.SectionId,
+                Title = x.Translations
+                        .Where(t => t.LanguageId == languageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? x.Translations
+                        .Where(t => t.LanguageId == defaultLanguageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                    ?? string.Empty,
+                Description = x.Translations
+                        .Where(t => t.LanguageId == languageId)
+                        .Select(t => t.Description)
+                        .FirstOrDefault()
+                    ?? x.Translations
+                        .Where(t => t.LanguageId == defaultLanguageId)
+                        .Select(t => t.Description)
+                        .FirstOrDefault(),
+                Url = x.Translations
+                        .Where(t => t.LanguageId == languageId)
+                        .Select(t => t.Url)
+                        .FirstOrDefault()
+                    ?? x.Translations
+                        .Where(t => t.LanguageId == defaultLanguageId)
+                        .Select(t => t.Url)
+                        .FirstOrDefault(),
+                Priority = x.Priority,
+                Icon = x.Icon,
+                ImageUrl = x.ImageUrl,
+                IsActive = x.IsActive,
+            })
+            .ToPagedAsync(request.Pagination);
+    }
+
+    private async Task<(int LanguageId, int DefaultLanguageId)> ResolveLanguageIdsAsync(CancellationToken cancellationToken)
+    {
+        var defaultLanguage = await languageRegistry.GetDefaultAsync(cancellationToken);
+        var languageId = languageContext.IsResolved ? languageContext.LanguageId : defaultLanguage.Id;
+        return (languageId, defaultLanguage.Id);
+    }
+}
+

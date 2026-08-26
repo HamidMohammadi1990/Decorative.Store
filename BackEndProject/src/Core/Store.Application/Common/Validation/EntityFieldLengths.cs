@@ -171,11 +171,6 @@ public static class EntityFieldLengths
         public const int Description = 200;
     }
 
-    public static class ProductPropertyRule
-    {
-        public const int Description = 250;
-    }
-
     public static class Property
     {
         public const int Title = 30;

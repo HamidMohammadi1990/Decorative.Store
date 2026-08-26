@@ -36,7 +36,7 @@ public class ProductCommentMapperService : IProductCommentMapperService
                 ProductId = x.ProductId,
                 Description = x.Description,
                 CommentRate = x.CommentRate,
-                QualityRating = x.CommentRate,
+                QualityRating = x.QualityRating,
                 CommentTopicId = x.CommentTopicId,
                 UserName = x.UserName,
                 UserFirstName = x.UserFirstName,
@@ -44,6 +44,7 @@ public class ProductCommentMapperService : IProductCommentMapperService
                 ProductTitle = x.ProductTitle,
                 AffordableRating = x.AffordableRating,
                 CommentTopicTitle = x.CommentTopicTitle,
+                IsActive = x.IsActive,
             })
             .ToList();
 
@@ -61,14 +62,14 @@ public class ProductCommentMapperService : IProductCommentMapperService
                 ProductId = x.ProductId,
                 Description = x.Description,
                 CommentRate = x.CommentRate,
-                QualityRating = x.CommentRate,
+                QualityRating = x.QualityRating,
                 CommentTopicId = x.CommentTopicId,
                 UserName = x.UserName,
                 UserFirstName = x.UserFirstName,
                 UserLastName = x.UserLastName,
                 ProductTitle = x.ProductTitle,
                 AffordableRating = x.AffordableRating,
-                CommentTopicTitle = x.CommentTopicTitle,
+                CommentTopicTitle = x.CommentTopicTitle
             })
             .ToList();
 

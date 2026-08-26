@@ -3,32 +3,30 @@ using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Contracts.Mapping;
 using Edition.Application.Features.SectionItems.Queries;
 using Store.Domain.Dtos.Pagination;
-using Store.Domain.Entities;
 using Store.Domain.Dtos.SectionItems;
+using Store.Domain.Entities;
 
 namespace Edition.Application.Mappings;
 
 public class SectionItemMapperService : ISectionItemMapperService
 {
-    public PagedResult<GetAllSectionItemResponse> Map(PagedResult<SectionItem> model)
+    public PagedResult<GetAllSectionItemResponse> Map(PagedResult<GetAllSectionItemResponseDto> model)
     {
         var items = model.Items.Select(x => new GetAllSectionItemResponse
         {
             Id = x.Id,
             SectionId = x.SectionId,
-            Title = x.Title,
             Priority = x.Priority,
             Icon = x.Icon,
             ImageUrl = x.ImageUrl,
-            Url = x.Url,
-            Description = x.Description,
-            IsActive = x.IsActive
+            IsActive = x.IsActive,
+            Translations = x.Translations,
         }).ToList();
 
         return PagedResult<GetAllSectionItemResponse>.Create(items, model);
     }
 
-    public PagedResult<SearchSectionItemResponse> MapToSearch(PagedResult<SectionItem> model)
+    public PagedResult<SearchSectionItemResponse> MapToSearch(PagedResult<SearchSectionItemResponseDto> model)
     {
         var items = model.Items.Select(x => new SearchSectionItemResponse
         {
@@ -39,25 +37,26 @@ public class SectionItemMapperService : ISectionItemMapperService
             Icon = x.Icon,
             ImageUrl = x.ImageUrl,
             Url = x.Url,
-            IsActive = x.IsActive
+            Description = x.Description,
+            IsActive = x.IsActive,
         }).ToList();
 
         return PagedResult<SearchSectionItemResponse>.Create(items, model);
     }
 
-    public GetSectionItemResponse Map(SectionItem model)
+    public GetSectionItemResponse Map(SectionItem model, string title, string? description, string? url)
     {
         return new GetSectionItemResponse
         {
             Id = model.Id,
             SectionId = model.SectionId,
-            Title = model.Title,
+            Title = title,
             Priority = model.Priority,
             Icon = model.Icon,
             ImageUrl = model.ImageUrl,
-            Url = model.Url,
-            Description = model.Description,
-            IsActive = model.IsActive
+            Url = url,
+            Description = description,
+            IsActive = model.IsActive,
         };
     }
 
@@ -67,7 +66,7 @@ public class SectionItemMapperService : ISectionItemMapperService
         {
             SectionId = model.SectionId,
             Title = model.Title,
-            Pagination = model.Pagination
+            Pagination = model.Pagination,
         }.WithContentPolicy<SectionItem, GetAllSectionItemRequestDto>(model);
     }
 
@@ -77,7 +76,7 @@ public class SectionItemMapperService : ISectionItemMapperService
         {
             SectionId = model.SectionId,
             Title = model.Title,
-            Pagination = model.Pagination
+            Pagination = model.Pagination,
         }.WithContentPolicy<SectionItem, SearchSectionItemRequestDto>(model);
     }
 }

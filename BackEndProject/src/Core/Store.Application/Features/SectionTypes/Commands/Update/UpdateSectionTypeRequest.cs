@@ -8,6 +8,7 @@ public record UpdateSectionTypeRequest : IRequest<OperationResult>
 {
     [JsonConverter(typeof(SectionTypeEncryptor))]
     public int Id { get; init; }
+    public int LanguageId { get; init; }
     public string Name { get; init; } = default!;
     public bool IsActive { get; init; }
 }

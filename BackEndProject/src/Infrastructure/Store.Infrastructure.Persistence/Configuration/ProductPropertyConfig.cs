@@ -27,16 +27,6 @@ internal class ProductPropertyConfig : IEntityTypeConfiguration<ProductProperty>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(x => x.ProductPropertyRule)
-            .WithOne(x => x.ProductProperty)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
-            .HasOne(x => x.ProductPropertyPrice)
-            .WithOne(x => x.ProductProperty)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasIndex(x => new { x.ProductId, x.PropertyId });
     }
 }

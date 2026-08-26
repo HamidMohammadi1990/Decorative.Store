@@ -1487,27 +1487,10 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("MetaDescription")
-                        .HasColumnType("NVARCHAR(300)");
-
-                    b.Property<string>("MetaTitle")
-                        .HasColumnType("NVARCHAR(120)");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR(350)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR(60)");
-
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Slug")
-                        .IsUnique();
 
                     b.ToTable("Page");
                 });
@@ -1537,6 +1520,45 @@ namespace Store.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("PageSection");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.PageTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MetaDescription")
+                        .HasColumnType("NVARCHAR(300)");
+
+                    b.Property<string>("MetaTitle")
+                        .HasColumnType("NVARCHAR(120)");
+
+                    b.Property<int>("PageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(350)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(60)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId", "Slug")
+                        .IsUnique();
+
+                    b.HasIndex("PageId", "LanguageId")
+                        .IsUnique();
+
+                    b.ToTable("PageTranslation", (string)null);
                 });
 
             modelBuilder.Entity("Store.Domain.Entities.Permission", b =>
@@ -1875,124 +1897,6 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.ToTable("ProductProperty");
                 });
 
-            modelBuilder.Entity("Store.Domain.Entities.ProductPropertyPrice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("CooperationPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("CreatedOnUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("CurrencyId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("PeriodEnd")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("PeriodEnd");
-
-                    b.Property<DateTime>("PeriodStart")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("PeriodStart");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ProductPropertyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurrencyId");
-
-                    b.HasIndex("ProductPropertyId")
-                        .IsUnique();
-
-                    b.ToTable("ProductPropertyPrice");
-
-                    b.ToTable(tb => tb.IsTemporal(ttb =>
-                            {
-                                ttb.UseHistoryTable("ProductPropertyPriceHistory");
-                                ttb
-                                    .HasPeriodStart("PeriodStart")
-                                    .HasColumnName("PeriodStart");
-                                ttb
-                                    .HasPeriodEnd("PeriodEnd")
-                                    .HasColumnName("PeriodEnd");
-                            }));
-                });
-
-            modelBuilder.Entity("Store.Domain.Entities.ProductPropertyRule", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsMandatory")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ProductPropertyId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PropertyType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductPropertyId")
-                        .IsUnique();
-
-                    b.ToTable("ProductPropertyRule");
-
-                    b.HasDiscriminator<int>("PropertyType").HasValue(1);
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Store.Domain.Entities.ProductPropertyRuleTranslation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("NVARCHAR(250)");
-
-                    b.Property<int>("LanguageId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductPropertyRuleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("ProductPropertyRuleId", "LanguageId")
-                        .IsUnique();
-
-                    b.ToTable("ProductPropertyRuleTranslation", (string)null);
-                });
-
             modelBuilder.Entity("Store.Domain.Entities.ProductQuestion", b =>
                 {
                     b.Property<int>("Id")
@@ -2236,65 +2140,6 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.ToTable("PropertyItemDependency");
                 });
 
-            modelBuilder.Entity("Store.Domain.Entities.PropertyItemPrice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("CooperationPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("CreatedOnUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("CurrencyId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("PeriodEnd")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("PeriodEnd");
-
-                    b.Property<DateTime>("PeriodStart")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("PeriodStart");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("PropertyItemId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurrencyId");
-
-                    b.HasIndex("PropertyItemId")
-                        .IsUnique();
-
-                    b.ToTable("PropertyItemPrice");
-
-                    b.ToTable(tb => tb.IsTemporal(ttb =>
-                            {
-                                ttb.UseHistoryTable("PropertyItemPriceHistory");
-                                ttb
-                                    .HasPeriodStart("PeriodStart")
-                                    .HasColumnName("PeriodStart");
-                                ttb
-                                    .HasPeriodEnd("PeriodEnd")
-                                    .HasColumnName("PeriodEnd");
-                            }));
-                });
-
             modelBuilder.Entity("Store.Domain.Entities.PropertyItemTranslation", b =>
                 {
                     b.Property<int>("Id")
@@ -2498,9 +2343,6 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .HasColumnType("NVARCHAR(160)");
-
                     b.Property<DateTime?>("EndDateOnUtc")
                         .HasColumnType("datetime2");
 
@@ -2519,14 +2361,6 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("StartDateOnUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR(80)");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR(150)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ParentId");
@@ -2544,9 +2378,6 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .HasColumnType("NVARCHAR(250)");
-
                     b.Property<string>("Icon")
                         .HasColumnType("VARCHAR(24)");
 
@@ -2562,6 +2393,30 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Property<int>("SectionId")
                         .HasColumnType("int");
 
+                    b.HasKey("Id");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("SectionItem");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.SectionItemTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("NVARCHAR(250)");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SectionItemId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("NVARCHAR(80)");
@@ -2571,9 +2426,47 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SectionId");
+                    b.HasIndex("LanguageId");
 
-                    b.ToTable("SectionItem");
+                    b.HasIndex("SectionItemId", "LanguageId")
+                        .IsUnique();
+
+                    b.ToTable("SectionItemTranslation", (string)null);
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.SectionTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("NVARCHAR(160)");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SectionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(80)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(150)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("SectionId", "LanguageId")
+                        .IsUnique();
+
+                    b.ToTable("SectionTranslation", (string)null);
                 });
 
             modelBuilder.Entity("Store.Domain.Entities.SectionType", b =>
@@ -2587,16 +2480,38 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.HasKey("Id");
+
+                    b.ToTable("SectionType");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.SectionTypeTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("NVARCHAR(80)");
 
+                    b.Property<int>("SectionTypeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
+                    b.HasIndex("LanguageId", "Name")
                         .IsUnique();
 
-                    b.ToTable("SectionType");
+                    b.HasIndex("SectionTypeId", "LanguageId")
+                        .IsUnique();
+
+                    b.ToTable("SectionTypeTranslation", (string)null);
                 });
 
             modelBuilder.Entity("Store.Domain.Entities.SubCategory", b =>
@@ -2817,9 +2732,9 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.HasIndex("UserId", "IsDefault");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId", "IsDefault");
 
                     b.ToTable("UserAddress");
                 });
@@ -3150,57 +3065,6 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Value")
                         .HasColumnType("NVARCHAR(80)");
-
-                    b.HasDiscriminator().HasValue(6);
-                });
-
-            modelBuilder.Entity("Store.Domain.Entities.DimensionsProductPropertyRule", b =>
-                {
-                    b.HasBaseType("Store.Domain.Entities.ProductPropertyRule");
-
-                    b.Property<decimal>("MaxHeight")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("MaxWidth")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("MinHeight")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("MinWidth")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasDiscriminator().HasValue(5);
-                });
-
-            modelBuilder.Entity("Store.Domain.Entities.NumericProductPropertyRule", b =>
-                {
-                    b.HasBaseType("Store.Domain.Entities.ProductPropertyRule");
-
-                    b.Property<decimal>("MaxQuantity")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("MinQuantity")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasDiscriminator().HasValue(4);
-                });
-
-            modelBuilder.Entity("Store.Domain.Entities.TextProductPropertyRule", b =>
-                {
-                    b.HasBaseType("Store.Domain.Entities.ProductPropertyRule");
-
-                    b.Property<int>("MaxLength")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MinLength")
-                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue(6);
                 });
@@ -3772,6 +3636,25 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Navigation("Section");
                 });
 
+            modelBuilder.Entity("Store.Domain.Entities.PageTranslation", b =>
+                {
+                    b.HasOne("Store.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Store.Domain.Entities.Page", "Page")
+                        .WithMany("Translations")
+                        .HasForeignKey("PageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Page");
+                });
+
             modelBuilder.Entity("Store.Domain.Entities.Permission", b =>
                 {
                     b.HasOne("Store.Domain.Entities.Permission", "Parent")
@@ -3914,51 +3797,6 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Navigation("PropertyItem");
                 });
 
-            modelBuilder.Entity("Store.Domain.Entities.ProductPropertyPrice", b =>
-                {
-                    b.HasOne("Store.Domain.Entities.Currency", null)
-                        .WithMany("ProductPropertyPrices")
-                        .HasForeignKey("CurrencyId");
-
-                    b.HasOne("Store.Domain.Entities.ProductProperty", "ProductProperty")
-                        .WithOne("ProductPropertyPrice")
-                        .HasForeignKey("Store.Domain.Entities.ProductPropertyPrice", "ProductPropertyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ProductProperty");
-                });
-
-            modelBuilder.Entity("Store.Domain.Entities.ProductPropertyRule", b =>
-                {
-                    b.HasOne("Store.Domain.Entities.ProductProperty", "ProductProperty")
-                        .WithOne("ProductPropertyRule")
-                        .HasForeignKey("Store.Domain.Entities.ProductPropertyRule", "ProductPropertyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ProductProperty");
-                });
-
-            modelBuilder.Entity("Store.Domain.Entities.ProductPropertyRuleTranslation", b =>
-                {
-                    b.HasOne("Store.Domain.Entities.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Store.Domain.Entities.ProductPropertyRule", "ProductPropertyRule")
-                        .WithMany("Translations")
-                        .HasForeignKey("ProductPropertyRuleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-
-                    b.Navigation("ProductPropertyRule");
-                });
-
             modelBuilder.Entity("Store.Domain.Entities.ProductQuestion", b =>
                 {
                     b.HasOne("Store.Domain.Entities.User", "AnsweredByUser")
@@ -4090,21 +3928,6 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Navigation("ParentPropertyItem");
                 });
 
-            modelBuilder.Entity("Store.Domain.Entities.PropertyItemPrice", b =>
-                {
-                    b.HasOne("Store.Domain.Entities.Currency", null)
-                        .WithMany("PropertyItemPrices")
-                        .HasForeignKey("CurrencyId");
-
-                    b.HasOne("Store.Domain.Entities.PropertyItem", "PropertyItem")
-                        .WithOne("PropertyItemPrice")
-                        .HasForeignKey("Store.Domain.Entities.PropertyItemPrice", "PropertyItemId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("PropertyItem");
-                });
-
             modelBuilder.Entity("Store.Domain.Entities.PropertyItemTranslation", b =>
                 {
                     b.HasOne("Store.Domain.Entities.Language", "Language")
@@ -4207,6 +4030,63 @@ namespace Store.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.SectionItemTranslation", b =>
+                {
+                    b.HasOne("Store.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Store.Domain.Entities.SectionItem", "SectionItem")
+                        .WithMany("Translations")
+                        .HasForeignKey("SectionItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("SectionItem");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.SectionTranslation", b =>
+                {
+                    b.HasOne("Store.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Store.Domain.Entities.Section", "Section")
+                        .WithMany("Translations")
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.SectionTypeTranslation", b =>
+                {
+                    b.HasOne("Store.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Store.Domain.Entities.SectionType", "SectionType")
+                        .WithMany("Translations")
+                        .HasForeignKey("SectionTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("SectionType");
                 });
 
             modelBuilder.Entity("Store.Domain.Entities.SubCategory", b =>
@@ -4443,13 +4323,6 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Navigation("Rules");
                 });
 
-            modelBuilder.Entity("Store.Domain.Entities.Currency", b =>
-                {
-                    b.Navigation("ProductPropertyPrices");
-
-                    b.Navigation("PropertyItemPrices");
-                });
-
             modelBuilder.Entity("Store.Domain.Entities.DeliveryType", b =>
                 {
                     b.Navigation("OrderItems");
@@ -4512,6 +4385,8 @@ namespace Store.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Store.Domain.Entities.Page", b =>
                 {
                     b.Navigation("PageSections");
+
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("Store.Domain.Entities.Permission", b =>
@@ -4568,20 +4443,6 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Navigation("OrderItemAttachments");
                 });
 
-            modelBuilder.Entity("Store.Domain.Entities.ProductProperty", b =>
-                {
-                    b.Navigation("ProductPropertyPrice")
-                        .IsRequired();
-
-                    b.Navigation("ProductPropertyRule")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Store.Domain.Entities.ProductPropertyRule", b =>
-                {
-                    b.Navigation("Translations");
-                });
-
             modelBuilder.Entity("Store.Domain.Entities.Property", b =>
                 {
                     b.Navigation("Children");
@@ -4612,9 +4473,6 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.Navigation("ProductProperties");
 
-                    b.Navigation("PropertyItemPrice")
-                        .IsRequired();
-
                     b.Navigation("Translations");
                 });
 
@@ -4637,11 +4495,20 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Navigation("PageSections");
 
                     b.Navigation("SectionItems");
+
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.SectionItem", b =>
+                {
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("Store.Domain.Entities.SectionType", b =>
                 {
                     b.Navigation("Sections");
+
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("Store.Domain.Entities.SubCategory", b =>

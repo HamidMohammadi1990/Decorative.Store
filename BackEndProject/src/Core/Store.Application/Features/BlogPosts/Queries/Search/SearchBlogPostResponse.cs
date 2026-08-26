@@ -29,4 +29,5 @@ public record SearchBlogPostResponse
     public DateTime CreatedOnUtc { get; init; }
     public DateTime? UpdatedOnUtc { get; init; }
     public DateTime? PublishedOnUtc { get; init; }
+    public bool IsFeatured { get; init; }
 }

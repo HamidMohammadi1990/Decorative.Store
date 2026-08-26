@@ -1,7 +1,7 @@
 using Edition.Application.Contracts.Persistence;
 using Store.Common.Models;
-using Store.Domain.Repositories;
 using Store.Domain.Entities;
+using Store.Domain.Repositories;
 
 namespace Edition.Application.Features.Sections.Commands;
 
@@ -14,13 +14,16 @@ public class CreateSectionHandler
         var model = Section.Create(
             request.SectionTypeId,
             request.ParentId,
-            request.Title,
-            request.Description,
-            request.Url,
             request.ImageUrl,
             request.StartDateOnUtc,
             request.EndDateOnUtc,
             request.IsActive);
+
+        model.UpsertTranslation(
+            request.LanguageId,
+            request.Title,
+            request.Url,
+            request.Description);
 
         repository.Add(model);
 

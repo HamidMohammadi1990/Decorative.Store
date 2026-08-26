@@ -39,11 +39,6 @@ internal class PropertyItemConfig : IEntityTypeConfiguration<PropertyItem>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasOne(x => x.PropertyItemPrice)
-            .WithOne(x => x.PropertyItem)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        builder
             .HasIndex(x => x.PropertyId);
 
         builder

@@ -13,6 +13,23 @@ import {
   readStringField,
 } from '@/services/api/apiNormalize'
 
+function readBooleanField(record: Record<string, unknown>, ...keys: string[]) {
+  for (const key of keys) {
+    const value = record[key]
+    if (typeof value === 'boolean') return value
+  }
+  return false
+}
+
+function readStringListField(record: Record<string, unknown>, ...keys: string[]) {
+  for (const key of keys) {
+    const value = record[key]
+    if (!Array.isArray(value)) continue
+    return value.filter((item): item is string => typeof item === 'string' && item.length > 0)
+  }
+  return []
+}
+
 export function parseBlogContent(content: string): string[] {
   return content
     .split(/\n{2,}/)
@@ -62,6 +79,7 @@ export function normalizeBlogPostSummary(
     new Date().toISOString()
 
   const seoKeywords = readStringField(record, 'seoKeywords', 'SeoKeywords')
+  const featured = readBooleanField(record, 'isFeatured', 'IsFeatured')
 
   return {
     id: readStringField(record, 'id', 'Id'),
@@ -74,9 +92,9 @@ export function normalizeBlogPostSummary(
     authorId: readStringField(record, 'userId', 'UserId'),
     publishedAt,
     readTimeMinutes: readNumberField(record, 'readingTimeInMinutes', 'ReadingTimeInMinutes'),
-    likes: 0,
-    commentCount: 0,
-    featured: false,
+    likes: readNumberField(record, 'likeCount', 'LikeCount'),
+    commentCount: readNumberField(record, 'commentCount', 'CommentCount'),
+    featured,
     tags: parseSeoKeywords(seoKeywords),
   }
 }
@@ -159,7 +177,9 @@ export function normalizeBlogPostDetailPage(data: unknown): {
 
   const categorySlug = readStringField(postRecord, 'categorySlug', 'CategorySlug')
   const categoryLabel = readStringField(postRecord, 'categoryTitle', 'CategoryTitle')
+  const tagTitles = readStringListField(postRecord, 'tagTitles', 'TagTitles')
   const post = normalizeBlogPostDetail(postRecord, DEFAULT_DETAIL_COVER, categorySlug, categoryLabel)
+  const tags = tagTitles.length > 0 ? tagTitles : post.tags
 
   const comments = (Array.isArray(record.comments ?? record.Comments)
     ? (record.comments ?? record.Comments)
@@ -181,6 +201,7 @@ export function normalizeBlogPostDetailPage(data: unknown): {
   return {
     post: {
       ...post,
+      tags,
       comments,
       commentCount,
     },

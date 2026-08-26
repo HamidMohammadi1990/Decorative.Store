@@ -39,6 +39,9 @@ public record BlogPostDetailPostResponse
     public DateTime? UpdatedOnUtc { get; init; }
     public DateTime? PublishedOnUtc { get; init; }
     public int CommentCount { get; init; }
+    public int LikeCount { get; init; }
+    public bool IsFeatured { get; init; }
+    public List<string> TagTitles { get; init; } = [];
 }
 
 public record BlogPostDetailCommentResponse

@@ -6,17 +6,32 @@ namespace Edition.Application.Features.Pages.Commands;
 
 public class CreatePageValidator : AbstractValidator<CreatePageRequest>
 {
-    public CreatePageValidator(IPageRepository pageRepository)
+    public CreatePageValidator(
+        IPageRepository pageRepository,
+        ILanguageRepository languageRepository)
     {
+        RuleFor(x => x.LanguageId)
+            .GreaterThan(0)
+            .WithMessage(MessageKeys.InvalidRequest)
+            .MustAsync(async (languageId, cancellationToken) =>
+                await languageRepository.FindAsync(languageId, cancellationToken) is { IsActive: true })
+            .WithMessage(MessageKeys.InvalidRequest);
+
         RuleFor(x => x.Title)
             .NotEmpty()
             .WithMessage(MessageKeys.TitleRequired);
 
         RuleFor(x => x.Slug)
             .NotEmpty()
-            .WithMessage(MessageKeys.SlugRequired)
-            .MustAsync(async (slug, cancellationToken)
-                => !await pageRepository.AnyAsync(x => x.Slug == slug.Trim()))
+            .WithMessage(MessageKeys.SlugRequired);
+
+        RuleFor(x => x)
+            .MustAsync(async (request, cancellationToken) =>
+                !await pageRepository.ExistsTranslationAsync(
+                    request.LanguageId,
+                    request.Title,
+                    request.Slug,
+                    cancellationToken: cancellationToken))
             .WithMessage(MessageKeys.DuplicateSlug);
     }
 }

@@ -12,6 +12,7 @@ public record SearchSectionResponse
     [JsonConverter(typeof(SectionNullableEncryptor))]
     public int? ParentId { get; init; }
     public string Title { get; init; } = default!;
+    public string? Description { get; set; }
     public string Url { get; init; } = default!;
     public string? ImageUrl { get; init; }
     public bool IsActive { get; init; }

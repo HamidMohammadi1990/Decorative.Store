@@ -8,6 +8,7 @@ public record UpdateSectionItemRequest : IRequest<OperationResult>
 {
     [JsonConverter(typeof(SectionItemEncryptor))]
     public int Id { get; init; }
+    public int LanguageId { get; init; }
     [JsonConverter(typeof(SectionEncryptor))]
     public int SectionId { get; init; }
     public string Title { get; init; } = default!;

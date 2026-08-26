@@ -14,5 +14,6 @@ public record SearchSectionItemResponse
     public string? Icon { get; init; }
     public string? ImageUrl { get; init; }
     public string? Url { get; init; }
+    public string? Description { get; init; }
     public bool IsActive { get; init; }
 }

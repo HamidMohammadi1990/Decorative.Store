@@ -526,15 +526,11 @@
 
   <data name="PermissionType_CreateProductPriceDeliveryOption" xml:space="preserve"><value>Create Product Price Delivery Option</value></data>
 
-  <data name="PermissionType_CreateProductPropertyPrice" xml:space="preserve"><value>Create Product Property Price</value></data>
-
   <data name="PermissionType_CreateProperty" xml:space="preserve"><value>Create Property</value></data>
 
   <data name="PermissionType_CreatePropertyCategory" xml:space="preserve"><value>Create Property Category</value></data>
 
   <data name="PermissionType_CreatePropertyItem" xml:space="preserve"><value>Create Property Item</value></data>
-
-  <data name="PermissionType_CreatePropertyItemPrice" xml:space="preserve"><value>Create Property Item Price</value></data>
 
   <data name="PermissionType_CreateProvince" xml:space="preserve"><value>Create Province</value></data>
 
@@ -654,15 +650,11 @@
 
   <data name="PermissionType_GetProductPriceDeliveryOptionById" xml:space="preserve"><value>Get Product Price Delivery Option By Id</value></data>
 
-  <data name="PermissionType_GetProductPropertyPriceById" xml:space="preserve"><value>Get Product Property Price By Id</value></data>
-
   <data name="PermissionType_GetPropertyById" xml:space="preserve"><value>Get Property By Id</value></data>
 
   <data name="PermissionType_GetPropertyCategoryById" xml:space="preserve"><value>Get Property Category By Id</value></data>
 
   <data name="PermissionType_GetPropertyItemById" xml:space="preserve"><value>Get Property Item By Id</value></data>
-
-  <data name="PermissionType_GetPropertyItemPriceById" xml:space="preserve"><value>Get Property Item Price By Id</value></data>
 
   <data name="PermissionType_GetProvinceById" xml:space="preserve"><value>Get Province By Id</value></data>
 
@@ -734,15 +726,11 @@
 
   <data name="PermissionType_ListProductPriceDeliveryOption" xml:space="preserve"><value>List Product Price Delivery Option</value></data>
 
-  <data name="PermissionType_ListProductPropertyPrice" xml:space="preserve"><value>List Product Property Price</value></data>
-
   <data name="PermissionType_ListProperty" xml:space="preserve"><value>List Property</value></data>
 
   <data name="PermissionType_ListPropertyCategory" xml:space="preserve"><value>List Property Category</value></data>
 
   <data name="PermissionType_ListPropertyItem" xml:space="preserve"><value>List Property Item</value></data>
-
-  <data name="PermissionType_ListPropertyItemPrice" xml:space="preserve"><value>List Property Item Price</value></data>
 
   <data name="PermissionType_ListProvince" xml:space="preserve"><value>List Province</value></data>
 
@@ -840,8 +828,6 @@
 
   <data name="PermissionType_ManageProductPriceDeliveryOption" xml:space="preserve"><value>Manage Product Price Delivery Option</value></data>
 
-  <data name="PermissionType_ManageProductPropertyPrice" xml:space="preserve"><value>Manage Product Property Price</value></data>
-
   <data name="PermissionType_ManageProperty" xml:space="preserve"><value>Manage Property</value></data>
 
   <data name="PermissionType_ManagePropertyCategory" xml:space="preserve"><value>Manage Property Category</value></data>
@@ -849,8 +835,6 @@
   <data name="PermissionType_ManagePropertyGroup" xml:space="preserve"><value>Manage Property Group</value></data>
 
   <data name="PermissionType_ManagePropertyItem" xml:space="preserve"><value>Manage Property Item</value></data>
-
-  <data name="PermissionType_ManagePropertyItemPrice" xml:space="preserve"><value>Manage Property Item Price</value></data>
 
   <data name="PermissionType_ManageProvince" xml:space="preserve"><value>Manage Province</value></data>
 
@@ -928,15 +912,11 @@
 
   <data name="PermissionType_UpdateProductPriceDeliveryOption" xml:space="preserve"><value>Update Product Price Delivery Option</value></data>
 
-  <data name="PermissionType_UpdateProductPropertyPrice" xml:space="preserve"><value>Update Product Property Price</value></data>
-
   <data name="PermissionType_UpdateProperty" xml:space="preserve"><value>Update Property</value></data>
 
   <data name="PermissionType_UpdatePropertyCategory" xml:space="preserve"><value>Update Property Category</value></data>
 
   <data name="PermissionType_UpdatePropertyItem" xml:space="preserve"><value>Update Property Item</value></data>
-
-  <data name="PermissionType_UpdatePropertyItemPrice" xml:space="preserve"><value>Update Property Item Price</value></data>
 
   <data name="PermissionType_UpdateProvince" xml:space="preserve"><value>Update Province</value></data>
 
@@ -968,12 +948,6 @@
   <data name="PermissionType_CreateProductProperty" xml:space="preserve"><value>ایجاد ویژگی محصول</value></data>
   <data name="PermissionType_UpdateProductProperty" xml:space="preserve"><value>ویرایش ویژگی محصول</value></data>
   <data name="PermissionType_DeleteProductProperty" xml:space="preserve"><value>حذف ویژگی محصول</value></data>
-  <data name="PermissionType_ManageProductPropertyRule" xml:space="preserve"><value>مدیریت قانون ویژگی محصول</value></data>
-  <data name="PermissionType_ListProductPropertyRule" xml:space="preserve"><value>لیست قانون ویژگی محصول</value></data>
-  <data name="PermissionType_GetProductPropertyRuleById" xml:space="preserve"><value>جزئیات قانون ویژگی محصول</value></data>
-  <data name="PermissionType_CreateProductPropertyRule" xml:space="preserve"><value>ایجاد قانون ویژگی محصول</value></data>
-  <data name="PermissionType_UpdateProductPropertyRule" xml:space="preserve"><value>ویرایش قانون ویژگی محصول</value></data>
-  <data name="PermissionType_DeleteProductPropertyRule" xml:space="preserve"><value>حذف قانون ویژگی محصول</value></data>
   <data name="PermissionType_ManageDiscount" xml:space="preserve"><value>مدیریت تخفیف</value></data>
   <data name="PermissionType_ListDiscount" xml:space="preserve"><value>لیست تخفیف</value></data>
   <data name="PermissionType_GetDiscountById" xml:space="preserve"><value>جزئیات تخفیف</value></data>

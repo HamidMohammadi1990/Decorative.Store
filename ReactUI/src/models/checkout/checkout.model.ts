@@ -15,19 +15,6 @@ export interface CheckoutPriceField {
   currencyCode: string
 }
 
-export interface CheckoutPropertyRule {
-  isMandatory: boolean
-  description?: string | null
-  minQuantity?: number
-  maxQuantity?: number
-  minLength?: number
-  maxLength?: number
-  minWidth?: number
-  maxWidth?: number
-  minHeight?: number
-  maxHeight?: number
-}
-
 export interface CheckoutPropertyItem {
   id: string
   title: string
@@ -48,7 +35,6 @@ export interface CheckoutProperty {
   items: CheckoutPropertyItem[]
   dependencies: CheckoutPropertyDependency[]
   parents: CheckoutProperty[]
-  rule?: CheckoutPropertyRule | null
 }
 
 export interface CheckoutPropertyGroup {

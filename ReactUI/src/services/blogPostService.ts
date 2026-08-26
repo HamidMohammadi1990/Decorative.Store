@@ -20,6 +20,7 @@ interface BlogPostSearchOptions {
   slug?: string
   categoryId?: string
   categorySlugById?: Record<string, string>
+  isFeatured?: boolean
   pagination?: PagedRequest
 }
 
@@ -31,7 +32,7 @@ interface BlogPostDetailPageResult {
 
 function searchCacheKey(locale: Locale, options: BlogPostSearchOptions) {
   const pagination = options.pagination ?? { pageNumber: 1, pageSize: 12 }
-  return `${locale}:${options.slug ?? 'all'}:${options.categoryId ?? 'all'}:${pagination.pageNumber}:${pagination.pageSize}`
+  return `${locale}:${options.slug ?? 'all'}:${options.categoryId ?? 'all'}:${options.isFeatured ?? 'all'}:${pagination.pageNumber}:${pagination.pageSize}`
 }
 
 const searchCache = new Map<string, PagedResult<BlogPostSummary>>()
@@ -133,6 +134,9 @@ export const blogPostService = {
     }
     if (options.slug) {
       body.slug = options.slug
+    }
+    if (options.isFeatured !== undefined) {
+      body.isFeatured = options.isFeatured
     }
 
     const request = apiPost<{

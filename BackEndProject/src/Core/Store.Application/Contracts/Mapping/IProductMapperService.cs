@@ -8,7 +8,13 @@ namespace Edition.Application.Contracts.Mapping;
 
 public interface IProductMapperService : IMapper
 {
-    GetProductResponse Map(Product model, string title, string slug, string description);
+    GetProductResponse Map(
+        Product model,
+        string title,
+        string slug,
+        string description,
+        string subCategoryTitle,
+        string categoryTitle);
     PagedResult<GetAllProductResponse> Map(PagedResult<GetAllProductResponseDto> model);
     GetAllProductRequestDto Map(GetAllProductRequest model);
 }

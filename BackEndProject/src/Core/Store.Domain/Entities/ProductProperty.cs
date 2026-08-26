@@ -12,8 +12,6 @@ public class ProductProperty : BaseEntity
     public Product Product { get; private set; } = default!;
     public Property Property { get; private set; } = default!;
     public PropertyItem? PropertyItem { get; private set; }
-    public ProductPropertyRule ProductPropertyRule { get; private set; } = default!;
-    public ProductPropertyPrice ProductPropertyPrice { get; private set; } = default!;
 
     public static ProductProperty Create(int productId, int propertyId, bool isActive, int? propertyItemId = null)
         => new()

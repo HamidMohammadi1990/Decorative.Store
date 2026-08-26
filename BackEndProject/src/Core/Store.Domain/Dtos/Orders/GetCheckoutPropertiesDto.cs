@@ -1,5 +1,4 @@
-﻿using Store.Domain.Dtos.ProductPropertyRules;
-using Store.Domain.Enums;
+﻿using Store.Domain.Enums;
 
 namespace Store.Domain.Dtos.Orders;
 
@@ -32,8 +31,4 @@ public record CheckoutPropertyDto
     public List<CheckoutPropertyItemDto> Items { get; set; } = [];
     public List<CheckoutPropertItemDependencyDto> Dependencies { get; set; } = [];
     public List<CheckoutPropertyDto>? Parents { get; set; } = [];
-    public ProductPropertyRuleDto? Rule { get; set; }
-    public int? PropertyPriceId { get; set; }
-    public decimal? PropertyPrice { get; set; }
-    public decimal? PropertyCooperationPrice { get; set; }
 }

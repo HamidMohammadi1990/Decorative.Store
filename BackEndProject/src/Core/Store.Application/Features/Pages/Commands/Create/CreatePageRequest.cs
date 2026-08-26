@@ -5,6 +5,7 @@ namespace Edition.Application.Features.Pages.Commands;
 
 public record CreatePageRequest : IRequest<OperationResult<CreatePageResponse>>
 {
+    public int LanguageId { get; init; }
     public string Slug { get; init; } = default!;
     public string Title { get; init; } = default!;
     public PageType Type { get; init; }

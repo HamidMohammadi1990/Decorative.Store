@@ -60,6 +60,7 @@ public class BlogPostMapperService : IBlogPostMapperService
                 CategoryTitle = x.CategoryTitle,
                 MetaDescription = x.MetaDescription,
                 ReadingTimeInMinutes = x.ReadingTimeInMinutes,
+                IsFeatured = x.IsFeatured,
             })
             .ToList();
 
@@ -112,6 +113,7 @@ public class BlogPostMapperService : IBlogPostMapperService
             Slug = model.Slug,
             Title = model.Title,
             CategoryId = model.CategoryId,
+            IsFeatured = model.IsFeatured,
             Pagination = model.Pagination,
         }.WithContentPolicy<BlogPost, SearchBlogPostRequestDto>(model);
     }

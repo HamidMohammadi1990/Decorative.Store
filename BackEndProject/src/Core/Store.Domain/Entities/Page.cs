@@ -5,47 +5,42 @@ namespace Store.Domain.Entities;
 
 public class Page : BaseEntity
 {
-    public string Slug { get; private set; } = default!;
-    public string Title { get; private set; } = default!;
-    public string? MetaTitle { get; private set; }
-    public string? MetaDescription { get; private set; }
     public PageType Type { get; private set; }
     public bool IsActive { get; private set; } = true;
 
-
     public ICollection<PageSection> PageSections { get; private set; } = [];
+    public ICollection<PageTranslation> Translations { get; private set; } = [];
 
-
-    public static Page Create(
-        string slug,
-        string title,
-        PageType type,
-        bool isActive,
-        string? metaTitle = null,
-        string? metaDescription = null)
+    public static Page Create(PageType type, bool isActive)
         => new()
         {
-            Slug = slug.Trim(),
-            Title = title,
             Type = type,
             IsActive = isActive,
-            MetaTitle = metaTitle,
-            MetaDescription = metaDescription
         };
 
-    public void Update(
-        string slug,
+    public PageTranslation UpsertTranslation(
+        int languageId,
         string title,
-        PageType type,
-        bool isActive,
+        string slug,
         string? metaTitle = null,
         string? metaDescription = null)
     {
-        Slug = slug.Trim();
-        Title = title;
+        var existing = Translations.FirstOrDefault(x => x.LanguageId == languageId);
+        if (existing is not null)
+        {
+            existing.Update(title, slug, metaTitle, metaDescription);
+            return existing;
+        }
+
+        var translation = PageTranslation.Create(title, slug, languageId, metaTitle, metaDescription);
+        Translations.Add(translation);
+        return translation;
+    }
+
+    public void Update(PageType type, bool isActive, int languageId, string title, string slug, string? metaTitle, string? metaDescription)
+    {
         Type = type;
         IsActive = isActive;
-        MetaTitle = metaTitle;
-        MetaDescription = metaDescription;
+        UpsertTranslation(languageId, title, slug, metaTitle, metaDescription);
     }
 }

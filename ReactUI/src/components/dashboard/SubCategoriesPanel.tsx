@@ -4,6 +4,9 @@ import type { AdminCategory, AdminSubCategory } from '@/models/admin/catalog.mod
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
 import { SubCategoriesIcon } from '@/components/dashboard/DashboardIcons'
+import { AdminDataGrid } from '@/components/dashboard/admin/AdminDataGrid'
+import { AdminContentLanguageField } from '@/components/dashboard/admin/AdminContentLanguageField'
+import { TranslationLocaleBadges } from '@/components/dashboard/admin/TranslationLocaleBadges'
 import {
   AdminField,
   adminInputClass,
@@ -11,10 +14,13 @@ import {
 } from '@/components/dashboard/admin/adminFormShared'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
+import { useAdminContentLanguage } from '@/hooks/useAdminContentLanguage'
+import { useAdminPagedList } from '@/hooks/useAdminPagedList'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
+import { useStoreLanguages } from '@/hooks/useStoreLanguages'
 import { adminCategoryService } from '@/services/adminCategoryService'
 import { adminSubCategoryService } from '@/services/adminSubCategoryService'
-import { slugifyTitle } from '@/services/admin/adminCatalogNormalize'
+import { slugifyTitle, pickTranslation } from '@/services/admin/adminCatalogNormalize'
 import { useUserStore } from '@/stores/userStore'
 
 type Mode = 'list' | 'create' | 'edit'
@@ -22,15 +28,22 @@ type Mode = 'list' | 'create' | 'edit'
 export function SubCategoriesPanel() {
   const { t } = useTranslation()
   const accessToken = useUserStore((s) => s.accessToken)
-  const { languageId, locale, loading: languageLoading } = useCurrentLanguageId()
+  const { locale, loading: languageLoading } = useCurrentLanguageId()
+  const { languages } = useStoreLanguages()
+  const {
+    contentLanguageId,
+    setContentLanguageId,
+    languages: formLanguages,
+    loading: contentLanguageLoading,
+  } = useAdminContentLanguage()
 
   const [mode, setMode] = useState<Mode>('list')
-  const [items, setItems] = useState<AdminSubCategory[]>([])
   const [categories, setCategories] = useState<AdminCategory[]>([])
-  const [loading, setLoading] = useState(true)
+  const [categoriesLoading, setCategoriesLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [formError, setFormError] = useState<string | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [editingItem, setEditingItem] = useState<AdminSubCategory | null>(null)
   const [filterCategoryId, setFilterCategoryId] = useState('')
 
   const [title, setTitle] = useState('')
@@ -40,40 +53,75 @@ export function SubCategoriesPanel() {
   const [isActive, setIsActive] = useState(true)
   const [slugTouched, setSlugTouched] = useState(false)
 
-  const load = useCallback(async () => {
+  const canLoad =
+    !languageLoading &&
+    !contentLanguageLoading &&
+    contentLanguageId != null &&
+    Boolean(accessToken) &&
+    accessToken !== 'mock-access-token'
+
+  const fetchPage = useCallback(
+    async (pageNumber: number, pageSize: number) => {
+      if (!accessToken || accessToken === 'mock-access-token') {
+        throw new Error(t('dashboard.subCategories.authRequired'))
+      }
+      return adminSubCategoryService.getAll(accessToken, locale, {
+        pageNumber,
+        pageSize,
+        languageId: contentLanguageId ?? undefined,
+        categoryId: filterCategoryId || null,
+      })
+    },
+    [accessToken, contentLanguageId, filterCategoryId, locale, t],
+  )
+
+  const {
+    items,
+    loading: listLoading,
+    error: listError,
+    pageNumber,
+    pageSize,
+    totalCount,
+    totalPages,
+    goToPage,
+    changePageSize,
+    reload,
+  } = useAdminPagedList<AdminSubCategory>({
+    fetchPage,
+    initialPageSize: 20,
+    enabled: canLoad && mode === 'list',
+  })
+
+  const listErrorMessage = listError
+    ? resolveAdminMutationError(listError, t('dashboard.subCategories.loadFailed'))
+    : null
+
+  const loadCategories = useCallback(async () => {
     if (!accessToken || accessToken === 'mock-access-token') {
-      setError(t('dashboard.subCategories.authRequired'))
-      setLoading(false)
+      setCategories([])
+      setCategoriesLoading(false)
       return
     }
 
-    setLoading(true)
-    setError(null)
+    setCategoriesLoading(true)
     try {
-      const [subResult, categoryResult] = await Promise.all([
-        adminSubCategoryService.getAll(accessToken, locale, {
-          pageSize: 100,
-          languageId: languageId ?? undefined,
-          categoryId: filterCategoryId || null,
-        }),
-        adminCategoryService.getAll(accessToken, locale, {
-          pageSize: 100,
-          languageId: languageId ?? undefined,
-        }),
-      ])
-      setItems(subResult.items)
+      const categoryResult = await adminCategoryService.getAll(accessToken, locale, {
+        pageSize: 100,
+        languageId: contentLanguageId ?? undefined,
+      })
       setCategories(categoryResult.items)
-    } catch (err) {
-      setError(resolveAdminMutationError(err, t('dashboard.subCategories.loadFailed')))
-      setItems([])
+    } catch {
+      setCategories([])
     } finally {
-      setLoading(false)
+      setCategoriesLoading(false)
     }
-  }, [accessToken, filterCategoryId, languageId, locale, t])
+  }, [accessToken, contentLanguageId, locale])
 
   useEffect(() => {
-    if (!languageLoading) void load()
-  }, [languageLoading, load])
+    if (!languageLoading && !contentLanguageLoading && contentLanguageId != null) {
+      void loadCategories()
+    }
+  }, [languageLoading, contentLanguageLoading, contentLanguageId, loadCategories])
 
   const resetForm = () => {
     setTitle('')
@@ -83,7 +131,15 @@ export function SubCategoriesPanel() {
     setIsActive(true)
     setSlugTouched(false)
     setEditingId(null)
-    setError(null)
+    setEditingItem(null)
+    setFormError(null)
+  }
+
+  const applySubCategoryTranslation = (item: AdminSubCategory, targetLanguageId: number) => {
+    const translation = pickTranslation(item.translations, targetLanguageId)
+    setTitle(translation?.title ?? '')
+    setSlug(translation?.slug ?? '')
+    setSlugTouched(Boolean(translation?.slug))
   }
 
   const openCreate = () => {
@@ -94,19 +150,30 @@ export function SubCategoriesPanel() {
 
   const openEdit = (item: AdminSubCategory) => {
     setEditingId(item.id)
-    setTitle(item.title)
-    setSlug(item.slug)
+    setEditingItem(item)
     setCode(item.code)
     setCategoryId(item.categoryId)
     setIsActive(item.isActive)
-    setSlugTouched(true)
-    setError(null)
+    setFormError(null)
     setMode('edit')
+    if (contentLanguageId != null) {
+      applySubCategoryTranslation(item, contentLanguageId)
+    }
   }
+
+  useEffect(() => {
+    if (mode !== 'edit' || !editingItem || contentLanguageId == null) return
+    applySubCategoryTranslation(editingItem, contentLanguageId)
+  }, [contentLanguageId, editingItem, mode])
 
   const backToList = () => {
     resetForm()
     setMode('list')
+  }
+
+  const handleFilterCategory = (value: string) => {
+    setFilterCategoryId(value)
+    goToPage(1)
   }
 
   const handleTitleChange = (value: string) => {
@@ -115,23 +182,23 @@ export function SubCategoriesPanel() {
   }
 
   const handleSave = async () => {
-    if (!accessToken || accessToken === 'mock-access-token' || languageId == null) {
-      setError(t('dashboard.subCategories.saveFailed'))
+    if (!accessToken || accessToken === 'mock-access-token' || contentLanguageId == null) {
+      setFormError(t('dashboard.subCategories.saveFailed'))
       return
     }
 
     if (!title.trim() || !slug.trim() || !code.trim() || !categoryId) {
-      setError(t('dashboard.subCategories.validationRequired'))
+      setFormError(t('dashboard.subCategories.validationRequired'))
       return
     }
 
     setSaving(true)
-    setError(null)
+    setFormError(null)
     try {
       if (mode === 'edit' && editingId) {
         await adminSubCategoryService.update(accessToken, locale, {
           id: editingId,
-          languageId,
+          languageId: contentLanguageId,
           title: title.trim(),
           slug: slug.trim(),
           code: code.trim(),
@@ -140,17 +207,17 @@ export function SubCategoriesPanel() {
         })
       } else {
         await adminSubCategoryService.create(accessToken, locale, {
-          languageId,
+          languageId: contentLanguageId,
           title: title.trim(),
           slug: slug.trim(),
           code: code.trim(),
           categoryId,
         })
       }
-      await load()
       backToList()
+      reload()
     } catch (err) {
-      setError(resolveAdminMutationError(err, t('dashboard.subCategories.saveFailed')))
+      setFormError(resolveAdminMutationError(err, t('dashboard.subCategories.saveFailed')))
     } finally {
       setSaving(false)
     }
@@ -161,12 +228,12 @@ export function SubCategoriesPanel() {
     if (!window.confirm(t('dashboard.subCategories.deleteConfirm'))) return
 
     setSaving(true)
-    setError(null)
+    setFormError(null)
     try {
       await adminSubCategoryService.delete(accessToken, id)
-      await load()
+      reload()
     } catch (err) {
-      setError(resolveAdminMutationError(err, t('dashboard.subCategories.deleteFailed')))
+      setFormError(resolveAdminMutationError(err, t('dashboard.subCategories.deleteFailed')))
     } finally {
       setSaving(false)
     }
@@ -190,6 +257,12 @@ export function SubCategoriesPanel() {
         />
 
         <div className="space-y-5 rounded-sm border border-border bg-surface-muted/20 p-5 shadow-sm sm:p-6">
+          <AdminContentLanguageField
+            value={contentLanguageId}
+            onChange={setContentLanguageId}
+            languages={formLanguages}
+            disabled={contentLanguageLoading}
+          />
           <AdminField label={t('dashboard.subCategories.fieldCategory')}>
             <select
               value={categoryId}
@@ -247,7 +320,7 @@ export function SubCategoriesPanel() {
             </label>
           )}
 
-          {error && <p className="text-sm text-sale">{error}</p>}
+          {formError && <p className="text-sm text-sale">{formError}</p>}
 
           <div className="flex flex-wrap gap-3">
             <Button variant="warm" onClick={() => void handleSave()} disabled={saving}>
@@ -266,6 +339,16 @@ export function SubCategoriesPanel() {
     )
   }
 
+  if (!accessToken || accessToken === 'mock-access-token') {
+    return (
+      <DashboardEmptyState
+        icon={<SubCategoriesIcon size={28} />}
+        title={t('dashboard.subCategories.loadFailedTitle')}
+        message={t('dashboard.subCategories.authRequired')}
+      />
+    )
+  }
+
   return (
     <div>
       <DashboardPageHeader
@@ -279,11 +362,22 @@ export function SubCategoriesPanel() {
         }
       />
 
+      <AdminContentLanguageField
+        className="mb-4"
+        value={contentLanguageId}
+        onChange={(id) => {
+          setContentLanguageId(id)
+          goToPage(1)
+        }}
+        languages={languages}
+        disabled={contentLanguageLoading}
+      />
+
       <div className="mb-4">
         <AdminField label={t('dashboard.subCategories.filterCategory')}>
           <select
             value={filterCategoryId}
-            onChange={(e) => setFilterCategoryId(e.target.value)}
+            onChange={(e) => handleFilterCategory(e.target.value)}
             className={adminInputClass}
           >
             <option value="">{t('dashboard.subCategories.allCategories')}</option>
@@ -296,27 +390,33 @@ export function SubCategoriesPanel() {
         </AdminField>
       </div>
 
-      {loading || languageLoading ? (
+      {languageLoading ||
+      contentLanguageLoading ||
+      categoriesLoading ||
+      (listLoading && items.length === 0) ? (
         <div className="flex justify-center py-16">
           <InlineLoading label={t('dashboard.subCategories.loading')} />
         </div>
-      ) : error && items.length === 0 ? (
+      ) : listErrorMessage && items.length === 0 ? (
         <DashboardEmptyState
+          icon={<SubCategoriesIcon size={28} />}
           title={t('dashboard.subCategories.loadFailedTitle')}
-          message={error}
+          message={listErrorMessage}
           action={
-            <Button variant="secondary" onClick={() => void load()}>
+            <Button variant="secondary" onClick={() => reload()}>
               {t('dashboard.subCategories.retry')}
             </Button>
           }
         />
       ) : categories.length === 0 ? (
         <DashboardEmptyState
+          icon={<SubCategoriesIcon size={28} />}
           title={t('dashboard.subCategories.noCategoriesTitle')}
           message={t('dashboard.subCategories.noCategoriesMessage')}
         />
-      ) : items.length === 0 ? (
+      ) : totalCount === 0 && !listLoading ? (
         <DashboardEmptyState
+          icon={<SubCategoriesIcon size={28} />}
           title={t('dashboard.subCategories.emptyTitle')}
           message={t('dashboard.subCategories.emptyMessage')}
           action={
@@ -327,29 +427,46 @@ export function SubCategoriesPanel() {
         />
       ) : (
         <div className="space-y-3">
-          {error && <p className="text-sm text-sale">{error}</p>}
-          <p className="text-xs text-text-muted">
-            {t('dashboard.subCategories.itemCount', { count: items.length })}
-          </p>
-          <ul className="divide-y divide-border rounded-sm border border-border">
-            {items.map((item) => (
-              <li
-                key={item.id}
-                className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5"
-              >
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-text">{item.title}</p>
-                  <p className="mt-0.5 text-xs text-text-muted">
-                    {item.categoryTitle}
-                    <span className="mx-1.5 text-border-strong">·</span>
-                    <span dir="ltr">
-                      {item.code} · {item.slug || '—'}
-                    </span>
-                  </p>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
+          {formError && <p className="text-sm text-sale">{formError}</p>}
+          {listErrorMessage && <p className="text-sm text-sale">{listErrorMessage}</p>}
+
+          <AdminDataGrid
+            columns={[
+              {
+                id: 'title',
+                header: t('dashboard.subCategories.fieldTitle'),
+                cell: (item) => (
+                  <div className="min-w-0">
+                    <p className="truncate font-semibold text-text">{item.title}</p>
+                    <p className="mt-0.5 text-xs text-text-muted">
+                      {item.categoryTitle}
+                      <span className="mx-1.5 text-border-strong">·</span>
+                      <span dir="ltr">
+                        {item.code} · {item.slug || '—'}
+                      </span>
+                    </p>
+                  </div>
+                ),
+              },
+              {
+                id: 'languages',
+                header: t('dashboard.contentLocale.fieldLanguages'),
+                align: 'center',
+                cell: (item) => (
+                  <TranslationLocaleBadges
+                    translations={item.translations}
+                    languages={languages}
+                    currentLanguageId={contentLanguageId ?? undefined}
+                  />
+                ),
+              },
+              {
+                id: 'status',
+                header: t('dashboard.subCategories.fieldActive'),
+                align: 'center',
+                cell: (item) => (
                   <span
-                    className={`rounded-sm px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                    className={`inline-flex rounded-sm px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
                       item.isActive
                         ? 'bg-warm-soft text-warm'
                         : 'bg-surface-muted text-text-muted'
@@ -359,26 +476,47 @@ export function SubCategoriesPanel() {
                       ? t('dashboard.subCategories.statusActive')
                       : t('dashboard.subCategories.statusInactive')}
                   </span>
-                  <Button
-                    variant="secondary"
-                    className="py-1.5 text-xs"
-                    onClick={() => openEdit(item)}
-                    disabled={saving}
-                  >
-                    {t('dashboard.subCategories.edit')}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="py-1.5 text-xs text-sale hover:bg-sale/10"
-                    onClick={() => void handleDelete(item.id)}
-                    disabled={saving}
-                  >
-                    {t('dashboard.subCategories.delete')}
-                  </Button>
-                </div>
-              </li>
-            ))}
-          </ul>
+                ),
+              },
+              {
+                id: 'actions',
+                header: '',
+                align: 'right',
+                cell: (item) => (
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <Button
+                      variant="secondary"
+                      className="py-1.5 text-xs"
+                      onClick={() => openEdit(item)}
+                      disabled={saving}
+                    >
+                      {t('dashboard.subCategories.edit')}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="py-1.5 text-xs text-sale hover:bg-sale/10"
+                      onClick={() => void handleDelete(item.id)}
+                      disabled={saving}
+                    >
+                      {t('dashboard.subCategories.delete')}
+                    </Button>
+                  </div>
+                ),
+              },
+            ]}
+            rows={items}
+            rowKey={(item) => item.id}
+            loading={listLoading}
+            loadingLabel={t('dashboard.subCategories.loading')}
+            pagination={{
+              pageNumber,
+              pageSize,
+              totalCount,
+              totalPages,
+              onPageChange: goToPage,
+              onPageSizeChange: changePageSize,
+            }}
+          />
         </div>
       )}
     </div>

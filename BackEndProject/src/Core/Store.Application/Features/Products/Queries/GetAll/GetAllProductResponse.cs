@@ -11,5 +11,9 @@ public record GetAllProductResponse
     public string ProductCode { get; init; } = default!;
     public bool IsActive { get; init; }
     public DateTime CreationDate { get; init; }
+
+    [JsonConverter(typeof(SubCategoryEncryptor))]
+    public int SubCategoryId { get; init; }
+
     public IReadOnlyList<ProductTranslationItemResponse> Translations { get; init; } = [];
 }

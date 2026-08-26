@@ -55,6 +55,7 @@ public class CategoryMapperService : ICategoryMapperService
             Slug = model.Slug,
             Title = model.Title,
             IsActive = model.IsActive,
+            Pagination = model.Pagination,
         }.WithContentPolicy<Category, GetAllCategoryRequestDto>(model);
     }
 
@@ -65,6 +66,7 @@ public class CategoryMapperService : ICategoryMapperService
             Code = model.Code,
             Slug = model.Slug,
             Title = model.Title,
+            Pagination = model.Pagination,
         }.WithContentPolicy<Category, SearchCategoryRequestDto>(model);
     }
 

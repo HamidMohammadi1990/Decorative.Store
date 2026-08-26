@@ -1,11 +1,30 @@
 using System.Linq.Expressions;
 using Store.Domain.Dtos.ContentPolicies;
+using Store.Domain.Dtos.Localization;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Entities;
 using Store.Domain.Enums;
 using Store.Domain.QueryFilters;
 
 namespace Store.Domain.Dtos.Pages;
+public record GetAllPageResponseDto
+{
+    public int Id { get; init; }
+    public PageType Type { get; init; }
+    public bool IsActive { get; init; }
+    public List<PageTranslationItemDto> Translations { get; init; } = [];
+}
+
+public record SearchPageResponseDto
+{
+    public int Id { get; init; }
+    public string Slug { get; init; } = default!;
+    public string Title { get; init; } = default!;
+    public PageType Type { get; init; }
+    public string? MetaTitle { get; init; }
+    public string? MetaDescription { get; init; }
+}
+
 
 public record GetAllPageRequestDto : IContentPolicyQueryDto<Page>
 {

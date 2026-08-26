@@ -6,8 +6,17 @@ namespace Edition.Application.Features.Sections.Commands;
 
 public class UpdateSectionValidator : AbstractValidator<UpdateSectionRequest>
 {
-    public UpdateSectionValidator(ISectionRepository sectionRepository)
+    public UpdateSectionValidator(
+        ISectionTypeRepository sectionTypeRepository,
+        ILanguageRepository languageRepository)
     {
+        RuleFor(x => x.LanguageId)
+            .GreaterThan(0)
+            .WithMessage(MessageKeys.InvalidRequest)
+            .MustAsync(async (languageId, cancellationToken) =>
+                await languageRepository.FindAsync(languageId, cancellationToken) is { IsActive: true })
+            .WithMessage(MessageKeys.InvalidRequest);
+
         RuleFor(x => x.Title)
             .NotEmpty()
             .WithMessage(MessageKeys.TitleRequired);
@@ -16,20 +25,13 @@ public class UpdateSectionValidator : AbstractValidator<UpdateSectionRequest>
             .NotEmpty()
             .WithMessage(MessageKeys.AddressRequired);
 
-        RuleFor(x => x)
-            .Must(x => !x.ParentId.HasValue || x.ParentId.Value != x.Id)
-            .WithMessage(MessageKeys.SectionCannotBeOwnParent);
+        RuleFor(x => x.SectionTypeId)
+            .MustAsync(async (sectionTypeId, cancellationToken)
+                => await sectionTypeRepository.AnyAsync(s => s.Id == sectionTypeId))
+            .WithMessage(MessageKeys.SectionTypeNotFound);
 
         RuleFor(x => x)
             .Must(x => !x.StartDateOnUtc.HasValue || !x.EndDateOnUtc.HasValue || x.StartDateOnUtc <= x.EndDateOnUtc)
             .WithMessage(MessageKeys.StartDateMustBeBeforeEndDate);
-
-        When(x => x.ParentId.HasValue, () =>
-        {
-            RuleFor(x => x.ParentId!.Value)
-                .MustAsync(async (parentId, cancellationToken)
-                    => await sectionRepository.AnyAsync(s => s.Id == parentId))
-                .WithMessage(MessageKeys.ParentSectionNotFound);
-        });
     }
 }

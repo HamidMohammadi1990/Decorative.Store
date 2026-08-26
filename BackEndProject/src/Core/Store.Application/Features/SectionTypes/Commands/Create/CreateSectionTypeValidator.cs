@@ -6,13 +6,27 @@ namespace Edition.Application.Features.SectionTypes.Commands;
 
 public class CreateSectionTypeValidator : AbstractValidator<CreateSectionTypeRequest>
 {
-    public CreateSectionTypeValidator(ISectionTypeRepository repository)
+    public CreateSectionTypeValidator(
+        ISectionTypeRepository repository,
+        ILanguageRepository languageRepository)
     {
+        RuleFor(x => x.LanguageId)
+            .GreaterThan(0)
+            .WithMessage(MessageKeys.InvalidRequest)
+            .MustAsync(async (languageId, cancellationToken) =>
+                await languageRepository.FindAsync(languageId, cancellationToken) is { IsActive: true })
+            .WithMessage(MessageKeys.InvalidRequest);
+
         RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage(MessageKeys.TitleRequired)
-            .MustAsync(async (name, cancellationToken)
-                => !await repository.AnyAsync(x => x.Name == name.Trim()))
+            .WithMessage(MessageKeys.TitleRequired);
+
+        RuleFor(x => x)
+            .MustAsync(async (request, cancellationToken) =>
+                !await repository.ExistsTranslationAsync(
+                    request.LanguageId,
+                    request.Name,
+                    cancellationToken: cancellationToken))
             .WithMessage(MessageKeys.DuplicateTitle);
     }
 }

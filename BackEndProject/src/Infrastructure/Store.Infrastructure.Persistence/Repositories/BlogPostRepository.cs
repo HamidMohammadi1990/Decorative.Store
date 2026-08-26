@@ -229,6 +229,7 @@ public class BlogPostRepository
                         .FirstOrDefault()
                     ?? string.Empty,
                 ReadingTimeInMinutes = x.blogPost.ReadingTimeInMinutes,
+                IsFeatured = x.blogPost.IsFeatured,
             })
             .ToPagedAsync(request.Pagination);
 
@@ -256,6 +257,18 @@ public class BlogPostRepository
 
         var post = MapSearchBlogPostDto(postRow.blogPost, postRow.blogPostCategory, postRow.user, languageId, defaultLanguageId);
         var categorySlug = ResolveCategorySlug(postRow.blogPostCategory, languageId, defaultLanguageId);
+
+        var likeCount = await Context.BlogPostLike
+            .AsNoTracking()
+            .CountAsync(x => x.BlogPostId == postRow.blogPost.Id, cancellationToken);
+
+        var tagTitles = await (
+                from blogPostTag in Context.BlogPostTag.AsNoTracking()
+                    .Where(x => x.BlogPostId == postRow.blogPost.Id)
+                join tag in Context.Tag.AsNoTracking() on blogPostTag.TagId equals tag.Id
+                orderby tag.Title
+                select tag.Title)
+            .ToListAsync(cancellationToken);
 
         var comments = await (
                 from blogPostComment in Context.BlogPostComment.AsNoTracking()
@@ -383,6 +396,8 @@ public class BlogPostRepository
         {
             Post = post,
             CategorySlug = categorySlug,
+            LikeCount = likeCount,
+            TagTitles = tagTitles,
             Comments = comments,
             RelatedPosts = relatedPosts,
             CategoryLabels = categoryLabels,
@@ -463,6 +478,7 @@ public class BlogPostRepository
                     .FirstOrDefault()
                 ?? string.Empty,
             ReadingTimeInMinutes = blogPost.ReadingTimeInMinutes,
+            IsFeatured = blogPost.IsFeatured,
         };
     }
 

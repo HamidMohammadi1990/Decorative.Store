@@ -10,23 +10,20 @@ namespace Edition.Application.Mappings;
 
 public class PageMapperService : IPageMapperService
 {
-    public PagedResult<GetAllPageResponse> Map(PagedResult<Page> model)
+    public PagedResult<GetAllPageResponse> Map(PagedResult<GetAllPageResponseDto> model)
     {
         var items = model.Items.Select(x => new GetAllPageResponse
         {
             Id = x.Id,
-            Slug = x.Slug,
-            Title = x.Title,
             Type = x.Type,
             IsActive = x.IsActive,
-            MetaTitle = x.MetaTitle,
-            MetaDescription = x.MetaDescription
+            Translations = x.Translations,
         }).ToList();
 
         return PagedResult<GetAllPageResponse>.Create(items, model);
     }
 
-    public PagedResult<SearchPageResponse> MapToSearch(PagedResult<Page> model)
+    public PagedResult<SearchPageResponse> MapToSearch(PagedResult<SearchPageResponseDto> model)
     {
         var items = model.Items.Select(x => new SearchPageResponse
         {
@@ -35,23 +32,28 @@ public class PageMapperService : IPageMapperService
             Title = x.Title,
             Type = x.Type,
             MetaTitle = x.MetaTitle,
-            MetaDescription = x.MetaDescription
+            MetaDescription = x.MetaDescription,
         }).ToList();
 
         return PagedResult<SearchPageResponse>.Create(items, model);
     }
 
-    public GetPageResponse Map(Page model)
+    public GetPageResponse Map(
+        Page model,
+        string title,
+        string slug,
+        string? metaTitle,
+        string? metaDescription)
     {
         return new GetPageResponse
         {
             Id = model.Id,
-            Slug = model.Slug,
-            Title = model.Title,
+            Slug = slug,
+            Title = title,
             Type = model.Type,
             IsActive = model.IsActive,
-            MetaTitle = model.MetaTitle,
-            MetaDescription = model.MetaDescription
+            MetaTitle = metaTitle,
+            MetaDescription = metaDescription,
         };
     }
 
@@ -63,7 +65,7 @@ public class PageMapperService : IPageMapperService
             Title = model.Title,
             Type = model.Type,
             IsActive = model.IsActive,
-            Pagination = model.Pagination
+            Pagination = model.Pagination,
         }.WithContentPolicy<Page, GetAllPageRequestDto>(model);
     }
 
@@ -74,7 +76,7 @@ public class PageMapperService : IPageMapperService
             Slug = model.Slug,
             Title = model.Title,
             Type = model.Type,
-            Pagination = model.Pagination
+            Pagination = model.Pagination,
         }.WithContentPolicy<Page, SearchPageRequestDto>(model);
     }
 }

@@ -33,6 +33,7 @@ public class ProductPropertyMapperService : IProductPropertyMapperService
             Id = model.Id,
             ProductId = model.ProductId,
             PropertyId = model.PropertyId,
+            PropertyItemId = model.PropertyItemId,
             IsActive = model.IsActive
         };
     }
@@ -44,6 +45,7 @@ public class ProductPropertyMapperService : IProductPropertyMapperService
             Id = x.Id,
             ProductId = x.ProductId,
             PropertyId = x.PropertyId,
+            PropertyItemId = x.PropertyItemId,
             IsActive = x.IsActive
         }).ToList();
         return PagedResult<GetAllProductPropertyResponse>.Create(items, model);

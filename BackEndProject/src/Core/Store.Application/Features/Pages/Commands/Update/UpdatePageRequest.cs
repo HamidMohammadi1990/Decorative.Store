@@ -9,6 +9,8 @@ public record UpdatePageRequest : IRequest<OperationResult>
 {
     [JsonConverter(typeof(PageEncryptor))]
     public int Id { get; init; }
+
+    public int LanguageId { get; init; }
     public string Slug { get; init; } = default!;
     public string Title { get; init; } = default!;
     public PageType Type { get; init; }

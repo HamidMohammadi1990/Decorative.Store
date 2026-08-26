@@ -39,6 +39,9 @@ public class GetBlogPostDetailHandler(IBlogPostRepository blogPostRepository)
                 UpdatedOnUtc = detail.Post.UpdatedOnUtc,
                 PublishedOnUtc = detail.Post.PublishedOnUtc,
                 CommentCount = detail.Comments.Count,
+                LikeCount = detail.LikeCount,
+                IsFeatured = detail.Post.IsFeatured,
+                TagTitles = detail.TagTitles,
             },
             Comments = detail.Comments
                 .Select(comment => new BlogPostDetailCommentResponse

@@ -70,20 +70,11 @@ function CheckoutPropertyField({
   error?: string
   onChange: (value: unknown) => void
 }) {
-  const { t } = useTranslation()
-  const mandatory = property.rule?.isMandatory ?? false
-
   return (
     <div>
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <label className="text-sm font-medium text-text">{property.title}</label>
-        {mandatory && (
-          <span className="text-xs font-medium text-warm">{t('checkout.required')}</span>
-        )}
       </div>
-      {property.rule?.description && (
-        <p className="mb-2 text-xs text-text-muted">{property.rule.description}</p>
-      )}
 
       <PropertyInput property={property} value={value} onChange={onChange} />
       {error && <p className="mt-1.5 text-xs text-sale">{error}</p>}
@@ -155,8 +146,7 @@ function PropertyInput({
       return (
         <input
           type="number"
-          min={property.rule?.minQuantity}
-          max={property.rule?.maxQuantity}
+          min={1}
           value={typeof value === 'number' ? value : ''}
           onChange={(e) => onChange(Number(e.target.value))}
           className="w-full max-w-[10rem] rounded-sm border border-border bg-surface px-3 py-2 text-sm text-text"
@@ -186,8 +176,7 @@ function PropertyInput({
           </select>
           <input
             type="number"
-            min={property.rule?.minQuantity ?? 1}
-            max={property.rule?.maxQuantity}
+            min={1}
             value={current.quantity ?? 1}
             onChange={(e) =>
               onChange({ ...current, quantity: Number(e.target.value), itemId: current.itemId })

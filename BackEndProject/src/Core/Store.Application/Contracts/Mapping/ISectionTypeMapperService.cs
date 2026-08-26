@@ -7,9 +7,9 @@ namespace Edition.Application.Contracts.Mapping;
 
 public interface ISectionTypeMapperService : IMapper
 {
-    GetSectionTypeResponse Map(SectionType model);
+    GetSectionTypeResponse Map(SectionType model, string name);
     GetAllSectionTypeRequestDto Map(GetAllSectionTypeRequest model);
     SearchSectionTypeRequestDto Map(SearchSectionTypeRequest model);
-    PagedResult<GetAllSectionTypeResponse> Map(PagedResult<SectionType> model);
-    PagedResult<SearchSectionTypeResponse> MapToSearch(PagedResult<SectionType> model);
+    PagedResult<GetAllSectionTypeResponse> Map(PagedResult<GetAllSectionTypeResponseDto> model);
+    PagedResult<SearchSectionTypeResponse> MapToSearch(PagedResult<SearchSectionTypeResponseDto> model);
 }

@@ -6,6 +6,7 @@ namespace Edition.Application.Features.SectionItems.Commands;
 
 public record CreateSectionItemRequest : IRequest<OperationResult<CreateSectionItemResponse>>
 {
+    public int LanguageId { get; init; }
     [JsonConverter(typeof(SectionEncryptor))]
     public int SectionId { get; init; }
     public string Title { get; init; } = default!;

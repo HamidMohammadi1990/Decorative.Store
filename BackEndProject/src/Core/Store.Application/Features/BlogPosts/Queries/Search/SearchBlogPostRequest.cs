@@ -18,5 +18,7 @@ public record SearchBlogPostRequest : ContentPolicyRequest<BlogPost>, IRequest<O
     [JsonConverter(typeof(UserNullableEncryptor))]
     public int? UserId { get; init; }
 
+    public bool? IsFeatured { get; init; }
+
     public PagedRequest Pagination { get; init; } = default!;
 }

@@ -27,15 +27,17 @@ export function buildFeaturedShopGrid(
     const collection = collectionById.get(section.id)
     if (!collection?.imageUrl) return section
 
+    const href = collection.href || section.link?.href || '/'
+
     return {
       ...section,
       link: {
         ...section.link,
-        href: collection.href || section.link.href,
+        href,
       },
       image: {
         src: resolveProductImageSrc(collection.imageUrl),
-        alt: collection.imageAlt || section.image.alt,
+        alt: collection.imageAlt || section.image?.alt || section.title,
       },
     }
   })

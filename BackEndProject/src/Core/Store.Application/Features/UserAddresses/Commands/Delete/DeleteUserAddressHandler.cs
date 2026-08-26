@@ -25,7 +25,9 @@ public class DeleteUserAddressHandler
 
         if (wasDefault)
         {
-            await userAddressRepository.PromoteNextDefaultAsync(userId, cancellationToken);
+            await userAddressRepository.PromoteNextDefaultAsync(
+                userId,
+                cancellationToken: cancellationToken);
             saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
             if (!saveChangesResult.IsSuccess)
                 return saveChangesResult;

@@ -6,6 +6,8 @@ public record BlogPostDetailDto
 {
     public SearchBlogPostDto Post { get; init; } = default!;
     public string CategorySlug { get; init; } = string.Empty;
+    public int LikeCount { get; init; }
+    public List<string> TagTitles { get; init; } = [];
     public List<SearchBlogPostCommentResponseDto> Comments { get; init; } = [];
     public List<BlogPostDetailRelatedDto> RelatedPosts { get; init; } = [];
     public Dictionary<string, string> CategoryLabels { get; init; } = new();

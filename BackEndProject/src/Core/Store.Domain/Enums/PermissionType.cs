@@ -221,15 +221,6 @@ public enum PermissionType : int
     [Display(Name = "PermissionType_DeleteProductFile", ResourceType = typeof(EnumResources))]
     DeleteProductFile = 125,
 
-    [Display(Name = "PermissionType_ManageProductPropertyPrice", ResourceType = typeof(EnumResources))]
-    ManageProductPropertyPrice = 126,
-
-    [Display(Name = "PermissionType_CreateProductPropertyPrice", ResourceType = typeof(EnumResources))]
-    CreateProductPropertyPrice = 127,
-
-    [Display(Name = "PermissionType_UpdateProductPropertyPrice", ResourceType = typeof(EnumResources))]
-    UpdateProductPropertyPrice = 128,
-
     [Display(Name = "PermissionType_ManageProductPriceDeliveryOption", ResourceType = typeof(EnumResources))]
     ManageProductPriceDeliveryOption = 129,
 
@@ -286,15 +277,6 @@ public enum PermissionType : int
 
     [Display(Name = "PermissionType_DeletePropertyItem", ResourceType = typeof(EnumResources))]
     DeletePropertyItem = 162,
-
-    [Display(Name = "PermissionType_ManagePropertyItemPrice", ResourceType = typeof(EnumResources))]
-    ManagePropertyItemPrice = 163,
-
-    [Display(Name = "PermissionType_CreatePropertyItemPrice", ResourceType = typeof(EnumResources))]
-    CreatePropertyItemPrice = 164,
-
-    [Display(Name = "PermissionType_UpdatePropertyItemPrice", ResourceType = typeof(EnumResources))]
-    UpdatePropertyItemPrice = 165,
 
     [Display(Name = "PermissionType_ManageTagGroup", ResourceType = typeof(EnumResources))]
     ManageTagGroup = 170,
@@ -557,12 +539,6 @@ public enum PermissionType : int
     [Display(Name = "PermissionType_GetProductFileById", ResourceType = typeof(EnumResources))]
     GetProductFileById = 315,
 
-    [Display(Name = "PermissionType_ListProductPropertyPrice", ResourceType = typeof(EnumResources))]
-    ListProductPropertyPrice = 316,
-
-    [Display(Name = "PermissionType_GetProductPropertyPriceById", ResourceType = typeof(EnumResources))]
-    GetProductPropertyPriceById = 317,
-
     [Display(Name = "PermissionType_ListProductPriceDeliveryOption", ResourceType = typeof(EnumResources))]
     ListProductPriceDeliveryOption = 318,
 
@@ -601,12 +577,6 @@ public enum PermissionType : int
 
     [Display(Name = "PermissionType_GetPropertyItemById", ResourceType = typeof(EnumResources))]
     GetPropertyItemById = 330,
-
-    [Display(Name = "PermissionType_ListPropertyItemPrice", ResourceType = typeof(EnumResources))]
-    ListPropertyItemPrice = 331,
-
-    [Display(Name = "PermissionType_GetPropertyItemPriceById", ResourceType = typeof(EnumResources))]
-    GetPropertyItemPriceById = 332,
 
     [Display(Name = "PermissionType_ListTag", ResourceType = typeof(EnumResources))]
     ListTag = 333,
@@ -898,24 +868,6 @@ public enum PermissionType : int
 
     [Display(Name = "PermissionType_DeleteProductFeatureType", ResourceType = typeof(EnumResources))]
     DeleteProductFeatureType = 429,
-
-    [Display(Name = "PermissionType_ManageProductPropertyRule", ResourceType = typeof(EnumResources))]
-    ManageProductPropertyRule = 430,
-
-    [Display(Name = "PermissionType_ListProductPropertyRule", ResourceType = typeof(EnumResources))]
-    ListProductPropertyRule = 431,
-
-    [Display(Name = "PermissionType_GetProductPropertyRuleById", ResourceType = typeof(EnumResources))]
-    GetProductPropertyRuleById = 432,
-
-    [Display(Name = "PermissionType_CreateProductPropertyRule", ResourceType = typeof(EnumResources))]
-    CreateProductPropertyRule = 433,
-
-    [Display(Name = "PermissionType_UpdateProductPropertyRule", ResourceType = typeof(EnumResources))]
-    UpdateProductPropertyRule = 434,
-
-    [Display(Name = "PermissionType_DeleteProductPropertyRule", ResourceType = typeof(EnumResources))]
-    DeleteProductPropertyRule = 435,
 
     [Display(Name = "PermissionType_ManageProductOrderItemAttachmentType", ResourceType = typeof(EnumResources))]
     ManageProductOrderItemAttachmentType = 436,

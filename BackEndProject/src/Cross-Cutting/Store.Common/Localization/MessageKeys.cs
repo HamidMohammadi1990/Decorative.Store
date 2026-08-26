@@ -108,7 +108,6 @@ public static class MessageKeys
     public const string ReviewRateRequired = nameof(ReviewRateRequired);
     public const string QualityRatingRequired = nameof(QualityRatingRequired);
     public const string TopicRequired = nameof(TopicRequired);
-    public const string ProductPropertyRuleAlreadyExists = nameof(ProductPropertyRuleAlreadyExists);
     public const string BankNotSelected = nameof(BankNotSelected);
     public const string WalletNotSelected = nameof(WalletNotSelected);
     public const string InvalidPaymentOption = nameof(InvalidPaymentOption);

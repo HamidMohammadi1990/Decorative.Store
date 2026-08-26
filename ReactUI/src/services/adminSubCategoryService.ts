@@ -47,6 +47,29 @@ function normalizeSubCategory(data: unknown, languageId?: number): AdminSubCateg
   }
 }
 
+function normalizeSubCategoryFromGet(data: unknown): AdminSubCategory | null {
+  const record = readRecord(data)
+  if (!record) return null
+
+  const id = readEncryptedId(record, 'id', 'Id')
+  const code = readStringField(record, 'code', 'Code')
+  const categoryId = readEncryptedId(record, 'categoryId', 'CategoryId')
+  const title = readStringField(record, 'title', 'Title')
+  if (!id || !code || !categoryId || !title) return null
+
+  return {
+    id,
+    code,
+    categoryId,
+    categoryCode: '',
+    categoryTitle: readStringField(record, 'categoryCode', 'Code'),
+    isActive: readIsActive(record),
+    title,
+    slug: readStringField(record, 'slug', 'Slug'),
+    translations: [],
+  }
+}
+
 export const adminSubCategoryService = {
   async getAll(
     accessToken: string,
@@ -74,6 +97,40 @@ export const adminSubCategoryService = {
     )
 
     return normalizeAdminPaged(data, (item) => normalizeSubCategory(item, options.languageId))
+  },
+
+  async getAllForSelect(
+    accessToken: string,
+    locale: Locale,
+    options: {
+      languageId?: number
+      categoryId?: string | null
+    } = {},
+  ): Promise<AdminPagedResult<AdminSubCategory>> {
+    const probe = await this.getAll(accessToken, locale, {
+      pageNumber: 1,
+      pageSize: 1,
+      languageId: options.languageId,
+      categoryId: options.categoryId,
+    })
+    const pageSize = Math.max(probe.totalCount, 1)
+    if (pageSize <= probe.items.length) return probe
+
+    return this.getAll(accessToken, locale, {
+      pageNumber: 1,
+      pageSize,
+      languageId: options.languageId,
+      categoryId: options.categoryId,
+    })
+  },
+
+  async get(
+    accessToken: string,
+    locale: Locale,
+    id: string,
+  ): Promise<AdminSubCategory | null> {
+    const data = await apiPost<unknown>(`${BASE}/get`, { id }, { locale, accessToken })
+    return normalizeSubCategoryFromGet(data)
   },
 
   async create(accessToken: string, locale: Locale, input: CreateSubCategoryInput): Promise<string> {

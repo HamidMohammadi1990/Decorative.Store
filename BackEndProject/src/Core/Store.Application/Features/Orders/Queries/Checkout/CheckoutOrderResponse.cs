@@ -2,7 +2,6 @@
 using Edition.Application.Common.Utilities.Security.Attributes;
 using Store.Domain.Enums;
 using Store.Domain.Dtos.Others;
-using Store.Domain.Dtos.ProductPropertyRules;
 
 namespace Edition.Application.Features.Orders.Queries;
 
@@ -78,7 +77,6 @@ public record CheckoutPropertyResponse
     public List<CheckoutPropertyItemResponse> Items { get; set; } = [];
     public List<CheckoutPropertItemDependencyResponse> Dependencies { get; set; } = [];
     public List<CheckoutPropertyResponse> Parents { get; set; } = [];
-    public ProductPropertyRuleDto? Rule { get; init; }
 }
 
 public record CheckoutUserAddressResponse

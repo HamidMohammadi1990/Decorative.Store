@@ -88,15 +88,61 @@ public static class TranslationResolver
         return current?.Title ?? fallback?.Title ?? string.Empty;
     }
 
-    public static string? ResolveDescription(
-        IEnumerable<ProductPropertyRuleTranslation> translations,
+    public static string ResolveName(
+        IEnumerable<SectionTypeTranslation> translations,
         int languageId,
         int defaultLanguageId)
     {
-        var list = translations as IList<ProductPropertyRuleTranslation> ?? translations.ToList();
+        var list = translations as IList<SectionTypeTranslation> ?? translations.ToList();
         var current = list.FirstOrDefault(t => t.LanguageId == languageId);
         var fallback = list.FirstOrDefault(t => t.LanguageId == defaultLanguageId);
-        return current?.Description ?? fallback?.Description;
+        return current?.Name ?? fallback?.Name ?? string.Empty;
+    }
+
+    public static (string Title, string Slug, string? MetaTitle, string? MetaDescription) Resolve(
+        IEnumerable<PageTranslation> translations,
+        int languageId,
+        int defaultLanguageId)
+    {
+        var list = translations as IList<PageTranslation> ?? translations.ToList();
+        var current = list.FirstOrDefault(t => t.LanguageId == languageId);
+        var fallback = list.FirstOrDefault(t => t.LanguageId == defaultLanguageId);
+
+        return (
+            current?.Title ?? fallback?.Title ?? string.Empty,
+            current?.Slug ?? fallback?.Slug ?? string.Empty,
+            current?.MetaTitle ?? fallback?.MetaTitle,
+            current?.MetaDescription ?? fallback?.MetaDescription);
+    }
+
+    public static (string Title, string? Description, string Url) Resolve(
+        IEnumerable<SectionTranslation> translations,
+        int languageId,
+        int defaultLanguageId)
+    {
+        var list = translations as IList<SectionTranslation> ?? translations.ToList();
+        var current = list.FirstOrDefault(t => t.LanguageId == languageId);
+        var fallback = list.FirstOrDefault(t => t.LanguageId == defaultLanguageId);
+
+        return (
+            current?.Title ?? fallback?.Title ?? string.Empty,
+            current?.Description ?? fallback?.Description,
+            current?.Url ?? fallback?.Url ?? string.Empty);
+    }
+
+    public static (string Title, string? Description, string? Url) Resolve(
+        IEnumerable<SectionItemTranslation> translations,
+        int languageId,
+        int defaultLanguageId)
+    {
+        var list = translations as IList<SectionItemTranslation> ?? translations.ToList();
+        var current = list.FirstOrDefault(t => t.LanguageId == languageId);
+        var fallback = list.FirstOrDefault(t => t.LanguageId == defaultLanguageId);
+
+        return (
+            current?.Title ?? fallback?.Title ?? string.Empty,
+            current?.Description ?? fallback?.Description,
+            current?.Url ?? fallback?.Url);
     }
 
     private static (string Title, string Slug, string Description) ResolveCoreWithDescription<T>(

@@ -6,6 +6,7 @@ interface BlogInteractionState {
   likedPostIds: string[]
   likedCommentIds: string[]
   userComments: Record<string, BlogComment[]>
+  markPostLiked: (postId: string) => void
   togglePostLike: (postId: string) => void
   isPostLiked: (postId: string) => boolean
   toggleCommentLike: (commentId: string) => void
@@ -24,6 +25,12 @@ export const useBlogInteractionStore = create<BlogInteractionState>()(
       likedPostIds: [],
       likedCommentIds: [],
       userComments: {},
+
+      markPostLiked: (postId) =>
+        set((state) => {
+          if (state.likedPostIds.includes(postId)) return state
+          return { likedPostIds: [...state.likedPostIds, postId] }
+        }),
 
       togglePostLike: (postId) =>
         set((state) => {

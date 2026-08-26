@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import type { AdminSubCategory } from '@/models/admin/catalog.model'
+import type { AdminProductDetail, AdminSubCategory } from '@/models/admin/catalog.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { ProductsIcon } from '@/components/dashboard/DashboardIcons'
 import {
@@ -9,28 +9,55 @@ import {
   adminInputClass,
   resolveAdminMutationError,
 } from '@/components/dashboard/admin/adminFormShared'
+import { AdminContentLanguageField } from '@/components/dashboard/admin/AdminContentLanguageField'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
+import { localeFromLanguageId } from '@/extensions/languageCode'
+import { useAdminContentLanguage } from '@/hooks/useAdminContentLanguage'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
 import { adminProductService } from '@/services/adminProductService'
 import { adminSubCategoryService } from '@/services/adminSubCategoryService'
 import { slugifyTitle } from '@/services/admin/adminCatalogNormalize'
 import { useUserStore } from '@/stores/userStore'
+import { ProductManageModal } from '@/components/dashboard/ProductManageModal'
 
-interface ProductFormPanelProps {
-  mode: 'create' | 'edit'
+function mergeSubCategory(
+  items: AdminSubCategory[],
+  candidate: AdminSubCategory | null,
+): AdminSubCategory[] {
+  if (!candidate || items.some((item) => item.id === candidate.id)) return items
+  return [candidate, ...items]
 }
 
-export function ProductFormPanel({ mode }: ProductFormPanelProps) {
+function formatSubCategoryLabel(item: AdminSubCategory): string {
+  const category = item.categoryTitle || item.categoryCode
+  return category ? `${category} / ${item.title}` : item.title
+}
+
+function formatSubCategoryTitles(categoryTitle: string, subCategoryTitle: string): string {
+  if (categoryTitle && subCategoryTitle) return `${categoryTitle} / ${subCategoryTitle}`
+  return subCategoryTitle || categoryTitle
+}
+
+export function ProductFormPanel() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { productId: rawProductId } = useParams<{ productId: string }>()
-  const productId = rawProductId ? decodeURIComponent(rawProductId) : null
+  const [searchParams] = useSearchParams()
+  const productId = searchParams.get('id') ?? undefined
+  const subCategoryIdFromUrl = searchParams.get('subCategoryId') ?? ''
+  const isEdit = Boolean(productId)
+
   const accessToken = useUserStore((s) => s.accessToken)
-  const { languageId, locale, loading: languageLoading } = useCurrentLanguageId()
+  const { locale, loading: languageLoading } = useCurrentLanguageId()
+  const {
+    contentLanguageId,
+    setContentLanguageId,
+    languages: formLanguages,
+    loading: contentLanguageLoading,
+  } = useAdminContentLanguage()
 
   const [subCategories, setSubCategories] = useState<AdminSubCategory[]>([])
-  const [loading, setLoading] = useState(mode === 'edit')
+  const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -41,31 +68,78 @@ export function ProductFormPanel({ mode }: ProductFormPanelProps) {
   const [price, setPrice] = useState('')
   const [compareAtPrice, setCompareAtPrice] = useState('')
   const [subCategoryId, setSubCategoryId] = useState('')
+  const [subCategoryLabel, setSubCategoryLabel] = useState('')
   const [isActive, setIsActive] = useState(true)
   const [slugTouched, setSlugTouched] = useState(false)
+  const [imagesModalOpen, setImagesModalOpen] = useState(false)
 
-  const loadLookups = useCallback(async () => {
-    if (!accessToken || accessToken === 'mock-access-token') {
-      setError(t('dashboard.products.authRequired'))
-      return
-    }
+  const contentLocale =
+    contentLanguageId != null
+      ? localeFromLanguageId(formLanguages, contentLanguageId, locale)
+      : locale
 
-    try {
-      const result = await adminSubCategoryService.getAll(accessToken, locale, {
-        pageSize: 100,
-        languageId: languageId ?? undefined,
-      })
-      setSubCategories(result.items)
-      if (mode === 'create' && !subCategoryId && result.items[0]) {
-        setSubCategoryId(result.items[0].id)
+  const resolveSubCategorySelection = useCallback(
+    async (
+      targetSubCategoryId: string,
+      items: AdminSubCategory[],
+      product?: AdminProductDetail,
+    ): Promise<AdminSubCategory[]> => {
+      if (!targetSubCategoryId) return items
+
+      let nextItems = items
+      if (!nextItems.some((item) => item.id === targetSubCategoryId)) {
+        const subCategory = await adminSubCategoryService.get(
+          accessToken!,
+          contentLocale,
+          targetSubCategoryId,
+        )
+        nextItems = mergeSubCategory(nextItems, subCategory)
       }
-    } catch (err) {
-      setError(resolveAdminMutationError(err, t('dashboard.products.loadFailed')))
-    }
-  }, [accessToken, languageId, locale, mode, subCategoryId, t])
 
-  const loadProduct = useCallback(async () => {
-    if (mode !== 'edit' || !productId || !accessToken || accessToken === 'mock-access-token') {
+      if (product?.subCategoryTitle) {
+        setSubCategoryLabel(formatSubCategoryTitles(product.categoryTitle, product.subCategoryTitle))
+      } else {
+        const match = nextItems.find((item) => item.id === targetSubCategoryId)
+        setSubCategoryLabel(match ? formatSubCategoryLabel(match) : '')
+      }
+
+      setSubCategoryId(targetSubCategoryId)
+      return nextItems
+    },
+    [accessToken, contentLocale],
+  )
+
+  const applyProductToForm = useCallback((product: AdminProductDetail) => {
+    setTitle(product.title)
+    setSlug(product.slug)
+    setDescription(product.description)
+    setProductCode(product.productCode)
+    setPrice(String(product.price))
+    setCompareAtPrice(product.compareAtPrice != null ? String(product.compareAtPrice) : '')
+    setIsActive(product.isActive)
+    setSlugTouched(true)
+    if (product.subCategoryTitle) {
+      setSubCategoryLabel(formatSubCategoryTitles(product.categoryTitle, product.subCategoryTitle))
+    }
+  }, [])
+
+  const resetForm = useCallback(() => {
+    setTitle('')
+    setSlug('')
+    setDescription('')
+    setProductCode('')
+    setPrice('')
+    setCompareAtPrice('')
+    setSubCategoryId('')
+    setSubCategoryLabel('')
+    setIsActive(true)
+    setSlugTouched(false)
+    setError(null)
+  }, [])
+
+  const load = useCallback(async () => {
+    if (!accessToken || accessToken === 'mock-access-token' || contentLanguageId == null) {
+      setError(t('dashboard.products.authRequired'))
       setLoading(false)
       return
     }
@@ -73,48 +147,89 @@ export function ProductFormPanel({ mode }: ProductFormPanelProps) {
     setLoading(true)
     setError(null)
     try {
-      const product = await adminProductService.get(accessToken, locale, productId)
-      if (!product) {
-        setError(t('dashboard.products.notFound'))
-        return
-      }
+      const subResult = await adminSubCategoryService.getAllForSelect(accessToken, contentLocale, {
+        languageId: contentLanguageId,
+      })
 
-      setTitle(product.title)
-      setSlug(product.slug)
-      setDescription(product.description)
-      setProductCode(product.productCode)
-      setPrice(String(product.price))
-      setCompareAtPrice(product.compareAtPrice != null ? String(product.compareAtPrice) : '')
-      setSubCategoryId(product.subCategoryId)
-      setIsActive(product.isActive)
-      setSlugTouched(true)
+      if (isEdit && productId) {
+        const product = await adminProductService.get(accessToken, contentLocale, productId)
+        if (!product) {
+          setError(t('dashboard.products.notFound'))
+          return
+        }
+
+        applyProductToForm(product)
+        const targetSubCategoryId = product.subCategoryId || subCategoryIdFromUrl
+        const subCategoryItems = await resolveSubCategorySelection(
+          targetSubCategoryId,
+          subResult.items,
+          product,
+        )
+        setSubCategories(subCategoryItems)
+      } else {
+        setSubCategories(subResult.items)
+        const initialSubCategoryId =
+          subCategoryIdFromUrl && subResult.items.some((item) => item.id === subCategoryIdFromUrl)
+            ? subCategoryIdFromUrl
+            : (subResult.items[0]?.id ?? '')
+        setSubCategoryId(initialSubCategoryId)
+        const match = subResult.items.find((item) => item.id === initialSubCategoryId)
+        setSubCategoryLabel(match ? formatSubCategoryLabel(match) : '')
+      }
     } catch (err) {
       setError(resolveAdminMutationError(err, t('dashboard.products.loadFailed')))
     } finally {
       setLoading(false)
     }
-  }, [accessToken, locale, mode, productId, t])
+  }, [
+    accessToken,
+    applyProductToForm,
+    contentLanguageId,
+    contentLocale,
+    isEdit,
+    productId,
+    resolveSubCategorySelection,
+    subCategoryIdFromUrl,
+    t,
+  ])
 
   useEffect(() => {
-    if (languageLoading) return
-    void loadLookups()
-    void loadProduct()
-  }, [languageLoading, loadLookups, loadProduct])
+    if (!languageLoading && !contentLanguageLoading && contentLanguageId != null) {
+      resetForm()
+      void load()
+    }
+  }, [
+    contentLanguageId,
+    contentLanguageLoading,
+    languageLoading,
+    load,
+    productId,
+    resetForm,
+  ])
+
+  const handleSubCategoryChange = (value: string) => {
+    setSubCategoryId(value)
+    const match = subCategories.find((item) => item.id === value)
+    setSubCategoryLabel(match ? formatSubCategoryLabel(match) : '')
+  }
 
   const handleTitleChange = (value: string) => {
     setTitle(value)
     if (!slugTouched) setSlug(slugifyTitle(value))
   }
 
+  const selectedSubCategory = subCategories.find((item) => item.id === subCategoryId)
+  const displayedSubCategoryLabel =
+    selectedSubCategory ? formatSubCategoryLabel(selectedSubCategory) : subCategoryLabel
+
   const handleSave = async () => {
-    if (!accessToken || accessToken === 'mock-access-token' || languageId == null) {
+    if (!accessToken || accessToken === 'mock-access-token' || contentLanguageId == null) {
       setError(t('dashboard.products.saveFailed'))
       return
     }
 
     const parsedPrice = Number(price)
-    const parsedCompare =
-      compareAtPrice.trim().length > 0 ? Number(compareAtPrice) : null
+    const parsedCompare = compareAtPrice.trim() ? Number(compareAtPrice) : null
 
     if (
       !title.trim() ||
@@ -132,10 +247,10 @@ export function ProductFormPanel({ mode }: ProductFormPanelProps) {
     setSaving(true)
     setError(null)
     try {
-      if (mode === 'edit' && productId) {
-        await adminProductService.update(accessToken, locale, {
+      if (isEdit && productId) {
+        await adminProductService.update(accessToken, contentLocale, {
           id: productId,
-          languageId,
+          languageId: contentLanguageId,
           title: title.trim(),
           slug: slug.trim(),
           description: description.trim(),
@@ -146,8 +261,8 @@ export function ProductFormPanel({ mode }: ProductFormPanelProps) {
           status: isActive,
         })
       } else {
-        await adminProductService.create(accessToken, locale, {
-          languageId,
+        await adminProductService.create(accessToken, contentLocale, {
+          languageId: contentLanguageId,
           title: title.trim(),
           slug: slug.trim(),
           description: description.trim(),
@@ -165,14 +280,17 @@ export function ProductFormPanel({ mode }: ProductFormPanelProps) {
     }
   }
 
-  if (loading || languageLoading) {
+  if (loading || languageLoading || contentLanguageLoading) {
     return (
       <div>
         <DashboardPageHeader
           title={
-            mode === 'edit'
-              ? t('dashboard.products.editTitle')
-              : t('dashboard.products.createTitle')
+            isEdit ? t('dashboard.products.editTitle') : t('dashboard.products.createTitle')
+          }
+          description={
+            isEdit
+              ? t('dashboard.products.editDescription')
+              : t('dashboard.products.createDescription')
           }
           icon={<ProductsIcon size={22} />}
         />
@@ -186,31 +304,51 @@ export function ProductFormPanel({ mode }: ProductFormPanelProps) {
   return (
     <div>
       <DashboardPageHeader
-        title={
-          mode === 'edit' ? t('dashboard.products.editTitle') : t('dashboard.products.createTitle')
-        }
+        title={isEdit ? t('dashboard.products.editTitle') : t('dashboard.products.createTitle')}
         description={
-          mode === 'edit'
+          isEdit
             ? t('dashboard.products.editDescription')
             : t('dashboard.products.createDescription')
         }
         icon={<ProductsIcon size={22} />}
+        action={
+          isEdit && productId ? (
+            <Button variant="secondary" onClick={() => setImagesModalOpen(true)}>
+              {t('dashboard.products.manageImages')}
+            </Button>
+          ) : undefined
+        }
       />
 
       <div className="space-y-5 rounded-sm border border-border bg-surface-muted/20 p-5 shadow-sm sm:p-6">
+        <AdminContentLanguageField
+          value={contentLanguageId}
+          onChange={setContentLanguageId}
+          languages={formLanguages}
+        />
         <AdminField label={t('dashboard.products.fieldSubCategory')}>
           <select
             value={subCategoryId}
-            onChange={(e) => setSubCategoryId(e.target.value)}
+            onChange={(e) => handleSubCategoryChange(e.target.value)}
             className={adminInputClass}
           >
             <option value="">{t('dashboard.products.selectSubCategory')}</option>
             {subCategories.map((item) => (
               <option key={item.id} value={item.id}>
-                {item.categoryTitle} / {item.title}
+                {formatSubCategoryLabel(item)}
               </option>
             ))}
+            {subCategoryId &&
+              !subCategories.some((item) => item.id === subCategoryId) &&
+              displayedSubCategoryLabel && (
+                <option value={subCategoryId}>{displayedSubCategoryLabel}</option>
+              )}
           </select>
+          {isEdit && displayedSubCategoryLabel && (
+            <p className="mt-1.5 text-xs font-medium text-warm">
+              {t('dashboard.products.currentSubCategory', { label: displayedSubCategoryLabel })}
+            </p>
+          )}
         </AdminField>
 
         <AdminField label={t('dashboard.products.fieldTitle')}>
@@ -247,7 +385,7 @@ export function ProductFormPanel({ mode }: ProductFormPanelProps) {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            rows={4}
+            rows={5}
             className={adminInputClass}
             placeholder={t('dashboard.products.descriptionPlaceholder')}
           />
@@ -257,8 +395,8 @@ export function ProductFormPanel({ mode }: ProductFormPanelProps) {
           <AdminField label={t('dashboard.products.fieldPrice')}>
             <input
               type="number"
-              min={0}
-              step="any"
+              min="0"
+              step="1"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               className={adminInputClass}
@@ -268,18 +406,18 @@ export function ProductFormPanel({ mode }: ProductFormPanelProps) {
           <AdminField label={t('dashboard.products.fieldCompareAtPrice')}>
             <input
               type="number"
-              min={0}
-              step="any"
+              min="0"
+              step="1"
               value={compareAtPrice}
               onChange={(e) => setCompareAtPrice(e.target.value)}
               className={adminInputClass}
               dir="ltr"
-              placeholder={t('dashboard.products.compareAtOptional')}
+              placeholder={t('dashboard.products.compareAtPlaceholder')}
             />
           </AdminField>
         </div>
 
-        {mode === 'edit' && (
+        {isEdit && (
           <label className="flex items-center gap-2 text-sm text-text">
             <input
               type="checkbox"
@@ -293,29 +431,41 @@ export function ProductFormPanel({ mode }: ProductFormPanelProps) {
 
         {error && <p className="text-sm text-sale">{error}</p>}
 
-        {subCategories.length === 0 && (
-          <p className="text-sm text-text-muted">{t('dashboard.products.noSubCategoriesHint')}</p>
-        )}
-
         <div className="flex flex-wrap gap-3">
-          <Button
-            variant="warm"
-            onClick={() => void handleSave()}
-            disabled={saving || subCategories.length === 0}
-          >
+          <Button variant="warm" onClick={() => void handleSave()} disabled={saving}>
             {saving ? (
               <InlineLoading label={t('dashboard.products.saving')} />
             ) : (
               t('dashboard.products.save')
             )}
           </Button>
-          <Link to="/account/dashboard/products">
-            <Button variant="secondary" disabled={saving}>
-              {t('dashboard.products.cancel')}
-            </Button>
-          </Link>
+          <Button
+            variant="secondary"
+            onClick={() => navigate('/account/dashboard/products')}
+            disabled={saving}
+          >
+            {t('dashboard.products.cancel')}
+          </Button>
         </div>
       </div>
+
+      {isEdit && productId && (
+        <ProductManageModal
+          open={imagesModalOpen}
+          tab="images"
+          product={{
+            id: productId,
+            title,
+            productCode,
+            slug,
+            isActive,
+            creationDate: '',
+            subCategoryId,
+            translations: [],
+          }}
+          onClose={() => setImagesModalOpen(false)}
+        />
+      )}
     </div>
   )
 }

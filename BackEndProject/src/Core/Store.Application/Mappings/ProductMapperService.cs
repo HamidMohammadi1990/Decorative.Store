@@ -11,7 +11,13 @@ namespace Edition.Application.Mappings;
 
 public class ProductMapperService : IProductMapperService
 {
-    public GetProductResponse Map(Product model, string title, string slug, string description)
+    public GetProductResponse Map(
+        Product model,
+        string title,
+        string slug,
+        string description,
+        string subCategoryTitle,
+        string categoryTitle)
     {
         return new GetProductResponse
         {
@@ -24,7 +30,9 @@ public class ProductMapperService : IProductMapperService
             Description = description,
             CreationDate = model.CreatedOnUtc,
             Price = model.Price,
-            CompareAtPrice = model.CompareAtPrice
+            CompareAtPrice = model.CompareAtPrice,
+            SubCategoryTitle = subCategoryTitle,
+            CategoryTitle = categoryTitle,
         };
     }
 
@@ -38,6 +46,7 @@ public class ProductMapperService : IProductMapperService
                 IsActive = x.IsActive,
                 CreationDate = x.CreatedOnUtc,
                 ProductCode = x.ProductCode,
+                SubCategoryId = x.SubCategoryId,
                 Translations = MapTranslations(x.Translations)
             })
             .ToList();

@@ -247,7 +247,6 @@
   <data name="ReviewRateRequired" xml:space="preserve"><value>نرخ نظرالزامی است</value></data>
   <data name="QualityRatingRequired" xml:space="preserve"><value>رتبه بندی کیفیت الزامی است</value></data>
   <data name="TopicRequired" xml:space="preserve"><value>موضوع الزامی است</value></data>
-  <data name="ProductPropertyRuleAlreadyExists" xml:space="preserve"><value>برای این ویژگی محصول، قانون قبلا ثبت شده است</value></data>
   <data name="DuplicateProductProperty" xml:space="preserve"><value>ویژگی برای این محصول تکراری است</value></data>
   <data name="DuplicateProductAttachmentType" xml:space="preserve"><value>این نوع فایل برای محصول تکراری است</value></data>
   <data name="BankNotSelected" xml:space="preserve"><value>بانکی انتخاب نشده است</value></data>

@@ -1,4 +1,5 @@
 using Edition.Application.Common.Utilities.Security.Attributes;
+using Store.Domain.Dtos.Localization;
 using System.Text.Json.Serialization;
 using Store.Domain.Enums;
 
@@ -8,10 +9,7 @@ public record GetAllPageResponse
 {
     [JsonConverter(typeof(PageEncryptor))]
     public int Id { get; init; }
-    public string Slug { get; init; } = default!;
-    public string Title { get; init; } = default!;
     public PageType Type { get; init; }
     public bool IsActive { get; init; }
-    public string? MetaTitle { get; init; }
-    public string? MetaDescription { get; init; }
+    public List<PageTranslationItemDto> Translations { get; init; } = [];
 }

@@ -20,6 +20,20 @@ function IconBase({ size = 20, className = '', children }: DashboardIconProps & 
   )
 }
 
+export function AccountIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <circle cx="12" cy="9" r="3.5" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M6 19c0-3.3 2.7-6 6-6s6 2.7 6 6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </IconBase>
+  )
+}
+
 export function WalletIcon(props: DashboardIconProps) {
   return (
     <IconBase {...props}>
@@ -69,6 +83,20 @@ export function ReviewsIcon(props: DashboardIconProps) {
         strokeWidth="1.5"
         strokeLinejoin="round"
       />
+    </IconBase>
+  )
+}
+
+export function ProductCommentsIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M12 3.5 14.2 8.2l5.3.5-4 3.5 1.2 5.2L12 15.2 7.3 17.4l1.2-5.2-4-3.5 5.3-.5L12 3.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="M16 5.5h4M18 3.5v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </IconBase>
   )
 }
@@ -145,6 +173,152 @@ export function ProductsIcon(props: DashboardIconProps) {
   )
 }
 
+export function PropertiesIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M4 6h16M4 12h10M4 18h16"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <circle cx="17" cy="12" r="2" stroke="currentColor" strokeWidth="1.5" />
+    </IconBase>
+  )
+}
+
+export function PropertyItemsIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M6 5h12v4H6V5Zm0 7h8v4H6v-4Zm10 0h4v4h-4v-4Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </IconBase>
+  )
+}
+
+export function ProductPropertiesIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M5 8.5 12 4l7 4.5v7L12 20l-7-4.5v-7Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15.5 3.5 18 2M18.5 6H21M15.5 8.5 18 10"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </IconBase>
+  )
+}
+
+export function PropertyCategoriesIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M4 5.5h7v7H4v-7Zm9 0h7v7h-7v-7ZM4 14.5h7v7H4v-7Zm9 0h7v4h-7v-4Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="M16 18.5h4M18 16.5v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </IconBase>
+  )
+}
+
+export function ProductDescriptionsIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M7 4h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <path
+        d="M8 9h8M8 12.5h8M8 16h5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </IconBase>
+  )
+}
+
+export function BlogCategoriesIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M4 5.5h7v7H4v-7Zm9 0h7v7h-7v-7ZM4 14.5h7v7H4v-7Zm9 3.5h7M16.5 14.5v7"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </IconBase>
+  )
+}
+
+export function BlogTagsIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M6 5.5h5.5L12 4l2.5 1.5H18v5.5L12 20l-6-4.5V5.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </IconBase>
+  )
+}
+
+export function BlogPostsIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M6 4h12v16H6V4Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="M9 8h6M9 12h6M9 16h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </IconBase>
+  )
+}
+
+export function BlogPostTagsIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M6 5.5h5.5L12 4l2.5 1.5H18v5.5L12 20l-6-4.5V5.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="M14 8h4M14 12h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </IconBase>
+  )
+}
+
+export function BlogCommentsIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M5 6.5h14v9H9l-4 3.5V6.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="M8 10h8M8 13.5h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </IconBase>
+  )
+}
+
 export function ProfileCompletionIcon(props: DashboardIconProps) {
   return (
     <IconBase {...props}>
@@ -200,6 +374,51 @@ export function LogoutIcon(props: DashboardIconProps) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </IconBase>
+  )
+}
+
+export function CmsPagesIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <rect x="5" y="4" width="14" height="16" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </IconBase>
+  )
+}
+
+export function CmsSectionTypesIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M6 7h12M6 12h12M6 17h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </IconBase>
+  )
+}
+
+export function CmsSectionsIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <rect x="4" y="5" width="16" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
+      <rect x="4" y="13" width="16" height="5" rx="1" stroke="currentColor" strokeWidth="1.5" />
+    </IconBase>
+  )
+}
+
+export function CmsSectionItemsIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <circle cx="8" cy="8" r="2" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="16" cy="8" r="2" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="12" cy="16" r="2" stroke="currentColor" strokeWidth="1.5" />
+    </IconBase>
+  )
+}
+
+export function CmsPageSectionsIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path d="M5 6h14v12H5z" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M9 10h6M9 14h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </IconBase>
   )
 }

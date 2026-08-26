@@ -19,4 +19,5 @@ public record SearchBlogPostDto
     public DateTime? PublishedOnUtc { get; init; }
     public bool IsActive { get; init; }
     public bool IsPublished { get; init; }
+    public bool IsFeatured { get; init; }
 }

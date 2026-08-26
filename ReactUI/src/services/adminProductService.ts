@@ -20,6 +20,7 @@ import {
   pickTranslation,
   readEncryptedId,
   readIsActive,
+  readOptionalEncryptedId,
   type AdminPagedResult,
 } from '@/services/admin/adminCatalogNormalize'
 
@@ -31,6 +32,7 @@ function normalizeProductListItem(data: unknown, languageId?: number): AdminProd
 
   const id = readEncryptedId(record, 'id', 'Id')
   const productCode = readStringField(record, 'productCode', 'ProductCode')
+  const subCategoryId = readOptionalEncryptedId(record, 'subCategoryId', 'SubCategoryId')
   if (!id || !productCode) return null
 
   const translations = normalizeTranslations(record.translations ?? record.Translations)
@@ -43,6 +45,8 @@ function normalizeProductListItem(data: unknown, languageId?: number): AdminProd
     creationDate: readStringField(record, 'creationDate', 'CreationDate'),
     title: translation?.title ?? productCode,
     slug: translation?.slug ?? '',
+    subCategoryId: subCategoryId ?? '',
+    translations,
   }
 }
 
@@ -51,15 +55,17 @@ function normalizeProductDetail(data: unknown): AdminProductDetail | null {
   if (!record) return null
 
   const id = readEncryptedId(record, 'id', 'Id')
-  const subCategoryId = readEncryptedId(record, 'subCategoryId', 'SubCategoryId')
+  const subCategoryId = readOptionalEncryptedId(record, 'subCategoryId', 'SubCategoryId')
   const title = readStringField(record, 'title', 'Title')
-  if (!id || !subCategoryId || !title) return null
+  if (!id || !title) return null
 
   const compareAt = readOptionalNumberField(record, 'compareAtPrice', 'CompareAtPrice')
 
   return {
     id,
-    subCategoryId,
+    subCategoryId: subCategoryId ?? '',
+    subCategoryTitle: readStringField(record, 'subCategoryTitle', 'SubCategoryTitle'),
+    categoryTitle: readStringField(record, 'categoryTitle', 'CategoryTitle'),
     title,
     slug: readStringField(record, 'slug', 'Slug'),
     description: readStringField(record, 'description', 'Description'),

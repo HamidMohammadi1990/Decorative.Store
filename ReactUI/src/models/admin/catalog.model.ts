@@ -33,11 +33,15 @@ export interface AdminProductListItem {
   creationDate: string
   title: string
   slug: string
+  subCategoryId: string
+  translations: CatalogTranslation[]
 }
 
 export interface AdminProductDetail {
   id: string
   subCategoryId: string
+  subCategoryTitle: string
+  categoryTitle: string
   title: string
   slug: string
   description: string
@@ -87,4 +91,56 @@ export interface CreateProductInput {
 export interface UpdateProductInput extends CreateProductInput {
   id: string
   status: boolean
+}
+
+export interface AdminProductFile {
+  id: string
+  productId: string
+  productTitle: string
+  title: string
+  fileName: string
+  imageUrl: string
+  isActive: boolean
+  isMain: boolean
+}
+
+export interface CreateProductFileInput {
+  productId: string
+  languageId: number
+  title: string
+  image: File
+  isIndex: boolean
+}
+
+export interface AdminProductDescription {
+  id: string
+  productId: string
+  languageId: number
+  description: string
+  productTitle: string
+}
+
+export interface CreateProductDescriptionInput {
+  productId: string
+  languageId: number
+  description: string
+}
+
+export interface UpdateProductDescriptionInput extends CreateProductDescriptionInput {
+  id: string
+}
+
+export interface AdminProductComment {
+  id: string
+  productId: string
+  productTitle: string
+  userId: string
+  authorName: string
+  commentTopicId: string
+  commentTopicTitle: string
+  commentRate: number
+  qualityRating: number
+  affordableRating: number
+  description: string
+  isActive: boolean
 }

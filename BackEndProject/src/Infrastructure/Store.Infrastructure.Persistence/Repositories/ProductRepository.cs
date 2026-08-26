@@ -26,6 +26,11 @@ public class ProductRepository
         => Context.Product
             .AsNoTracking()
             .Include(x => x.Translations)
+            .Include(x => x.SubCategory)
+                .ThenInclude(sc => sc.Translations)
+            .Include(x => x.SubCategory)
+                .ThenInclude(sc => sc.Category)
+                .ThenInclude(c => c.Translations)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
     public Task<bool> ExistsProductCodeAsync(string productCode, int? excludeProductId = null, CancellationToken cancellationToken = default)
@@ -127,7 +132,6 @@ public class ProductRepository
     {
         var productSource = Context.Product
             .AsNoTracking()
-            .Include(x => x.Translations)
             .ApplyContentPolicyFilter(request.ContentFilter);
 
         var query =
@@ -178,7 +182,6 @@ public class ProductRepository
                     })
                     .ToList()
             })
-            .Distinct()
             .ToPagedAsync(request.Pagination);
 
         return result;

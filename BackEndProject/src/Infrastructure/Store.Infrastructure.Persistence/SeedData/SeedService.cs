@@ -24,6 +24,7 @@ public class SeedService(EditionDbContext context) : ISeedService
         await SeedCommentTopicsAsync(cancellationToken);
         await SeedBlogPostCategoriesAsync(cancellationToken);
         await SeedBlogPostsAsync(cancellationToken);
+        await CmsSeedService.SeedShopPagesAsync(context, cancellationToken);
     }
 
     public async Task SeedDataAsync(List<DynamicPermission> dynamicPermissions, CancellationToken cancellationToken = default)

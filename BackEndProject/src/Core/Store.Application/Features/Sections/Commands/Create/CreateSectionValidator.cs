@@ -6,8 +6,17 @@ namespace Edition.Application.Features.Sections.Commands;
 
 public class CreateSectionValidator : AbstractValidator<CreateSectionRequest>
 {
-    public CreateSectionValidator(ISectionTypeRepository sectionTypeRepository)
+    public CreateSectionValidator(
+        ISectionTypeRepository sectionTypeRepository,
+        ILanguageRepository languageRepository)
     {
+        RuleFor(x => x.LanguageId)
+            .GreaterThan(0)
+            .WithMessage(MessageKeys.InvalidRequest)
+            .MustAsync(async (languageId, cancellationToken) =>
+                await languageRepository.FindAsync(languageId, cancellationToken) is { IsActive: true })
+            .WithMessage(MessageKeys.InvalidRequest);
+
         RuleFor(x => x.Title)
             .NotEmpty()
             .WithMessage(MessageKeys.TitleRequired);

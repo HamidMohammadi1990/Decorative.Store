@@ -22,11 +22,13 @@ export function BlogComments({ postId, comments, onCommentCreated }: BlogComment
   const [text, setText] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
 
   const submitComment = useCallback(
     async (content: string) => {
       setSubmitting(true)
       setSubmitError(null)
+      setSubmitSuccess(false)
 
       try {
         await submitBlogComment({
@@ -35,6 +37,7 @@ export function BlogComments({ postId, comments, onCommentCreated }: BlogComment
           locale,
         })
         setText('')
+        setSubmitSuccess(true)
         await onCommentCreated?.()
       } catch {
         setSubmitError(t('blog.commentSubmitFailed'))
@@ -98,6 +101,11 @@ export function BlogComments({ postId, comments, onCommentCreated }: BlogComment
         {submitError && (
           <p className="mt-2 text-sm text-red-600" role="alert">
             {submitError}
+          </p>
+        )}
+        {submitSuccess && (
+          <p className="mt-2 text-sm text-text-muted" role="status">
+            {t('blog.commentSubmitPending')}
           </p>
         )}
         <button

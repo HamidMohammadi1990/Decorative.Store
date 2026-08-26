@@ -12,7 +12,6 @@ using Store.Domain.Dtos.UserAddresses;
 using Store.Domain.Dtos.Others;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Dtos.Orders;
-using Store.Domain.Dtos.ProductPropertyRules;
 using Store.Domain.Entities;
 
 namespace Edition.Application.Mappings;
@@ -156,17 +155,14 @@ public class OrderMapperService : IOrderMapperService
                 CategoryTitle = x.Key,
                 Properties = x.DistinctBy(x => x.PropertyId).Select(p =>
                 {
-                    var propertyRuleItem = productProperties.FirstOrDefault(rule => p.ProductPropertyId == rule.PropertyRuleProductPropertyId);
-                    var propertyRule = ToPropertyRule(propertyRuleItem, false);
                     var property = new CheckoutPropertyResponse
                     {
                         Id = p.PropertyId,
                         Title = p.PropertyTitle,
                         PropertyType = p.PropertyType,
-                        Rule = propertyRule,
                         Items = [],
                         Parents = [],
-                        Price = PriceField.Create((!userIsCooperation ? p.PropertyPrice : p.PropertyCooperationPrice) ?? 0),
+                        Price = PriceField.Create(0),
                         Dependencies = [],
                         DependentPropertyId = productProperties.FirstOrDefault(x => x.DependencyParentPropertyItemId == p.PropertyId)?.PropertyId,
                     };
@@ -177,7 +173,7 @@ public class OrderMapperService : IOrderMapperService
                             {
                                 Id = x.PropertyItemId!.Value,
                                 Title = x.PropertyItemTitle!,
-                                Price = PriceField.Create((!userIsCooperation ? x.PropertyItemPrice : x.PropertyItemCooperationPrice) ?? 0)
+                                Price = PriceField.Create(0)
                             }).ToList();
                     property.Dependencies =
                             productProperties
@@ -192,20 +188,15 @@ public class OrderMapperService : IOrderMapperService
                             .Where(item => p.PropertyParentId is not null && p.PropertyParentId == item.ParentPropertyId)
                             .Select(parentProperty =>
                             {
-                                var parentPropertyRuleItem =
-                                        productProperties
-                                       .FirstOrDefault(rule => parentProperty.ParentProductPropertyId == rule.ParentPropertyRuleProductPropertyId);
-                                var parentPropertyRule = ToPropertyRule(parentPropertyRuleItem, true);
                                 var property = new CheckoutPropertyResponse
                                 {
                                     Id = parentProperty.ParentPropertyId ?? 0,
                                     Title = parentProperty.ParentPropertyTitle ?? "",
                                     PropertyType = parentProperty.ParentPropertyType ?? 0,
-                                    Rule = parentPropertyRule,
                                     Items = [],
                                     Parents = [],
                                     Dependencies = [],
-                                    Price = PriceField.Create((!userIsCooperation ? parentProperty.ParentPropertyPrice : parentProperty.ParentPropertyCooperationPrice) ?? 0),
+                                    Price = PriceField.Create(0),
                                 };
 
                                 if (parentProperty.ParentPropertyId is not null)
@@ -217,7 +208,7 @@ public class OrderMapperService : IOrderMapperService
                                         {
                                             Id = x.ParentPropertyItemId!.Value,
                                             Title = x.ParentPropertyItemTitle!,
-                                            Price = PriceField.Create((!userIsCooperation ? x.ParentPropertyItemPrice : x.ParentPropertyItemCooperationPrice) ?? 0)
+                                            Price = PriceField.Create(0)
                                         }).ToList();
                                 }
 
@@ -229,44 +220,6 @@ public class OrderMapperService : IOrderMapperService
             }).ToList();
 
         return result;
-
-        static ProductPropertyRuleDto? ToPropertyRule(ProductPropertyDto? productProperty, bool isParent)
-        {
-            if (productProperty is null || productProperty.PropertyRulePropertyType is null)
-                return null;
-
-            return productProperty.PropertyRulePropertyType switch
-            {
-                PropertyType.Numeric or PropertyType.NumericWithItem => new NumericProductPropertyRuleDto
-                {
-                    IsMandatory = !isParent ? productProperty.PropertyRuleIsMandatory!.Value : productProperty.ParentPropertyRuleIsMandatory!.Value,
-                    Description = !isParent ? productProperty.PropertyRuleDescription! : productProperty.ParentPropertyRuleDescription!,
-                    MinQuantity = !isParent ? productProperty.PropertyRuleMinQuantity!.Value : productProperty.ParentPropertyRuleMinQuantity!.Value,
-                    MaxQuantity = !isParent ? productProperty.PropertyRuleMaxQuantity!.Value : productProperty.ParentPropertyRuleMaxQuantity!.Value
-                },
-                PropertyType.Dimensions => new DimensionsProductPropertyRuleDto
-                {
-                    IsMandatory = !isParent ? productProperty.PropertyRuleIsMandatory!.Value : productProperty.ParentPropertyRuleIsMandatory!.Value,
-                    Description = !isParent ? productProperty.PropertyRuleDescription : productProperty.ParentPropertyRuleDescription,
-                    MinWidth = !isParent ? productProperty.PropertyRuleMinWidth!.Value : productProperty.ParentPropertyRuleMinWidth!.Value,
-                    MaxWidth = !isParent ? productProperty.PropertyRuleMaxWidth!.Value : productProperty.ParentPropertyRuleMaxWidth!.Value,
-                    MinHeight = !isParent ? productProperty.PropertyRuleMinHeight!.Value : productProperty.ParentPropertyRuleMinHeight!.Value,
-                    MaxHeight = !isParent ? productProperty.PropertyRuleMaxHeight!.Value : productProperty.ParentPropertyRuleMaxHeight!.Value
-                },
-                PropertyType.Text => new TextProductPropertyRuleDto
-                {
-                    IsMandatory = !isParent ? productProperty.PropertyRuleIsMandatory!.Value : productProperty.ParentPropertyRuleIsMandatory!.Value,
-                    Description = !isParent ? productProperty.PropertyRuleDescription : productProperty.ParentPropertyRuleDescription,
-                    MinLength = !isParent ? productProperty.PropertyRuleMinLength!.Value : productProperty.ParentPropertyRuleMinLength!.Value,
-                    MaxLength = !isParent ? productProperty.PropertyRuleMaxLength!.Value : productProperty.ParentPropertyRuleMaxLength!.Value
-                },
-                _ => new ProductPropertyRuleDto
-                {
-                    IsMandatory = !isParent ? productProperty.PropertyRuleIsMandatory!.Value : productProperty.ParentPropertyRuleIsMandatory!.Value,
-                    Description = !isParent ? productProperty.PropertyRuleDescription : productProperty.ParentPropertyRuleDescription
-                }
-            };
-        }
     }
 
     public List<OrderItemProperty> ToOrderItemProperties(List<BaseOrderProperty> properties, List<ProductPropertyDto> productProperties, bool userIsCooperation)
@@ -321,23 +274,12 @@ public class OrderMapperService : IOrderMapperService
 
         foreach (var orderProperty in orderProperties)
         {
-            if (!catalog.TryGetDefinition(orderProperty.PropertyId, out var definition))
+            if (!catalog.TryGetDefinition(orderProperty.PropertyId, out _))
                 continue;
 
-            var propertyPrice = definition.PropertyPrice(userIsCooperation);
-            if (propertyPrice.HasValue)
-                orderProperty.SetPropertyPrice(propertyPrice.Value);
-
-            if (orderProperty.PropertyType != PropertyType.NumericWithItem || orderProperty.PropertyItemId is not int itemId)
-                continue;
-
-            var itemRow = catalog.FindItemRow(orderProperty.PropertyId, itemId);
-            if (itemRow is null)
-                continue;
-
-            var itemPrice = definition.PropertyItemPrice(userIsCooperation, itemRow);
-            if (itemPrice.HasValue)
-                orderProperty.SetPropertyItemPrice(itemPrice.Value);
+            // Properties are descriptive only — they never change product price.
+            orderProperty.SetPropertyPrice(0);
+            orderProperty.SetPropertyItemPrice(0);
         }
 
         return orderProperties;

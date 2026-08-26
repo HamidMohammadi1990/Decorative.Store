@@ -23,10 +23,11 @@ export const blogService = {
 
   async getFeaturedPosts(locale: Locale, limit = 3): Promise<BlogPostSummary[]> {
     const postsResult = await blogPostService.search(locale, {
-      pagination: { pageNumber: 1, pageSize: 50 },
+      isFeatured: true,
+      pagination: { pageNumber: 1, pageSize: limit },
     })
 
-    return postsResult.items.slice(0, limit)
+    return postsResult.items
   },
 
   async getListing(locale: Locale, categorySlug?: string): Promise<BlogListingResult> {
@@ -41,7 +42,18 @@ export const blogService = {
     })
 
     const posts = postsResult.items
-    const featuredPosts = [...posts].slice(0, 5)
+
+    let featuredPosts: BlogPostSummary[]
+    if (!categorySlug) {
+      const featuredResult = await blogPostService.search(locale, {
+        isFeatured: true,
+        categorySlugById,
+        pagination: { pageNumber: 1, pageSize: 5 },
+      })
+      featuredPosts = featuredResult.items
+    } else {
+      featuredPosts = posts.filter((post) => post.featured).slice(0, 5)
+    }
 
     return {
       categories,

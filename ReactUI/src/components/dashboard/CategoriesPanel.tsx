@@ -4,6 +4,9 @@ import type { AdminCategory } from '@/models/admin/catalog.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
 import { CategoriesIcon } from '@/components/dashboard/DashboardIcons'
+import { AdminDataGrid } from '@/components/dashboard/admin/AdminDataGrid'
+import { AdminContentLanguageField } from '@/components/dashboard/admin/AdminContentLanguageField'
+import { TranslationLocaleBadges } from '@/components/dashboard/admin/TranslationLocaleBadges'
 import {
   AdminField,
   adminInputClass,
@@ -11,9 +14,12 @@ import {
 } from '@/components/dashboard/admin/adminFormShared'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
+import { useAdminContentLanguage } from '@/hooks/useAdminContentLanguage'
+import { useAdminPagedList } from '@/hooks/useAdminPagedList'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
+import { useStoreLanguages } from '@/hooks/useStoreLanguages'
 import { adminCategoryService } from '@/services/adminCategoryService'
-import { slugifyTitle } from '@/services/admin/adminCatalogNormalize'
+import { slugifyTitle, pickTranslation } from '@/services/admin/adminCatalogNormalize'
 import { useUserStore } from '@/stores/userStore'
 
 type Mode = 'list' | 'create' | 'edit'
@@ -22,13 +28,19 @@ export function CategoriesPanel() {
   const { t } = useTranslation()
   const accessToken = useUserStore((s) => s.accessToken)
   const { languageId, locale, loading: languageLoading } = useCurrentLanguageId()
+  const { languages } = useStoreLanguages()
+  const {
+    contentLanguageId,
+    setContentLanguageId,
+    languages: formLanguages,
+    loading: contentLanguageLoading,
+  } = useAdminContentLanguage()
 
   const [mode, setMode] = useState<Mode>('list')
-  const [items, setItems] = useState<AdminCategory[]>([])
-  const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [formError, setFormError] = useState<string | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [editingItem, setEditingItem] = useState<AdminCategory | null>(null)
 
   const [title, setTitle] = useState('')
   const [slug, setSlug] = useState('')
@@ -36,32 +48,47 @@ export function CategoriesPanel() {
   const [isActive, setIsActive] = useState(true)
   const [slugTouched, setSlugTouched] = useState(false)
 
-  const load = useCallback(async () => {
-    if (!accessToken || accessToken === 'mock-access-token') {
-      setError(t('dashboard.categories.authRequired'))
-      setLoading(false)
-      return
-    }
+  const canLoad =
+    !languageLoading &&
+    !contentLanguageLoading &&
+    contentLanguageId != null &&
+    Boolean(accessToken) &&
+    accessToken !== 'mock-access-token'
 
-    setLoading(true)
-    setError(null)
-    try {
-      const result = await adminCategoryService.getAll(accessToken, locale, {
-        pageSize: 100,
-        languageId: languageId ?? undefined,
+  const fetchPage = useCallback(
+    async (pageNumber: number, pageSize: number) => {
+      if (!accessToken || accessToken === 'mock-access-token') {
+        throw new Error(t('dashboard.categories.authRequired'))
+      }
+      return adminCategoryService.getAll(accessToken, locale, {
+        pageNumber,
+        pageSize,
+        languageId: contentLanguageId ?? undefined,
       })
-      setItems(result.items)
-    } catch (err) {
-      setError(resolveAdminMutationError(err, t('dashboard.categories.loadFailed')))
-      setItems([])
-    } finally {
-      setLoading(false)
-    }
-  }, [accessToken, languageId, locale, t])
+    },
+    [accessToken, contentLanguageId, locale, t],
+  )
 
-  useEffect(() => {
-    if (!languageLoading) void load()
-  }, [languageLoading, load])
+  const {
+    items,
+    loading: listLoading,
+    error: listError,
+    pageNumber,
+    pageSize,
+    totalCount,
+    totalPages,
+    goToPage,
+    changePageSize,
+    reload,
+  } = useAdminPagedList<AdminCategory>({
+    fetchPage,
+    initialPageSize: 20,
+    enabled: canLoad && mode === 'list',
+  })
+
+  const listErrorMessage = listError
+    ? resolveAdminMutationError(listError, t('dashboard.categories.loadFailed'))
+    : null
 
   const resetForm = () => {
     setTitle('')
@@ -70,7 +97,15 @@ export function CategoriesPanel() {
     setIsActive(true)
     setSlugTouched(false)
     setEditingId(null)
-    setError(null)
+    setEditingItem(null)
+    setFormError(null)
+  }
+
+  const applyCategoryTranslation = (item: AdminCategory, targetLanguageId: number) => {
+    const translation = pickTranslation(item.translations, targetLanguageId)
+    setTitle(translation?.title ?? '')
+    setSlug(translation?.slug ?? '')
+    setSlugTouched(Boolean(translation?.slug))
   }
 
   const openCreate = () => {
@@ -80,14 +115,21 @@ export function CategoriesPanel() {
 
   const openEdit = (item: AdminCategory) => {
     setEditingId(item.id)
-    setTitle(item.title)
-    setSlug(item.slug)
+    setEditingItem(item)
     setCode(item.code)
     setIsActive(item.isActive)
-    setSlugTouched(true)
-    setError(null)
+    setFormError(null)
     setMode('edit')
+    const langId = contentLanguageId ?? languageId
+    if (langId != null) {
+      applyCategoryTranslation(item, langId)
+    }
   }
+
+  useEffect(() => {
+    if (mode !== 'edit' || !editingItem || contentLanguageId == null) return
+    applyCategoryTranslation(editingItem, contentLanguageId)
+  }, [contentLanguageId, editingItem, mode])
 
   const backToList = () => {
     resetForm()
@@ -100,23 +142,23 @@ export function CategoriesPanel() {
   }
 
   const handleSave = async () => {
-    if (!accessToken || accessToken === 'mock-access-token' || languageId == null) {
-      setError(t('dashboard.categories.saveFailed'))
+    if (!accessToken || accessToken === 'mock-access-token' || contentLanguageId == null) {
+      setFormError(t('dashboard.categories.saveFailed'))
       return
     }
 
     if (!title.trim() || !slug.trim() || !code.trim()) {
-      setError(t('dashboard.categories.validationRequired'))
+      setFormError(t('dashboard.categories.validationRequired'))
       return
     }
 
     setSaving(true)
-    setError(null)
+    setFormError(null)
     try {
       if (mode === 'edit' && editingId) {
         await adminCategoryService.update(accessToken, locale, {
           id: editingId,
-          languageId,
+          languageId: contentLanguageId,
           title: title.trim(),
           slug: slug.trim(),
           code: code.trim(),
@@ -124,16 +166,16 @@ export function CategoriesPanel() {
         })
       } else {
         await adminCategoryService.create(accessToken, locale, {
-          languageId,
+          languageId: contentLanguageId,
           title: title.trim(),
           slug: slug.trim(),
           code: code.trim(),
         })
       }
-      await load()
       backToList()
+      reload()
     } catch (err) {
-      setError(resolveAdminMutationError(err, t('dashboard.categories.saveFailed')))
+      setFormError(resolveAdminMutationError(err, t('dashboard.categories.saveFailed')))
     } finally {
       setSaving(false)
     }
@@ -144,12 +186,11 @@ export function CategoriesPanel() {
     if (!window.confirm(t('dashboard.categories.deleteConfirm'))) return
 
     setSaving(true)
-    setError(null)
     try {
       await adminCategoryService.delete(accessToken, id)
-      await load()
+      reload()
     } catch (err) {
-      setError(resolveAdminMutationError(err, t('dashboard.categories.deleteFailed')))
+      setFormError(resolveAdminMutationError(err, t('dashboard.categories.deleteFailed')))
     } finally {
       setSaving(false)
     }
@@ -173,6 +214,12 @@ export function CategoriesPanel() {
         />
 
         <div className="space-y-5 rounded-sm border border-border bg-surface-muted/20 p-5 shadow-sm sm:p-6">
+          <AdminContentLanguageField
+            value={contentLanguageId}
+            onChange={setContentLanguageId}
+            languages={formLanguages}
+            disabled={contentLanguageLoading}
+          />
           <AdminField label={t('dashboard.categories.fieldTitle')}>
             <input
               value={title}
@@ -215,7 +262,7 @@ export function CategoriesPanel() {
             </label>
           )}
 
-          {error && <p className="text-sm text-sale">{error}</p>}
+          {formError && <p className="text-sm text-sale">{formError}</p>}
 
           <div className="flex flex-wrap gap-3">
             <Button variant="warm" onClick={() => void handleSave()} disabled={saving}>
@@ -234,6 +281,16 @@ export function CategoriesPanel() {
     )
   }
 
+  if (!accessToken || accessToken === 'mock-access-token') {
+    return (
+      <DashboardEmptyState
+        icon={<CategoriesIcon size={28} />}
+        title={t('dashboard.categories.loadFailedTitle')}
+        message={t('dashboard.categories.authRequired')}
+      />
+    )
+  }
+
   return (
     <div>
       <DashboardPageHeader
@@ -247,22 +304,35 @@ export function CategoriesPanel() {
         }
       />
 
-      {loading || languageLoading ? (
+      <AdminContentLanguageField
+        className="mb-4"
+        value={contentLanguageId}
+        onChange={(id) => {
+          setContentLanguageId(id)
+          goToPage(1)
+        }}
+        languages={languages}
+        disabled={contentLanguageLoading}
+      />
+
+      {languageLoading || (listLoading && items.length === 0) ? (
         <div className="flex justify-center py-16">
           <InlineLoading label={t('dashboard.categories.loading')} />
         </div>
-      ) : error && items.length === 0 ? (
+      ) : listErrorMessage && items.length === 0 ? (
         <DashboardEmptyState
+          icon={<CategoriesIcon size={28} />}
           title={t('dashboard.categories.loadFailedTitle')}
-          message={error}
+          message={listErrorMessage}
           action={
-            <Button variant="secondary" onClick={() => void load()}>
+            <Button variant="secondary" onClick={() => reload()}>
               {t('dashboard.categories.retry')}
             </Button>
           }
         />
-      ) : items.length === 0 ? (
+      ) : totalCount === 0 && !listLoading ? (
         <DashboardEmptyState
+          icon={<CategoriesIcon size={28} />}
           title={t('dashboard.categories.emptyTitle')}
           message={t('dashboard.categories.emptyMessage')}
           action={
@@ -273,25 +343,42 @@ export function CategoriesPanel() {
         />
       ) : (
         <div className="space-y-3">
-          {error && <p className="text-sm text-sale">{error}</p>}
-          <p className="text-xs text-text-muted">
-            {t('dashboard.categories.itemCount', { count: items.length })}
-          </p>
-          <ul className="divide-y divide-border rounded-sm border border-border">
-            {items.map((item) => (
-              <li
-                key={item.id}
-                className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5"
-              >
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-text">{item.title}</p>
-                  <p className="mt-0.5 text-xs text-text-muted" dir="ltr">
-                    {item.code} · {item.slug || '—'}
-                  </p>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
+          {formError && <p className="text-sm text-sale">{formError}</p>}
+          {listErrorMessage && <p className="text-sm text-sale">{listErrorMessage}</p>}
+
+          <AdminDataGrid
+            columns={[
+              {
+                id: 'title',
+                header: t('dashboard.categories.fieldTitle'),
+                cell: (item) => (
+                  <div className="min-w-0">
+                    <p className="truncate font-semibold text-text">{item.title}</p>
+                    <p className="mt-0.5 text-xs text-text-muted" dir="ltr">
+                      {item.code} · {item.slug || '—'}
+                    </p>
+                  </div>
+                ),
+              },
+              {
+                id: 'languages',
+                header: t('dashboard.contentLocale.fieldLanguages'),
+                align: 'center',
+                cell: (item) => (
+                  <TranslationLocaleBadges
+                    translations={item.translations}
+                    languages={languages}
+                    currentLanguageId={contentLanguageId ?? undefined}
+                  />
+                ),
+              },
+              {
+                id: 'status',
+                header: t('dashboard.categories.fieldActive'),
+                align: 'center',
+                cell: (item) => (
                   <span
-                    className={`rounded-sm px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                    className={`inline-flex rounded-sm px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
                       item.isActive
                         ? 'bg-warm-soft text-warm'
                         : 'bg-surface-muted text-text-muted'
@@ -301,26 +388,47 @@ export function CategoriesPanel() {
                       ? t('dashboard.categories.statusActive')
                       : t('dashboard.categories.statusInactive')}
                   </span>
-                  <Button
-                    variant="secondary"
-                    className="py-1.5 text-xs"
-                    onClick={() => openEdit(item)}
-                    disabled={saving}
-                  >
-                    {t('dashboard.categories.edit')}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="py-1.5 text-xs text-sale hover:bg-sale/10"
-                    onClick={() => void handleDelete(item.id)}
-                    disabled={saving}
-                  >
-                    {t('dashboard.categories.delete')}
-                  </Button>
-                </div>
-              </li>
-            ))}
-          </ul>
+                ),
+              },
+              {
+                id: 'actions',
+                header: '',
+                align: 'right',
+                cell: (item) => (
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <Button
+                      variant="secondary"
+                      className="py-1.5 text-xs"
+                      onClick={() => openEdit(item)}
+                      disabled={saving}
+                    >
+                      {t('dashboard.categories.edit')}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="py-1.5 text-xs text-sale hover:bg-sale/10"
+                      onClick={() => void handleDelete(item.id)}
+                      disabled={saving}
+                    >
+                      {t('dashboard.categories.delete')}
+                    </Button>
+                  </div>
+                ),
+              },
+            ]}
+            rows={items}
+            rowKey={(item) => item.id}
+            loading={listLoading}
+            loadingLabel={t('dashboard.categories.loading')}
+            pagination={{
+              pageNumber,
+              pageSize,
+              totalCount,
+              totalPages,
+              onPageChange: goToPage,
+              onPageSizeChange: changePageSize,
+            }}
+          />
         </div>
       )}
     </div>

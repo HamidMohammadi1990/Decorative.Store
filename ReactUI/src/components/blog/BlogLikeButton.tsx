@@ -1,5 +1,10 @@
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ApiError } from '@/services/api/apiTypes'
+import { blogPostLikeService } from '@/services/blogPostLikeService'
 import { useBlogInteractionStore } from '@/stores/blogInteractionStore'
+import { useSettingsStore } from '@/stores/settingsStore'
+import { useAccessToken } from '@/stores/userStore'
 
 interface BlogLikeButtonProps {
   postId: string
@@ -9,22 +14,49 @@ interface BlogLikeButtonProps {
 
 export function BlogLikeButton({ postId, baseLikes, size = 'md' }: BlogLikeButtonProps) {
   const { t } = useTranslation()
+  const locale = useSettingsStore((s) => s.locale)
+  const accessToken = useAccessToken()
   const liked = useBlogInteractionStore((s) => s.likedPostIds.includes(postId))
-  const toggleLike = useBlogInteractionStore((s) => s.togglePostLike)
-  const count = baseLikes + (liked ? 1 : 0)
+  const markPostLiked = useBlogInteractionStore((s) => s.markPostLiked)
+  const [pending, setPending] = useState(false)
+  const [extraLike, setExtraLike] = useState(0)
+  const count = baseLikes + extraLike
+
+  const submitLike = useCallback(async () => {
+    setPending(true)
+
+    try {
+      await blogPostLikeService.create(postId, locale, accessToken)
+      markPostLiked(postId)
+      setExtraLike(1)
+    } catch (error) {
+      if (error instanceof ApiError && error.hasCode('DuplicateLike')) {
+        markPostLiked(postId)
+        return
+      }
+    } finally {
+      setPending(false)
+    }
+  }, [accessToken, locale, markPostLiked, postId])
+
+  const handleClick = () => {
+    if (liked || pending) return
+    void submitLike()
+  }
 
   const dim = size === 'sm' ? 'size-9 text-sm' : 'h-11 px-4 text-sm'
 
   return (
     <button
       type="button"
-      onClick={() => toggleLike(postId)}
+      onClick={handleClick}
+      disabled={liked || pending}
       aria-pressed={liked}
       aria-label={t('blog.likeArticle')}
       className={`inline-flex items-center justify-center gap-2 rounded-full border transition-colors ${dim} ${
         liked
           ? 'border-warm bg-warm-soft text-warm'
-          : 'border-border bg-surface text-text-muted hover:border-warm hover:text-warm'
+          : 'border-border bg-surface text-text-muted hover:border-warm hover:text-warm disabled:cursor-default'
       }`}
     >
       <HeartIcon filled={liked} />

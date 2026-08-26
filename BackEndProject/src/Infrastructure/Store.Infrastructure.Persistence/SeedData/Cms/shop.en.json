@@ -1,0 +1,185 @@
+{
+  "promoAnnouncement": {
+    "id": "summer-sale-2026",
+    "message": "Summer Sale Starts NOW! Save up to 50% off",
+    "link": { "label": "Shop sale", "href": "/sale" }
+  },
+  "utilityBar": {
+    "phoneLabel": "Call us: 0800 404 9780",
+    "phoneHref": "tel:08004049780",
+    "links": [
+      { "label": "Sustainability", "href": "/sustainability" },
+      { "label": "Track Order", "href": "/track-order" }
+    ]
+  },
+  "header": {
+    "brandLabel": "Diba Gallery",
+    "searchPlaceholder": "Search furniture, rugs, lighting…",
+    "accountLabel": "Sign In",
+    "cartLabel": "Cart",
+    "primaryNav": []
+  },
+  "designServices": {
+    "title": "Free Design Services",
+    "cta": { "label": "Book a free appointment", "href": "/design-services" },
+    "featuredLinks": [
+      { "label": "Fabric & Leather Guide", "href": "/guides/fabric" },
+      { "label": "Measure for Delivery", "href": "/guides/measure" },
+      { "label": "The Rug Guide", "href": "/guides/rugs" },
+      { "label": "Curtain Buying Guide", "href": "/guides/curtains" }
+    ]
+  },
+  "hero": {
+    "slides": [
+      {
+        "id": "hero-1",
+        "eyebrow": "Limited time",
+        "title": "Summer Sale Starts NOW!",
+        "subtitle": "Save up to 50% off select styles",
+        "image": { "src": "/images/home/living-room.jpg", "alt": "Modern living room" },
+        "cta": { "label": "Shop the sale", "href": "/sale" }
+      },
+      {
+        "id": "hero-2",
+        "title": "Save up to 20% on select bedroom styles",
+        "subtitle": "Calm, layered spaces for summer",
+        "image": { "src": "/images/home/bedroom.jpg", "alt": "Bedroom" },
+        "cta": { "label": "Shop furniture favourites", "href": "/bedroom" }
+      },
+      {
+        "id": "hero-3",
+        "title": "In-stock sofas & chairs to sink into",
+        "subtitle": "Delivered in 1–3 weeks*",
+        "image": { "src": "/images/home/velvet-sofa.jpg", "alt": "Sofa" },
+        "cta": { "label": "Shop in stock", "href": "/in-stock/sofas" }
+      },
+      {
+        "id": "hero-4",
+        "title": "Dining chairs under 3.5M",
+        "subtitle": "Gather around in style",
+        "image": { "src": "/images/home/dining.jpg", "alt": "Dining" },
+        "cta": { "label": "Shop now", "href": "/dining/chairs" }
+      }
+    ]
+  },
+  "promoTiles": {
+    "tiles": [
+      {
+        "id": "tile-1",
+        "title": "Save up to 20% on bedroom",
+        "subtitle": "Shop furniture favourites",
+        "image": { "src": "/images/home/bedroom-set.jpg", "alt": "Bedroom" },
+        "link": { "label": "Shop now", "href": "/bedroom" }
+      },
+      {
+        "id": "tile-2",
+        "title": "Dining chairs under 3.5M",
+        "image": { "src": "/images/home/dining.jpg", "alt": "Dining chairs" },
+        "link": { "label": "Shop now", "href": "/dining/chairs" }
+      },
+      {
+        "id": "tile-3",
+        "title": "In-stock sofas & chairs",
+        "subtitle": "Delivered in 1–3 weeks*",
+        "image": { "src": "/images/home/velvet-sofa.jpg", "alt": "Sofa" },
+        "link": { "label": "Shop now", "href": "/in-stock/sofas" }
+      },
+      {
+        "id": "tile-4",
+        "title": "Summer Sale",
+        "subtitle": "Save up to 50% off",
+        "image": { "src": "/images/home/living-room.jpg", "alt": "Living room" },
+        "link": { "label": "Shop sale", "href": "/sale" }
+      }
+    ],
+    "disclaimer": "*Some exclusions apply.",
+    "disclaimerLink": { "label": "See details", "href": "/promo-terms" }
+  },
+  "categoryNav": {
+    "items": [
+      { "label": "New", "href": "/new" },
+      { "label": "Sofas", "href": "/sofas" },
+      { "label": "Bedroom", "href": "/bedroom" },
+      { "label": "Home Office", "href": "/home-office" },
+      { "label": "Rugs", "href": "/rugs" },
+      { "label": "Dining Room", "href": "/dining" },
+      { "label": "Living Room", "href": "/living-room" },
+      { "label": "Summer Sale", "href": "/sale" },
+      { "label": "Mid-Century", "href": "/mid-century" },
+      { "label": "Garden", "href": "/garden" },
+      { "label": "Lighting", "href": "/lighting" },
+      { "label": "Bed Linen", "href": "/bed-linen" },
+      { "label": "Kitchen & Dining", "href": "/kitchen-dining" },
+      { "label": "Gifts", "href": "/gifts" }
+    ]
+  },
+  "featuredShop": {
+    "sections": [
+      {
+        "id": "new-arrivals",
+        "title": "New Arrivals",
+        "subtitle": "Shop the latest",
+        "image": { "src": "/images/home/new-arrivals.jpg", "alt": "New arrivals" },
+        "link": { "label": "Shop New Arrivals", "href": "/new" }
+      },
+      {
+        "id": "in-stock",
+        "title": "In Stock & Ready to Ship",
+        "subtitle": "Arrives in 1–3 weeks",
+        "image": { "src": "/images/home/in-stock.jpg", "alt": "In-stock" },
+        "link": { "label": "Shop in stock", "href": "/in-stock" }
+      },
+      {
+        "id": "best-sellers",
+        "title": "Best Sellers",
+        "image": { "src": "/images/home/living-room.jpg", "alt": "Best sellers" },
+        "link": { "label": "Shop best sellers", "href": "/best-sellers" }
+      }
+    ]
+  },
+  "footer": {
+    "columns": [
+      {
+        "title": "Customer service",
+        "links": [
+          { "label": "Contact us", "href": "/contact" },
+          { "label": "Returns & exchanges", "href": "/returns" },
+          { "label": "Delivery information", "href": "/delivery" }
+        ]
+      },
+      {
+        "title": "Resources",
+        "links": [
+          { "label": "Click & Collect", "href": "/click-collect" },
+          { "label": "Klarna", "href": "/klarna" },
+          { "label": "Clearpay", "href": "/clearpay" }
+        ]
+      },
+      {
+        "title": "More about us",
+        "links": [
+          { "label": "Journal", "href": "/blog" },
+          { "label": "Sustainability", "href": "/sustainability" },
+          { "label": "Careers", "href": "/careers" },
+          { "label": "Find a store", "href": "/stores" }
+        ]
+      },
+      {
+        "title": "Design services",
+        "links": [
+          { "label": "Meet with design crew", "href": "/design-services" },
+          { "label": "Diba Gallery TRADE", "href": "/trade" }
+        ]
+      }
+    ],
+    "newsletterTitle": "Exclusive sales & new arrivals",
+    "newsletterPlaceholder": "Email address",
+    "newsletterButton": "Join",
+    "copyright": "© 2026 Williams-Sonoma Inc. All Rights Reserved",
+    "legalLinks": [
+      { "label": "Terms & Conditions", "href": "/terms" },
+      { "label": "Privacy Policy", "href": "/privacy" },
+      { "label": "Legal Statement", "href": "/legal" }
+    ]
+  }
+}

@@ -23,7 +23,31 @@ public class GetProductHandler
         var languageId = languageContext.IsResolved ? languageContext.LanguageId : defaultLanguage.Id;
         var (title, slug, description) = TranslationResolver.Resolve(product.Translations, languageId, defaultLanguage.Id);
 
-        var result = mapper.Map(product, title, slug, description);
+        var subCategoryTitle = string.Empty;
+        var categoryTitle = string.Empty;
+        if (product.SubCategory is not null)
+        {
+            (subCategoryTitle, _) = TranslationResolver.Resolve(
+                product.SubCategory.Translations,
+                languageId,
+                defaultLanguage.Id);
+
+            if (product.SubCategory.Category is not null)
+            {
+                (categoryTitle, _) = TranslationResolver.Resolve(
+                    product.SubCategory.Category.Translations,
+                    languageId,
+                    defaultLanguage.Id);
+            }
+        }
+
+        var result = mapper.Map(
+            product,
+            title,
+            slug,
+            description,
+            subCategoryTitle,
+            categoryTitle);
         return result;
     }
 }

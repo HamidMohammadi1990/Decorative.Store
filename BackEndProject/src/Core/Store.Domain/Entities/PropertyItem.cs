@@ -10,7 +10,6 @@ public class PropertyItem : BaseEntity
     public bool IsActive { get; private set; } = true;
 
     public Property Property { get; private set; } = default!;
-    public PropertyItemPrice PropertyItemPrice { get; private set; } = default!;
     public ICollection<OrderItemProperty> OrderItemProperties { get; private set; } = default!;
     public ICollection<PropertyItemDependency> ParentPropertyItems { get; private set; } = default!;
     public ICollection<PropertyItemDependency> DependentPropertyItems { get; private set; } = default!;

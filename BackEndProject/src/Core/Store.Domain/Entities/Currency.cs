@@ -8,11 +8,6 @@ public class Currency : BaseEntity
     public string Name { get; private set; } = default!;
     public bool IsDefault { get; set; }
 
-
-    public List<PropertyItemPrice> PropertyItemPrices { get; private set; } = default!;
-    public List<ProductPropertyPrice> ProductPropertyPrices { get; private set; } = default!;
-
-
     public static Currency Create(string code, string name, bool isDefault)
         => new()
         {

@@ -29,4 +29,5 @@ public record GetAllProductCommentResponse
     public string? Description { get; init; }
     public int QualityRating { get; init; }
     public int AffordableRating { get; init; }
+    public bool IsActive { get; init; }
 }

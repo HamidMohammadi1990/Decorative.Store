@@ -19,4 +19,6 @@ public record GetProductResponse
     public string ProductCode { get; init; } = default!;
     public decimal Price { get; init; }
     public decimal? CompareAtPrice { get; init; }
+    public string SubCategoryTitle { get; init; } = default!;
+    public string CategoryTitle { get; init; } = default!;
 }

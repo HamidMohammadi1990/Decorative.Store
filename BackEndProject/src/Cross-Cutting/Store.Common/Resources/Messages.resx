@@ -247,7 +247,6 @@
   <data name="ReviewRateRequired" xml:space="preserve"><value>Review rate is required</value></data>
   <data name="QualityRatingRequired" xml:space="preserve"><value>Quality rating is required</value></data>
   <data name="TopicRequired" xml:space="preserve"><value>Topic is required</value></data>
-  <data name="ProductPropertyRuleAlreadyExists" xml:space="preserve"><value>A rule for this product property already exists</value></data>
   <data name="DuplicateProductProperty" xml:space="preserve"><value>Property for this product already exists</value></data>
   <data name="DuplicateProductAttachmentType" xml:space="preserve"><value>This attachment type for the product already exists</value></data>
   <data name="BankNotSelected" xml:space="preserve"><value>Bank is not selected</value></data>

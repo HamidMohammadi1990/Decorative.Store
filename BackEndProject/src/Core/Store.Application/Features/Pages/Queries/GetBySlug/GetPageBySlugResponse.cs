@@ -4,6 +4,7 @@ namespace Edition.Application.Features.Pages.Queries;
 
 public record GetPageBySlugResponse
 {
+    public bool NotFound { get; init; }
     public string Slug { get; init; } = default!;
     public string Title { get; init; } = default!;
     public PageType Type { get; init; }
@@ -15,6 +16,7 @@ public record GetPageBySlugResponse
 public record PageSectionRenderResponse
 {
     public int SectionTypeId { get; init; }
+    public string SectionTypeName { get; init; } = default!;
     public int Priority { get; init; }
     public string Title { get; init; } = default!;
     public string? Description { get; init; }

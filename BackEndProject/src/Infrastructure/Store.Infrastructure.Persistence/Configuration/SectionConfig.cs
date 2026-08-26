@@ -10,20 +10,6 @@ public class SectionConfig : IEntityTypeConfiguration<Section>
     public void Configure(EntityTypeBuilder<Section> builder)
     {
         builder
-            .Property(x => x.Title)
-            .HasNVarcharMaxLength(80)
-            .IsRequired();
-
-        builder
-            .Property(x => x.Description)
-            .HasNVarcharMaxLength(160);
-
-        builder
-            .Property(x => x.Url)
-            .HasNVarcharMaxLength(150)
-            .IsRequired();
-
-        builder
             .Property(x => x.ImageUrl)
             .HasVarcharMaxLength(80);
 
@@ -50,5 +36,11 @@ public class SectionConfig : IEntityTypeConfiguration<Section>
             .WithOne(x => x.Section)
             .HasForeignKey(x => x.SectionId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasMany(x => x.Translations)
+            .WithOne(x => x.Section)
+            .HasForeignKey(x => x.SectionId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
