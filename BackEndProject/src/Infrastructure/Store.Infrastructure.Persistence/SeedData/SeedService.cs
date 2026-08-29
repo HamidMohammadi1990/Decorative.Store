@@ -25,6 +25,7 @@ public class SeedService(EditionDbContext context) : ISeedService
         await SeedBlogPostCategoriesAsync(cancellationToken);
         await SeedBlogPostsAsync(cancellationToken);
         await CmsSeedService.SeedShopPagesAsync(context, cancellationToken);
+        await CmsSeedService.SeedBlogPagesAsync(context, cancellationToken);
     }
 
     public async Task SeedDataAsync(List<DynamicPermission> dynamicPermissions, CancellationToken cancellationToken = default)
@@ -163,7 +164,7 @@ public class SeedService(EditionDbContext context) : ISeedService
         return permissionIds;
 
         static string GetControllerName(string fullName)
-           => fullName.Split(".").Last();
+            => fullName.Split(".").Last();
     }
 
     private async Task SeedUsersAsync(int adminRoleId)

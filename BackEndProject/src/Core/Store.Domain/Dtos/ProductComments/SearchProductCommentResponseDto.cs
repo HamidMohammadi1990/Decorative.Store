@@ -3,6 +3,8 @@
 public record SearchProductCommentResponseDto
 {
     public int Id { get; init; }
+    public int? ParentId { get; init; }
+    public DateTime CreatedOnUtc { get; init; }
     public int UserId { get; init; }
     public string? UserFirstName { get; init; }
     public string? UserLastName { get; init; }
@@ -15,4 +17,7 @@ public record SearchProductCommentResponseDto
     public int AffordableRating { get; init; }
     public int ProductId { get; init; }
     public string ProductTitle { get; init; } = default!;
+    public bool IsBuyer { get; init; }
+    public int HelpfulCount { get; init; }
+    public int NotHelpfulCount { get; init; }
 }

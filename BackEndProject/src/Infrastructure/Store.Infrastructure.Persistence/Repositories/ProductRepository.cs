@@ -452,6 +452,31 @@ public class ProductRepository
             defaultLanguageId,
             cancellationToken);
 
+        var rootComments = Context.ProductComment
+            .AsNoTracking()
+            .Where(comment =>
+                comment.ProductId == product.Id
+                && comment.IsActive
+                && comment.ParentId == null);
+
+        var reviewCount = await rootComments.CountAsync(cancellationToken);
+        double? averageRating = null;
+        int? satisfactionPercent = null;
+        if (reviewCount > 0)
+        {
+            averageRating = await rootComments.AverageAsync(comment => (double)comment.CommentRate, cancellationToken);
+            var satisfiedCount = await rootComments.CountAsync(comment => comment.CommentRate >= 4, cancellationToken);
+            satisfactionPercent = (int)Math.Round((double)satisfiedCount / reviewCount * 100);
+        }
+
+        var purchaseCount = await Context.OrderItem
+            .AsNoTracking()
+            .Where(item =>
+                item.ProductId == product.Id
+                && (item.Order.Status == OrderStatusType.Completed
+                    || item.Order.Status == OrderStatusType.InProgress))
+            .SumAsync(item => item.Quantity, cancellationToken);
+
         return new CatalogProductDto
         {
             NotFound = false,
@@ -459,7 +484,11 @@ public class ProductRepository
             Description = description,
             LongDescriptions = longDescriptions,
             Images = images,
-            Features = features
+            Features = features,
+            ReviewCount = reviewCount,
+            AverageRating = averageRating,
+            SatisfactionPercent = satisfactionPercent,
+            PurchaseCount = purchaseCount,
         };
     }
 

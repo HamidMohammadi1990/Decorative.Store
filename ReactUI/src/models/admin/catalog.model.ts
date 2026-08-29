@@ -144,3 +144,16 @@ export interface AdminProductComment {
   description: string
   isActive: boolean
 }
+
+export interface AdminProductQuestion {
+  id: string
+  productId: string
+  productTitle: string
+  userId: string
+  askerName: string
+  question: string
+  answer?: string | null
+  createdOnUtc?: string
+  isActive: boolean
+  answeredByName?: string | null
+}

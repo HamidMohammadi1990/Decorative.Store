@@ -10,7 +10,7 @@ public class ProductQuestion : BaseEntity
     public string? Answer { get; private set; }
     public int? AnsweredByUserId { get; private set; }
     public DateTime CreatedOnUtc { get; private set; } = DateTime.UtcNow;
-    public bool IsActive { get; private set; } = true;
+    public bool IsActive { get; private set; }
 
     public Product Product { get; private set; } = default!;
     public User User { get; private set; } = default!;
@@ -28,5 +28,15 @@ public class ProductQuestion : BaseEntity
     {
         Answer = answer.Trim();
         AnsweredByUserId = answeredByUserId;
+    }
+
+    public void Active()
+    {
+        IsActive = true;
+    }
+
+    public void InActive()
+    {
+        IsActive = false;
     }
 }

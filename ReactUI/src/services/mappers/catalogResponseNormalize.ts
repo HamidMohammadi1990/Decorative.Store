@@ -84,6 +84,10 @@ export function normalizeCatalogProductResponse(data: unknown): CatalogProductRe
     longDescriptions,
     images,
     features,
+    reviewCount: readNumberField(record, 'reviewCount', 'ReviewCount'),
+    averageRating: readOptionalNumberField(record, 'averageRating', 'AverageRating'),
+    satisfactionPercent: readOptionalNumberField(record, 'satisfactionPercent', 'SatisfactionPercent'),
+    purchaseCount: readNumberField(record, 'purchaseCount', 'PurchaseCount'),
   }
 }
 

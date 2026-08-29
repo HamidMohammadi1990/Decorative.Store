@@ -4,6 +4,7 @@ export interface ProductQuestionItem {
   id: string
   question: string
   answer?: string
+  askerName: string
   author?: string
   date?: string
   isBuyer?: boolean
@@ -36,11 +37,18 @@ export function mapProductQuestionToItem(
       )
     : undefined
 
+  const askerName = formatPersonName(
+    question.userFirstName,
+    question.userLastName,
+    question.userName,
+  )
+
   return {
     id: question.id,
     question: question.question,
     answer: question.answer ?? undefined,
-    author: answerAuthor,
+    askerName,
+    author: answerAuthor ?? askerName,
     date: question.createdOnUtc
       ? new Date(question.createdOnUtc).toLocaleDateString(dateLocale, {
           year: 'numeric',

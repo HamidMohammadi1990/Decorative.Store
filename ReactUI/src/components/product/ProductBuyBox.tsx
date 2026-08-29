@@ -2,6 +2,10 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import { calcDiscountPercent } from '@/extensions/calcDiscountPercent'
+import {
+  computeSatisfactionPercent,
+  type ProductReviewItem,
+} from '@/extensions/productReviews'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { WishlistButton } from '@/components/wishlist/WishlistButton'
@@ -9,10 +13,12 @@ import { useAddToBag } from '@/hooks/useAddToBag'
 
 interface ProductBuyBoxProps {
   product: ProductDetail
+  reviews: ProductReviewItem[]
+  reviewsLoading: boolean
 }
 
-export function ProductBuyBox({ product }: ProductBuyBoxProps) {
-  const { t } = useTranslation()
+export function ProductBuyBox({ product, reviews, reviewsLoading }: ProductBuyBoxProps) {
+  const { t, i18n } = useTranslation()
   const { currency } = useLocaleSettings()
   const { addToBag, status } = useAddToBag()
   const [quantity, setQuantity] = useState(1)
@@ -41,6 +47,22 @@ export function ProductBuyBox({ product }: ProductBuyBoxProps) {
         ? t('cart.added')
         : t('listing.addToBag')
 
+  const liveSatisfaction = computeSatisfactionPercent(reviews)
+  const hasLiveReviews = liveSatisfaction !== null
+  const satisfactionPercent = reviewsLoading
+    ? product.satisfactionPercent
+    : hasLiveReviews
+      ? liveSatisfaction
+      : product.satisfactionPercent
+
+  const numberLocale = i18n.language === 'fa' ? 'fa-IR' : 'en-US'
+  const satisfactionLabel =
+    satisfactionPercent != null
+      ? t('product.sellerRating', {
+          percent: satisfactionPercent.toLocaleString(numberLocale),
+        })
+      : t('product.sellerRatingEmpty')
+
   return (
     <aside className="lg:sticky lg:top-24 lg:self-start">
       <div className="rounded-lg border border-border bg-surface p-5 shadow-sm">
@@ -50,7 +72,7 @@ export function ProductBuyBox({ product }: ProductBuyBoxProps) {
             <p className="mt-0.5 text-sm font-semibold text-text">{t('product.sellerName')}</p>
           </div>
           <span className="shrink-0 rounded-full bg-surface-muted px-2.5 py-1 text-xs font-medium text-accent">
-            {t('product.sellerRating')}
+            {satisfactionLabel}
           </span>
         </div>
 
@@ -122,12 +144,12 @@ export function ProductBuyBox({ product }: ProductBuyBoxProps) {
 
         <WishlistButton slug={product.slug} variant="card" className="mt-3" />
 
-        <ul className="mt-5 space-y-3 border-t border-border pt-4 text-xs leading-relaxed text-text-muted">
-          <TrustRow icon="shield">{product.warranty ?? t('product.warrantyDefault')}</TrustRow>
-          <TrustRow icon="truck">{t('product.shippingInfo')}</TrustRow>
-          <TrustRow icon="return">{t('product.deliveryReturns')}</TrustRow>
-          <TrustRow icon="support">{t('product.deliverySupport')}</TrustRow>
-        </ul>
+        {(product.warranty || product.deliveryNote) && (
+          <ul className="mt-5 space-y-3 border-t border-border pt-4 text-xs leading-relaxed text-text-muted">
+            {product.warranty && <TrustRow icon="shield">{product.warranty}</TrustRow>}
+            {product.deliveryNote && <TrustRow icon="truck">{product.deliveryNote}</TrustRow>}
+          </ul>
+        )}
       </div>
     </aside>
   )
@@ -137,7 +159,7 @@ function TrustRow({
   icon,
   children,
 }: {
-  icon: 'shield' | 'truck' | 'return' | 'support'
+  icon: 'shield' | 'truck'
   children: string
 }) {
   return (
@@ -148,12 +170,10 @@ function TrustRow({
   )
 }
 
-function TrustIcon({ type }: { type: 'shield' | 'truck' | 'return' | 'support' }) {
+function TrustIcon({ type }: { type: 'shield' | 'truck' }) {
   const paths: Record<typeof type, string> = {
     shield: 'M6 2l4 1.5v3.5c0 2.5-1.7 4.8-4 5.5C3.7 11.8 2 9.5 2 7V3.5L6 2z',
     truck: 'M1 4h8v5H1V4zm9 1h2l2 2v2h-4V5zM3 10a1.5 1.5 0 103 0 1.5 1.5 0 00-3 0zm7 0a1.5 1.5 0 103 0 1.5 1.5 0 00-3 0z',
-    return: 'M2 6h6V3l4 4-4 4V8H4v4H2V6z',
-    support: 'M6 1a5 5 0 014.9 6.1L9 9.5V11H3V9.5L1.1 7.1A5 5 0 016 1zm0 2a1.5 1.5 0 100 3 1.5 1.5 0 000-3z',
   }
 
   return (

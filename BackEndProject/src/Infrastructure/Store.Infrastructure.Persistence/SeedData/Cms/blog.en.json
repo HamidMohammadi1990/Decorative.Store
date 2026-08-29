@@ -1,0 +1,66 @@
+{
+  "promoAnnouncement": {
+    "id": "journal-promo",
+    "message": "Ideas & inspiration for every room",
+    "link": { "label": "Browse the shop", "href": "/shop" }
+  },
+  "utilityBar": {
+    "phoneLabel": "Call us: 0800 404 9780",
+    "phoneHref": "tel:08004049780",
+    "links": [
+      { "label": "Sustainability", "href": "/sustainability" },
+      { "label": "Track Order", "href": "/track-order" }
+    ]
+  },
+  "header": {
+    "brandLabel": "Diba Gallery",
+    "searchPlaceholder": "Search articles, inspiration…",
+    "accountLabel": "Sign In",
+    "cartLabel": "Cart"
+  },
+  "footer": {
+    "columns": [
+      {
+        "title": "Customer service",
+        "links": [
+          { "label": "Contact us", "href": "/contact" },
+          { "label": "Returns & exchanges", "href": "/returns" },
+          { "label": "Delivery information", "href": "/delivery" }
+        ]
+      },
+      {
+        "title": "Resources",
+        "links": [
+          { "label": "Click & Collect", "href": "/click-collect" },
+          { "label": "Klarna", "href": "/klarna" },
+          { "label": "Clearpay", "href": "/clearpay" }
+        ]
+      },
+      {
+        "title": "More about us",
+        "links": [
+          { "label": "Journal", "href": "/blog" },
+          { "label": "Sustainability", "href": "/sustainability" },
+          { "label": "Careers", "href": "/careers" },
+          { "label": "Find a store", "href": "/stores" }
+        ]
+      },
+      {
+        "title": "Design services",
+        "links": [
+          { "label": "Meet with design crew", "href": "/design-services" },
+          { "label": "Diba Gallery TRADE", "href": "/trade" }
+        ]
+      }
+    ],
+    "newsletterTitle": "Exclusive sales & new arrivals",
+    "newsletterPlaceholder": "Email address",
+    "newsletterButton": "Join",
+    "copyright": "© 2026 Williams-Sonoma Inc. All Rights Reserved",
+    "legalLinks": [
+      { "label": "Terms & Conditions", "href": "/terms" },
+      { "label": "Privacy Policy", "href": "/privacy" },
+      { "label": "Legal Statement", "href": "/legal" }
+    ]
+  }
+}

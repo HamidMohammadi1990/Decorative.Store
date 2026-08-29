@@ -8,7 +8,6 @@ import type {
 } from '@/models/catalog/productDetail.model'
 import type { ProductSummary } from '@/models/catalog/product.model'
 import type { Locale } from '@/models/shared/locale.model'
-import { enrichProductDetail } from '@/extensions/productDetailContent'
 import { mapCatalogListingProduct } from '@/services/mappers/catalogListingMapper'
 
 function resolveProductImageSrc(imageUrl: string): string {
@@ -52,10 +51,24 @@ function buildFeatureGroups(features: CatalogProductResponse['features']): Produ
   }))
 }
 
+export function buildProductDetailFromSummary(product: ProductSummary): ProductDetail {
+  return {
+    ...product,
+    description: '',
+    longDescription: [],
+    highlights: [],
+    images: product.image.src ? [product.image] : [],
+    features: [],
+    featureGroups: [],
+  }
+}
+
 export function mapCatalogProductToDetail(
   product: CatalogProductResponse,
   locale: Locale,
 ): ProductDetail | null {
+  void locale
+
   if (product.notFound) return null
 
   const summary = mapCatalogListingProduct(toListingProductShape(product))
@@ -74,7 +87,7 @@ export function mapCatalogProductToDetail(
     value: feature.value,
   }))
 
-  const featureGroups = buildFeatureGroups(product.features).filter((group) => group.title)
+  const featureGroups = buildFeatureGroups(product.features)
 
   const longDescription =
     product.longDescriptions.length > 0
@@ -83,16 +96,18 @@ export function mapCatalogProductToDetail(
         ? [product.description]
         : []
 
-  const enriched = enrichProductDetail(summary, locale)
-
   return {
-    ...enriched,
     ...summary,
-    description: product.description || enriched.description,
-    longDescription: longDescription.length > 0 ? longDescription : enriched.longDescription,
-    images: apiImages.length > 0 ? apiImages : enriched.images,
-    features: flatFeatures.length > 0 ? flatFeatures : enriched.features,
-    featureGroups: featureGroups.length > 0 ? featureGroups : enriched.featureGroups,
+    description: product.description,
+    longDescription,
+    highlights: [],
+    images: apiImages,
+    features: flatFeatures,
+    featureGroups,
+    reviewCount: product.reviewCount,
+    averageRating: product.averageRating,
+    satisfactionPercent: product.satisfactionPercent,
+    purchaseCount: product.purchaseCount,
   }
 }
 

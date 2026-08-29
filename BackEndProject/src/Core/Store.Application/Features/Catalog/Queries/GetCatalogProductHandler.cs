@@ -56,7 +56,11 @@ public class GetCatalogProductHandler(IProductRepository productRepository)
                     Value = feature.Value,
                     GroupTitle = feature.GroupTitle
                 })
-                .ToList()
+                .ToList(),
+            ReviewCount = product.ReviewCount,
+            AverageRating = product.AverageRating,
+            SatisfactionPercent = product.SatisfactionPercent,
+            PurchaseCount = product.PurchaseCount,
         };
     }
 }

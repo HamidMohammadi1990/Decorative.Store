@@ -28,6 +28,10 @@ export interface CatalogProductResponse {
   longDescriptions: string[]
   images: CatalogProductImage[]
   features: CatalogProductFeature[]
+  reviewCount: number
+  averageRating?: number
+  satisfactionPercent?: number
+  purchaseCount: number
 }
 
 export interface RelatedCatalogProductsResponse {

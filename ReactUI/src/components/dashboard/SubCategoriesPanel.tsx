@@ -25,6 +25,11 @@ import { useUserStore } from '@/stores/userStore'
 
 type Mode = 'list' | 'create' | 'edit'
 
+function mergeCategory(items: AdminCategory[], candidate: AdminCategory | null): AdminCategory[] {
+  if (!candidate || items.some((item) => item.id === candidate.id)) return items
+  return [candidate, ...items]
+}
+
 export function SubCategoriesPanel() {
   const { t } = useTranslation()
   const accessToken = useUserStore((s) => s.accessToken)
@@ -40,6 +45,7 @@ export function SubCategoriesPanel() {
   const [mode, setMode] = useState<Mode>('list')
   const [categories, setCategories] = useState<AdminCategory[]>([])
   const [categoriesLoading, setCategoriesLoading] = useState(true)
+  const [formLoading, setFormLoading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -50,6 +56,7 @@ export function SubCategoriesPanel() {
   const [slug, setSlug] = useState('')
   const [code, setCode] = useState('')
   const [categoryId, setCategoryId] = useState('')
+  const [categoryLabel, setCategoryLabel] = useState('')
   const [isActive, setIsActive] = useState(true)
   const [slugTouched, setSlugTouched] = useState(false)
 
@@ -105,8 +112,7 @@ export function SubCategoriesPanel() {
 
     setCategoriesLoading(true)
     try {
-      const categoryResult = await adminCategoryService.getAll(accessToken, locale, {
-        pageSize: 100,
+      const categoryResult = await adminCategoryService.getAllForSelect(accessToken, locale, {
         languageId: contentLanguageId ?? undefined,
       })
       setCategories(categoryResult.items)
@@ -117,17 +123,70 @@ export function SubCategoriesPanel() {
     }
   }, [accessToken, contentLanguageId, locale])
 
+  const resolveCategorySelection = useCallback(
+    async (
+      targetCategoryId: string,
+      items: AdminCategory[],
+      options?: { fallbackTitle?: string; categoryCode?: string },
+    ): Promise<AdminCategory[]> => {
+      if (!accessToken || accessToken === 'mock-access-token') {
+        return items
+      }
+
+      let resolvedId = targetCategoryId.trim()
+      const categoryCode = options?.categoryCode?.trim()
+
+      if (categoryCode) {
+        const byCode = items.find((item) => item.code === categoryCode)
+        if (byCode && (!resolvedId || !items.some((item) => item.id === resolvedId))) {
+          resolvedId = byCode.id
+        }
+      }
+
+      if (!resolvedId) {
+        setCategoryLabel(options?.fallbackTitle ?? '')
+        setCategoryId('')
+        return items
+      }
+
+      let nextItems = items
+      if (!nextItems.some((item) => item.id === resolvedId)) {
+        const category = await adminCategoryService.get(accessToken, locale, resolvedId)
+        if (category) {
+          nextItems = mergeCategory(nextItems, category)
+        } else if (options?.fallbackTitle) {
+          nextItems = mergeCategory(nextItems, {
+            id: resolvedId,
+            code: categoryCode ?? '',
+            isActive: true,
+            title: options.fallbackTitle,
+            slug: '',
+            translations: [],
+          })
+        }
+      }
+
+      const match = nextItems.find((item) => item.id === resolvedId)
+      setCategoryLabel(match?.title ?? options?.fallbackTitle ?? '')
+      setCategoryId(resolvedId)
+      return nextItems
+    },
+    [accessToken, locale],
+  )
+
   useEffect(() => {
+    if (mode !== 'list') return
     if (!languageLoading && !contentLanguageLoading && contentLanguageId != null) {
       void loadCategories()
     }
-  }, [languageLoading, contentLanguageLoading, contentLanguageId, loadCategories])
+  }, [mode, languageLoading, contentLanguageLoading, contentLanguageId, loadCategories])
 
   const resetForm = () => {
     setTitle('')
     setSlug('')
     setCode('')
     setCategoryId(categories[0]?.id ?? '')
+    setCategoryLabel(categories[0]?.title ?? '')
     setIsActive(true)
     setSlugTouched(false)
     setEditingId(null)
@@ -145,26 +204,100 @@ export function SubCategoriesPanel() {
   const openCreate = () => {
     resetForm()
     setCategoryId(categories[0]?.id ?? '')
+    setCategoryLabel(categories[0]?.title ?? '')
     setMode('create')
   }
 
   const openEdit = (item: AdminSubCategory) => {
+    if (!accessToken || accessToken === 'mock-access-token') return
+
     setEditingId(item.id)
     setEditingItem(item)
-    setCode(item.code)
-    setCategoryId(item.categoryId)
-    setIsActive(item.isActive)
     setFormError(null)
     setMode('edit')
-    if (contentLanguageId != null) {
-      applySubCategoryTranslation(item, contentLanguageId)
-    }
+    setFormLoading(true)
+
+    void (async () => {
+      try {
+        const detail = (await adminSubCategoryService.get(accessToken, locale, item.id)) ?? item
+        const categoryResult = await adminCategoryService.getAllForSelect(accessToken, locale, {
+          languageId: contentLanguageId ?? undefined,
+        })
+        const categoryItems = await resolveCategorySelection(
+          detail.categoryId || item.categoryId,
+          categoryResult.items,
+          {
+            fallbackTitle: detail.categoryTitle || item.categoryTitle,
+            categoryCode: detail.categoryCode || item.categoryCode,
+          },
+        )
+        setCategories(categoryItems)
+        setCode(detail.code)
+        setIsActive(detail.isActive)
+        setEditingItem(detail)
+        if (contentLanguageId != null) {
+          applySubCategoryTranslation(detail, contentLanguageId)
+        }
+      } catch {
+        setFormError(t('dashboard.subCategories.loadFailed'))
+        setCode(item.code)
+        setCategoryId(item.categoryId)
+        setCategoryLabel(item.categoryTitle)
+        setIsActive(item.isActive)
+        setEditingItem(item)
+        if (contentLanguageId != null) {
+          applySubCategoryTranslation(item, contentLanguageId)
+        }
+      } finally {
+        setFormLoading(false)
+      }
+    })()
+  }
+
+  const handleCategoryChange = (value: string) => {
+    setCategoryId(value)
+    const match = categories.find((category) => category.id === value)
+    setCategoryLabel(match?.title ?? '')
   }
 
   useEffect(() => {
-    if (mode !== 'edit' || !editingItem || contentLanguageId == null) return
+    if (mode !== 'edit' || !editingItem || contentLanguageId == null || formLoading) return
     applySubCategoryTranslation(editingItem, contentLanguageId)
-  }, [contentLanguageId, editingItem, mode])
+  }, [contentLanguageId, editingItem, formLoading, mode])
+
+  useEffect(() => {
+    if (
+      mode !== 'edit' ||
+      formLoading ||
+      !accessToken ||
+      accessToken === 'mock-access-token' ||
+      contentLanguageId == null
+    ) {
+      return
+    }
+
+    void adminCategoryService
+      .getAllForSelect(accessToken, locale, { languageId: contentLanguageId })
+      .then((result) => {
+        setCategories((prev) => {
+          const preserved =
+            categoryId
+              ? prev.find((item) => item.id === categoryId) ??
+                result.items.find((item) => item.id === categoryId)
+              : null
+          let items = result.items
+          if (preserved && !items.some((item) => item.id === preserved.id)) {
+            items = mergeCategory(items, preserved)
+          }
+          return items
+        })
+        const match = result.items.find((item) => item.id === categoryId)
+        if (match) setCategoryLabel(match.title)
+      })
+  }, [accessToken, categoryId, contentLanguageId, formLoading, locale, mode])
+
+  const selectedCategory = categories.find((category) => category.id === categoryId)
+  const displayedCategoryLabel = selectedCategory?.title ?? categoryLabel
 
   const backToList = () => {
     resetForm()
@@ -257,6 +390,12 @@ export function SubCategoriesPanel() {
         />
 
         <div className="space-y-5 rounded-sm border border-border bg-surface-muted/20 p-5 shadow-sm sm:p-6">
+          {formLoading ? (
+            <div className="flex justify-center py-12">
+              <InlineLoading label={t('dashboard.subCategories.loading')} />
+            </div>
+          ) : (
+            <>
           <AdminContentLanguageField
             value={contentLanguageId}
             onChange={setContentLanguageId}
@@ -266,7 +405,7 @@ export function SubCategoriesPanel() {
           <AdminField label={t('dashboard.subCategories.fieldCategory')}>
             <select
               value={categoryId}
-              onChange={(e) => setCategoryId(e.target.value)}
+              onChange={(e) => handleCategoryChange(e.target.value)}
               className={adminInputClass}
             >
               <option value="">{t('dashboard.subCategories.selectCategory')}</option>
@@ -275,7 +414,17 @@ export function SubCategoriesPanel() {
                   {category.title}
                 </option>
               ))}
+              {categoryId &&
+                !categories.some((category) => category.id === categoryId) &&
+                displayedCategoryLabel && (
+                  <option value={categoryId}>{displayedCategoryLabel}</option>
+                )}
             </select>
+            {mode === 'edit' && displayedCategoryLabel && (
+              <p className="mt-1.5 text-xs font-medium text-warm">
+                {t('dashboard.subCategories.currentCategory', { name: displayedCategoryLabel })}
+              </p>
+            )}
           </AdminField>
 
           <AdminField label={t('dashboard.subCategories.fieldTitle')}>
@@ -330,10 +479,12 @@ export function SubCategoriesPanel() {
                 t('dashboard.subCategories.save')
               )}
             </Button>
-            <Button variant="secondary" onClick={backToList} disabled={saving}>
+            <Button variant="secondary" onClick={backToList} disabled={saving || formLoading}>
               {t('dashboard.subCategories.cancel')}
             </Button>
           </div>
+            </>
+          )}
         </div>
       </div>
     )

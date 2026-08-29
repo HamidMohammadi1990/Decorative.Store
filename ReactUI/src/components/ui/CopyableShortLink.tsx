@@ -7,13 +7,32 @@ interface CopyableShortLinkProps {
   className?: string
 }
 
+function resolveCopyPath(path: string): string {
+  const trimmed = path.trim()
+  if (typeof window === 'undefined') return trimmed
+
+  const currentPath = window.location.pathname
+  const isIncompleteBlogPath = /^\/blog\/?$/.test(trimmed)
+  if (
+    isIncompleteBlogPath &&
+    currentPath.startsWith('/blog/') &&
+    currentPath.length > '/blog/'.length
+  ) {
+    return currentPath
+  }
+
+  return trimmed
+}
+
 export function CopyableShortLink({ path, className = '' }: CopyableShortLinkProps) {
   const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
 
+  const sharePath = resolveCopyPath(path)
+  const fullUrl =
+    typeof window !== 'undefined' ? `${window.location.origin}${sharePath}` : sharePath
+
   const handleCopy = async () => {
-    const fullUrl =
-      typeof window !== 'undefined' ? `${window.location.origin}${path}` : path
     const ok = await copyToClipboard(fullUrl)
     if (!ok) return
     setCopied(true)
@@ -27,9 +46,9 @@ export function CopyableShortLink({ path, className = '' }: CopyableShortLinkPro
         <code
           dir="ltr"
           className="min-w-0 flex-1 truncate text-xs text-text-muted"
-          title={path}
+          title={fullUrl}
         >
-          {path}
+          {sharePath}
         </code>
         <button
           type="button"

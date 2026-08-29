@@ -22,4 +22,8 @@ export interface ProductSummary {
   inStock: boolean
   onSale: boolean
   isNew: boolean
+  reviewCount: number
+  averageRating?: number
+  satisfactionPercent?: number
+  purchaseCount: number
 }

@@ -54,5 +54,7 @@ export function mapCatalogListingProduct(product: CatalogListingProduct): Produc
     inStock: product.inStock,
     onSale: product.onSale,
     isNew: product.isNew,
+    reviewCount: 0,
+    purchaseCount: 0,
   }
 }

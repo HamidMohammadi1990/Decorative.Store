@@ -19,6 +19,10 @@ export async function submitProductReview(input: {
   locale: Locale
   description: string
   commentTopicId: string
+  commentRate: number
+  qualityRating: number
+  affordableRating: number
+  parentId?: string | null
 }) {
   let accessToken = useUserStore.getState().accessToken
   if (!accessToken) {
@@ -45,9 +49,10 @@ export async function submitProductReview(input: {
       productId,
       commentTopicId: input.commentTopicId,
       description: input.description,
-      commentRate: 5,
-      qualityRating: 5,
-      affordableRating: 5,
+      commentRate: input.commentRate,
+      qualityRating: input.qualityRating,
+      affordableRating: input.affordableRating,
+      parentId: input.parentId ?? null,
     },
     input.locale,
     accessToken,

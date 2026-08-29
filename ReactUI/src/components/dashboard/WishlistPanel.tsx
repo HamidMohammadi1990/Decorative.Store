@@ -7,17 +7,19 @@ import { WishlistIcon } from '@/components/wishlist/WishlistIcon'
 import { ProductGrid } from '@/components/listing/ProductGrid'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
-import { useWishlistProducts } from '@/hooks/useWishlistProducts'
-import { useWishlistStore } from '@/stores/wishlistStore'
-import { useUserStore } from '@/stores/userStore'
+import { useWishlistPage } from '@/hooks/useWishlistPage'
 
 export function WishlistPanel() {
   const { t } = useTranslation()
-  const accessToken = useUserStore((state) => state.accessToken)
-  const slugs = useWishlistStore((s) => s.slugs)
-  const isSyncing = useWishlistStore((s) => s.isLoading)
-  const clearAllRemote = useWishlistStore((s) => s.clearAllRemote)
-  const { products, loading, error, reload } = useWishlistProducts()
+  const {
+    products,
+    slugs,
+    loading,
+    error,
+    reload,
+    clearAllRemote,
+    accessToken,
+  } = useWishlistPage()
   const [isClearing, setIsClearing] = useState(false)
   const [actionError, setActionError] = useState<string | null>(null)
 
@@ -38,11 +40,9 @@ export function WishlistPanel() {
     }
   }
 
-  const showInitialLoading = isSyncing && slugs.length === 0
-  const showProductsLoading = loading && slugs.length > 0
-  const isEmpty = !isSyncing && !loading && slugs.length === 0
+  const isEmpty = !loading && !error && slugs.length === 0
 
-  if (showInitialLoading) {
+  if (loading) {
     return (
       <div>
         <DashboardPageHeader
@@ -52,6 +52,24 @@ export function WishlistPanel() {
         />
         <div className="flex justify-center py-16">
           <InlineLoading label={t('dashboard.wishlist.loading')} />
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div>
+        <DashboardPageHeader
+          title={t('dashboard.wishlist.title')}
+          description={t('dashboard.wishlist.description')}
+          icon={<WishlistIcon size={22} />}
+        />
+        <div className="rounded-sm border border-dashed border-border bg-surface-muted/30 px-4 py-12 text-center">
+          <p className="text-sm text-text-muted">{t('dashboard.wishlist.loadFailed')}</p>
+          <Button variant="secondary" className="mt-4" onClick={() => reload()}>
+            {t('dashboard.wishlist.retry')}
+          </Button>
         </div>
       </div>
     )
@@ -106,18 +124,7 @@ export function WishlistPanel() {
 
       {actionError && <p className="mb-4 text-sm text-sale">{actionError}</p>}
 
-      {showProductsLoading ? (
-        <div className="flex justify-center py-16">
-          <InlineLoading label={t('dashboard.wishlist.loading')} />
-        </div>
-      ) : error ? (
-        <div className="rounded-sm border border-dashed border-border bg-surface-muted/30 px-4 py-12 text-center">
-          <p className="text-sm text-text-muted">{t('dashboard.wishlist.loadFailed')}</p>
-          <Button variant="secondary" className="mt-4" onClick={() => void reload()}>
-            {t('dashboard.wishlist.retry')}
-          </Button>
-        </div>
-      ) : products.length === 0 ? (
+      {products.length === 0 ? (
         <DashboardEmptyState
           icon={<WishlistIcon size={28} />}
           title={t('dashboard.wishlist.emptyTitle')}

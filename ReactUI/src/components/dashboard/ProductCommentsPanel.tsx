@@ -75,6 +75,10 @@ export function ProductCommentsPanel({
       return
     }
 
+    const productIdForQuery = embedded
+      ? (fixedProductId ?? filterProductId)
+      : filterProductId
+
     setLoading(true)
     setError(null)
     try {
@@ -88,7 +92,7 @@ export function ProductCommentsPanel({
 
       const commentResult = await adminProductCommentService.getAll(accessToken, locale, {
         pageSize: 200,
-        productId: filterProductId || null,
+        productId: productIdForQuery || null,
         isActive:
           filterStatus === 'active' ? true : filterStatus === 'inactive' ? false : null,
       })
@@ -99,7 +103,16 @@ export function ProductCommentsPanel({
     } finally {
       setLoading(false)
     }
-  }, [accessToken, embedded, filterProductId, filterStatus, languageId, locale, t])
+  }, [
+    accessToken,
+    embedded,
+    fixedProductId,
+    filterProductId,
+    filterStatus,
+    languageId,
+    locale,
+    t,
+  ])
 
   useEffect(() => {
     if (!languageLoading) void load()

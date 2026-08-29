@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { CopyableShortLink } from '@/components/ui/CopyableShortLink'
 import { BlogAuthorCard } from '@/components/blog/BlogAuthorCard'
@@ -17,6 +17,7 @@ import { useSettingsStore } from '@/stores/settingsStore'
 
 export function BlogDetailPage() {
   const { t } = useTranslation()
+  const { slug: routeSlug } = useParams<{ slug: string }>()
   const locale = useSettingsStore((s) => s.locale)
   const { post, related, categoryMap, loading, error, reload } = useBlogPost()
 
@@ -36,7 +37,9 @@ export function BlogDetailPage() {
     )
   }
 
-  const shareUrl = typeof window !== 'undefined' ? window.location.href : `/blog/${post.slug}`
+  const postSlug = post.slug || routeSlug || ''
+  const sharePath = `/blog/${postSlug}`
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : sharePath
   const categoryLabel = post.categoryLabel || post.categorySlug
 
   const getCategoryLabel = (slug: string) => categoryMap[slug] ?? slug
@@ -80,7 +83,7 @@ export function BlogDetailPage() {
               <span>{t('blog.readTime', { count: post.readTimeMinutes })}</span>
             </div>
 
-            <CopyableShortLink path={`/blog/${post.slug}`} className="mt-4" />
+            <CopyableShortLink path={sharePath} className="mt-4" />
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <BlogLikeButton postId={post.id} baseLikes={post.likes} />

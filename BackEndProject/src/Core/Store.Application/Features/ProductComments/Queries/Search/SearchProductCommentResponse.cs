@@ -8,6 +8,11 @@ public record SearchProductCommentResponse
     [JsonConverter(typeof(ProductCommentEncryptor))]
     public int Id { get; init; }
 
+    [JsonConverter(typeof(ProductCommentNullableEncryptor))]
+    public int? ParentId { get; init; }
+
+    public DateTime CreatedOnUtc { get; init; }
+
     [JsonConverter(typeof(CommentTopicEncryptor))]
     public int CommentTopicId { get; init; }
 
@@ -19,7 +24,7 @@ public record SearchProductCommentResponse
     [JsonConverter(typeof(ProductEncryptor))]
     public int ProductId { get; init; }
 
-    public string ProductTitle { get; init; } = default!;
+    public string ProductTitle { get; init; } = string.Empty;
 
     public string? UserFirstName { get; init; }
     public string? UserLastName { get; init; }
@@ -29,4 +34,7 @@ public record SearchProductCommentResponse
     public string? Description { get; init; }
     public int QualityRating { get; init; }
     public int AffordableRating { get; init; }
+    public bool IsBuyer { get; init; }
+    public int HelpfulCount { get; init; }
+    public int NotHelpfulCount { get; init; }
 }

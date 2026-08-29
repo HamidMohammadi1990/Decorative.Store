@@ -3,12 +3,16 @@ import { useTranslation } from 'react-i18next'
 import { ProductQuestionsPanel } from '@/components/product/ProductQuestionsPanel'
 import { ProductReviewsPanel } from '@/components/product/ProductReviewsPanel'
 import { ProductSpecsPanel } from '@/components/product/ProductSpecsPanel'
+import type { ProductReviewItem } from '@/extensions/productReviews'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 
 type SectionTab = 'specs' | 'reviews' | 'questions'
 
 interface ProductDetailSectionsProps {
   product: ProductDetail
+  reviews: ProductReviewItem[]
+  reviewsLoading: boolean
+  reloadReviews: () => Promise<void>
 }
 
 const TABS: SectionTab[] = ['specs', 'reviews', 'questions']
@@ -18,7 +22,12 @@ function tabFromHash(): SectionTab | null {
   return TABS.includes(hash as SectionTab) ? (hash as SectionTab) : null
 }
 
-export function ProductDetailSections({ product }: ProductDetailSectionsProps) {
+export function ProductDetailSections({
+  product,
+  reviews,
+  reviewsLoading,
+  reloadReviews,
+}: ProductDetailSectionsProps) {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState<SectionTab>('specs')
 
@@ -90,7 +99,12 @@ export function ProductDetailSections({ product }: ProductDetailSectionsProps) {
 
         {activeTab === 'reviews' && (
           <div role="tabpanel" id="panel-reviews" aria-labelledby="tab-reviews">
-            <ProductReviewsPanel product={product} />
+            <ProductReviewsPanel
+              product={product}
+              reviews={reviews}
+              loading={reviewsLoading}
+              reload={reloadReviews}
+            />
           </div>
         )}
 

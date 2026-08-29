@@ -355,6 +355,13 @@ export function ProductsPanel() {
                       {t('dashboard.products.comments')}
                     </Button>
                     <Button
+                      variant="secondary"
+                      className="py-1.5 text-xs"
+                      onClick={() => openManageModal('questions', item)}
+                    >
+                      {t('dashboard.products.questions')}
+                    </Button>
+                    <Button
                       variant="ghost"
                       className="py-1.5 text-xs text-sale hover:bg-sale/10"
                       onClick={() => void handleDelete(item.id)}

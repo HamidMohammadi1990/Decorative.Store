@@ -1,6 +1,8 @@
 using Edition.Application.Common.Directories;
 using Edition.Application.Common.Utilities.Contracts;
+using Edition.Application.Common.Utilities.Security;
 using Edition.Application.Contracts.Persistence;
+using Edition.Application.Models.Constants;
 using Store.Common.Models;
 using Store.Domain.Repositories;
 using Store.Domain.Entities;
@@ -15,10 +17,14 @@ public class CreateProductFileHandler
     {
         var productFilesTask = request.Files.Select(async file =>
         {
+            var productId = ResolveProductId(file.ProductId);
+            if (productId == 0)
+                return (productFile: (ProductFile?)null, title: (string?)null);
+
             var filename = await localFileService.SaveFileAsync(file.Image, ProductDirectory.ProductImage);
             if (filename.IsSuccess)
             {
-                var productFile = ProductFile.Create(file.ProductId, filename.Result!, file.IsIndex);
+                var productFile = ProductFile.Create(productId, filename.Result!, file.IsIndex);
                 productFile.UpsertTranslation(file.LanguageId, file.Title);
                 productFileRepository.Add(productFile);
                 return (productFile: productFile, title: file.Title);
@@ -42,5 +48,14 @@ public class CreateProductFileHandler
                 ImageUrl = ProductDirectory.GetImageUrl(x.productFile.FileName)
             }).ToList();
         return result;
+    }
+
+    private static int ResolveProductId(string encryptedProductId)
+    {
+        if (string.IsNullOrWhiteSpace(encryptedProductId))
+            return 0;
+
+        var decrypted = encryptedProductId.Decrypt(SecurityKeyConstant.Product);
+        return int.TryParse(decrypted, out var productId) ? productId : 0;
     }
 }

@@ -1,6 +1,6 @@
 import type { HomePage } from '@/models/home/homePage.model'
 import type { Locale } from '@/models/shared/locale.model'
-import { cmsShopPageSlug } from '@/constants/cmsSectionTypes'
+import { cmsBlogPageSlug, cmsShopPageSlug } from '@/constants/cmsSectionTypes'
 import { getHomeMock, getNavigationMock } from '@/data/mock'
 import { mockFetch } from '@/services/api/mockClient'
 import { catalogProductService } from '@/services/catalogProductService'
@@ -74,9 +74,14 @@ function applyCmsOnMock(mock: HomePage, cms: HomePage): HomePage {
   return page
 }
 
-async function loadCmsPage(locale: Locale, includeHomeContent: boolean): Promise<HomePage | null> {
+async function loadCmsPage(
+  locale: Locale,
+  includeHomeContent: boolean,
+  useBlogSlug: boolean,
+): Promise<HomePage | null> {
   try {
-    const cmsPage = await pageService.getBySlug(cmsShopPageSlug(locale), locale)
+    const slug = useBlogSlug ? cmsBlogPageSlug(locale) : cmsShopPageSlug(locale)
+    const cmsPage = await pageService.getBySlug(slug, locale)
     if (!cmsPage) return null
     return mapCmsPageToHomePage(cmsPage, { includeHomeContent })
   } catch {
@@ -116,7 +121,7 @@ async function buildPage(
   const mockPage = mapHomePage(getHomeMock(locale))
 
   try {
-    const cmsPage = await loadCmsPage(locale, !skipHomeCatalogContent)
+    const cmsPage = await loadCmsPage(locale, !skipHomeCatalogContent, skipCatalogNav)
     let page = cmsPage ? applyCmsOnMock(mockPage, cmsPage) : mockPage
 
     const staticNav = getStaticPrimaryNav(locale)

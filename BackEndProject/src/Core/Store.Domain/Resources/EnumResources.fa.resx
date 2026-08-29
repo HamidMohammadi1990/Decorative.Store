@@ -483,6 +483,7 @@
   <data name="PermissionType_AssignUserRole" xml:space="preserve"><value>Assign User Role</value></data>
 
   <data name="PermissionType_ChangeProductCommentStatus" xml:space="preserve"><value>Change Product Comment Status</value></data>
+  <data name="PermissionType_AnswerProductComment" xml:space="preserve"><value>پاسخ به پرسش محصول</value></data>
 
   <data name="PermissionType_ChangeUserPassword" xml:space="preserve"><value>Change User Password</value></data>
 
@@ -817,6 +818,11 @@
   <data name="PermissionType_ManageProductComment" xml:space="preserve"><value>Manage Product Comment</value></data>
 
   <data name="PermissionType_ManageProductCommentGroup" xml:space="preserve"><value>Manage Product Comment Group</value></data>
+  <data name="PermissionType_ManageProductQuestionGroup" xml:space="preserve"><value>مدیریت گروه پرسش محصول</value></data>
+  <data name="PermissionType_ManageProductQuestion" xml:space="preserve"><value>مدیریت پرسش محصول</value></data>
+  <data name="PermissionType_ListProductQuestion" xml:space="preserve"><value>لیست پرسش محصول</value></data>
+  <data name="PermissionType_ChangeProductQuestionStatus" xml:space="preserve"><value>تغییر وضعیت پرسش محصول</value></data>
+  <data name="PermissionType_AnswerProductQuestion" xml:space="preserve"><value>پاسخ به پرسش محصول</value></data>
 
   <data name="PermissionType_ManageProductDescription" xml:space="preserve"><value>Manage Product Description</value></data>
 

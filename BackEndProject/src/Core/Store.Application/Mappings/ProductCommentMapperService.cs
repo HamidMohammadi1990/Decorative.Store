@@ -58,6 +58,8 @@ public class ProductCommentMapperService : IProductCommentMapperService
             .Select(x => new SearchProductCommentResponse
             {
                 Id = x.Id,
+                ParentId = x.ParentId,
+                CreatedOnUtc = x.CreatedOnUtc,
                 UserId = x.UserId,
                 ProductId = x.ProductId,
                 Description = x.Description,
@@ -69,7 +71,10 @@ public class ProductCommentMapperService : IProductCommentMapperService
                 UserLastName = x.UserLastName,
                 ProductTitle = x.ProductTitle,
                 AffordableRating = x.AffordableRating,
-                CommentTopicTitle = x.CommentTopicTitle
+                CommentTopicTitle = x.CommentTopicTitle,
+                IsBuyer = x.IsBuyer,
+                HelpfulCount = x.HelpfulCount,
+                NotHelpfulCount = x.NotHelpfulCount,
             })
             .ToList();
 

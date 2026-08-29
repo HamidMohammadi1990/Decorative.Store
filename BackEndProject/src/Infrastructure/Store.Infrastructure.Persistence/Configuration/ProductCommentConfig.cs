@@ -33,6 +33,12 @@ internal class ProductCommentConfig : IEntityTypeConfiguration<ProductComment>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
+            .HasOne(d => d.Parent)
+            .WithMany(p => p.Replies)
+            .HasForeignKey(x => x.ParentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder
             .HasIndex(x => x.ProductId);
 
         builder

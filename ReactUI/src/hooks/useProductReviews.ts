@@ -4,6 +4,7 @@ import {
   mapProductCommentToReview,
   type ProductReviewItem,
 } from '@/extensions/productReviews'
+import { catalogProductService } from '@/services/catalogProductService'
 import { productCommentService } from '@/services/productCommentService'
 import { useSettingsStore } from '@/stores/settingsStore'
 
@@ -14,7 +15,10 @@ interface UseProductReviewsResult {
   reload: () => Promise<void>
 }
 
-export function useProductReviews(productId: string | undefined): UseProductReviewsResult {
+export function useProductReviews(
+  productId: string | undefined,
+  productSlug?: string,
+): UseProductReviewsResult {
   const locale = useSettingsStore((s) => s.locale)
   const { i18n } = useTranslation()
   const [reviews, setReviews] = useState<ProductReviewItem[]>([])
@@ -22,7 +26,18 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
   const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
-    if (!productId) {
+    let resolvedProductId = productId?.trim() || ''
+
+    if (!resolvedProductId && productSlug) {
+      try {
+        const catalogProduct = await catalogProductService.getProduct(productSlug, locale)
+        resolvedProductId = catalogProduct.id?.trim() || ''
+      } catch {
+        resolvedProductId = ''
+      }
+    }
+
+    if (!resolvedProductId) {
       setReviews([])
       setLoading(false)
       return
@@ -32,7 +47,7 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
     setError(null)
 
     try {
-      const result = await productCommentService.search(productId, locale, {
+      const result = await productCommentService.search(resolvedProductId, locale, {
         pageNumber: 1,
         pageSize: 50,
       })
@@ -45,7 +60,7 @@ export function useProductReviews(productId: string | undefined): UseProductRevi
     } finally {
       setLoading(false)
     }
-  }, [i18n.language, locale, productId])
+  }, [i18n.language, locale, productId, productSlug])
 
   useEffect(() => {
     void load()

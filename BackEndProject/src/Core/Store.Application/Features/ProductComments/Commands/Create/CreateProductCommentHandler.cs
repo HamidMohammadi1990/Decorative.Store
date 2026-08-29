@@ -13,6 +13,13 @@ public class CreateProductCommentHandler
 {
     public async Task<OperationResult<CreateProductCommentResponse>> Handle(CreateProductCommentRequest request, CancellationToken cancellationToken)
     {
+        if (request.ParentId.HasValue)
+        {
+            var parent = await productCommentRpository.FindAsync(request.ParentId.Value, cancellationToken);
+            if (parent is null || parent.ProductId != request.ProductId)
+                return ErrorModel.Create("InvalidParentComment");
+        }
+
         var productComment = ProductComment.Create(
             currentUser.UserId,
             request.ProductId,
@@ -20,7 +27,8 @@ public class CreateProductCommentHandler
             request.QualityRating,
             request.CommentTopicId,
             request.Description,
-            request.AffordableRating);
+            request.AffordableRating,
+            request.ParentId);
 
         productCommentRpository.Add(productComment);
 

@@ -39,6 +39,25 @@ function normalizeCategory(data: unknown, languageId?: number): AdminCategory | 
   }
 }
 
+function normalizeCategoryFromGet(data: unknown): AdminCategory | null {
+  const record = readRecord(data)
+  if (!record) return null
+
+  const id = readEncryptedId(record, 'id', 'Id')
+  const code = readStringField(record, 'code', 'Code')
+  const title = readStringField(record, 'title', 'Title')
+  if (!id || !code || !title) return null
+
+  return {
+    id,
+    code,
+    isActive: readIsActive(record),
+    title,
+    slug: readStringField(record, 'slug', 'Slug'),
+    translations: [],
+  }
+}
+
 export const adminCategoryService = {
   async getAll(
     accessToken: string,
@@ -58,6 +77,31 @@ export const adminCategoryService = {
     )
 
     return normalizeAdminPaged(data, (item) => normalizeCategory(item, options.languageId))
+  },
+
+  async getAllForSelect(
+    accessToken: string,
+    locale: Locale,
+    options: { languageId?: number } = {},
+  ): Promise<AdminPagedResult<AdminCategory>> {
+    const probe = await this.getAll(accessToken, locale, {
+      pageNumber: 1,
+      pageSize: 1,
+      languageId: options.languageId,
+    })
+    const pageSize = Math.max(probe.totalCount, 1)
+    if (pageSize <= probe.items.length) return probe
+
+    return this.getAll(accessToken, locale, {
+      pageNumber: 1,
+      pageSize,
+      languageId: options.languageId,
+    })
+  },
+
+  async get(accessToken: string, locale: Locale, id: string): Promise<AdminCategory | null> {
+    const data = await apiPost<unknown>(`${BASE}/get`, { id }, { locale, accessToken })
+    return normalizeCategoryFromGet(data)
   },
 
   async create(accessToken: string, locale: Locale, input: CreateCategoryInput): Promise<string> {

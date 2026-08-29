@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Store.Domain.Entities;
+﻿using Store.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Store.Infrastructure.Persistence.Extensions;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Store.Infrastructure.Persistence.Configuration;
 
@@ -27,7 +27,6 @@ internal class ProductDescriptionConfig : IEntityTypeConfiguration<ProductDescri
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .HasIndex(x => new { x.ProductId, x.LanguageId })
-            .IsUnique();
+            .HasIndex(x => new { x.ProductId, x.LanguageId });
     }
 }

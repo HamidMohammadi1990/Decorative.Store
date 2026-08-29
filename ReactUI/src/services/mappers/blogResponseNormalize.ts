@@ -159,7 +159,10 @@ function readCategoryLabels(data: unknown): Record<string, string> {
   )
 }
 
-export function normalizeBlogPostDetailPage(data: unknown): {
+export function normalizeBlogPostDetailPage(
+  data: unknown,
+  requestSlug = '',
+): {
   post: BlogPostDetail | null
   related: BlogPostSummary[]
   categoryMap: Record<string, string>
@@ -179,6 +182,7 @@ export function normalizeBlogPostDetailPage(data: unknown): {
   const categoryLabel = readStringField(postRecord, 'categoryTitle', 'CategoryTitle')
   const tagTitles = readStringListField(postRecord, 'tagTitles', 'TagTitles')
   const post = normalizeBlogPostDetail(postRecord, DEFAULT_DETAIL_COVER, categorySlug, categoryLabel)
+  const resolvedSlug = post.slug || requestSlug.trim()
   const tags = tagTitles.length > 0 ? tagTitles : post.tags
 
   const comments = (Array.isArray(record.comments ?? record.Comments)
@@ -201,6 +205,7 @@ export function normalizeBlogPostDetailPage(data: unknown): {
   return {
     post: {
       ...post,
+      slug: resolvedSlug,
       tags,
       comments,
       commentCount,

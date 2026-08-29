@@ -12,6 +12,9 @@ public record CreateProductCommentRequest : IRequest<OperationResult<CreateProdu
     [JsonConverter(typeof(ProductEncryptor))]
     public int ProductId { get; init; }
 
+    [JsonConverter(typeof(ProductCommentNullableEncryptor))]
+    public int? ParentId { get; init; }
+
     public int CommentRate { get; init; }
     public string Description { get; init; } = default!;
     public int QualityRating { get; init; }

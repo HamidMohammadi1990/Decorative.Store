@@ -30,3 +30,7 @@ export const CMS_HOME_SECTION_TYPES = new Set<string>([
 export function cmsShopPageSlug(_locale: 'en' | 'fa') {
   return 'shop'
 }
+
+export function cmsBlogPageSlug(_locale: 'en' | 'fa') {
+  return 'blog'
+}

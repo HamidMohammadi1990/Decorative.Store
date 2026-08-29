@@ -101,6 +101,21 @@ export function ProductCommentsIcon(props: DashboardIconProps) {
   )
 }
 
+export function ProductQuestionsIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M9.2 9.4a2.8 2.8 0 0 1 4.9 2c0 1.5-1.6 1.9-1.6 3.1"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <circle cx="12" cy="16.2" r="0.8" fill="currentColor" />
+    </IconBase>
+  )
+}
+
 export function AddressesIcon(props: DashboardIconProps) {
   return (
     <IconBase {...props}>

@@ -1,12 +1,24 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
+import { ReviewReplyModal } from '@/components/product/ReviewReplyModal'
 import { ReviewSubmitModal } from '@/components/product/ReviewSubmitModal'
+import {
+  ProductSectionSortBar,
+  type ProductSectionSortOption,
+} from '@/components/product/ProductSectionSortBar'
 import type { ProductReviewItem } from '@/extensions/productReviews'
+import {
+  applyVoteToReviewTree,
+  buildReviewTree,
+  computeReviewStatsFromItems,
+  isMainReview,
+  sortReviewRoots,
+} from '@/extensions/productReviews'
 import { useHorizontalDragScroll } from '@/hooks/useHorizontalDragScroll'
-import { useProductReviews } from '@/hooks/useProductReviews'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
+import { productCommentService } from '@/services/productCommentService'
 import { submitProductReview } from '@/services/reviewSubmitService'
 import { openLoginModal } from '@/stores/authModalStore'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -14,6 +26,9 @@ import { useAccessToken } from '@/stores/userStore'
 
 interface ProductReviewsPanelProps {
   product: ProductDetail
+  reviews: ProductReviewItem[]
+  loading: boolean
+  reload: () => Promise<void>
 }
 
 type SortId = 'newest' | 'buyers' | 'useful'
@@ -21,50 +36,64 @@ type SortId = 'newest' | 'buyers' | 'useful'
 const INITIAL_VISIBLE = 5
 const MOBILE_TEXT_LIMIT = 110
 
-function computeReviewStats(reviews: ProductReviewItem[]) {
-  if (reviews.length === 0) {
-    return { ratingDisplay: '—', ratingValue: 0, total: 0 }
-  }
-
-  const ratingValue = reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
-
-  return {
-    ratingDisplay: ratingValue >= 4.95 ? '5' : ratingValue.toFixed(1),
-    ratingValue,
-    total: reviews.length,
-  }
-}
-
-export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
+export function ProductReviewsPanel({
+  product,
+  reviews: flatReviews,
+  loading,
+  reload,
+}: ProductReviewsPanelProps) {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
   const accessToken = useAccessToken()
   const mobileDrag = useHorizontalDragScroll<HTMLDivElement>()
-  const { reviews: allReviews, loading, reload } = useProductReviews(product.id)
-  const stats = computeReviewStats(allReviews)
-  const buyerCount = allReviews.filter((review) => review.isBuyer).length
 
-  const [sort, setSort] = useState<SortId>('useful')
+  const reviewTree = useMemo(() => buildReviewTree(flatReviews), [flatReviews])
+  const [displayTree, setDisplayTree] = useState<ProductReviewItem[]>([])
+  const stats = computeReviewStatsFromItems(flatReviews)
+  const buyerCount = flatReviews.filter((review) => review.isBuyer && !review.parentId).length
+
+  useEffect(() => {
+    setDisplayTree(reviewTree)
+  }, [reviewTree])
+
+  const [sort, setSort] = useState<SortId>('newest')
   const [expanded, setExpanded] = useState(false)
   const [mobileShowAll, setMobileShowAll] = useState(false)
   const [reviewModalOpen, setReviewModalOpen] = useState(false)
+  const [replyTarget, setReplyTarget] = useState<ProductReviewItem | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [replySubmitting, setReplySubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [replyError, setReplyError] = useState<string | null>(null)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [replySubmitSuccess, setReplySubmitSuccess] = useState(false)
 
-  const sortedReviews = useMemo(() => {
-    const list = [...allReviews]
-    if (sort === 'buyers') return list.filter((review) => review.isBuyer)
-    if (sort === 'useful') return list.sort((a, b) => b.helpful - a.helpful)
-    return list
-  }, [allReviews, sort])
+  const closeReviewModal = () => {
+    setReviewModalOpen(false)
+    setSubmitError(null)
+    setSubmitSuccess(false)
+  }
 
-  const visibleReviews = expanded ? sortedReviews : sortedReviews.slice(0, INITIAL_VISIBLE)
-  const hiddenCount = Math.max(0, sortedReviews.length - INITIAL_VISIBLE)
+  const closeReplyModal = () => {
+    setReplyTarget(null)
+    setReplyError(null)
+    setReplySubmitSuccess(false)
+  }
 
-  const sortOptions: { id: SortId; label: string }[] = [
-    { id: 'newest', label: t('product.sortNewest') },
-    { id: 'buyers', label: t('product.sortBuyers') },
-    { id: 'useful', label: t('product.sortUseful') },
+  const sortedRoots = useMemo(() => sortReviewRoots(displayTree, sort), [displayTree, sort])
+  const mainReviewCount = useMemo(
+    () => displayTree.filter(isMainReview).length,
+    [displayTree],
+  )
+  const visibleReviews = expanded ? sortedRoots : sortedRoots.slice(0, INITIAL_VISIBLE)
+  const hiddenCount = Math.max(0, sortedRoots.length - INITIAL_VISIBLE)
+  const hasReviews = flatReviews.length > 0
+  const hasVisibleReviews = sortedRoots.some(isMainReview) || sortedRoots.some((r) => r.isStandaloneReply)
+
+  const sortOptions: ProductSectionSortOption<SortId>[] = [
+    { id: 'newest', label: t('product.sortNewest'), icon: <SortNewestIcon /> },
+    { id: 'buyers', label: t('product.sortBuyers'), icon: <SortBuyersIcon /> },
+    { id: 'useful', label: t('product.sortUseful'), icon: <SortUsefulIcon /> },
   ]
 
   const openReviewModal = () => {
@@ -72,17 +101,25 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
       openLoginModal({
         onSuccess: () => {
           setSubmitError(null)
+          setSubmitSuccess(false)
           setReviewModalOpen(true)
         },
       })
       return
     }
     setSubmitError(null)
+    setSubmitSuccess(false)
     setReviewModalOpen(true)
   }
 
   const handleSubmitReview = useCallback(
-    async (description: string, commentTopicId: string) => {
+    async (payload: {
+      description: string
+      commentTopicId: string
+      commentRate: number
+      qualityRating: number
+      affordableRating: number
+    }) => {
       setSubmitting(true)
       setSubmitError(null)
 
@@ -90,13 +127,14 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
         await submitProductReview({
           product,
           locale,
-          description,
-          commentTopicId,
+          ...payload,
         })
 
-        setReviewModalOpen(false)
+        setSubmitSuccess(true)
+        setSubmitError(null)
         await reload()
       } catch {
+        setSubmitSuccess(false)
         setSubmitError(t('product.reviewSubmitFailed'))
       } finally {
         setSubmitting(false)
@@ -105,28 +143,122 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
     [locale, product, reload, t],
   )
 
+  const handleReplySubmit = useCallback(
+    async (description: string, target: ProductReviewItem) => {
+      if (!target.id) return
+
+      setReplySubmitting(true)
+      setReplyError(null)
+
+      try {
+        await submitProductReview({
+          product,
+          locale,
+          description,
+          commentTopicId: target.commentTopicId,
+          commentRate: 5,
+          qualityRating: 5,
+          affordableRating: 5,
+          parentId: target.id,
+        })
+
+        setReplySubmitSuccess(true)
+        setReplyError(null)
+        await reload()
+      } catch {
+        setReplySubmitSuccess(false)
+        setReplyError(t('product.reviewReplyFailed'))
+      } finally {
+        setReplySubmitting(false)
+      }
+    },
+    [locale, product, reload, t],
+  )
+
+  const handleVote = useCallback(
+    async (reviewId: string, isHelpful: boolean) => {
+      if (!accessToken) {
+        openLoginModal({
+          onSuccess: () => void handleVote(reviewId, isHelpful),
+        })
+        return
+      }
+
+      try {
+        const result = await productCommentService.vote(reviewId, isHelpful, locale, accessToken)
+        setDisplayTree((prev) =>
+          applyVoteToReviewTree(prev, reviewId, {
+            helpfulCount: result.helpfulCount,
+            notHelpfulCount: result.notHelpfulCount,
+            userVoteHelpful: result.userVoteHelpful,
+          }),
+        )
+      } catch {
+        // ignore vote errors silently
+      }
+    },
+    [accessToken, locale],
+  )
+
+  const openReply = (review: ProductReviewItem) => {
+    if (!accessToken) {
+      openLoginModal({
+        onSuccess: () => {
+          setReplyError(null)
+          setReplySubmitSuccess(false)
+          setReplyTarget(review)
+        },
+      })
+      return
+    }
+    setReplyError(null)
+    setReplySubmitSuccess(false)
+    setReplyTarget(review)
+  }
+
   return (
     <div>
       <ReviewSubmitModal
         product={product}
         isOpen={reviewModalOpen}
-        onClose={() => setReviewModalOpen(false)}
+        onClose={closeReviewModal}
         onSubmit={handleSubmitReview}
         submitting={submitting}
         submitError={submitError}
+        submitSuccess={submitSuccess}
+        onWriteAnother={() => setSubmitSuccess(false)}
+      />
+
+      <ReviewReplyModal
+        key={replyTarget?.id ?? 'reply-modal-closed'}
+        review={replyTarget}
+        isOpen={replyTarget !== null}
+        onClose={closeReplyModal}
+        onSubmit={handleReplySubmit}
+        submitting={replySubmitting}
+        submitError={replyError}
+        submitSuccess={replySubmitSuccess}
       />
 
       {loading && (
         <p className="py-6 text-center text-sm text-text-muted">{t('common.loading')}</p>
       )}
 
-      {!loading && sortedReviews.length === 0 && (
-        <p className="py-6 text-center text-sm text-text-muted">{t('product.noReviewsYet')}</p>
+      {!loading && !hasReviews && (
+        <>
+          <p className="py-6 text-center text-sm text-text-muted">{t('product.noReviewsYet')}</p>
+          <button
+            type="button"
+            onClick={openReviewModal}
+            className="mt-4 w-full rounded-md border border-warm bg-surface py-2.5 text-sm font-semibold text-warm transition-colors hover:bg-warm-soft lg:max-w-xs"
+          >
+            {t('product.writeReview')}
+          </button>
+        </>
       )}
 
-      {!loading && sortedReviews.length > 0 && (
+      {!loading && hasReviews && (
         <>
-          {/* ── Mobile ── */}
           <div className="lg:hidden">
             <div className="flex items-start justify-between gap-3">
               <div>
@@ -142,7 +274,7 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
                 onClick={() => setMobileShowAll((value) => !value)}
                 className="inline-flex shrink-0 items-center gap-0.5 text-sm font-medium text-warm"
               >
-                {t('product.viewAllReviews', { count: sortedReviews.length })}
+                {t('product.viewAllReviews', { count: mainReviewCount })}
                 <ChevronIcon expanded={false} className="text-warm rtl:rotate-90 ltr:-rotate-90" />
               </button>
             </div>
@@ -154,6 +286,15 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
             >
               {t('product.writeReview')}
             </button>
+
+            <ProductSectionSortBar
+              className="mt-4"
+              label={t('product.sortBy')}
+              options={sortOptions}
+              value={sort}
+              onChange={setSort}
+              totalLabel={t('product.reviewsTotal', { count: mainReviewCount })}
+            />
 
             {!mobileShowAll ? (
               <div
@@ -168,20 +309,37 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
                 onClickCapture={mobileDrag.onClickCapture}
                 onDragStart={(event) => event.preventDefault()}
               >
-                {sortedReviews.map((review) => (
-                  <MobileReviewCard key={review.id} review={review} t={t} />
+                {sortedRoots.map((review) => (
+                  <MobileReviewCard
+                    key={review.id}
+                    review={review}
+                    t={t}
+                    onVote={handleVote}
+                  />
                 ))}
               </div>
             ) : (
               <ul className="mt-4 divide-y divide-border">
-                {sortedReviews.map((review) => (
-                  <ReviewCard key={review.id} review={review} t={t} compact />
+                {sortedRoots.map((review) => (
+                  <ReviewCard
+                    key={review.id}
+                    review={review}
+                    t={t}
+                    compact
+                    onVote={handleVote}
+                    onReply={openReply}
+                  />
                 ))}
               </ul>
             )}
+
+            {!hasVisibleReviews && (
+              <p className="mt-4 text-center text-sm text-text-muted">
+                {sort === 'buyers' ? t('product.noBuyerReviews') : t('product.noReviewsYet')}
+              </p>
+            )}
           </div>
 
-          {/* ── Desktop ── */}
           <div className="hidden lg:block">
             <h3 className="text-base font-bold text-text">
               {t('product.reviewsSectionTitle')}
@@ -202,7 +360,7 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
                 </div>
 
                 <p className="mt-2 text-xs text-text-muted">
-                  {t('product.fromTotalRatings', { count: stats.total })}
+                  {t('product.fromTotalRatings', { count: stats.reviewCount })}
                 </p>
 
                 <p className="mt-8 text-sm leading-relaxed text-text-muted">
@@ -224,40 +382,31 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
               </aside>
 
               <div className="min-w-0">
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-3">
-                  <div className="flex flex-wrap items-center gap-1 text-sm">
-                    <span className="text-text-muted">{t('product.sortBy')}:</span>
-                    {sortOptions.map((option, index) => (
-                      <span key={option.id} className="inline-flex items-center">
-                        {index > 0 && (
-                          <span className="mx-1.5 text-border-strong" aria-hidden>
-                            |
-                          </span>
-                        )}
-                        <button
-                          type="button"
-                          onClick={() => setSort(option.id)}
-                          className={
-                            sort === option.id
-                              ? 'font-semibold text-warm'
-                              : 'text-text-muted transition-colors hover:text-text'
-                          }
-                        >
-                          {option.label}
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                  <span className="text-sm text-text-muted">
-                    {t('product.reviewsTotal', { count: sortedReviews.length })}
-                  </span>
-                </div>
+                <ProductSectionSortBar
+                  label={t('product.sortBy')}
+                  options={sortOptions}
+                  value={sort}
+                  onChange={setSort}
+                  totalLabel={t('product.reviewsTotal', { count: mainReviewCount })}
+                />
 
-                <ul>
-                  {visibleReviews.map((review) => (
-                    <ReviewCard key={review.id} review={review} t={t} />
-                  ))}
-                </ul>
+                {!hasVisibleReviews ? (
+                  <p className="py-8 text-center text-sm text-text-muted">
+                    {sort === 'buyers' ? t('product.noBuyerReviews') : t('product.noReviewsYet')}
+                  </p>
+                ) : (
+                  <ul>
+                    {visibleReviews.map((review) => (
+                      <ReviewCard
+                        key={review.id}
+                        review={review}
+                        t={t}
+                        onVote={handleVote}
+                        onReply={openReply}
+                      />
+                    ))}
+                  </ul>
+                )}
 
                 {!expanded && hiddenCount > 0 && (
                   <button
@@ -274,25 +423,168 @@ export function ProductReviewsPanel({ product }: ProductReviewsPanelProps) {
           </div>
         </>
       )}
-
-      {!loading && sortedReviews.length === 0 && (
-        <button
-          type="button"
-          onClick={openReviewModal}
-          className="mt-4 w-full rounded-md border border-warm bg-surface py-2.5 text-sm font-semibold text-warm transition-colors hover:bg-warm-soft lg:max-w-xs"
-        >
-          {t('product.writeReview')}
-        </button>
-      )}
     </div>
   )
 }
 
-function MobileReviewCard({ review, t }: { review: ProductReviewItem; t: TFunction }) {
+function ReviewRepliesThread({
+  replies,
+  parentAuthor,
+  t,
+  onVote,
+  compact = false,
+}: {
+  replies: ProductReviewItem[]
+  parentAuthor: string
+  t: TFunction
+  onVote: (reviewId: string, isHelpful: boolean) => void
+  compact?: boolean
+}) {
+  if (replies.length === 0) return null
+
+  const elbowWidth = compact ? 'w-3.5' : 'w-4 sm:w-5'
+  const elbowOffset = compact ? '-start-4' : '-start-5 sm:-start-6'
+  const threadPadding = compact ? 'ps-4' : 'ps-5 sm:ps-6'
+  const threadIndent = compact ? 'ms-4 sm:ms-6' : 'ms-6 sm:ms-10 md:ms-12'
+
+  return (
+    <div className={`mt-4 ${threadIndent}`}>
+      <div className={`relative space-y-3 ${threadPadding}`}>
+        <div
+          className="absolute start-0 top-3 bottom-3 w-0.5 rounded-full bg-gradient-to-b from-warm/50 via-border-strong/50 to-border/30"
+          aria-hidden
+        />
+        {replies.map((reply) => (
+          <div key={reply.id} className="relative">
+            <div
+              className={`absolute ${elbowOffset} top-5 h-0.5 ${elbowWidth} rounded-full bg-border-strong/55`}
+              aria-hidden
+            />
+            <ReviewReplyCard
+              reply={reply}
+              parentAuthor={parentAuthor}
+              t={t}
+              onVote={onVote}
+              compact={compact}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function ReviewReplyIndent({
+  children,
+  compact = false,
+}: {
+  children: ReactNode
+  compact?: boolean
+}) {
+  const threadIndent = compact ? 'ms-4 sm:ms-6' : 'ms-6 sm:ms-10 md:ms-12'
+  const threadPadding = compact ? 'ps-4' : 'ps-5 sm:ps-6'
+
+  return (
+    <div className={`${threadIndent} ${threadPadding} border-s border-border/70`}>
+      {children}
+    </div>
+  )
+}
+
+function ReviewReplyCard({
+  reply,
+  parentAuthor,
+  t,
+  onVote,
+  compact = false,
+}: {
+  reply: ProductReviewItem
+  parentAuthor: string
+  t: TFunction
+  onVote: (reviewId: string, isHelpful: boolean) => void
+  compact?: boolean
+}) {
+  const replyTo = reply.replyToAuthor ?? parentAuthor
+
+  return (
+    <article
+      className={`rounded-lg border border-border/80 bg-surface-muted shadow-sm ${compact ? 'p-2.5' : 'px-4 py-3'}`}
+    >
+      <div className="flex flex-wrap items-center gap-2 text-xs text-warm">
+        <ReplyArrowIcon />
+        <span className="font-medium">{t('product.reviewReplyBadge')}</span>
+        <span className="text-text-muted">
+          {t('product.reviewReplyInThread', { author: replyTo })}
+        </span>
+      </div>
+
+      <div className="mt-2.5 flex items-center gap-2">
+        <UserAvatar name={reply.author} size="sm" />
+        <div className="min-w-0">
+          <span className="text-sm font-semibold text-text">{reply.author}</span>
+          <span className="mt-0.5 block text-xs text-text-muted">{reply.date}</span>
+        </div>
+      </div>
+
+      <p className={`mt-2 leading-relaxed text-text ${compact ? 'text-xs' : 'text-sm'}`}>
+        {reply.text}
+      </p>
+
+      <div className="mt-3 flex items-center justify-end gap-4 text-xs text-text-muted">
+        <button
+          type="button"
+          onClick={() => onVote(reply.id, true)}
+          className={`inline-flex items-center gap-1.5 transition-colors hover:text-text ${
+            reply.userVoteHelpful === true ? 'text-warm' : ''
+          }`}
+        >
+          <ThumbUpIcon />
+          {reply.helpful}
+        </button>
+        <button
+          type="button"
+          onClick={() => onVote(reply.id, false)}
+          className={`inline-flex items-center gap-1.5 transition-colors hover:text-text ${
+            reply.userVoteHelpful === false ? 'text-warm' : ''
+          }`}
+        >
+          <ThumbDownIcon />
+          {reply.notHelpful}
+        </button>
+      </div>
+    </article>
+  )
+}
+
+function MobileReviewCard({
+  review,
+  t,
+  onVote,
+}: {
+  review: ProductReviewItem
+  t: TFunction
+  onVote: (reviewId: string, isHelpful: boolean) => void
+}) {
   const [showFull, setShowFull] = useState(false)
   const isLong = review.text.length > MOBILE_TEXT_LIMIT
   const displayText =
     showFull || !isLong ? review.text : `${review.text.slice(0, MOBILE_TEXT_LIMIT)}…`
+
+  if (review.isStandaloneReply) {
+    return (
+      <article className="w-[calc(50%-0.375rem)] min-w-[calc(50%-0.375rem)] shrink-0 snap-start">
+        <ReviewReplyIndent compact>
+          <ReviewReplyCard
+            reply={review}
+            parentAuthor={t('product.reviewParentUnknown')}
+            t={t}
+            onVote={onVote}
+            compact
+          />
+        </ReviewReplyIndent>
+      </article>
+    )
+  }
 
   return (
     <article className="w-[calc(50%-0.375rem)] min-w-[calc(50%-0.375rem)] shrink-0 snap-start rounded-lg border border-border bg-surface p-3.5">
@@ -330,16 +622,34 @@ function MobileReviewCard({ review, t }: { review: ProductReviewItem; t: TFuncti
       <div className="mt-3 flex items-center justify-between gap-2 text-[11px] text-text-muted">
         <span>{review.date}</span>
         <div className="flex items-center gap-3">
-          <span className="inline-flex items-center gap-1">
+          <button
+            type="button"
+            onClick={() => onVote(review.id, true)}
+            className={`inline-flex items-center gap-1 ${review.userVoteHelpful === true ? 'text-warm' : ''}`}
+          >
             <ThumbUpIcon />
             {review.helpful}
-          </span>
-          <span className="inline-flex items-center gap-1">
+          </button>
+          <button
+            type="button"
+            onClick={() => onVote(review.id, false)}
+            className={`inline-flex items-center gap-1 ${review.userVoteHelpful === false ? 'text-warm' : ''}`}
+          >
             <ThumbDownIcon />
             {review.notHelpful}
-          </span>
+          </button>
         </div>
       </div>
+
+      {review.replies.length > 0 && (
+        <ReviewRepliesThread
+          replies={review.replies}
+          parentAuthor={review.author}
+          t={t}
+          onVote={onVote}
+          compact
+        />
+      )}
     </article>
   )
 }
@@ -348,11 +658,33 @@ function ReviewCard({
   review,
   t,
   compact = false,
+  onVote,
+  onReply,
 }: {
   review: ProductReviewItem
   t: TFunction
   compact?: boolean
+  onVote: (reviewId: string, isHelpful: boolean) => void
+  onReply: (review: ProductReviewItem) => void
 }) {
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  if (review.isStandaloneReply) {
+    return (
+      <li className={`border-b border-border ${compact ? 'py-4' : 'py-5'} last:border-b-0`}>
+        <ReviewReplyIndent compact={compact}>
+          <ReviewReplyCard
+            reply={review}
+            parentAuthor={t('product.reviewParentUnknown')}
+            t={t}
+            onVote={onVote}
+            compact={compact}
+          />
+        </ReviewReplyIndent>
+      </li>
+    )
+  }
+
   return (
     <li className={`border-b border-border ${compact ? 'py-4' : 'py-5'} last:border-b-0`}>
       <div className="flex items-start justify-between gap-3">
@@ -364,17 +696,40 @@ function ReviewCard({
               {t('product.buyerBadge')}
             </span>
           )}
+          {review.replies.length > 0 && (
+            <span className="rounded-md bg-warm/10 px-2 py-0.5 text-[11px] font-medium text-warm">
+              {t('product.reviewReplyCount', { count: review.replies.length })}
+            </span>
+          )}
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="relative flex shrink-0 items-center gap-2">
           <span className="text-xs text-text-muted">{review.date}</span>
           {!compact && (
-            <button
-              type="button"
-              aria-label={t('product.reviewMenu')}
-              className="rounded p-1 text-text-muted transition-colors hover:bg-surface-muted hover:text-text"
-            >
-              <MoreIcon />
-            </button>
+            <>
+              <button
+                type="button"
+                aria-label={t('product.reviewMenu')}
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((open) => !open)}
+                className="rounded p-1 text-text-muted transition-colors hover:bg-surface-muted hover:text-text"
+              >
+                <MoreIcon />
+              </button>
+              {menuOpen && (
+                <div className="absolute end-0 top-full z-10 mt-1 min-w-[10rem] rounded-md border border-border bg-surface py-1 shadow-lg">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMenuOpen(false)
+                      onReply(review)
+                    }}
+                    className="block w-full px-3 py-2 text-start text-xs text-text hover:bg-surface-muted"
+                  >
+                    {t('product.reviewReplyAction')}
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -395,10 +750,11 @@ function ReviewCard({
           {!compact && (
             <button
               type="button"
+              onClick={() => onReply(review)}
               className="inline-flex items-center gap-1 transition-colors hover:text-text"
             >
               <QuoteIcon />
-              {t('product.quote')}
+              {t('product.reviewReplyAction')}
             </button>
           )}
           {review.variant && (
@@ -412,20 +768,36 @@ function ReviewCard({
         <div className="flex items-center gap-4 text-xs text-text-muted">
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 transition-colors hover:text-text"
+            onClick={() => onVote(review.id, true)}
+            className={`inline-flex items-center gap-1.5 transition-colors hover:text-text ${
+              review.userVoteHelpful === true ? 'text-warm' : ''
+            }`}
           >
             <ThumbUpIcon />
             {review.helpful}
           </button>
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 transition-colors hover:text-text"
+            onClick={() => onVote(review.id, false)}
+            className={`inline-flex items-center gap-1.5 transition-colors hover:text-text ${
+              review.userVoteHelpful === false ? 'text-warm' : ''
+            }`}
           >
             <ThumbDownIcon />
             {review.notHelpful}
           </button>
         </div>
       </div>
+
+      {review.replies.length > 0 && (
+        <ReviewRepliesThread
+          replies={review.replies}
+          parentAuthor={review.author}
+          t={t}
+          onVote={onVote}
+          compact={compact}
+        />
+      )}
     </li>
   )
 }
@@ -486,6 +858,56 @@ function QuoteIcon() {
         stroke="currentColor"
         strokeWidth="1"
         strokeLinecap="round"
+      />
+    </svg>
+  )
+}
+
+function ReplyArrowIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 12 12" fill="none" aria-hidden className="shrink-0">
+      <path
+        d="M9 3H4a2 2 0 00-2 2v4M3 7l2.5 2.5L8 7"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function SortNewestIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M8 4.5V8l2.5 1.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function SortBuyersIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <circle cx="8" cy="5.5" r="2.2" stroke="currentColor" strokeWidth="1.2" />
+      <path
+        d="M3.5 13c0-2.2 2-3.5 4.5-3.5s4.5 1.3 4.5 3.5"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+}
+
+function SortUsefulIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
+      <path
+        d="M5.5 12V7.5L7 5.5h3l.8 2.8H13V12H5.5zM3 7.5h1.8V12H3V7.5z"
+        stroke="currentColor"
+        strokeWidth="1.1"
+        strokeLinejoin="round"
       />
     </svg>
   )

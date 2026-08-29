@@ -11,7 +11,7 @@ internal class ProductFileConfig : IEntityTypeConfiguration<ProductFile>
     {
         builder
             .Property(x => x.FileName)
-            .HasVarcharMaxLength(35)
+            .HasVarcharMaxLength(70)
             .IsRequired();
 
         builder

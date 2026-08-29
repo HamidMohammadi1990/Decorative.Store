@@ -26,6 +26,10 @@ public record GetCatalogProductResponse
     public List<string> LongDescriptions { get; init; } = [];
     public List<CatalogProductImageResponse> Images { get; init; } = [];
     public List<CatalogProductFeatureResponse> Features { get; init; } = [];
+    public int ReviewCount { get; init; }
+    public double? AverageRating { get; init; }
+    public int? SatisfactionPercent { get; init; }
+    public int PurchaseCount { get; init; }
 }
 
 public record CatalogProductImageResponse

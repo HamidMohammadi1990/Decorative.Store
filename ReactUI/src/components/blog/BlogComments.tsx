@@ -78,48 +78,50 @@ export function BlogComments({ postId, comments, onCommentCreated }: BlogComment
       </div>
 
       <div className="mt-5 rounded-xl border border-border bg-surface-muted/40 p-4">
-        <label htmlFor="blog-comment" className="text-sm font-medium text-text">
-          {t('blog.addComment')}
-        </label>
-        {!accessToken && (
-          <p className="mt-2 text-xs text-text-muted">{t('blog.signInToComment')}</p>
+        {submitSuccess ? (
+          <CommentSubmitSuccess
+            onWriteAnother={() => {
+              setSubmitSuccess(false)
+              setSubmitError(null)
+            }}
+          />
+        ) : (
+          <>
+            <label htmlFor="blog-comment" className="text-sm font-medium text-text">
+              {t('blog.addComment')}
+            </label>
+            {!accessToken && (
+              <p className="mt-2 text-xs text-text-muted">{t('blog.signInToComment')}</p>
+            )}
+            {authorLabel && (
+              <p className="mt-2 text-xs text-text-muted">
+                {t('blog.commentAsUser', { name: authorLabel })}
+              </p>
+            )}
+            <textarea
+              id="blog-comment"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder={t('blog.commentPlaceholder')}
+              rows={4}
+              disabled={submitting}
+              className="mt-2 block w-full resize-none rounded-lg border border-border bg-surface px-3 py-3 text-sm leading-relaxed text-text outline-none transition-colors placeholder:text-text-muted focus:border-warm disabled:cursor-not-allowed disabled:opacity-70"
+            />
+            {submitError && <CommentSubmitError message={submitError} />}
+            <button
+              type="button"
+              onClick={handleSubmit}
+              disabled={!text.trim() || submitting}
+              className={`mt-3 rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors ${
+                text.trim() && !submitting
+                  ? 'bg-warm text-warm-text hover:bg-warm-hover'
+                  : 'cursor-not-allowed bg-border text-text-muted'
+              }`}
+            >
+              {submitting ? t('common.loading') : t('blog.postComment')}
+            </button>
+          </>
         )}
-        {authorLabel && (
-          <p className="mt-2 text-xs text-text-muted">
-            {t('blog.commentAsUser', { name: authorLabel })}
-          </p>
-        )}
-        <textarea
-          id="blog-comment"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          placeholder={t('blog.commentPlaceholder')}
-          rows={4}
-          disabled={submitting}
-          className="mt-2 block w-full resize-none rounded-lg border border-border bg-surface px-3 py-3 text-sm leading-relaxed text-text outline-none transition-colors placeholder:text-text-muted focus:border-warm disabled:cursor-not-allowed disabled:opacity-70"
-        />
-        {submitError && (
-          <p className="mt-2 text-sm text-red-600" role="alert">
-            {submitError}
-          </p>
-        )}
-        {submitSuccess && (
-          <p className="mt-2 text-sm text-text-muted" role="status">
-            {t('blog.commentSubmitPending')}
-          </p>
-        )}
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={!text.trim() || submitting}
-          className={`mt-3 rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors ${
-            text.trim() && !submitting
-              ? 'bg-warm text-warm-text hover:bg-warm-hover'
-              : 'cursor-not-allowed bg-border text-text-muted'
-          }`}
-        >
-          {submitting ? t('common.loading') : t('blog.postComment')}
-        </button>
       </div>
 
       <ul className="mt-6 space-y-4">
@@ -128,6 +130,81 @@ export function BlogComments({ postId, comments, onCommentCreated }: BlogComment
         ))}
       </ul>
     </section>
+  )
+}
+
+function CommentSubmitSuccess({ onWriteAnother }: { onWriteAnother: () => void }) {
+  const { t } = useTranslation()
+
+  return (
+    <div
+      className="flex gap-4 rounded-xl border border-accent/20 bg-accent/5 p-4 sm:p-5"
+      role="status"
+      aria-live="polite"
+    >
+      <span
+        className="flex size-11 shrink-0 items-center justify-center rounded-full bg-accent/15 text-accent"
+        aria-hidden
+      >
+        <CheckCircleIcon />
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="text-base font-semibold text-text">{t('blog.commentSubmitSuccessTitle')}</p>
+        <p className="mt-1.5 text-sm leading-relaxed text-text-muted">
+          {t('blog.commentSubmitSuccessMessage')}
+        </p>
+        <button
+          type="button"
+          onClick={onWriteAnother}
+          className="mt-4 text-sm font-semibold text-warm transition-colors hover:text-warm-hover hover:underline"
+        >
+          {t('blog.commentSubmitAnother')}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function CommentSubmitError({ message }: { message: string }) {
+  return (
+    <div
+      className="mt-3 flex gap-3 rounded-xl border border-sale/25 bg-sale/5 p-3"
+      role="alert"
+      aria-live="assertive"
+    >
+      <span
+        className="flex size-9 shrink-0 items-center justify-center rounded-full bg-sale/10 text-sale"
+        aria-hidden
+      >
+        <AlertIcon />
+      </span>
+      <p className="min-w-0 flex-1 text-sm leading-relaxed text-sale">{message}</p>
+    </div>
+  )
+}
+
+function CheckCircleIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+      <circle cx="11" cy="11" r="10" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M6.5 11.2l3 3 5.5-6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function AlertIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
+      <circle cx="9" cy="9" r="7.5" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M9 5.5v4.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <circle cx="9" cy="12.75" r="0.75" fill="currentColor" />
+    </svg>
   )
 }
 

@@ -7,10 +7,10 @@ import type { ProductQuestionItem } from '@/extensions/productQuestions'
 import { useHorizontalDragScroll } from '@/hooks/useHorizontalDragScroll'
 import { useProductQuestions } from '@/hooks/useProductQuestions'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
-import { productQuestionService } from '@/services/productQuestionService'
+import { submitProductQuestion } from '@/services/questionSubmitService'
 import { openLoginModal } from '@/stores/authModalStore'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { useAccessToken, useIsAuthenticated } from '@/stores/userStore'
+import { useIsAuthenticated } from '@/stores/userStore'
 
 interface ProductQuestionsPanelProps {
   product: ProductDetail
@@ -25,7 +25,6 @@ export function ProductQuestionsPanel({ product }: ProductQuestionsPanelProps) {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
   const isAuthenticated = useIsAuthenticated()
-  const accessToken = useAccessToken()
   const { questions: allQuestions, loading, reload } = useProductQuestions(product.id)
   const mobileDrag = useHorizontalDragScroll<HTMLDivElement>()
 
@@ -35,6 +34,13 @@ export function ProductQuestionsPanel({ product }: ProductQuestionsPanelProps) {
   const [questionModalOpen, setQuestionModalOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
+
+  const closeQuestionModal = () => {
+    setQuestionModalOpen(false)
+    setSubmitError(null)
+    setSubmitSuccess(false)
+  }
 
   const sortedQuestions = useMemo(() => {
     const list = [...allQuestions]
@@ -44,7 +50,6 @@ export function ProductQuestionsPanel({ product }: ProductQuestionsPanelProps) {
     return list
   }, [allQuestions, sort])
 
-  const answeredQuestions = sortedQuestions.filter((question) => question.answer)
   const visibleQuestions = expanded ? sortedQuestions : sortedQuestions.slice(0, INITIAL_VISIBLE)
   const hiddenCount = Math.max(0, sortedQuestions.length - INITIAL_VISIBLE)
 
@@ -58,55 +63,71 @@ export function ProductQuestionsPanel({ product }: ProductQuestionsPanelProps) {
       openLoginModal({
         onSuccess: () => {
           setSubmitError(null)
+          setSubmitSuccess(false)
           setQuestionModalOpen(true)
         },
       })
       return
     }
     setSubmitError(null)
+    setSubmitSuccess(false)
     setQuestionModalOpen(true)
   }
 
   const handleSubmitQuestion = async (question: string) => {
-    if (!accessToken) return
-
     setSubmitting(true)
     setSubmitError(null)
 
     try {
-      await productQuestionService.create(
-        { productId: product.id, question },
+      await submitProductQuestion({
+        product,
         locale,
-        accessToken,
-      )
-      setQuestionModalOpen(false)
+        question,
+      })
+      setSubmitSuccess(true)
+      setSubmitError(null)
       await reload()
     } catch {
+      setSubmitSuccess(false)
       setSubmitError(t('product.questionSubmitFailed'))
     } finally {
       setSubmitting(false)
     }
   }
 
+  const hasQuestions = allQuestions.length > 0
+
   return (
     <div>
       <QuestionSubmitModal
+        product={product}
         isOpen={questionModalOpen}
-        onClose={() => setQuestionModalOpen(false)}
+        onClose={closeQuestionModal}
         onSubmit={handleSubmitQuestion}
         submitting={submitting}
         submitError={submitError}
+        submitSuccess={submitSuccess}
+        onWriteAnother={() => setSubmitSuccess(false)}
       />
 
       {loading && (
         <p className="py-6 text-center text-sm text-text-muted">{t('common.loading')}</p>
       )}
 
-      {!loading && sortedQuestions.length === 0 && (
-        <p className="py-6 text-center text-sm text-text-muted">{t('product.noQuestionsYet')}</p>
+      {!loading && !hasQuestions && (
+        <>
+          <p className="py-6 text-center text-sm text-text-muted">{t('product.noQuestionsYet')}</p>
+          <button
+            type="button"
+            onClick={openQuestionModal}
+            className="mx-auto mt-2 flex w-full max-w-xs items-center justify-center rounded-md border border-warm bg-surface py-2.5 text-sm font-semibold text-warm transition-colors hover:bg-warm-soft"
+          >
+            {t('product.askQuestion')}
+          </button>
+        </>
       )}
 
-      {!loading && sortedQuestions.length > 0 && (
+      {!loading && hasQuestions && (
         <>
           <div className="lg:hidden">
             <div className="flex items-start justify-between gap-3">
@@ -135,7 +156,7 @@ export function ProductQuestionsPanel({ product }: ProductQuestionsPanelProps) {
                   onClickCapture={mobileDrag.onClickCapture}
                   onDragStart={(event) => event.preventDefault()}
                 >
-                  {answeredQuestions.map((item) => (
+                  {sortedQuestions.map((item) => (
                     <MobileQuestionCard key={item.id} item={item} t={t} />
                   ))}
                 </div>
@@ -230,14 +251,16 @@ export function ProductQuestionsPanel({ product }: ProductQuestionsPanelProps) {
         </>
       )}
 
-      {!loading && (
-        <button
-          type="button"
-          onClick={openQuestionModal}
-          className="mt-4 w-full rounded-md border border-warm bg-surface py-2.5 text-sm font-semibold text-warm transition-colors hover:bg-warm-soft lg:hidden"
-        >
-          {t('product.askQuestion')}
-        </button>
+      {!loading && hasQuestions && (
+        <div className="mt-4 lg:hidden">
+          <button
+            type="button"
+            onClick={openQuestionModal}
+            className="w-full rounded-md border border-warm bg-surface py-2.5 text-sm font-semibold text-warm transition-colors hover:bg-warm-soft"
+          >
+            {t('product.askQuestion')}
+          </button>
+        </div>
       )}
     </div>
   )
@@ -257,6 +280,10 @@ function QuestionRow({
   return (
     <li className={`border-b border-border ${compact ? 'py-4' : 'py-5'} last:border-b-0`}>
       <p className="text-sm font-medium leading-relaxed text-text">{item.question}</p>
+      <p className="mt-1 text-xs text-text-muted">
+        {t('product.questionAskedBy', { name: item.askerName })}
+        {item.date ? ` · ${item.date}` : ''}
+      </p>
 
       {hasAnswer ? (
         <div className="mt-3 rounded-lg bg-surface-muted px-4 py-3">
@@ -295,8 +322,11 @@ function MobileQuestionCard({ item, t }: { item: ProductQuestionItem; t: TFuncti
   return (
     <article className="w-[calc(50%-0.375rem)] min-w-[calc(50%-0.375rem)] shrink-0 snap-start rounded-lg border border-border bg-surface p-3.5">
       <p className="text-sm font-semibold leading-relaxed text-text">{item.question}</p>
+      <p className="mt-1 text-xs text-text-muted">
+        {t('product.questionAskedBy', { name: item.askerName })}
+      </p>
 
-      {item.answer && (
+      {item.answer ? (
         <div className="mt-3 rounded-lg bg-surface-muted p-3">
           <div className="flex items-start gap-2">
             <UserAvatar name={item.author ?? '?'} />
@@ -319,6 +349,8 @@ function MobileQuestionCard({ item, t }: { item: ProductQuestionItem; t: TFuncti
           </div>
           <p className="mt-2 text-xs leading-relaxed text-text-muted">{displayAnswer}</p>
         </div>
+      ) : (
+        <p className="mt-3 text-xs text-text-muted">{t('product.awaitingAnswer')}</p>
       )}
 
       <div className="mt-3 flex items-center justify-between gap-2 text-[11px] text-text-muted">

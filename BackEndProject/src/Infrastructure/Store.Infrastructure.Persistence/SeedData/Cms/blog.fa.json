@@ -1,0 +1,66 @@
+{
+  "promoAnnouncement": {
+    "id": "journal-promo",
+    "message": "ایده و الهام برای هر فضا",
+    "link": { "label": "مشاهده فروشگاه", "href": "/shop" }
+  },
+  "utilityBar": {
+    "phoneLabel": "تماس: ۰۸۰۰ ۴۰۴ ۹۷۸۰",
+    "phoneHref": "tel:08004049780",
+    "links": [
+      { "label": "پایداری", "href": "/sustainability" },
+      { "label": "پیگیری سفارش", "href": "/track-order" }
+    ]
+  },
+  "header": {
+    "brandLabel": "دیبا گالری",
+    "searchPlaceholder": "جستجوی مقالات و ایده‌ها…",
+    "accountLabel": "ورود",
+    "cartLabel": "سبد خرید"
+  },
+  "footer": {
+    "columns": [
+      {
+        "title": "خدمات مشتریان",
+        "links": [
+          { "label": "تماس با ما", "href": "/contact" },
+          { "label": "مرجوعی و تعویض", "href": "/returns" },
+          { "label": "اطلاعات تحویل", "href": "/delivery" }
+        ]
+      },
+      {
+        "title": "منابع",
+        "links": [
+          { "label": "کلیک و جمع‌آوری", "href": "/click-collect" },
+          { "label": "Klarna", "href": "/klarna" },
+          { "label": "Clearpay", "href": "/clearpay" }
+        ]
+      },
+      {
+        "title": "بیشتر درباره ما",
+        "links": [
+          { "label": "مجله", "href": "/blog" },
+          { "label": "پایداری", "href": "/sustainability" },
+          { "label": "فرصت‌های شغلی", "href": "/careers" },
+          { "label": "شعب ما", "href": "/stores" }
+        ]
+      },
+      {
+        "title": "خدمات طراحی",
+        "links": [
+          { "label": "ملاقات با تیم طراحی", "href": "/design-services" },
+          { "label": "دیبا گالری TRADE", "href": "/trade" }
+        ]
+      }
+    ],
+    "newsletterTitle": "حراج‌های ویژه و محصولات جدید",
+    "newsletterPlaceholder": "آدرس ایمیل",
+    "newsletterButton": "عضویت",
+    "copyright": "© ۲۰۲۶ Williams-Sonoma Inc. تمامی حقوق محفوظ است",
+    "legalLinks": [
+      { "label": "شرایط و قوانین", "href": "/terms" },
+      { "label": "حریم خصوصی", "href": "/privacy" },
+      { "label": "بیانیه حقوقی", "href": "/legal" }
+    ]
+  }
+}

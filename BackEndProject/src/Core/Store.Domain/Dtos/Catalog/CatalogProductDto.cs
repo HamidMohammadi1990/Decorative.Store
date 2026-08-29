@@ -8,6 +8,10 @@ public record CatalogProductDto
     public List<string> LongDescriptions { get; init; } = [];
     public List<CatalogProductImageDto> Images { get; init; } = [];
     public List<CatalogProductFeatureDto> Features { get; init; } = [];
+    public int ReviewCount { get; init; }
+    public double? AverageRating { get; init; }
+    public int? SatisfactionPercent { get; init; }
+    public int PurchaseCount { get; init; }
 }
 
 public record CatalogProductImageDto

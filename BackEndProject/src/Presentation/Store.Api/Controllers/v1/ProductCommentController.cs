@@ -38,6 +38,11 @@ public class ProductCommentController
         => await mediator.Send(request);
 
     [Authorize]
+    [HttpPost("vote")]
+    public async Task<ApiResult<VoteProductCommentResponse>> Vote(VoteProductCommentRequest request)
+        => await mediator.Send(request);
+
+    [Authorize]
     [HttpPut("update")]
     public async Task<ApiResult<OperationResult>> Update(UpdateProductCommentRequest request)
         => await mediator.Send(request);

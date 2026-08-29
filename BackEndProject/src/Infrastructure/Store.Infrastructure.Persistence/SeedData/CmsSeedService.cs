@@ -260,11 +260,195 @@ public static class CmsSeedService
 
 
 
+    public static async Task SeedBlogPagesAsync(EditionDbContext context, CancellationToken cancellationToken = default)
+
+    {
+
+        var faLanguage = await context.Language
+
+            .AsNoTracking()
+
+            .FirstOrDefaultAsync(x => x.Code == "fa-IR", cancellationToken);
+
+
+
+        var enLanguage = await context.Language
+
+            .AsNoTracking()
+
+            .FirstOrDefaultAsync(x => x.Code == "en-US", cancellationToken);
+
+
+
+        if (faLanguage is null || enLanguage is null)
+
+            return;
+
+
+
+        if (await context.PageTranslation.AnyAsync(
+
+                x => x.Slug == "blog" && x.LanguageId == faLanguage.Id,
+
+                cancellationToken))
+
+            return;
+
+
+
+        var typeIds = await EnsureSectionTypesAsync(context, enLanguage.Id, cancellationToken);
+
+
+
+        var enContent = await LoadBlogContentAsync("en", cancellationToken);
+
+        var faContent = await LoadBlogContentAsync("fa", cancellationToken);
+
+        if (enContent is null && faContent is null)
+
+            return;
+
+
+
+        enContent ??= new CmsShopSeedDto();
+
+        faContent ??= new CmsShopSeedDto();
+
+
+
+        var page = Page.Create(PageType.General, true);
+
+        context.Page.Add(page);
+
+        await context.SaveChangesAsync(cancellationToken);
+
+
+
+        page.UpsertTranslation(
+
+            faLanguage.Id,
+
+            "مجله",
+
+            "blog",
+
+            "مجله",
+
+            "مجله");
+
+        page.UpsertTranslation(
+
+            enLanguage.Id,
+
+            "Journal",
+
+            "blog",
+
+            "Journal",
+
+            "Journal");
+
+        await context.SaveChangesAsync(cancellationToken);
+
+
+
+        var priority = 0;
+
+
+
+        await AddPromoAnnouncementAsync(
+
+            context, page.Id, priority++, typeIds, faLanguage.Id, enLanguage.Id,
+
+            faContent.PromoAnnouncement, enContent.PromoAnnouncement, cancellationToken);
+
+
+
+        await AddUtilityBarAsync(
+
+            context, page.Id, priority++, typeIds, faLanguage.Id, enLanguage.Id,
+
+            faContent.UtilityBar, enContent.UtilityBar, cancellationToken);
+
+
+
+        await AddSiteHeaderAsync(
+
+            context, page.Id, priority++, typeIds, faLanguage.Id, enLanguage.Id,
+
+            faContent.Header, enContent.Header, cancellationToken);
+
+
+
+        if (faContent.Footer is not null || enContent.Footer is not null)
+
+        {
+
+            var faFooter = faContent.Footer ?? new CmsFooterDto();
+
+            var enFooter = enContent.Footer ?? new CmsFooterDto();
+
+            var columnCount = Math.Max(faFooter.Columns.Count, enFooter.Columns.Count);
+
+
+
+            for (var index = 0; index < columnCount; index++)
+
+            {
+
+                var faColumn = index < faFooter.Columns.Count ? faFooter.Columns[index] : new CmsFooterColumnDto();
+
+                var enColumn = index < enFooter.Columns.Count ? enFooter.Columns[index] : new CmsFooterColumnDto();
+
+
+
+                await AddFooterColumnAsync(
+
+                    context, page.Id, priority++, typeIds, faLanguage.Id, enLanguage.Id,
+
+                    faColumn, enColumn, cancellationToken);
+
+            }
+
+
+
+            await AddSiteFooterAsync(
+
+                context, page.Id, priority, typeIds, faLanguage.Id, enLanguage.Id,
+
+                faFooter, enFooter, cancellationToken);
+
+        }
+
+    }
+
+
+
     private static async Task<CmsShopSeedDto?> LoadShopContentAsync(string locale, CancellationToken cancellationToken)
 
     {
 
         var jsonPath = Path.Combine(AppContext.BaseDirectory, "SeedData", "cms", $"shop.{locale}.json");
+
+        if (!File.Exists(jsonPath))
+
+            return null;
+
+
+
+        var json = await File.ReadAllTextAsync(jsonPath, cancellationToken);
+
+        return JsonSerializer.Deserialize<CmsShopSeedDto>(json, JsonOptions);
+
+    }
+
+
+
+    private static async Task<CmsShopSeedDto?> LoadBlogContentAsync(string locale, CancellationToken cancellationToken)
+
+    {
+
+        var jsonPath = Path.Combine(AppContext.BaseDirectory, "SeedData", "cms", $"blog.{locale}.json");
 
         if (!File.Exists(jsonPath))
 

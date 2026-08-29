@@ -1697,12 +1697,18 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Property<int>("CommentTopicId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("NVARCHAR(250)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -1717,11 +1723,43 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("CommentTopicId");
 
+                    b.HasIndex("ParentId");
+
                     b.HasIndex("ProductId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("ProductComment");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.ProductCommentReaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsHelpful")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProductCommentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductCommentId");
+
+                    b.HasIndex("UserId", "ProductCommentId")
+                        .IsUnique();
+
+                    b.ToTable("ProductCommentReaction");
                 });
 
             modelBuilder.Entity("Store.Domain.Entities.ProductDescription", b =>
@@ -1746,8 +1784,7 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("LanguageId");
 
-                    b.HasIndex("ProductId", "LanguageId")
-                        .IsUnique();
+                    b.HasIndex("ProductId", "LanguageId");
 
                     b.ToTable("ProductDescription");
                 });
@@ -1791,7 +1828,7 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(35)");
+                        .HasColumnType("VARCHAR(70)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -3684,6 +3721,11 @@ namespace Store.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Store.Domain.Entities.ProductComment", "Parent")
+                        .WithMany("Replies")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Store.Domain.Entities.Product", "Product")
                         .WithMany("ProductComments")
                         .HasForeignKey("ProductId")
@@ -3698,7 +3740,28 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.Navigation("CommentTopic");
 
+                    b.Navigation("Parent");
+
                     b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.ProductCommentReaction", b =>
+                {
+                    b.HasOne("Store.Domain.Entities.ProductComment", "ProductComment")
+                        .WithMany("Reactions")
+                        .HasForeignKey("ProductCommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Store.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ProductComment");
 
                     b.Navigation("User");
                 });
@@ -4424,6 +4487,13 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Navigation("Translations");
 
                     b.Navigation("UserStories");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.ProductComment", b =>
+                {
+                    b.Navigation("Reactions");
+
+                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("Store.Domain.Entities.ProductFeatureType", b =>

@@ -1,6 +1,5 @@
 import type { ProductSummary } from '@/models/catalog/product.model'
 import type { Locale } from '@/models/shared/locale.model'
-import { enrichProductDetail } from '@/extensions/productDetailContent'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import type {
   FilterFacet,
@@ -29,6 +28,7 @@ import { catalogListingService } from '@/services/catalogListingService'
 import { catalogProductService } from '@/services/catalogProductService'
 import { mapCatalogListingProduct } from '@/services/mappers/catalogListingMapper'
 import {
+  buildProductDetailFromSummary,
   mapCatalogProductToDetail,
   mapRelatedCatalogProducts,
 } from '@/services/mappers/catalogProductMapper'
@@ -599,7 +599,7 @@ export const catalogService = {
       const products = getProductsMock(locale) as ProductSummary[]
       const product = products.find((p) => p.slug === slug)
       if (!product) return null
-      return enrichProductDetail(product, locale)
+      return buildProductDetailFromSummary(product)
     })
   },
 
@@ -628,7 +628,7 @@ export const catalogService = {
       return products
         .filter((p) => slugs.includes(p.slug))
         .sort((a, b) => (order.get(a.slug) ?? 0) - (order.get(b.slug) ?? 0))
-        .map((p) => enrichProductDetail(p, locale))
+        .map((p) => buildProductDetailFromSummary(p))
     })
   },
 

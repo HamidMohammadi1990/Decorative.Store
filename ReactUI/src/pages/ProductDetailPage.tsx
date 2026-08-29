@@ -9,11 +9,17 @@ import { ProductGrid } from '@/components/listing/ProductGrid'
 import { Container } from '@/components/ui/Container'
 import { PageLoading } from '@/components/ui/Spinner'
 import { useProductDetail } from '@/hooks/useProductDetail'
+import { useProductReviews } from '@/hooks/useProductReviews'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 
 export function ProductDetailPage() {
   const { t } = useTranslation()
   const { product, related, loading, error } = useProductDetail()
+  const {
+    reviews,
+    loading: reviewsLoading,
+    reload: reloadReviews,
+  } = useProductReviews(product?.id, product?.slug)
 
   if (loading) {
     return <PageLoading />
@@ -57,15 +63,29 @@ export function ProductDetailPage() {
           </div>
 
           <div className="lg:col-span-4">
-            <ProductInfoPanel product={product} primaryCategory={primaryCategory} />
+            <ProductInfoPanel
+              product={product}
+              primaryCategory={primaryCategory}
+              reviews={reviews}
+              reviewsLoading={reviewsLoading}
+            />
           </div>
 
           <div className="lg:col-span-3">
-            <ProductBuyBox product={product} />
+            <ProductBuyBox
+              product={product}
+              reviews={reviews}
+              reviewsLoading={reviewsLoading}
+            />
           </div>
         </div>
 
-        <ProductDetailSections product={product} />
+        <ProductDetailSections
+          product={product}
+          reviews={reviews}
+          reviewsLoading={reviewsLoading}
+          reloadReviews={reloadReviews}
+        />
 
         {related.length > 0 && (
           <section className="mt-14 border-t border-border pt-10">

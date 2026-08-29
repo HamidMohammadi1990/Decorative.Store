@@ -243,28 +243,45 @@ public class BlogPostRepository
         var normalizedSlug = slug.Trim();
         var (languageId, defaultLanguageId) = await ResolveLanguageIdsAsync();
 
-        var postRow = await (
-                from blogPost in Context.BlogPost.AsNoTracking()
-                    .Where(x => x.IsActive && x.IsPublished)
-                    .Where(x => x.Translations.Any(t => t.Slug == normalizedSlug))
-                join user in Context.User on blogPost.UserId equals user.Id
-                join blogPostCategory in Context.BlogPostCategory on blogPost.BlogPostCategoryId equals blogPostCategory.Id
-                select new { blogPost, blogPostCategory, user })
+        var blogPost = await Context.BlogPost
+            .AsNoTracking()
+            .Include(x => x.Translations)
+            .Where(x => x.IsActive && x.IsPublished)
+            .Where(x => x.Translations.Any(t => t.Slug == normalizedSlug))
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (postRow is null)
+        if (blogPost is null)
             return null;
 
-        var post = MapSearchBlogPostDto(postRow.blogPost, postRow.blogPostCategory, postRow.user, languageId, defaultLanguageId);
-        var categorySlug = ResolveCategorySlug(postRow.blogPostCategory, languageId, defaultLanguageId);
+        var user = await Context.User
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == blogPost.UserId, cancellationToken);
+
+        if (user is null)
+            return null;
+
+        var blogPostCategory = await Context.BlogPostCategory
+            .AsNoTracking()
+            .Include(x => x.Translations)
+            .FirstOrDefaultAsync(x => x.Id == blogPost.BlogPostCategoryId, cancellationToken);
+
+        if (blogPostCategory is null)
+            return null;
+
+        var post = MapSearchBlogPostDto(blogPost, blogPostCategory, user, languageId, defaultLanguageId);
+        if (string.IsNullOrWhiteSpace(post.Slug))
+            post = post with { Slug = normalizedSlug };
+
+        var categorySlug = ResolveCategorySlug(blogPostCategory, languageId, defaultLanguageId);
+        var blogPostId = blogPost.Id;
 
         var likeCount = await Context.BlogPostLike
             .AsNoTracking()
-            .CountAsync(x => x.BlogPostId == postRow.blogPost.Id, cancellationToken);
+            .CountAsync(x => x.BlogPostId == blogPostId, cancellationToken);
 
         var tagTitles = await (
                 from blogPostTag in Context.BlogPostTag.AsNoTracking()
-                    .Where(x => x.BlogPostId == postRow.blogPost.Id)
+                    .Where(x => x.BlogPostId == blogPostId)
                 join tag in Context.Tag.AsNoTracking() on blogPostTag.TagId equals tag.Id
                 orderby tag.Title
                 select tag.Title)
@@ -272,7 +289,7 @@ public class BlogPostRepository
 
         var comments = await (
                 from blogPostComment in Context.BlogPostComment.AsNoTracking()
-                    .Where(x => x.BlogPostId == postRow.blogPost.Id && x.IsApproved)
+                    .Where(x => x.BlogPostId == blogPostId && x.IsApproved)
                 join createdByUser in Context.User on blogPostComment.CreatedByUserId equals createdByUser.Id
                 orderby blogPostComment.CreatedOnUtc descending
                 select new SearchBlogPostCommentResponseDto
@@ -291,13 +308,14 @@ public class BlogPostRepository
             .ToListAsync(cancellationToken);
 
         var relatedPosts = await (
-                from blogPost in Context.BlogPost.AsNoTracking()
+                from relatedBlogPost in Context.BlogPost.AsNoTracking()
                     .Where(x => x.IsActive && x.IsPublished)
-                    .Where(x => x.BlogPostCategoryId == postRow.blogPost.BlogPostCategoryId)
-                    .Where(x => x.Id != postRow.blogPost.Id)
-                join blogPostCategory in Context.BlogPostCategory on blogPost.BlogPostCategoryId equals blogPostCategory.Id
-                orderby blogPost.PublishedOnUtc descending, blogPost.CreatedOnUtc descending
-                select new { blogPost, blogPostCategory })
+                    .Where(x => x.BlogPostCategoryId == blogPost.BlogPostCategoryId)
+                    .Where(x => x.Id != blogPostId)
+                join relatedBlogPostCategory in Context.BlogPostCategory
+                    on relatedBlogPost.BlogPostCategoryId equals relatedBlogPostCategory.Id
+                orderby relatedBlogPost.PublishedOnUtc descending, relatedBlogPost.CreatedOnUtc descending
+                select new { blogPost = relatedBlogPost, blogPostCategory = relatedBlogPostCategory })
             .Take(4)
             .Select(x => new BlogPostDetailRelatedDto
             {

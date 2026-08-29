@@ -395,6 +395,24 @@ public enum PermissionType : int
     [Display(Name = "PermissionType_ChangeProductCommentStatus", ResourceType = typeof(EnumResources))]
     ChangeProductCommentStatus = 242,
 
+    [Display(Name = "PermissionType_AnswerProductComment", ResourceType = typeof(EnumResources))]
+    AnswerProductComment = 243,
+
+    [Display(Name = "PermissionType_ManageProductQuestionGroup", ResourceType = typeof(EnumResources))]
+    ManageProductQuestionGroup = 244,
+
+    [Display(Name = "PermissionType_ManageProductQuestion", ResourceType = typeof(EnumResources))]
+    ManageProductQuestion = 245,
+
+    [Display(Name = "PermissionType_ListProductQuestion", ResourceType = typeof(EnumResources))]
+    ListProductQuestion = 246,
+
+    [Display(Name = "PermissionType_ChangeProductQuestionStatus", ResourceType = typeof(EnumResources))]
+    ChangeProductQuestionStatus = 247,
+
+    [Display(Name = "PermissionType_AnswerProductQuestion", ResourceType = typeof(EnumResources))]
+    AnswerProductQuestion = 248,
+
     [Display(Name = "PermissionType_ManagePermissionGroup", ResourceType = typeof(EnumResources))]
     ManagePermissionGroup = 250,
 

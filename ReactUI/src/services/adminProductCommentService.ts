@@ -1,5 +1,6 @@
 import type { AdminProductComment } from '@/models/admin/catalog.model'
 import type { Locale } from '@/models/shared/locale.model'
+import { apiPost } from '@/services/api/apiClient'
 import { readNumberField, readRecord, readStringField } from '@/services/api/apiNormalize'
 import {
   normalizeAdminPaged,

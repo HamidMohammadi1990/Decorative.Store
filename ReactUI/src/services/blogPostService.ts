@@ -93,7 +93,7 @@ export const blogPostService = {
     const request = (async () => {
       const query = `?slug=${encodeURIComponent(slug)}`
       const data = await apiGet<unknown>(`${BLOG_POST_DETAIL_PATH}${query}`, locale)
-      return normalizeBlogPostDetailPage(data)
+      return normalizeBlogPostDetailPage(data, slug)
     })()
 
     detailRequests.set(key, request)

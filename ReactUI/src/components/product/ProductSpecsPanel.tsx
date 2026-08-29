@@ -108,10 +108,6 @@ export function ProductSpecsPanel({ product }: ProductSpecsPanelProps) {
                 <p className="mt-3 text-sm leading-relaxed text-text-muted">
                   {product.deliveryNote}
                 </p>
-                <ul className="mt-3 space-y-2 text-sm text-text-muted">
-                  <li>• {t('product.deliveryReturns')}</li>
-                  <li>• {t('product.deliverySupport')}</li>
-                </ul>
               </div>
             )}
 

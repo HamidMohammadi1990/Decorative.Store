@@ -35,7 +35,8 @@ public class ProductFileController
 
     [ActionInfo(PermissionType.CreateProductFileRange)]
     [HttpPost("create-range")]
-    public async Task<ApiResult<List<CreateProductFileResponse>>> CreateRange(CreateProductFileRequest request)
+    [RequestSizeLimit(5_242_880)]
+    public async Task<ApiResult<List<CreateProductFileResponse>>> CreateRange([FromForm] CreateProductFileRequest request)
         => await mediator.Send(request);
 
     [ActionInfo(PermissionType.DeleteProductFile)]

@@ -11,14 +11,27 @@ public class ProductComment : BaseEntity
     public int QualityRating { get; private set; }
     public int AffordableRating { get; private set; }
     public int ProductId { get; private set; }
+    public int? ParentId { get; private set; }
+    public DateTime CreatedOnUtc { get; private set; } = DateTime.UtcNow;
     public bool IsActive { get; private set; }
 
     public User User { get; private set; } = default!;
     public Product Product { get; private set; } = default!;
     public CommentTopic CommentTopic { get; private set; } = default!;
+    public ProductComment? Parent { get; private set; }
+    public ICollection<ProductComment> Replies { get; private set; } = [];
+    public ICollection<ProductCommentReaction> Reactions { get; private set; } = [];
 
-    public static ProductComment Create(int userId, int productId, int commentRate, int qualityRating,
-                                        int commentTopicId, string description, int affordableRating)
+    public static ProductComment Create(
+        int userId,
+        int productId,
+        int commentRate,
+        int qualityRating,
+        int commentTopicId,
+        string description,
+        int affordableRating,
+        int? parentId = null,
+        bool? isActive = null)
         => new()
         {
             UserId = userId,
@@ -27,7 +40,10 @@ public class ProductComment : BaseEntity
             Description = description,
             QualityRating = qualityRating,
             CommentTopicId = commentTopicId,
-            AffordableRating = affordableRating
+            AffordableRating = affordableRating,
+            ParentId = parentId,
+            CreatedOnUtc = DateTime.UtcNow,
+            IsActive = isActive ?? false,
         };
 
     public void Update(int commentRate, int qualityRating, int commentTopicId, string description, int affordableRating)

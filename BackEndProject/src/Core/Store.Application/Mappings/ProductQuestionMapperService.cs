@@ -16,6 +16,15 @@ public class ProductQuestionMapperService : IProductQuestionMapperService
             Pagination = model.Pagination
         }.WithContentPolicy<ProductQuestion, SearchProductQuestionRequestDto>(model);
 
+    public GetAllProductQuestionRequestDto Map(GetAllProductQuestionRequest model)
+        => new GetAllProductQuestionRequestDto
+        {
+            ProductId = model.ProductId,
+            UserId = model.UserId,
+            IsActive = model.IsActive,
+            Pagination = model.Pagination
+        }.WithContentPolicy<ProductQuestion, GetAllProductQuestionRequestDto>(model);
+
     public PagedResult<SearchProductQuestionResponse> Map(PagedResult<SearchProductQuestionResponseDto> model)
     {
         var items = model.Items
@@ -37,5 +46,30 @@ public class ProductQuestionMapperService : IProductQuestionMapperService
             .ToList();
 
         return PagedResult<SearchProductQuestionResponse>.Create(items, model);
+    }
+
+    public PagedResult<GetAllProductQuestionResponse> Map(PagedResult<GetAllProductQuestionResponseDto> model)
+    {
+        var items = model.Items
+            .Select(x => new GetAllProductQuestionResponse
+            {
+                Id = x.Id,
+                UserId = x.UserId,
+                ProductId = x.ProductId,
+                ProductTitle = x.ProductTitle,
+                Question = x.Question,
+                Answer = x.Answer,
+                CreatedOnUtc = x.CreatedOnUtc,
+                IsActive = x.IsActive,
+                UserName = x.UserName,
+                UserFirstName = x.UserFirstName,
+                UserLastName = x.UserLastName,
+                AnsweredByFirstName = x.AnsweredByFirstName,
+                AnsweredByLastName = x.AnsweredByLastName,
+                AnsweredByUserName = x.AnsweredByUserName
+            })
+            .ToList();
+
+        return PagedResult<GetAllProductQuestionResponse>.Create(items, model);
     }
 }

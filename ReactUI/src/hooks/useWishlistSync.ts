@@ -6,6 +6,7 @@ import { useIsAuthenticated, useUserStore } from '@/stores/userStore'
 /** Load the user's wishlist from the backend when authenticated. */
 export function useWishlistSync() {
   const isAuthenticated = useIsAuthenticated()
+  const accessToken = useUserStore((state) => state.accessToken)
   const { locale } = useLocaleSettings()
   const loadWishlist = useWishlistStore((state) => state.loadWishlist)
   const clear = useWishlistStore((state) => state.clear)
@@ -18,19 +19,14 @@ export function useWishlistSync() {
       return
     }
 
-    void (async () => {
-      const accessToken = useUserStore.getState().accessToken
-      if (!accessToken || accessToken === 'mock-access-token') return
+    if (!accessToken || accessToken === 'mock-access-token') return
 
-      const syncKey = `${accessToken}:${locale}`
-      if (syncedKeyRef.current === syncKey) return
+    const syncKey = `${accessToken}:${locale}`
+    if (syncedKeyRef.current === syncKey) return
 
-      syncedKeyRef.current = syncKey
-      try {
-        await loadWishlist(accessToken, locale)
-      } catch {
-        syncedKeyRef.current = null
-      }
-    })()
-  }, [clear, isAuthenticated, loadWishlist, locale])
+    syncedKeyRef.current = syncKey
+    void loadWishlist(accessToken, locale).catch(() => {
+      syncedKeyRef.current = null
+    })
+  }, [accessToken, clear, isAuthenticated, loadWishlist, locale])
 }

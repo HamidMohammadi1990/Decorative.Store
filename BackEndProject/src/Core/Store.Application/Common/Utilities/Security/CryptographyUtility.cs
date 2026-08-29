@@ -26,7 +26,7 @@ public static class CryptographyUtility
         aes.Key = key;
         aes.Mode = CipherMode.CBC;
         aes.Padding = PaddingMode.PKCS7;
-        aes.GenerateIV();
+        aes.IV = DeriveDeterministicIv(hashKey, plainBytes);
 
         using var encryptor = aes.CreateEncryptor();
         var cipherBytes = encryptor.TransformFinalBlock(plainBytes, 0, plainBytes.Length);
@@ -96,4 +96,10 @@ public static class CryptographyUtility
 
     private static byte[] DeriveAesKey(string hashKey)
         => SHA256.HashData(Encoding.UTF8.GetBytes(hashKey));
+
+    private static byte[] DeriveDeterministicIv(string hashKey, byte[] plainBytes)
+    {
+        var hash = SHA256.HashData(Encoding.UTF8.GetBytes(hashKey).Concat(plainBytes).ToArray());
+        return hash.AsSpan(0, 16).ToArray();
+    }
 }
