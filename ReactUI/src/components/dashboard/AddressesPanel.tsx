@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import { AddressCard } from '@/components/address/AddressCard'
 import { AddressFormFields } from '@/components/address/AddressFormFields'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
@@ -22,6 +23,7 @@ type PanelMode = 'list' | 'add' | 'edit'
 
 export function AddressesPanel() {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const addresses = useAddressStore((s) => s.addresses)
   const isLoading = useAddressStore((s) => s.isLoading)
   const { isSaving, mutationError, saveAddress, setAsDefault, deleteAddress, clearMutationError } =
@@ -97,6 +99,7 @@ export function AddressesPanel() {
   }
 
   const handleDelete = async (id: string) => {
+    if (!(await confirm({ message: t('address.deleteConfirm') }))) return
     await deleteAddress(id)
   }
 
@@ -173,11 +176,12 @@ export function AddressesPanel() {
           }
         />
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2">
           {addresses.map((address) => (
             <AddressCard
               key={address.id}
               address={address}
+              disabled={isSaving}
               onEdit={() => startEdit(address)}
               onDelete={() => void handleDelete(address.id)}
               onSetDefault={() => void setAsDefault(address)}

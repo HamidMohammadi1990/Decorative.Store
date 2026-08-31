@@ -10,6 +10,8 @@ import {
   adminInputClass,
   resolveAdminMutationError,
 } from '@/components/dashboard/admin/adminFormShared'
+import { AdminListGridHeader } from '@/components/dashboard/admin/AdminListGridHeader'
+import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import type { ProductPanelEmbedProps } from '@/components/dashboard/admin/productPanelEmbed'
 import { embeddedProductLabel } from '@/components/dashboard/admin/productPanelEmbed'
 import { Button } from '@/components/ui/Button'
@@ -261,9 +263,11 @@ export function DashboardProductQuestionsPanel({
             {t('dashboard.productQuestions.itemCount', { count: items.length })}
           </p>
           <ul className="divide-y divide-border rounded-sm border border-border">
-            {items.map((item) => (
+            <AdminListGridHeader />
+            {items.map((item, index) => (
               <li key={item.id} className="px-4 py-4 sm:px-5">
-                <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="flex flex-wrap items-start gap-3">
+                  <AdminRowNumber value={index + 1} />
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium text-text">{item.question}</p>
                     <p className="mt-1 text-xs text-text-muted">

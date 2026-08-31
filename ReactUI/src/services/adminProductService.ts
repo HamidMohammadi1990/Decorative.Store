@@ -14,6 +14,7 @@ import {
   readStringField,
 } from '@/services/api/apiNormalize'
 import {
+  fetchAllAdminPages,
   normalizeAdminPaged,
   normalizeTranslations,
   paginationBody,
@@ -107,6 +108,29 @@ export const adminProductService = {
     )
 
     return normalizeAdminPaged(data, (item) => normalizeProductListItem(item, options.languageId))
+  },
+
+  async getAllPages(
+    accessToken: string,
+    locale: Locale,
+    options: {
+      pageSize?: number
+      languageId?: number
+      title?: string | null
+      productCode?: string | null
+      subCategoryId?: string | null
+    } = {},
+  ): Promise<AdminProductListItem[]> {
+    const pageSize = options.pageSize ?? 100
+    return fetchAllAdminPages(
+      (pageNumber, size) =>
+        this.getAll(accessToken, locale, {
+          ...options,
+          pageNumber,
+          pageSize: size,
+        }),
+      pageSize,
+    )
   },
 
   async get(accessToken: string, locale: Locale, id: string): Promise<AdminProductDetail | null> {

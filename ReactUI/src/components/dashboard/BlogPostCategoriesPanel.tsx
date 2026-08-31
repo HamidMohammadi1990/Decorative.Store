@@ -3,12 +3,18 @@ import { useTranslation } from 'react-i18next'
 import type { AdminBlogPostCategory } from '@/models/admin/blog.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
-import { BlogCategoriesIcon } from '@/components/dashboard/DashboardIcons'
+import { BlogCategoriesIcon, EditIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  AdminGridActions,
+  AdminGridIconButton,
+} from '@/components/dashboard/admin/AdminGridActions'
 import {
   AdminField,
   adminInputClass,
   resolveAdminMutationError,
 } from '@/components/dashboard/admin/adminFormShared'
+import { AdminListGridHeader } from '@/components/dashboard/admin/AdminListGridHeader'
+import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
@@ -264,12 +270,14 @@ export function BlogPostCategoriesPanel() {
             {t('dashboard.blogCategories.itemCount', { count: items.length })}
           </p>
           <ul className="divide-y divide-border rounded-sm border border-border">
-            {items.map((item) => (
+            <AdminListGridHeader />
+            {items.map((item, index) => (
               <li
                 key={item.id}
-                className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5"
+                className="flex flex-wrap items-center gap-3 px-4 py-3 sm:px-5"
               >
-                <div className="min-w-0">
+                <AdminRowNumber value={index + 1} />
+                <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-text">{item.title}</p>
                   <p className="mt-0.5 text-xs text-text-muted" dir="ltr">
                     {item.slug}
@@ -289,14 +297,14 @@ export function BlogPostCategoriesPanel() {
                       ? t('dashboard.blogCategories.statusActive')
                       : t('dashboard.blogCategories.statusInactive')}
                   </span>
-                  <Button
-                    variant="secondary"
-                    className="py-1.5 text-xs"
+                <AdminGridActions>
+                  <AdminGridIconButton
+                    label={t('dashboard.blogCategories.edit')}
+                    icon={<EditIcon size={15} />}
                     onClick={() => openEdit(item)}
                     disabled={saving}
-                  >
-                    {t('dashboard.blogCategories.edit')}
-                  </Button>
+                  />
+                </AdminGridActions>
                 </div>
               </li>
             ))}

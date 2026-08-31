@@ -1,5 +1,6 @@
 import { useOutletContext } from 'react-router-dom'
 import type { DashboardData } from '@/models/dashboard/dashboard.model'
+import { CartPanel } from '@/components/cart/CartPanel'
 import { WalletPanel } from '@/components/dashboard/WalletPanel'
 import { OrdersPanel } from '@/components/dashboard/OrdersPanel'
 import { TransactionsPanel } from '@/components/dashboard/TransactionsPanel'
@@ -42,6 +43,10 @@ function useDashboardContext() {
 export function DashboardWalletPage() {
   const data = useDashboardContext()
   return <WalletPanel wallet={data.wallet} recentTransactions={data.transactions} />
+}
+
+export function DashboardCartPage() {
+  return <CartPanel embedded />
 }
 
 export function DashboardOrdersPage() {

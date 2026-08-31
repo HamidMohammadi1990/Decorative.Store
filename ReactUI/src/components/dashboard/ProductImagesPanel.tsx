@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import type { AdminProductFile, AdminProductListItem } from '@/models/admin/catalog.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
@@ -11,6 +12,8 @@ import {
   resolveAdminMutationError,
 } from '@/components/dashboard/admin/adminFormShared'
 import { AdminContentLanguageField } from '@/components/dashboard/admin/AdminContentLanguageField'
+import { AdminListGridHeader } from '@/components/dashboard/admin/AdminListGridHeader'
+import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import type { ProductPanelEmbedProps } from '@/components/dashboard/admin/productPanelEmbed'
 import { embeddedProductLabel } from '@/components/dashboard/admin/productPanelEmbed'
 import { Button } from '@/components/ui/Button'
@@ -31,6 +34,7 @@ export function ProductImagesPanel({
   productCode: fixedProductCode,
 }: ProductPanelEmbedProps = {}) {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const [searchParams, setSearchParams] = useSearchParams()
   const accessToken = useUserStore((s) => s.accessToken)
   const { locale, loading: languageLoading } = useCurrentLanguageId()
@@ -228,7 +232,7 @@ export function ProductImagesPanel({
 
   const handleDelete = async (id: string) => {
     if (!accessToken || accessToken === 'mock-access-token') return
-    if (!window.confirm(t('dashboard.productImages.deleteConfirm'))) return
+    if (!(await confirm({ message: t('dashboard.productImages.deleteConfirm') }))) return
 
     setSaving(true)
     setError(null)
@@ -388,63 +392,63 @@ export function ProductImagesPanel({
           <p className="text-xs text-text-muted">
             {t('dashboard.productImages.itemCount', { count: items.length })}
           </p>
-          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((item) => (
+          <ul className="divide-y divide-border rounded-sm border border-border">
+            <AdminListGridHeader />
+            {items.map((item, index) => (
               <li
                 key={item.id}
-                className="overflow-hidden rounded-sm border border-border bg-surface shadow-sm"
+                className="flex flex-wrap items-center gap-3 px-4 py-3 sm:px-5"
               >
-                <div className="aspect-[4/3] bg-surface-muted">
+                <AdminRowNumber value={index + 1} />
+                <div className="size-12 shrink-0 overflow-hidden rounded-sm bg-surface-muted">
                   <img
                     src={item.imageUrl}
                     alt={item.title || item.productTitle}
                     className="size-full object-cover"
                   />
                 </div>
-                <div className="space-y-3 p-4">
-                  <div>
-                    <p className="truncate text-sm font-semibold text-text">
-                      {item.title || item.fileName}
-                    </p>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {item.isMain && (
-                        <span className="rounded-sm bg-warm-soft px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-warm">
-                          {t('dashboard.productImages.mainBadge')}
-                        </span>
-                      )}
-                      <span
-                        className={`rounded-sm px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
-                          item.isActive
-                            ? 'bg-warm-soft text-warm'
-                            : 'bg-surface-muted text-text-muted'
-                        }`}
-                      >
-                        {item.isActive
-                          ? t('dashboard.productImages.statusActive')
-                          : t('dashboard.productImages.statusInactive')}
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-text">
+                    {item.title || item.fileName}
+                  </p>
+                  <div className="mt-1.5 flex flex-wrap gap-2">
+                    {item.isMain && (
+                      <span className="rounded-sm bg-warm-soft px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-warm">
+                        {t('dashboard.productImages.mainBadge')}
                       </span>
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    <Button
-                      variant="secondary"
-                      className="py-1.5 text-xs"
-                      onClick={() => void handleToggleStatus(item)}
-                      disabled={saving}
+                    )}
+                    <span
+                      className={`rounded-sm px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                        item.isActive
+                          ? 'bg-warm-soft text-warm'
+                          : 'bg-surface-muted text-text-muted'
+                      }`}
                     >
                       {item.isActive
-                        ? t('dashboard.productImages.hide')
-                        : t('dashboard.productImages.show')}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="py-1.5 text-xs text-sale hover:bg-sale/10"
-                      onClick={() => void handleDelete(item.id)}
-                      disabled={saving}
-                    >
-                      {t('dashboard.productImages.delete')}
-                    </Button>
+                        ? t('dashboard.productImages.statusActive')
+                        : t('dashboard.productImages.statusInactive')}
+                    </span>
                   </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button
+                    variant="secondary"
+                    className="py-1.5 text-xs"
+                    onClick={() => void handleToggleStatus(item)}
+                    disabled={saving}
+                  >
+                    {item.isActive
+                      ? t('dashboard.productImages.hide')
+                      : t('dashboard.productImages.show')}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="py-1.5 text-xs text-sale hover:bg-sale/10"
+                    onClick={() => void handleDelete(item.id)}
+                    disabled={saving}
+                  >
+                    {t('dashboard.productImages.delete')}
+                  </Button>
                 </div>
               </li>
             ))}

@@ -1,8 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode, type TouchEvent } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
-import { StoriesIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  StoriesIcon,
+  EditIcon,
+  DeleteIcon,
+  CommentIcon,
+  EyeIcon,
+  EyeOffIcon,
+} from '@/components/dashboard/DashboardIcons'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { LocalImage } from '@/components/ui/LocalImage'
@@ -10,14 +18,22 @@ import { ScrollArrowButton } from '@/components/ui/ScrollArrowButton'
 import type { UserStoryDraft } from '@/models/stories/story.model'
 import { useUserStoryMutations } from '@/hooks/useUserStoryMutations'
 import { useUserStorySync } from '@/hooks/useUserStorySync'
-import { catalogListingService } from '@/services/catalogListingService'
+import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
+import { adminProductService } from '@/services/adminProductService'
 import { useUserStoryStore } from '@/stores/userStoryStore'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useUserStore } from '@/stores/userStore'
 import {
   groupUserStoriesForDashboard,
   type DashboardStoryGroup,
 } from '@/extensions/groupUserStoriesForDashboard'
 import { StoryGroupCommentsModal } from '@/components/dashboard/StoryGroupCommentsModal'
+import {
+  AdminSearchableSelect,
+  type AdminSearchableSelectOption,
+} from '@/components/dashboard/admin/AdminSearchableSelect'
+import {
+  AdminGridIconButton,
+} from '@/components/dashboard/admin/AdminGridActions'
 
 const SWIPE_THRESHOLD_PX = 48
 
@@ -34,11 +50,19 @@ type StoryMediaDraft = {
   posterSrc?: string
 }
 
+type StoryProductOption = {
+  slug: string
+  title: string
+  productCode: string
+}
+
 export function StoriesPanel() {
   useUserStorySync()
 
   const { t } = useTranslation()
-  const locale = useSettingsStore((s) => s.locale)
+  const confirm = useConfirm()
+  const accessToken = useUserStore((s) => s.accessToken)
+  const { locale, languageId } = useCurrentLanguageId()
   const stories = useUserStoryStore((s) => s.stories)
   const isLoading = useUserStoryStore((s) => s.isLoading)
   const {
@@ -60,28 +84,73 @@ export function StoriesPanel() {
   const [title, setTitle] = useState('')
   const [caption, setCaption] = useState('')
   const [productSlug, setProductSlug] = useState('')
+  const [productSearch, setProductSearch] = useState('')
   const [isActive, setIsActive] = useState(true)
   const [mediaItems, setMediaItems] = useState<StoryMediaDraft[]>([])
   const [error, setError] = useState<string | null>(null)
-  const [products, setProducts] = useState<{ slug: string; title: string }[]>([])
+  const [products, setProducts] = useState<StoryProductOption[]>([])
+  const [productsLoading, setProductsLoading] = useState(false)
   const [commentsGroup, setCommentsGroup] = useState<DashboardStoryGroup | null>(null)
 
   useEffect(() => {
     if (mode === 'list') return
+    if (!accessToken || accessToken === 'mock-access-token') return
 
-    void catalogListingService.getListing('', locale).then((listing) => {
-      const next = listing.products.slice(0, 40).map((item) => ({
-        slug: item.slug,
-        title: item.title,
-      }))
+    const timer = window.setTimeout(() => {
+      setProductsLoading(true)
+      void (async () => {
+        try {
+          const trimmed = productSearch.trim()
+          const items = trimmed
+            ? (
+                await adminProductService.getAll(accessToken, locale, {
+                  title: trimmed,
+                  pageSize: 100,
+                  languageId: languageId ?? undefined,
+                })
+              ).items
+            : await adminProductService.getAllPages(accessToken, locale, {
+                languageId: languageId ?? undefined,
+              })
 
-      if (productSlug && !next.some((item) => item.slug === productSlug)) {
-        next.unshift({ slug: productSlug, title: productSlug })
-      }
+          setProducts(
+            items
+              .filter((item) => item.slug.trim())
+              .map((item) => ({
+                slug: item.slug,
+                title: item.title,
+                productCode: item.productCode,
+              })),
+          )
+        } catch {
+          setProducts([])
+        } finally {
+          setProductsLoading(false)
+        }
+      })()
+    }, 300)
 
-      setProducts(next)
-    })
-  }, [locale, mode, productSlug])
+    return () => window.clearTimeout(timer)
+  }, [accessToken, languageId, locale, mode, productSearch])
+
+  const productSelectOptions = useMemo((): AdminSearchableSelectOption[] => {
+    const options = products.map((item) => ({
+      value: item.slug,
+      label: item.title,
+      hint: item.productCode || undefined,
+    }))
+
+    if (productSlug && !options.some((item) => item.value === productSlug)) {
+      const selected = products.find((item) => item.slug === productSlug)
+      options.unshift(
+        selected
+          ? { value: selected.slug, label: selected.title, hint: selected.productCode || undefined }
+          : { value: productSlug, label: productSlug },
+      )
+    }
+
+    return options
+  }, [productSlug, products])
 
   useEffect(() => {
     if (mode === 'list') {
@@ -90,6 +159,7 @@ export function StoriesPanel() {
       setTitle('')
       setCaption('')
       setProductSlug('')
+      setProductSearch('')
       setIsActive(true)
       setMediaItems([])
       setError(null)
@@ -106,6 +176,7 @@ export function StoriesPanel() {
     setTitle('')
     setCaption('')
     setProductSlug('')
+    setProductSearch('')
     setIsActive(true)
     setMediaItems([])
     setError(null)
@@ -120,6 +191,7 @@ export function StoriesPanel() {
     setTitle(group.title)
     setCaption(group.caption)
     setProductSlug(group.productSlugs[0] ?? '')
+    setProductSearch('')
     setIsActive(group.isActive)
     const items: StoryMediaDraft[] = group.slides.map((slide) => ({
       storyId: slide.id,
@@ -168,7 +240,8 @@ export function StoriesPanel() {
     }
   }
 
-  const removeMediaItem = (index: number) => {
+  const removeMediaItem = async (index: number) => {
+    if (!(await confirm({ message: t('dashboard.stories.removeMediaConfirm') }))) return
     setMediaItems((prev) => prev.filter((_, i) => i !== index))
   }
 
@@ -358,18 +431,20 @@ export function StoriesPanel() {
           </Field>
 
           <Field label={t('dashboard.stories.fieldProduct')}>
-            <select
+            <AdminSearchableSelect
               value={productSlug}
-              onChange={(e) => setProductSlug(e.target.value)}
-              className={inputClass}
-            >
-              <option value="">{t('dashboard.stories.noProduct')}</option>
-              {products.map((p) => (
-                <option key={p.slug} value={p.slug}>
-                  {p.title}
-                </option>
-              ))}
-            </select>
+              onChange={setProductSlug}
+              options={productSelectOptions}
+              loading={productsLoading}
+              disabled={isSaving}
+              placeholder={t('dashboard.stories.noProduct')}
+              searchPlaceholder={t('dashboard.stories.productSearchPlaceholder')}
+              emptyMessage={t('dashboard.stories.productsEmpty')}
+              clearLabel={t('dashboard.stories.noProduct')}
+              loadingLabel={t('dashboard.stories.productsLoading')}
+              searchValue={productSearch}
+              onSearchChange={setProductSearch}
+            />
           </Field>
 
           {mode === 'edit' && (
@@ -440,7 +515,7 @@ export function StoriesPanel() {
       ) : (
         <>
           {mutationError && <p className="mb-4 text-sm text-sale">{mutationError}</p>}
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-3 lg:grid-cols-2">
             {groupedStories.map((group) => (
               <StoryManageCard
                 key={group.id}
@@ -449,7 +524,12 @@ export function StoriesPanel() {
                 onEdit={() => startEditGroup(group)}
                 onComments={() => setCommentsGroup(group)}
                 onToggle={() => void toggleStoryGroup(group.slides)}
-                onDelete={() => void deleteStories(group.slides.map((slide) => slide.id))}
+                onDelete={() => {
+                  void (async () => {
+                    if (!(await confirm({ message: t('dashboard.stories.deleteConfirm') }))) return
+                    await deleteStories(group.slides.map((slide) => slide.id))
+                  })()
+                }}
               />
             ))}
           </div>
@@ -484,61 +564,94 @@ function StoryManageCard({
   const cover = group.slides[0]
 
   return (
-    <article className="overflow-hidden rounded-sm border border-border bg-surface shadow-sm">
-      <div className="relative aspect-[4/3] bg-surface-muted">
-        <StoryManageCardMedia slides={group.slides} title={group.title} />
-        <span
-          className={`absolute start-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide ${
-            group.isActive ? 'bg-accent/90 text-text-inverse' : 'bg-black/50 text-white'
-          }`}
-        >
-          {group.isActive ? t('dashboard.stories.statusActive') : t('dashboard.stories.statusHidden')}
-        </span>
+    <article className="flex gap-3 overflow-hidden rounded-xl border border-border bg-surface p-3 shadow-sm transition-shadow hover:shadow-md sm:gap-4 sm:p-3.5">
+      <div className="relative h-[6.75rem] w-[3.75rem] shrink-0 overflow-hidden rounded-lg bg-surface-muted ring-1 ring-border/60 sm:h-28 sm:w-[4.25rem]">
+        <StoryManageCardMedia slides={group.slides} title={group.title} compact />
         {slideCount > 1 && (
-          <span className="absolute end-3 top-3 rounded-full bg-black/55 px-2.5 py-1 text-[10px] font-semibold text-white">
-            {t('stories.slideCount', { count: slideCount })}
+          <span className="pointer-events-none absolute bottom-1 end-1 z-10 rounded bg-black/60 px-1.5 py-0.5 text-[9px] font-semibold text-white">
+            {slideCount}
           </span>
         )}
       </div>
 
-      <div className="p-4">
-        <h3 className="font-semibold text-text">{group.title}</h3>
-        {group.caption && (
-          <p className="mt-1 line-clamp-2 text-sm text-text-muted">{group.caption}</p>
-        )}
-        <p className="mt-2 text-xs text-text-muted">
-          {slideCount > 1
-            ? t('stories.slideCount', { count: slideCount })
-            : cover.mediaType === 'video'
-              ? t('dashboard.stories.typeVideo')
-              : t('dashboard.stories.typeImage')}
-        </p>
+      <div className="flex min-w-0 flex-1 flex-col justify-between gap-2">
+        <div className="min-w-0 space-y-1">
+          <div className="flex items-start gap-2">
+            <h3 className="min-w-0 flex-1 truncate text-sm font-semibold text-text">{group.title}</h3>
+            <span
+              className={`shrink-0 rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide ${
+                group.isActive ? 'bg-accent/15 text-accent' : 'bg-surface-muted text-text-muted'
+              }`}
+            >
+              {group.isActive ? t('dashboard.stories.statusActive') : t('dashboard.stories.statusHidden')}
+            </span>
+          </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Button variant="secondary" className="py-2 text-xs" onClick={onComments} disabled={disabled}>
-            {t('dashboard.stories.viewComments')}
-          </Button>
-          <Button variant="secondary" className="py-2 text-xs" onClick={onEdit} disabled={disabled}>
-            {t('dashboard.stories.edit')}
-          </Button>
-          <Button variant="secondary" className="py-2 text-xs" onClick={onToggle} disabled={disabled}>
-            {group.isActive ? t('dashboard.stories.hide') : t('dashboard.stories.show')}
-          </Button>
-          <Button
-            variant="ghost"
-            className="py-2 text-xs text-sale hover:bg-sale/10"
+          {group.caption ? (
+            <p className="line-clamp-1 text-xs text-text-muted">{group.caption}</p>
+          ) : (
+            <p className="text-xs text-text-muted">
+              {slideCount > 1
+                ? t('stories.slideCount', { count: slideCount })
+                : cover.mediaType === 'video'
+                  ? t('dashboard.stories.typeVideo')
+                  : t('dashboard.stories.typeImage')}
+            </p>
+          )}
+
+          <div className="flex flex-wrap items-center gap-3 text-xs text-text-muted">
+            <span className="inline-flex items-center gap-1 tabular-nums">
+              <HeartIcon />
+              {group.likeCount}
+            </span>
+            <span className="inline-flex items-center gap-1 tabular-nums">
+              <CommentIcon size={14} className="text-text-muted" />
+              {group.commentCount}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-1.5">
+          <AdminGridIconButton
+            label={t('dashboard.stories.viewComments')}
+            icon={<CommentIcon size={15} />}
+            onClick={onComments}
+            disabled={disabled}
+          />
+          <AdminGridIconButton
+            label={t('dashboard.stories.edit')}
+            icon={<EditIcon size={15} />}
+            onClick={onEdit}
+            disabled={disabled}
+          />
+          <AdminGridIconButton
+            label={group.isActive ? t('dashboard.stories.hide') : t('dashboard.stories.show')}
+            icon={group.isActive ? <EyeOffIcon size={15} /> : <EyeIcon size={15} />}
+            onClick={onToggle}
+            disabled={disabled}
+          />
+          <AdminGridIconButton
+            label={t('dashboard.stories.delete')}
+            icon={<DeleteIcon size={15} />}
             onClick={onDelete}
             disabled={disabled}
-          >
-            {t('dashboard.stories.delete')}
-          </Button>
+            tone="danger"
+          />
         </div>
       </div>
     </article>
   )
 }
 
-function StoryManageCardMedia({ slides, title }: { slides: UserStoryDraft[]; title: string }) {
+function StoryManageCardMedia({
+  slides,
+  title,
+  compact = false,
+}: {
+  slides: UserStoryDraft[]
+  title: string
+  compact?: boolean
+}) {
   const { t } = useTranslation()
   const [index, setIndex] = useState(0)
   const touchStartX = useRef(0)
@@ -616,27 +729,31 @@ function StoryManageCardMedia({ slides, title }: { slides: UserStoryDraft[]; tit
         </div>
       </div>
 
-      <div className="absolute inset-y-0 start-0 z-10 flex items-center ps-2">
-        <ScrollArrowButton
-          direction="prev"
-          label={t('product.prevImage')}
-          disabled={index === 0}
-          onClick={goPrev}
-          className="size-8 bg-surface/95 shadow-md backdrop-blur-sm"
-        />
-      </div>
-      <div className="absolute inset-y-0 end-0 z-10 flex items-center pe-2">
-        <ScrollArrowButton
-          direction="next"
-          label={t('product.nextImage')}
-          disabled={index === slideCount - 1}
-          onClick={goNext}
-          className="size-8 bg-surface/95 shadow-md backdrop-blur-sm"
-        />
-      </div>
-      <span className="absolute bottom-3 end-3 z-10 rounded-full bg-black/55 px-2.5 py-1 text-xs font-medium text-white">
-        {index + 1} / {slideCount}
-      </span>
+      {!compact && (
+        <>
+          <div className="absolute inset-y-0 start-0 z-10 flex items-center ps-2">
+            <ScrollArrowButton
+              direction="prev"
+              label={t('product.prevImage')}
+              disabled={index === 0}
+              onClick={goPrev}
+              className="size-8 bg-surface/95 shadow-md backdrop-blur-sm"
+            />
+          </div>
+          <div className="absolute inset-y-0 end-0 z-10 flex items-center pe-2">
+            <ScrollArrowButton
+              direction="next"
+              label={t('product.nextImage')}
+              disabled={index === slideCount - 1}
+              onClick={goNext}
+              className="size-8 bg-surface/95 shadow-md backdrop-blur-sm"
+            />
+          </div>
+          <span className="absolute bottom-3 end-3 z-10 rounded-full bg-black/55 px-2.5 py-1 text-xs font-medium text-white">
+            {index + 1} / {slideCount}
+          </span>
+        </>
+      )}
     </div>
   )
 }
@@ -662,6 +779,18 @@ function UploadIcon() {
         strokeWidth="1.6"
         strokeLinecap="round"
         strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function HeartIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" className="text-sale" aria-hidden>
+      <path
+        d="M10 17s-6.5-4.2-6.5-8.5C3.5 6.2 5.4 4.5 7.5 4.5c1.2 0 2.3.6 3 1.5.7-.9 1.8-1.5 3-1.5 2.1 0 3.9 1.7 3.9 4 0 4.3-6.5 8.5-6.5 8.5z"
+        stroke="currentColor"
+        strokeWidth="1.4"
       />
     </svg>
   )

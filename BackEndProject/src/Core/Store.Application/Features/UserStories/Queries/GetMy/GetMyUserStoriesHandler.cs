@@ -11,7 +11,9 @@ public class GetMyUserStoriesHandler
         ICurrentUserContext currentUser,
         ICurrentLanguageContext languageContext,
         ILanguageRegistry languageRegistry,
-        IUserStoryRepository userStoryRepository)
+        IUserStoryRepository userStoryRepository,
+        IUserStoryLikeRepository userStoryLikeRepository,
+        IUserStoryCommentRepository userStoryCommentRepository)
     : IRequestHandler<GetMyUserStoriesRequest, OperationResult<GetMyUserStoriesResponse>>
 {
     public async Task<OperationResult<GetMyUserStoriesResponse>> Handle(
@@ -24,6 +26,10 @@ public class GetMyUserStoriesHandler
             languageContext.LanguageId,
             defaultLanguage.Id,
             cancellationToken);
+
+        var storyIds = stories.Select(x => x.Id).ToList();
+        var likeCounts = await userStoryLikeRepository.GetLikeCountsByStoryIdsAsync(storyIds, cancellationToken);
+        var commentCounts = await userStoryCommentRepository.GetApprovedCommentCountsByStoryIdsAsync(storyIds, cancellationToken);
 
         return new GetMyUserStoriesResponse
         {
@@ -39,6 +45,8 @@ public class GetMyUserStoriesHandler
                 ProductSlug = x.ProductSlug,
                 IsActive = x.IsActive,
                 CreatedOnUtc = x.CreatedOnUtc,
+                LikeCount = likeCounts.GetValueOrDefault(x.Id),
+                CommentCount = commentCounts.GetValueOrDefault(x.Id),
             }).ToList(),
         };
     }

@@ -10,6 +10,8 @@ export interface DashboardStoryGroup {
   isActive: boolean
   productSlugs: string[]
   createdAt: string
+  likeCount: number
+  commentCount: number
 }
 
 function withinBatch(createdAtA: string, createdAtB: string) {
@@ -41,6 +43,8 @@ export function groupUserStoriesForDashboard(stories: UserStoryDraft[]): Dashboa
     if (existing) {
       existing.slides.push(story)
       existing.slides.sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+      existing.likeCount += story.likeCount ?? 0
+      existing.commentCount += story.commentCount ?? 0
       continue
     }
 
@@ -52,6 +56,8 @@ export function groupUserStoriesForDashboard(stories: UserStoryDraft[]): Dashboa
       isActive: story.isActive,
       productSlugs: story.productSlugs,
       createdAt: story.createdAt,
+      likeCount: story.likeCount ?? 0,
+      commentCount: story.commentCount ?? 0,
     })
   }
 

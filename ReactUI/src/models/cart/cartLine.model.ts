@@ -5,6 +5,7 @@ import type { Money } from '@/models/shared/money.model'
 export interface CartLine {
   lineId: string
   sku: string
+  slug?: string
   title: string
   image: ImageAsset
   unitPrice: Money

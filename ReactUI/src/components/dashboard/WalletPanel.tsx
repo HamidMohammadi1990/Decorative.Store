@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import type { WalletInfo, DashboardTransaction } from '@/models/dashboard/dashboard.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
+import { AdminListGridHeader } from '@/components/dashboard/admin/AdminListGridHeader'
+import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import { DashboardStatCard } from '@/components/dashboard/DashboardStatCard'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
 import { DashboardSection } from '@/components/dashboard/DashboardSection'
@@ -95,12 +97,14 @@ export function WalletPanel({ wallet, recentTransactions }: WalletPanelProps) {
           </div>
         ) : (
           <ul className="divide-y divide-border">
-            {recentTransactions.slice(0, 5).map((tx) => (
+            <AdminListGridHeader contentLabel={t('dashboard.transactions.colDescription')} />
+            {recentTransactions.slice(0, 5).map((tx, index) => (
               <li
                 key={tx.id}
-                className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-surface-muted/40 sm:px-6"
+                className="flex items-center gap-3 px-5 py-4 transition-colors hover:bg-surface-muted/40 sm:px-6"
               >
-                <div className="flex min-w-0 items-center gap-3">
+                <AdminRowNumber value={index + 1} />
+                <div className="flex min-w-0 flex-1 items-center gap-3">
                   <span
                     className={`flex size-9 shrink-0 items-center justify-center rounded-sm text-sm font-semibold ${
                       tx.type === 'credit'

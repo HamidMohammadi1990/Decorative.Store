@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import { CompareButton } from '@/components/compare/CompareButton'
 import { AddToBagButton } from '@/components/cart/AddToBagButton'
 import { CompareIcon } from '@/components/compare/CompareIcon'
@@ -21,6 +22,7 @@ import type { CompareRow } from '@/models/catalog/compare.model'
 
 export function ComparePage() {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const { currency } = useLocaleSettings()
   const slugs = useCompareStore((s) => s.slugs)
   const remove = useCompareStore((s) => s.remove)
@@ -33,6 +35,16 @@ export function ComparePage() {
   )
 
   const bestPriceIndex = useMemo(() => findBestPriceIndex(products), [products])
+
+  const handleClear = async () => {
+    if (!(await confirm({ message: t('compare.clearConfirm') }))) return
+    clear()
+  }
+
+  const handleRemove = async (slug: string, title: string) => {
+    if (!(await confirm({ message: t('compare.removeConfirm', { title }) }))) return
+    remove(slug)
+  }
 
   const emptySlots = Math.max(0, MAX_COMPARE_PRODUCTS - products.length)
 
@@ -72,7 +84,7 @@ export function ComparePage() {
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                onClick={clear}
+                onClick={() => void handleClear()}
                 className="text-sm font-medium text-text-muted hover:text-text"
               >
                 {t('compare.clearAll')}
@@ -109,7 +121,7 @@ export function ComparePage() {
                     key={product.slug}
                     product={product}
                     isBestPrice={bestPriceIndex === index}
-                    onRemove={() => remove(product.slug)}
+                    onRemove={() => void handleRemove(product.slug, product.title)}
                   />
                 ))}
                 {Array.from({ length: emptySlots }, (_, i) => (

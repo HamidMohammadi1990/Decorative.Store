@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { AdminPagination, type AdminPaginationProps } from '@/components/dashboard/admin/AdminPagination'
+import { ADMIN_ROW_NUMBER_CLASS, getAdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import { InlineLoading } from '@/components/ui/Spinner'
 
 export interface AdminDataGridColumn<T> {
@@ -20,6 +22,7 @@ export interface AdminDataGridProps<T> {
   pagination?: Omit<AdminPaginationProps, 'disabled'>
   emptyState?: ReactNode
   className?: string
+  showRowNumbers?: boolean
 }
 
 function alignClass(align: AdminDataGridColumn<unknown>['align']) {
@@ -37,8 +40,11 @@ export function AdminDataGrid<T>({
   pagination,
   emptyState,
   className = '',
+  showRowNumbers = true,
 }: AdminDataGridProps<T>) {
+  const { t } = useTranslation()
   const showPagination = pagination && pagination.totalCount > 0
+  const columnCount = columns.length + (showRowNumbers ? 1 : 0)
 
   return (
     <div
@@ -48,6 +54,14 @@ export function AdminDataGrid<T>({
         <table className="w-full min-w-[32rem] border-collapse text-sm">
           <thead>
             <tr className="border-b border-border bg-surface-muted/50">
+              {showRowNumbers && (
+                <th
+                  scope="col"
+                  className={`w-12 px-3 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted sm:px-4`}
+                >
+                  {t('common.grid.row')}
+                </th>
+              )}
               {columns.map((column) => (
                 <th
                   key={column.id}
@@ -62,24 +76,31 @@ export function AdminDataGrid<T>({
           <tbody className="divide-y divide-border/80">
             {loading && rows.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-16 text-center sm:px-5">
+                <td colSpan={columnCount} className="px-4 py-16 text-center sm:px-5">
                   <InlineLoading label={loadingLabel} />
                 </td>
               </tr>
             ) : rows.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-12 text-center sm:px-5">
+                <td colSpan={columnCount} className="px-4 py-12 text-center sm:px-5">
                   {emptyState ?? (
                     <p className="text-sm text-text-muted">—</p>
                   )}
                 </td>
               </tr>
             ) : (
-              rows.map((row) => (
+              rows.map((row, index) => (
                 <tr
                   key={rowKey(row)}
                   className="transition-colors hover:bg-surface-muted/40"
                 >
+                  {showRowNumbers && (
+                    <td
+                      className={`px-3 py-3.5 align-middle sm:px-4 ${ADMIN_ROW_NUMBER_CLASS}`}
+                    >
+                      {getAdminRowNumber(index, pagination)}
+                    </td>
+                  )}
                   {columns.map((column) => (
                     <td
                       key={column.id}

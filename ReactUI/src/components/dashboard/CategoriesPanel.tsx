@@ -1,9 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import type { AdminCategory } from '@/models/admin/catalog.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
-import { CategoriesIcon } from '@/components/dashboard/DashboardIcons'
+import { CategoriesIcon, EditIcon, DeleteIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  AdminGridActions,
+  AdminGridIconButton,
+} from '@/components/dashboard/admin/AdminGridActions'
 import { AdminDataGrid } from '@/components/dashboard/admin/AdminDataGrid'
 import { AdminContentLanguageField } from '@/components/dashboard/admin/AdminContentLanguageField'
 import { TranslationLocaleBadges } from '@/components/dashboard/admin/TranslationLocaleBadges'
@@ -26,6 +31,7 @@ type Mode = 'list' | 'create' | 'edit'
 
 export function CategoriesPanel() {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const accessToken = useUserStore((s) => s.accessToken)
   const { languageId, locale, loading: languageLoading } = useCurrentLanguageId()
   const { languages } = useStoreLanguages()
@@ -183,7 +189,7 @@ export function CategoriesPanel() {
 
   const handleDelete = async (id: string) => {
     if (!accessToken || accessToken === 'mock-access-token') return
-    if (!window.confirm(t('dashboard.categories.deleteConfirm'))) return
+    if (!(await confirm({ message: t('dashboard.categories.deleteConfirm') }))) return
 
     setSaving(true)
     try {
@@ -395,24 +401,21 @@ export function CategoriesPanel() {
                 header: '',
                 align: 'right',
                 cell: (item) => (
-                  <div className="flex flex-wrap justify-end gap-2">
-                    <Button
-                      variant="secondary"
-                      className="py-1.5 text-xs"
+                  <AdminGridActions>
+                    <AdminGridIconButton
+                      label={t('dashboard.categories.edit')}
+                      icon={<EditIcon size={15} />}
                       onClick={() => openEdit(item)}
                       disabled={saving}
-                    >
-                      {t('dashboard.categories.edit')}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="py-1.5 text-xs text-sale hover:bg-sale/10"
+                    />
+                    <AdminGridIconButton
+                      label={t('dashboard.categories.delete')}
+                      icon={<DeleteIcon size={15} />}
+                      tone="danger"
                       onClick={() => void handleDelete(item.id)}
                       disabled={saving}
-                    >
-                      {t('dashboard.categories.delete')}
-                    </Button>
-                  </div>
+                    />
+                  </AdminGridActions>
                 ),
               },
             ]}

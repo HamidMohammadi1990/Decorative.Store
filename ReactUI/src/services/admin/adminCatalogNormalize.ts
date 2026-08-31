@@ -101,6 +101,24 @@ export function paginationBody(pageNumber = 1, pageSize = 50) {
   return { pageNumber, pageSize }
 }
 
+export async function fetchAllAdminPages<T>(
+  fetchPage: (pageNumber: number, pageSize: number) => Promise<AdminPagedResult<T>>,
+  pageSize = 100,
+): Promise<T[]> {
+  const items: T[] = []
+  let pageNumber = 1
+  let totalPages = 1
+
+  do {
+    const page = await fetchPage(pageNumber, pageSize)
+    items.push(...page.items)
+    totalPages = page.totalPages
+    pageNumber += 1
+  } while (pageNumber <= totalPages)
+
+  return items
+}
+
 export function slugifyTitle(value: string): string {
   return value
     .trim()

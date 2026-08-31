@@ -24,6 +24,9 @@
     "emptyCartMessage": "You haven't added anything yet. Explore our collections and find pieces you'll love.",
     "quantity": "Qty",
     "remove": "Remove",
+    "cancel": "Cancel",
+    "confirmDeleteTitle": "Confirm deletion",
+    "confirmDelete": "Delete",
     "subtotal": "Subtotal",
     "toman": "Toman",
     "checkout": "Checkout",
@@ -46,6 +49,11 @@
       "previous": "Previous page",
       "next": "Next page",
       "pageOf": "Page {{page}} of {{total}}"
+    },
+    "grid": {
+      "row": "#",
+      "content": "Item",
+      "actions": "Actions"
     }
   },
   "lightbox": {
@@ -89,8 +97,10 @@
     "inCompare": "In compare",
     "remove": "Remove from compare",
     "removeProduct": "Remove product",
+    "removeConfirm": "Remove \"{{title}}\" from compare?",
     "open": "Compare now",
     "clearAll": "Clear all",
+    "clearConfirm": "Remove all products from compare?",
     "maxReached": "You can compare up to 4 products",
     "floatingTitle": "{{count}} of {{max}} selected",
     "floatingHint": "Ready to compare side by side",
@@ -128,6 +138,35 @@
     "signInRequired": "Sign in to add items to your bag",
     "viewProductToOrder": "View & order"
   },
+  "cartPage": {
+    "title": "Shopping bag",
+    "eyebrow": "Your order",
+    "breadcrumbLabel": "Breadcrumb",
+    "breadcrumbHome": "Home",
+    "loading": "Loading your bag…",
+    "loadFailed": "Could not load your bag. Please try again.",
+    "updateFailed": "Could not update your bag. Please try again.",
+    "orderSummary": "Order summary",
+    "orderRef": "Ref. {{code}}",
+    "colProduct": "Product",
+    "colUnitPrice": "Unit price",
+    "colTotal": "Line total",
+    "colRemove": "Remove",
+    "productRef": "Ref. {{id}}",
+    "discount": "Discount",
+    "estimatedShipping": "Est. shipping",
+    "estimatedTotal": "Est. total",
+    "totalsNote": "Shipping and tax are estimated. Final amounts are confirmed at checkout.",
+    "freeShippingRemaining": "Add {{amount}} more for free standard delivery",
+    "freeShippingUnlocked": "You qualify for free standard delivery",
+    "clearCart": "Clear bag",
+    "removeConfirm": "Remove \"{{title}}\" from your bag?",
+    "clearConfirm": "Remove all items from your bag?",
+    "viewFullCart": "View bag details",
+    "secureCheckout": "Secure checkout with encrypted payment",
+    "deliveryEstimate": "Standard delivery in 5–7 business days",
+    "easyReturns": "Easy returns within 30 days"
+  },
   "roomLayout": {
     "eyebrow": "Room studio",
     "title": "Plan your space",
@@ -153,6 +192,8 @@
     "rotateRight": "Rotate right",
     "bringFront": "Bring forward",
     "remove": "Remove",
+    "removeConfirm": "Remove this piece from the layout?",
+    "clearConfirm": "Clear the entire layout?",
     "goCheckout": "Continue to checkout",
     "canvasEyebrow": "Your room",
     "canvasHint": "Drag pieces to position them. Tap a piece to adjust it.",
@@ -451,7 +492,8 @@
     "label": "Account menu",
     "guestTitle": "Welcome",
     "guestDescription": "Sign in or create an account to manage orders and your profile.",
-    "viewDashboard": "Go to dashboard"
+    "viewDashboard": "Go to dashboard",
+    "cart": "Shopping bag"
   },
   "auth": {
     "backToShop": "Continue shopping",
@@ -638,6 +680,7 @@
     "cancel": "Cancel",
     "edit": "Edit",
     "delete": "Delete",
+    "deleteConfirm": "Remove this address?",
     "makeDefault": "Set as default",
     "defaultBadge": "Default",
     "labelField": "Address label",
@@ -673,6 +716,7 @@
     },
     "nav": {
       "wallet": "Wallet",
+      "cart": "Shopping bag",
       "orders": "Orders",
       "transactions": "Transactions",
       "reviews": "Reviews",
@@ -725,6 +769,10 @@
       "topUp": "Top up wallet",
       "withdraw": "Withdraw",
       "recentTitle": "Recent activity"
+    },
+    "cart": {
+      "title": "Shopping bag",
+      "description": "{{count}} items in your bag — review details before checkout."
     },
     "orders": {
       "title": "Orders",
@@ -819,7 +867,12 @@
       "clearFailed": "Could not clear your wishlist. Please try again.",
       "loading": "Loading wishlist…",
       "loadFailed": "Could not load wishlist products.",
-      "retry": "Try again"
+      "retry": "Try again",
+      "viewProduct": "View product",
+      "remove": "Remove from wishlist",
+      "removeConfirm": "Remove \"{{title}}\" from your wishlist?",
+      "clearConfirm": "Clear your entire wishlist?",
+      "ratingSummary": "{{rating}} / 5 · {{count}} reviews"
     },
     "stories": {
       "title": "My stories",
@@ -845,6 +898,9 @@
       "uploadFormats": "JPG, PNG, MP4 · max {{max}} MB",
       "replaceMediaHint": "Tap again to replace the media file.",
       "noProduct": "No product link",
+      "productSearchPlaceholder": "Search products by title, code, or slug…",
+      "productsLoading": "Loading products…",
+      "productsEmpty": "No products found.",
       "publish": "Publish story",
       "saveChanges": "Save changes",
       "publishLive": "Show on homepage",
@@ -859,10 +915,14 @@
       "hide": "Hide",
       "show": "Show",
       "delete": "Delete",
+      "deleteConfirm": "Delete this story?",
+      "removeMediaConfirm": "Remove this slide from the story?",
       "saveFailed": "Could not save your story. Please try again.",
       "deleteFailed": "Could not delete your story. Please try again.",
       "uploadFailed": "Could not upload the file. Please try again.",
       "viewComments": "Comments",
+      "likeCount": "{{count}} likes",
+      "commentCount": "{{count}} comments",
       "commentsModalTitle": "Story comments",
       "commentsModalDescription": "Review and approve comments for “{{title}}”.",
       "commentsEmpty": "No comments for this story yet."
@@ -919,6 +979,7 @@
       "moveUp": "Move up",
       "moveDown": "Move down",
       "deleteQuestion": "Delete",
+      "deleteQuestionConfirm": "Delete this question?",
       "questionType": "Question type",
       "required": "Required",
       "requiredHint": "Required for reward",
@@ -929,6 +990,7 @@
       "addOption": "Add option",
       "optionValue": "Option value",
       "deleteOption": "Remove",
+      "deleteOptionConfirm": "Delete this option?",
       "types": {
         "text": "Short text",
         "textarea": "Long text",
@@ -1030,7 +1092,16 @@
       "colStatus": "Status",
       "colActions": "Actions",
       "statusActive": "Active",
-      "statusInactive": "Inactive"
+      "statusInactive": "Inactive",
+      "assignRoles": "Assign roles",
+      "rolesModalTitle": "Assign roles to user",
+      "rolesModalDescription": "Select roles for {{name}}.",
+      "rolesLoading": "Loading roles…",
+      "rolesLoadFailed": "Could not load user roles.",
+      "rolesSave": "Save roles",
+      "rolesSaving": "Saving…",
+      "rolesSaveFailed": "Could not save roles.",
+      "rolesEmpty": "No roles available to assign."
     },
     "roles": {
       "title": "Role management",
@@ -1063,7 +1134,18 @@
       "colStatus": "Status",
       "colActions": "Actions",
       "statusActive": "Active",
-      "statusInactive": "Inactive"
+      "statusInactive": "Inactive",
+      "permissions": "Permissions",
+      "permissionsTitle": "Manage role permissions",
+      "permissionsDescription": "Select and save permissions for “{{role}}”.",
+      "permissionsSearch": "Search permissions…",
+      "permissionsLoading": "Loading permissions…",
+      "permissionsLoadFailed": "Could not load permissions.",
+      "permissionsSave": "Save permissions",
+      "permissionsSaving": "Saving…",
+      "permissionsSaveFailed": "Could not save permissions.",
+      "permissionsEmpty": "No permissions found.",
+      "permissionsOtherGroup": "Other"
     },
     "subCategories": {
       "title": "Subcategories",
@@ -1135,6 +1217,7 @@
       "cancel": "Cancel",
       "edit": "Edit",
       "delete": "Delete",
+      "manage": "Manage",
       "images": "Images",
       "properties": "Properties",
       "descriptions": "Descriptions",

@@ -93,4 +93,9 @@ public class UserStoryCommentRepository
 
         return counts.ToDictionary(x => x.UserStoryId, x => x.Count);
     }
+
+    public Task DeleteByStoryIdAsync(int userStoryId, CancellationToken cancellationToken = default)
+        => Context.UserStoryComment
+            .Where(x => x.UserStoryId == userStoryId)
+            .ExecuteDeleteAsync(cancellationToken);
 }

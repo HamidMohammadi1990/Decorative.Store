@@ -51,6 +51,11 @@ public class OrderController
         => await mediator.Send(request);
 
     [Authorize]
+    [HttpPatch("cart/items")]
+    public async Task<ApiResult<GetCartResponse>> UpdateCartItemQuantity(UpdateCartItemQuantityRequest request)
+        => await mediator.Send(request);
+
+    [Authorize]
     [HttpPost("purchase")]
     public async Task<ApiResult<PurchaseOrderResponse>> Purchase(PurchaseOrderRequest request)
         => await mediator.Send(request);

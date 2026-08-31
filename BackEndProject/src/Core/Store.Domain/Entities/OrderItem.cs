@@ -55,6 +55,25 @@ public class OrderItem : BaseEntity
             IsNeedToDesign = false,
         };
 
+    public void AddQuantity(int amount)
+    {
+        if (amount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(amount));
+
+        Quantity += amount;
+    }
+
+    public void SetQuantity(int quantity)
+    {
+        if (quantity <= 0)
+            throw new ArgumentOutOfRangeException(nameof(quantity));
+
+        Quantity = quantity;
+    }
+
+    public bool IsQuickAddItem()
+        => OrderItemProperties.Count == 0 && OrderItemAttachments.Count == 0;
+
     public void AddProperties(List<OrderItemProperty> orderItemProperties)
     {
         foreach (var orderItemProperty in orderItemProperties)

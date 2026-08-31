@@ -13,7 +13,7 @@ export function useCartSync() {
   const syncedTokenRef = useRef<string | null>(null)
 
   useEffect(() => {
-    if (location.pathname === '/checkout') return
+    if (location.pathname === '/checkout' || location.pathname === '/cart' || location.pathname.startsWith('/account/dashboard/cart')) return
 
     if (!isAuthenticated) {
       syncedTokenRef.current = null

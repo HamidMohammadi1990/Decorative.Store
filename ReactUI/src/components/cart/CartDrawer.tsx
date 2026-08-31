@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
+import { useCartMutations } from '@/hooks/useCartMutations'
 import { useCartStore } from '@/stores/cartStore'
 import { CartEmptyState } from '@/components/cart/CartEmptyState'
 import { CartLineItem } from '@/components/cart/CartLineItem'
@@ -10,12 +12,17 @@ import { CloseIcon } from '@/components/ui/CloseIcon'
 
 export function CartDrawer() {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const { currency } = useLocaleSettings()
   const lines = useCartStore((s) => s.lines)
   const isOpen = useCartStore((s) => s.isOpen)
   const closeCart = useCartStore((s) => s.closeCart)
-  const removeLine = useCartStore((s) => s.removeLine)
-  const updateQuantity = useCartStore((s) => s.updateQuantity)
+  const { removeLine, updateQuantity } = useCartMutations()
+
+  const handleRemoveLine = async (lineId: string, title: string) => {
+    if (!(await confirm({ message: t('cartPage.removeConfirm', { title }) }))) return
+    await removeLine(lineId)
+  }
 
   if (!isOpen) return null
 
@@ -69,8 +76,8 @@ export function CartDrawer() {
                   key={line.lineId}
                   line={line}
                   currency={currency}
-                  onRemove={() => removeLine(line.lineId)}
-                  onUpdateQuantity={(quantity) => updateQuantity(line.lineId, quantity)}
+                  onRemove={() => void handleRemoveLine(line.lineId, line.title)}
+                  onUpdateQuantity={(quantity) => void updateQuantity(line.lineId, quantity)}
                 />
               ))}
             </ul>
@@ -93,6 +100,14 @@ export function CartDrawer() {
               <Button variant="warm" className="w-full py-3 font-semibold">
                 {t('common.checkout')}
               </Button>
+            </Link>
+
+            <Link
+              to="/account/dashboard/cart"
+              onClick={closeCart}
+              className="mt-2 block w-full py-2 text-center text-sm font-medium text-warm transition-colors hover:text-warm-hover"
+            >
+              {t('cartPage.viewFullCart')}
             </Link>
 
             {lines.length > 0 && (

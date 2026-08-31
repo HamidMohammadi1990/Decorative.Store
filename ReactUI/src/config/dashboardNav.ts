@@ -15,6 +15,7 @@ import {
   CmsSectionsIcon,
   CmsSectionTypesIcon,
   CouponsIcon,
+  CartIcon,
   OrdersIcon,
   ProductsIcon,
   PropertyCategoriesIcon,
@@ -59,6 +60,7 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
     icon: AccountIcon,
     items: [
       { section: 'wallet', path: '/account/dashboard/wallet', icon: WalletIcon },
+      { section: 'cart', path: '/account/dashboard/cart', icon: CartIcon },
       { section: 'orders', path: '/account/dashboard/orders', icon: OrdersIcon },
       { section: 'transactions', path: '/account/dashboard/transactions', icon: TransactionsIcon },
       { section: 'reviews', path: '/account/dashboard/reviews', icon: ReviewsIcon },

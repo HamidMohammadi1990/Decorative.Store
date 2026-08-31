@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import { Button } from '@/components/ui/Button'
 import {
   isSelectType,
@@ -221,7 +222,18 @@ function QuestionEditor({
   onRemoveOption: (optionIndex: number) => void
 }) {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const showOptions = isSelectType(question.type)
+
+  const handleRemoveQuestion = async () => {
+    if (!(await confirm({ message: t('dashboard.adminProfile.deleteQuestionConfirm') }))) return
+    onRemove()
+  }
+
+  const handleRemoveOption = async (optionIndex: number) => {
+    if (!(await confirm({ message: t('dashboard.adminProfile.deleteOptionConfirm') }))) return
+    onRemoveOption(optionIndex)
+  }
 
   return (
     <article className="rounded-sm border border-border bg-surface p-4 shadow-sm sm:p-5">
@@ -251,7 +263,7 @@ function QuestionEditor({
           </button>
           <button
             type="button"
-            onClick={onRemove}
+            onClick={() => void handleRemoveQuestion()}
             className="rounded-sm border border-sale/30 px-2 py-1 text-xs text-sale hover:bg-sale/5"
           >
             {t('dashboard.adminProfile.deleteQuestion')}
@@ -388,7 +400,7 @@ function QuestionEditor({
                 </div>
                 <button
                   type="button"
-                  onClick={() => onRemoveOption(optionIndex)}
+                  onClick={() => void handleRemoveOption(optionIndex)}
                   className="self-end rounded-sm px-2 py-1 text-xs text-sale hover:bg-sale/5 lg:self-center"
                 >
                   {t('dashboard.adminProfile.deleteOption')}

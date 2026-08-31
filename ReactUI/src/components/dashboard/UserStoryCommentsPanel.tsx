@@ -9,6 +9,8 @@ import {
   adminInputClass,
   resolveAdminMutationError,
 } from '@/components/dashboard/admin/adminFormShared'
+import { AdminListGridHeader } from '@/components/dashboard/admin/AdminListGridHeader'
+import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
@@ -188,47 +190,49 @@ export function UserStoryCommentsPanel() {
           <p className="text-sm text-text-muted">
             {t('dashboard.userStoryComments.itemCount', { count: items.length })}
           </p>
-          {items.map((item) => (
-            <article
-              key={item.id}
-              className="rounded-2xl border border-border bg-surface p-4 shadow-sm"
-            >
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div className="min-w-0">
+          <ul className="divide-y divide-border rounded-sm border border-border">
+            <AdminListGridHeader />
+            {items.map((item, index) => (
+              <li
+                key={item.id}
+                className="flex flex-wrap items-start gap-3 px-4 py-3 sm:px-5"
+              >
+                <AdminRowNumber value={index + 1} />
+                <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-text">
                     {item.authorName || t('dashboard.userStoryComments.unknownAuthor')}
                   </p>
-                  <p className="mt-1 text-xs text-text-muted">{item.userStoryTitle}</p>
+                  <p className="mt-0.5 text-xs text-text-muted">{item.userStoryTitle}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-text">
+                    {truncateText(item.content)}
+                  </p>
                 </div>
-                <span
-                  className={`rounded-full px-2.5 py-1 text-xs font-medium ${
-                    item.isApproved
-                      ? 'bg-success/10 text-success'
-                      : 'bg-warm-soft text-warm'
-                  }`}
-                >
-                  {item.isApproved
-                    ? t('dashboard.userStoryComments.statusApproved')
-                    : t('dashboard.userStoryComments.statusPending')}
-                </span>
-              </div>
-              <p className="mt-3 text-sm leading-relaxed text-text">
-                {truncateText(item.content)}
-              </p>
-              {!item.isApproved && (
-                <div className="mt-4">
-                  <Button
-                    type="button"
-                    size="sm"
-                    disabled={saving}
-                    onClick={() => void handleApprove(item.id)}
+                <div className="flex flex-wrap items-center gap-2">
+                  <span
+                    className={`rounded-sm px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                      item.isApproved
+                        ? 'bg-warm-soft text-warm'
+                        : 'bg-surface-muted text-text-muted'
+                    }`}
                   >
-                    {t('dashboard.userStoryComments.approve')}
-                  </Button>
+                    {item.isApproved
+                      ? t('dashboard.userStoryComments.statusApproved')
+                      : t('dashboard.userStoryComments.statusPending')}
+                  </span>
+                  {!item.isApproved && (
+                    <Button
+                      type="button"
+                      size="sm"
+                      disabled={saving}
+                      onClick={() => void handleApprove(item.id)}
+                    >
+                      {t('dashboard.userStoryComments.approve')}
+                    </Button>
+                  )}
                 </div>
-              )}
-            </article>
-          ))}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>

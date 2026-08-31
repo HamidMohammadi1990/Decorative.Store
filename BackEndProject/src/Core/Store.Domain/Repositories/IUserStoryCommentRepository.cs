@@ -14,4 +14,5 @@ public interface IUserStoryCommentRepository
     Task<UserStoryComment?> GetAsNoTrackingAsync(int id, CancellationToken cancellationToken = default);
     Task<bool> AnyAsync(Expression<Func<UserStoryComment, bool>> expression, CancellationToken cancellationToken = default);
     Task<Dictionary<int, int>> GetApprovedCommentCountsByStoryIdsAsync(IReadOnlyCollection<int> storyIds, CancellationToken cancellationToken = default);
+    Task DeleteByStoryIdAsync(int userStoryId, CancellationToken cancellationToken = default);
 }

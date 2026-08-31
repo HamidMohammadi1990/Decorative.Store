@@ -1,4 +1,6 @@
 export { AdminDataGrid, type AdminDataGridColumn, type AdminDataGridProps } from './AdminDataGrid'
+export { AdminRowNumber, ADMIN_ROW_NUMBER_CLASS, getAdminRowNumber } from './AdminRowNumber'
+export { AdminListGridHeader } from './AdminListGridHeader'
 export { AdminPagination, type AdminPaginationProps } from './AdminPagination'
 export { AdminContentLocaleBar } from './AdminContentLocaleBar'
 export { AdminContentLanguageField } from './AdminContentLanguageField'

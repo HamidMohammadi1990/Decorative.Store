@@ -9,4 +9,5 @@ public interface IUserStoryLikeRepository
     Task<UserStoryLike?> FindByUserAndStoryAsync(int userId, int userStoryId, CancellationToken cancellationToken = default);
     Task<Dictionary<int, int>> GetLikeCountsByStoryIdsAsync(IReadOnlyCollection<int> storyIds, CancellationToken cancellationToken = default);
     Task<HashSet<int>> GetLikedStoryIdsForUserAsync(int userId, IReadOnlyCollection<int> storyIds, CancellationToken cancellationToken = default);
+    Task DeleteByStoryIdAsync(int userStoryId, CancellationToken cancellationToken = default);
 }

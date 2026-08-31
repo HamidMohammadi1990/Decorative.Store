@@ -1,9 +1,17 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import type { AdminRole } from '@/models/admin/role.model'
+import type { AdminPermission } from '@/models/admin/permission.model'
+import type { AdminRolePermission } from '@/models/admin/rolePermission.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
-import { RolesIcon } from '@/components/dashboard/DashboardIcons'
+import { RolesIcon, EditIcon, DeleteIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  AdminGridActionButton,
+  AdminGridActions,
+  AdminGridIconButton,
+} from '@/components/dashboard/admin/AdminGridActions'
 import { AdminDataGrid } from '@/components/dashboard/admin/AdminDataGrid'
 import {
   AdminField,
@@ -14,13 +22,18 @@ import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { useAdminPagedList } from '@/hooks/useAdminPagedList'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
+import { PermissionTreeList } from '@/components/dashboard/PermissionTreeList'
+import { buildPermissionTree, filterPermissionTree } from '@/extensions/buildPermissionTree'
 import { adminRoleService } from '@/services/adminRoleService'
+import { adminPermissionService } from '@/services/adminPermissionService'
+import { adminRolePermissionService } from '@/services/adminRolePermissionService'
 import { useUserStore } from '@/stores/userStore'
 
-type Mode = 'list' | 'create' | 'edit'
+type Mode = 'list' | 'create' | 'edit' | 'permissions'
 
 export function RolesPanel() {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const accessToken = useUserStore((s) => s.accessToken)
   const { locale, loading: languageLoading } = useCurrentLanguageId()
 
@@ -30,6 +43,15 @@ export function RolesPanel() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [title, setTitle] = useState('')
   const [isActive, setIsActive] = useState(true)
+
+  const [permissionsRole, setPermissionsRole] = useState<AdminRole | null>(null)
+  const [permissionsLoading, setPermissionsLoading] = useState(false)
+  const [permissionsSaving, setPermissionsSaving] = useState(false)
+  const [permissionsError, setPermissionsError] = useState<string | null>(null)
+  const [allPermissions, setAllPermissions] = useState<AdminPermission[]>([])
+  const [currentRolePermissions, setCurrentRolePermissions] = useState<AdminRolePermission[]>([])
+  const [selectedPermissionIds, setSelectedPermissionIds] = useState<Set<string>>(new Set())
+  const [permissionSearch, setPermissionSearch] = useState('')
 
   const fetchPage = useCallback(
     (pageNumber: number, pageSize: number) =>
@@ -82,6 +104,95 @@ export function RolesPanel() {
     setMode('edit')
   }
 
+  const loadRolePermissions = useCallback(
+    async (role: AdminRole) => {
+      if (!accessToken || accessToken === 'mock-access-token') return
+
+      setPermissionsLoading(true)
+      setPermissionsError(null)
+      try {
+        const [permissions, rolePermissions] = await Promise.all([
+          adminPermissionService.getAllPages(accessToken, locale),
+          adminRolePermissionService.getAllPages(accessToken, locale, { roleId: role.id }),
+        ])
+
+        setAllPermissions(permissions)
+        setCurrentRolePermissions(rolePermissions)
+        setSelectedPermissionIds(new Set(rolePermissions.map((item) => item.permissionId)))
+      } catch (err) {
+        setPermissionsError(
+          resolveAdminMutationError(err, t('dashboard.roles.permissionsLoadFailed')),
+        )
+      } finally {
+        setPermissionsLoading(false)
+      }
+    },
+    [accessToken, locale, t],
+  )
+
+  const openPermissions = (item: AdminRole) => {
+    setPermissionsRole(item)
+    setPermissionSearch('')
+    setPermissionsError(null)
+    setMode('permissions')
+    void loadRolePermissions(item)
+  }
+
+  const backFromPermissions = () => {
+    setPermissionsRole(null)
+    setAllPermissions([])
+    setCurrentRolePermissions([])
+    setSelectedPermissionIds(new Set())
+    setPermissionSearch('')
+    setPermissionsError(null)
+    setMode('list')
+  }
+
+  const handlePermissionSelectionChange = (ids: Set<string>) => {
+    setSelectedPermissionIds(ids)
+  }
+
+  const handleSavePermissions = async () => {
+    if (!permissionsRole || !accessToken || accessToken === 'mock-access-token') return
+
+    const currentIds = new Set(currentRolePermissions.map((item) => item.permissionId))
+    const toAdd = [...selectedPermissionIds].filter((id) => !currentIds.has(id))
+    const toRemove = currentRolePermissions.filter(
+      (item) => !selectedPermissionIds.has(item.permissionId),
+    )
+
+    if (toAdd.length === 0 && toRemove.length === 0) {
+      backFromPermissions()
+      return
+    }
+
+    setPermissionsSaving(true)
+    setPermissionsError(null)
+    try {
+      await Promise.all([
+        ...toAdd.map((permissionId) =>
+          adminRolePermissionService.create(accessToken, locale, {
+            roleId: permissionsRole.id,
+            permissionId,
+          }),
+        ),
+        ...toRemove.map((item) => adminRolePermissionService.delete(accessToken, item.id)),
+      ])
+      backFromPermissions()
+    } catch (err) {
+      setPermissionsError(
+        resolveAdminMutationError(err, t('dashboard.roles.permissionsSaveFailed')),
+      )
+    } finally {
+      setPermissionsSaving(false)
+    }
+  }
+
+  const visiblePermissionTree = useMemo(
+    () => filterPermissionTree(buildPermissionTree(allPermissions), permissionSearch),
+    [allPermissions, permissionSearch],
+  )
+
   const handleSave = async () => {
     if (!accessToken || accessToken === 'mock-access-token') {
       setFormError(t('dashboard.roles.authRequired'))
@@ -115,7 +226,7 @@ export function RolesPanel() {
 
   const handleDelete = async (id: string) => {
     if (!accessToken || accessToken === 'mock-access-token') return
-    if (!window.confirm(t('dashboard.roles.deleteConfirm'))) return
+    if (!(await confirm({ message: t('dashboard.roles.deleteConfirm') }))) return
 
     setSaving(true)
     setFormError(null)
@@ -127,6 +238,70 @@ export function RolesPanel() {
     } finally {
       setSaving(false)
     }
+  }
+
+  if (mode === 'permissions' && permissionsRole) {
+    return (
+      <div>
+        <DashboardPageHeader
+          title={t('dashboard.roles.permissionsTitle')}
+          description={t('dashboard.roles.permissionsDescription', {
+            role: permissionsRole.title,
+          })}
+          icon={<RolesIcon size={22} />}
+        />
+
+        <div className="space-y-5 rounded-sm border border-border bg-surface-muted/20 p-5 shadow-sm sm:p-6">
+          <div>
+            <input
+              value={permissionSearch}
+              onChange={(e) => setPermissionSearch(e.target.value)}
+              className={adminInputClass}
+              placeholder={t('dashboard.roles.permissionsSearch')}
+            />
+          </div>
+
+          {permissionsLoading ? (
+            <div className="flex justify-center py-12">
+              <InlineLoading label={t('dashboard.roles.permissionsLoading')} />
+            </div>
+          ) : visiblePermissionTree.length === 0 ? (
+            <p className="text-sm text-text-muted">{t('dashboard.roles.permissionsEmpty')}</p>
+          ) : (
+            <PermissionTreeList
+              permissions={allPermissions}
+              searchQuery={permissionSearch}
+              selectedIds={selectedPermissionIds}
+              disabled={permissionsSaving}
+              onSelectedIdsChange={handlePermissionSelectionChange}
+            />
+          )}
+
+          {permissionsError && <p className="text-sm text-sale">{permissionsError}</p>}
+
+          <div className="flex flex-wrap gap-3 border-t border-border pt-4">
+            <Button
+              variant="warm"
+              onClick={() => void handleSavePermissions()}
+              disabled={permissionsSaving || permissionsLoading}
+            >
+              {permissionsSaving ? (
+                <InlineLoading label={t('dashboard.roles.permissionsSaving')} />
+              ) : (
+                t('dashboard.roles.permissionsSave')
+              )}
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={backFromPermissions}
+              disabled={permissionsSaving}
+            >
+              {t('dashboard.roles.cancel')}
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (mode === 'create' || mode === 'edit') {
@@ -267,23 +442,25 @@ export function RolesPanel() {
                 header: t('dashboard.roles.colActions'),
                 align: 'right',
                 cell: (item) => (
-                  <div className="flex justify-end gap-2">
-                    <Button
-                      variant="secondary"
-                      className="py-1.5 text-xs"
+                  <AdminGridActions>
+                    <AdminGridActionButton
+                      label={t('dashboard.roles.permissions')}
+                      icon={<RolesIcon size={14} />}
+                      onClick={() => openPermissions(item)}
+                    />
+                    <AdminGridIconButton
+                      label={t('dashboard.roles.edit')}
+                      icon={<EditIcon size={15} />}
                       onClick={() => openEdit(item)}
-                    >
-                      {t('dashboard.roles.edit')}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="py-1.5 text-xs text-red-600 hover:text-red-700"
+                    />
+                    <AdminGridIconButton
+                      label={t('dashboard.roles.delete')}
+                      icon={<DeleteIcon size={15} />}
+                      tone="danger"
                       disabled={saving}
                       onClick={() => void handleDelete(item.id)}
-                    >
-                      {t('dashboard.roles.delete')}
-                    </Button>
-                  </div>
+                    />
+                  </AdminGridActions>
                 ),
               },
             ]}

@@ -5,12 +5,24 @@ import type { AdminBlogPostCategory } from '@/models/admin/blog.model'
 import type { AdminBlogPostListItem } from '@/models/admin/blog.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
-import { BlogPostsIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  BlogPostsIcon,
+  BlogPostTagsIcon,
+  BlogCommentsIcon,
+  EditIcon,
+} from '@/components/dashboard/DashboardIcons'
+import {
+  AdminGridActionLink,
+  AdminGridActions,
+  AdminGridIconLink,
+} from '@/components/dashboard/admin/AdminGridActions'
 import {
   AdminField,
   adminInputClass,
   resolveAdminMutationError,
 } from '@/components/dashboard/admin/adminFormShared'
+import { AdminListGridHeader } from '@/components/dashboard/admin/AdminListGridHeader'
+import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
@@ -165,12 +177,14 @@ export function BlogPostsPanel() {
             {t('dashboard.blogPosts.itemCount', { count: items.length })}
           </p>
           <ul className="divide-y divide-border rounded-sm border border-border">
-            {items.map((item) => (
+            <AdminListGridHeader />
+            {items.map((item, index) => (
               <li
                 key={item.id}
-                className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5"
+                className="flex flex-wrap items-center gap-3 px-4 py-3 sm:px-5"
               >
-                <div className="min-w-0">
+                <AdminRowNumber value={index + 1} />
+                <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-text">{item.title}</p>
                   <p className="mt-0.5 text-xs text-text-muted">
                     {item.categoryTitle}
@@ -189,24 +203,23 @@ export function BlogPostsPanel() {
                       ? t('dashboard.blogPosts.statusPublished')
                       : t('dashboard.blogPosts.statusDraft')}
                   </span>
-                  <Link
-                    to={`/account/dashboard/blog-posts/edit?id=${encodeURIComponent(item.id)}`}
-                    className="inline-flex items-center justify-center rounded-sm border border-border-strong px-3 py-1.5 text-xs font-medium text-text transition-colors hover:bg-surface-muted"
-                  >
-                    {t('dashboard.blogPosts.edit')}
-                  </Link>
-                  <Link
+                <AdminGridActions>
+                  <AdminGridActionLink
+                    label={t('dashboard.blogPosts.tags')}
+                    icon={<BlogPostTagsIcon size={14} />}
                     to={`/account/dashboard/blog-post-tags?blogPostId=${encodeURIComponent(item.id)}`}
-                    className="inline-flex items-center justify-center rounded-sm border border-border-strong px-3 py-1.5 text-xs font-medium text-text transition-colors hover:bg-surface-muted"
-                  >
-                    {t('dashboard.blogPosts.tags')}
-                  </Link>
-                  <Link
+                  />
+                  <AdminGridActionLink
+                    label={t('dashboard.blogPosts.comments')}
+                    icon={<BlogCommentsIcon size={14} />}
                     to={`/account/dashboard/blog-post-comments?blogPostId=${encodeURIComponent(item.id)}`}
-                    className="inline-flex items-center justify-center rounded-sm border border-border-strong px-3 py-1.5 text-xs font-medium text-text transition-colors hover:bg-surface-muted"
-                  >
-                    {t('dashboard.blogPosts.comments')}
-                  </Link>
+                  />
+                  <AdminGridIconLink
+                    label={t('dashboard.blogPosts.edit')}
+                    icon={<EditIcon size={15} />}
+                    to={`/account/dashboard/blog-posts/edit?id=${encodeURIComponent(item.id)}`}
+                  />
+                </AdminGridActions>
                 </div>
               </li>
             ))}

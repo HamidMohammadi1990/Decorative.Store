@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import { AddressCard } from '@/components/address/AddressCard'
 import { AddressFormFields } from '@/components/address/AddressFormFields'
 import { Button } from '@/components/ui/Button'
@@ -21,6 +22,7 @@ type ModalMode = 'list' | 'add' | 'edit'
 
 export function AddressBookModal() {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const isOpen = useAddressStore((s) => s.isModalOpen)
   const closeModal = useAddressStore((s) => s.closeModal)
   const addresses = useAddressStore((s) => s.addresses)
@@ -106,6 +108,7 @@ export function AddressBookModal() {
   }
 
   const handleDelete = async (id: string) => {
+    if (!(await confirm({ message: t('address.deleteConfirm') }))) return
     await deleteAddress(id)
   }
 

@@ -17,8 +17,13 @@ const STATIC_NAV_IDS = new Set(['blog'])
 const pageCache = new Map<string, HomePage>()
 const pageRequests = new Map<string, Promise<HomePage>>()
 
-function pageCacheKey(locale: Locale, skipCatalogNav: boolean, skipHomeCatalogContent: boolean) {
-  return `${locale}:${skipCatalogNav ? 'blog' : 'shop'}:${skipHomeCatalogContent ? 'header' : 'full'}`
+function pageCacheKey(
+  locale: Locale,
+  skipCatalogNav: boolean,
+  skipHomeCatalogContent: boolean,
+  skipCmsPage: boolean,
+) {
+  return `${locale}:${skipCatalogNav ? 'blog' : 'shop'}:${skipHomeCatalogContent ? 'header' : 'full'}:${skipCmsPage ? 'mock' : 'cms'}`
 }
 
 function getStaticPrimaryNav(locale: Locale) {
@@ -117,12 +122,18 @@ async function buildPage(
   locale: Locale,
   skipCatalogNav: boolean,
   skipHomeCatalogContent: boolean,
+  skipCmsPage: boolean,
 ): Promise<HomePage> {
   const mockPage = mapHomePage(getHomeMock(locale))
 
   try {
-    const cmsPage = await loadCmsPage(locale, !skipHomeCatalogContent, skipCatalogNav)
-    let page = cmsPage ? applyCmsOnMock(mockPage, cmsPage) : mockPage
+    let page = mockPage
+    if (!skipCmsPage) {
+      const cmsPage = await loadCmsPage(locale, !skipHomeCatalogContent, skipCatalogNav)
+      if (cmsPage) {
+        page = applyCmsOnMock(mockPage, cmsPage)
+      }
+    }
 
     const staticNav = getStaticPrimaryNav(locale)
 
@@ -175,10 +186,20 @@ async function buildPage(
 export const homeService = {
   async getPage(
     locale: Locale,
-    options: { force?: boolean; skipCatalogNav?: boolean; skipHomeCatalogContent?: boolean } = {},
+    options: {
+      force?: boolean
+      skipCatalogNav?: boolean
+      skipHomeCatalogContent?: boolean
+      skipCmsPage?: boolean
+    } = {},
   ): Promise<HomePage> {
-    const { force = false, skipCatalogNav = false, skipHomeCatalogContent = false } = options
-    const cacheKey = pageCacheKey(locale, skipCatalogNav, skipHomeCatalogContent)
+    const {
+      force = false,
+      skipCatalogNav = false,
+      skipHomeCatalogContent = false,
+      skipCmsPage = false,
+    } = options
+    const cacheKey = pageCacheKey(locale, skipCatalogNav, skipHomeCatalogContent, skipCmsPage)
 
     if (!force) {
       const cached = pageCache.get(cacheKey)
@@ -190,7 +211,7 @@ export const homeService = {
       pageCache.delete(cacheKey)
     }
 
-    const request = buildPage(locale, skipCatalogNav, skipHomeCatalogContent)
+    const request = buildPage(locale, skipCatalogNav, skipHomeCatalogContent, skipCmsPage)
     pageRequests.set(cacheKey, request)
 
     try {

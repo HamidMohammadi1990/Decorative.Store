@@ -1,6 +1,6 @@
 import { API_BASE_URL } from '@/config/api'
 import type { CartLine } from '@/models/cart/cartLine.model'
-import { apiGetAuth, apiPost } from '@/services/api/apiClient'
+import { apiGetAuth, apiPost, apiPatch, apiDelete } from '@/services/api/apiClient'
 import { ApiError } from '@/services/api/apiTypes'
 
 const CART_PATH = '/api/v1/order/cart'
@@ -44,6 +44,7 @@ export function mapServerCartToLines(cart: ServerCartResponse): CartLine[] {
   return cart.items.map((item) => ({
     lineId: item.orderItemId,
     sku: item.productId,
+    slug: item.slug || undefined,
     title: item.title,
     image: {
       src: resolveImageSrc(item.imageUrl),
@@ -55,6 +56,13 @@ export function mapServerCartToLines(cart: ServerCartResponse): CartLine[] {
     },
     quantity: item.quantity,
   }))
+}
+
+interface RemoveOrderItemResponse {
+  orderId?: string | null
+  trackingCode?: number | null
+  isOrderDeleted: boolean
+  cart: ServerCartSummary
 }
 
 export const cartService = {
@@ -72,6 +80,27 @@ export const cartService = {
       { productId, quantity },
       { accessToken },
     )
+  },
+
+  async updateItemQuantity(
+    accessToken: string,
+    orderItemId: string,
+    quantity: number,
+  ): Promise<ServerCartResponse> {
+    return apiPatch<ServerCartResponse>(
+      CART_ITEMS_PATH,
+      { orderItemId, quantity },
+      accessToken,
+    )
+  },
+
+  async removeItem(accessToken: string, orderItemId: string): Promise<ServerCartResponse> {
+    await apiDelete<RemoveOrderItemResponse>(
+      '/api/v1/order/item',
+      accessToken,
+      { orderItemId },
+    )
+    return this.getCart(accessToken)
   },
 
   isConfigurationRequired(error: unknown) {

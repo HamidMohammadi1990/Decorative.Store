@@ -1,10 +1,25 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import type { AdminProductListItem, AdminSubCategory } from '@/models/admin/catalog.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
-import { ProductsIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  ProductsIcon,
+  ProductCommentsIcon,
+  ProductDescriptionsIcon,
+  ProductPropertiesIcon,
+  ProductQuestionsIcon,
+  EditIcon,
+  DeleteIcon,
+} from '@/components/dashboard/DashboardIcons'
+import {
+  AdminGridActionMenu,
+  AdminGridActions,
+  AdminGridIconButton,
+  AdminGridIconLink,
+} from '@/components/dashboard/admin/AdminGridActions'
 import { AdminDataGrid } from '@/components/dashboard/admin/AdminDataGrid'
 import { AdminContentLanguageField } from '@/components/dashboard/admin/AdminContentLanguageField'
 import { TranslationLocaleBadges } from '@/components/dashboard/admin/TranslationLocaleBadges'
@@ -29,6 +44,7 @@ import {
 
 export function ProductsPanel() {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const navigate = useNavigate()
   const accessToken = useUserStore((s) => s.accessToken)
   const { locale, loading: languageLoading } = useCurrentLanguageId()
@@ -136,7 +152,7 @@ export function ProductsPanel() {
 
   const handleDelete = async (id: string) => {
     if (!accessToken || accessToken === 'mock-access-token') return
-    if (!window.confirm(t('dashboard.products.deleteConfirm'))) return
+    if (!(await confirm({ message: t('dashboard.products.deleteConfirm') }))) return
 
     setSaving(true)
     setActionError(null)
@@ -315,61 +331,59 @@ export function ProductsPanel() {
                 header: '',
                 align: 'right',
                 cell: (item) => (
-                  <div className="flex flex-wrap justify-end gap-2">
-                    <Link
+                  <AdminGridActions>
+                    <AdminGridActionMenu
+                      label={t('dashboard.products.manage')}
+                      icon={<ProductsIcon size={14} />}
+                      items={[
+                        {
+                          id: 'images',
+                          label: t('dashboard.products.images'),
+                          onClick: () => openManageModal('images', item),
+                        },
+                        {
+                          id: 'properties',
+                          label: t('dashboard.products.properties'),
+                          icon: <ProductPropertiesIcon size={14} />,
+                          onClick: () => openManageModal('properties', item),
+                        },
+                        {
+                          id: 'descriptions',
+                          label: t('dashboard.products.descriptions'),
+                          icon: <ProductDescriptionsIcon size={14} />,
+                          onClick: () => openManageModal('descriptions', item),
+                        },
+                        {
+                          id: 'comments',
+                          label: t('dashboard.products.comments'),
+                          icon: <ProductCommentsIcon size={14} />,
+                          onClick: () => openManageModal('comments', item),
+                        },
+                        {
+                          id: 'questions',
+                          label: t('dashboard.products.questions'),
+                          icon: <ProductQuestionsIcon size={14} />,
+                          onClick: () => openManageModal('questions', item),
+                        },
+                      ]}
+                    />
+                    <AdminGridIconLink
+                      label={t('dashboard.products.edit')}
+                      icon={<EditIcon size={15} />}
                       to={`/account/dashboard/products/edit?id=${encodeURIComponent(item.id)}${
                         item.subCategoryId
                           ? `&subCategoryId=${encodeURIComponent(item.subCategoryId)}`
                           : ''
                       }`}
-                      className="inline-flex items-center justify-center rounded-sm border border-border-strong px-3 py-1.5 text-xs font-medium text-text transition-colors hover:bg-surface-muted"
-                    >
-                      {t('dashboard.products.edit')}
-                    </Link>
-                    <Button
-                      variant="secondary"
-                      className="py-1.5 text-xs"
-                      onClick={() => openManageModal('images', item)}
-                    >
-                      {t('dashboard.products.images')}
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      className="py-1.5 text-xs"
-                      onClick={() => openManageModal('properties', item)}
-                    >
-                      {t('dashboard.products.properties')}
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      className="py-1.5 text-xs"
-                      onClick={() => openManageModal('descriptions', item)}
-                    >
-                      {t('dashboard.products.descriptions')}
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      className="py-1.5 text-xs"
-                      onClick={() => openManageModal('comments', item)}
-                    >
-                      {t('dashboard.products.comments')}
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      className="py-1.5 text-xs"
-                      onClick={() => openManageModal('questions', item)}
-                    >
-                      {t('dashboard.products.questions')}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="py-1.5 text-xs text-sale hover:bg-sale/10"
-                      onClick={() => void handleDelete(item.id)}
+                    />
+                    <AdminGridIconButton
+                      label={t('dashboard.products.delete')}
+                      icon={<DeleteIcon size={15} />}
+                      tone="danger"
                       disabled={saving}
-                    >
-                      {t('dashboard.products.delete')}
-                    </Button>
-                  </div>
+                      onClick={() => void handleDelete(item.id)}
+                    />
+                  </AdminGridActions>
                 ),
               },
             ]}

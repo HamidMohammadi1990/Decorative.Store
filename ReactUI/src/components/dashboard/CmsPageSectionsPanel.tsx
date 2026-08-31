@@ -3,8 +3,14 @@ import { useTranslation } from 'react-i18next'
 import type { AdminCmsPage, AdminCmsPageSection, AdminCmsSection } from '@/models/admin/cms.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
-import { CmsPageSectionsIcon } from '@/components/dashboard/DashboardIcons'
+import { CmsPageSectionsIcon, EditIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  AdminGridActions,
+  AdminGridIconButton,
+} from '@/components/dashboard/admin/AdminGridActions'
 import { AdminField, adminInputClass, resolveAdminMutationError } from '@/components/dashboard/admin/adminFormShared'
+import { AdminListGridHeader } from '@/components/dashboard/admin/AdminListGridHeader'
+import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
@@ -119,13 +125,27 @@ export function CmsPageSectionsPanel() {
         <DashboardEmptyState icon={<CmsPageSectionsIcon size={28} />} title={t('dashboard.cms.pageSections.emptyTitle')} message={error ?? t('dashboard.cms.pageSections.emptyMessage')} />
       ) : (
         <ul className="divide-y divide-border rounded-sm border border-border">
-          {items.map((item) => (
-            <li key={item.id} className="flex items-center justify-between gap-4 px-4 py-3">
-              <div>
+          <AdminListGridHeader />
+          {items.map((item, index) => (
+            <li key={item.id} className="flex items-center gap-3 px-4 py-3">
+              <AdminRowNumber value={index + 1} />
+              <div className="flex-1">
                 <p className="font-medium">{pageTitleById.get(item.pageId) ?? item.pageId}</p>
                 <p className="text-xs text-text-muted">{sectionTitleById.get(item.sectionId) ?? item.sectionId} · {item.priority}</p>
               </div>
-              <Button variant="secondary" size="sm" onClick={() => { setEditingId(item.id); setPageId(item.pageId); setSectionId(item.sectionId); setPriority(String(item.priority)); setMode('edit') }}>{t('dashboard.cms.pageSections.edit')}</Button>
+              <AdminGridActions>
+                <AdminGridIconButton
+                  label={t('dashboard.cms.pageSections.edit')}
+                  icon={<EditIcon size={15} />}
+                  onClick={() => {
+                    setEditingId(item.id)
+                    setPageId(item.pageId)
+                    setSectionId(item.sectionId)
+                    setPriority(String(item.priority))
+                    setMode('edit')
+                  }}
+                />
+              </AdminGridActions>
             </li>
           ))}
         </ul>

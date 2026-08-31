@@ -1,9 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import type { AdminCategory, AdminSubCategory } from '@/models/admin/catalog.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
-import { SubCategoriesIcon } from '@/components/dashboard/DashboardIcons'
+import { SubCategoriesIcon, EditIcon, DeleteIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  AdminGridActions,
+  AdminGridIconButton,
+} from '@/components/dashboard/admin/AdminGridActions'
 import { AdminDataGrid } from '@/components/dashboard/admin/AdminDataGrid'
 import { AdminContentLanguageField } from '@/components/dashboard/admin/AdminContentLanguageField'
 import { TranslationLocaleBadges } from '@/components/dashboard/admin/TranslationLocaleBadges'
@@ -32,6 +37,7 @@ function mergeCategory(items: AdminCategory[], candidate: AdminCategory | null):
 
 export function SubCategoriesPanel() {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const accessToken = useUserStore((s) => s.accessToken)
   const { locale, loading: languageLoading } = useCurrentLanguageId()
   const { languages } = useStoreLanguages()
@@ -358,7 +364,7 @@ export function SubCategoriesPanel() {
 
   const handleDelete = async (id: string) => {
     if (!accessToken || accessToken === 'mock-access-token') return
-    if (!window.confirm(t('dashboard.subCategories.deleteConfirm'))) return
+    if (!(await confirm({ message: t('dashboard.subCategories.deleteConfirm') }))) return
 
     setSaving(true)
     setFormError(null)
@@ -634,24 +640,21 @@ export function SubCategoriesPanel() {
                 header: '',
                 align: 'right',
                 cell: (item) => (
-                  <div className="flex flex-wrap justify-end gap-2">
-                    <Button
-                      variant="secondary"
-                      className="py-1.5 text-xs"
+                  <AdminGridActions>
+                    <AdminGridIconButton
+                      label={t('dashboard.subCategories.edit')}
+                      icon={<EditIcon size={15} />}
                       onClick={() => openEdit(item)}
                       disabled={saving}
-                    >
-                      {t('dashboard.subCategories.edit')}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="py-1.5 text-xs text-sale hover:bg-sale/10"
+                    />
+                    <AdminGridIconButton
+                      label={t('dashboard.subCategories.delete')}
+                      icon={<DeleteIcon size={15} />}
+                      tone="danger"
                       onClick={() => void handleDelete(item.id)}
                       disabled={saving}
-                    >
-                      {t('dashboard.subCategories.delete')}
-                    </Button>
-                  </div>
+                    />
+                  </AdminGridActions>
                 ),
               },
             ]}

@@ -72,12 +72,31 @@ public class AddCartItemHandler
             await orderRepository.HasPendingBankPaymentAsync(order.Id, cancellationToken))
             return ErrorModel.Create("PaymentInProgress");
 
-        var orderItem = OrderItem.CreateForQuickAdd(
-            request.ProductId,
-            request.Quantity,
-            product.Price);
+        var matchingQuickAddItems = order.OrderItems
+            .Where(item => item.ProductId == request.ProductId && item.IsQuickAddItem())
+            .ToList();
 
-        order.AddOrderItem(orderItem);
+        if (matchingQuickAddItems.Count > 0)
+        {
+            var primaryItem = matchingQuickAddItems[0];
+
+            foreach (var duplicateItem in matchingQuickAddItems.Skip(1))
+            {
+                primaryItem.AddQuantity(duplicateItem.Quantity);
+                order.RemoveOrderItem(duplicateItem);
+            }
+
+            primaryItem.AddQuantity(request.Quantity);
+        }
+        else
+        {
+            var orderItem = OrderItem.CreateForQuickAdd(
+                request.ProductId,
+                request.Quantity,
+                product.Price);
+
+            order.AddOrderItem(orderItem);
+        }
 
         var cartResult = await OrderCartService.RefreshCartAsync(
             order, discountRepository, userIsCooperation, cancellationToken);

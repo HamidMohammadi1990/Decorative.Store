@@ -3,7 +3,11 @@ import { useTranslation } from 'react-i18next'
 import type { AdminCmsSectionType } from '@/models/admin/cms.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
-import { CmsSectionTypesIcon } from '@/components/dashboard/DashboardIcons'
+import { CmsSectionTypesIcon, EditIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  AdminGridActions,
+  AdminGridIconButton,
+} from '@/components/dashboard/admin/AdminGridActions'
 import { AdminDataGrid } from '@/components/dashboard/admin/AdminDataGrid'
 import {
   AdminField,
@@ -250,9 +254,13 @@ export function CmsSectionTypesPanel() {
                 header: '',
                 align: 'right',
                 cell: (item) => (
-                  <Button variant="secondary" className="py-1.5 text-xs" onClick={() => openEdit(item)}>
-                    {t('dashboard.cms.sectionTypes.edit')}
-                  </Button>
+                  <AdminGridActions>
+                    <AdminGridIconButton
+                      label={t('dashboard.cms.sectionTypes.edit')}
+                      icon={<EditIcon size={15} />}
+                      onClick={() => openEdit(item)}
+                    />
+                  </AdminGridActions>
                 ),
               },
             ]}

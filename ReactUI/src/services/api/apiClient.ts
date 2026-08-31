@@ -120,6 +120,14 @@ export async function apiPut<T>(
   })
 }
 
+export async function apiPatch<T>(
+  path: string,
+  body: unknown,
+  accessToken: string,
+): Promise<T> {
+  return requestApi<T>(path, { accessToken, body, method: 'PATCH' })
+}
+
 export async function apiDelete<T>(path: string, accessToken: string, body?: unknown): Promise<T> {
   return requestApi<T>(path, { accessToken, body, method: 'DELETE' })
 }

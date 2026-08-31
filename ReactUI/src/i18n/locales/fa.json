@@ -24,6 +24,9 @@
     "emptyCartMessage": "هنوز محصولی اضافه نکرده‌اید. مجموعه‌های ما را ببینید و چیزهایی که دوست دارید پیدا کنید.",
     "quantity": "تعداد",
     "remove": "حذف",
+    "cancel": "انصراف",
+    "confirmDeleteTitle": "تأیید حذف",
+    "confirmDelete": "حذف",
     "subtotal": "جمع جزء",
     "toman": "تومان",
     "checkout": "تسویه",
@@ -46,6 +49,11 @@
       "previous": "صفحه قبل",
       "next": "صفحه بعد",
       "pageOf": "صفحه {{page}} از {{total}}"
+    },
+    "grid": {
+      "row": "ردیف",
+      "content": "مورد",
+      "actions": "عملیات"
     }
   },
   "lightbox": {
@@ -89,8 +97,10 @@
     "inCompare": "در لیست مقایسه",
     "remove": "حذف از مقایسه",
     "removeProduct": "حذف محصول",
+    "removeConfirm": "«{{title}}» از لیست مقایسه حذف شود؟",
     "open": "مقایسه کن",
     "clearAll": "پاک کردن همه",
+    "clearConfirm": "همه محصولات از لیست مقایسه حذف شوند؟",
     "maxReached": "حداکثر ۴ محصول قابل مقایسه است",
     "floatingTitle": "{{count}} از {{max}} انتخاب شده",
     "floatingHint": "آماده مقایسه کنار هم",
@@ -128,6 +138,35 @@
     "signInRequired": "برای افزودن به سبد وارد شوید",
     "viewProductToOrder": "مشاهده و سفارش"
   },
+  "cartPage": {
+    "title": "سبد خرید",
+    "eyebrow": "سفارش شما",
+    "breadcrumbLabel": "مسیر صفحه",
+    "breadcrumbHome": "خانه",
+    "loading": "در حال بارگذاری سبد…",
+    "loadFailed": "بارگذاری سبد ممکن نشد. دوباره تلاش کنید.",
+    "updateFailed": "به‌روزرسانی سبد ممکن نشد. دوباره تلاش کنید.",
+    "orderSummary": "خلاصه سفارش",
+    "orderRef": "پیگیری {{code}}",
+    "colProduct": "محصول",
+    "colUnitPrice": "قیمت واحد",
+    "colTotal": "جمع ردیف",
+    "colRemove": "حذف",
+    "productRef": "کد {{id}}",
+    "discount": "تخفیف",
+    "estimatedShipping": "هزینه تقریبی ارسال",
+    "estimatedTotal": "جمع تقریبی",
+    "totalsNote": "هزینه ارسال و مالیات تقریبی است. مبلغ نهایی در تسویه حساب تأیید می‌شود.",
+    "freeShippingRemaining": "{{amount}} دیگر تا ارسال رایگان",
+    "freeShippingUnlocked": "ارسال استاندارد رایگان برای شما فعال است",
+    "clearCart": "خالی کردن سبد",
+    "removeConfirm": "«{{title}}» از سبد حذف شود؟",
+    "clearConfirm": "همه کالاها از سبد حذف شوند؟",
+    "viewFullCart": "مشاهده جزئیات سبد",
+    "secureCheckout": "پرداخت امن با رمزنگاری",
+    "deliveryEstimate": "تحویل استاندارد ۵ تا ۷ روز کاری",
+    "easyReturns": "مرجوعی آسان تا ۳۰ روز"
+  },
   "roomLayout": {
     "eyebrow": "استودیو چیدمان",
     "title": "چیدمان فضای خود",
@@ -153,6 +192,8 @@
     "rotateRight": "چرخش راست",
     "bringFront": "جلو آوردن",
     "remove": "حذف",
+    "removeConfirm": "این قطعه از چیدمان حذف شود؟",
+    "clearConfirm": "کل چیدمان پاک شود؟",
     "goCheckout": "ادامه به تسویه",
     "canvasEyebrow": "فضای شما",
     "canvasHint": "قطعات را بکشید و جابه‌جا کنید. برای تنظیم، روی قطعه بزنید.",
@@ -451,7 +492,8 @@
     "label": "منوی حساب کاربری",
     "guestTitle": "خوش آمدید",
     "guestDescription": "برای مدیریت سفارش‌ها و پروفایل، وارد شوید یا حساب بسازید.",
-    "viewDashboard": "رفتن به داشبورد"
+    "viewDashboard": "رفتن به داشبورد",
+    "cart": "سبد خرید"
   },
   "auth": {
     "backToShop": "ادامه خرید",
@@ -638,6 +680,7 @@
     "cancel": "انصراف",
     "edit": "ویرایش",
     "delete": "حذف",
+    "deleteConfirm": "این آدرس حذف شود؟",
     "makeDefault": "تنظیم به‌عنوان پیش‌فرض",
     "defaultBadge": "پیش‌فرض",
     "labelField": "عنوان آدرس",
@@ -673,6 +716,7 @@
     },
     "nav": {
       "wallet": "کیف پول",
+      "cart": "سبد خرید",
       "orders": "سفارشات",
       "transactions": "تراکنش‌ها",
       "reviews": "نظرات",
@@ -725,6 +769,10 @@
       "topUp": "شارژ کیف پول",
       "withdraw": "برداشت",
       "recentTitle": "فعالیت‌های اخیر"
+    },
+    "cart": {
+      "title": "سبد خرید",
+      "description": "{{count}} کالا در سبد — قبل از تسویه جزئیات را بررسی کنید."
     },
     "orders": {
       "title": "سفارشات",
@@ -819,7 +867,12 @@
       "clearFailed": "پاک کردن علاقه‌مندی‌ها انجام نشد. دوباره تلاش کنید.",
       "loading": "در حال بارگذاری علاقه‌مندی‌ها…",
       "loadFailed": "بارگذاری محصولات علاقه‌مندی ناموفق بود.",
-      "retry": "تلاش دوباره"
+      "retry": "تلاش دوباره",
+      "viewProduct": "مشاهده محصول",
+      "remove": "حذف از علاقه‌مندی",
+      "removeConfirm": "«{{title}}» از علاقه‌مندی‌ها حذف شود؟",
+      "clearConfirm": "همه علاقه‌مندی‌ها پاک شوند؟",
+      "ratingSummary": "{{rating}} از ۵ · {{count}} نظر"
     },
     "stories": {
       "title": "استوری‌های من",
@@ -845,6 +898,9 @@
       "uploadFormats": "JPG، PNG، MP4 · حداکثر {{max}} مگابایت",
       "replaceMediaHint": "برای جایگزینی فایل، دوباره ضربه بزنید.",
       "noProduct": "بدون لینک محصول",
+      "productSearchPlaceholder": "جستجوی محصول بر اساس عنوان، کد یا اسلاگ…",
+      "productsLoading": "در حال بارگذاری محصولات…",
+      "productsEmpty": "محصولی یافت نشد.",
       "publish": "انتشار استوری",
       "saveChanges": "ذخیره تغییرات",
       "publishLive": "نمایش در صفحه اصلی",
@@ -859,10 +915,14 @@
       "hide": "مخفی کردن",
       "show": "نمایش",
       "delete": "حذف",
+      "deleteConfirm": "این استوری حذف شود؟",
+      "removeMediaConfirm": "این اسلاید از استوری حذف شود؟",
       "saveFailed": "ذخیره استوری انجام نشد. دوباره تلاش کنید.",
       "deleteFailed": "حذف استوری انجام نشد. دوباره تلاش کنید.",
       "uploadFailed": "آپلود فایل انجام نشد. دوباره تلاش کنید.",
       "viewComments": "نظرات",
+      "likeCount": "{{count}} لایک",
+      "commentCount": "{{count}} نظر",
       "commentsModalTitle": "نظرات استوری",
       "commentsModalDescription": "بررسی و تأیید نظرات برای «{{title}}».",
       "commentsEmpty": "هنوز نظری برای این استوری ثبت نشده."
@@ -919,6 +979,7 @@
       "moveUp": "بالا",
       "moveDown": "پایین",
       "deleteQuestion": "حذف",
+      "deleteQuestionConfirm": "این سوال حذف شود؟",
       "questionType": "نوع سوال",
       "required": "الزامی",
       "requiredHint": "برای دریافت جایزه لازم است",
@@ -929,6 +990,7 @@
       "addOption": "افزودن گزینه",
       "optionValue": "مقدار گزینه",
       "deleteOption": "حذف",
+      "deleteOptionConfirm": "این گزینه حذف شود؟",
       "types": {
         "text": "متن کوتاه",
         "textarea": "متن بلند",
@@ -1030,7 +1092,16 @@
       "colStatus": "وضعیت",
       "colActions": "عملیات",
       "statusActive": "فعال",
-      "statusInactive": "غیرفعال"
+      "statusInactive": "غیرفعال",
+      "assignRoles": "تخصیص نقش",
+      "rolesModalTitle": "تخصیص نقش به کاربر",
+      "rolesModalDescription": "نقش‌های مورد نظر برای {{name}} را انتخاب کنید.",
+      "rolesLoading": "در حال بارگذاری نقش‌ها…",
+      "rolesLoadFailed": "بارگذاری نقش‌های کاربر انجام نشد.",
+      "rolesSave": "ذخیره نقش‌ها",
+      "rolesSaving": "در حال ذخیره…",
+      "rolesSaveFailed": "ذخیره نقش‌ها انجام نشد.",
+      "rolesEmpty": "نقشی برای تخصیص وجود ندارد."
     },
     "roles": {
       "title": "مدیریت نقش‌ها",
@@ -1063,7 +1134,18 @@
       "colStatus": "وضعیت",
       "colActions": "عملیات",
       "statusActive": "فعال",
-      "statusInactive": "غیرفعال"
+      "statusInactive": "غیرفعال",
+      "permissions": "دسترسی‌ها",
+      "permissionsTitle": "مدیریت دسترسی‌های نقش",
+      "permissionsDescription": "دسترسی‌های نقش «{{role}}» را انتخاب و ذخیره کنید.",
+      "permissionsSearch": "جستجوی دسترسی…",
+      "permissionsLoading": "در حال بارگذاری دسترسی‌ها…",
+      "permissionsLoadFailed": "بارگذاری دسترسی‌ها انجام نشد.",
+      "permissionsSave": "ذخیره دسترسی‌ها",
+      "permissionsSaving": "در حال ذخیره…",
+      "permissionsSaveFailed": "ذخیره دسترسی‌ها انجام نشد.",
+      "permissionsEmpty": "دسترسی‌ای یافت نشد.",
+      "permissionsOtherGroup": "سایر"
     },
     "subCategories": {
       "title": "مدیریت زیردسته‌ها",
@@ -1135,6 +1217,7 @@
       "cancel": "انصراف",
       "edit": "ویرایش",
       "delete": "حذف",
+      "manage": "مدیریت",
       "images": "تصاویر",
       "properties": "ویژگی‌ها",
       "descriptions": "توضیحات",

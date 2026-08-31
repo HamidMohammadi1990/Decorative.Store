@@ -1,9 +1,15 @@
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import type { AdminUser, AdminUserGender } from '@/models/admin/user.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
-import { UsersIcon } from '@/components/dashboard/DashboardIcons'
+import { UsersIcon, RolesIcon, EditIcon, DeleteIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  AdminGridActionButton,
+  AdminGridActions,
+  AdminGridIconButton,
+} from '@/components/dashboard/admin/AdminGridActions'
 import { AdminDataGrid } from '@/components/dashboard/admin/AdminDataGrid'
 import {
   AdminField,
@@ -14,6 +20,7 @@ import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { useAdminPagedList } from '@/hooks/useAdminPagedList'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
+import { UserRolesModal } from '@/components/dashboard/UserRolesModal'
 import { adminUserService } from '@/services/adminUserService'
 import { useUserStore } from '@/stores/userStore'
 
@@ -23,6 +30,7 @@ const GENDER_OPTIONS: AdminUserGender[] = [1, 2]
 
 export function UsersPanel() {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const accessToken = useUserStore((s) => s.accessToken)
   const currentUserId = useUserStore((s) => s.user?.id)
   const { locale, loading: languageLoading } = useCurrentLanguageId()
@@ -41,6 +49,7 @@ export function UsersPanel() {
   const [gender, setGender] = useState<AdminUserGender>(2)
   const [isActive, setIsActive] = useState(true)
   const [loginPermission, setLoginPermission] = useState(true)
+  const [rolesModalUser, setRolesModalUser] = useState<AdminUser | null>(null)
 
   const fetchPage = useCallback(
     (pageNumber: number, pageSize: number) =>
@@ -174,7 +183,7 @@ export function UsersPanel() {
       setFormError(t('dashboard.users.deleteSelfForbidden'))
       return
     }
-    if (!window.confirm(t('dashboard.users.deleteConfirm'))) return
+    if (!(await confirm({ message: t('dashboard.users.deleteConfirm') }))) return
 
     setSaving(true)
     setFormError(null)
@@ -408,20 +417,25 @@ export function UsersPanel() {
               header: t('dashboard.users.colActions'),
               align: 'right',
               cell: (row) => (
-                <div className="flex justify-end gap-2">
-                  <Button variant="ghost" size="sm" onClick={() => openEdit(row)}>
-                    {t('dashboard.users.edit')}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-red-600 hover:text-red-700"
+                <AdminGridActions>
+                  <AdminGridActionButton
+                    label={t('dashboard.users.assignRoles')}
+                    icon={<RolesIcon size={14} />}
+                    onClick={() => setRolesModalUser(row)}
+                  />
+                  <AdminGridIconButton
+                    label={t('dashboard.users.edit')}
+                    icon={<EditIcon size={15} />}
+                    onClick={() => openEdit(row)}
+                  />
+                  <AdminGridIconButton
+                    label={t('dashboard.users.delete')}
+                    icon={<DeleteIcon size={15} />}
+                    tone="danger"
                     disabled={row.id === currentUserId || saving}
                     onClick={() => handleDelete(row.id)}
-                  >
-                    {t('dashboard.users.delete')}
-                  </Button>
-                </div>
+                  />
+                </AdminGridActions>
               ),
             },
           ]}
@@ -450,6 +464,12 @@ export function UsersPanel() {
           }
         />
       )}
+
+      <UserRolesModal
+        user={rolesModalUser}
+        open={rolesModalUser !== null}
+        onClose={() => setRolesModalUser(null)}
+      />
     </div>
   )
 }

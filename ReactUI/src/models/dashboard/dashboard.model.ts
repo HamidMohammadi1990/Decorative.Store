@@ -109,6 +109,7 @@ export interface DashboardData {
 
 export type DashboardSection =
   | 'wallet'
+  | 'cart'
   | 'profile'
   | 'orders'
   | 'transactions'

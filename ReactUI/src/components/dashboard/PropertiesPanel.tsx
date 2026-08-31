@@ -1,17 +1,24 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import type { PropertyTypeValue } from '@/models/checkout/checkout.model'
 import type { AdminProperty, AdminPropertyCategory } from '@/models/admin/property.model'
 import { PROPERTY_TYPE_OPTIONS } from '@/models/admin/property.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
-import { PropertiesIcon } from '@/components/dashboard/DashboardIcons'
+import { PropertiesIcon, EditIcon, DeleteIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  AdminGridActions,
+  AdminGridIconButton,
+} from '@/components/dashboard/admin/AdminGridActions'
 import {
   AdminField,
   adminInputClass,
   resolveAdminMutationError,
 } from '@/components/dashboard/admin/adminFormShared'
+import { AdminListGridHeader } from '@/components/dashboard/admin/AdminListGridHeader'
+import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
@@ -36,6 +43,7 @@ function propertyTypeLabel(t: (key: string) => string, type: PropertyTypeValue) 
 
 export function PropertiesPanel() {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const accessToken = useUserStore((s) => s.accessToken)
   const { languageId, locale, loading: languageLoading } = useCurrentLanguageId()
 
@@ -192,7 +200,7 @@ export function PropertiesPanel() {
 
   const handleDelete = async (id: string) => {
     if (!accessToken || accessToken === 'mock-access-token') return
-    if (!window.confirm(t('dashboard.properties.deleteConfirm'))) return
+    if (!(await confirm({ message: t('dashboard.properties.deleteConfirm') }))) return
 
     setSaving(true)
     setError(null)
@@ -416,12 +424,14 @@ export function PropertiesPanel() {
             {t('dashboard.properties.itemCount', { count: items.length })}
           </p>
           <ul className="divide-y divide-border rounded-sm border border-border">
-            {items.map((item) => (
+            <AdminListGridHeader />
+            {items.map((item, index) => (
               <li
                 key={item.id}
-                className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5"
+                className="flex flex-wrap items-center gap-3 px-4 py-3 sm:px-5"
               >
-                <div className="min-w-0">
+                <AdminRowNumber value={index + 1} />
+                <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-text">{item.title}</p>
                   <p className="mt-0.5 text-xs text-text-muted">
                     {categoryTitleById.get(item.propertyCategoryId) ?? item.propertyCategoryCode}
@@ -443,22 +453,21 @@ export function PropertiesPanel() {
                       ? t('dashboard.properties.statusActive')
                       : t('dashboard.properties.statusInactive')}
                   </span>
-                  <Button
-                    variant="secondary"
-                    className="py-1.5 text-xs"
-                    onClick={() => openEdit(item)}
-                    disabled={saving}
-                  >
-                    {t('dashboard.properties.edit')}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="py-1.5 text-xs text-sale hover:bg-sale/10"
-                    onClick={() => void handleDelete(item.id)}
-                    disabled={saving}
-                  >
-                    {t('dashboard.properties.delete')}
-                  </Button>
+                  <AdminGridActions>
+                    <AdminGridIconButton
+                      label={t('dashboard.properties.edit')}
+                      icon={<EditIcon size={15} />}
+                      onClick={() => openEdit(item)}
+                      disabled={saving}
+                    />
+                    <AdminGridIconButton
+                      label={t('dashboard.properties.delete')}
+                      icon={<DeleteIcon size={15} />}
+                      tone="danger"
+                      onClick={() => void handleDelete(item.id)}
+                      disabled={saving}
+                    />
+                  </AdminGridActions>
                 </div>
               </li>
             ))}

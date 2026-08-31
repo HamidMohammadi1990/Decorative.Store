@@ -3,7 +3,11 @@ import { useTranslation } from 'react-i18next'
 import type { AdminCmsPage } from '@/models/admin/cms.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
-import { CmsPagesIcon } from '@/components/dashboard/DashboardIcons'
+import { CmsPagesIcon, EditIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  AdminGridActions,
+  AdminGridIconButton,
+} from '@/components/dashboard/admin/AdminGridActions'
 import { AdminDataGrid } from '@/components/dashboard/admin/AdminDataGrid'
 import {
   AdminField,
@@ -326,14 +330,14 @@ export function CmsPagesPanel() {
                 header: '',
                 align: 'right',
                 cell: (item) => (
-                  <Button
-                    variant="secondary"
-                    className="py-1.5 text-xs"
-                    onClick={() => openEdit(item)}
-                    disabled={saving}
-                  >
-                    {t('dashboard.cms.pages.edit')}
-                  </Button>
+                  <AdminGridActions>
+                    <AdminGridIconButton
+                      label={t('dashboard.cms.pages.edit')}
+                      icon={<EditIcon size={15} />}
+                      onClick={() => openEdit(item)}
+                      disabled={saving}
+                    />
+                  </AdminGridActions>
                 ),
               },
             ]}

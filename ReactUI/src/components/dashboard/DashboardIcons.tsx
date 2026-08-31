@@ -83,6 +83,25 @@ export function WalletIcon(props: DashboardIconProps) {
   )
 }
 
+export function CartIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M8 8V7a4 4 0 0 1 8 0v1"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M6 8h12l-1.25 12H7.25L6 8Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </IconBase>
+  )
+}
+
 export function OrdersIcon(props: DashboardIconProps) {
   return (
     <IconBase {...props}>
@@ -469,6 +488,110 @@ export function CmsPageSectionsIcon(props: DashboardIconProps) {
     <IconBase {...props}>
       <path d="M5 6h14v12H5z" stroke="currentColor" strokeWidth="1.5" />
       <path d="M9 10h6M9 14h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </IconBase>
+  )
+}
+
+export function EditIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M4 20h4l10.5-10.5a1.8 1.8 0 0 0 0-2.5l-1.5-1.5a1.8 1.8 0 0 0-2.5 0L4 16v4Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="M13.5 6.5 17.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </IconBase>
+  )
+}
+
+export function DeleteIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M4.5 7h15M9 7V5.5A1 1 0 0 1 10 4.5h4a1 1 0 0 1 1 1V7M8 7v11.5h8V7"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M10 10.5v6M14 10.5v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </IconBase>
+  )
+}
+
+export function CheckIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M6 12.5 10 16.5 18 7.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </IconBase>
+  )
+}
+
+export function CommentIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M5 6.5A2.5 2.5 0 0 1 7.5 4h9A2.5 2.5 0 0 1 19 6.5v7A2.5 2.5 0 0 1 16.5 16H10l-4 3.5V6.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </IconBase>
+  )
+}
+
+export function EyeIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M3.5 12s3-5.5 8.5-5.5S20.5 12 20.5 12s-3 5.5-8.5 5.5S3.5 12 3.5 12Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="12" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+    </IconBase>
+  )
+}
+
+export function EyeOffIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M4 4l16 16M9.5 9.7A2.5 2.5 0 0 0 12 14.5c.7 0 1.3-.3 1.8-.7M7.2 7.6C5.6 8.6 4.3 10 3.5 12c0 0 3 5.5 8.5 5.5 1.4 0 2.7-.4 3.8-1"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14.8 10.3C15.2 10.8 15.5 11.4 15.5 12c0 1.9-1.6 3.5-3.5 3.5-.6 0-1.2-.3-1.7-.7"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </IconBase>
+  )
+}
+
+export function StarIcon({ filled = false, ...props }: DashboardIconProps & { filled?: boolean }) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M12 4.2 13.8 8.8 18.7 9.3 15 12.4 16 17.2 12 14.8 8 17.2 9 12.4 5.3 9.3 10.2 8.8 12 4.2Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+        fill={filled ? 'currentColor' : 'none'}
+      />
     </IconBase>
   )
 }

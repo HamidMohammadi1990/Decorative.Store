@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import type { RoomPresetId } from '@/models/room/roomLayout.model'
 import { Button } from '@/components/ui/Button'
 import { useRoomLayout } from '@/hooks/useRoomLayout'
@@ -8,6 +9,7 @@ const PRESETS: RoomPresetId[] = ['living', 'bedroom', 'dining']
 
 export function RoomLayoutToolbar() {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const {
     roomPreset,
     selectedItem,
@@ -21,6 +23,16 @@ export function RoomLayoutToolbar() {
     clearLayout,
     placedItems,
   } = useRoomLayout()
+
+  const handleClearLayout = async () => {
+    if (!(await confirm({ message: t('roomLayout.clearConfirm') }))) return
+    clearLayout()
+  }
+
+  const handleRemoveItem = async (id: string) => {
+    if (!(await confirm({ message: t('roomLayout.removeConfirm') }))) return
+    removeItem(id)
+  }
 
   return (
     <div className="flex flex-col gap-4 rounded-sm border border-border bg-surface p-4 shadow-sm sm:p-5">
@@ -60,7 +72,7 @@ export function RoomLayoutToolbar() {
         </button>
         <button
           type="button"
-          onClick={clearLayout}
+          onClick={() => void handleClearLayout()}
           disabled={placedItems.length === 0}
           className="rounded-sm border border-border px-3 py-1.5 text-xs font-medium text-text-muted hover:bg-surface-muted disabled:opacity-40"
         >
@@ -95,7 +107,7 @@ export function RoomLayoutToolbar() {
             />
             <ToolbarBtn
               label={t('roomLayout.remove')}
-              onClick={() => removeItem(selectedItem.id)}
+              onClick={() => void handleRemoveItem(selectedItem.id)}
               danger
             />
           </div>

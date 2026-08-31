@@ -5,12 +5,18 @@ import type { AdminBlogPostComment } from '@/models/admin/blog.model'
 import type { AdminBlogPostListItem } from '@/models/admin/blog.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
-import { BlogCommentsIcon } from '@/components/dashboard/DashboardIcons'
+import { BlogCommentsIcon, CheckIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  AdminGridActionButton,
+  AdminGridActions,
+} from '@/components/dashboard/admin/AdminGridActions'
 import {
   AdminField,
   adminInputClass,
   resolveAdminMutationError,
 } from '@/components/dashboard/admin/adminFormShared'
+import { AdminListGridHeader } from '@/components/dashboard/admin/AdminListGridHeader'
+import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
@@ -209,11 +215,13 @@ export function BlogPostCommentsPanel() {
             {t('dashboard.blogPostComments.itemCount', { count: items.length })}
           </p>
           <ul className="divide-y divide-border rounded-sm border border-border">
-            {items.map((item) => (
+            <AdminListGridHeader />
+            {items.map((item, index) => (
               <li
                 key={item.id}
-                className="flex flex-wrap items-start justify-between gap-3 px-4 py-3 sm:px-5"
+                className="flex flex-wrap items-start gap-3 px-4 py-3 sm:px-5"
               >
+                <AdminRowNumber value={index + 1} />
                 <div className="min-w-0 flex-1">
                   <p className="text-sm text-text">{truncateText(item.content)}</p>
                   <p className="mt-1 text-xs text-text-muted">
@@ -234,14 +242,14 @@ export function BlogPostCommentsPanel() {
                       : t('dashboard.blogPostComments.statusPending')}
                   </span>
                   {!item.isApproved && (
-                    <Button
-                      variant="secondary"
-                      className="py-1.5 text-xs"
-                      onClick={() => void handleApprove(item.id)}
-                      disabled={saving}
-                    >
-                      {t('dashboard.blogPostComments.approve')}
-                    </Button>
+                    <AdminGridActions>
+                      <AdminGridActionButton
+                        label={t('dashboard.blogPostComments.approve')}
+                        icon={<CheckIcon size={14} />}
+                        onClick={() => void handleApprove(item.id)}
+                        disabled={saving}
+                      />
+                    </AdminGridActions>
                   )}
                 </div>
               </li>

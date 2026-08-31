@@ -27,4 +27,6 @@ public record GetMyUserStoryItemResponse
     public string? ProductSlug { get; init; }
     public bool IsActive { get; init; }
     public DateTime CreatedOnUtc { get; init; }
+    public int LikeCount { get; init; }
+    public int CommentCount { get; init; }
 }

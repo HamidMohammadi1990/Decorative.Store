@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import { CompareIcon } from '@/components/compare/CompareIcon'
 import { Button } from '@/components/ui/Button'
 import { LocalImage } from '@/components/ui/LocalImage'
@@ -9,10 +10,16 @@ import { MAX_COMPARE_PRODUCTS } from '@/models/catalog/compare.model'
 
 export function CompareFloatingBar() {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const location = useLocation()
   const slugs = useCompareStore((s) => s.slugs)
   const clear = useCompareStore((s) => s.clear)
   const { products, loading } = useCompareProducts()
+
+  const handleClear = async () => {
+    if (!(await confirm({ message: t('compare.clearConfirm') }))) return
+    clear()
+  }
 
   if (location.pathname === '/compare' || slugs.length === 0) return null
 
@@ -54,7 +61,7 @@ export function CompareFloatingBar() {
         <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
-            onClick={clear}
+            onClick={() => void handleClear()}
             className="hidden text-xs font-medium text-text-muted hover:text-text sm:inline"
           >
             {t('compare.clearAll')}

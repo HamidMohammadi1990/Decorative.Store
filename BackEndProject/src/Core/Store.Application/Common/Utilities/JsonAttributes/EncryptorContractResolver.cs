@@ -18,18 +18,38 @@ public sealed class EncryptorContractResolver : CamelCasePropertyNamesContractRe
         if (converterAttribute?.ConverterType is null)
             return property;
 
+        var memberType = GetMemberType(member);
+
         if (Activator.CreateInstance(converterAttribute.ConverterType) is JsonIntEncryptor intEncryptor)
         {
-            property.Converter = new NewtonsoftIntEncryptor(intEncryptor.Key);
+            property.Converter = IsEnumType(memberType)
+                ? new NewtonsoftEnumIntEncryptor(intEncryptor.Key, memberType)
+                : new NewtonsoftIntEncryptor(intEncryptor.Key);
             return property;
         }
 
         if (Activator.CreateInstance(converterAttribute.ConverterType) is JsonNullableIntEncryptor nullableEncryptor)
         {
-            property.Converter = new NewtonsoftNullableIntEncryptor(nullableEncryptor.Key);
+            property.Converter = IsEnumType(memberType)
+                ? new NewtonsoftEnumIntEncryptor(nullableEncryptor.Key, memberType)
+                : new NewtonsoftNullableIntEncryptor(nullableEncryptor.Key);
             return property;
         }
 
         return property;
+    }
+
+    private static Type GetMemberType(MemberInfo member) =>
+        member switch
+        {
+            PropertyInfo property => property.PropertyType,
+            FieldInfo field => field.FieldType,
+            _ => throw new NotSupportedException($"Member type '{member.MemberType}' is not supported."),
+        };
+
+    private static bool IsEnumType(Type memberType)
+    {
+        var underlyingType = Nullable.GetUnderlyingType(memberType) ?? memberType;
+        return underlyingType.IsEnum;
     }
 }

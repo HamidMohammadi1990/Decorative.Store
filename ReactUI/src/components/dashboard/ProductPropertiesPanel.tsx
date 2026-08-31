@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import type { AdminProductListItem } from '@/models/admin/catalog.model'
 import type { AdminProductProperty } from '@/models/admin/property.model'
 import type { AdminProperty, AdminPropertyItem } from '@/models/admin/property.model'
@@ -13,6 +14,8 @@ import {
   adminInputClass,
   resolveAdminMutationError,
 } from '@/components/dashboard/admin/adminFormShared'
+import { AdminListGridHeader } from '@/components/dashboard/admin/AdminListGridHeader'
+import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import { AdminContentLanguageField } from '@/components/dashboard/admin/AdminContentLanguageField'
 import type { ProductPanelEmbedProps } from '@/components/dashboard/admin/productPanelEmbed'
 import { embeddedProductLabel } from '@/components/dashboard/admin/productPanelEmbed'
@@ -36,6 +39,7 @@ export function ProductPropertiesPanel({
   productCode: fixedProductCode,
 }: ProductPanelEmbedProps = {}) {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const [searchParams, setSearchParams] = useSearchParams()
   const accessToken = useUserStore((s) => s.accessToken)
   const { locale, loading: languageLoading } = useCurrentLanguageId()
@@ -291,7 +295,7 @@ export function ProductPropertiesPanel({
 
   const handleDelete = async (id: string) => {
     if (!accessToken || accessToken === 'mock-access-token') return
-    if (!window.confirm(t('dashboard.productProperties.deleteConfirm'))) return
+    if (!(await confirm({ message: t('dashboard.productProperties.deleteConfirm') }))) return
 
     setSaving(true)
     setError(null)
@@ -554,12 +558,14 @@ export function ProductPropertiesPanel({
               : ''}
           </p>
           <ul className="divide-y divide-border rounded-sm border border-border">
-            {items.map((item) => (
+            <AdminListGridHeader />
+            {items.map((item, index) => (
               <li
                 key={item.id}
-                className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-5"
+                className="flex flex-wrap items-center gap-3 px-4 py-3 sm:px-5"
               >
-                <div className="min-w-0">
+                <AdminRowNumber value={index + 1} />
+                <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-text">
                     {resolveItemLabel(item)}
                   </p>

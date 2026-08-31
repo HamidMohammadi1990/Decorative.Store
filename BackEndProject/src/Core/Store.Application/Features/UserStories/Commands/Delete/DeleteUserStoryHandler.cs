@@ -13,7 +13,9 @@ public class DeleteUserStoryHandler
         IUnitOfWork uow,
         ICurrentUserContext currentUser,
         ILocalFileService localFileService,
-        IUserStoryRepository userStoryRepository)
+        IUserStoryRepository userStoryRepository,
+        IUserStoryLikeRepository userStoryLikeRepository,
+        IUserStoryCommentRepository userStoryCommentRepository)
     : IRequestHandler<DeleteUserStoryRequest, OperationResult>
 {
     public async Task<OperationResult> Handle(DeleteUserStoryRequest request, CancellationToken cancellationToken)
@@ -21,6 +23,9 @@ public class DeleteUserStoryHandler
         var userStory = await userStoryRepository.FindByIdAndUserIdAsync(request.Id, currentUser.UserId, cancellationToken);
         if (userStory is null)
             return ErrorModel.Create("InvalidId");
+
+        await userStoryLikeRepository.DeleteByStoryIdAsync(request.Id, cancellationToken);
+        await userStoryCommentRepository.DeleteByStoryIdAsync(request.Id, cancellationToken);
 
         DeleteMediaFile(userStory.MediaPath);
         if (!string.IsNullOrWhiteSpace(userStory.PosterPath))

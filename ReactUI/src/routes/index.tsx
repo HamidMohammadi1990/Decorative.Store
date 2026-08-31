@@ -20,6 +20,7 @@ import {
   DashboardCmsSectionTypesPage,
   DashboardCategoriesPage,
   DashboardCouponsPage,
+  DashboardCartPage,
   DashboardOrdersPage,
   DashboardProductCommentsPage,
   DashboardProductCreatePage,
@@ -43,6 +44,7 @@ import {
   DashboardWishlistPage,
 } from '@/pages/dashboard/DashboardPages'
 import { CheckoutPage } from '@/pages/CheckoutPage'
+import { CartPage } from '@/pages/CartPage'
 import { HomePage } from '@/pages/HomePage'
 import { BlogDetailPage } from '@/pages/BlogDetailPage'
 import { BlogListingPage } from '@/pages/BlogListingPage'
@@ -60,6 +62,14 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <HomePage />,
+      },
+      {
+        path: '/cart',
+        element: (
+          <RequireAuth>
+            <CartPage />
+          </RequireAuth>
+        ),
       },
       {
         path: '/checkout',
@@ -116,6 +126,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <Navigate to="wallet" replace /> },
           { path: 'wallet', element: <DashboardWalletPage /> },
+          { path: 'cart', element: <DashboardCartPage /> },
           { path: 'profile', element: <DashboardProfilePage /> },
           { path: 'orders', element: <DashboardOrdersPage /> },
           { path: 'transactions', element: <DashboardTransactionsPage /> },

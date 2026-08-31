@@ -3,8 +3,14 @@ import { useTranslation } from 'react-i18next'
 import type { AdminCmsSection, AdminCmsSectionType } from '@/models/admin/cms.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
-import { CmsSectionsIcon } from '@/components/dashboard/DashboardIcons'
+import { CmsSectionsIcon, EditIcon } from '@/components/dashboard/DashboardIcons'
+import {
+  AdminGridActions,
+  AdminGridIconButton,
+} from '@/components/dashboard/admin/AdminGridActions'
 import { AdminField, adminInputClass, resolveAdminMutationError } from '@/components/dashboard/admin/adminFormShared'
+import { AdminListGridHeader } from '@/components/dashboard/admin/AdminListGridHeader'
+import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
@@ -112,13 +118,29 @@ export function CmsSectionsPanel() {
         <DashboardEmptyState icon={<CmsSectionsIcon size={28} />} title={t('dashboard.cms.sections.emptyTitle')} message={error ?? t('dashboard.cms.sections.emptyMessage')} />
       ) : (
         <ul className="divide-y divide-border rounded-sm border border-border">
-          {items.map((item) => (
-            <li key={item.id} className="flex items-center justify-between gap-4 px-4 py-3">
-              <div>
+          <AdminListGridHeader />
+          {items.map((item, index) => (
+            <li key={item.id} className="flex items-center gap-3 px-4 py-3">
+              <AdminRowNumber value={index + 1} />
+              <div className="flex-1">
                 <p className="font-medium">{item.title}</p>
                 <p className="text-xs text-text-muted">{sectionTypeNameById.get(item.sectionTypeId) ?? item.sectionTypeId}</p>
               </div>
-              <Button variant="secondary" size="sm" onClick={() => { setEditingId(item.id); setSectionTypeId(item.sectionTypeId); setTitle(item.title); setUrl(item.url); setDescription(item.description ?? ''); setIsActive(item.isActive); setMode('edit') }}>{t('dashboard.cms.sections.edit')}</Button>
+              <AdminGridActions>
+                <AdminGridIconButton
+                  label={t('dashboard.cms.sections.edit')}
+                  icon={<EditIcon size={15} />}
+                  onClick={() => {
+                    setEditingId(item.id)
+                    setSectionTypeId(item.sectionTypeId)
+                    setTitle(item.title)
+                    setUrl(item.url)
+                    setDescription(item.description ?? '')
+                    setIsActive(item.isActive)
+                    setMode('edit')
+                  }}
+                />
+              </AdminGridActions>
             </li>
           ))}
         </ul>

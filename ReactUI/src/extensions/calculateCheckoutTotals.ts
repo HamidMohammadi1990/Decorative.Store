@@ -14,6 +14,7 @@ export interface CheckoutTotals {
 }
 
 const FREE_SHIPPING_THRESHOLD = 5_000_000
+export { FREE_SHIPPING_THRESHOLD }
 const STANDARD_SHIPPING = 290_000
 const EXPRESS_SHIPPING = 490_000
 const TAX_RATE = 0.2

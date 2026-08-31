@@ -48,4 +48,9 @@ public class UserStoryLikeRepository
 
         return likedIds.ToHashSet();
     }
+
+    public Task DeleteByStoryIdAsync(int userStoryId, CancellationToken cancellationToken = default)
+        => Context.UserStoryLike
+            .Where(x => x.UserStoryId == userStoryId)
+            .ExecuteDeleteAsync(cancellationToken);
 }

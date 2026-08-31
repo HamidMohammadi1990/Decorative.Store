@@ -1,16 +1,18 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
+import { WishlistItemCard } from '@/components/dashboard/WishlistItemCard'
 import { WishlistIcon } from '@/components/wishlist/WishlistIcon'
-import { ProductGrid } from '@/components/listing/ProductGrid'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { useWishlistPage } from '@/hooks/useWishlistPage'
 
 export function WishlistPanel() {
   const { t } = useTranslation()
+  const confirm = useConfirm()
   const {
     products,
     slugs,
@@ -27,6 +29,8 @@ export function WishlistPanel() {
     if (!accessToken || accessToken === 'mock-access-token' || isClearing || slugs.length === 0) {
       return
     }
+
+    if (!(await confirm({ message: t('dashboard.wishlist.clearConfirm') }))) return
 
     setIsClearing(true)
     setActionError(null)
@@ -136,7 +140,11 @@ export function WishlistPanel() {
           }
         />
       ) : (
-        <ProductGrid products={products} />
+        <div className="grid gap-3 lg:grid-cols-2">
+          {products.map((product) => (
+            <WishlistItemCard key={product.slug} product={product} />
+          ))}
+        </div>
       )}
     </div>
   )

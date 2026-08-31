@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import type { DashboardTransaction } from '@/models/dashboard/dashboard.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
+import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
 import { TransactionsIcon } from '@/components/dashboard/DashboardIcons'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
@@ -47,18 +48,20 @@ export function TransactionsPanel({ transactions }: TransactionsPanelProps) {
       />
 
       <div className="overflow-hidden rounded-sm border border-border bg-surface shadow-sm">
-        <div className="hidden border-b border-border bg-surface-muted/30 px-5 py-3 text-xs font-semibold uppercase tracking-wider text-text-muted sm:grid sm:grid-cols-[1fr_auto_auto] sm:gap-4 sm:px-6">
+        <div className="flex border-b border-border bg-surface-muted/30 px-5 py-3 text-xs font-semibold uppercase tracking-wider text-text-muted sm:grid sm:grid-cols-[auto_1fr_auto_auto] sm:gap-4 sm:px-6">
+          <span className="w-10 text-center">{t('common.grid.row')}</span>
           <span>{t('dashboard.transactions.colDescription')}</span>
           <span className="text-end">{t('dashboard.transactions.colDate')}</span>
           <span className="w-28 text-end">{t('dashboard.transactions.colAmount')}</span>
         </div>
 
         <ul className="divide-y divide-border">
-          {transactions.map((tx) => (
+          {transactions.map((tx, index) => (
             <li
               key={tx.id}
-              className="px-5 py-4 transition-colors hover:bg-surface-muted/40 sm:grid sm:grid-cols-[1fr_auto_auto] sm:items-center sm:gap-4 sm:px-6"
+              className="px-5 py-4 transition-colors hover:bg-surface-muted/40 sm:grid sm:grid-cols-[auto_1fr_auto_auto] sm:items-center sm:gap-4 sm:px-6"
             >
+              <AdminRowNumber value={index + 1} />
               <div className="flex items-start gap-3">
                 <span
                   className={`mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-sm text-sm font-semibold ${
