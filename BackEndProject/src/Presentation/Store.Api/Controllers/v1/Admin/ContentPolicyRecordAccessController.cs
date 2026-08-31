@@ -15,7 +15,7 @@ namespace Store.Api.Controllers.v1.Admin;
 [ApiVersion("1")]
 [ControllerName("content-policy-record-access")]
 [ApiControllerCategory(ApiControllerCategory.ContentPolicy)]
-[ControllerInfo(PermissionType.ManageContentPolicyRecordAccessGroup, PermissionType.ManageContentPolicyRecordAccess)]
+[ControllerInfo(PermissionType.ManageContentPolicyRecordAccess, PermissionType.ManageContentPolicyRecordAccessGroup)]
 public class ContentPolicyRecordAccessController
     (ISender mediator)
     : BaseApiAdminController

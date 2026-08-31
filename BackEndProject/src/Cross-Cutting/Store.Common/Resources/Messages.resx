@@ -262,6 +262,7 @@
   <data name="PaymentFailed" xml:space="preserve"><value>Payment was not successful</value></data>
   <data name="BankTransactionNotFound" xml:space="preserve"><value>Bank transaction not found</value></data>
   <data name="InvalidBlogPostId" xml:space="preserve"><value>Invalid blog post identifier</value></data>
+  <data name="InvalidUserStoryId" xml:space="preserve"><value>Invalid user story identifier</value></data>
   <data name="InvalidCompanyStoryId" xml:space="preserve"><value>Invalid company story identifier</value></data>
   <data name="InvalidRefreshToken" xml:space="preserve"><value>Invalid refresh token</value></data>
   <data name="AccountCodeRequired" xml:space="preserve"><value>Account code is required</value></data>

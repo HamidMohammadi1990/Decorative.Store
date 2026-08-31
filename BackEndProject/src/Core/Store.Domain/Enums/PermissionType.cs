@@ -1,4 +1,4 @@
-﻿using Store.Domain.Resources;
+using Store.Domain.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace Store.Domain.Enums;
@@ -1042,4 +1042,16 @@ public enum PermissionType : int
 
     [Display(Name = "PermissionType_SetDefaultLanguage", ResourceType = typeof(EnumResources))]
     SetDefaultLanguage = 487,
+
+    [Display(Name = "PermissionType_ManageUserStoryComment", ResourceType = typeof(EnumResources))]
+    ManageUserStoryComment = 488,
+
+    [Display(Name = "PermissionType_ApproveUserStoryComment", ResourceType = typeof(EnumResources))]
+    ApproveUserStoryComment = 489,
+
+    [Display(Name = "PermissionType_ListUserStoryComment", ResourceType = typeof(EnumResources))]
+    ListUserStoryComment = 490,
+
+    [Display(Name = "PermissionType_GetUserStoryCommentById", ResourceType = typeof(EnumResources))]
+    GetUserStoryCommentById = 491,
 }

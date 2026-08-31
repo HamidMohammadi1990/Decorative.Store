@@ -59,8 +59,32 @@ export function BlogPostCommentsPanel() {
     setLoading(true)
     setError(null)
     try {
-      const postResult = await adminBlogPostService.getAll(accessToken, locale, { pageSize: 200 })
-      setPosts(postResult.items)
+      const loadedPosts = await adminBlogPostService.getAllPages(accessToken, locale)
+
+      const activePostId = filterBlogPostId || blogPostIdFromUrl
+      if (activePostId && !loadedPosts.some((post) => post.id === activePostId)) {
+        const post = await adminBlogPostService.get(accessToken, locale, activePostId)
+        if (post) {
+          loadedPosts.unshift({
+            id: post.id,
+            title: post.title,
+            slug: post.slug,
+            categoryId: post.categoryId,
+            categoryTitle: '',
+            metaDescription: post.metaDescription,
+            content: post.content,
+            readingTimeInMinutes: post.readingTimeInMinutes,
+            authorName: '',
+            createdOnUtc: post.createdOnUtc,
+            updatedOnUtc: post.updatedOnUtc,
+            publishedOnUtc: post.publishedOnUtc,
+            isActive: post.isActive,
+            isPublished: post.isPublished,
+          })
+        }
+      }
+
+      setPosts(loadedPosts)
 
       const commentResult = await adminBlogPostCommentService.getAll(accessToken, locale, {
         pageSize: 200,
@@ -75,19 +99,11 @@ export function BlogPostCommentsPanel() {
     } finally {
       setLoading(false)
     }
-  }, [accessToken, filterApproved, filterBlogPostId, locale, t])
+  }, [accessToken, blogPostIdFromUrl, filterApproved, filterBlogPostId, locale, t])
 
   useEffect(() => {
     if (!languageLoading) void load()
   }, [languageLoading, load])
-
-  useEffect(() => {
-    if (!blogPostIdFromUrl && posts.length > 0 && !filterBlogPostId) {
-      const firstId = posts[0].id
-      setFilterBlogPostId(firstId)
-      setSearchParams({ blogPostId: firstId })
-    }
-  }, [blogPostIdFromUrl, filterBlogPostId, posts, setSearchParams])
 
   const handlePostFilterChange = (id: string) => {
     setFilterBlogPostId(id)

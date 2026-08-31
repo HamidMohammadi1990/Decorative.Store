@@ -35,11 +35,14 @@ public class User : BaseEntity
     public ICollection<ProductComment> ProductComments { get; private set; } = default!;
     public ICollection<ProductWishlist> ProductWishlists { get; private set; } = default!;
     public ICollection<UserStory> UserStories { get; private set; } = default!;
+    public ICollection<UserStoryComment> UserStoryComments { get; private set; } = default!;
+    public ICollection<UserStoryLike> UserStoryLikes { get; private set; } = default!;
     public ICollection<BlogPostComment> BlogPostComments { get; private set; } = default!;
     public ICollection<BankTransaction> BankTransactions { get; private set; } = default!;
     public ICollection<ChequeTransaction> ChequeTransactions { get; private set; } = default!;
     public ICollection<WalletTransaction> WalletTransactions { get; private set; } = default!;
     public ICollection<BlogPostComment> BlogPostApprovedComments { get; private set; } = default!;
+    public ICollection<UserStoryComment> UserStoryApprovedComments { get; private set; } = default!;
 
 
     public static User Create(string? email, GenderType gender, string username,
@@ -92,6 +95,31 @@ public class User : BaseEntity
     public void ConfirmPhoneNumber()
     {
         PhoneNumberConfirmed = true;
+    }
+
+    public void UpdateByAdmin(
+        string userName,
+        string firstName,
+        string lastName,
+        string? email,
+        string phoneNumber,
+        GenderType gender,
+        bool isActive,
+        bool loginPermission)
+    {
+        UserName = userName;
+        FirstName = firstName;
+        LastName = lastName;
+        Email = email;
+        PhoneNumber = phoneNumber;
+        Gender = gender;
+        IsActive = isActive;
+        LoginPermission = loginPermission;
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
     }
 
     public bool EnsureSecurityStamp()

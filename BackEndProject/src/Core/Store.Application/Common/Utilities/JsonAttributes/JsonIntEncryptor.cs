@@ -37,20 +37,29 @@ public class JsonNullableIntEncryptor : JsonConverter<int?>
     }
     public override int? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
+        if (reader.TokenType == JsonTokenType.Null)
+            return null;
+
         var encrypted = reader.GetString();
-        var decrypted = encrypted.Decrypt(Key);
         if (string.IsNullOrEmpty(encrypted))
             return null;
-        int.TryParse(decrypted, out var integerValue);
-        return integerValue;
+
+        var decrypted = encrypted.Decrypt(Key);
+        if (string.IsNullOrEmpty(decrypted))
+            return null;
+
+        return int.TryParse(decrypted, out var integerValue) ? integerValue : null;
     }
 
     public override void Write(Utf8JsonWriter writer, int? value, JsonSerializerOptions options)
     {
-        var stringValue = "";
-        if (value != null)
-            stringValue = value.ToString();
-        var encrypted = stringValue.Encrypt(Key);
+        if (value is null)
+        {
+            writer.WriteNullValue();
+            return;
+        }
+
+        var encrypted = value.ToString()!.Encrypt(Key);
         writer.WriteStringValue(encrypted);
     }
 }

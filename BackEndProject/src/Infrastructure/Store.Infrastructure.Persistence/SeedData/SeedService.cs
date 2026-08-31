@@ -1,6 +1,7 @@
-﻿using Store.Domain.Enums;
+using Store.Domain.Enums;
 using Store.Domain.Entities;
 using Store.Common.Utilities;
+using Store.Common.Extensions;
 using Store.Domain.Dtos.Others;
 using Microsoft.EntityFrameworkCore;
 using Store.Infrastructure.Persistence.Contracts;
@@ -98,73 +99,98 @@ public class SeedService(EditionDbContext context) : ISeedService
 
     private async Task<List<int>> SeedPermissionsAsync(List<DynamicPermission> dynamicPermissions)
     {
-        var priority = 1;
+        var addedIds = new List<int>();
+        var priority = await context.Permission.MaxAsync(x => (int?)x.Priority) ?? 0;
+
+        await EnsureProductPermissionAsync();
+
         foreach (var dynamicPermission in dynamicPermissions)
         {
-            var existsTabPermission = await context
-                             .Permission
-                             .FirstOrDefaultAsync(x => x.Title == dynamicPermission.Name && x.ParentId == PermissionType.Product);
+            var groupType = dynamicPermission.Controllers[0].GroupType;
 
-            var tabPermission = existsTabPermission ??
-                                Permission.Create(dynamicPermission.Controllers[0].GroupType, "", dynamicPermission.Name, "",
-                                                  priority, PermissionLevelType.Tab, PermissionType.Product);
-            tabPermission.SetParents([]);
-
-            var versionOfControllers = dynamicPermission.Controllers.GroupBy(x => GetControllerName(x.FullName)).ToList();
-            foreach (var controller in versionOfControllers)
+            if (!await PermissionExistsAsync(groupType))
             {
-                var actions = controller.ToList().SelectMany(x => x.Actions).DistinctBy(x => new { x.Name, x.Type }).ToList();
-                var firstController = controller.First();
-                var existsPagePermission =
-                        await context.Permission
-                       .SingleOrDefaultAsync(x => x.Title == firstController.Name && x.NameSpace == firstController.FullName);
+                context.Permission.Add(
+                    Permission.Create(
+                        groupType, "", dynamicPermission.Name, "",
+                        ++priority, PermissionLevelType.Tab, PermissionType.Product));
+                addedIds.Add((int)groupType);
+            }
+        }
 
-                var pagePermission = existsPagePermission ??
-                                     Permission.Create(firstController.Type, firstController.Url, firstController.Name,
-                                     firstController.FullName, ++priority, PermissionLevelType.Page, tabPermission.Id);
-                pagePermission.SetParents([]);
+        await context.SaveChangesAsync();
+
+        foreach (var dynamicPermission in dynamicPermissions)
+        {
+            var groupType = dynamicPermission.Controllers[0].GroupType;
+
+            foreach (var controller in dynamicPermission.Controllers.GroupBy(x => GetControllerName(x.FullName)))
+            {
+                var firstController = controller.First();
+
+                if (!await PermissionExistsAsync(firstController.Type))
+                {
+                    context.Permission.Add(
+                        Permission.Create(
+                            firstController.Type, firstController.Url, firstController.Name,
+                            firstController.FullName, ++priority, PermissionLevelType.Page, groupType));
+                    addedIds.Add((int)firstController.Type);
+                }
+            }
+        }
+
+        await context.SaveChangesAsync();
+
+        foreach (var dynamicPermission in dynamicPermissions)
+        {
+            foreach (var controller in dynamicPermission.Controllers.GroupBy(x => GetControllerName(x.FullName)))
+            {
+                var actions = controller.ToList().SelectMany(x => x.Actions).DistinctBy(x => x.Type).ToList();
+                var firstController = controller.First();
 
                 foreach (var action in actions)
                 {
-                    if (action.Type == pagePermission.Id)
+                    if (action.Type == firstController.Type)
                         continue;
 
-                    var isExistsAction = await context.Permission.AnyAsync(x => x.Title == action.Name && x.NameSpace == action.FullNames.FirstOrDefault());
-                    if (isExistsAction)
+                    if (await PermissionExistsAsync(action.Type))
                         continue;
 
-                    var pagePermissionAction =
-                            Permission.Create(action.Type, action.Url, action.Name, action.FullNames.FirstOrDefault() ?? "",
-                                              ++priority, PermissionLevelType.Action, pagePermission.Id);
-
-                    if (!pagePermission.Children.Any(x => x.Title == pagePermissionAction.Title && x.NameSpace == pagePermissionAction.NameSpace))
-                        pagePermission.Children.Add(pagePermissionAction);
+                    context.Permission.Add(
+                        Permission.Create(
+                            action.Type, action.Url, action.Name, action.FullNames.FirstOrDefault() ?? "",
+                            ++priority, PermissionLevelType.Action, firstController.Type));
+                    addedIds.Add((int)action.Type);
                 }
-
-                if (!tabPermission.Children.Any(x => x.Title == pagePermission.Title && x.NameSpace == pagePermission.NameSpace))
-                    tabPermission.Children.Add(pagePermission);
             }
-            if (existsTabPermission is null)
-                context.Permission.Add(tabPermission);
-            else
-                context.Permission.Update(tabPermission);
-
-            priority++;
         }
+
         await context.SaveChangesAsync();
-
-        var permissionIds =
-                context.ChangeTracker
-               .Entries<Permission>()
-               .SelectMany(x => x.Properties)
-               .Where(x => x.Metadata.Name == "Id")
-               .Select(x => Convert.ToInt32(x.CurrentValue))
-               .ToList();
-
-        return permissionIds;
+        return addedIds;
 
         static string GetControllerName(string fullName)
             => fullName.Split(".").Last();
+    }
+
+    private async Task EnsureProductPermissionAsync()
+    {
+        if (await PermissionExistsAsync(PermissionType.Product))
+            return;
+
+        context.Permission.Add(
+            Permission.Create(
+                PermissionType.Product, "",
+                PermissionType.Product.ToDisplay(), "",
+                0, PermissionLevelType.Product));
+        await context.SaveChangesAsync();
+    }
+
+    private async Task<bool> PermissionExistsAsync(PermissionType id)
+    {
+        if (context.ChangeTracker.Entries<Permission>().Any(x => x.Entity.Id == id))
+            return true;
+
+        return await context.Permission.AnyAsync(x => x.Id == id);
     }
 
     private async Task SeedUsersAsync(int adminRoleId)

@@ -13,7 +13,7 @@ import {
   readIsActive,
   type AdminPagedResult,
 } from '@/services/admin/adminCatalogNormalize'
-import { normalizeSectionTypeTranslations } from '@/services/admin/adminCmsNormalize'
+import { normalizeSectionTypeTranslations, pickSectionTypeName } from '@/services/admin/adminCmsNormalize'
 
 const BASE = '/api/v1/admin/section-type'
 
@@ -25,15 +25,11 @@ function normalizeSectionType(data: unknown, languageId?: number): AdminCmsSecti
   if (!id) return null
 
   const translations = normalizeSectionTypeTranslations(record.translations ?? record.Translations)
-  const translation =
-    (languageId != null
-      ? translations.find((item) => item.languageId === languageId)
-      : translations[0]) ?? null
 
   return {
     id,
     isActive: readIsActive(record),
-    name: translation?.name ?? '',
+    name: pickSectionTypeName(translations, languageId) || readStringField(record, 'name', 'Name'),
     translations,
   }
 }

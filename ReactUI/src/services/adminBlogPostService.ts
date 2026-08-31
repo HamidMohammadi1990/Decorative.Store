@@ -120,6 +120,34 @@ export const adminBlogPostService = {
     return normalizeAdminPaged(data, normalizeBlogPostListItem)
   },
 
+  async getAllPages(
+    accessToken: string,
+    locale: Locale,
+    options: {
+      pageSize?: number
+      categoryId?: string | null
+      isPublished?: boolean | null
+    } = {},
+  ): Promise<AdminBlogPostListItem[]> {
+    const pageSize = options.pageSize ?? 100
+    const items: AdminBlogPostListItem[] = []
+    let pageNumber = 1
+    let totalPages = 1
+
+    do {
+      const page = await this.getAll(accessToken, locale, {
+        ...options,
+        pageNumber,
+        pageSize,
+      })
+      items.push(...page.items)
+      totalPages = page.totalPages
+      pageNumber += 1
+    } while (pageNumber <= totalPages)
+
+    return items
+  },
+
   async get(accessToken: string, locale: Locale, id: string): Promise<AdminBlogPostDetail | null> {
     const data = await apiPost<unknown>(`${BASE}/get`, { id }, { locale, accessToken })
     return normalizeBlogPostDetail(data)

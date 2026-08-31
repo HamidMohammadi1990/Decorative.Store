@@ -8,6 +8,7 @@ import { AddressesPanel } from '@/components/dashboard/AddressesPanel'
 import { CouponsPanel } from '@/components/dashboard/CouponsPanel'
 import { WishlistPanel } from '@/components/dashboard/WishlistPanel'
 import { StoriesPanel } from '@/components/dashboard/StoriesPanel'
+import { UserStoryCommentsPanel } from '@/components/dashboard/UserStoryCommentsPanel'
 import { ProfileCompletionPanel } from '@/components/dashboard/ProfileCompletionPanel'
 import { BlogPostCategoriesPanel } from '@/components/dashboard/BlogPostCategoriesPanel'
 import { BlogPostCommentsPanel } from '@/components/dashboard/BlogPostCommentsPanel'
@@ -31,6 +32,8 @@ import { CmsSectionTypesPanel } from '@/components/dashboard/CmsSectionTypesPane
 import { CmsSectionsPanel } from '@/components/dashboard/CmsSectionsPanel'
 import { CmsSectionItemsPanel } from '@/components/dashboard/CmsSectionItemsPanel'
 import { CmsPageSectionsPanel } from '@/components/dashboard/CmsPageSectionsPanel'
+import { UsersPanel } from '@/components/dashboard/UsersPanel'
+import { RolesPanel } from '@/components/dashboard/RolesPanel'
 
 function useDashboardContext() {
   return useOutletContext<DashboardData>()
@@ -60,6 +63,10 @@ export function DashboardProfilePage() {
 
 export function DashboardStoriesPage() {
   return <StoriesPanel />
+}
+
+export function DashboardUserStoryCommentsPage() {
+  return <UserStoryCommentsPanel />
 }
 
 export function DashboardWishlistPage() {
@@ -168,4 +175,12 @@ export function DashboardCmsSectionItemsPage() {
 
 export function DashboardCmsPageSectionsPage() {
   return <CmsPageSectionsPanel />
+}
+
+export function DashboardUsersPage() {
+  return <UsersPanel />
+}
+
+export function DashboardRolesPage() {
+  return <RolesPanel />
 }

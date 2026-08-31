@@ -1,44 +1,57 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { StoryComment } from '@/models/stories/story.model'
 import { formatRelativeDate } from '@/extensions/formatRelativeDate'
-import {
-  getDisplayedCommentLikes,
-  useStoryInteractionStore,
-} from '@/stores/storyInteractionStore'
+import { useStoryInteractionStore } from '@/stores/storyInteractionStore'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { useUserStore } from '@/stores/userStore'
+import { useAccessToken, useUserStore } from '@/stores/userStore'
+import { openLoginModal } from '@/stores/authModalStore'
+import { userStoryCommentService } from '@/services/userStoryCommentService'
 import { CloseIcon } from '@/components/ui/CloseIcon'
 import { Portal } from '@/components/ui/Portal'
 
-const EMPTY_COMMENTS: StoryComment[] = []
-
 interface StoryCommentsSheetProps {
   storyId: string
-  baseComments: StoryComment[]
+  commentCount: number
   isOpen: boolean
   onClose: () => void
+  onCommentSubmitted?: () => void
 }
 
 export function StoryCommentsSheet({
   storyId,
-  baseComments,
+  commentCount,
   isOpen,
   onClose,
+  onCommentSubmitted,
 }: StoryCommentsSheetProps) {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
+  const accessToken = useAccessToken()
   const user = useUserStore((s) => s.user)
   const [text, setText] = useState('')
-  const addComment = useStoryInteractionStore((s) => s.addComment)
-  const userComments = useStoryInteractionStore(
-    (s) => s.userComments[storyId] ?? EMPTY_COMMENTS,
-  )
+  const [comments, setComments] = useState<StoryComment[]>([])
+  const [loading, setLoading] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
 
-  const allComments = useMemo(
-    () => [...userComments, ...baseComments],
-    [baseComments, userComments],
-  )
+  const loadComments = useCallback(async () => {
+    setLoading(true)
+    try {
+      const result = await userStoryCommentService.search(locale, storyId)
+      setComments(result.items)
+    } catch {
+      setComments([])
+    } finally {
+      setLoading(false)
+    }
+  }, [locale, storyId])
+
+  useEffect(() => {
+    if (!isOpen) return
+    void loadComments()
+  }, [isOpen, loadComments])
 
   if (!isOpen) return null
 
@@ -46,11 +59,38 @@ export function StoryCommentsSheet({
     ? `${user.firstName}${user.lastName ? ` ${user.lastName}` : ''}`
     : t('stories.guestAuthor')
 
+  const submitComment = async (content: string) => {
+    if (!accessToken) return
+
+    setSubmitting(true)
+    setSubmitError(null)
+    setSubmitSuccess(false)
+    try {
+      await userStoryCommentService.create(storyId, content, locale, accessToken)
+      setText('')
+      setSubmitSuccess(true)
+      onCommentSubmitted?.()
+    } catch {
+      setSubmitError(t('stories.commentSubmitFailed'))
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   const handleSubmit = () => {
     const trimmed = text.trim()
-    if (!trimmed) return
-    addComment(storyId, trimmed, authorName)
-    setText('')
+    if (!trimmed || submitting) return
+
+    if (!accessToken) {
+      openLoginModal({
+        onSuccess: () => {
+          void submitComment(trimmed)
+        },
+      })
+      return
+    }
+
+    void submitComment(trimmed)
   }
 
   return (
@@ -72,6 +112,9 @@ export function StoryCommentsSheet({
           <header className="flex items-center justify-between border-b border-border px-5 py-4">
             <h2 id="story-comments-title" className="text-base font-bold text-text">
               {t('stories.commentsTitle')}
+              <span className="ms-2 text-sm font-medium text-text-muted tabular-nums">
+                ({commentCount})
+              </span>
             </h2>
             <button
               type="button"
@@ -84,43 +127,73 @@ export function StoryCommentsSheet({
           </header>
 
           <ul className="flex-1 space-y-0 overflow-y-auto">
-            {allComments.length === 0 ? (
+            {loading ? (
+              <li className="px-5 py-10 text-center text-sm text-text-muted">
+                {t('common.loading')}
+              </li>
+            ) : comments.length === 0 ? (
               <li className="px-5 py-10 text-center text-sm text-text-muted">
                 {t('stories.noComments')}
               </li>
             ) : (
-              allComments.map((comment) => (
+              comments.map((comment) => (
                 <CommentRow key={comment.id} comment={comment} locale={locale} />
               ))
             )}
           </ul>
 
           <div className="border-t border-border bg-surface p-4">
-            <div className="flex items-center gap-3 rounded-full border border-border bg-surface-muted/60 px-4 py-2.5">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-warm-soft text-xs font-semibold text-warm">
-                {authorName.charAt(0).toUpperCase()}
-              </span>
-              <input
-                type="text"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') handleSubmit()
-                }}
-                placeholder={t('stories.commentPlaceholder')}
-                className="min-w-0 flex-1 bg-transparent text-sm text-text outline-none placeholder:text-text-muted"
-              />
-              <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={!text.trim()}
-                className={`shrink-0 text-sm font-semibold transition-colors ${
-                  text.trim() ? 'text-warm hover:text-warm-hover' : 'text-text-muted'
-                }`}
-              >
-                {t('stories.postComment')}
-              </button>
-            </div>
+            {submitSuccess ? (
+              <div className="rounded-xl border border-warm/30 bg-warm-soft/40 px-4 py-3 text-sm text-text">
+                <p>{t('stories.commentPending')}</p>
+                <button
+                  type="button"
+                  className="mt-2 text-sm font-semibold text-warm hover:text-warm-hover"
+                  onClick={() => {
+                    setSubmitSuccess(false)
+                    setSubmitError(null)
+                  }}
+                >
+                  {t('stories.writeAnotherComment')}
+                </button>
+              </div>
+            ) : (
+              <>
+                {!accessToken && (
+                  <p className="mb-2 text-xs text-text-muted">{t('stories.signInToComment')}</p>
+                )}
+                {submitError && (
+                  <p className="mb-2 text-xs text-danger">{submitError}</p>
+                )}
+                <div className="flex items-center gap-3 rounded-full border border-border bg-surface-muted/60 px-4 py-2.5">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-warm-soft text-xs font-semibold text-warm">
+                    {authorName.charAt(0).toUpperCase()}
+                  </span>
+                  <input
+                    type="text"
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleSubmit()
+                    }}
+                    placeholder={t('stories.commentPlaceholder')}
+                    className="min-w-0 flex-1 bg-transparent text-sm text-text outline-none placeholder:text-text-muted"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={!text.trim() || submitting}
+                    className={`shrink-0 text-sm font-semibold transition-colors ${
+                      text.trim() && !submitting
+                        ? 'text-warm hover:text-warm-hover'
+                        : 'text-text-muted'
+                    }`}
+                  >
+                    {t('stories.postComment')}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -135,49 +208,18 @@ function CommentRow({
   comment: StoryComment
   locale: ReturnType<typeof useSettingsStore.getState>['locale']
 }) {
-  const { t } = useTranslation()
-  const toggleLike = useStoryInteractionStore((s) => s.toggleCommentLike)
-  const liked = useStoryInteractionStore((s) => s.isCommentLiked(comment.id))
-  const likes = getDisplayedCommentLikes(comment.likes, comment.id)
-
   return (
     <li className="border-b border-border/70 px-5 py-4 last:border-b-0">
       <p className="text-sm leading-relaxed text-text">{comment.text}</p>
-      <div className="mt-3 flex items-center justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-2">
-          <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-warm-soft text-[10px] font-semibold text-warm">
-            {comment.authorName.charAt(0).toUpperCase()}
-          </span>
-          <span className="truncate text-xs font-medium text-text">{comment.authorName}</span>
-          <span className="text-xs text-text-muted">
-            {formatRelativeDate(comment.date, locale)}
-          </span>
-        </div>
-        <button
-          type="button"
-          onClick={() => toggleLike(comment.id)}
-          aria-pressed={liked}
-          aria-label={t('stories.likeComment')}
-          className={`inline-flex items-center gap-1 text-xs transition-colors ${
-            liked ? 'text-warm' : 'text-text-muted hover:text-warm'
-          }`}
-        >
-          <HeartIcon filled={liked} />
-          <span className="tabular-nums">{likes}</span>
-        </button>
+      <div className="mt-3 flex items-center gap-2">
+        <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-warm-soft text-[10px] font-semibold text-warm">
+          {comment.authorName.charAt(0).toUpperCase()}
+        </span>
+        <span className="truncate text-xs font-medium text-text">{comment.authorName}</span>
+        <span className="text-xs text-text-muted">
+          {formatRelativeDate(comment.date, locale)}
+        </span>
       </div>
     </li>
-  )
-}
-
-function HeartIcon({ filled }: { filled: boolean }) {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill={filled ? 'currentColor' : 'none'} aria-hidden>
-      <path
-        d="M7 12.2S2.8 9.2 2.8 5.8A2.6 2.6 0 0 1 7 4.2a2.6 2.6 0 0 1 4.2 1.6C11.2 9.2 7 12.2 7 12.2Z"
-        stroke="currentColor"
-        strokeWidth="1.2"
-      />
-    </svg>
   )
 }

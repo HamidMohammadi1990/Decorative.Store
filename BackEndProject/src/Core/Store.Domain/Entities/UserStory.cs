@@ -18,6 +18,8 @@ public class UserStory : BaseEntity
 
     public User User { get; private set; } = default!;
     public Product? Product { get; private set; }
+    public ICollection<UserStoryComment> Comments { get; private set; } = [];
+    public ICollection<UserStoryLike> Likes { get; private set; } = [];
 
     public static UserStory Create(
         int userId,

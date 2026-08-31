@@ -8,6 +8,7 @@ using Store.WebFramework.Api;
 using Store.Common.Enums;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Enums;
+using Store.Common.Models;
 
 namespace Store.Api.Controllers.v1.Admin;
 
@@ -35,5 +36,15 @@ public class AccountController
     [ActionInfo(PermissionType.CreateUser)]
     [HttpPost("create")]
     public async Task<ApiResult<CreateUserResponse>> Create(CreateUserRequest request)
+        => await mediator.Send(request);
+
+    [ActionInfo(PermissionType.UpdateUser)]
+    [HttpPut("update")]
+    public async Task<ApiResult<OperationResult>> Update(UpdateUserRequest request)
+        => await mediator.Send(request);
+
+    [ActionInfo(PermissionType.DeleteUser)]
+    [HttpDelete("delete")]
+    public async Task<ApiResult<OperationResult>> Delete(DeleteUserRequest request)
         => await mediator.Send(request);
 }

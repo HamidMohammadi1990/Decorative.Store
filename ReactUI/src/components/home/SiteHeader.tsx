@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { SiteHeader as SiteHeaderModel } from '@/models/home/siteHeader.model'
 import { BlogMainNav } from '@/components/header/BlogNav'
+import { HeaderSearch } from '@/components/header/HeaderSearch'
 import { MainNav } from '@/components/header/MainNav'
 import { MobileNavDrawer } from '@/components/header/MobileNavDrawer'
 import { isBlogRoute } from '@/extensions/blogRoute'
@@ -40,7 +41,7 @@ export function SiteHeader({ data }: SiteHeaderProps) {
   return (
     <header className="sticky top-0 z-30 overflow-visible border-b border-border bg-surface">
       <Container className="flex flex-col gap-1 overflow-visible py-2">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
             className="lg:hidden"
@@ -57,13 +58,7 @@ export function SiteHeader({ data }: SiteHeaderProps) {
             {data.brandLabel}
           </Link>
 
-          <form className="hidden min-w-0 flex-1 lg:block" role="search">
-            <input
-              type="search"
-              placeholder={data.searchPlaceholder}
-              className="mx-auto w-full max-w-lg rounded-sm border border-border bg-surface-muted px-3 py-1.5 text-sm outline-none focus:border-accent"
-            />
-          </form>
+          <HeaderSearch placeholder={data.searchPlaceholder} className="min-w-0 flex-1 max-lg:order-last max-lg:w-full" />
 
           <div className="ms-auto flex shrink-0 items-center gap-2 text-sm sm:gap-3">
             <ThemeSwitcher />

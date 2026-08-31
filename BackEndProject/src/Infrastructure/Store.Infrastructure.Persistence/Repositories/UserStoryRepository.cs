@@ -9,6 +9,9 @@ public class UserStoryRepository
     (EditionDbContext context)
     : Repository<UserStory>(context), IUserStoryRepository
 {
+    public Task<UserStory?> FindByIdAsync(int id, CancellationToken cancellationToken = default)
+        => Context.UserStory.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
     public Task<UserStory?> FindByIdAndUserIdAsync(int id, int userId, CancellationToken cancellationToken = default)
         => Context.UserStory
             .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId, cancellationToken);

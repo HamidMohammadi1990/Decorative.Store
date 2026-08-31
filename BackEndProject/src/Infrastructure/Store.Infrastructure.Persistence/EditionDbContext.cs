@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Store.Infrastructure.Persistence.Interceptors;
 using Store.Domain.Entities;
@@ -69,6 +69,8 @@ public sealed class EditionDbContext
     public DbSet<BlogPostLike> BlogPostLike { get; set; }
     public DbSet<ProductWishlist> ProductWishlist { get; set; }
     public DbSet<UserStory> UserStory { get; set; }
+    public DbSet<UserStoryComment> UserStoryComment { get; set; }
+    public DbSet<UserStoryLike> UserStoryLike { get; set; }
     public DbSet<BlogPostComment> BlogPostComment { get; set; }
     public DbSet<BlogPostCategory> BlogPostCategory { get; set; }
     public DbSet<BlogPostCategoryTranslation> BlogPostCategoryTranslation { get; set; }

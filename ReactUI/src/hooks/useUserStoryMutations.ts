@@ -23,6 +23,37 @@ export function useUserStoryMutations() {
   const [isSaving, setIsSaving] = useState(false)
   const [mutationError, setMutationError] = useState<string | null>(null)
 
+  const publishStories = useCallback(
+    async (inputs: UserStoryInput[]) => {
+      if (!accessToken || accessToken === 'mock-access-token') {
+        setMutationError(t('dashboard.stories.saveFailed'))
+        return false
+      }
+
+      if (inputs.length === 0) {
+        setMutationError(t('dashboard.stories.validationRequired'))
+        return false
+      }
+
+      setIsSaving(true)
+      setMutationError(null)
+
+      try {
+        for (const input of inputs) {
+          await userStoryService.create(accessToken, locale, input)
+        }
+        await loadStories(accessToken, locale)
+        return true
+      } catch (error) {
+        setMutationError(resolveMutationError(error, t('dashboard.stories.saveFailed')))
+        return false
+      } finally {
+        setIsSaving(false)
+      }
+    },
+    [accessToken, locale, loadStories, t],
+  )
+
   const publishStory = useCallback(
     async (input: UserStoryInput) => {
       if (!accessToken || accessToken === 'mock-access-token') {
@@ -110,6 +141,85 @@ export function useUserStoryMutations() {
     [accessToken, locale, loadStories, t],
   )
 
+  const deleteStories = useCallback(
+    async (ids: string[]) => {
+      if (!accessToken || accessToken === 'mock-access-token') {
+        setMutationError(t('dashboard.stories.deleteFailed'))
+        return false
+      }
+
+      if (ids.length === 0) return true
+
+      setIsSaving(true)
+      setMutationError(null)
+
+      try {
+        for (const id of ids) {
+          await userStoryService.delete(accessToken, id)
+        }
+        await loadStories(accessToken, locale)
+        return true
+      } catch (error) {
+        setMutationError(resolveMutationError(error, t('dashboard.stories.deleteFailed')))
+        return false
+      } finally {
+        setIsSaving(false)
+      }
+    },
+    [accessToken, locale, loadStories, t],
+  )
+
+  const updateStories = useCallback(
+    async (updates: { id: string; input: UserStoryInput }[]) => {
+      if (!accessToken || accessToken === 'mock-access-token') {
+        setMutationError(t('dashboard.stories.saveFailed'))
+        return false
+      }
+
+      if (updates.length === 0) return true
+
+      setIsSaving(true)
+      setMutationError(null)
+
+      try {
+        for (const { id, input } of updates) {
+          await userStoryService.update(accessToken, locale, id, input)
+        }
+        await loadStories(accessToken, locale)
+        return true
+      } catch (error) {
+        setMutationError(resolveMutationError(error, t('dashboard.stories.saveFailed')))
+        return false
+      } finally {
+        setIsSaving(false)
+      }
+    },
+    [accessToken, locale, loadStories, t],
+  )
+
+  const toggleStoryGroup = useCallback(
+    async (slides: UserStoryDraft[]) => {
+      if (slides.length === 0) return false
+      const nextActive = !slides[0].isActive
+
+      return updateStories(
+        slides.map((story) => ({
+          id: story.id,
+          input: {
+            title: story.title,
+            caption: story.caption,
+            mediaType: story.mediaType,
+            mediaPath: story.mediaPath,
+            mediaAlt: story.mediaAlt,
+            productSlug: story.productSlugs[0],
+            isActive: nextActive,
+          },
+        })),
+      )
+    },
+    [updateStories],
+  )
+
   const uploadMedia = useCallback(
     async (file: File) => {
       if (!accessToken || accessToken === 'mock-access-token') {
@@ -127,9 +237,13 @@ export function useUserStoryMutations() {
     isSaving,
     mutationError,
     publishStory,
+    publishStories,
     updateStory,
+    updateStories,
     toggleStoryActive,
+    toggleStoryGroup,
     deleteStory,
+    deleteStories,
     uploadMedia,
     clearMutationError,
   }

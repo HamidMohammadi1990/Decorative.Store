@@ -33,6 +33,11 @@ public static class EntityFieldLengths
         public const int Comment = 2500;
     }
 
+    public static class UserStoryComment
+    {
+        public const int Content = 500;
+    }
+
     public static class Category
     {
         public const int Title = 60;

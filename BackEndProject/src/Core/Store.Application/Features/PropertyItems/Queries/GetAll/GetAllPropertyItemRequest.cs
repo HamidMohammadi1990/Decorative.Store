@@ -12,13 +12,13 @@ public record GetAllPropertyItemRequest : ContentPolicyRequest<PropertyItem>, IR
 {
     public string? Title { get; init; }
 
-    [JsonConverter(typeof(PropertyEncryptor))]
+    [JsonConverter(typeof(PropertyNullableEncryptor))]
     public int? PropertyId { get; init; }
 
     public bool? IsActive { get; init; }
     public string? PropertyTitle { get; init; }
 
-    [JsonConverter(typeof(PropertyCategoryEncryptor))]
+    [JsonConverter(typeof(PropertyCategoryNullableEncryptor))]
     public int? PropertyCategoryId { get; init; }
 
     public PropertyType? PropertyType { get; init; }

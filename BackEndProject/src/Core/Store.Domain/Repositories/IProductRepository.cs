@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Store.Domain.Dtos.Catalog;
 using Store.Domain.Dtos.Products;
 using Store.Domain.Dtos.Pagination;
@@ -30,4 +30,5 @@ public interface IProductRepository
     Task<List<CatalogListingProductDto>> GetNewArrivalsCatalogProductsAsync(int? limit = null, CancellationToken cancellationToken = default);
     Task<List<CatalogListingProductDto>> GetInStockCatalogProductsAsync(int? limit = null, CancellationToken cancellationToken = default);
     Task<List<CatalogListingProductDto>> GetBestSellingCatalogProductsAsync(int? limit = null, CancellationToken cancellationToken = default);
+    Task<CatalogSearchDto> SearchCatalogAsync(string query, int limit, CancellationToken cancellationToken = default);
 }

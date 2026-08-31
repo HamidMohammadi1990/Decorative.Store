@@ -972,6 +972,14 @@
   <data name="PermissionType_CreateBank" xml:space="preserve"><value>ایجاد بانک</value></data>
   <data name="PermissionType_UpdateBank" xml:space="preserve"><value>ویرایش بانک</value></data>
   <data name="PermissionType_DeleteBank" xml:space="preserve"><value>حذف بانک</value></data>
+  <data name="PermissionType_ManageWallet" xml:space="preserve"><value>مدیریت کیف پول</value></data>
+  <data name="PermissionType_ListWallet" xml:space="preserve"><value>لیست کیف پول</value></data>
+  <data name="PermissionType_GetWalletById" xml:space="preserve"><value>جزئیات کیف پول</value></data>
+  <data name="PermissionType_CreateWallet" xml:space="preserve"><value>ایجاد کیف پول</value></data>
+  <data name="PermissionType_UpdateWallet" xml:space="preserve"><value>ویرایش کیف پول</value></data>
+  <data name="PermissionType_UpdateWalletStatus" xml:space="preserve"><value>تغییر وضعیت کیف پول</value></data>
+  <data name="PermissionType_AdminChargeWallet" xml:space="preserve"><value>شارژ کیف پول توسط ادمین</value></data>
+  <data name="PermissionType_ListWalletTransaction" xml:space="preserve"><value>لیست تراکنش کیف پول</value></data>
   <data name="PermissionType_ManageCmsGroup" xml:space="preserve"><value>مدیریت گروه CMS</value></data>
   <data name="PermissionType_ManagePage" xml:space="preserve"><value>مدیریت صفحه</value></data>
   <data name="PermissionType_ListPage" xml:space="preserve"><value>لیست صفحه</value></data>
@@ -1044,6 +1052,10 @@
   <data name="PermissionType_UpdateLanguage" xml:space="preserve"><value>ویرایش زبان</value></data>
   <data name="PermissionType_DeleteLanguage" xml:space="preserve"><value>حذف زبان</value></data>
   <data name="PermissionType_SetDefaultLanguage" xml:space="preserve"><value>تنظیم زبان پیش‌فرض</value></data>
+  <data name="PermissionType_ManageUserStoryComment" xml:space="preserve"><value>مدیریت نظر استوری</value></data>
+  <data name="PermissionType_ApproveUserStoryComment" xml:space="preserve"><value>تأیید نظر استوری</value></data>
+  <data name="PermissionType_ListUserStoryComment" xml:space="preserve"><value>لیست نظرات استوری</value></data>
+  <data name="PermissionType_GetUserStoryCommentById" xml:space="preserve"><value>دریافت نظر استوری با شناسه</value></data>
 
 </root>
 

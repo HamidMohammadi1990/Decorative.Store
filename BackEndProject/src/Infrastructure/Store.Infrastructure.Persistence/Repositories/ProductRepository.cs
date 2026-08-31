@@ -1,4 +1,4 @@
-﻿using System.Linq.Expressions;
+using System.Linq.Expressions;
 using Edition.Application.Contracts.Localization;
 using Microsoft.EntityFrameworkCore;
 using Store.Infrastructure.Persistence.Extensions;
@@ -346,6 +346,78 @@ public class ProductRepository
                     await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken),
                     "/")
             ]
+        };
+    }
+
+    public async Task<CatalogSearchDto> SearchCatalogAsync(
+        string query,
+        int limit,
+        CancellationToken cancellationToken = default)
+    {
+        var term = query.Trim();
+        if (string.IsNullOrWhiteSpace(term))
+            return new CatalogSearchDto();
+
+        var take = limit > 0 ? limit : 8;
+        var (languageId, defaultLanguageId) = await ResolveLanguageIdsAsync(cancellationToken);
+
+        var categoryRows = await Context.Category
+            .AsNoTracking()
+            .Where(category => category.IsActive)
+            .Include(category => category.Translations)
+            .Where(category => category.Translations.Any(t => t.Title.Contains(term) || t.Slug.Contains(term)))
+            .OrderBy(category => category.Id)
+            .Take(take)
+            .ToListAsync(cancellationToken);
+
+        var categories = categoryRows
+            .Select(category => new CatalogSearchCategoryDto
+            {
+                Title = ResolveCategoryTranslationValue(
+                    category.Translations, languageId, defaultLanguageId, translation => translation.Title),
+                Slug = ResolveCategoryTranslationValue(
+                    category.Translations, languageId, defaultLanguageId, translation => translation.Slug)
+            })
+            .Where(category => !string.IsNullOrWhiteSpace(category.Slug))
+            .ToList();
+
+        var subCategoryRows = await Context.SubCategory
+            .AsNoTracking()
+            .Where(subCategory => subCategory.IsActive && subCategory.Category.IsActive)
+            .Include(subCategory => subCategory.Translations)
+            .Include(subCategory => subCategory.Category)
+            .ThenInclude(category => category.Translations)
+            .Where(subCategory =>
+                subCategory.Translations.Any(t => t.Title.Contains(term) || t.Slug.Contains(term)))
+            .OrderBy(subCategory => subCategory.Id)
+            .Take(take)
+            .ToListAsync(cancellationToken);
+
+        var subCategories = subCategoryRows
+            .Select(subCategory => new CatalogSearchSubCategoryDto
+            {
+                Title = ResolveSubCategoryTranslationValue(
+                    subCategory.Translations, languageId, defaultLanguageId, translation => translation.Title),
+                Slug = ResolveSubCategoryTranslationValue(
+                    subCategory.Translations, languageId, defaultLanguageId, translation => translation.Slug),
+                CategoryTitle = ResolveCategoryTranslationValue(
+                    subCategory.Category.Translations, languageId, defaultLanguageId, translation => translation.Title),
+                CategorySlug = ResolveCategoryTranslationValue(
+                    subCategory.Category.Translations, languageId, defaultLanguageId, translation => translation.Slug)
+            })
+            .Where(subCategory => !string.IsNullOrWhiteSpace(subCategory.Slug))
+            .ToList();
+
+        var products = await LoadFilteredCatalogProductsAsync(
+            product => product.Translations.Any(t => t.Title.Contains(term) || t.Slug.Contains(term)),
+            take,
+            cancellationToken);
+
+        return new CatalogSearchDto
+        {
+            Categories = categories,
+            SubCategories = subCategories,
+            Products = products
         };
     }
 

@@ -14,7 +14,8 @@ public class UpdateProductPropertyHandler
         if (productProperty is null)
             return ErrorModel.Create("InvalidId");
 
-        productProperty.Update(request.ProductId, request.PropertyId, request.IsActive, request.PropertyItemId);
+        var propertyItemId = ProductPropertyReferenceRules.NormalizePropertyItemId(request.PropertyItemId);
+        productProperty.Update(request.ProductId, request.PropertyId, request.IsActive, propertyItemId);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

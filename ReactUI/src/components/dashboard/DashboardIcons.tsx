@@ -34,6 +34,41 @@ export function AccountIcon(props: DashboardIconProps) {
   )
 }
 
+export function UsersIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <circle cx="9" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="16.5" cy="10" r="2" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M5.5 18c0-2.2 1.6-4 3.5-4s3.5 1.8 3.5 4M14 18c0-1.7 1.1-3 2.5-3"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </IconBase>
+  )
+}
+
+export function RolesIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M12 3.5 4.5 7v5c0 4.2 3.2 7.5 7.5 8.5 4.3-1 7.5-4.3 7.5-8.5V7L12 3.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9.5 12.5 11 14l3.5-3.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </IconBase>
+  )
+}
+
 export function WalletIcon(props: DashboardIconProps) {
   return (
     <IconBase {...props}>

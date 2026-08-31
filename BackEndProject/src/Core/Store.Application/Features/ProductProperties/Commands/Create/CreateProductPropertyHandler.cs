@@ -11,7 +11,8 @@ public class CreateProductPropertyHandler
 {
     public async Task<OperationResult<CreateProductPropertyResponse>> Handle(CreateProductPropertyRequest request, CancellationToken cancellationToken)
     {
-        var productProperty = ProductProperty.Create(request.ProductId, request.PropertyId, request.IsActive, request.PropertyItemId);
+        var propertyItemId = ProductPropertyReferenceRules.NormalizePropertyItemId(request.PropertyItemId);
+        var productProperty = ProductProperty.Create(request.ProductId, request.PropertyId, request.IsActive, propertyItemId);
         productPropertyRepository.Add(productProperty);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);

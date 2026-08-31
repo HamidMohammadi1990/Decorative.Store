@@ -7,17 +7,18 @@ import { StorySlidePlayer } from '@/components/stories/StorySlidePlayer'
 import { CloseIcon } from '@/components/ui/CloseIcon'
 import { LocalImage } from '@/components/ui/LocalImage'
 import { Portal } from '@/components/ui/Portal'
-import {
-  getDisplayedStoryLikes,
-  useStoryInteractionStore,
-} from '@/stores/storyInteractionStore'
+import { useStoryInteractionStore } from '@/stores/storyInteractionStore'
 import { useStoryViewerStore } from '@/stores/storyViewerStore'
 import { catalogService } from '@/services/catalogService'
+import { userStoryLikeService } from '@/services/userStoryLikeService'
+import { openLoginModal } from '@/stores/authModalStore'
 import { useSettingsStore } from '@/stores/settingsStore'
+import { useAccessToken, useUserStore } from '@/stores/userStore'
 
 export function StoryViewerModal() {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
+  const accessToken = useAccessToken()
   const isOpen = useStoryViewerStore((s) => s.isOpen)
   const groups = useStoryViewerStore((s) => s.groups)
   const groupIndex = useStoryViewerStore((s) => s.groupIndex)
@@ -29,29 +30,30 @@ export function StoryViewerModal() {
   const openComments = useStoryViewerStore((s) => s.openComments)
   const closeComments = useStoryViewerStore((s) => s.closeComments)
   const markViewed = useStoryInteractionStore((s) => s.markViewed)
-  const toggleLike = useStoryInteractionStore((s) => s.toggleStoryLike)
   const toggleFollow = useStoryInteractionStore((s) => s.toggleFollow)
 
   const [slideProgress, setSlideProgress] = useState(0)
   const [products, setProducts] = useState<ProductDetail[]>([])
   const [visible, setVisible] = useState(false)
+  const [likeCount, setLikeCount] = useState(0)
+  const [liked, setLiked] = useState(false)
+  const [commentCount, setCommentCount] = useState(0)
+  const [likeLoading, setLikeLoading] = useState(false)
 
   const group = groups[groupIndex]
   const slide = group?.slides[slideIndex]
   const groupId = group?.id
   const productSlugKey = group?.productSlugs.join(',') ?? ''
-  const liked = useStoryInteractionStore((s) =>
-    groupId ? s.isStoryLiked(groupId) : false,
-  )
   const following = useStoryInteractionStore((s) =>
     groupId ? s.isFollowing(groupId) : false,
   )
-  const userCommentCount = useStoryInteractionStore((s) =>
-    groupId ? (s.userComments[groupId]?.length ?? 0) : 0,
-  )
 
-  const likes = group && groupId ? getDisplayedStoryLikes(group.likes, groupId) : 0
-  const commentCount = group ? group.comments.length + userCommentCount : 0
+  useEffect(() => {
+    if (!group) return
+    setLikeCount(group.likes)
+    setLiked(group.isLikedByCurrentUser ?? false)
+    setCommentCount(group.commentCount)
+  }, [group])
 
   useEffect(() => {
     if (!isOpen || !groupId) return
@@ -129,6 +131,33 @@ export function StoryViewerModal() {
     nextSlide()
   }, [nextSlide])
 
+  const handleToggleLike = useCallback(() => {
+    if (!groupId || likeLoading) return
+
+    const runToggle = async (token: string) => {
+      setLikeLoading(true)
+      try {
+        const result = await userStoryLikeService.toggle(groupId, locale, token)
+        setLiked(result.liked)
+        setLikeCount(result.likeCount)
+      } finally {
+        setLikeLoading(false)
+      }
+    }
+
+    if (!accessToken) {
+      openLoginModal({
+        onSuccess: () => {
+          const token = useUserStore.getState().accessToken
+          if (token) void runToggle(token)
+        },
+      })
+      return
+    }
+
+    void runToggle(accessToken)
+  }, [accessToken, groupId, likeLoading, locale])
+
   if (!isOpen || !group || !slide) return null
 
   return (
@@ -139,7 +168,6 @@ export function StoryViewerModal() {
         }`}
       >
         <div className="relative flex h-full w-full max-w-md flex-col overflow-hidden bg-black shadow-2xl sm:max-h-[min(92vh,52rem)] sm:rounded-2xl sm:border sm:border-white/10">
-          {/* Progress */}
           <div className="absolute inset-x-0 top-0 z-30 flex gap-1 px-3 pt-3">
             {progressBars.map((value, i) => (
               <div
@@ -154,7 +182,6 @@ export function StoryViewerModal() {
             ))}
           </div>
 
-          {/* Header */}
           <header className="absolute inset-x-0 top-0 z-30 flex items-center justify-between gap-3 px-3 pb-2 pt-8">
             <div className="flex min-w-0 flex-1 items-center gap-2.5">
               <div className="size-9 shrink-0 overflow-hidden rounded-full ring-2 ring-white/30">
@@ -191,7 +218,6 @@ export function StoryViewerModal() {
             </div>
           </header>
 
-          {/* Media */}
           <div className="relative min-h-0 flex-1 bg-black">
             <StorySlidePlayer
               slide={slide}
@@ -216,16 +242,16 @@ export function StoryViewerModal() {
               />
             </div>
 
-            {/* Side actions */}
             <div className="pointer-events-none absolute bottom-28 start-3 z-20 flex flex-col gap-4">
               <button
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation()
-                  toggleLike(group.id)
+                  handleToggleLike()
                 }}
+                disabled={likeLoading}
                 aria-pressed={liked}
-                className="pointer-events-auto flex flex-col items-center gap-1 text-white"
+                className="pointer-events-auto flex flex-col items-center gap-1 text-white disabled:opacity-60"
               >
                 <span
                   className={`flex size-11 items-center justify-center rounded-full backdrop-blur-sm ${
@@ -234,7 +260,7 @@ export function StoryViewerModal() {
                 >
                   <HeartIcon filled={liked} />
                 </span>
-                <span className="text-xs font-semibold tabular-nums drop-shadow">{likes}</span>
+                <span className="text-xs font-semibold tabular-nums drop-shadow">{likeCount}</span>
               </button>
 
               <button
@@ -265,9 +291,10 @@ export function StoryViewerModal() {
         {commentsOpen && (
           <StoryCommentsSheet
             storyId={group.id}
-            baseComments={group.comments}
+            commentCount={commentCount}
             isOpen={commentsOpen}
             onClose={closeComments}
+            onCommentSubmitted={() => setCommentCount((count) => count + 1)}
           />
         )}
       </div>

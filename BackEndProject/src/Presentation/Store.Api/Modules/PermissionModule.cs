@@ -1,8 +1,8 @@
-﻿using Asp.Versioning;
+using Asp.Versioning;
 using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
 using Store.Common.Extensions;
 using Store.Domain.Dtos.Others;
+using Store.Domain.Enums;
 
 namespace Store.Api.Modules;
 
@@ -30,7 +30,55 @@ public static class PermissionModule
             result.Add(permission);
         }
 
+        ValidatePermissionTree(result);
         return result;
+    }
+
+    /// <summary>
+    /// Ensures every discovered permission id (tab/page/action) is unique — duplicate ids break seed and FK constraints.
+    /// </summary>
+    private static void ValidatePermissionTree(List<DynamicPermission> permissions)
+    {
+        var ids = new Dictionary<PermissionType, string>();
+
+        foreach (var group in permissions)
+        {
+            var groupType = group.Controllers[0].GroupType;
+            RegisterPermissionId(ids, groupType, $"Tab '{group.Name}'");
+
+            foreach (var controller in group.Controllers)
+            {
+                if (controller.Type == controller.GroupType)
+                    throw new InvalidOperationException(
+                        $"Controller {controller.FullName}: PageType equals GroupType ({controller.Type}). " +
+                        "ControllerInfo must be (pagePermission, groupPermission).");
+
+                RegisterPermissionId(ids, controller.Type, $"Page '{controller.FullName}'");
+
+                foreach (var action in controller.Actions)
+                {
+                    if (action.Type == controller.Type)
+                        continue;
+
+                    var actionSource =
+                        action.FullNames.Count > 0
+                            ? $"Action '{action.FullNames[0]}'"
+                            : $"Action '{action.Name}'";
+                    RegisterPermissionId(ids, action.Type, actionSource);
+                }
+            }
+        }
+    }
+
+    private static void RegisterPermissionId(
+        Dictionary<PermissionType, string> ids,
+        PermissionType id,
+        string source)
+    {
+        if (ids.TryGetValue(id, out var existing))
+            throw new InvalidOperationException(
+                $"Duplicate PermissionType id {(int)id} ({id}): used by {existing} and {source}.");
+        ids[id] = source;
     }
 
     private static PermissionController BuildControllerPermission(Type controllerType)
@@ -66,15 +114,15 @@ public static class PermissionModule
             Actions = []
         };
 
-        foreach (var action in actions.GroupBy(x => new { x.ActionName, x.PermissionType }))
+        foreach (var action in actions.GroupBy(x => x.PermissionType))
         {
             var first = action.First();
             permissionController.Actions.Add(new PermissionAction
             {
                 Url = first.ActionUrl,
-                Name = action.Key.ActionName,
-                Type = action.Key.PermissionType,
-                FullNames = action.Select(x => x.ActionFullName).Distinct().ToList()
+                Name = first.ActionName,
+                Type = action.Key,
+                FullNames = [.. action.Select(x => x.ActionFullName).Distinct()]
             });
         }
 

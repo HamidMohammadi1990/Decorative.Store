@@ -34,6 +34,8 @@ export interface StoryGroup {
   slides: StorySlide[]
   productSlugs: string[]
   likes: number
+  commentCount: number
+  isLikedByCurrentUser?: boolean
   comments: StoryComment[]
   publishedAt: string
   isOfficial?: boolean
@@ -53,6 +55,10 @@ export interface UserStoryDraft {
   createdAt: string
   isActive: boolean
   ownerName?: string
+  userId?: string
+  likeCount?: number
+  commentCount?: number
+  isLikedByCurrentUser?: boolean
 }
 
 export type UserStoryInput = {

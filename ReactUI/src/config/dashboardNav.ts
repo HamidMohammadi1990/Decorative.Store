@@ -22,9 +22,11 @@ import {
   PropertyItemsIcon,
   ProfileCompletionIcon,
   ReviewsIcon,
+  RolesIcon,
   StoriesIcon,
   SubCategoriesIcon,
   TransactionsIcon,
+  UsersIcon,
   WalletIcon,
 } from '@/components/dashboard/DashboardIcons'
 import { WishlistIcon } from '@/components/wishlist/WishlistIcon'
@@ -40,7 +42,7 @@ export interface DashboardNavItem {
 }
 
 export interface DashboardNavGroup {
-  id: 'account' | 'catalog' | 'properties' | 'blog' | 'cms'
+  id: 'account' | 'users' | 'catalog' | 'properties' | 'blog' | 'cms'
   icon: DashboardNavIcon
   items: DashboardNavItem[]
 }
@@ -64,6 +66,14 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
       { section: 'stories', path: '/account/dashboard/stories', icon: StoriesIcon },
       { section: 'addresses', path: '/account/dashboard/addresses', icon: AddressesIcon },
       { section: 'coupons', path: '/account/dashboard/coupons', icon: CouponsIcon },
+    ],
+  },
+  {
+    id: 'users',
+    icon: UsersIcon,
+    items: [
+      { section: 'users', path: '/account/dashboard/users', icon: UsersIcon },
+      { section: 'roles', path: '/account/dashboard/roles', icon: RolesIcon },
     ],
   },
   {

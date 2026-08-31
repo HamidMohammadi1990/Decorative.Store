@@ -34,6 +34,7 @@ public static class MessageKeys
     public const string InvalidStoreId = nameof(InvalidStoreId);
     public const string InvalidCityId = nameof(InvalidCityId);
     public const string InvalidBlogPostId = nameof(InvalidBlogPostId);
+    public const string InvalidUserStoryId = nameof(InvalidUserStoryId);
     public const string InvalidCompanyStoryId = nameof(InvalidCompanyStoryId);
     public const string InvalidUser = nameof(InvalidUser);
     public const string InvalidRole = nameof(InvalidRole);

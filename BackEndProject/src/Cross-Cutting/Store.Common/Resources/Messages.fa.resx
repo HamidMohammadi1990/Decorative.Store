@@ -262,6 +262,7 @@
   <data name="PaymentFailed" xml:space="preserve"><value>پرداخت ناموفق بود</value></data>
   <data name="BankTransactionNotFound" xml:space="preserve"><value>تراکنش بانکی یافت نشد</value></data>
   <data name="InvalidBlogPostId" xml:space="preserve"><value>شناسه پست نامعتبر است</value></data>
+  <data name="InvalidUserStoryId" xml:space="preserve"><value>شناسه استوری نامعتبر است</value></data>
   <data name="InvalidCompanyStoryId" xml:space="preserve"><value>شناسه استوری کمپانی نامعتبر است</value></data>
   <data name="InvalidRefreshToken" xml:space="preserve"><value>رفرش توکن نامعتبر</value></data>
   <data name="AccountCodeRequired" xml:space="preserve"><value>کد حساب الزامی است</value></data>

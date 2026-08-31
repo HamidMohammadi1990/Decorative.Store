@@ -115,6 +115,7 @@ export type DashboardSection =
   | 'reviews'
   | 'wishlist'
   | 'stories'
+  | 'userStoryComments'
   | 'addresses'
   | 'coupons'
   | 'categories'
@@ -136,3 +137,5 @@ export type DashboardSection =
   | 'cmsSections'
   | 'cmsSectionItems'
   | 'cmsPageSections'
+  | 'users'
+  | 'roles'

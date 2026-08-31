@@ -60,6 +60,8 @@ export function ProductPropertiesPanel({
   const [products, setProducts] = useState<AdminProductListItem[]>([])
   const [properties, setProperties] = useState<AdminProperty[]>([])
   const [propertyItems, setPropertyItems] = useState<AdminPropertyItem[]>([])
+  const [selectedPropertyItems, setSelectedPropertyItems] = useState<AdminPropertyItem[]>([])
+  const [loadingPropertyItems, setLoadingPropertyItems] = useState(false)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -99,11 +101,43 @@ export function ProductPropertiesPanel({
 
   const availablePropertyItems = useMemo(() => {
     if (!propertyId) return []
-    return propertyItems.filter((item) => item.propertyId === propertyId)
-  }, [propertyItems, propertyId])
+    return selectedPropertyItems.filter((item) => item.isActive)
+  }, [propertyId, selectedPropertyItems])
 
-  const showPropertyItemField =
-    selectedProperty != null && propertyTypeUsesItems(selectedProperty.propertyType)
+  const requiresPropertyItem =
+    availablePropertyItems.length > 0 ||
+    (selectedProperty != null && propertyTypeUsesItems(selectedProperty.propertyType))
+
+  useEffect(() => {
+    if (mode !== 'create' && mode !== 'edit') return
+    if (!propertyId || !accessToken || accessToken === 'mock-access-token') {
+      setSelectedPropertyItems([])
+      return
+    }
+
+    let cancelled = false
+    setLoadingPropertyItems(true)
+
+    void adminPropertyItemService
+      .getAll(accessToken, contentLocale, {
+        propertyId,
+        pageSize: 200,
+        languageId: contentLanguageId ?? undefined,
+      })
+      .then((result) => {
+        if (!cancelled) setSelectedPropertyItems(result.items)
+      })
+      .catch(() => {
+        if (!cancelled) setSelectedPropertyItems([])
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingPropertyItems(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [accessToken, contentLanguageId, contentLocale, mode, propertyId])
 
   useEffect(() => {
     if (!embedded) {
@@ -223,7 +257,7 @@ export function ProductPropertiesPanel({
       return
     }
 
-    if (showPropertyItemField && !propertyItemId) {
+    if (requiresPropertyItem && !propertyItemId) {
       setError(t('dashboard.productProperties.itemRequired'))
       return
     }
@@ -234,7 +268,7 @@ export function ProductPropertiesPanel({
       const payload = {
         productId,
         propertyId,
-        propertyItemId: showPropertyItemField ? propertyItemId : null,
+        propertyItemId: propertyItemId || null,
         isActive,
       }
 
@@ -344,20 +378,32 @@ export function ProductPropertiesPanel({
             </select>
           </AdminField>
 
-          {showPropertyItemField && (
+          {propertyId && (
             <AdminField label={t('dashboard.productProperties.fieldPropertyItem')}>
-              <select
-                value={propertyItemId}
-                onChange={(e) => setPropertyItemId(e.target.value)}
-                className={adminInputClass}
-              >
-                <option value="">{t('dashboard.productProperties.selectPropertyItem')}</option>
-                {availablePropertyItems.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.title} ({item.code})
-                  </option>
-                ))}
-              </select>
+              {loadingPropertyItems ? (
+                <InlineLoading label={t('dashboard.productProperties.loadingPropertyItems')} />
+              ) : (
+                <>
+                  <select
+                    value={propertyItemId}
+                    onChange={(e) => setPropertyItemId(e.target.value)}
+                    className={adminInputClass}
+                    disabled={availablePropertyItems.length === 0}
+                  >
+                    <option value="">{t('dashboard.productProperties.selectPropertyItem')}</option>
+                    {availablePropertyItems.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.title} ({item.code})
+                      </option>
+                    ))}
+                  </select>
+                  {availablePropertyItems.length === 0 && (
+                    <p className="mt-2 text-xs text-text-muted">
+                      {t('dashboard.productProperties.noPropertyItemsForProperty')}
+                    </p>
+                  )}
+                </>
+              )}
             </AdminField>
           )}
 

@@ -1,3 +1,4 @@
+using Edition.Application.Contracts;
 using Edition.Application.Contracts.Localization;
 using MediatR;
 using Store.Common.Models;
@@ -9,7 +10,10 @@ public class SearchActiveUserStoriesHandler
     (
         ICurrentLanguageContext languageContext,
         ILanguageRegistry languageRegistry,
-        IUserStoryRepository userStoryRepository)
+        IUserStoryRepository userStoryRepository,
+        IUserStoryLikeRepository userStoryLikeRepository,
+        IUserStoryCommentRepository userStoryCommentRepository,
+        ICurrentUserContext currentUser)
     : IRequestHandler<SearchActiveUserStoriesRequest, OperationResult<SearchActiveUserStoriesResponse>>
 {
     public async Task<OperationResult<SearchActiveUserStoriesResponse>> Handle(
@@ -23,11 +27,23 @@ public class SearchActiveUserStoriesHandler
             request.Limit,
             cancellationToken);
 
+        var storyIds = stories.Select(x => x.Id).ToList();
+        var likeCounts = await userStoryLikeRepository.GetLikeCountsByStoryIdsAsync(storyIds, cancellationToken);
+        var commentCounts = await userStoryCommentRepository.GetApprovedCommentCountsByStoryIdsAsync(storyIds, cancellationToken);
+
+        HashSet<int> likedStoryIds = [];
+        if (currentUser.IsAuthenticated && storyIds.Count > 0)
+            likedStoryIds = await userStoryLikeRepository.GetLikedStoryIdsForUserAsync(
+                currentUser.UserId,
+                storyIds,
+                cancellationToken);
+
         return new SearchActiveUserStoriesResponse
         {
             Items = stories.Select(x => new SearchActiveUserStoryItemResponse
             {
                 Id = x.Id,
+                UserId = x.UserId,
                 Title = x.Title,
                 Caption = x.Caption,
                 MediaType = x.MediaType,
@@ -38,6 +54,9 @@ public class SearchActiveUserStoriesHandler
                 CreatedOnUtc = x.CreatedOnUtc,
                 OwnerFirstName = x.OwnerFirstName,
                 OwnerLastName = x.OwnerLastName,
+                LikeCount = likeCounts.GetValueOrDefault(x.Id),
+                CommentCount = commentCounts.GetValueOrDefault(x.Id),
+                IsLikedByCurrentUser = likedStoryIds.Contains(x.Id),
             }).ToList(),
         };
     }

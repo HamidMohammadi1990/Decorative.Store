@@ -1,12 +1,18 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { AdminCmsSectionType } from '@/models/admin/cms.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
 import { CmsSectionTypesIcon } from '@/components/dashboard/DashboardIcons'
-import { AdminField, adminInputClass, resolveAdminMutationError } from '@/components/dashboard/admin/adminFormShared'
+import { AdminDataGrid } from '@/components/dashboard/admin/AdminDataGrid'
+import {
+  AdminField,
+  adminInputClass,
+  resolveAdminMutationError,
+} from '@/components/dashboard/admin/adminFormShared'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
+import { useAdminPagedList } from '@/hooks/useAdminPagedList'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
 import { adminSectionTypeService } from '@/services/adminSectionTypeService'
 import { useUserStore } from '@/stores/userStore'
@@ -17,93 +23,252 @@ export function CmsSectionTypesPanel() {
   const { t } = useTranslation()
   const accessToken = useUserStore((s) => s.accessToken)
   const { languageId, locale, loading: languageLoading } = useCurrentLanguageId()
+
   const [mode, setMode] = useState<Mode>('list')
-  const [items, setItems] = useState<AdminCmsSectionType[]>([])
-  const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [formError, setFormError] = useState<string | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [name, setName] = useState('')
   const [isActive, setIsActive] = useState(true)
 
-  const load = useCallback(async () => {
-    if (!accessToken || accessToken === 'mock-access-token') {
-      setError(t('dashboard.cms.sectionTypes.authRequired'))
-      setLoading(false)
-      return
-    }
-    setLoading(true)
-    setError(null)
-    try {
-      const result = await adminSectionTypeService.getAll(accessToken, locale, { pageSize: 100, languageId: languageId ?? undefined })
-      setItems(result.items)
-    } catch (err) {
-      setError(resolveAdminMutationError(err, t('dashboard.cms.sectionTypes.loadFailed')))
-      setItems([])
-    } finally {
-      setLoading(false)
-    }
-  }, [accessToken, languageId, locale, t])
+  const fetchPage = useCallback(
+    (pageNumber: number, pageSize: number) =>
+      adminSectionTypeService.getAll(accessToken!, locale, {
+        pageNumber,
+        pageSize,
+        languageId: languageId ?? undefined,
+      }),
+    [accessToken, languageId, locale],
+  )
 
-  useEffect(() => { if (!languageLoading) void load() }, [languageLoading, load])
+  const {
+    items,
+    loading: listLoading,
+    error: listError,
+    pageNumber,
+    pageSize,
+    totalCount,
+    totalPages,
+    goToPage,
+    reload,
+  } = useAdminPagedList<AdminCmsSectionType>({
+    fetchPage,
+    enabled: Boolean(accessToken && accessToken !== 'mock-access-token' && !languageLoading),
+  })
 
-  const resetForm = () => { setName(''); setIsActive(true); setEditingId(null); setError(null) }
-  const backToList = () => { resetForm(); setMode('list') }
+  const listErrorMessage = listError
+    ? resolveAdminMutationError(listError, t('dashboard.cms.sectionTypes.loadFailed'))
+    : null
+
+  const resetForm = () => {
+    setName('')
+    setIsActive(true)
+    setEditingId(null)
+    setFormError(null)
+  }
+
+  const backToList = () => {
+    resetForm()
+    setMode('list')
+  }
+
+  const openCreate = () => {
+    resetForm()
+    setMode('create')
+  }
+
+  const openEdit = (item: AdminCmsSectionType) => {
+    setEditingId(item.id)
+    setName(item.name)
+    setIsActive(item.isActive)
+    setFormError(null)
+    setMode('edit')
+  }
 
   const handleSave = async () => {
-    if (!accessToken || languageId == null || !name.trim()) {
-      setError(t('dashboard.cms.sectionTypes.validationRequired'))
+    if (!accessToken || accessToken === 'mock-access-token') {
+      setFormError(t('dashboard.cms.sectionTypes.authRequired'))
       return
     }
+    if (languageId == null || !name.trim()) {
+      setFormError(t('dashboard.cms.sectionTypes.validationRequired'))
+      return
+    }
+
     setSaving(true)
+    setFormError(null)
     try {
       const payload = { languageId, name: name.trim(), isActive }
-      if (mode === 'edit' && editingId) await adminSectionTypeService.update(accessToken, locale, { ...payload, id: editingId })
-      else await adminSectionTypeService.create(accessToken, locale, payload)
-      await load()
+      if (mode === 'edit' && editingId) {
+        await adminSectionTypeService.update(accessToken, locale, { ...payload, id: editingId })
+      } else {
+        await adminSectionTypeService.create(accessToken, locale, payload)
+      }
+      reload()
       backToList()
     } catch (err) {
-      setError(resolveAdminMutationError(err, t('dashboard.cms.sectionTypes.saveFailed')))
+      setFormError(resolveAdminMutationError(err, t('dashboard.cms.sectionTypes.saveFailed')))
     } finally {
       setSaving(false)
     }
   }
 
-  if (mode !== 'list') {
+  if (mode === 'create' || mode === 'edit') {
     return (
       <div>
-        <DashboardPageHeader title={t(mode === 'edit' ? 'dashboard.cms.sectionTypes.editTitle' : 'dashboard.cms.sectionTypes.createTitle')} icon={<CmsSectionTypesIcon size={22} />} />
-        <div className="space-y-5 rounded-sm border border-border bg-surface-muted/20 p-5">
+        <DashboardPageHeader
+          title={t(
+            mode === 'edit'
+              ? 'dashboard.cms.sectionTypes.editTitle'
+              : 'dashboard.cms.sectionTypes.createTitle',
+          )}
+          icon={<CmsSectionTypesIcon size={22} />}
+        />
+        <div className="space-y-5 rounded-sm border border-border bg-surface-muted/20 p-5 shadow-sm sm:p-6">
           <AdminField label={t('dashboard.cms.sectionTypes.fieldName')}>
-            <input value={name} onChange={(e) => setName(e.target.value)} className={adminInputClass} dir="ltr" />
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className={adminInputClass}
+              dir="ltr"
+            />
           </AdminField>
           {mode === 'edit' && (
-            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} className="size-4" />{t('dashboard.cms.sectionTypes.fieldActive')}</label>
+            <label className="flex items-center gap-2 text-sm text-text">
+              <input
+                type="checkbox"
+                checked={isActive}
+                onChange={(e) => setIsActive(e.target.checked)}
+                className="size-4 rounded border-border text-warm focus:ring-warm"
+              />
+              {t('dashboard.cms.sectionTypes.fieldActive')}
+            </label>
           )}
-          {error && <p className="text-sm text-sale">{error}</p>}
-          <div className="flex gap-3">
-            <Button variant="warm" onClick={() => void handleSave()} disabled={saving}>{t('dashboard.cms.sectionTypes.save')}</Button>
-            <Button variant="secondary" onClick={backToList}>{t('dashboard.cms.sectionTypes.cancel')}</Button>
+          {formError && <p className="text-sm text-sale">{formError}</p>}
+          <div className="flex flex-wrap gap-3">
+            <Button variant="warm" onClick={() => void handleSave()} disabled={saving}>
+              {saving ? (
+                <InlineLoading label={t('dashboard.cms.sectionTypes.saving')} />
+              ) : (
+                t('dashboard.cms.sectionTypes.save')
+              )}
+            </Button>
+            <Button variant="secondary" onClick={backToList} disabled={saving}>
+              {t('dashboard.cms.sectionTypes.cancel')}
+            </Button>
           </div>
         </div>
       </div>
     )
   }
 
+  if (!accessToken || accessToken === 'mock-access-token') {
+    return (
+      <DashboardEmptyState
+        icon={<CmsSectionTypesIcon size={28} />}
+        title={t('dashboard.cms.sectionTypes.emptyTitle')}
+        message={t('dashboard.cms.sectionTypes.authRequired')}
+      />
+    )
+  }
+
   return (
     <div>
-      <DashboardPageHeader title={t('dashboard.cms.sectionTypes.title')} description={t('dashboard.cms.sectionTypes.description')} icon={<CmsSectionTypesIcon size={22} />} action={<Button variant="warm" onClick={() => { resetForm(); setMode('create') }}>{t('dashboard.cms.sectionTypes.add')}</Button>} />
-      {loading || languageLoading ? <div className="flex justify-center py-16"><InlineLoading label={t('dashboard.cms.sectionTypes.loading')} /></div> : items.length === 0 ? (
-        <DashboardEmptyState icon={<CmsSectionTypesIcon size={28} />} title={t('dashboard.cms.sectionTypes.emptyTitle')} message={error ?? t('dashboard.cms.sectionTypes.emptyMessage')} />
+      <DashboardPageHeader
+        title={t('dashboard.cms.sectionTypes.title')}
+        description={t('dashboard.cms.sectionTypes.description')}
+        icon={<CmsSectionTypesIcon size={22} />}
+        action={
+          <Button variant="warm" onClick={openCreate}>
+            {t('dashboard.cms.sectionTypes.add')}
+          </Button>
+        }
+      />
+
+      {languageLoading || (listLoading && items.length === 0) ? (
+        <div className="flex justify-center py-16">
+          <InlineLoading label={t('dashboard.cms.sectionTypes.loading')} />
+        </div>
+      ) : listErrorMessage && items.length === 0 ? (
+        <DashboardEmptyState
+          icon={<CmsSectionTypesIcon size={28} />}
+          title={t('dashboard.cms.sectionTypes.loadFailedTitle')}
+          message={listErrorMessage}
+          action={
+            <Button variant="secondary" onClick={() => reload()}>
+              {t('dashboard.cms.sectionTypes.retry')}
+            </Button>
+          }
+        />
+      ) : totalCount === 0 && !listLoading ? (
+        <DashboardEmptyState
+          icon={<CmsSectionTypesIcon size={28} />}
+          title={t('dashboard.cms.sectionTypes.emptyTitle')}
+          message={t('dashboard.cms.sectionTypes.emptyMessage')}
+          action={
+            <Button variant="warm" onClick={openCreate}>
+              {t('dashboard.cms.sectionTypes.add')}
+            </Button>
+          }
+        />
       ) : (
-        <ul className="divide-y divide-border rounded-sm border border-border">
-          {items.map((item) => (
-            <li key={item.id} className="flex items-center justify-between px-4 py-3">
-              <span className="font-medium" dir="ltr">{item.name}</span>
-              <Button variant="secondary" size="sm" onClick={() => { setEditingId(item.id); setName(item.name); setIsActive(item.isActive); setMode('edit') }}>{t('dashboard.cms.sectionTypes.edit')}</Button>
-            </li>
-          ))}
-        </ul>
+        <div className="space-y-3">
+          {formError && <p className="text-sm text-sale">{formError}</p>}
+          {listErrorMessage && <p className="text-sm text-sale">{listErrorMessage}</p>}
+
+          <AdminDataGrid
+            columns={[
+              {
+                id: 'name',
+                header: t('dashboard.cms.sectionTypes.fieldName'),
+                cell: (item) => (
+                  <span className="font-semibold text-text" dir="ltr">
+                    {item.name || '—'}
+                  </span>
+                ),
+              },
+              {
+                id: 'status',
+                header: t('dashboard.cms.sectionTypes.fieldActive'),
+                align: 'center',
+                cell: (item) => (
+                  <span
+                    className={`inline-flex rounded-sm px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                      item.isActive
+                        ? 'bg-warm-soft text-warm'
+                        : 'bg-surface-muted text-text-muted'
+                    }`}
+                  >
+                    {item.isActive
+                      ? t('dashboard.cms.sectionTypes.statusActive')
+                      : t('dashboard.cms.sectionTypes.statusInactive')}
+                  </span>
+                ),
+              },
+              {
+                id: 'actions',
+                header: '',
+                align: 'right',
+                cell: (item) => (
+                  <Button variant="secondary" className="py-1.5 text-xs" onClick={() => openEdit(item)}>
+                    {t('dashboard.cms.sectionTypes.edit')}
+                  </Button>
+                ),
+              },
+            ]}
+            rows={items}
+            rowKey={(item) => item.id}
+            loading={listLoading}
+            loadingLabel={t('dashboard.cms.sectionTypes.loading')}
+            pagination={{
+              pageNumber,
+              pageSize,
+              totalCount,
+              totalPages,
+              onPageChange: goToPage,
+            }}
+          />
+        </div>
       )}
     </div>
   )

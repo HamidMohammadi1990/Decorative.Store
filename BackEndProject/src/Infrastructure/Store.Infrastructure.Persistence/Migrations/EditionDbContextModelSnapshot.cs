@@ -2906,6 +2906,76 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.ToTable("UserStory");
                 });
 
+            modelBuilder.Entity("Store.Domain.Entities.UserStoryComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ApprovedByUserId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ApprovedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(500)");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserStoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApprovedByUserId");
+
+                    b.HasIndex("IsApproved");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserStoryId");
+
+                    b.ToTable("UserStoryComment");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.UserStoryLike", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserStoryId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserStoryId");
+
+                    b.HasIndex("UserId", "UserStoryId")
+                        .IsUnique();
+
+                    b.ToTable("UserStoryLike");
+                });
+
             modelBuilder.Entity("Store.Domain.Entities.Wallet", b =>
                 {
                     b.Property<int>("Id")
@@ -4248,6 +4318,51 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Store.Domain.Entities.UserStoryComment", b =>
+                {
+                    b.HasOne("Store.Domain.Entities.User", "ApprovedByUser")
+                        .WithMany("UserStoryApprovedComments")
+                        .HasForeignKey("ApprovedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Store.Domain.Entities.User", "User")
+                        .WithMany("UserStoryComments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Store.Domain.Entities.UserStory", "UserStory")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserStoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ApprovedByUser");
+
+                    b.Navigation("User");
+
+                    b.Navigation("UserStory");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.UserStoryLike", b =>
+                {
+                    b.HasOne("Store.Domain.Entities.User", "User")
+                        .WithMany("UserStoryLikes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Store.Domain.Entities.UserStory", "UserStory")
+                        .WithMany("Likes")
+                        .HasForeignKey("UserStoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("UserStory");
+                });
+
             modelBuilder.Entity("Store.Domain.Entities.Wallet", b =>
                 {
                     b.HasOne("Store.Domain.Entities.User", "User")
@@ -4629,6 +4744,12 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.Navigation("UserStories");
 
+                    b.Navigation("UserStoryApprovedComments");
+
+                    b.Navigation("UserStoryComments");
+
+                    b.Navigation("UserStoryLikes");
+
                     b.Navigation("WalletTransactions");
 
                     b.Navigation("Wallets");
@@ -4642,6 +4763,13 @@ namespace Store.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Store.Domain.Entities.UserSession", b =>
                 {
                     b.Navigation("RefreshTokens");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.UserStory", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
                 });
 
             modelBuilder.Entity("Store.Domain.Entities.Wallet", b =>

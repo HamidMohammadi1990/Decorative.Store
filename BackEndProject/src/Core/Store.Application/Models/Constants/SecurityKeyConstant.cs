@@ -1,4 +1,4 @@
-﻿using Store.Common.Security;
+using Store.Common.Security;
 
 namespace Edition.Application.Models.Constants;
 
@@ -57,4 +57,6 @@ public static class SecurityKeyConstant
     public static string ProductFeatureType => SecurityKeyRegistry.Get(nameof(ProductFeatureType));
     public static string ProductOrderItemAttachmentType => SecurityKeyRegistry.Get(nameof(ProductOrderItemAttachmentType));
     public static string UserStory => SecurityKeyRegistry.Get(nameof(UserStory));
+    public static string UserStoryComment => SecurityKeyRegistry.Get(nameof(UserStoryComment));
+    public static string UserStoryLike => SecurityKeyRegistry.Get(nameof(UserStoryLike));
 }

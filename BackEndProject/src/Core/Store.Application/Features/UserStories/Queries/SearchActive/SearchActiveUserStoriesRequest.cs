@@ -21,6 +21,9 @@ public record SearchActiveUserStoryItemResponse
     [JsonConverter(typeof(UserStoryEncryptor))]
     public int Id { get; init; }
 
+    [JsonConverter(typeof(UserEncryptor))]
+    public int UserId { get; init; }
+
     public string Title { get; init; } = default!;
     public string? Caption { get; init; }
     public StoryMediaType MediaType { get; init; }
@@ -31,4 +34,7 @@ public record SearchActiveUserStoryItemResponse
     public DateTime CreatedOnUtc { get; init; }
     public string? OwnerFirstName { get; init; }
     public string? OwnerLastName { get; init; }
+    public int LikeCount { get; init; }
+    public int CommentCount { get; init; }
+    public bool IsLikedByCurrentUser { get; init; }
 }

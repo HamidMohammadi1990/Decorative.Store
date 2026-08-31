@@ -9,7 +9,7 @@ import {
   readIsActive,
   type AdminPagedResult,
 } from '@/services/admin/adminCatalogNormalize'
-import { normalizeCmsTranslations, pickCmsTranslation } from '@/services/admin/adminCmsNormalize'
+import { normalizeCmsTranslations, pickCmsTranslation, readPageType } from '@/services/admin/adminCmsNormalize'
 
 const BASE = '/api/v1/admin/page'
 
@@ -25,7 +25,7 @@ function normalizePage(data: unknown, languageId?: number): AdminCmsPage | null 
 
   return {
     id,
-    type: Number(record.type ?? record.Type ?? 1),
+    type: readPageType(record.type ?? record.Type),
     isActive: readIsActive(record),
     title: translation?.title ?? '',
     slug: translation?.slug ?? '',
@@ -66,7 +66,7 @@ export const adminPageService = {
 
     return {
       id: idValue,
-      type: Number(record.type ?? record.Type ?? 1),
+      type: readPageType(record.type ?? record.Type),
       isActive: readIsActive(record),
       title: readStringField(record, 'title', 'Title'),
       slug: readStringField(record, 'slug', 'Slug'),

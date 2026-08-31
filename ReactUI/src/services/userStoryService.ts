@@ -37,6 +37,7 @@ export function normalizeUserStoryItem(data: unknown): UserStoryDraft {
 
   return {
     id: readStringField(record, 'id', 'Id'),
+    userId: readStringField(record, 'userId', 'UserId') || undefined,
     title: readStringField(record, 'title', 'Title'),
     caption: readStringField(record, 'caption', 'Caption'),
     mediaType: readMediaType(record.mediaType ?? record.MediaType),
@@ -48,6 +49,11 @@ export function normalizeUserStoryItem(data: unknown): UserStoryDraft {
     createdAt: createdOnUtc || new Date().toISOString(),
     isActive: Boolean(record.isActive ?? record.IsActive ?? true),
     ownerName: ownerName || undefined,
+    likeCount: Number(record.likeCount ?? record.LikeCount ?? 0),
+    commentCount: Number(record.commentCount ?? record.CommentCount ?? 0),
+    isLikedByCurrentUser: Boolean(
+      record.isLikedByCurrentUser ?? record.IsLikedByCurrentUser ?? false,
+    ),
   }
 }
 
@@ -62,11 +68,11 @@ export const userStoryService = {
     return items.map(normalizeUserStoryItem).filter((story) => story.id)
   },
 
-  async searchActive(locale: Locale, limit = 40): Promise<UserStoryDraft[]> {
+  async searchActive(locale: Locale, limit = 40, accessToken?: string | null): Promise<UserStoryDraft[]> {
     const result = await apiPost<{ items?: unknown[]; Items?: unknown[] }>(
       USER_STORY_SEARCH_ACTIVE_PATH,
       { limit },
-      { locale },
+      { locale, accessToken: accessToken ?? undefined },
     )
     const items = result.items ?? result.Items ?? []
     return items.map(normalizeUserStoryItem).filter((story) => story.id)

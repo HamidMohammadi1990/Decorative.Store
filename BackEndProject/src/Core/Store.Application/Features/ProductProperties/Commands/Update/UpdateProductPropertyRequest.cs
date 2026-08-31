@@ -13,7 +13,7 @@ public record UpdateProductPropertyRequest : IRequest<OperationResult>
     [JsonConverter(typeof(PropertyEncryptor))]
     public int PropertyId { get; init; }
 
-    [JsonConverter(typeof(PropertyItemEncryptor))]
+    [JsonConverter(typeof(PropertyItemNullableEncryptor))]
     public int? PropertyItemId { get; init; }
 
     public bool IsActive { get; init; }

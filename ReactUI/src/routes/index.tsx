@@ -34,8 +34,11 @@ import {
   DashboardProfilePage,
   DashboardReviewsPage,
   DashboardStoriesPage,
+  DashboardUserStoryCommentsPage,
   DashboardSubCategoriesPage,
   DashboardTransactionsPage,
+  DashboardUsersPage,
+  DashboardRolesPage,
   DashboardWalletPage,
   DashboardWishlistPage,
 } from '@/pages/dashboard/DashboardPages'
@@ -47,6 +50,7 @@ import { ComparePage } from '@/pages/ComparePage'
 import { ProductDetailPage } from '@/pages/ProductDetailPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { ProductListingPage } from '@/pages/ProductListingPage'
+import { SearchPage } from '@/pages/SearchPage'
 import { RoomLayoutPage } from '@/pages/RoomLayoutPage'
 
 export const router = createBrowserRouter([
@@ -90,6 +94,10 @@ export const router = createBrowserRouter([
         element: <BlogDetailPage />,
       },
       {
+        path: '/search',
+        element: <SearchPage />,
+      },
+      {
         path: '*',
         element: <ProductListingPage />,
       },
@@ -114,6 +122,7 @@ export const router = createBrowserRouter([
           { path: 'reviews', element: <DashboardReviewsPage /> },
           { path: 'wishlist', element: <DashboardWishlistPage /> },
           { path: 'stories', element: <DashboardStoriesPage /> },
+          { path: 'user-story-comments', element: <DashboardUserStoryCommentsPage /> },
           { path: 'addresses', element: <DashboardAddressesPage /> },
           { path: 'coupons', element: <DashboardCouponsPage /> },
           { path: 'categories', element: <DashboardCategoriesPage /> },
@@ -140,6 +149,8 @@ export const router = createBrowserRouter([
           { path: 'cms-sections', element: <DashboardCmsSectionsPage /> },
           { path: 'cms-section-items', element: <DashboardCmsSectionItemsPage /> },
           { path: 'cms-page-sections', element: <DashboardCmsPageSectionsPage /> },
+          { path: 'users', element: <DashboardUsersPage /> },
+          { path: 'roles', element: <DashboardRolesPage /> },
           { path: '*', element: <NotFoundPage /> },
         ],
       },

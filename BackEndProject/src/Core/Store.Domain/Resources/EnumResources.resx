@@ -504,6 +504,14 @@
   <data name="PermissionType_CreateBank" xml:space="preserve"><value>Create Bank</value></data>
   <data name="PermissionType_UpdateBank" xml:space="preserve"><value>Update Bank</value></data>
   <data name="PermissionType_DeleteBank" xml:space="preserve"><value>Delete Bank</value></data>
+  <data name="PermissionType_ManageWallet" xml:space="preserve"><value>Manage Wallet</value></data>
+  <data name="PermissionType_ListWallet" xml:space="preserve"><value>List Wallet</value></data>
+  <data name="PermissionType_GetWalletById" xml:space="preserve"><value>Get Wallet By Id</value></data>
+  <data name="PermissionType_CreateWallet" xml:space="preserve"><value>Create Wallet</value></data>
+  <data name="PermissionType_UpdateWallet" xml:space="preserve"><value>Update Wallet</value></data>
+  <data name="PermissionType_UpdateWalletStatus" xml:space="preserve"><value>Update Wallet Status</value></data>
+  <data name="PermissionType_AdminChargeWallet" xml:space="preserve"><value>Admin Charge Wallet</value></data>
+  <data name="PermissionType_ListWalletTransaction" xml:space="preserve"><value>List Wallet Transaction</value></data>
   <data name="PermissionType_ManageCmsGroup" xml:space="preserve"><value>Manage Cms Group</value></data>
   <data name="PermissionType_ManagePage" xml:space="preserve"><value>Manage Page</value></data>
   <data name="PermissionType_ListPage" xml:space="preserve"><value>List Page</value></data>
@@ -576,4 +584,8 @@
   <data name="PermissionType_UpdateLanguage" xml:space="preserve"><value>Update Language</value></data>
   <data name="PermissionType_DeleteLanguage" xml:space="preserve"><value>Delete Language</value></data>
   <data name="PermissionType_SetDefaultLanguage" xml:space="preserve"><value>Set Default Language</value></data>
+  <data name="PermissionType_ManageUserStoryComment" xml:space="preserve"><value>Manage User Story Comment</value></data>
+  <data name="PermissionType_ApproveUserStoryComment" xml:space="preserve"><value>Approve User Story Comment</value></data>
+  <data name="PermissionType_ListUserStoryComment" xml:space="preserve"><value>List User Story Comment</value></data>
+  <data name="PermissionType_GetUserStoryCommentById" xml:space="preserve"><value>Get User Story Comment By Id</value></data>
 </root>

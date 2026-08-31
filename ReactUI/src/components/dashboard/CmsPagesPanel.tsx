@@ -29,6 +29,7 @@ const PAGE_TYPES = [
 ]
 
 function pageTypeLabel(type: number, t: (key: string) => string): string {
+  if (!Number.isFinite(type)) return '—'
   const match = PAGE_TYPES.find((item) => item.value === type)
   return match ? t(match.labelKey) : String(type)
 }

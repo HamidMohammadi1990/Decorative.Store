@@ -7,6 +7,7 @@ public interface IUserStoryRepository
 {
     void Add(UserStory userStory);
     void Remove(UserStory userStory);
+    Task<UserStory?> FindByIdAsync(int id, CancellationToken cancellationToken = default);
     Task<UserStory?> FindByIdAndUserIdAsync(int id, int userId, CancellationToken cancellationToken = default);
     Task<List<UserStoryListDto>> GetByUserIdAsync(int userId, int languageId, int defaultLanguageId, CancellationToken cancellationToken = default);
     Task<List<UserStoryListDto>> GetActiveAsync(int languageId, int defaultLanguageId, int limit, CancellationToken cancellationToken = default);
