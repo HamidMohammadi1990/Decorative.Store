@@ -10,14 +10,18 @@ namespace Edition.Application.Mappings;
 
 public class PageSectionMapperService : IPageSectionMapperService
 {
-    public PagedResult<GetAllPageSectionResponse> Map(PagedResult<PageSection> model)
+    public PagedResult<GetAllPageSectionResponse> Map(PagedResult<GetAllPageSectionResponseDto> model)
     {
         var items = model.Items.Select(x => new GetAllPageSectionResponse
         {
             Id = x.Id,
             PageId = x.PageId,
             SectionId = x.SectionId,
-            Priority = x.Priority
+            Priority = x.Priority,
+            PageTitle = x.PageTitle,
+            PageSlug = x.PageSlug,
+            SectionTitle = x.SectionTitle,
+            SectionTypeName = x.SectionTypeName,
         }).ToList();
 
         return PagedResult<GetAllPageSectionResponse>.Create(items, model);

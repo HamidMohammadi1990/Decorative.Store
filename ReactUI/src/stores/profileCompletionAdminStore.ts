@@ -1,9 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
-import {
-  buildAdminConfigFromMocks,
-  createEmptyAdminQuestion,
-} from '@/extensions/buildAdminProfileConfig'
+import { createEmptyAdminQuestion } from '@/extensions/profileCompletionAdminDefaults'
 import type {
   AdminProfileCompletionConfig,
   AdminProfileQuestion,
@@ -13,7 +9,9 @@ import type {
 import type { ProfileQuestionType } from '@/models/profile/profileCompletion.model'
 
 interface ProfileCompletionAdminState {
-  config: AdminProfileCompletionConfig
+  config: AdminProfileCompletionConfig | null
+  setConfigFromServer: (config: AdminProfileCompletionConfig) => void
+  clearConfig: () => void
   updateCampaign: (
     patch: Partial<
       Pick<AdminProfileCompletionConfig, 'campaignId' | 'titles' | 'subtitles' | 'reward'>
@@ -30,7 +28,6 @@ interface ProfileCompletionAdminState {
     patch: Partial<AdminQuestionOption>,
   ) => void
   removeOption: (questionId: string, optionIndex: number) => void
-  resetToDefaults: () => void
 }
 
 function reindexQuestions(questions: AdminProfileQuestion[]) {
@@ -44,153 +41,164 @@ function emptyOption(index: number): AdminQuestionOption {
   }
 }
 
-export const useProfileCompletionAdminStore = create<ProfileCompletionAdminState>()(
-  persist(
-    (set) => ({
-      config: buildAdminConfigFromMocks(),
+export const useProfileCompletionAdminStore = create<ProfileCompletionAdminState>()((set) => ({
+  config: null,
 
-      updateCampaign: (patch) =>
-        set((state) => ({
-          config: {
-            ...state.config,
-            ...patch,
-            titles: patch.titles ? { ...state.config.titles, ...patch.titles } : state.config.titles,
-            subtitles: patch.subtitles
-              ? { ...state.config.subtitles, ...patch.subtitles }
-              : state.config.subtitles,
-            reward: patch.reward
-              ? {
-                  ...state.config.reward,
-                  ...patch.reward,
-                  descriptions: patch.reward.descriptions
-                    ? { ...state.config.reward.descriptions, ...patch.reward.descriptions }
-                    : state.config.reward.descriptions,
-                }
-              : state.config.reward,
-          },
-        })),
+  setConfigFromServer: (config) => set({ config }),
 
-      addQuestion: () =>
-        set((state) => {
-          const nextOrder = state.config.questions.length + 1
-          return {
-            config: {
-              ...state.config,
-              questions: [...state.config.questions, createEmptyAdminQuestion(nextOrder)],
-            },
-          }
-        }),
+  clearConfig: () => set({ config: null }),
 
-      updateQuestion: (id, patch) =>
-        set((state) => ({
-          config: {
-            ...state.config,
-            questions: state.config.questions.map((q) =>
-              q.id === id
-                ? {
-                    ...q,
-                    ...patch,
-                    labels: patch.labels ? { ...q.labels, ...patch.labels } : q.labels,
-                    hints: patch.hints ? { ...q.hints, ...patch.hints } : q.hints,
-                    placeholders: patch.placeholders
-                      ? { ...q.placeholders, ...patch.placeholders }
-                      : q.placeholders,
-                    options: patch.options ?? q.options,
-                  }
-                : q,
-            ),
-          },
-        })),
-
-      removeQuestion: (id) =>
-        set((state) => ({
-          config: {
-            ...state.config,
-            questions: reindexQuestions(
-              state.config.questions.filter((q) => q.id !== id),
-            ),
-          },
-        })),
-
-      moveQuestion: (id, direction) =>
-        set((state) => {
-          const list = [...state.config.questions].sort((a, b) => a.order - b.order)
-          const index = list.findIndex((q) => q.id === id)
-          if (index < 0) return state
-
-          const target = direction === 'up' ? index - 1 : index + 1
-          if (target < 0 || target >= list.length) return state
-
-          const next = [...list]
-          ;[next[index], next[target]] = [next[target], next[index]]
-
-          return {
-            config: {
-              ...state.config,
-              questions: reindexQuestions(next),
-            },
-          }
-        }),
-
-      addOption: (questionId) =>
-        set((state) => ({
-          config: {
-            ...state.config,
-            questions: state.config.questions.map((q) => {
-              if (q.id !== questionId) return q
-              return {
-                ...q,
-                options: [...q.options, emptyOption(q.options.length)],
+  updateCampaign: (patch) =>
+    set((state) => {
+      if (!state.config) return state
+      return {
+        config: {
+          ...state.config,
+          ...patch,
+          titles: patch.titles ? { ...state.config.titles, ...patch.titles } : state.config.titles,
+          subtitles: patch.subtitles
+            ? { ...state.config.subtitles, ...patch.subtitles }
+            : state.config.subtitles,
+          reward: patch.reward
+            ? {
+                ...state.config.reward,
+                ...patch.reward,
+                descriptions: patch.reward.descriptions
+                  ? { ...state.config.reward.descriptions, ...patch.reward.descriptions }
+                  : state.config.reward.descriptions,
               }
-            }),
-          },
-        })),
-
-      updateOption: (questionId, optionIndex, patch) =>
-        set((state) => ({
-          config: {
-            ...state.config,
-            questions: state.config.questions.map((q) => {
-              if (q.id !== questionId) return q
-              return {
-                ...q,
-                options: q.options.map((opt, index) =>
-                  index === optionIndex
-                    ? {
-                        ...opt,
-                        ...patch,
-                        labels: patch.labels
-                          ? { ...opt.labels, ...patch.labels }
-                          : opt.labels,
-                      }
-                    : opt,
-                ),
-              }
-            }),
-          },
-        })),
-
-      removeOption: (questionId, optionIndex) =>
-        set((state) => ({
-          config: {
-            ...state.config,
-            questions: state.config.questions.map((q) => {
-              if (q.id !== questionId) return q
-              return {
-                ...q,
-                options: q.options.filter((_, index) => index !== optionIndex),
-              }
-            }),
-          },
-        })),
-
-      resetToDefaults: () => set({ config: buildAdminConfigFromMocks() }),
+            : state.config.reward,
+        },
+      }
     }),
-    {
-      name: 'diba-profile-completion-admin',
-    },
-  ),
-)
+
+  addQuestion: () =>
+    set((state) => {
+      if (!state.config) return state
+      const nextOrder = state.config.questions.length + 1
+      return {
+        config: {
+          ...state.config,
+          questions: [...state.config.questions, createEmptyAdminQuestion(nextOrder)],
+        },
+      }
+    }),
+
+  updateQuestion: (id, patch) =>
+    set((state) => {
+      if (!state.config) return state
+      return {
+        config: {
+          ...state.config,
+          questions: state.config.questions.map((q) =>
+            q.id === id
+              ? {
+                  ...q,
+                  ...patch,
+                  labels: patch.labels ? { ...q.labels, ...patch.labels } : q.labels,
+                  hints: patch.hints ? { ...q.hints, ...patch.hints } : q.hints,
+                  placeholders: patch.placeholders
+                    ? { ...q.placeholders, ...patch.placeholders }
+                    : q.placeholders,
+                  options: patch.options ?? q.options,
+                }
+              : q,
+          ),
+        },
+      }
+    }),
+
+  removeQuestion: (id) =>
+    set((state) => {
+      if (!state.config) return state
+      return {
+        config: {
+          ...state.config,
+          questions: reindexQuestions(state.config.questions.filter((q) => q.id !== id)),
+        },
+      }
+    }),
+
+  moveQuestion: (id, direction) =>
+    set((state) => {
+      if (!state.config) return state
+      const list = [...state.config.questions].sort((a, b) => a.order - b.order)
+      const index = list.findIndex((q) => q.id === id)
+      if (index < 0) return state
+
+      const target = direction === 'up' ? index - 1 : index + 1
+      if (target < 0 || target >= list.length) return state
+
+      const next = [...list]
+      ;[next[index], next[target]] = [next[target], next[index]]
+
+      return {
+        config: {
+          ...state.config,
+          questions: reindexQuestions(next),
+        },
+      }
+    }),
+
+  addOption: (questionId) =>
+    set((state) => {
+      if (!state.config) return state
+      return {
+        config: {
+          ...state.config,
+          questions: state.config.questions.map((q) => {
+            if (q.id !== questionId) return q
+            return {
+              ...q,
+              options: [...q.options, emptyOption(q.options.length)],
+            }
+          }),
+        },
+      }
+    }),
+
+  updateOption: (questionId, optionIndex, patch) =>
+    set((state) => {
+      if (!state.config) return state
+      return {
+        config: {
+          ...state.config,
+          questions: state.config.questions.map((q) => {
+            if (q.id !== questionId) return q
+            return {
+              ...q,
+              options: q.options.map((opt, index) =>
+                index === optionIndex
+                  ? {
+                      ...opt,
+                      ...patch,
+                      labels: patch.labels ? { ...opt.labels, ...patch.labels } : opt.labels,
+                    }
+                  : opt,
+              ),
+            }
+          }),
+        },
+      }
+    }),
+
+  removeOption: (questionId, optionIndex) =>
+    set((state) => {
+      if (!state.config) return state
+      return {
+        config: {
+          ...state.config,
+          questions: state.config.questions.map((q) => {
+            if (q.id !== questionId) return q
+            return {
+              ...q,
+              options: q.options.filter((_, index) => index !== optionIndex),
+            }
+          }),
+        },
+      }
+    }),
+}))
 
 export function patchLocalized(
   current: LocalizedText,

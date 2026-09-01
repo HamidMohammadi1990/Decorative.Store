@@ -12,4 +12,8 @@ public record GetAllPageSectionResponse
     [JsonConverter(typeof(SectionEncryptor))]
     public int SectionId { get; init; }
     public int Priority { get; init; }
+    public string PageTitle { get; init; } = string.Empty;
+    public string PageSlug { get; init; } = string.Empty;
+    public string SectionTitle { get; init; } = string.Empty;
+    public string SectionTypeName { get; init; } = string.Empty;
 }

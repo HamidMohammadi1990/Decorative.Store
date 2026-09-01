@@ -6,6 +6,11 @@ public record CatalogListingDto
     public string Title { get; init; } = string.Empty;
     public List<CatalogBreadcrumbDto> Breadcrumbs { get; init; } = [];
     public List<CatalogListingProductDto> Products { get; init; } = [];
+    public int TotalCount { get; init; }
+    public int Page { get; init; } = 1;
+    public int PageSize { get; init; } = 12;
+    public List<CatalogListingFacetGroupDto> FacetGroups { get; init; } = [];
+    public CatalogListingFacetLabelLookupDto FacetLabels { get; set; } = new();
 }
 
 public record CatalogBreadcrumbDto(string Label, string Href);
@@ -25,4 +30,8 @@ public record CatalogListingProductDto
     public bool IsNew { get; init; }
     public string CategorySlug { get; init; } = string.Empty;
     public string SubCategorySlug { get; init; } = string.Empty;
+    public Dictionary<string, List<string>> Facets { get; set; } = new(StringComparer.OrdinalIgnoreCase);
+    public int ReviewCount { get; set; }
+    public double? AverageRating { get; set; }
+    public int PurchaseCount { get; set; }
 }

@@ -4,6 +4,7 @@ using Store.Common.Utilities;
 using Store.Common.Extensions;
 using Store.Domain.Dtos.Others;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 using Store.Infrastructure.Persistence.Contracts;
 
 namespace Store.Infrastructure.Persistence.SeedData;
@@ -27,6 +28,11 @@ public class SeedService(EditionDbContext context) : ISeedService
         await SeedBlogPostsAsync(cancellationToken);
         await CmsSeedService.SeedShopPagesAsync(context, cancellationToken);
         await CmsSeedService.SeedBlogPagesAsync(context, cancellationToken);
+        await CmsSeedService.SeedAboutPagesAsync(context, cancellationToken);
+        await CmsSeedService.SeedContactPagesAsync(context, cancellationToken);
+        await CmsSeedService.SeedContentPagesAsync(context, cancellationToken);
+        await SeedProfileCompletionAsync(cancellationToken);
+        await SeedMarketingPromosAsync(cancellationToken);
     }
 
     public async Task SeedDataAsync(List<DynamicPermission> dynamicPermissions, CancellationToken cancellationToken = default)
@@ -616,6 +622,99 @@ public class SeedService(EditionDbContext context) : ISeedService
             blogPost.Publish(item.PublishedOnUtc);
             context.BlogPost.Add(blogPost);
         }
+
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SeedProfileCompletionAsync(CancellationToken cancellationToken = default)
+    {
+        var existing = await context.ProfileCompletionSetting
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (existing is null)
+        {
+            context.ProfileCompletionSetting.Add(
+                ProfileCompletionSetting.Create(ProfileCompletionSeedData.ConfigJson));
+            await context.SaveChangesAsync(cancellationToken);
+            return;
+        }
+
+        if (HasProfileCompletionQuestions(existing.ConfigJson))
+            return;
+
+        existing.UpdateConfig(ProfileCompletionSeedData.ConfigJson);
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private static bool HasProfileCompletionQuestions(string configJson)
+    {
+        try
+        {
+            using var document = JsonDocument.Parse(configJson);
+            return document.RootElement.TryGetProperty("questions", out var questions)
+                && questions.ValueKind == JsonValueKind.Array
+                && questions.GetArrayLength() > 0;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
+
+    private async Task SeedMarketingPromosAsync(CancellationToken cancellationToken = default)
+    {
+        if (await context.MarketingPromo.AnyAsync(cancellationToken))
+            return;
+
+        var faLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "fa-IR", cancellationToken);
+        var enLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "en-US", cancellationToken);
+
+        if (faLanguage is null || enLanguage is null)
+            return;
+
+        foreach (var promo in MarketingPromoSeedData.FaPromos)
+        {
+            context.MarketingPromo.Add(MarketingPromo.Create(
+                faLanguage.Id,
+                promo.PromoType,
+                promo.Title,
+                promo.Subtitle,
+                promo.LinkLabel,
+                promo.LinkHref,
+                promo.ImageFileName,
+                promo.Priority));
+        }
+
+        foreach (var promo in MarketingPromoSeedData.EnPromos)
+        {
+            context.MarketingPromo.Add(MarketingPromo.Create(
+                enLanguage.Id,
+                promo.PromoType,
+                promo.Title,
+                promo.Subtitle,
+                promo.LinkLabel,
+                promo.LinkHref,
+                promo.ImageFileName,
+                promo.Priority));
+        }
+
+        var faDisclaimer = MarketingPromoSeedData.FaDisclaimer;
+        context.MarketingStripDisclaimer.Add(MarketingStripDisclaimer.Create(
+            faLanguage.Id,
+            faDisclaimer.Disclaimer,
+            faDisclaimer.DisclaimerLinkLabel,
+            faDisclaimer.DisclaimerLinkHref));
+
+        var enDisclaimer = MarketingPromoSeedData.EnDisclaimer;
+        context.MarketingStripDisclaimer.Add(MarketingStripDisclaimer.Create(
+            enLanguage.Id,
+            enDisclaimer.Disclaimer,
+            enDisclaimer.DisclaimerLinkLabel,
+            enDisclaimer.DisclaimerLinkHref));
 
         await context.SaveChangesAsync(cancellationToken);
     }

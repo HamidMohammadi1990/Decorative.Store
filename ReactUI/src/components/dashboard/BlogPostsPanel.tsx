@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { AdminBlogPostCategory } from '@/models/admin/blog.model'
 import type { AdminBlogPostListItem } from '@/models/admin/blog.model'
@@ -12,7 +12,7 @@ import {
   EditIcon,
 } from '@/components/dashboard/DashboardIcons'
 import {
-  AdminGridActionLink,
+  AdminGridActionMenu,
   AdminGridActions,
   AdminGridIconLink,
 } from '@/components/dashboard/admin/AdminGridActions'
@@ -29,9 +29,14 @@ import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
 import { adminBlogPostCategoryService } from '@/services/adminBlogPostCategoryService'
 import { adminBlogPostService } from '@/services/adminBlogPostService'
 import { useUserStore } from '@/stores/userStore'
+import {
+  BlogPostManageModal,
+  type BlogPostManageTab,
+} from '@/components/dashboard/BlogPostManageModal'
 
 export function BlogPostsPanel() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const accessToken = useUserStore((s) => s.accessToken)
   const { languageId, locale, loading: languageLoading } = useCurrentLanguageId()
 
@@ -41,6 +46,14 @@ export function BlogPostsPanel() {
   const [error, setError] = useState<string | null>(null)
   const [filterCategoryId, setFilterCategoryId] = useState('')
   const [filterPublished, setFilterPublished] = useState('')
+  const [manageModal, setManageModal] = useState<{
+    tab: BlogPostManageTab
+    post: AdminBlogPostListItem
+  } | null>(null)
+
+  const openManageModal = (tab: BlogPostManageTab, post: AdminBlogPostListItem) => {
+    setManageModal({ tab, post })
+  }
 
   const load = useCallback(async () => {
     if (!accessToken || accessToken === 'mock-access-token') {
@@ -204,15 +217,34 @@ export function BlogPostsPanel() {
                       : t('dashboard.blogPosts.statusDraft')}
                   </span>
                 <AdminGridActions>
-                  <AdminGridActionLink
-                    label={t('dashboard.blogPosts.tags')}
-                    icon={<BlogPostTagsIcon size={14} />}
-                    to={`/account/dashboard/blog-post-tags?blogPostId=${encodeURIComponent(item.id)}`}
-                  />
-                  <AdminGridActionLink
-                    label={t('dashboard.blogPosts.comments')}
-                    icon={<BlogCommentsIcon size={14} />}
-                    to={`/account/dashboard/blog-post-comments?blogPostId=${encodeURIComponent(item.id)}`}
+                  <AdminGridActionMenu
+                    label={t('dashboard.blogPosts.manage')}
+                    icon={<BlogPostsIcon size={14} />}
+                    items={[
+                      {
+                        id: 'images',
+                        label: t('dashboard.blogPosts.images.menuLabel'),
+                        onClick: () => openManageModal('images', item),
+                      },
+                      {
+                        id: 'tags',
+                        label: t('dashboard.blogPosts.tags'),
+                        icon: <BlogPostTagsIcon size={14} />,
+                        onClick: () =>
+                          navigate(
+                            `/account/dashboard/blog-post-tags?blogPostId=${encodeURIComponent(item.id)}`,
+                          ),
+                      },
+                      {
+                        id: 'comments',
+                        label: t('dashboard.blogPosts.comments'),
+                        icon: <BlogCommentsIcon size={14} />,
+                        onClick: () =>
+                          navigate(
+                            `/account/dashboard/blog-post-comments?blogPostId=${encodeURIComponent(item.id)}`,
+                          ),
+                      },
+                    ]}
                   />
                   <AdminGridIconLink
                     label={t('dashboard.blogPosts.edit')}
@@ -226,6 +258,13 @@ export function BlogPostsPanel() {
           </ul>
         </div>
       )}
+
+      <BlogPostManageModal
+        open={manageModal != null}
+        tab={manageModal?.tab ?? 'images'}
+        post={manageModal?.post ?? null}
+        onClose={() => setManageModal(null)}
+      />
     </div>
   )
 }

@@ -15,7 +15,7 @@ public class GetAllPageSectionHandler
     public async Task<OperationResult<PagedResult<GetAllPageSectionResponse>>> Handle(GetAllPageSectionRequest request, CancellationToken cancellationToken)
     {
         var requestModel = mapper.Map(request);
-        var models = await repository.GetAllAsync(requestModel);
+        var models = await repository.GetAllAsync(requestModel, cancellationToken);
         return mapper.Map(models);
     }
 }

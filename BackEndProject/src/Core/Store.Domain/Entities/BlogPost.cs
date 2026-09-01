@@ -20,6 +20,7 @@ public class BlogPost : BaseEntity
     public ICollection<BlogPostTag> BlogPostTags { get; private set; } = default!;
     public ICollection<BlogPostLike> BlogPostLikes { get; private set; } = default!;
     public ICollection<BlogPostComment> BlogPostComments { get; private set; } = default!;
+    public ICollection<BlogPostFile> BlogPostFiles { get; private set; } = default!;
     public ICollection<BlogPostTranslation> Translations { get; private set; } = [];
 
     public static BlogPost Create(

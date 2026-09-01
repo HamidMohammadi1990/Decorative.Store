@@ -18,6 +18,21 @@ public class ProductFileRepository
             .Include(x => x.Translations)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
+    public Task<ProductFile?> GetWithTranslationsAsync(int id, CancellationToken cancellationToken = default)
+        => Context.ProductFile
+            .Include(x => x.Translations)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+    public async Task ClearMainFlagsAsync(int productId, CancellationToken cancellationToken = default)
+    {
+        var mainFiles = await Context.ProductFile
+            .Where(x => x.ProductId == productId && x.IsMain)
+            .ToListAsync(cancellationToken);
+
+        foreach (var file in mainFiles)
+            file.SetMain(false);
+    }
+
     public async Task<PagedResult<GetAllProductFileResponseDto>> GetAllAsync(
         GetAllProductFileRequestDto request,
         CancellationToken cancellationToken = default)

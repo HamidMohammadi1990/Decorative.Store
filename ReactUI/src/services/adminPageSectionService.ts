@@ -29,6 +29,10 @@ function normalizePageSection(data: unknown): AdminCmsPageSection | null {
     pageId,
     sectionId,
     priority: readNumberField(record, 'priority', 'Priority'),
+    pageTitle: readStringField(record, 'pageTitle', 'PageTitle') || undefined,
+    pageSlug: readStringField(record, 'pageSlug', 'PageSlug') || undefined,
+    sectionTitle: readStringField(record, 'sectionTitle', 'SectionTitle') || undefined,
+    sectionTypeName: readStringField(record, 'sectionTypeName', 'SectionTypeName') || undefined,
   }
 }
 

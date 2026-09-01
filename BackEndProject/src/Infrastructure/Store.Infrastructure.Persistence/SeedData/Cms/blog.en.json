@@ -39,6 +39,7 @@
       {
         "title": "More about us",
         "links": [
+          { "label": "About us", "href": "/about" },
           { "label": "Journal", "href": "/blog" },
           { "label": "Sustainability", "href": "/sustainability" },
           { "label": "Careers", "href": "/careers" },

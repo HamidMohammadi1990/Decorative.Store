@@ -1,0 +1,66 @@
+{
+  "promoAnnouncement": {
+    "id": "content-promo",
+    "message": "Free design consultation — book your slot today",
+    "link": { "label": "Learn more", "href": "/design-services" }
+  },
+  "utilityBar": {
+    "phoneLabel": "Call: 0800 404 9780",
+    "phoneHref": "tel:08004049780",
+    "links": [
+      { "label": "About us", "href": "/about" },
+      { "label": "Track order", "href": "/track-order" }
+    ]
+  },
+  "header": {
+    "brandLabel": "Diba Gallery",
+    "searchPlaceholder": "Search furniture, rugs, lighting…",
+    "accountLabel": "Sign in",
+    "cartLabel": "Basket"
+  },
+  "footer": {
+    "columns": [
+      {
+        "title": "Customer service",
+        "links": [
+          { "label": "Contact us", "href": "/contact" },
+          { "label": "Returns & exchanges", "href": "/returns" },
+          { "label": "Delivery information", "href": "/delivery" }
+        ]
+      },
+      {
+        "title": "Resources",
+        "links": [
+          { "label": "Click & Collect", "href": "/click-collect" },
+          { "label": "Design services", "href": "/design-services" },
+          { "label": "Journal", "href": "/blog" }
+        ]
+      },
+      {
+        "title": "More about us",
+        "links": [
+          { "label": "About us", "href": "/about" },
+          { "label": "Sustainability", "href": "/sustainability" },
+          { "label": "Careers", "href": "/careers" },
+          { "label": "Find a store", "href": "/stores" }
+        ]
+      },
+      {
+        "title": "Design services",
+        "links": [
+          { "label": "Meet the design team", "href": "/design-services" },
+          { "label": "Diba Gallery TRADE", "href": "/trade" }
+        ]
+      }
+    ],
+    "newsletterTitle": "Sales & new arrivals",
+    "newsletterPlaceholder": "Email address",
+    "newsletterButton": "Sign up",
+    "copyright": "© 2026 Diba Gallery. All rights reserved",
+    "legalLinks": [
+      { "label": "Terms & conditions", "href": "/terms" },
+      { "label": "Privacy", "href": "/privacy" },
+      { "label": "Legal statement", "href": "/legal" }
+    ]
+  }
+}

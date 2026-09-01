@@ -83,7 +83,7 @@ public class AddCartItemHandler
             foreach (var duplicateItem in matchingQuickAddItems.Skip(1))
             {
                 primaryItem.AddQuantity(duplicateItem.Quantity);
-                order.RemoveOrderItem(duplicateItem);
+                orderRepository.RemoveOrderItem(order, duplicateItem);
             }
 
             primaryItem.AddQuantity(request.Quantity);

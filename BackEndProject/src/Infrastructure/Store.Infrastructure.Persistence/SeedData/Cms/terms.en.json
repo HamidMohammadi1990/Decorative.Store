@@ -1,0 +1,36 @@
+{
+  "page": {
+    "title": "Terms & Conditions",
+    "metaTitle": "Terms & Conditions — Diba Gallery",
+    "metaDescription": "Terms of use for shopping at Diba Gallery online and in store."
+  },
+  "contentHero": {
+    "eyebrow": "Shopping with us",
+    "title": "Terms & conditions",
+    "subtitle": "Please read these terms before placing an order. They govern your use of our website and services."
+  },
+  "contentBlocks": [
+    {
+      "heading": "Orders & pricing",
+      "paragraphs": [
+        "All prices are shown in the store currency and include applicable taxes where stated.",
+        "We reserve the right to cancel orders affected by pricing or stock errors before dispatch.",
+        "An order is confirmed once you receive our confirmation email."
+      ]
+    },
+    {
+      "heading": "Payments",
+      "paragraphs": [
+        "We accept major cards and approved payment partners shown at checkout.",
+        "Payment is captured when your order is confirmed unless stated otherwise for pre-orders."
+      ]
+    },
+    {
+      "heading": "Limitation of liability",
+      "paragraphs": [
+        "Diba Gallery is not liable for indirect losses arising from delays outside our reasonable control.",
+        "Nothing in these terms limits your statutory consumer rights."
+      ]
+    }
+  ]
+}

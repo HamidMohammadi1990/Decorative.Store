@@ -68,6 +68,8 @@ export interface AdminCmsSection {
   title: string
   description?: string
   url: string
+  sectionTypeName?: string
+  parentTitle?: string | null
   translations: CmsContentTranslation[]
 }
 
@@ -98,6 +100,8 @@ export interface AdminCmsSectionItem {
   title: string
   description?: string
   url?: string
+  sectionTitle?: string
+  sectionTypeName?: string
   translations: CmsContentTranslation[]
 }
 
@@ -122,6 +126,10 @@ export interface AdminCmsPageSection {
   pageId: string
   sectionId: string
   priority: number
+  pageTitle?: string
+  pageSlug?: string
+  sectionTitle?: string
+  sectionTypeName?: string
 }
 
 export interface CreateCmsPageSectionInput {

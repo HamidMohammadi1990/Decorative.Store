@@ -135,6 +135,10 @@ export const adminProductFileService = {
     await apiPut(`${BASE}/status`, { id, status }, { locale, accessToken })
   },
 
+  async setMain(accessToken: string, locale: Locale, id: string): Promise<void> {
+    await apiPut(`${BASE}/main`, { id }, { locale, accessToken })
+  },
+
   async delete(accessToken: string, id: string): Promise<void> {
     await apiDelete(`${BASE}/delete`, accessToken, { id })
   },

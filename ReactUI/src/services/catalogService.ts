@@ -26,7 +26,7 @@ import {
 } from '@/extensions/resolveListingPath'
 import { catalogListingService } from '@/services/catalogListingService'
 import { catalogProductService } from '@/services/catalogProductService'
-import { mapCatalogListingProduct } from '@/services/mappers/catalogListingMapper'
+import { mapCatalogListingProduct, mapCatalogListingFacetGroups } from '@/services/mappers/catalogListingMapper'
 import {
   buildProductDetailFromSummary,
   mapCatalogProductToDetail,
@@ -233,17 +233,28 @@ function getSortOptions(locale: Locale) {
           'price-asc': 'قیمت: کم به زیاد',
           'price-desc': 'قیمت: زیاد به کم',
           newest: 'جدیدترین',
+          'best-selling': 'پرفروش‌ترین',
+          rating: 'بیشترین امتیاز',
         }
       : {
           featured: 'Featured',
           'price-asc': 'Price: Low to High',
           'price-desc': 'Price: High to Low',
           newest: 'Newest',
+          'best-selling': 'Best selling',
+          rating: 'Top rated',
         }
 
-  return (['featured', 'price-asc', 'price-desc', 'newest'] as SortOptionId[]).map(
-    (id) => ({ id, label: labels[id] }),
-  )
+  return (
+    [
+      'featured',
+      'price-asc',
+      'price-desc',
+      'newest',
+      'best-selling',
+      'rating',
+    ] as SortOptionId[]
+  ).map((id) => ({ id, label: labels[id] }))
 }
 
 function buildTitle(locale: Locale, collection: string | null, segments: string[]) {
@@ -312,6 +323,14 @@ function sortProducts(products: ProductSummary[], sort: SortOptionId) {
       return copy.sort((a, b) => b.price.amount - a.price.amount)
     case 'newest':
       return copy.sort((a, b) => Number(b.isNew) - Number(a.isNew))
+    case 'best-selling':
+      return copy.sort((a, b) => b.purchaseCount - a.purchaseCount)
+    case 'rating':
+      return copy.sort(
+        (a, b) =>
+          (b.averageRating ?? 0) - (a.averageRating ?? 0) ||
+          b.reviewCount - a.reviewCount,
+      )
     default:
       return copy
   }
@@ -337,7 +356,7 @@ function countForFacetOption(
     if (facetId === 'onSale') return product.onSale
     if (facetId === 'isNew') return product.isNew
 
-    const values = product.facets[facetId as keyof typeof product.facets] ?? []
+    const values = product.facets[facetId] ?? []
     return values.includes(optionValue)
   }).length
 }
@@ -422,9 +441,14 @@ function buildFacets(
     })
   }
 
-  const attributeFacetIds = ['color', 'size', 'material', 'room'] as const
+  const attributeFacetIds = new Set<string>()
+  for (const product of products) {
+    for (const facetId of Object.keys(product.facets)) {
+      attributeFacetIds.add(facetId)
+    }
+  }
 
-  for (const facetId of attributeFacetIds) {
+  for (const facetId of [...attributeFacetIds].sort()) {
     const values = new Set<string>()
     for (const product of products) {
       for (const value of product.facets[facetId] ?? []) {
@@ -532,13 +556,25 @@ async function getMockListing(
   }
 }
 
+export function buildListingFacets(
+  locale: Locale,
+  products: ProductSummary[],
+  filters: ParsedListingFilters,
+): FilterFacet[] {
+  return buildFacets(locale, products, filters)
+}
+
+export function getListingSortOptions(locale: Locale) {
+  return getSortOptions(locale)
+}
+
 export const catalogService = {
   async getListing(query: ListingQuery, locale: Locale): Promise<ProductListingResult> {
     const { pathname, searchParams } = query
     const catalogPath = pathname.replace(/^\/+/, '').replace(/\/+$/, '')
 
     try {
-      const listing = await catalogListingService.getListing(catalogPath, locale)
+      const listing = await catalogListingService.getListing(catalogPath, locale, searchParams)
 
       if (listing.pathNotFound) {
         return {
@@ -555,28 +591,20 @@ export const catalogService = {
         }
       }
 
-      let filtered = listing.products.map(mapCatalogListingProduct)
       const parsedFilters = parseListingFilters(searchParams)
-      filtered = filtered.filter((product) => productMatchesFilters(product, parsedFilters))
-
-      const sort = (searchParams.get('sort') as SortOptionId) || 'featured'
-      filtered = sortProducts(filtered, sort)
-
-      const page = Math.max(1, Number(searchParams.get('page')) || 1)
-      const totalCount = filtered.length
-      const start = (page - 1) * PAGE_SIZE
-      const pageProducts = filtered.slice(start, start + PAGE_SIZE)
-      const facets = buildFacets(locale, listing.products.map(mapCatalogListingProduct), parsedFilters)
 
       return {
         title: listing.title,
         breadcrumbs: listing.breadcrumbs,
-        products: pageProducts,
-        facets,
+        products: listing.products.map(mapCatalogListingProduct),
+        facets:
+          (listing.facetGroups?.length ?? 0) > 0
+            ? mapCatalogListingFacetGroups(listing.facetGroups)
+            : buildFacets(locale, listing.products.map(mapCatalogListingProduct), parsedFilters),
         sortOptions: getSortOptions(locale),
-        totalCount,
-        page,
-        pageSize: PAGE_SIZE,
+        totalCount: listing.totalCount,
+        page: listing.page,
+        pageSize: listing.pageSize,
         activeFilters: toActiveFiltersRecord(parsedFilters),
         pathNotFound: false,
       }

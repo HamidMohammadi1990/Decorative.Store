@@ -1,0 +1,8 @@
+{
+  "page": { "title": "Delivery Information", "metaTitle": "Delivery — Diba Gallery", "metaDescription": "Delivery options, timescales, and tracking for Diba Gallery orders." },
+  "contentHero": { "eyebrow": "To your door", "title": "Delivery information", "subtitle": "From standard courier to room-of-choice delivery — choose what suits your order." },
+  "contentBlocks": [
+    { "heading": "Delivery options", "paragraphs": ["Standard delivery: 3–7 business days for in-stock items nationwide.", "Express and scheduled slots available in selected cities at checkout.", "Large furniture may require assembly scheduling — we will contact you to confirm."] },
+    { "heading": "Tracking", "paragraphs": ["Tracking details are sent by email and SMS when your order dispatches.", "For questions about an active delivery, contact us with your order number."] }
+  ]
+}

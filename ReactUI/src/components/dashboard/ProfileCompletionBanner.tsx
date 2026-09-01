@@ -6,9 +6,9 @@ import { useProfileCompletion } from '@/hooks/useProfileCompletion'
 export function ProfileCompletionBanner() {
   const { t } = useTranslation()
   const location = useLocation()
-  const { progress, rewardClaimed, canClaimReward, config } = useProfileCompletion()
+  const { progress, rewardClaimed, canClaimReward, config, loading } = useProfileCompletion()
 
-  if (rewardClaimed || location.pathname.includes('/profile')) return null
+  if (loading || !config || rewardClaimed || location.pathname.includes('/profile')) return null
 
   const reward = config.campaign.reward
 

@@ -1,9 +1,12 @@
+using Edition.Application.Common.Directories;
 using Store.Common.Models;
 using Store.Domain.Repositories;
 
 namespace Edition.Application.Features.BlogPosts.Queries;
 
-public class GetBlogPostDetailHandler(IBlogPostRepository blogPostRepository)
+public class GetBlogPostDetailHandler(
+    IBlogPostRepository blogPostRepository,
+    IBlogPostFileRepository blogPostFileRepository)
     : IRequestHandler<GetBlogPostDetailRequest, OperationResult<GetBlogPostDetailResponse>>
 {
     public async Task<OperationResult<GetBlogPostDetailResponse>> Handle(
@@ -16,6 +19,10 @@ public class GetBlogPostDetailHandler(IBlogPostRepository blogPostRepository)
         {
             return new GetBlogPostDetailResponse { NotFound = true };
         }
+
+        var images = await blogPostFileRepository.GetActiveImagesByBlogPostIdAsync(
+            detail.Post.Id,
+            cancellationToken);
 
         return new GetBlogPostDetailResponse
         {
@@ -42,6 +49,14 @@ public class GetBlogPostDetailHandler(IBlogPostRepository blogPostRepository)
                 LikeCount = detail.LikeCount,
                 IsFeatured = detail.Post.IsFeatured,
                 TagTitles = detail.TagTitles,
+                Images = images
+                    .Select(image => new BlogPostDetailImageResponse
+                    {
+                        Title = image.Title,
+                        ImageUrl = BlogPostDirectory.GetImageUrl(image.FileName),
+                        IsMain = image.IsMain,
+                    })
+                    .ToList(),
             },
             Comments = detail.Comments
                 .Select(comment => new BlogPostDetailCommentResponse

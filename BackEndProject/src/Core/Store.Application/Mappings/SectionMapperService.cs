@@ -21,6 +21,8 @@ public class SectionMapperService : ISectionMapperService
             StartDateOnUtc = x.StartDateOnUtc,
             EndDateOnUtc = x.EndDateOnUtc,
             IsActive = x.IsActive,
+            SectionTypeName = x.SectionTypeName,
+            ParentTitle = x.ParentTitle,
             Translations = x.Translations,
         }).ToList();
 

@@ -12,6 +12,44 @@ import {
   readRecord,
   readStringField,
 } from '@/services/api/apiNormalize'
+import { API_BASE_URL } from '@/config/api'
+
+function resolveBlogImageUrl(url: string): string {
+  if (!url) return ''
+  if (url.startsWith('http://') || url.startsWith('https://')) return url
+  if (url.startsWith('/')) return `${API_BASE_URL}${url}`
+  return `${API_BASE_URL}/${url}`
+}
+
+function toImageAsset(src: string, alt: string): ImageAsset {
+  return { src: resolveBlogImageUrl(src), alt }
+}
+
+function readCoverImage(record: Record<string, unknown>, fallback: ImageAsset, alt: string): ImageAsset {
+  const coverImageUrl = readOptionalStringField(record, 'coverImageUrl', 'CoverImageUrl')
+  if (coverImageUrl) return toImageAsset(coverImageUrl, alt)
+  return { ...fallback, alt: alt || fallback.alt }
+}
+
+function readGalleryImages(record: Record<string, unknown>, fallback: ImageAsset, alt: string): ImageAsset[] {
+  const images = record.images ?? record.Images
+  if (!Array.isArray(images) || images.length === 0) {
+    return [fallback]
+  }
+
+  const gallery = images
+    .map((item) => {
+      const imageRecord = readRecord(item)
+      if (!imageRecord) return null
+      const imageUrl = readStringField(imageRecord, 'imageUrl', 'ImageUrl')
+      if (!imageUrl) return null
+      const title = readStringField(imageRecord, 'title', 'Title')
+      return toImageAsset(imageUrl, title || alt)
+    })
+    .filter((item): item is ImageAsset => item !== null)
+
+  return gallery.length > 0 ? gallery : [fallback]
+}
 
 function readBooleanField(record: Record<string, unknown>, ...keys: string[]) {
   for (const key of keys) {
@@ -80,13 +118,15 @@ export function normalizeBlogPostSummary(
 
   const seoKeywords = readStringField(record, 'seoKeywords', 'SeoKeywords')
   const featured = readBooleanField(record, 'isFeatured', 'IsFeatured')
+  const title = readStringField(record, 'title', 'Title')
+  const coverImage = readCoverImage(record, fallbackCover, title)
 
   return {
     id: readStringField(record, 'id', 'Id'),
     slug: readStringField(record, 'slug', 'Slug'),
-    title: readStringField(record, 'title', 'Title'),
+    title,
     excerpt: metaDescription,
-    coverImage: fallbackCover,
+    coverImage,
     categorySlug,
     categoryLabel: readStringField(record, 'categoryTitle', 'CategoryTitle'),
     authorId: readStringField(record, 'userId', 'UserId'),
@@ -108,7 +148,8 @@ export function normalizeBlogPostDetail(
   const record = readRecord(data) ?? {}
   const summary = normalizeBlogPostSummary(data, fallbackCover, categorySlug)
   const content = parseBlogContent(readStringField(record, 'content', 'Content'))
-  const coverImage = { ...fallbackCover, alt: summary.title }
+  const coverImage = summary.coverImage
+  const gallery = readGalleryImages(record, coverImage, summary.title)
   const authorName = readAuthorName(record)
   const author: BlogAuthor = {
     id: summary.authorId,
@@ -123,7 +164,7 @@ export function normalizeBlogPostDetail(
     categoryId: readStringField(record, 'categoryId', 'CategoryId'),
     categoryLabel: categoryLabel || readStringField(record, 'categoryTitle', 'CategoryTitle'),
     content: content.length > 0 ? content : [summary.excerpt].filter(Boolean),
-    gallery: [coverImage],
+    gallery,
     author,
     comments: [],
   }
@@ -182,6 +223,15 @@ export function normalizeBlogPostDetailPage(
   const categoryLabel = readStringField(postRecord, 'categoryTitle', 'CategoryTitle')
   const tagTitles = readStringListField(postRecord, 'tagTitles', 'TagTitles')
   const post = normalizeBlogPostDetail(postRecord, DEFAULT_DETAIL_COVER, categorySlug, categoryLabel)
+  const imagesFromDetail = postRecord.images ?? postRecord.Images
+  const postWithImages =
+    Array.isArray(imagesFromDetail) && imagesFromDetail.length > 0
+      ? {
+          ...post,
+          coverImage: readGalleryImages(postRecord, post.coverImage, post.title)[0] ?? post.coverImage,
+          gallery: readGalleryImages(postRecord, post.coverImage, post.title),
+        }
+      : post
   const resolvedSlug = post.slug || requestSlug.trim()
   const tags = tagTitles.length > 0 ? tagTitles : post.tags
 
@@ -204,7 +254,7 @@ export function normalizeBlogPostDetailPage(
 
   return {
     post: {
-      ...post,
+      ...postWithImages,
       slug: resolvedSlug,
       tags,
       comments,

@@ -1,32 +1,28 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
 import type { ProfileAnswerValue } from '@/models/profile/profileCompletion.model'
 
 interface ProfileCompletionState {
   answers: Record<string, ProfileAnswerValue>
   rewardClaimedAt: string | null
   setAnswer: (questionId: string, value: ProfileAnswerValue) => void
-  claimReward: () => void
+  setAnswers: (answers: Record<string, ProfileAnswerValue>) => void
+  setRewardClaimedAt: (value: string | null) => void
   reset: () => void
 }
 
-export const useProfileCompletionStore = create<ProfileCompletionState>()(
-  persist(
-    (set) => ({
-      answers: {},
-      rewardClaimedAt: null,
+/** In-memory session state only — synced from API on load, saved via API on demand. */
+export const useProfileCompletionStore = create<ProfileCompletionState>()((set) => ({
+  answers: {},
+  rewardClaimedAt: null,
 
-      setAnswer: (questionId, value) =>
-        set((state) => ({
-          answers: { ...state.answers, [questionId]: value },
-        })),
+  setAnswer: (questionId, value) =>
+    set((state) => ({
+      answers: { ...state.answers, [questionId]: value },
+    })),
 
-      claimReward: () => set({ rewardClaimedAt: new Date().toISOString() }),
+  setAnswers: (answers) => set({ answers }),
 
-      reset: () => set({ answers: {}, rewardClaimedAt: null }),
-    }),
-    {
-      name: 'diba-profile-completion',
-    },
-  ),
-)
+  setRewardClaimedAt: (value) => set({ rewardClaimedAt: value }),
+
+  reset: () => set({ answers: {}, rewardClaimedAt: null }),
+}))

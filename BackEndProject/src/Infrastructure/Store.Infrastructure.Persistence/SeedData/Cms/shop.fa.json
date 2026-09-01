@@ -158,6 +158,7 @@
       {
         "title": "درباره ما",
         "links": [
+          { "label": "درباره ما", "href": "/about" },
           { "label": "مجله", "href": "/blog" },
           { "label": "پایداری", "href": "/sustainability" },
           { "label": "فرصت‌های شغلی", "href": "/careers" },

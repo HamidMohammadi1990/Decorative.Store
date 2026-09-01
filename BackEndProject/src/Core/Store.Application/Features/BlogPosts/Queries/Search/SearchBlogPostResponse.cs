@@ -30,4 +30,5 @@ public record SearchBlogPostResponse
     public DateTime? UpdatedOnUtc { get; init; }
     public DateTime? PublishedOnUtc { get; init; }
     public bool IsFeatured { get; init; }
+    public string? CoverImageUrl { get; init; }
 }

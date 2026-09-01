@@ -1,0 +1,71 @@
+{
+  "slug": "about",
+  "title": "About Us",
+  "metaTitle": "About Diba Gallery",
+  "metaDescription": "Our story, values, and team — a design-led furniture and home décor destination.",
+  "hero": {
+    "eyebrow": "Since 2010",
+    "title": "Crafting spaces that feel like home",
+    "subtitle": "We curate furniture, rugs, and lighting with timeless design, honest materials, and a deep respect for the way people live.",
+    "image": { "src": "/images/home/living-room.jpg", "alt": "Curated living room interior" },
+    "cta": { "label": "Explore the collection", "href": "/" }
+  },
+  "story": {
+    "heading": "Our story",
+    "lead": "Diba Gallery began with a simple belief: every home deserves pieces that are beautiful, durable, and made with care.",
+    "paragraphs": [
+      "What started as a small showroom has grown into a destination for design-led living — from handcrafted sofas and artisan rugs to statement lighting and finishing touches that complete a room.",
+      "We partner with makers who share our standards for quality and sustainability. Every collection is chosen for how it looks, how it feels, and how it lasts — season after season."
+    ],
+    "image": { "src": "/images/home/collaboration.svg", "alt": "Design collaboration" }
+  },
+  "stats": {
+    "heading": "By the numbers",
+    "items": [
+      { "value": "15+", "label": "Years of design heritage" },
+      { "value": "50K+", "label": "Homes styled nationwide" },
+      { "value": "200+", "label": "Artisan & brand partners" },
+      { "value": "12", "label": "Showrooms & design studios" }
+    ]
+  },
+  "values": {
+    "heading": "What we stand for",
+    "items": [
+      {
+        "id": "quality",
+        "title": "Thoughtful quality",
+        "description": "Materials and construction chosen for longevity — not trends that fade in a season."
+      },
+      {
+        "id": "design",
+        "title": "Design for living",
+        "description": "Collections that balance aesthetics with comfort, scale, and everyday practicality."
+      },
+      {
+        "id": "sustainability",
+        "title": "Responsible sourcing",
+        "description": "Partnerships with makers who prioritise ethical production and lower-impact materials."
+      },
+      {
+        "id": "service",
+        "title": "Personal service",
+        "description": "Free design consultations and delivery guidance from people who know the product inside out."
+      }
+    ]
+  },
+  "timeline": {
+    "heading": "Our journey",
+    "items": [
+      { "year": "2010", "text": "First showroom opens, focused on curated living-room collections." },
+      { "year": "2014", "text": "Design services launch — free in-home and virtual consultations." },
+      { "year": "2018", "text": "National delivery network expands; rug and lighting categories added." },
+      { "year": "2022", "text": "Trade programme opens for interior designers and commercial projects." },
+      { "year": "2026", "text": "Twelve studios nationwide, serving over fifty thousand homes." }
+    ]
+  },
+  "cta": {
+    "title": "Ready to design your space?",
+    "subtitle": "Book a free consultation with our design crew — in store, at home, or online.",
+    "cta": { "label": "Book a consultation", "href": "/design-services" }
+  }
+}

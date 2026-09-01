@@ -9,6 +9,10 @@ public record GetCatalogListingResponse
     public bool PathNotFound { get; init; }
     public List<CatalogListingBreadcrumbResponse> Breadcrumbs { get; init; } = [];
     public List<CatalogListingProductResponse> Products { get; init; } = [];
+    public int TotalCount { get; init; }
+    public int Page { get; init; } = 1;
+    public int PageSize { get; init; } = 12;
+    public List<CatalogListingFacetGroupResponse> FacetGroups { get; init; } = [];
 }
 
 public record CatalogListingBreadcrumbResponse
@@ -33,4 +37,34 @@ public record CatalogListingProductResponse
     public bool IsNew { get; init; }
     public string CategorySlug { get; init; } = string.Empty;
     public string SubCategorySlug { get; init; } = string.Empty;
+    public Dictionary<string, List<string>> Facets { get; init; } = new(StringComparer.OrdinalIgnoreCase);
+    public int ReviewCount { get; init; }
+    public double? AverageRating { get; init; }
+    public int PurchaseCount { get; init; }
+}
+
+public record CatalogListingFacetGroupResponse
+{
+    public string Id { get; init; } = string.Empty;
+    public string Label { get; init; } = string.Empty;
+    public string Type { get; init; } = "checkbox";
+    public List<CatalogListingFacetOptionResponse> Options { get; init; } = [];
+    public CatalogListingPriceRangeResponse? Range { get; init; }
+}
+
+public record CatalogListingFacetOptionResponse
+{
+    public string Value { get; init; } = string.Empty;
+    public string Label { get; init; } = string.Empty;
+    public int Count { get; init; }
+    public string? Swatch { get; init; }
+}
+
+public record CatalogListingPriceRangeResponse
+{
+    public decimal Min { get; init; }
+    public decimal Max { get; init; }
+    public decimal Step { get; init; } = 1;
+    public decimal? SelectedMin { get; init; }
+    public decimal? SelectedMax { get; init; }
 }

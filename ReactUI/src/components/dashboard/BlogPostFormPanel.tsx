@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { AdminBlogPostCategory } from '@/models/admin/blog.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { BlogPostsIcon } from '@/components/dashboard/DashboardIcons'
+import { BlogPostImagesSection } from '@/components/dashboard/BlogPostImagesSection'
 import {
   AdminField,
   adminInputClass,
@@ -44,6 +45,8 @@ export function BlogPostFormPanel() {
   const [isFeatured, setIsFeatured] = useState(false)
   const [isPublished, setIsPublished] = useState(false)
   const [slugTouched, setSlugTouched] = useState(false)
+
+  const loadRef = useRef<() => Promise<void>>(async () => {})
 
   const load = useCallback(async () => {
     if (!accessToken || accessToken === 'mock-access-token') {
@@ -88,9 +91,12 @@ export function BlogPostFormPanel() {
     }
   }, [accessToken, isEdit, languageId, locale, postId, t])
 
+  loadRef.current = load
+
   useEffect(() => {
-    if (!languageLoading) void load()
-  }, [languageLoading, load])
+    if (languageLoading) return
+    void loadRef.current()
+  }, [accessToken, isEdit, languageId, languageLoading, locale, postId])
 
   const handleTitleChange = (value: string) => {
     setTitle(value)
@@ -325,6 +331,18 @@ export function BlogPostFormPanel() {
             </Link>
           </div>
         </div>
+      )}
+
+      {isEdit && postId && categories.length > 0 && (
+        <div className="mt-6">
+          <BlogPostImagesSection blogPostId={postId} blogPostTitle={title} />
+        </div>
+      )}
+
+      {!isEdit && categories.length > 0 && (
+        <p className="mt-6 rounded-sm border border-dashed border-border bg-surface-muted/20 px-4 py-3 text-sm text-text-muted">
+          {t('dashboard.blogPosts.images.saveFirstHint')}
+        </p>
       )}
     </div>
   )

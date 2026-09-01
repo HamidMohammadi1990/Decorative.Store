@@ -12,7 +12,7 @@ public class DeleteProductFileHandler
 {
     public async Task<OperationResult> Handle(DeleteProductFileRequest request, CancellationToken cancellationToken)
     {
-        var productFile = await productFileRepository.FindAsync(request.Id, cancellationToken);
+        var productFile = await productFileRepository.GetWithTranslationsAsync(request.Id, cancellationToken);
         if (productFile is null)
             return ErrorModel.Create("InvalidId");
         

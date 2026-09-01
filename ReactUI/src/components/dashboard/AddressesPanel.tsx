@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useConfirm } from '@/hooks/useConfirm'
+import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { AddressCard } from '@/components/address/AddressCard'
 import { AddressFormFields } from '@/components/address/AddressFormFields'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
@@ -18,6 +19,7 @@ import {
 } from '@/extensions/validateAddressForm'
 import { useAddressMutations } from '@/hooks/useAddressMutations'
 import { useAddressStore } from '@/stores/addressStore'
+import { useUserStore } from '@/stores/userStore'
 
 type PanelMode = 'list' | 'add' | 'edit'
 
@@ -26,6 +28,9 @@ export function AddressesPanel() {
   const confirm = useConfirm()
   const addresses = useAddressStore((s) => s.addresses)
   const isLoading = useAddressStore((s) => s.isLoading)
+  const loadAddresses = useAddressStore((s) => s.loadAddresses)
+  const accessToken = useUserStore((s) => s.accessToken)
+  const { locale } = useLocaleSettings()
   const { isSaving, mutationError, saveAddress, setAsDefault, deleteAddress, clearMutationError } =
     useAddressMutations()
 
@@ -34,6 +39,11 @@ export function AddressesPanel() {
   const [form, setForm] = useState<AddressFormValues>(emptyAddressForm)
   const [errors, setErrors] = useState<Partial<Record<AddressFormField, string>>>({})
   const [makeDefault, setMakeDefault] = useState(false)
+
+  useEffect(() => {
+    if (!accessToken || accessToken === 'mock-access-token') return
+    void loadAddresses(accessToken, locale)
+  }, [accessToken, loadAddresses, locale])
 
   useEffect(() => {
     if (mode === 'list') {

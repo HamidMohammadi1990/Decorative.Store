@@ -14,6 +14,10 @@ import {
   DashboardBlogPostsPage,
   DashboardBlogTagsPage,
   DashboardCmsPageSectionsPage,
+  DashboardAssistantFaqPage,
+  DashboardMarketingPromosPage,
+  DashboardNewsletterSubscribersPage,
+  DashboardProfileCompletionAnswersPage,
   DashboardCmsPagesPage,
   DashboardCmsSectionItemsPage,
   DashboardCmsSectionsPage,
@@ -29,10 +33,12 @@ import {
   DashboardProductImagesPage,
   DashboardProductPropertiesPage,
   DashboardProductsPage,
+  DashboardDiscountCodesPage,
   DashboardPropertiesPage,
   DashboardPropertyCategoriesPage,
   DashboardPropertyItemsPage,
   DashboardProfilePage,
+  DashboardProfileQuestionsPage,
   DashboardReviewsPage,
   DashboardStoriesPage,
   DashboardUserStoryCommentsPage,
@@ -48,6 +54,10 @@ import { CartPage } from '@/pages/CartPage'
 import { HomePage } from '@/pages/HomePage'
 import { BlogDetailPage } from '@/pages/BlogDetailPage'
 import { BlogListingPage } from '@/pages/BlogListingPage'
+import { AboutPage } from '@/pages/AboutPage'
+import { ContactPage } from '@/pages/ContactPage'
+import { CmsContentPage } from '@/pages/CmsContentPage'
+import { CMS_CONTENT_PATH_TO_SLUG } from '@/extensions/cmsContentRoute'
 import { ComparePage } from '@/pages/ComparePage'
 import { ProductDetailPage } from '@/pages/ProductDetailPage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
@@ -108,6 +118,22 @@ export const router = createBrowserRouter([
         element: <SearchPage />,
       },
       {
+        path: '/about',
+        element: <AboutPage />,
+      },
+      {
+        path: '/contact',
+        element: <ContactPage />,
+      },
+      ...Object.entries(CMS_CONTENT_PATH_TO_SLUG).map(([path, slug]) => ({
+        path,
+        element: <CmsContentPage slug={slug} />,
+      })),
+      {
+        path: '/p/:slug',
+        element: <CmsContentPage />,
+      },
+      {
         path: '*',
         element: <ProductListingPage />,
       },
@@ -141,6 +167,7 @@ export const router = createBrowserRouter([
           { path: 'products', element: <DashboardProductsPage /> },
           { path: 'products/new', element: <DashboardProductCreatePage /> },
           { path: 'products/edit', element: <DashboardProductEditPage /> },
+          { path: 'discount-codes', element: <DashboardDiscountCodesPage /> },
           { path: 'product-images', element: <DashboardProductImagesPage /> },
           { path: 'product-descriptions', element: <DashboardProductDescriptionsPage /> },
           { path: 'product-comments', element: <DashboardProductCommentsPage /> },
@@ -160,6 +187,11 @@ export const router = createBrowserRouter([
           { path: 'cms-sections', element: <DashboardCmsSectionsPage /> },
           { path: 'cms-section-items', element: <DashboardCmsSectionItemsPage /> },
           { path: 'cms-page-sections', element: <DashboardCmsPageSectionsPage /> },
+          { path: 'marketing-promos', element: <DashboardMarketingPromosPage /> },
+          { path: 'newsletter-subscribers', element: <DashboardNewsletterSubscribersPage /> },
+          { path: 'assistant-faq', element: <DashboardAssistantFaqPage /> },
+          { path: 'profile-questions', element: <DashboardProfileQuestionsPage /> },
+          { path: 'profile-completion-answers', element: <DashboardProfileCompletionAnswersPage /> },
           { path: 'users', element: <DashboardUsersPage /> },
           { path: 'roles', element: <DashboardRolesPage /> },
           { path: '*', element: <NotFoundPage /> },

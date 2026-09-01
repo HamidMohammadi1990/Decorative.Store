@@ -20,6 +20,8 @@ public class SectionItemMapperService : ISectionItemMapperService
             Icon = x.Icon,
             ImageUrl = x.ImageUrl,
             IsActive = x.IsActive,
+            SectionTitle = x.SectionTitle,
+            SectionTypeName = x.SectionTypeName,
             Translations = x.Translations,
         }).ToList();
 

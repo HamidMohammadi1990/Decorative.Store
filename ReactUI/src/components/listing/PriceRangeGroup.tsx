@@ -68,12 +68,14 @@ export function PriceRangeGroup({
     (bounds.selectedMin > bounds.min || bounds.selectedMax < bounds.max)
 
   return (
-    <div className="border-b border-border py-5 last:border-b-0">
-      <h3 className="mb-4 text-sm font-semibold text-text">{facet.label}</h3>
+    <div className="border-b border-border/60 px-4 py-4 last:border-b-0">
+      <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+        {facet.label}
+      </h3>
 
-      <div className="space-y-3">
-        <div className="flex items-center justify-between gap-3 text-sm font-medium text-text">
-          <span className="rounded-lg bg-surface-muted px-2.5 py-1.5">
+      <div className="space-y-4 rounded-lg bg-surface-muted/40 p-3 ring-1 ring-border/50">
+        <div className="flex items-center justify-between gap-2 text-sm font-medium text-text">
+          <span className="rounded-lg border border-border/60 bg-surface px-2.5 py-1.5 shadow-sm">
             {currency ? (
               <PriceDisplay
                 money={{ amount: localMin, currencyCode: currency.code }}
@@ -84,8 +86,8 @@ export function PriceRangeGroup({
               localMin.toLocaleString()
             )}
           </span>
-          <span className="text-xs text-text-muted">{t('listing.priceTo')}</span>
-          <span className="rounded-lg bg-surface-muted px-2.5 py-1.5">
+          <span className="text-[11px] text-text-muted">{t('listing.priceTo')}</span>
+          <span className="rounded-lg border border-border/60 bg-surface px-2.5 py-1.5 shadow-sm">
             {currency ? (
               <PriceDisplay
                 money={{ amount: localMax, currencyCode: currency.code }}
@@ -121,7 +123,7 @@ export function PriceRangeGroup({
               setLocalMax(bounds.max)
               onApplyRange(undefined, undefined)
             }}
-            className="text-xs font-medium text-warm hover:underline"
+            className="w-full text-center text-xs font-medium text-warm hover:underline"
           >
             {t('listing.clearPriceRange')}
           </button>
@@ -129,31 +131,25 @@ export function PriceRangeGroup({
       </div>
 
       {facet.options.length > 0 && (
-        <ul className="mt-4 space-y-2.5 border-t border-border pt-4">
+        <ul className="mt-3 flex flex-wrap gap-2">
           {facet.options.map((option) => {
             const checked = activeBucketValues.includes(option.value)
-            const id = `price-${option.value}`
 
             return (
               <li key={option.value}>
-                <label
-                  htmlFor={id}
-                  className="flex cursor-pointer items-center justify-between gap-3 text-sm text-text-muted transition-colors hover:text-text"
+                <button
+                  type="button"
+                  onClick={() => onToggleBucket(facet.id, option.value)}
+                  aria-pressed={checked}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all ${
+                    checked
+                      ? 'border-warm bg-warm-soft text-text ring-1 ring-warm/20'
+                      : 'border-border/70 bg-surface text-text-muted hover:border-warm/30 hover:text-text'
+                  }`}
                 >
-                  <span className="flex items-center gap-2.5">
-                    <input
-                      id={id}
-                      type="checkbox"
-                      checked={checked}
-                      onChange={() => onToggleBucket(facet.id, option.value)}
-                      className="size-4 rounded-sm border-border text-warm accent-[#9a7448]"
-                    />
-                    <span>{option.label}</span>
-                  </span>
-                  <span className="text-xs tabular-nums text-text-muted/80">
-                    {option.count}
-                  </span>
-                </label>
+                  {option.label}
+                  <span className="ms-1.5 tabular-nums opacity-70">({option.count})</span>
+                </button>
               </li>
             )
           })}

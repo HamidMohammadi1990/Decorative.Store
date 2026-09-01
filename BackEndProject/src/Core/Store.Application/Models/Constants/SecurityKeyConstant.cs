@@ -26,6 +26,7 @@ public static class SecurityKeyConstant
     public static string BankTransaction => SecurityKeyRegistry.Get(nameof(BankTransaction));
     public static string UserAddress => SecurityKeyRegistry.Get(nameof(UserAddress));
     public static string ProductFile => SecurityKeyRegistry.Get(nameof(ProductFile));
+    public static string BlogPostFile => SecurityKeyRegistry.Get(nameof(BlogPostFile));
     public static string SubCategory => SecurityKeyRegistry.Get(nameof(SubCategory));
     public static string BlogPostLike => SecurityKeyRegistry.Get(nameof(BlogPostLike));
     public static string CommentTopic => SecurityKeyRegistry.Get(nameof(CommentTopic));
@@ -59,4 +60,6 @@ public static class SecurityKeyConstant
     public static string UserStory => SecurityKeyRegistry.Get(nameof(UserStory));
     public static string UserStoryComment => SecurityKeyRegistry.Get(nameof(UserStoryComment));
     public static string UserStoryLike => SecurityKeyRegistry.Get(nameof(UserStoryLike));
+    public static string AssistantFaq => SecurityKeyRegistry.Get(nameof(AssistantFaq));
+    public static string MarketingPromo => SecurityKeyRegistry.Get(nameof(MarketingPromo));
 }

@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ProfileCompletionQuestionField } from '@/components/dashboard/ProfileCompletionQuestionField'
 import { Button } from '@/components/ui/Button'
+import { InlineLoading } from '@/components/ui/Spinner'
 import { isAnswerFilled } from '@/extensions/calculateProfileCompletion'
 import { useProfileCompletion } from '@/hooks/useProfileCompletion'
 
@@ -13,10 +15,37 @@ export function ProfileCompletionUserSection() {
     progress,
     rewardClaimed,
     canClaimReward,
+    loading,
+    saving,
+    syncError,
     setAnswer,
+    saveAnswers,
     claimReward,
     rewardClaimedLabel,
   } = useProfileCompletion()
+
+  const [savedHint, setSavedHint] = useState(false)
+
+  const handleSave = async () => {
+    const ok = await saveAnswers()
+    if (ok) setSavedHint(true)
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-12">
+        <InlineLoading label={t('dashboard.profileCompletion.loading')} />
+      </div>
+    )
+  }
+
+  if (!config) {
+    return (
+      <div className="rounded-sm border border-sale/30 bg-sale/5 px-4 py-6 text-center text-sm text-sale">
+        {syncError ?? t('dashboard.profileCompletion.syncFailed')}
+      </div>
+    )
+  }
 
   const reward = config.campaign.reward
 
@@ -90,7 +119,7 @@ export function ProfileCompletionUserSection() {
               </Link>
             </div>
           ) : canClaimReward ? (
-            <Button variant="warm" className="mt-4 w-full" onClick={claimReward}>
+            <Button variant="warm" className="mt-4 w-full" onClick={() => void claimReward()}>
               {t('dashboard.profileCompletion.claimReward')}
             </Button>
           ) : (
@@ -102,9 +131,24 @@ export function ProfileCompletionUserSection() {
       </div>
 
       <div className="space-y-4">
-        <h2 className="text-sm font-semibold uppercase tracking-[0.12em] text-text-muted">
-          {t('dashboard.profileCompletion.questionsTitle')}
-        </h2>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-sm font-semibold uppercase tracking-[0.12em] text-text-muted">
+            {t('dashboard.profileCompletion.questionsTitle')}
+          </h2>
+          <Button variant="secondary" className="text-xs" onClick={() => void handleSave()} disabled={saving}>
+            {saving ? (
+              <InlineLoading label={t('dashboard.profileCompletion.saving')} />
+            ) : (
+              t('dashboard.profileCompletion.saveAnswers')
+            )}
+          </Button>
+        </div>
+
+        {syncError && <p className="text-sm text-sale">{syncError}</p>}
+        {savedHint && (
+          <p className="text-sm text-warm">{t('dashboard.profileCompletion.savedHint')}</p>
+        )}
+
         {config.questions.map((question) => (
           <ProfileCompletionQuestionField
             key={question.id}
@@ -122,7 +166,7 @@ export function ProfileCompletionUserSection() {
             <p className="text-sm text-text">
               {t('dashboard.profileCompletion.readyToClaim')}
             </p>
-            <Button variant="warm" className="sm:min-w-[12rem]" onClick={claimReward}>
+            <Button variant="warm" className="sm:min-w-[12rem]" onClick={() => void claimReward()}>
               {t('dashboard.profileCompletion.claimReward')}
             </Button>
           </div>

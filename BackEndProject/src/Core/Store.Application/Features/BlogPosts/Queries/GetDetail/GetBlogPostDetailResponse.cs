@@ -42,6 +42,14 @@ public record BlogPostDetailPostResponse
     public int LikeCount { get; init; }
     public bool IsFeatured { get; init; }
     public List<string> TagTitles { get; init; } = [];
+    public List<BlogPostDetailImageResponse> Images { get; init; } = [];
+}
+
+public record BlogPostDetailImageResponse
+{
+    public string Title { get; init; } = string.Empty;
+    public string ImageUrl { get; init; } = string.Empty;
+    public bool IsMain { get; init; }
 }
 
 public record BlogPostDetailCommentResponse

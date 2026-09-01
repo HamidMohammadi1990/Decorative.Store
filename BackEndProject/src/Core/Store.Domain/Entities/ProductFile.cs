@@ -38,4 +38,9 @@ public class ProductFile : BaseEntity
     {
         IsActive = isActive;
     }
+
+    public void SetMain(bool isMain)
+    {
+        IsMain = isMain;
+    }
 }

@@ -16,7 +16,7 @@ namespace Store.Infrastructure.Persistence.SeedData;
 
 
 
-public static class CmsSeedService
+public static partial class CmsSeedService
 
 {
 
@@ -53,6 +53,34 @@ public static class CmsSeedService
         CmsSectionTypeNames.FooterColumn,
 
         CmsSectionTypeNames.SiteFooter,
+
+        CmsSectionTypeNames.AboutHero,
+
+        CmsSectionTypeNames.AboutStoryBlock,
+
+        CmsSectionTypeNames.AboutStatsStrip,
+
+        CmsSectionTypeNames.AboutValuesGrid,
+
+        CmsSectionTypeNames.AboutTimeline,
+
+        CmsSectionTypeNames.AboutCtaStrip,
+
+        CmsSectionTypeNames.ContactHero,
+
+        CmsSectionTypeNames.ContactMethodsGrid,
+
+        CmsSectionTypeNames.ContactLocationsGrid,
+
+        CmsSectionTypeNames.ContactFormIntro,
+
+        CmsSectionTypeNames.ContentHero,
+
+        CmsSectionTypeNames.ContentBodyBlock,
+
+        CmsSectionTypeNames.ContentStepsGrid,
+
+        CmsSectionTypeNames.ContentCtaStrip,
 
     ];
 

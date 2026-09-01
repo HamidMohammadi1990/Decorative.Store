@@ -1,10 +1,8 @@
 import { useCallback, useRef, useState, type TouchEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getDirection } from '@/extensions/getDirection'
 import { ImageLightbox } from '@/components/ui/ImageLightbox'
 import { ScrollArrowButton } from '@/components/ui/ScrollArrowButton'
 import { LocalImage } from '@/components/ui/LocalImage'
-import { useSettingsStore } from '@/stores/settingsStore'
 import type { ImageAsset } from '@/models/shared/image.model'
 
 const SWIPE_THRESHOLD_PX = 48
@@ -16,8 +14,6 @@ interface BlogDetailGalleryProps {
 
 export function BlogDetailGallery({ images, title }: BlogDetailGalleryProps) {
   const { t } = useTranslation()
-  const locale = useSettingsStore((s) => s.locale)
-  const isRtl = getDirection(locale) === 'rtl'
   const [index, setIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const touchStartX = useRef(0)
@@ -41,12 +37,6 @@ export function BlogDetailGallery({ images, title }: BlogDetailGalleryProps) {
   const onTouchEnd = (e: TouchEvent) => {
     const endX = e.changedTouches[0]?.clientX ?? 0
     const delta = endX - touchStartX.current
-
-    if (isRtl) {
-      if (delta >= SWIPE_THRESHOLD_PX) goNext()
-      else if (delta <= -SWIPE_THRESHOLD_PX) goPrev()
-      return
-    }
 
     if (delta <= -SWIPE_THRESHOLD_PX) goNext()
     else if (delta >= SWIPE_THRESHOLD_PX) goPrev()
@@ -106,19 +96,19 @@ export function BlogDetailGallery({ images, title }: BlogDetailGalleryProps) {
           <>
             <div className="absolute inset-y-0 start-0 z-10 flex items-center ps-3">
               <ScrollArrowButton
-                direction={isRtl ? 'next' : 'prev'}
-                label={isRtl ? t('product.nextImage') : t('product.prevImage')}
-                disabled={isRtl ? index === slideCount - 1 : index === 0}
-                onClick={isRtl ? goNext : goPrev}
+                direction="prev"
+                label={t('product.prevImage')}
+                disabled={index === 0}
+                onClick={goPrev}
                 className="bg-surface/95 shadow-md backdrop-blur-sm"
               />
             </div>
             <div className="absolute inset-y-0 end-0 z-10 flex items-center pe-3">
               <ScrollArrowButton
-                direction={isRtl ? 'prev' : 'next'}
-                label={isRtl ? t('product.prevImage') : t('product.nextImage')}
-                disabled={isRtl ? index === 0 : index === slideCount - 1}
-                onClick={isRtl ? goPrev : goNext}
+                direction="next"
+                label={t('product.nextImage')}
+                disabled={index === slideCount - 1}
+                onClick={goNext}
                 className="bg-surface/95 shadow-md backdrop-blur-sm"
               />
             </div>

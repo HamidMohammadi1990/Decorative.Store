@@ -69,6 +69,71 @@ export function RolesIcon(props: DashboardIconProps) {
   )
 }
 
+export function AssistantFaqIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M6 5.5h12v13H6V5.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9 9.5h6M9 13h4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <circle cx="12" cy="17" r="0.75" fill="currentColor" />
+    </IconBase>
+  )
+}
+
+export function MarketingPromoIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M5 8.5h14v9H5v-9Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.5 6.5h7l1.5 2h-10l1.5-2Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M9 12h6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </IconBase>
+  )
+}
+
+export function NewsletterSubscriberIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M4 7.5 12 13l8-5.5V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M20 7.5 12 13 4 7.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </IconBase>
+  )
+}
+
 export function WalletIcon(props: DashboardIconProps) {
   return (
     <IconBase {...props}>
@@ -196,6 +261,31 @@ export function CouponsIcon(props: DashboardIconProps) {
         stroke="currentColor"
         strokeWidth="1.5"
         strokeDasharray="2 3"
+      />
+    </IconBase>
+  )
+}
+
+export function DiscountCodesIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M5 7.5h14v9H5v-9Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8 7.5V6.5a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1M8 16.5v1a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-1"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <path
+        d="M10.5 12h3"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
       />
     </IconBase>
   )

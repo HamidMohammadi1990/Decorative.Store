@@ -1056,6 +1056,24 @@
   <data name="PermissionType_ApproveUserStoryComment" xml:space="preserve"><value>تأیید نظر استوری</value></data>
   <data name="PermissionType_ListUserStoryComment" xml:space="preserve"><value>لیست نظرات استوری</value></data>
   <data name="PermissionType_GetUserStoryCommentById" xml:space="preserve"><value>دریافت نظر استوری با شناسه</value></data>
+  <data name="PermissionType_ManageProfileCompletionGroup" xml:space="preserve"><value>مدیریت گروه تکمیل پروفایل</value></data>
+  <data name="PermissionType_ManageProfileCompletion" xml:space="preserve"><value>مدیریت تکمیل پروفایل</value></data>
+  <data name="PermissionType_GetProfileCompletionConfig" xml:space="preserve"><value>دریافت تنظیمات تکمیل پروفایل</value></data>
+  <data name="PermissionType_UpdateProfileCompletionConfig" xml:space="preserve"><value>ویرایش تنظیمات تکمیل پروفایل</value></data>
+  <data name="PermissionType_ListProfileCompletionUserState" xml:space="preserve"><value>لیست پاسخ‌های تکمیل پروفایل</value></data>
+  <data name="PermissionType_GetProfileCompletionUserState" xml:space="preserve"><value>دریافت پاسخ تکمیل پروفایل</value></data>
+  <data name="PermissionType_UpdateProfileCompletionUserState" xml:space="preserve"><value>ویرایش پاسخ تکمیل پروفایل</value></data>
+  <data name="PermissionType_DeleteProfileCompletionUserState" xml:space="preserve"><value>حذف پاسخ تکمیل پروفایل</value></data>
+  <data name="PermissionType_ManageMarketingPromoGroup" xml:space="preserve"><value>مدیریت گروه پرومو بازاریابی</value></data>
+  <data name="PermissionType_ManageMarketingPromo" xml:space="preserve"><value>مدیریت پرومو بازاریابی</value></data>
+  <data name="PermissionType_CreateMarketingPromo" xml:space="preserve"><value>ایجاد پرومو بازاریابی</value></data>
+  <data name="PermissionType_UpdateMarketingPromo" xml:space="preserve"><value>ویرایش پرومو بازاریابی</value></data>
+  <data name="PermissionType_DeleteMarketingPromo" xml:space="preserve"><value>حذف پرومو بازاریابی</value></data>
+  <data name="PermissionType_ListMarketingPromo" xml:space="preserve"><value>لیست پرومو بازاریابی</value></data>
+  <data name="PermissionType_GetMarketingPromoById" xml:space="preserve"><value>دریافت پرومو بازاریابی</value></data>
+  <data name="PermissionType_UpdateMarketingPromoDisclaimer" xml:space="preserve"><value>ویرایش سلب مسئولیت پرومو</value></data>
+  <data name="MarketingPromoType_Sale" xml:space="preserve"><value>حراج</value></data>
+  <data name="MarketingPromoType_NewArrival" xml:space="preserve"><value>جدید</value></data>
 
 </root>
 

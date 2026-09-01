@@ -15,6 +15,7 @@ interface CartOrderSummaryProps {
   summary: ServerCartSummary | null
   trackingCode: number | null
   checkoutDisabled?: boolean
+  embedded?: boolean
 }
 
 export function CartOrderSummary({
@@ -23,6 +24,7 @@ export function CartOrderSummary({
   summary,
   trackingCode,
   checkoutDisabled = false,
+  embedded = false,
 }: CartOrderSummaryProps) {
   const { t } = useTranslation()
   const freeShippingRemaining = Math.max(0, FREE_SHIPPING_THRESHOLD - totals.subtotal)
@@ -39,27 +41,39 @@ export function CartOrderSummary({
   )
 
   return (
-    <div className="rounded-sm border border-border bg-surface shadow-sm lg:sticky lg:top-24">
-      <div className="border-b border-border px-5 py-4">
-        <h2 className="text-lg font-semibold text-text">{t('cartPage.orderSummary')}</h2>
-        <p className="mt-1 text-sm text-text-muted">
+    <div
+      className={`overflow-hidden border border-border bg-surface shadow-sm ${
+        embedded
+          ? 'w-full rounded-xl ring-1 ring-black/[0.02]'
+          : 'rounded-sm lg:sticky lg:top-24'
+      }`}
+    >
+      <div
+        className={`border-b border-border ${embedded ? 'bg-warm-soft/40 px-4 py-3' : 'px-5 py-4'}`}
+      >
+        <h2 className={`font-semibold text-text ${embedded ? 'text-base' : 'text-lg'}`}>
+          {t('cartPage.orderSummary')}
+        </h2>
+        <p className={`text-text-muted ${embedded ? 'mt-0.5 text-xs' : 'mt-1 text-sm'}`}>
           {t('checkout.itemCount', { count: totals.itemCount })}
         </p>
         {trackingCode ? (
-          <p className="mt-2 font-mono text-xs text-text-muted" dir="ltr">
+          <p className="mt-1.5 font-mono text-[11px] text-text-muted" dir="ltr">
             {t('cartPage.orderRef', { code: trackingCode })}
           </p>
         ) : null}
       </div>
 
       {totals.fulfillment === 'delivery' && freeShippingRemaining > 0 && (
-        <div className="border-b border-border bg-warm-soft/30 px-5 py-4">
-          <p className="text-sm text-text">
+        <div
+          className={`border-b border-border bg-warm-soft/30 ${embedded ? 'px-4 py-3' : 'px-5 py-4'}`}
+        >
+          <p className={embedded ? 'text-xs text-text' : 'text-sm text-text'}>
             {t('cartPage.freeShippingRemaining', {
               amount: freeShippingRemainingLabel,
             })}
           </p>
-          <div className="mt-2 h-2 overflow-hidden rounded-full bg-surface-muted">
+          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-muted">
             <div
               className="h-full rounded-full bg-warm transition-all duration-300"
               style={{ width: `${freeShippingProgress}%` }}
@@ -69,12 +83,16 @@ export function CartOrderSummary({
       )}
 
       {totals.shippingIsFree && (
-        <div className="border-b border-border bg-accent/5 px-5 py-3 text-sm font-medium text-accent">
+        <div
+          className={`border-b border-border bg-accent/5 font-medium text-accent ${
+            embedded ? 'px-4 py-2 text-xs' : 'px-5 py-3 text-sm'
+          }`}
+        >
           {t('cartPage.freeShippingUnlocked')}
         </div>
       )}
 
-      <div className="space-y-2.5 px-5 py-4 text-sm">
+      <div className={`space-y-2 ${embedded ? 'px-4 py-3 text-xs' : 'space-y-2.5 px-5 py-4 text-sm'}`}>
         <SummaryRow
           label={t('common.subtotal')}
           value={
@@ -130,7 +148,11 @@ export function CartOrderSummary({
           }
         />
 
-        <div className="flex items-center justify-between border-t border-border pt-3 text-base font-semibold text-text">
+        <div
+          className={`flex items-center justify-between border-t border-border font-semibold text-text ${
+            embedded ? 'pt-2.5 text-sm' : 'pt-3 text-base'
+          }`}
+        >
           <span>{t('cartPage.estimatedTotal')}</span>
           <PriceDisplay
             money={{ amount: estimatedTotal, currencyCode: currency.code }}
@@ -138,39 +160,68 @@ export function CartOrderSummary({
           />
         </div>
 
-        <p className="text-xs leading-relaxed text-text-muted">{t('cartPage.totalsNote')}</p>
+        {!embedded && (
+          <p className="text-xs leading-relaxed text-text-muted">{t('cartPage.totalsNote')}</p>
+        )}
       </div>
 
-      <div className="space-y-2 border-t border-border px-5 py-4">
+      <div className={`space-y-2 border-t border-border ${embedded ? 'px-4 py-3' : 'px-5 py-4'}`}>
         <Link to="/checkout" className="block">
           <Button
             variant="warm"
-            className="w-full py-3 text-sm font-semibold"
+            className={`w-full font-semibold ${embedded ? 'py-2.5 text-sm' : 'py-3 text-sm'}`}
             disabled={checkoutDisabled}
           >
             {t('common.checkout')}
           </Button>
         </Link>
 
-        <Link to="/room-layout" className="block">
-          <Button variant="secondary" className="w-full">
-            {t('roomLayout.openFromCart')}
-          </Button>
-        </Link>
+        {embedded ? (
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 pt-0.5 text-xs">
+            <Link to="/room-layout" className="font-medium text-warm transition-colors hover:text-warm-hover">
+              {t('roomLayout.openFromCart')}
+            </Link>
+            <span aria-hidden className="text-border">
+              ·
+            </span>
+            <Link to="/" className="text-text-muted transition-colors hover:text-warm">
+              {t('common.continueShopping')}
+            </Link>
+          </div>
+        ) : (
+          <>
+            <Link to="/room-layout" className="block">
+              <Button variant="secondary" className="w-full">
+                {t('roomLayout.openFromCart')}
+              </Button>
+            </Link>
 
-        <Link to="/" className="block pt-1">
-          <Button variant="ghost" className="w-full text-text-muted">
-            {t('common.continueShopping')}
-          </Button>
-        </Link>
+            <Link to="/" className="block pt-1">
+              <Button variant="ghost" className="w-full text-text-muted">
+                {t('common.continueShopping')}
+              </Button>
+            </Link>
+          </>
+        )}
       </div>
 
-      <div className="border-t border-border px-5 py-4">
-        <ul className="space-y-2 text-xs text-text-muted">
-          <TrustRow icon="lock">{t('cartPage.secureCheckout')}</TrustRow>
-          <TrustRow icon="truck">{t('cartPage.deliveryEstimate')}</TrustRow>
-          <TrustRow icon="return">{t('cartPage.easyReturns')}</TrustRow>
-        </ul>
+      <div className={`border-t border-border ${embedded ? 'px-4 py-3' : 'px-5 py-4'}`}>
+        {embedded ? (
+          <ul className="flex flex-wrap gap-x-3 gap-y-2 text-[10px] leading-snug text-text-muted">
+            <TrustRow icon="lock" compact>
+              {t('cartPage.secureCheckout')}
+            </TrustRow>
+            <TrustRow icon="truck" compact>
+              {t('cartPage.deliveryEstimate')}
+            </TrustRow>
+          </ul>
+        ) : (
+          <ul className="space-y-2 text-xs text-text-muted">
+            <TrustRow icon="lock">{t('cartPage.secureCheckout')}</TrustRow>
+            <TrustRow icon="truck">{t('cartPage.deliveryEstimate')}</TrustRow>
+            <TrustRow icon="return">{t('cartPage.easyReturns')}</TrustRow>
+          </ul>
+        )}
       </div>
     </div>
   )
@@ -185,10 +236,22 @@ function SummaryRow({ label, value }: { label: string; value: ReactNode }) {
   )
 }
 
-function TrustRow({ icon, children }: { icon: 'lock' | 'truck' | 'return'; children: ReactNode }) {
+function TrustRow({
+  icon,
+  children,
+  compact = false,
+}: {
+  icon: 'lock' | 'truck' | 'return'
+  children: ReactNode
+  compact?: boolean
+}) {
   return (
-    <li className="flex items-start gap-2.5">
-      <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-surface-muted text-warm">
+    <li className={`flex items-start ${compact ? 'gap-1.5' : 'gap-2.5'}`}>
+      <span
+        className={`flex shrink-0 items-center justify-center rounded-full bg-surface-muted text-warm ${
+          compact ? 'size-4' : 'mt-0.5 size-5'
+        }`}
+      >
         {icon === 'lock' && (
           <svg viewBox="0 0 16 16" className="size-3" aria-hidden>
             <path

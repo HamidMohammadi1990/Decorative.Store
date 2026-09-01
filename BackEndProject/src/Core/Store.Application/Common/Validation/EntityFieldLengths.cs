@@ -171,6 +171,12 @@ public static class EntityFieldLengths
         public const int FileName = 35;
     }
 
+    public static class BlogPostFile
+    {
+        public const int Title = 30;
+        public const int FileName = 35;
+    }
+
     public static class ProductOrderItemAttachmentType
     {
         public const int Description = 200;
@@ -248,5 +254,10 @@ public static class EntityFieldLengths
         public const int Mobile = 11;
         public const int NationalCode = 20;
         public const int Address = 40;
+    }
+
+    public static class NewsletterSubscriber
+    {
+        public const int Email = 256;
     }
 }

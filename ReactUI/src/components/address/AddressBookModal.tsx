@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useConfirm } from '@/hooks/useConfirm'
+import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { AddressCard } from '@/components/address/AddressCard'
 import { AddressFormFields } from '@/components/address/AddressFormFields'
 import { Button } from '@/components/ui/Button'
@@ -17,6 +18,7 @@ import {
 } from '@/extensions/validateAddressForm'
 import { useAddressMutations } from '@/hooks/useAddressMutations'
 import { useAddressStore } from '@/stores/addressStore'
+import { useUserStore } from '@/stores/userStore'
 
 type ModalMode = 'list' | 'add' | 'edit'
 
@@ -27,6 +29,8 @@ export function AddressBookModal() {
   const closeModal = useAddressStore((s) => s.closeModal)
   const addresses = useAddressStore((s) => s.addresses)
   const isLoading = useAddressStore((s) => s.isLoading)
+  const loadAddresses = useAddressStore((s) => s.loadAddresses)
+  const { locale } = useLocaleSettings()
   const { isSaving, mutationError, saveAddress, setAsDefault, deleteAddress, clearMutationError } =
     useAddressMutations()
 
@@ -44,8 +48,14 @@ export function AddressBookModal() {
       setErrors({})
       setMakeDefault(false)
       clearMutationError()
+      return
     }
-  }, [clearMutationError, isOpen])
+
+    const accessToken = useUserStore.getState().accessToken
+    if (!accessToken || accessToken === 'mock-access-token') return
+
+    void loadAddresses(accessToken, locale)
+  }, [clearMutationError, isOpen, loadAddresses, locale])
 
   if (!isOpen) return null
 

@@ -338,6 +338,24 @@ public enum PermissionType : int
     [Display(Name = "PermissionType_ManageBlogPostLike", ResourceType = typeof(EnumResources))]
     ManageBlogPostLike = 189,
 
+    [Display(Name = "PermissionType_ManageBlogPostFile", ResourceType = typeof(EnumResources))]
+    ManageBlogPostFile = 190,
+
+    [Display(Name = "PermissionType_CreateBlogPostFileRange", ResourceType = typeof(EnumResources))]
+    CreateBlogPostFileRange = 191,
+
+    [Display(Name = "PermissionType_UpdateBlogPostFileStatus", ResourceType = typeof(EnumResources))]
+    UpdateBlogPostFileStatus = 192,
+
+    [Display(Name = "PermissionType_DeleteBlogPostFile", ResourceType = typeof(EnumResources))]
+    DeleteBlogPostFile = 193,
+
+    [Display(Name = "PermissionType_ListBlogPostFile", ResourceType = typeof(EnumResources))]
+    ListBlogPostFile = 194,
+
+    [Display(Name = "PermissionType_GetBlogPostFileById", ResourceType = typeof(EnumResources))]
+    GetBlogPostFileById = 195,
+
     [Display(Name = "PermissionType_ManageCompanyGroup", ResourceType = typeof(EnumResources))]
     ManageCompanyGroup = 200,
 
@@ -1054,4 +1072,73 @@ public enum PermissionType : int
 
     [Display(Name = "PermissionType_GetUserStoryCommentById", ResourceType = typeof(EnumResources))]
     GetUserStoryCommentById = 491,
+
+    [Display(Name = "PermissionType_ManageAssistantFaqGroup", ResourceType = typeof(EnumResources))]
+    ManageAssistantFaqGroup = 492,
+
+    [Display(Name = "PermissionType_ManageAssistantFaq", ResourceType = typeof(EnumResources))]
+    ManageAssistantFaq = 493,
+
+    [Display(Name = "PermissionType_CreateAssistantFaq", ResourceType = typeof(EnumResources))]
+    CreateAssistantFaq = 494,
+
+    [Display(Name = "PermissionType_UpdateAssistantFaq", ResourceType = typeof(EnumResources))]
+    UpdateAssistantFaq = 495,
+
+    [Display(Name = "PermissionType_DeleteAssistantFaq", ResourceType = typeof(EnumResources))]
+    DeleteAssistantFaq = 496,
+
+    [Display(Name = "PermissionType_ListAssistantFaq", ResourceType = typeof(EnumResources))]
+    ListAssistantFaq = 497,
+
+    [Display(Name = "PermissionType_GetAssistantFaqById", ResourceType = typeof(EnumResources))]
+    GetAssistantFaqById = 498,
+
+    [Display(Name = "PermissionType_ManageProfileCompletionGroup", ResourceType = typeof(EnumResources))]
+    ManageProfileCompletionGroup = 499,
+
+    [Display(Name = "PermissionType_ManageProfileCompletion", ResourceType = typeof(EnumResources))]
+    ManageProfileCompletion = 500,
+
+    [Display(Name = "PermissionType_GetProfileCompletionConfig", ResourceType = typeof(EnumResources))]
+    GetProfileCompletionConfig = 501,
+
+    [Display(Name = "PermissionType_UpdateProfileCompletionConfig", ResourceType = typeof(EnumResources))]
+    UpdateProfileCompletionConfig = 502,
+
+    [Display(Name = "PermissionType_ManageMarketingPromoGroup", ResourceType = typeof(EnumResources))]
+    ManageMarketingPromoGroup = 503,
+
+    [Display(Name = "PermissionType_ManageMarketingPromo", ResourceType = typeof(EnumResources))]
+    ManageMarketingPromo = 504,
+
+    [Display(Name = "PermissionType_CreateMarketingPromo", ResourceType = typeof(EnumResources))]
+    CreateMarketingPromo = 505,
+
+    [Display(Name = "PermissionType_UpdateMarketingPromo", ResourceType = typeof(EnumResources))]
+    UpdateMarketingPromo = 506,
+
+    [Display(Name = "PermissionType_DeleteMarketingPromo", ResourceType = typeof(EnumResources))]
+    DeleteMarketingPromo = 507,
+
+    [Display(Name = "PermissionType_ListMarketingPromo", ResourceType = typeof(EnumResources))]
+    ListMarketingPromo = 508,
+
+    [Display(Name = "PermissionType_GetMarketingPromoById", ResourceType = typeof(EnumResources))]
+    GetMarketingPromoById = 509,
+
+    [Display(Name = "PermissionType_UpdateMarketingPromoDisclaimer", ResourceType = typeof(EnumResources))]
+    UpdateMarketingPromoDisclaimer = 510,
+
+    [Display(Name = "PermissionType_ListProfileCompletionUserState", ResourceType = typeof(EnumResources))]
+    ListProfileCompletionUserState = 511,
+
+    [Display(Name = "PermissionType_GetProfileCompletionUserState", ResourceType = typeof(EnumResources))]
+    GetProfileCompletionUserState = 512,
+
+    [Display(Name = "PermissionType_UpdateProfileCompletionUserState", ResourceType = typeof(EnumResources))]
+    UpdateProfileCompletionUserState = 513,
+
+    [Display(Name = "PermissionType_DeleteProfileCompletionUserState", ResourceType = typeof(EnumResources))]
+    DeleteProfileCompletionUserState = 514,
 }

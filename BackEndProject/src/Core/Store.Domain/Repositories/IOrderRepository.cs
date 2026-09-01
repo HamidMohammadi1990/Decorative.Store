@@ -10,6 +10,7 @@ public interface IOrderRepository
 {
     void Add(Order order);
     void Remove(Order order);
+    void RemoveOrderItem(Order order, OrderItem orderItem);
     Task<Order?> GetAsNoTrackingAsync(int id, CancellationToken cancellationToken = default);
     Task<PagedResult<GetAllOrderDto>> GetAllAsync(GetAllOrderRequestDto request);
     Task<Order?> GetPendingOrderByUserIdAsync(int userId);

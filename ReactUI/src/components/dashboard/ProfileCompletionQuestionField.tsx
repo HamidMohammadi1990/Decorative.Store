@@ -3,6 +3,8 @@ import type {
   ProfileAnswerValue,
   ProfileCompletionQuestion,
 } from '@/models/profile/profileCompletion.model'
+import { PersianDatePicker } from '@/components/ui/PersianDatePicker'
+import { useSettingsStore } from '@/stores/settingsStore'
 
 interface ProfileCompletionQuestionFieldProps {
   question: ProfileCompletionQuestion
@@ -75,6 +77,8 @@ function QuestionInput({
   value: ProfileAnswerValue | undefined
   onChange: (value: ProfileAnswerValue) => void
 }) {
+  const locale = useSettingsStore((s) => s.locale)
+
   switch (question.type) {
     case 'textarea':
       return (
@@ -88,6 +92,15 @@ function QuestionInput({
       )
 
     case 'date':
+      if (locale === 'fa') {
+        return (
+          <PersianDatePicker
+            value={typeof value === 'string' ? value : ''}
+            placeholder={question.placeholder}
+            onChange={onChange}
+          />
+        )
+      }
       return (
         <input
           type="date"

@@ -14,5 +14,7 @@ public record GetAllSectionItemResponse
     public string? Icon { get; init; }
     public string? ImageUrl { get; init; }
     public bool IsActive { get; init; }
+    public string SectionTitle { get; init; } = string.Empty;
+    public string SectionTypeName { get; init; } = string.Empty;
     public List<SectionItemTranslationItemDto> Translations { get; init; } = [];
 }

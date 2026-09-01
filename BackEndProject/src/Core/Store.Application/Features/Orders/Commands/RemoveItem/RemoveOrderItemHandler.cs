@@ -44,7 +44,7 @@ public class RemoveOrderItemHandler
         if (orderItem is null)
             return ErrorModel.Create("OrderItemNotFound");
 
-        order.RemoveOrderItem(orderItem);
+        orderRepository.RemoveOrderItem(order, orderItem);
 
         var cartResult = await OrderCartService.RefreshCartAsync(
             order, discountRepository, userIsCooperation, cancellationToken);

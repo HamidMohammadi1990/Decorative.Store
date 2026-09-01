@@ -11,6 +11,7 @@ import { WishlistPanel } from '@/components/dashboard/WishlistPanel'
 import { StoriesPanel } from '@/components/dashboard/StoriesPanel'
 import { UserStoryCommentsPanel } from '@/components/dashboard/UserStoryCommentsPanel'
 import { ProfileCompletionPanel } from '@/components/dashboard/ProfileCompletionPanel'
+import { ProfileQuestionsAdminPage } from '@/components/dashboard/ProfileQuestionsAdminPage'
 import { BlogPostCategoriesPanel } from '@/components/dashboard/BlogPostCategoriesPanel'
 import { BlogPostCommentsPanel } from '@/components/dashboard/BlogPostCommentsPanel'
 import { BlogPostFormPanel } from '@/components/dashboard/BlogPostFormPanel'
@@ -33,6 +34,11 @@ import { CmsSectionTypesPanel } from '@/components/dashboard/CmsSectionTypesPane
 import { CmsSectionsPanel } from '@/components/dashboard/CmsSectionsPanel'
 import { CmsSectionItemsPanel } from '@/components/dashboard/CmsSectionItemsPanel'
 import { CmsPageSectionsPanel } from '@/components/dashboard/CmsPageSectionsPanel'
+import { DiscountCodesPanel } from '@/components/dashboard/DiscountCodesPanel'
+import { MarketingPromosPanel } from '@/components/dashboard/MarketingPromosPanel'
+import { NewsletterSubscribersPanel } from '@/components/dashboard/NewsletterSubscribersPanel'
+import { ProfileCompletionAnswersPanel } from '@/components/dashboard/ProfileCompletionAnswersPanel'
+import { AssistantFaqPanel } from '@/components/dashboard/AssistantFaqPanel'
 import { UsersPanel } from '@/components/dashboard/UsersPanel'
 import { RolesPanel } from '@/components/dashboard/RolesPanel'
 
@@ -66,6 +72,10 @@ export function DashboardProfilePage() {
   return <ProfileCompletionPanel />
 }
 
+export function DashboardProfileQuestionsPage() {
+  return <ProfileQuestionsAdminPage />
+}
+
 export function DashboardStoriesPage() {
   return <StoriesPanel />
 }
@@ -96,6 +106,10 @@ export function DashboardSubCategoriesPage() {
 
 export function DashboardProductsPage() {
   return <ProductsPanel />
+}
+
+export function DashboardDiscountCodesPage() {
+  return <DiscountCodesPanel />
 }
 
 export function DashboardProductCreatePage() {
@@ -180,6 +194,22 @@ export function DashboardCmsSectionItemsPage() {
 
 export function DashboardCmsPageSectionsPage() {
   return <CmsPageSectionsPanel />
+}
+
+export function DashboardMarketingPromosPage() {
+  return <MarketingPromosPanel />
+}
+
+export function DashboardNewsletterSubscribersPage() {
+  return <NewsletterSubscribersPanel />
+}
+
+export function DashboardProfileCompletionAnswersPage() {
+  return <ProfileCompletionAnswersPanel />
+}
+
+export function DashboardAssistantFaqPage() {
+  return <AssistantFaqPanel />
 }
 
 export function DashboardUsersPage() {

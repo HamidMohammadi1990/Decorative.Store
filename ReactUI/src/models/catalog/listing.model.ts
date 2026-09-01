@@ -23,7 +23,13 @@ export interface FilterFacet {
   }
 }
 
-export type SortOptionId = 'featured' | 'price-asc' | 'price-desc' | 'newest'
+export type SortOptionId =
+  | 'featured'
+  | 'price-asc'
+  | 'price-desc'
+  | 'newest'
+  | 'best-selling'
+  | 'rating'
 
 export interface SortOption {
   id: SortOptionId

@@ -1,0 +1,26 @@
+{
+  "page": {
+    "title": "Design Services",
+    "metaTitle": "Interior Design Services — Diba Gallery",
+    "metaDescription": "Complimentary design consultation for furniture, rugs, and room layouts."
+  },
+  "contentHero": {
+    "eyebrow": "Complimentary",
+    "title": "Interior design services",
+    "subtitle": "Our design crew helps you choose furniture, rugs, lighting, and room layouts — in store, online, or at home."
+  },
+  "contentSteps": {
+    "heading": "How it works",
+    "items": [
+      { "title": "Book a slot", "description": "Choose a consultation time by phone or through your account." },
+      { "title": "Design session", "description": "We review your space, style, and budget together." },
+      { "title": "Personal plan", "description": "Receive a tailored product selection and layout recommendation." }
+    ]
+  },
+  "contentCta": {
+    "title": "Ready to get started?",
+    "subtitle": "Your first consultation is free. Book a time today.",
+    "primaryCta": { "label": "Book online", "href": "/account" },
+    "secondaryCta": { "label": "Call us", "href": "tel:08004049780" }
+  }
+}

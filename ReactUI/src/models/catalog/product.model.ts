@@ -1,12 +1,7 @@
 import type { ImageAsset } from '@/models/shared/image.model'
 import type { Money } from '@/models/shared/money.model'
 
-export interface ProductFacets {
-  color?: string[]
-  size?: string[]
-  material?: string[]
-  room?: string[]
-}
+export type ProductFacets = Record<string, string[]>
 
 export interface ProductSummary {
   id: string

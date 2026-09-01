@@ -11,9 +11,9 @@ internal class SectionTranslationConfig : IEntityTypeConfiguration<SectionTransl
     {
         builder.ToTable("SectionTranslation");
 
-        builder.Property(x => x.Title).HasNVarcharMaxLength(80).IsRequired();
-        builder.Property(x => x.Description).HasNVarcharMaxLength(160);
-        builder.Property(x => x.Url).HasNVarcharMaxLength(150).IsRequired();
+        builder.Property(x => x.Title).HasNVarcharMaxLength(300).IsRequired();
+        builder.Property(x => x.Description).HasNVarcharMaxLength(500);
+        builder.Property(x => x.Url).HasNVarcharMaxLength(200).IsRequired();
 
         builder
             .HasOne(x => x.Section)

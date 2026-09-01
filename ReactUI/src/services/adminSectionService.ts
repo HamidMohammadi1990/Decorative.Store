@@ -36,6 +36,8 @@ function normalizeSection(data: unknown, languageId?: number): AdminCmsSection |
     title: translation?.title ?? '',
     description: translation?.description,
     url: translation?.url ?? '',
+    sectionTypeName: readStringField(record, 'sectionTypeName', 'SectionTypeName') || undefined,
+    parentTitle: readStringField(record, 'parentTitle', 'ParentTitle') || null,
     translations,
   }
 }

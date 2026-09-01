@@ -13,12 +13,12 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://localhost:55274',
+        target: 'https://localhost:60927',
         changeOrigin: true,
         secure: false,
       },
       '/Uploads': {
-        target: 'https://localhost:55274',
+        target: 'https://localhost:60927',
         changeOrigin: true,
         secure: false,
       },

@@ -18,7 +18,9 @@ export function BlogCategoryFilter({ categories, activeCategory }: BlogCategoryF
   return (
     <div
       ref={drag.ref}
-      className={`-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 touch-pan-y select-none ${
+      role="navigation"
+      aria-label={t('blog.navLabel')}
+      className={`-mx-1 flex gap-2 overflow-x-auto px-1 pb-0.5 touch-pan-y select-none ${
         drag.isGrabbing ? 'cursor-grabbing snap-none' : 'cursor-grab snap-x snap-mandatory'
       }`}
       onPointerDown={drag.onPointerDown}
@@ -61,10 +63,10 @@ function CategoryPill({
   return (
     <Link
       to={to}
-      className={`inline-flex shrink-0 snap-start items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+      className={`inline-flex shrink-0 snap-start items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 ${
         active
-          ? 'border-warm bg-warm text-warm-text'
-          : 'border-border bg-surface text-text-muted hover:border-warm hover:text-warm'
+          ? 'border-warm bg-warm text-warm-text shadow-sm shadow-warm/20'
+          : 'border-border/80 bg-surface text-text-muted hover:border-warm/40 hover:bg-surface-muted hover:text-warm'
       }`}
     >
       <span>{label}</span>

@@ -48,4 +48,9 @@ public class ProductFileController
     [HttpPut("status")]
     public async Task<ApiResult<OperationResult>> UpdateStatus(UpdateStatusProductFileRequest request)
         => await mediator.Send(request);
+
+    [ActionInfo(PermissionType.UpdateProductFileStatus)]
+    [HttpPut("main")]
+    public async Task<ApiResult<OperationResult>> SetMain(UpdateSetMainProductFileRequest request)
+        => await mediator.Send(request);
 }

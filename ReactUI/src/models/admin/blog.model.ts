@@ -89,6 +89,25 @@ export interface UpdateBlogPostInput extends CreateBlogPostInput {
   id: string
 }
 
+export interface AdminBlogPostFile {
+  id: string
+  blogPostId: string
+  blogPostTitle: string
+  title: string
+  fileName: string
+  imageUrl: string
+  isActive: boolean
+  isMain: boolean
+}
+
+export interface CreateBlogPostFileInput {
+  blogPostId: string
+  languageId: number
+  title: string
+  image: File
+  isIndex: boolean
+}
+
 export interface AdminBlogPostTag {
   id: string
   tagId: string

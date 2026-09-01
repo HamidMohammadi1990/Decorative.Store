@@ -30,4 +30,7 @@ internal static class CmsSeedDescription
     {
         return BuildTileDescription(subtitle, linkLabel);
     }
+
+    public static string BuildAboutHeroDescription(string? eyebrow, string? subtitle, string ctaLabel)
+        => BuildSlideDescription(eyebrow, subtitle, ctaLabel);
 }

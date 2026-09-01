@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import type { AdminProductDetail, AdminSubCategory } from '@/models/admin/catalog.model'
+import type { AdminCategory, AdminProductDetail, AdminSubCategory } from '@/models/admin/catalog.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { ProductsIcon } from '@/components/dashboard/DashboardIcons'
 import {
@@ -16,22 +16,14 @@ import { localeFromLanguageId } from '@/extensions/languageCode'
 import { useAdminContentLanguage } from '@/hooks/useAdminContentLanguage'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
 import { adminProductService } from '@/services/adminProductService'
+import { adminCategoryService } from '@/services/adminCategoryService'
 import { adminSubCategoryService } from '@/services/adminSubCategoryService'
 import { slugifyTitle } from '@/services/admin/adminCatalogNormalize'
 import { useUserStore } from '@/stores/userStore'
-import { ProductManageModal } from '@/components/dashboard/ProductManageModal'
-
-function mergeSubCategory(
-  items: AdminSubCategory[],
-  candidate: AdminSubCategory | null,
-): AdminSubCategory[] {
-  if (!candidate || items.some((item) => item.id === candidate.id)) return items
-  return [candidate, ...items]
-}
+import { ProductImagesPanel } from '@/components/dashboard/ProductImagesPanel'
 
 function formatSubCategoryLabel(item: AdminSubCategory): string {
-  const category = item.categoryTitle || item.categoryCode
-  return category ? `${category} / ${item.title}` : item.title
+  return item.title
 }
 
 function formatSubCategoryTitles(categoryTitle: string, subCategoryTitle: string): string {
@@ -56,10 +48,14 @@ export function ProductFormPanel() {
     loading: contentLanguageLoading,
   } = useAdminContentLanguage()
 
+  const [categories, setCategories] = useState<AdminCategory[]>([])
   const [subCategories, setSubCategories] = useState<AdminSubCategory[]>([])
+  const [subCategoriesLoading, setSubCategoriesLoading] = useState(false)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const [categoryId, setCategoryId] = useState('')
 
   const [title, setTitle] = useState('')
   const [slug, setSlug] = useState('')
@@ -71,43 +67,16 @@ export function ProductFormPanel() {
   const [subCategoryLabel, setSubCategoryLabel] = useState('')
   const [isActive, setIsActive] = useState(true)
   const [slugTouched, setSlugTouched] = useState(false)
-  const [imagesModalOpen, setImagesModalOpen] = useState(false)
 
-  const contentLocale =
-    contentLanguageId != null
-      ? localeFromLanguageId(formLanguages, contentLanguageId, locale)
-      : locale
-
-  const resolveSubCategorySelection = useCallback(
-    async (
-      targetSubCategoryId: string,
-      items: AdminSubCategory[],
-      product?: AdminProductDetail,
-    ): Promise<AdminSubCategory[]> => {
-      if (!targetSubCategoryId) return items
-
-      let nextItems = items
-      if (!nextItems.some((item) => item.id === targetSubCategoryId)) {
-        const subCategory = await adminSubCategoryService.get(
-          accessToken!,
-          contentLocale,
-          targetSubCategoryId,
-        )
-        nextItems = mergeSubCategory(nextItems, subCategory)
-      }
-
-      if (product?.subCategoryTitle) {
-        setSubCategoryLabel(formatSubCategoryTitles(product.categoryTitle, product.subCategoryTitle))
-      } else {
-        const match = nextItems.find((item) => item.id === targetSubCategoryId)
-        setSubCategoryLabel(match ? formatSubCategoryLabel(match) : '')
-      }
-
-      setSubCategoryId(targetSubCategoryId)
-      return nextItems
-    },
-    [accessToken, contentLocale],
+  const contentLocale = useMemo(
+    () =>
+      contentLanguageId != null
+        ? localeFromLanguageId(formLanguages, contentLanguageId, locale)
+        : locale,
+    [contentLanguageId, formLanguages, locale],
   )
+
+  const loadRef = useRef<() => Promise<void>>(async () => {})
 
   const applyProductToForm = useCallback((product: AdminProductDetail) => {
     setTitle(product.title)
@@ -130,12 +99,60 @@ export function ProductFormPanel() {
     setProductCode('')
     setPrice('')
     setCompareAtPrice('')
+    setCategoryId('')
     setSubCategoryId('')
     setSubCategoryLabel('')
+    setSubCategories([])
     setIsActive(true)
     setSlugTouched(false)
     setError(null)
   }, [])
+
+  const loadSubCategoriesForCategory = useCallback(
+    async (targetCategoryId: string, preferredSubCategoryId = '') => {
+      if (
+        !accessToken ||
+        accessToken === 'mock-access-token' ||
+        contentLanguageId == null ||
+        !targetCategoryId
+      ) {
+        setSubCategories([])
+        setSubCategoryId('')
+        setSubCategoryLabel('')
+        return []
+      }
+
+      setSubCategoriesLoading(true)
+      try {
+        const subResult = await adminSubCategoryService.getAllForSelect(accessToken, contentLocale, {
+          languageId: contentLanguageId,
+          categoryId: targetCategoryId,
+        })
+        setSubCategories(subResult.items)
+
+        const nextSubCategoryId =
+          preferredSubCategoryId &&
+          subResult.items.some((item) => item.id === preferredSubCategoryId)
+            ? preferredSubCategoryId
+            : ''
+
+        setSubCategoryId(nextSubCategoryId)
+        const match = subResult.items.find((item) => item.id === nextSubCategoryId)
+        setSubCategoryLabel(match ? formatSubCategoryLabel(match) : '')
+
+        return subResult.items
+      } catch (err) {
+        setError(resolveAdminMutationError(err, t('dashboard.products.loadFailed')))
+        setSubCategories([])
+        setSubCategoryId('')
+        setSubCategoryLabel('')
+        return []
+      } finally {
+        setSubCategoriesLoading(false)
+      }
+    },
+    [accessToken, contentLanguageId, contentLocale, t],
+  )
 
   const load = useCallback(async () => {
     if (!accessToken || accessToken === 'mock-access-token' || contentLanguageId == null) {
@@ -147,9 +164,10 @@ export function ProductFormPanel() {
     setLoading(true)
     setError(null)
     try {
-      const subResult = await adminSubCategoryService.getAllForSelect(accessToken, contentLocale, {
+      const categoryResult = await adminCategoryService.getAllForSelect(accessToken, contentLocale, {
         languageId: contentLanguageId,
       })
+      setCategories(categoryResult.items)
 
       if (isEdit && productId) {
         const product = await adminProductService.get(accessToken, contentLocale, productId)
@@ -160,21 +178,56 @@ export function ProductFormPanel() {
 
         applyProductToForm(product)
         const targetSubCategoryId = product.subCategoryId || subCategoryIdFromUrl
-        const subCategoryItems = await resolveSubCategorySelection(
-          targetSubCategoryId,
-          subResult.items,
-          product,
-        )
-        setSubCategories(subCategoryItems)
+
+        let resolvedCategoryId = ''
+        if (targetSubCategoryId) {
+          const subCategory = await adminSubCategoryService.get(
+            accessToken,
+            contentLocale,
+            targetSubCategoryId,
+          )
+          resolvedCategoryId = subCategory?.categoryId ?? ''
+          if (subCategory) {
+            setSubCategoryLabel(formatSubCategoryLabel(subCategory))
+          } else if (product.subCategoryTitle) {
+            setSubCategoryLabel(
+              formatSubCategoryTitles(product.categoryTitle, product.subCategoryTitle),
+            )
+          }
+        }
+
+        if (resolvedCategoryId) {
+          setCategoryId(resolvedCategoryId)
+          await loadSubCategoriesForCategory(resolvedCategoryId, targetSubCategoryId)
+        } else {
+          setSubCategories([])
+          setSubCategoryId(targetSubCategoryId)
+        }
       } else {
-        setSubCategories(subResult.items)
-        const initialSubCategoryId =
-          subCategoryIdFromUrl && subResult.items.some((item) => item.id === subCategoryIdFromUrl)
-            ? subCategoryIdFromUrl
-            : (subResult.items[0]?.id ?? '')
-        setSubCategoryId(initialSubCategoryId)
-        const match = subResult.items.find((item) => item.id === initialSubCategoryId)
-        setSubCategoryLabel(match ? formatSubCategoryLabel(match) : '')
+        let initialCategoryId = ''
+        let initialSubCategoryId = ''
+
+        if (subCategoryIdFromUrl) {
+          const subCategory = await adminSubCategoryService.get(
+            accessToken,
+            contentLocale,
+            subCategoryIdFromUrl,
+          )
+          if (subCategory) {
+            initialCategoryId = subCategory.categoryId
+            initialSubCategoryId = subCategory.id
+            setSubCategoryLabel(formatSubCategoryLabel(subCategory))
+          }
+        }
+
+        if (initialCategoryId) {
+          setCategoryId(initialCategoryId)
+          await loadSubCategoriesForCategory(initialCategoryId, initialSubCategoryId)
+        } else {
+          setSubCategories([])
+          setSubCategoryId('')
+          setSubCategoryLabel('')
+        }
       }
     } catch (err) {
       setError(resolveAdminMutationError(err, t('dashboard.products.loadFailed')))
@@ -187,25 +240,39 @@ export function ProductFormPanel() {
     contentLanguageId,
     contentLocale,
     isEdit,
+    loadSubCategoriesForCategory,
     productId,
-    resolveSubCategorySelection,
     subCategoryIdFromUrl,
     t,
   ])
 
+  loadRef.current = load
+
   useEffect(() => {
-    if (!languageLoading && !contentLanguageLoading && contentLanguageId != null) {
-      resetForm()
-      void load()
-    }
+    if (languageLoading || contentLanguageLoading || contentLanguageId == null) return
+
+    resetForm()
+    void loadRef.current()
   }, [
+    accessToken,
     contentLanguageId,
     contentLanguageLoading,
     languageLoading,
-    load,
     productId,
+    subCategoryIdFromUrl,
     resetForm,
   ])
+
+  const handleCategoryChange = (value: string) => {
+    setCategoryId(value)
+    setSubCategoryId('')
+    setSubCategoryLabel('')
+    if (value) {
+      void loadSubCategoriesForCategory(value)
+    } else {
+      setSubCategories([])
+    }
+  }
 
   const handleSubCategoryChange = (value: string) => {
     setSubCategoryId(value)
@@ -235,6 +302,7 @@ export function ProductFormPanel() {
       !title.trim() ||
       !slug.trim() ||
       !productCode.trim() ||
+      !categoryId ||
       !subCategoryId ||
       !Number.isFinite(parsedPrice) ||
       parsedPrice < 0 ||
@@ -261,7 +329,7 @@ export function ProductFormPanel() {
           status: isActive,
         })
       } else {
-        await adminProductService.create(accessToken, contentLocale, {
+        const newId = await adminProductService.create(accessToken, contentLocale, {
           languageId: contentLanguageId,
           title: title.trim(),
           slug: slug.trim(),
@@ -271,8 +339,11 @@ export function ProductFormPanel() {
           compareAtPrice: parsedCompare,
           subCategoryId,
         })
+        const params = new URLSearchParams({ id: newId })
+        if (subCategoryId) params.set('subCategoryId', subCategoryId)
+        navigate(`/account/dashboard/products/edit?${params.toString()}`, { replace: true })
+        return
       }
-      navigate('/account/dashboard/products')
     } catch (err) {
       setError(resolveAdminMutationError(err, t('dashboard.products.saveFailed')))
     } finally {
@@ -311,13 +382,6 @@ export function ProductFormPanel() {
             : t('dashboard.products.createDescription')
         }
         icon={<ProductsIcon size={22} />}
-        action={
-          isEdit && productId ? (
-            <Button variant="secondary" onClick={() => setImagesModalOpen(true)}>
-              {t('dashboard.products.manageImages')}
-            </Button>
-          ) : undefined
-        }
       />
 
       <div className="space-y-5 rounded-sm border border-border bg-surface-muted/20 p-5 shadow-sm sm:p-6">
@@ -326,13 +390,34 @@ export function ProductFormPanel() {
           onChange={setContentLanguageId}
           languages={formLanguages}
         />
+
+        <AdminField label={t('dashboard.products.fieldCategory')}>
+          <select
+            value={categoryId}
+            onChange={(e) => handleCategoryChange(e.target.value)}
+            className={adminInputClass}
+          >
+            <option value="">{t('dashboard.products.selectCategory')}</option>
+            {categories.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.title}
+              </option>
+            ))}
+          </select>
+        </AdminField>
+
         <AdminField label={t('dashboard.products.fieldSubCategory')}>
           <select
             value={subCategoryId}
             onChange={(e) => handleSubCategoryChange(e.target.value)}
             className={adminInputClass}
+            disabled={!categoryId || subCategoriesLoading}
           >
-            <option value="">{t('dashboard.products.selectSubCategory')}</option>
+            <option value="">
+              {!categoryId
+                ? t('dashboard.products.selectCategoryFirst')
+                : t('dashboard.products.selectSubCategory')}
+            </option>
             {subCategories.map((item) => (
               <option key={item.id} value={item.id}>
                 {formatSubCategoryLabel(item)}
@@ -344,6 +429,16 @@ export function ProductFormPanel() {
                 <option value={subCategoryId}>{displayedSubCategoryLabel}</option>
               )}
           </select>
+          {!categoryId && (
+            <p className="mt-1.5 text-xs text-text-muted">
+              {t('dashboard.products.selectCategoryFirstHint')}
+            </p>
+          )}
+          {categoryId && !subCategoriesLoading && subCategories.length === 0 && (
+            <p className="mt-1.5 text-xs text-text-muted">
+              {t('dashboard.products.noSubCategoriesInCategory')}
+            </p>
+          )}
           {isEdit && displayedSubCategoryLabel && (
             <p className="mt-1.5 text-xs font-medium text-warm">
               {t('dashboard.products.currentSubCategory', { label: displayedSubCategoryLabel })}
@@ -450,21 +545,20 @@ export function ProductFormPanel() {
       </div>
 
       {isEdit && productId && (
-        <ProductManageModal
-          open={imagesModalOpen}
-          tab="images"
-          product={{
-            id: productId,
-            title,
-            productCode,
-            slug,
-            isActive,
-            creationDate: '',
-            subCategoryId,
-            translations: [],
-          }}
-          onClose={() => setImagesModalOpen(false)}
-        />
+        <div id="product-images" className="mt-6">
+          <ProductImagesPanel
+            embedded
+            productId={productId}
+            productTitle={title}
+            productCode={productCode}
+          />
+        </div>
+      )}
+
+      {!isEdit && (
+        <p className="mt-6 rounded-sm border border-dashed border-border bg-surface-muted/20 px-4 py-3 text-sm text-text-muted">
+          {t('dashboard.productImages.saveFirstHint')}
+        </p>
       )}
     </div>
   )

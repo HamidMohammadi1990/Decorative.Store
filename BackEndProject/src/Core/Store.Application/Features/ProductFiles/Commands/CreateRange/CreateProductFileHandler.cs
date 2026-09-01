@@ -15,11 +15,26 @@ public class CreateProductFileHandler
 {
     public async Task<OperationResult<List<CreateProductFileResponse>>> Handle(CreateProductFileRequest request, CancellationToken cancellationToken)
     {
-        var productFilesTask = request.Files.Select(async file =>
+        var productIdsWithNewMain = request.Files
+            .Where(file => file.IsIndex)
+            .Select(file => ResolveProductId(file.ProductId))
+            .Where(productId => productId > 0)
+            .Distinct()
+            .ToList();
+
+        foreach (var productId in productIdsWithNewMain)
+            await productFileRepository.ClearMainFlagsAsync(productId, cancellationToken);
+
+        var productFiles = new List<(ProductFile? productFile, string? title)>();
+
+        foreach (var file in request.Files)
         {
             var productId = ResolveProductId(file.ProductId);
             if (productId == 0)
-                return (productFile: (ProductFile?)null, title: (string?)null);
+            {
+                productFiles.Add((null, null));
+                continue;
+            }
 
             var filename = await localFileService.SaveFileAsync(file.Image, ProductDirectory.ProductImage);
             if (filename.IsSuccess)
@@ -27,12 +42,12 @@ public class CreateProductFileHandler
                 var productFile = ProductFile.Create(productId, filename.Result!, file.IsIndex);
                 productFile.UpsertTranslation(file.LanguageId, file.Title);
                 productFileRepository.Add(productFile);
-                return (productFile: productFile, title: file.Title);
+                productFiles.Add((productFile, file.Title));
+                continue;
             }
-            return (productFile: (ProductFile?)null, title: (string?)null);
-        });
 
-        var productFiles = await Task.WhenAll(productFilesTask);
+            productFiles.Add((null, null));
+        }
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

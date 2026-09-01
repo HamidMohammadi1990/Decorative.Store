@@ -10,6 +10,11 @@ import { mapCategoryTreeToCategoryNav, mapCategoryTreeToNav } from '@/services/m
 import { buildFeaturedShopGrid } from '@/services/mappers/featuredShopMapper'
 import { buildHeroCarouselFromProducts } from '@/services/mappers/heroCarouselMapper'
 import { mapHomePage } from '@/services/mappers/homeMapper'
+import { languageService } from '@/services/languageService'
+import {
+  mapMarketingStripToPromoTiles,
+  marketingPromoService,
+} from '@/services/marketingPromoService'
 import { pageService } from '@/services/pageService'
 
 const STATIC_NAV_IDS = new Set(['blog'])
@@ -22,8 +27,9 @@ function pageCacheKey(
   skipCatalogNav: boolean,
   skipHomeCatalogContent: boolean,
   skipCmsPage: boolean,
+  cmsSlug: string,
 ) {
-  return `${locale}:${skipCatalogNav ? 'blog' : 'shop'}:${skipHomeCatalogContent ? 'header' : 'full'}:${skipCmsPage ? 'mock' : 'cms'}`
+  return `${locale}:${cmsSlug}:${skipHomeCatalogContent ? 'header' : 'full'}:${skipCmsPage ? 'mock' : 'cms'}`
 }
 
 function getStaticPrimaryNav(locale: Locale) {
@@ -82,10 +88,15 @@ function applyCmsOnMock(mock: HomePage, cms: HomePage): HomePage {
 async function loadCmsPage(
   locale: Locale,
   includeHomeContent: boolean,
-  useBlogSlug: boolean,
+  cmsSlug: string,
 ): Promise<HomePage | null> {
   try {
-    const slug = useBlogSlug ? cmsBlogPageSlug(locale) : cmsShopPageSlug(locale)
+    const slug =
+      cmsSlug === 'shop'
+        ? cmsShopPageSlug(locale)
+        : cmsSlug === 'blog'
+          ? cmsBlogPageSlug(locale)
+          : cmsSlug
     const cmsPage = await pageService.getBySlug(slug, locale)
     if (!cmsPage) return null
     return mapCmsPageToHomePage(cmsPage, { includeHomeContent })
@@ -118,18 +129,32 @@ async function loadFeaturedShop(locale: Locale, fallback: HomePage['featuredShop
   return fallback
 }
 
+async function loadPromoTiles(locale: Locale, fallback: HomePage['promoTiles']) {
+  try {
+    const languageId = await languageService.resolveLanguageId(locale)
+    const strip = await marketingPromoService.getPromoStrip(locale, languageId)
+    if (strip?.tiles?.length) {
+      return mapMarketingStripToPromoTiles(strip)
+    }
+  } catch {
+    // keep CMS/mock promo tiles
+  }
+  return fallback
+}
+
 async function buildPage(
   locale: Locale,
   skipCatalogNav: boolean,
   skipHomeCatalogContent: boolean,
   skipCmsPage: boolean,
+  cmsSlug: string,
 ): Promise<HomePage> {
   const mockPage = mapHomePage(getHomeMock(locale))
 
   try {
     let page = mockPage
     if (!skipCmsPage) {
-      const cmsPage = await loadCmsPage(locale, !skipHomeCatalogContent, skipCatalogNav)
+      const cmsPage = await loadCmsPage(locale, !skipHomeCatalogContent, cmsSlug)
       if (cmsPage) {
         page = applyCmsOnMock(mockPage, cmsPage)
       }
@@ -139,13 +164,15 @@ async function buildPage(
 
     let pageWithContent = page
     if (!skipHomeCatalogContent) {
-      const [hero, featuredShop] = await Promise.all([
+      const [hero, featuredShop, promoTiles] = await Promise.all([
         loadHeroCarousel(locale),
         loadFeaturedShop(locale, page.featuredShop),
+        loadPromoTiles(locale, page.promoTiles),
       ])
       pageWithContent = mergeHomePage(page, {
         ...(hero ? { hero } : {}),
         featuredShop,
+        promoTiles,
       })
     }
 
@@ -191,6 +218,7 @@ export const homeService = {
       skipCatalogNav?: boolean
       skipHomeCatalogContent?: boolean
       skipCmsPage?: boolean
+      cmsSlug?: 'shop' | 'blog' | 'about'
     } = {},
   ): Promise<HomePage> {
     const {
@@ -198,8 +226,10 @@ export const homeService = {
       skipCatalogNav = false,
       skipHomeCatalogContent = false,
       skipCmsPage = false,
+      cmsSlug: cmsSlugOption,
     } = options
-    const cacheKey = pageCacheKey(locale, skipCatalogNav, skipHomeCatalogContent, skipCmsPage)
+    const cmsSlug = cmsSlugOption ?? (skipCatalogNav ? 'blog' : 'shop')
+    const cacheKey = pageCacheKey(locale, skipCatalogNav, skipHomeCatalogContent, skipCmsPage, cmsSlug)
 
     if (!force) {
       const cached = pageCache.get(cacheKey)
@@ -211,7 +241,7 @@ export const homeService = {
       pageCache.delete(cacheKey)
     }
 
-    const request = buildPage(locale, skipCatalogNav, skipHomeCatalogContent, skipCmsPage)
+    const request = buildPage(locale, skipCatalogNav, skipHomeCatalogContent, skipCmsPage, cmsSlug)
     pageRequests.set(cacheKey, request)
 
     try {

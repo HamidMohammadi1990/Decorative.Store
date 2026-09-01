@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { AssistantChatMessage, AssistantSuggestionId } from '@/models/assistant/assistantChat.model'
+import type { AssistantFaqItem } from '@/models/admin/assistantFaq.model'
+import type { AssistantChatMessage } from '@/models/assistant/assistantChat.model'
 import { CloseIcon } from '@/components/ui/CloseIcon'
 import { Portal } from '@/components/ui/Portal'
 import { formatAssistantTime } from '@/extensions/formatAssistantTime'
@@ -10,24 +11,20 @@ interface AiChatPanelProps {
   open: boolean
   messages: AssistantChatMessage[]
   isTyping: boolean
+  suggestions: AssistantFaqItem[]
+  suggestionsLoading?: boolean
   onClose: () => void
   onSend: (text: string) => void
-  onSuggestion: (id: AssistantSuggestionId) => void
+  onSuggestion: (id: string) => void
   onReset: () => void
 }
-
-const SUGGESTION_IDS: AssistantSuggestionId[] = [
-  'recommend',
-  'shipping',
-  'returns',
-  'orders',
-  'payment',
-]
 
 export function AiChatPanel({
   open,
   messages,
   isTyping,
+  suggestions,
+  suggestionsLoading = false,
   onClose,
   onSend,
   onSuggestion,
@@ -131,18 +128,24 @@ export function AiChatPanel({
                 <p className="text-[11px] font-medium uppercase tracking-wide text-text-muted">
                   {t('assistant.suggestionsTitle')}
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {SUGGESTION_IDS.map((id) => (
-                    <button
-                      key={id}
-                      type="button"
-                      onClick={() => onSuggestion(id)}
-                      className="rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text transition-colors hover:border-warm/50 hover:bg-warm-soft hover:text-warm"
-                    >
-                      {t(`assistant.suggestions.${id}.label`)}
-                    </button>
-                  ))}
-                </div>
+                {suggestionsLoading ? (
+                  <p className="text-xs text-text-muted">{t('assistant.loadingSuggestions')}</p>
+                ) : suggestions.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {suggestions.map((item) => (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => onSuggestion(item.id)}
+                        className="rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text transition-colors hover:border-warm/50 hover:bg-warm-soft hover:text-warm"
+                      >
+                        {item.question}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-text-muted">{t('assistant.noSuggestions')}</p>
+                )}
               </div>
             )}
           </div>

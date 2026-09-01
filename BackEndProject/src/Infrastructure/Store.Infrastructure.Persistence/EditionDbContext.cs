@@ -74,6 +74,8 @@ public sealed class EditionDbContext
     public DbSet<BlogPostComment> BlogPostComment { get; set; }
     public DbSet<BlogPostCategory> BlogPostCategory { get; set; }
     public DbSet<BlogPostCategoryTranslation> BlogPostCategoryTranslation { get; set; }
+    public DbSet<BlogPostFile> BlogPostFile { get; set; }
+    public DbSet<BlogPostFileTranslation> BlogPostFileTranslation { get; set; }
     public DbSet<ContentPolicy> ContentPolicy { get; set; }
     public DbSet<ContentPolicyRule> ContentPolicyRule { get; set; }
     public DbSet<ContentPolicyRecordAccess> ContentPolicyRecordAccess { get; set; }
@@ -96,6 +98,12 @@ public sealed class EditionDbContext
     public DbSet<SectionType> SectionType { get; set; }
     public DbSet<SectionTypeTranslation> SectionTypeTranslation { get; set; }
     public DbSet<PageSection> PageSection { get; set; }
+    public DbSet<AssistantFaq> AssistantFaq { get; set; }
+    public DbSet<MarketingPromo> MarketingPromo { get; set; }
+    public DbSet<MarketingStripDisclaimer> MarketingStripDisclaimer { get; set; }
+    public DbSet<NewsletterSubscriber> NewsletterSubscriber { get; set; }
+    public DbSet<ProfileCompletionSetting> ProfileCompletionSetting { get; set; }
+    public DbSet<ProfileCompletionUserState> ProfileCompletionUserState { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

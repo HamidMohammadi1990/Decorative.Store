@@ -3,6 +3,27 @@ export interface CatalogListingBreadcrumb {
   href: string
 }
 
+export interface CatalogListingFacetOption {
+  value: string
+  label: string
+  count: number
+  swatch?: string | null
+}
+
+export interface CatalogListingFacetGroup {
+  id: string
+  label: string
+  type: 'checkbox' | 'color' | 'range'
+  options: CatalogListingFacetOption[]
+  range?: {
+    min: number
+    max: number
+    step: number
+    selectedMin?: number
+    selectedMax?: number
+  }
+}
+
 export interface CatalogListingProduct {
   id: string
   title: string
@@ -17,6 +38,10 @@ export interface CatalogListingProduct {
   isNew: boolean
   categorySlug: string
   subCategorySlug: string
+  facets?: Record<string, string[]>
+  reviewCount?: number
+  averageRating?: number | null
+  purchaseCount?: number
 }
 
 export interface CatalogListingResponse {
@@ -24,4 +49,13 @@ export interface CatalogListingResponse {
   pathNotFound: boolean
   breadcrumbs: CatalogListingBreadcrumb[]
   products: CatalogListingProduct[]
+  totalCount: number
+  page: number
+  pageSize: number
+  facetGroups: CatalogListingFacetGroup[]
+}
+
+export interface CatalogListingQueryParams {
+  path: string
+  searchParams: URLSearchParams
 }

@@ -1,6 +1,5 @@
 import { useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { CHECKBOX_FILTER_KEYS } from '@/extensions/listingFilters'
 
 export function useListingFilters() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -9,6 +8,14 @@ export function useListingFilters() {
     (facetId: string, value: string) => {
       setSearchParams((prev) => {
         const next = new URLSearchParams(prev)
+
+        if (facetId === 'minRating') {
+          if (next.get('minRating') === value) next.delete('minRating')
+          else next.set('minRating', value)
+          next.delete('page')
+          return next
+        }
+
         const current = next.getAll(facetId)
         next.delete(facetId)
 
@@ -52,12 +59,10 @@ export function useListingFilters() {
   const clearFilters = useCallback(() => {
     setSearchParams((prev) => {
       const next = new URLSearchParams(prev)
-      for (const key of CHECKBOX_FILTER_KEYS) {
+      for (const key of [...next.keys()]) {
+        if (key === 'sort' || key === 'q') continue
         next.delete(key)
       }
-      next.delete('minPrice')
-      next.delete('maxPrice')
-      next.delete('page')
       return next
     })
   }, [setSearchParams])
@@ -75,6 +80,18 @@ export function useListingFilters() {
     [setSearchParams],
   )
 
+  const setPage = useCallback(
+    (page: number) => {
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev)
+        if (page <= 1) next.delete('page')
+        else next.set('page', String(page))
+        return next
+      })
+    },
+    [setSearchParams],
+  )
+
   const currentSort = searchParams.get('sort') || 'featured'
 
   return {
@@ -82,6 +99,7 @@ export function useListingFilters() {
     applyPriceRange,
     clearFilters,
     setSort,
+    setPage,
     currentSort,
     searchParams,
   }

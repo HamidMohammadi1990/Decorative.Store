@@ -58,6 +58,8 @@ public class OrderRepository
             .Include(x => x.OrderItems)
             .ThenInclude(x => x.OrderItemProperties)
             .Include(x => x.OrderItems)
+            .ThenInclude(x => x.OrderItemAttachments)
+            .Include(x => x.OrderItems)
             .ThenInclude(x => x.Product)
             .SingleOrDefaultAsync(x => x.UserId == userId && x.Status == OrderStatusType.Pending);
     }
@@ -90,8 +92,22 @@ public class OrderRepository
             .Include(x => x.OrderItems)
             .ThenInclude(x => x.OrderItemProperties)
             .Include(x => x.OrderItems)
+            .ThenInclude(x => x.OrderItemAttachments)
+            .Include(x => x.OrderItems)
             .ThenInclude(x => x.Product)
             .SingleOrDefaultAsync(x => x.UserId == userId && x.Status == status);
+    }
+
+    public void RemoveOrderItem(Order order, OrderItem orderItem)
+    {
+        if (orderItem.OrderItemProperties.Count > 0)
+            Context.OrderItemProperty.RemoveRange(orderItem.OrderItemProperties);
+
+        if (orderItem.OrderItemAttachments.Count > 0)
+            Context.OrderItemAttachment.RemoveRange(orderItem.OrderItemAttachments);
+
+        order.RemoveOrderItem(orderItem);
+        Context.OrderItem.Remove(orderItem);
     }
 
     public async Task<List<GetStatusSummaryPropertiesDto>> GetUserOrderStatusSummaryAsync(int userId)

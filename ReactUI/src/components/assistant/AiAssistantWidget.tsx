@@ -1,11 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import { AiChatPanel } from '@/components/assistant/AiChatPanel'
 import { useAssistantChat } from '@/hooks/useAssistantChat'
+import { useAssistantFaqs } from '@/hooks/useAssistantFaqs'
 import { useCompareStore } from '@/stores/compareStore'
 
 export function AiAssistantWidget() {
   const { t } = useTranslation()
   const compareCount = useCompareStore((s) => s.slugs.length)
+  const { faqs, loading: faqsLoading, loadFaqs } = useAssistantFaqs()
   const {
     isOpen,
     isTyping,
@@ -15,7 +17,16 @@ export function AiAssistantWidget() {
     sendMessage,
     sendSuggestion,
     resetChat,
-  } = useAssistantChat()
+  } = useAssistantChat(faqs)
+
+  const handleFabClick = () => {
+    if (isOpen) {
+      close()
+      return
+    }
+    void loadFaqs()
+    openChat()
+  }
 
   const bottomOffset = compareCount > 0 ? 'bottom-24 sm:bottom-28' : 'bottom-4 sm:bottom-6'
 
@@ -23,7 +34,7 @@ export function AiAssistantWidget() {
     <>
       <button
         type="button"
-        onClick={() => (isOpen ? close() : openChat())}
+        onClick={handleFabClick}
         aria-expanded={isOpen}
         aria-label={isOpen ? t('assistant.close') : t('assistant.open')}
         title={!isOpen ? t('assistant.launchHint') : undefined}
@@ -54,6 +65,8 @@ export function AiAssistantWidget() {
         open={isOpen}
         messages={messages}
         isTyping={isTyping}
+        suggestions={faqs}
+        suggestionsLoading={faqsLoading}
         onClose={close}
         onSend={(text) => void sendMessage(text)}
         onSuggestion={sendSuggestion}

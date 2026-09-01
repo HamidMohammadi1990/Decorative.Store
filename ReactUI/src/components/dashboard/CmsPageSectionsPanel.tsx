@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { AdminCmsPage, AdminCmsPageSection, AdminCmsSection } from '@/models/admin/cms.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
@@ -21,6 +21,15 @@ import { useUserStore } from '@/stores/userStore'
 
 type Mode = 'list' | 'create' | 'edit'
 
+function RelatedMetaLine({ label, value }: { label: string; value?: string | null }) {
+  if (!value?.trim()) return null
+  return (
+    <span>
+      <span className="font-medium text-text-muted">{label}:</span> {value}
+    </span>
+  )
+}
+
 export function CmsPageSectionsPanel() {
   const { t } = useTranslation()
   const accessToken = useUserStore((s) => s.accessToken)
@@ -30,6 +39,7 @@ export function CmsPageSectionsPanel() {
   const [pages, setPages] = useState<AdminCmsPage[]>([])
   const [sections, setSections] = useState<AdminCmsSection[]>([])
   const [loading, setLoading] = useState(true)
+  const [formLoading, setFormLoading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -37,10 +47,7 @@ export function CmsPageSectionsPanel() {
   const [sectionId, setSectionId] = useState('')
   const [priority, setPriority] = useState('0')
 
-  const pageTitleById = useMemo(() => new Map(pages.map((x) => [x.id, x.title])), [pages])
-  const sectionTitleById = useMemo(() => new Map(sections.map((x) => [x.id, x.title])), [sections])
-
-  const load = useCallback(async () => {
+  const loadList = useCallback(async () => {
     if (!accessToken || accessToken === 'mock-access-token') {
       setError(t('dashboard.cms.pageSections.authRequired'))
       setLoading(false)
@@ -48,25 +55,40 @@ export function CmsPageSectionsPanel() {
     }
     setLoading(true)
     try {
-      const [pageSections, pageList, sectionList] = await Promise.all([
-        adminPageSectionService.getAll(accessToken, locale, { pageSize: 200 }),
-        adminPageService.getAll(accessToken, locale, { pageSize: 100, languageId: languageId ?? undefined }),
-        adminSectionService.getAll(accessToken, locale, { pageSize: 100, languageId: languageId ?? undefined }),
-      ])
+      const pageSections = await adminPageSectionService.getAll(accessToken, locale, { pageSize: 200 })
       setItems(pageSections.items)
-      setPages(pageList.items)
-      setSections(sectionList.items)
-      if (!pageId && pageList.items[0]) setPageId(pageList.items[0].id)
-      if (!sectionId && sectionList.items[0]) setSectionId(sectionList.items[0].id)
     } catch (err) {
       setError(resolveAdminMutationError(err, t('dashboard.cms.pageSections.loadFailed')))
       setItems([])
     } finally {
       setLoading(false)
     }
+  }, [accessToken, locale, t])
+
+  const loadFormOptions = useCallback(async () => {
+    if (!accessToken || accessToken === 'mock-access-token') return
+    setFormLoading(true)
+    try {
+      const [pageList, sectionList] = await Promise.all([
+        adminPageService.getAll(accessToken, locale, { pageSize: 200, languageId: languageId ?? undefined }),
+        adminSectionService.getAll(accessToken, locale, { pageSize: 200, languageId: languageId ?? undefined }),
+      ])
+      setPages(pageList.items)
+      setSections(sectionList.items)
+      if (!pageId && pageList.items[0]) setPageId(pageList.items[0].id)
+      if (!sectionId && sectionList.items[0]) setSectionId(sectionList.items[0].id)
+    } catch (err) {
+      setError(resolveAdminMutationError(err, t('dashboard.cms.pageSections.loadFailed')))
+    } finally {
+      setFormLoading(false)
+    }
   }, [accessToken, languageId, locale, pageId, sectionId, t])
 
-  useEffect(() => { if (!languageLoading) void load() }, [languageLoading, load])
+  useEffect(() => { if (!languageLoading) void loadList() }, [languageLoading, loadList])
+
+  useEffect(() => {
+    if (mode !== 'list' && !languageLoading) void loadFormOptions()
+  }, [languageLoading, loadFormOptions, mode])
 
   const resetForm = () => {
     setPriority('0'); setEditingId(null); setError(null)
@@ -84,7 +106,7 @@ export function CmsPageSectionsPanel() {
       const payload = { pageId, sectionId, priority: Number(priority) || 0 }
       if (mode === 'edit' && editingId) await adminPageSectionService.update(accessToken, locale, { ...payload, id: editingId })
       else await adminPageSectionService.create(accessToken, locale, payload)
-      await load(); resetForm(); setMode('list')
+      await loadList(); resetForm(); setMode('list')
     } catch (err) {
       setError(resolveAdminMutationError(err, t('dashboard.cms.pageSections.saveFailed')))
     } finally {
@@ -96,24 +118,32 @@ export function CmsPageSectionsPanel() {
     return (
       <div>
         <DashboardPageHeader title={t(mode === 'edit' ? 'dashboard.cms.pageSections.editTitle' : 'dashboard.cms.pageSections.createTitle')} icon={<CmsPageSectionsIcon size={22} />} />
-        <div className="space-y-5 rounded-sm border border-border bg-surface-muted/20 p-5">
-          <AdminField label={t('dashboard.cms.pageSections.fieldPage')}>
-            <select value={pageId} onChange={(e) => setPageId(e.target.value)} className={adminInputClass}>
-              {pages.map((page) => <option key={page.id} value={page.id}>{page.title}</option>)}
-            </select>
-          </AdminField>
-          <AdminField label={t('dashboard.cms.pageSections.fieldSection')}>
-            <select value={sectionId} onChange={(e) => setSectionId(e.target.value)} className={adminInputClass}>
-              {sections.map((section) => <option key={section.id} value={section.id}>{section.title}</option>)}
-            </select>
-          </AdminField>
-          <AdminField label={t('dashboard.cms.pageSections.fieldPriority')}><input value={priority} onChange={(e) => setPriority(e.target.value)} className={adminInputClass} dir="ltr" type="number" /></AdminField>
-          {error && <p className="text-sm text-sale">{error}</p>}
-          <div className="flex gap-3">
-            <Button variant="warm" onClick={() => void handleSave()} disabled={saving}>{t('dashboard.cms.pageSections.save')}</Button>
-            <Button variant="secondary" onClick={() => { resetForm(); setMode('list') }}>{t('dashboard.cms.pageSections.cancel')}</Button>
+        {formLoading ? (
+          <div className="flex justify-center py-16"><InlineLoading label={t('dashboard.cms.pageSections.loading')} /></div>
+        ) : (
+          <div className="space-y-5 rounded-sm border border-border bg-surface-muted/20 p-5">
+            <AdminField label={t('dashboard.cms.pageSections.fieldPage')}>
+              <select value={pageId} onChange={(e) => setPageId(e.target.value)} className={adminInputClass}>
+                {pages.map((page) => <option key={page.id} value={page.id}>{page.title}{page.slug ? ` (${page.slug})` : ''}</option>)}
+              </select>
+            </AdminField>
+            <AdminField label={t('dashboard.cms.pageSections.fieldSection')}>
+              <select value={sectionId} onChange={(e) => setSectionId(e.target.value)} className={adminInputClass}>
+                {sections.map((section) => (
+                  <option key={section.id} value={section.id}>
+                    {section.title}{section.sectionTypeName ? ` · ${section.sectionTypeName}` : ''}
+                  </option>
+                ))}
+              </select>
+            </AdminField>
+            <AdminField label={t('dashboard.cms.pageSections.fieldPriority')}><input value={priority} onChange={(e) => setPriority(e.target.value)} className={adminInputClass} dir="ltr" type="number" /></AdminField>
+            {error && <p className="text-sm text-sale">{error}</p>}
+            <div className="flex gap-3">
+              <Button variant="warm" onClick={() => void handleSave()} disabled={saving}>{t('dashboard.cms.pageSections.save')}</Button>
+              <Button variant="secondary" onClick={() => { resetForm(); setMode('list') }}>{t('dashboard.cms.pageSections.cancel')}</Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     )
   }
@@ -129,9 +159,17 @@ export function CmsPageSectionsPanel() {
           {items.map((item, index) => (
             <li key={item.id} className="flex items-center gap-3 px-4 py-3">
               <AdminRowNumber value={index + 1} />
-              <div className="flex-1">
-                <p className="font-medium">{pageTitleById.get(item.pageId) ?? item.pageId}</p>
-                <p className="text-xs text-text-muted">{sectionTitleById.get(item.sectionId) ?? item.sectionId} · {item.priority}</p>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium truncate">
+                  {item.pageTitle || item.pageId}
+                  <span className="mx-2 text-text-muted">→</span>
+                  {item.sectionTitle || item.sectionId}
+                </p>
+                <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-text-muted">
+                  <RelatedMetaLine label={t('dashboard.cms.pageSections.colPageSlug')} value={item.pageSlug} />
+                  <RelatedMetaLine label={t('dashboard.cms.pageSections.colSectionType')} value={item.sectionTypeName} />
+                  <span>{t('dashboard.cms.pageSections.colPriority')}: {item.priority}</span>
+                </p>
               </div>
               <AdminGridActions>
                 <AdminGridIconButton

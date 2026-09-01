@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
 using Edition.Application.Contracts.Localization;
+using Edition.Application.Features.Catalog.Services;
 using Microsoft.EntityFrameworkCore;
 using Store.Infrastructure.Persistence.Extensions;
-using Store.Infrastructure.Persistence;
 using Store.Domain.Dtos.Catalog;
 using Store.Domain.Dtos.Products;
 using Store.Domain.Dtos.Localization;
@@ -109,6 +109,8 @@ public class ProductRepository
                         .FirstOrDefault()
                     ?? string.Empty,
                 Images = x.ProductFiles!
+                    .OrderByDescending(file => file.IsMain)
+                    .ThenBy(file => file.Id)
                     .Select(file => new CheckoutProductImageDto
                     {
                         Url = file.FileName,
@@ -208,6 +210,21 @@ public class ProductRepository
             };
         }
 
+        var (collectionSlug, categoryPath) = ParseCollectionPrefix(normalizedPath);
+        if (collectionSlug is not null)
+        {
+            return await WithEnrichedProductsAsync(
+                await BuildCollectionListingAsync(
+                    collectionSlug,
+                    categoryPath,
+                    languageId,
+                    defaultLanguageId,
+                    cancellationToken),
+                languageId,
+                defaultLanguageId,
+                cancellationToken);
+        }
+
         var subCategoryMatch = await (
                 from translation in Context.SubCategoryTranslation.AsNoTracking()
                 join subCategory in Context.SubCategory.AsNoTracking() on translation.SubCategoryId equals subCategory.Id
@@ -250,12 +267,16 @@ public class ProductRepository
                 defaultLanguageId,
                 cancellationToken);
 
-            return new CatalogListingDto
-            {
-                Title = subCategoryTranslation.Title,
-                Breadcrumbs = breadcrumbs,
-                Products = products
-            };
+            return await WithEnrichedProductsAsync(
+                new CatalogListingDto
+                {
+                    Title = subCategoryTranslation.Title,
+                    Breadcrumbs = breadcrumbs,
+                    Products = products
+                },
+                languageId,
+                defaultLanguageId,
+                cancellationToken);
         }
 
         var categoryMatch = await (
@@ -292,12 +313,16 @@ public class ProductRepository
                 defaultLanguageId,
                 cancellationToken);
 
-            return new CatalogListingDto
-            {
-                Title = categoryTranslation.Title,
-                Breadcrumbs = breadcrumbs,
-                Products = products
-            };
+            return await WithEnrichedProductsAsync(
+                new CatalogListingDto
+                {
+                    Title = categoryTranslation.Title,
+                    Breadcrumbs = breadcrumbs,
+                    Products = products
+                },
+                languageId,
+                defaultLanguageId,
+                cancellationToken);
         }
 
         if (normalizedPath == "in-stock")
@@ -306,16 +331,20 @@ public class ProductRepository
             var title = await ResolveCollectionLabelAsync("in-stock", languageId, defaultLanguageId, cancellationToken);
             var products = await GetInStockCatalogProductsAsync(cancellationToken: cancellationToken);
 
-            return new CatalogListingDto
-            {
-                Title = title,
-                Breadcrumbs =
-                [
-                    new(homeLabel, "/"),
-                    new(title, "/in-stock")
-                ],
-                Products = products
-            };
+            return await WithEnrichedProductsAsync(
+                new CatalogListingDto
+                {
+                    Title = title,
+                    Breadcrumbs =
+                    [
+                        new(homeLabel, "/"),
+                        new(title, "/in-stock")
+                    ],
+                    Products = products
+                },
+                languageId,
+                defaultLanguageId,
+                cancellationToken);
         }
 
         if (normalizedPath == "best-sellers")
@@ -324,16 +353,20 @@ public class ProductRepository
             var title = await ResolveCollectionLabelAsync("best-sellers", languageId, defaultLanguageId, cancellationToken);
             var products = await GetBestSellingCatalogProductsAsync(cancellationToken: cancellationToken);
 
-            return new CatalogListingDto
-            {
-                Title = title,
-                Breadcrumbs =
-                [
-                    new(homeLabel, "/"),
-                    new(title, "/best-sellers")
-                ],
-                Products = products
-            };
+            return await WithEnrichedProductsAsync(
+                new CatalogListingDto
+                {
+                    Title = title,
+                    Breadcrumbs =
+                    [
+                        new(homeLabel, "/"),
+                        new(title, "/best-sellers")
+                    ],
+                    Products = products
+                },
+                languageId,
+                defaultLanguageId,
+                cancellationToken);
         }
 
         return new CatalogListingDto
@@ -877,6 +910,7 @@ public class ProductRepository
             CompareAtPrice = compareAtPrice,
             OnSale = compareAtPrice.HasValue && compareAtPrice > price,
             InStock = product.InStock,
+            IsNew = CatalogListingFilterProcessor.IsNewProduct(product.CreatedOnUtc),
             CategorySlug = categorySlug,
             SubCategorySlug = subCategorySlug,
         };
@@ -896,6 +930,9 @@ public class ProductRepository
         {
             "in-stock" => isFa ? "موجود و آماده ارسال" : "In Stock & Ready to Ship",
             "best-sellers" => isFa ? "پرفروش‌ها" : "Best Sellers",
+            "sale" => isFa ? "حراج" : "Sale",
+            "new" => isFa ? "محصولات جدید" : "New Arrivals",
+            "clearance" => isFa ? "تخفیف ویژه" : "Clearance",
             _ => collectionSlug
         };
     }
@@ -923,45 +960,9 @@ public class ProductRepository
             .OrderBy(product => product.Id)
             .ToListAsync(cancellationToken);
 
-        return rows.Select(product =>
-        {
-            var title = ResolveProductTranslation(product.Translations, languageId, defaultLanguageId, t => t.Title);
-            var slug = ResolveProductTranslation(product.Translations, languageId, defaultLanguageId, t => t.Slug);
-            var mainFile = product.ProductFiles
-                .OrderByDescending(file => file.IsMain)
-                .ThenBy(file => file.Id)
-                .FirstOrDefault();
-            var imageAlt = mainFile is null
-                ? title
-                : ResolveProductFileTranslation(mainFile.Translations, languageId, defaultLanguageId);
-            var price = product.Price;
-            var compareAtPrice = product.CompareAtPrice;
-            var categorySlug = ResolveCategoryTranslationValue(
-                product.SubCategory.Category.Translations,
-                languageId,
-                defaultLanguageId,
-                translation => translation.Slug);
-            var subCategorySlug = ResolveSubCategoryTranslationValue(
-                product.SubCategory.Translations,
-                languageId,
-                defaultLanguageId,
-                translation => translation.Slug);
-
-            return new CatalogListingProductDto
-            {
-                Id = product.Id,
-                Title = title,
-                Slug = slug,
-                ImageFileName = mainFile?.FileName ?? string.Empty,
-                ImageAlt = imageAlt,
-                Price = price,
-                CompareAtPrice = compareAtPrice,
-                OnSale = compareAtPrice.HasValue && compareAtPrice > price,
-                InStock = product.InStock,
-                CategorySlug = categorySlug,
-                SubCategorySlug = subCategorySlug
-            };
-        }).ToList();
+        return rows
+            .Select(product => MapToCatalogListingProductDto(product, languageId, defaultLanguageId))
+            .ToList();
     }
 
     private static string ResolveProductTranslation(
@@ -1123,5 +1124,411 @@ public class ProductRepository
                 })
             .Where(feature => !string.IsNullOrWhiteSpace(feature.Label) && !string.IsNullOrWhiteSpace(feature.Value))
             .ToListAsync(cancellationToken);
+    }
+
+    private static readonly HashSet<string> CollectionSlugs = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "sale", "new", "in-stock", "best-sellers", "clearance",
+    };
+
+    private static (string? Collection, string RemainingPath) ParseCollectionPrefix(string normalizedPath)
+    {
+        var segments = normalizedPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (segments.Length == 0 || !CollectionSlugs.Contains(segments[0]))
+            return (null, normalizedPath);
+
+        var collection = segments[0].ToLowerInvariant();
+        var remaining = segments.Length > 1 ? string.Join('/', segments.Skip(1)) : string.Empty;
+        return (collection, remaining);
+    }
+
+    private async Task<CatalogListingDto> WithEnrichedProductsAsync(
+        CatalogListingDto listing,
+        int languageId,
+        int defaultLanguageId,
+        CancellationToken cancellationToken)
+    {
+        if (!listing.PathNotFound && listing.Products.Count > 0)
+            await EnrichListingProductsAsync(listing, languageId, defaultLanguageId, cancellationToken);
+
+        return listing;
+    }
+
+    private async Task<CatalogListingDto> BuildCollectionListingAsync(
+        string collectionSlug,
+        string categoryPath,
+        int languageId,
+        int defaultLanguageId,
+        CancellationToken cancellationToken)
+    {
+        var homeLabel = await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken);
+        var collectionTitle = await ResolveCollectionLabelAsync(
+            collectionSlug,
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
+
+        List<CatalogListingProductDto> products;
+        List<CatalogBreadcrumbDto> breadcrumbs =
+        [
+            new(homeLabel, "/"),
+            new(collectionTitle, $"/{collectionSlug}"),
+        ];
+
+        if (string.IsNullOrWhiteSpace(categoryPath))
+        {
+            products = collectionSlug switch
+            {
+                "sale" or "clearance" => await LoadFilteredCatalogProductsAsync(
+                    product => product.CompareAtPrice != null && product.CompareAtPrice > product.Price,
+                    null,
+                    cancellationToken),
+                "new" => await LoadFilteredCatalogProductsAsync(
+                    product => product.CreatedOnUtc >= DateTime.UtcNow.AddDays(-90),
+                    null,
+                    cancellationToken),
+                "in-stock" => await GetInStockCatalogProductsAsync(cancellationToken: cancellationToken),
+                "best-sellers" => await GetBestSellingCatalogProductsAsync(cancellationToken: cancellationToken),
+                _ => [],
+            };
+        }
+        else
+        {
+            var scopedListing = await ResolveScopedCategoryListingAsync(
+                categoryPath,
+                languageId,
+                defaultLanguageId,
+                cancellationToken);
+
+            if (scopedListing.PathNotFound)
+                return scopedListing;
+
+            await EnrichListingProductsAsync(
+                scopedListing,
+                languageId,
+                defaultLanguageId,
+                cancellationToken);
+
+            products = collectionSlug switch
+            {
+                "sale" or "clearance" => scopedListing.Products.Where(product => product.OnSale).ToList(),
+                "new" => scopedListing.Products.Where(product => product.IsNew).ToList(),
+                "in-stock" => scopedListing.Products.Where(product => product.InStock).ToList(),
+                "best-sellers" => scopedListing.Products
+                    .OrderByDescending(product => product.PurchaseCount)
+                    .ThenByDescending(product => product.Id)
+                    .ToList(),
+                _ => scopedListing.Products,
+            };
+
+            breadcrumbs =
+            [
+                new(homeLabel, "/"),
+                new(collectionTitle, $"/{collectionSlug}"),
+                .. scopedListing.Breadcrumbs.Skip(1),
+            ];
+            collectionTitle = $"{collectionTitle} — {scopedListing.Title}";
+        }
+
+        return new CatalogListingDto
+        {
+            Title = collectionTitle,
+            Breadcrumbs = breadcrumbs,
+            Products = products,
+        };
+    }
+
+    private async Task<CatalogListingDto> ResolveScopedCategoryListingAsync(
+        string categoryPath,
+        int languageId,
+        int defaultLanguageId,
+        CancellationToken cancellationToken)
+    {
+        var normalizedPath = categoryPath.Trim().Trim('/').ToLowerInvariant();
+
+        var subCategoryMatch = await (
+                from translation in Context.SubCategoryTranslation.AsNoTracking()
+                join subCategory in Context.SubCategory.AsNoTracking() on translation.SubCategoryId equals subCategory.Id
+                join category in Context.Category.AsNoTracking() on subCategory.CategoryId equals category.Id
+                where subCategory.IsActive
+                      && category.IsActive
+                      && translation.Slug.ToLower() == normalizedPath
+                select new
+                {
+                    SubCategoryId = subCategory.Id,
+                    CategoryId = category.Id
+                })
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (subCategoryMatch is not null)
+        {
+            var categoryTranslation = await ResolveCategoryTranslationAsync(
+                subCategoryMatch.CategoryId,
+                languageId,
+                defaultLanguageId,
+                cancellationToken);
+            var subCategoryTranslation = await ResolveSubCategoryTranslationAsync(
+                subCategoryMatch.SubCategoryId,
+                languageId,
+                defaultLanguageId,
+                cancellationToken);
+            var homeLabel = await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken);
+            var products = await LoadCatalogProductsAsync(
+                [subCategoryMatch.SubCategoryId],
+                languageId,
+                defaultLanguageId,
+                cancellationToken);
+
+            return new CatalogListingDto
+            {
+                Title = subCategoryTranslation.Title,
+                Breadcrumbs =
+                [
+                    new(homeLabel, "/"),
+                    new(categoryTranslation.Title, $"/{categoryTranslation.Slug}"),
+                    new(subCategoryTranslation.Title, $"/{subCategoryTranslation.Slug}"),
+                ],
+                Products = products,
+            };
+        }
+
+        var categoryMatch = await (
+                from translation in Context.CategoryTranslation.AsNoTracking()
+                join category in Context.Category.AsNoTracking() on translation.CategoryId equals category.Id
+                where category.IsActive && translation.Slug.ToLower() == normalizedPath
+                select category.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (categoryMatch == default)
+        {
+            return new CatalogListingDto
+            {
+                PathNotFound = true,
+                Title = normalizedPath,
+            };
+        }
+
+        var categoryTranslationOnly = await ResolveCategoryTranslationAsync(
+            categoryMatch,
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
+        var subCategoryIds = await Context.SubCategory
+            .AsNoTracking()
+            .Where(x => x.IsActive && x.CategoryId == categoryMatch)
+            .Select(x => x.Id)
+            .ToListAsync(cancellationToken);
+        var home = await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken);
+        var categoryProducts = await LoadCatalogProductsAsync(
+            subCategoryIds,
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
+
+        return new CatalogListingDto
+        {
+            Title = categoryTranslationOnly.Title,
+            Breadcrumbs =
+            [
+                new(home, "/"),
+                new(categoryTranslationOnly.Title, $"/{categoryTranslationOnly.Slug}"),
+            ],
+            Products = categoryProducts,
+        };
+    }
+
+    private async Task EnrichListingProductsAsync(
+        CatalogListingDto listing,
+        int languageId,
+        int defaultLanguageId,
+        CancellationToken cancellationToken)
+    {
+        var products = listing.Products;
+        if (products.Count == 0)
+            return;
+
+        var productIds = products.Select(product => product.Id).Distinct().ToList();
+        var facetBatch = await LoadProductFacetsWithLabelsBatchAsync(
+            productIds,
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
+        var reviewStats = await LoadProductReviewStatsBatchAsync(productIds, cancellationToken);
+        var purchaseCounts = await LoadProductPurchaseCountsBatchAsync(productIds, cancellationToken);
+
+        listing.FacetLabels.GroupLabels.Clear();
+        foreach (var (key, label) in facetBatch.GroupLabels)
+            listing.FacetLabels.GroupLabels[key] = label;
+
+        listing.FacetLabels.OptionLabels.Clear();
+        foreach (var (facetKey, options) in facetBatch.OptionLabels)
+            listing.FacetLabels.OptionLabels[facetKey] = options;
+
+        foreach (var product in products)
+        {
+            if (facetBatch.FacetsByProductId.TryGetValue(product.Id, out var facets))
+            {
+                product.Facets.Clear();
+                foreach (var (key, values) in facets)
+                    product.Facets[key] = values;
+            }
+
+            if (reviewStats.TryGetValue(product.Id, out var review))
+            {
+                product.ReviewCount = review.ReviewCount;
+                product.AverageRating = review.AverageRating;
+            }
+
+            if (purchaseCounts.TryGetValue(product.Id, out var sold))
+                product.PurchaseCount = sold;
+        }
+    }
+
+    private sealed record ProductFacetBatchResult(
+        Dictionary<int, Dictionary<string, List<string>>> FacetsByProductId,
+        Dictionary<string, string> GroupLabels,
+        Dictionary<string, Dictionary<string, string>> OptionLabels);
+
+    private async Task<ProductFacetBatchResult> LoadProductFacetsWithLabelsBatchAsync(
+        IReadOnlyCollection<int> productIds,
+        int languageId,
+        int defaultLanguageId,
+        CancellationToken cancellationToken)
+    {
+        if (productIds.Count == 0)
+        {
+            return new ProductFacetBatchResult(
+                new Dictionary<int, Dictionary<string, List<string>>>(),
+                new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase),
+                new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase));
+        }
+
+        var rows = await (
+                from productProperty in Context.ProductProperty.AsNoTracking()
+                where productIds.Contains(productProperty.ProductId) && productProperty.IsActive
+                join property in Context.Property.AsNoTracking() on productProperty.PropertyId equals property.Id
+                where property.IsActive && property.ParentId == null
+                join propertyCategory in Context.PropertyCategory.AsNoTracking()
+                    on property.PropertyCategoryId equals propertyCategory.Id
+                where propertyCategory.IsActive
+                join propertyItem in Context.PropertyItem.AsNoTracking()
+                    on productProperty.PropertyItemId equals propertyItem.Id into propertyItems
+                from propertyItem in propertyItems.DefaultIfEmpty()
+                where productProperty.PropertyItemId == null || propertyItem.IsActive
+                select new
+                {
+                    productProperty.ProductId,
+                    FacetKey = propertyCategory.Code.ToLower(),
+                    GroupLabel = propertyCategory.Translations
+                        .Where(t => t.LanguageId == languageId)
+                        .Select(t => t.Title)
+                        .FirstOrDefault()
+                        ?? propertyCategory.Translations
+                            .Where(t => t.LanguageId == defaultLanguageId)
+                            .Select(t => t.Title)
+                            .FirstOrDefault()
+                        ?? propertyCategory.Code,
+                    Value = productProperty.PropertyItemId == null
+                        ? string.Empty
+                        : propertyItem.Code.ToLower(),
+                    OptionLabel = productProperty.PropertyItemId == null
+                        ? string.Empty
+                        : propertyItem.Translations
+                            .Where(t => t.LanguageId == languageId)
+                            .Select(t => t.Title)
+                            .FirstOrDefault()
+                            ?? propertyItem.Translations
+                                .Where(t => t.LanguageId == defaultLanguageId)
+                                .Select(t => t.Title)
+                                .FirstOrDefault()
+                            ?? propertyItem.Code,
+                })
+            .Where(row => !string.IsNullOrWhiteSpace(row.Value))
+            .ToListAsync(cancellationToken);
+
+        var facetsByProductId = new Dictionary<int, Dictionary<string, List<string>>>();
+        var groupLabels = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var optionLabels = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var row in rows)
+        {
+            if (!string.IsNullOrWhiteSpace(row.GroupLabel))
+                groupLabels[row.FacetKey] = row.GroupLabel;
+
+            if (!optionLabels.TryGetValue(row.FacetKey, out var facetOptions))
+            {
+                facetOptions = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                optionLabels[row.FacetKey] = facetOptions;
+            }
+
+            if (!string.IsNullOrWhiteSpace(row.OptionLabel))
+                facetOptions[row.Value] = row.OptionLabel;
+
+            if (!facetsByProductId.TryGetValue(row.ProductId, out var facets))
+            {
+                facets = new Dictionary<string, List<string>>(StringComparer.OrdinalIgnoreCase);
+                facetsByProductId[row.ProductId] = facets;
+            }
+
+            if (!facets.TryGetValue(row.FacetKey, out var values))
+            {
+                values = [];
+                facets[row.FacetKey] = values;
+            }
+
+            if (!values.Contains(row.Value, StringComparer.OrdinalIgnoreCase))
+                values.Add(row.Value);
+        }
+
+        return new ProductFacetBatchResult(facetsByProductId, groupLabels, optionLabels);
+    }
+
+    private async Task<Dictionary<int, (int ReviewCount, double? AverageRating)>> LoadProductReviewStatsBatchAsync(
+        IReadOnlyCollection<int> productIds,
+        CancellationToken cancellationToken)
+    {
+        if (productIds.Count == 0)
+            return new Dictionary<int, (int ReviewCount, double? AverageRating)>();
+
+        var rows = await Context.ProductComment
+            .AsNoTracking()
+            .Where(comment =>
+                productIds.Contains(comment.ProductId)
+                && comment.IsActive
+                && comment.ParentId == null)
+            .GroupBy(comment => comment.ProductId)
+            .Select(group => new
+            {
+                ProductId = group.Key,
+                ReviewCount = group.Count(),
+                AverageRating = group.Average(comment => (double)comment.CommentRate),
+            })
+            .ToListAsync(cancellationToken);
+
+        return rows.ToDictionary(
+            row => row.ProductId,
+            row => (row.ReviewCount, (double?)row.AverageRating));
+    }
+
+    private async Task<Dictionary<int, int>> LoadProductPurchaseCountsBatchAsync(
+        IReadOnlyCollection<int> productIds,
+        CancellationToken cancellationToken)
+    {
+        if (productIds.Count == 0)
+            return new Dictionary<int, int>();
+
+        return await Context.OrderItem
+            .AsNoTracking()
+            .Where(item =>
+                productIds.Contains(item.ProductId)
+                && (item.Order.Status == OrderStatusType.Completed
+                    || item.Order.Status == OrderStatusType.InProgress))
+            .GroupBy(item => item.ProductId)
+            .Select(group => new
+            {
+                ProductId = group.Key,
+                Sold = group.Sum(item => item.Quantity),
+            })
+            .ToDictionaryAsync(row => row.ProductId, row => row.Sold, cancellationToken);
     }
 }

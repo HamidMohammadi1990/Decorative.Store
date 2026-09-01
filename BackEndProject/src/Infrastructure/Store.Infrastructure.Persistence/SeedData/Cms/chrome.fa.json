@@ -1,0 +1,66 @@
+{
+  "promoAnnouncement": {
+    "id": "content-promo",
+    "message": "مشاوره طراحی رایگان — همین امروز وقت رزرو کنید",
+    "link": { "label": "اطلاعات بیشتر", "href": "/design-services" }
+  },
+  "utilityBar": {
+    "phoneLabel": "تماس: ۰۸۰۰ ۴۰۴ ۹۷۸۰",
+    "phoneHref": "tel:08004049780",
+    "links": [
+      { "label": "درباره ما", "href": "/about" },
+      { "label": "پیگیری سفارش", "href": "/track-order" }
+    ]
+  },
+  "header": {
+    "brandLabel": "دیبا گالری",
+    "searchPlaceholder": "جستجوی مبلمان، فرش، روشنایی…",
+    "accountLabel": "ورود",
+    "cartLabel": "سبد خرید"
+  },
+  "footer": {
+    "columns": [
+      {
+        "title": "خدمات مشتری",
+        "links": [
+          { "label": "تماس با ما", "href": "/contact" },
+          { "label": "مرجوعی و تعویض", "href": "/returns" },
+          { "label": "اطلاعات ارسال", "href": "/delivery" }
+        ]
+      },
+      {
+        "title": "منابع",
+        "links": [
+          { "label": "تحویل در فروشگاه", "href": "/click-collect" },
+          { "label": "خدمات طراحی", "href": "/design-services" },
+          { "label": "مجله", "href": "/blog" }
+        ]
+      },
+      {
+        "title": "بیشتر درباره ما",
+        "links": [
+          { "label": "درباره ما", "href": "/about" },
+          { "label": "پایداری", "href": "/sustainability" },
+          { "label": "فرصت‌های شغلی", "href": "/careers" },
+          { "label": "یافتن شعبه", "href": "/stores" }
+        ]
+      },
+      {
+        "title": "خدمات طراحی",
+        "links": [
+          { "label": "ملاقات با تیم طراحی", "href": "/design-services" },
+          { "label": "دیبا گالری TRADE", "href": "/trade" }
+        ]
+      }
+    ],
+    "newsletterTitle": "حراج‌ها و محصولات جدید",
+    "newsletterPlaceholder": "آدرس ایمیل",
+    "newsletterButton": "عضویت",
+    "copyright": "© ۱۴۰۵ دیبا گالری. تمامی حقوق محفوظ است",
+    "legalLinks": [
+      { "label": "شرایط و ضوابط", "href": "/terms" },
+      { "label": "حریم خصوصی", "href": "/privacy" },
+      { "label": "بیانیه حقوقی", "href": "/legal" }
+    ]
+  }
+}

@@ -1,3 +1,4 @@
+using Edition.Application.Common.Directories;
 using Edition.Application.Features.Orders.Commands;
 using Store.Domain.Dtos.Orders;
 using Store.Domain.Entities;
@@ -26,7 +27,9 @@ internal static class CartResponseMapper
                 ProductId = orderItem.ProductId,
                 Slug = summary?.Slug ?? string.Empty,
                 Title = summary?.Title ?? string.Empty,
-                ImageUrl = image?.Url,
+                ImageUrl = string.IsNullOrWhiteSpace(image?.Url)
+                    ? null
+                    : ProductDirectory.GetImageUrl(image.Url),
                 ImageAlt = image?.Title,
                 Quantity = orderItem.Quantity,
                 UnitPrice = orderItem.ProductPrice,

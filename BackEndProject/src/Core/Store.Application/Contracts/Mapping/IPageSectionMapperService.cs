@@ -10,6 +10,6 @@ public interface IPageSectionMapperService : IMapper
     GetPageSectionResponse Map(PageSection model);
     GetAllPageSectionRequestDto Map(GetAllPageSectionRequest model);
     SearchPageSectionRequestDto Map(SearchPageSectionRequest model);
-    PagedResult<GetAllPageSectionResponse> Map(PagedResult<PageSection> model);
+    PagedResult<GetAllPageSectionResponse> Map(PagedResult<GetAllPageSectionResponseDto> model);
     PagedResult<SearchPageSectionResponse> MapToSearch(PagedResult<PageSection> model);
 }

@@ -1,0 +1,129 @@
+{
+  "promoAnnouncement": {
+    "id": "contact-promo",
+    "message": "مشاوره طراحی رایگان — همین امروز وقت رزرو کنید",
+    "link": { "label": "اطلاعات بیشتر", "href": "/design-services" }
+  },
+  "utilityBar": {
+    "phoneLabel": "تماس: ۰۸۰۰ ۴۰۴ ۹۷۸۰",
+    "phoneHref": "tel:08004049780",
+    "links": [
+      { "label": "درباره ما", "href": "/about" },
+      { "label": "پیگیری سفارش", "href": "/track-order" }
+    ]
+  },
+  "header": {
+    "brandLabel": "دیبا گالری",
+    "searchPlaceholder": "جستجوی مبلمان، فرش، روشنایی…",
+    "accountLabel": "ورود",
+    "cartLabel": "سبد خرید"
+  },
+  "footer": {
+    "columns": [
+      {
+        "title": "خدمات مشتری",
+        "links": [
+          { "label": "تماس با ما", "href": "/contact" },
+          { "label": "مرجوعی و تعویض", "href": "/returns" },
+          { "label": "اطلاعات ارسال", "href": "/delivery" }
+        ]
+      },
+      {
+        "title": "منابع",
+        "links": [
+          { "label": "تحویل در فروشگاه", "href": "/click-collect" },
+          { "label": "خدمات طراحی", "href": "/design-services" },
+          { "label": "مجله", "href": "/blog" }
+        ]
+      },
+      {
+        "title": "بیشتر درباره ما",
+        "links": [
+          { "label": "درباره ما", "href": "/about" },
+          { "label": "پایداری", "href": "/sustainability" },
+          { "label": "فرصت‌های شغلی", "href": "/careers" },
+          { "label": "یافتن شعبه", "href": "/stores" }
+        ]
+      },
+      {
+        "title": "خدمات طراحی",
+        "links": [
+          { "label": "ملاقات با تیم طراحی", "href": "/design-services" },
+          { "label": "دیبا گالری TRADE", "href": "/trade" }
+        ]
+      }
+    ],
+    "newsletterTitle": "حراج‌ها و محصولات جدید",
+    "newsletterPlaceholder": "آدرس ایمیل",
+    "newsletterButton": "عضویت",
+    "copyright": "© ۱۴۰۵ دیبا گالری. تمامی حقوق محفوظ است",
+    "legalLinks": [
+      { "label": "شرایط و ضوابط", "href": "/terms" },
+      { "label": "حریم خصوصی", "href": "/privacy" },
+      { "label": "بیانیه حقوقی", "href": "/legal" }
+    ]
+  },
+  "contactHero": {
+    "eyebrow": "در کنار شما هستیم",
+    "title": "تماس با ما",
+    "subtitle": "سؤالی درباره سفارش، ارسال یا پروژه طراحی دارید؟ تیم ما از طریق تلفن، ایمیل یا مراجعه حضوری پاسخگوست."
+  },
+  "contactMethods": {
+    "heading": "راه‌های ارتباط",
+    "items": [
+      {
+        "id": "phone",
+        "title": "تلفن",
+        "description": "شنبه تا پنج‌شنبه ۹ تا ۱۸ · جمعه ۱۰ تا ۱۶",
+        "href": "tel:08004049780"
+      },
+      {
+        "id": "email",
+        "title": "ایمیل",
+        "description": "پاسخ در کمتر از یک روز کاری",
+        "href": "mailto:support@dibagallery.com"
+      },
+      {
+        "id": "chat",
+        "title": "چت آنلاین",
+        "description": "در ساعات کاری از طریق وب‌سایت",
+        "href": "/"
+      },
+      {
+        "id": "design",
+        "title": "مشاوره طراحی",
+        "description": "رزرو جلسه رایگان با تیم طراحی",
+        "href": "/design-services"
+      }
+    ]
+  },
+  "contactLocations": {
+    "heading": "مراجعه به شوروم",
+    "items": [
+      {
+        "title": "تهران — ونک",
+        "address": "میدان ونک، پلاک ۱۲، تهران",
+        "hours": "شنبه تا پنج‌شنبه ۱۰ تا ۲۰ · جمعه ۱۶ تا ۲۱",
+        "mapHref": "https://maps.google.com"
+      },
+      {
+        "title": "اصفهان — چهارباغ",
+        "address": "خیابان چهارباغ عباسی، اصفهان",
+        "hours": "شنبه تا پنج‌شنبه ۱۰ تا ۱۹ · جمعه تعطیل",
+        "mapHref": "https://maps.google.com"
+      },
+      {
+        "title": "شیراز — زند",
+        "address": "خیابان زند، نزدیک ارگ کریم‌خان، شیراز",
+        "hours": "شنبه تا پنج‌شنبه ۱۰ تا ۱۹ · جمعه ۱۷ تا ۲۱",
+        "mapHref": "https://maps.google.com"
+      }
+    ]
+  },
+  "contactFormIntro": {
+    "heading": "ارسال پیام",
+    "lead": "فرم را پر کنید تا در اسرع وقت پاسخ دهیم.",
+    "email": "support@dibagallery.com",
+    "note": "برای مسائل فوری سفارش، لطفاً تماس بگیرید تا سریع‌تر راهنمایی شوید."
+  }
+}

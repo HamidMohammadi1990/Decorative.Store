@@ -7,7 +7,7 @@ namespace Store.Domain.Repositories;
 
 public interface IPageSectionRepository
 {
-    Task<PagedResult<PageSection>> GetAllAsync(GetAllPageSectionRequestDto request);
+    Task<PagedResult<GetAllPageSectionResponseDto>> GetAllAsync(GetAllPageSectionRequestDto request, CancellationToken cancellationToken = default);
     Task<PagedResult<PageSection>> SearchAsync(SearchPageSectionRequestDto request);
     void Add(PageSection model);
     void Remove(PageSection model);

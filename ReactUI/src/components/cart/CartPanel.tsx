@@ -160,15 +160,23 @@ export function CartPanel({ embedded = false }: CartPanelProps) {
         </div>
       )}
 
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_22rem] xl:grid-cols-[minmax(0,1fr)_24rem]">
-        <section className="overflow-hidden rounded-sm border border-border bg-surface shadow-sm">
-          <div className="hidden border-b border-border bg-surface-muted/50 px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted sm:grid sm:grid-cols-[minmax(0,1fr)_7rem_9rem_8rem_3rem] sm:gap-4">
-            <span>{t('cartPage.colProduct')}</span>
-            <span className="text-end">{t('cartPage.colUnitPrice')}</span>
-            <span className="text-center">{t('common.quantity')}</span>
-            <span className="text-end">{t('cartPage.colTotal')}</span>
-            <span className="sr-only">{t('cartPage.colRemove')}</span>
-          </div>
+      <div
+        className={`grid gap-6 ${
+          embedded
+            ? 'lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,17rem)] lg:items-start xl:grid-cols-[minmax(0,1fr)_18rem]'
+            : 'lg:grid-cols-[minmax(0,1fr)_22rem] xl:grid-cols-[minmax(0,1fr)_24rem]'
+        }`}
+      >
+        <section className={embedded ? 'space-y-3' : 'overflow-hidden rounded-sm border border-border bg-surface shadow-sm'}>
+          {!embedded && (
+            <div className="hidden border-b border-border bg-surface-muted/50 px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-text-muted lg:grid lg:grid-cols-[minmax(0,1fr)_7rem_9rem_8rem_3rem] lg:gap-4">
+              <span>{t('cartPage.colProduct')}</span>
+              <span className="text-end">{t('cartPage.colUnitPrice')}</span>
+              <span className="text-center">{t('common.quantity')}</span>
+              <span className="text-end">{t('cartPage.colTotal')}</span>
+              <span className="sr-only">{t('cartPage.colRemove')}</span>
+            </div>
+          )}
 
           <div className={mutating ? 'pointer-events-none opacity-70' : undefined}>
             {lines.map((line) => (
@@ -176,6 +184,7 @@ export function CartPanel({ embedded = false }: CartPanelProps) {
                 key={line.lineId}
                 line={line}
                 currency={currency}
+                embedded={embedded}
                 disabled={mutating}
                 onRemove={() => void handleRemoveLine(line.lineId, line.title)}
                 onUpdateQuantity={(quantity) => void updateQuantity(line.lineId, quantity)}
@@ -184,8 +193,9 @@ export function CartPanel({ embedded = false }: CartPanelProps) {
           </div>
         </section>
 
-        <aside>
+        <aside className={embedded ? 'lg:sticky lg:top-24 lg:self-start' : undefined}>
           <CartOrderSummary
+            embedded={embedded}
             totals={totals}
             currency={currency}
             summary={summary}

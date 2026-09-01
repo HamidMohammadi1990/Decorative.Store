@@ -588,4 +588,22 @@
   <data name="PermissionType_ApproveUserStoryComment" xml:space="preserve"><value>Approve User Story Comment</value></data>
   <data name="PermissionType_ListUserStoryComment" xml:space="preserve"><value>List User Story Comment</value></data>
   <data name="PermissionType_GetUserStoryCommentById" xml:space="preserve"><value>Get User Story Comment By Id</value></data>
+  <data name="PermissionType_ManageProfileCompletionGroup" xml:space="preserve"><value>Manage Profile Completion Group</value></data>
+  <data name="PermissionType_ManageProfileCompletion" xml:space="preserve"><value>Manage Profile Completion</value></data>
+  <data name="PermissionType_GetProfileCompletionConfig" xml:space="preserve"><value>Get Profile Completion Config</value></data>
+  <data name="PermissionType_UpdateProfileCompletionConfig" xml:space="preserve"><value>Update Profile Completion Config</value></data>
+  <data name="PermissionType_ListProfileCompletionUserState" xml:space="preserve"><value>List Profile Completion User States</value></data>
+  <data name="PermissionType_GetProfileCompletionUserState" xml:space="preserve"><value>Get Profile Completion User State</value></data>
+  <data name="PermissionType_UpdateProfileCompletionUserState" xml:space="preserve"><value>Update Profile Completion User State</value></data>
+  <data name="PermissionType_DeleteProfileCompletionUserState" xml:space="preserve"><value>Delete Profile Completion User State</value></data>
+  <data name="PermissionType_ManageMarketingPromoGroup" xml:space="preserve"><value>Manage Marketing Promo Group</value></data>
+  <data name="PermissionType_ManageMarketingPromo" xml:space="preserve"><value>Manage Marketing Promo</value></data>
+  <data name="PermissionType_CreateMarketingPromo" xml:space="preserve"><value>Create Marketing Promo</value></data>
+  <data name="PermissionType_UpdateMarketingPromo" xml:space="preserve"><value>Update Marketing Promo</value></data>
+  <data name="PermissionType_DeleteMarketingPromo" xml:space="preserve"><value>Delete Marketing Promo</value></data>
+  <data name="PermissionType_ListMarketingPromo" xml:space="preserve"><value>List Marketing Promo</value></data>
+  <data name="PermissionType_GetMarketingPromoById" xml:space="preserve"><value>Get Marketing Promo By Id</value></data>
+  <data name="PermissionType_UpdateMarketingPromoDisclaimer" xml:space="preserve"><value>Update Marketing Promo Disclaimer</value></data>
+  <data name="MarketingPromoType_Sale" xml:space="preserve"><value>Sale</value></data>
+  <data name="MarketingPromoType_NewArrival" xml:space="preserve"><value>New Arrival</value></data>
 </root>

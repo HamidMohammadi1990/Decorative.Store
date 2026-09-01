@@ -1,0 +1,39 @@
+{
+  "page": {
+    "title": "Privacy Policy",
+    "metaTitle": "Privacy Policy — Diba Gallery",
+    "metaDescription": "How Diba Gallery collects, uses, and protects your personal data."
+  },
+  "contentHero": {
+    "eyebrow": "Your privacy",
+    "title": "Privacy policy",
+    "subtitle": "We respect your data and explain clearly how we use it when you shop or browse with us."
+  },
+  "contentBlocks": [
+    {
+      "heading": "Information we collect",
+      "lead": "When you create an account, place an order, or subscribe to our newsletter, we may collect:",
+      "paragraphs": [
+        "Name, email address, phone number, and delivery address",
+        "Order history and payment confirmation details (we do not store full card numbers)",
+        "Device and browsing data to improve site performance and security"
+      ]
+    },
+    {
+      "heading": "How we use your data",
+      "paragraphs": [
+        "To fulfil orders, provide customer support, and send service-related updates",
+        "To personalise recommendations when you opt in to marketing",
+        "To comply with legal obligations and prevent fraud"
+      ]
+    },
+    {
+      "heading": "Your choices",
+      "paragraphs": [
+        "You can update account details anytime from your dashboard.",
+        "Unsubscribe from marketing emails using the link in any message or contact us.",
+        "Request access or deletion of personal data by emailing support@dibagallery.com."
+      ]
+    }
+  ]
+}

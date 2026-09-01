@@ -1,0 +1,117 @@
+namespace Edition.Application.Features.ProfileCompletion.Models;
+
+public static class ProfileCompletionDefaults
+{
+    public const string ConfigJson =
+        """
+        {
+          "campaignId": "profile-completion-2026",
+          "titles": { "fa": "تکمیل پروفایل", "en": "Complete your profile" },
+          "subtitles": {
+            "fa": "به ما کمک کنید تجربه خرید شما را شخصی‌سازی کنیم — با تکمیل سوالات، جایزه بگیرید.",
+            "en": "Help us personalise your experience — unlock a reward when you're done."
+          },
+          "reward": {
+            "type": "percent_discount",
+            "value": 5,
+            "code": "PROFILE5",
+            "validDays": 30,
+            "descriptions": { "fa": "۵٪ تخفیف خرید بعدی", "en": "5% off your next order" }
+          },
+          "questions": [
+            {
+              "id": "birth-date",
+              "type": "date",
+              "required": true,
+              "order": 1,
+              "labels": { "fa": "تاریخ تولد", "en": "Date of birth" },
+              "hints": { "fa": "برای هدیه تولد از ما.", "en": "We'll send you a little birthday surprise." },
+              "placeholders": { "fa": "", "en": "" },
+              "options": []
+            },
+            {
+              "id": "phone",
+              "type": "tel",
+              "required": true,
+              "order": 2,
+              "labels": { "fa": "شماره موبایل", "en": "Mobile number" },
+              "hints": {
+                "fa": "برای اطلاع‌رسانی سفارش و پیشنهادهای ویژه پیامکی.",
+                "en": "For order updates and exclusive SMS offers."
+              },
+              "placeholders": { "fa": "۰۹۱۲ xxx xxxx", "en": "09xx xxx xxxx" },
+              "options": []
+            },
+            {
+              "id": "home-style",
+              "type": "single_select",
+              "required": true,
+              "order": 3,
+              "labels": {
+                "fa": "کدام سبک بیشتر به خانه شما نزدیک است؟",
+                "en": "Which style best describes your home?"
+              },
+              "hints": { "fa": "", "en": "" },
+              "placeholders": { "fa": "", "en": "" },
+              "options": [
+                { "value": "modern", "labels": { "fa": "مدرن و مینیمال", "en": "Modern & minimal" } },
+                { "value": "classic", "labels": { "fa": "کلاسیک و ماندگار", "en": "Classic & timeless" } },
+                { "value": "warm", "labels": { "fa": "گرم و دنج", "en": "Warm & cosy" } },
+                { "value": "eclectic", "labels": { "fa": "هنری و متنوع", "en": "Eclectic & artistic" } }
+              ]
+            },
+            {
+              "id": "shopping-rooms",
+              "type": "multi_select",
+              "required": true,
+              "order": 4,
+              "labels": {
+                "fa": "برای کدام فضاها خرید می‌کنید؟",
+                "en": "Which rooms are you shopping for?"
+              },
+              "hints": { "fa": "همه موارد مرتبط را انتخاب کنید.", "en": "Select all that apply." },
+              "placeholders": { "fa": "", "en": "" },
+              "options": [
+                { "value": "living", "labels": { "fa": "پذیرایی", "en": "Living room" } },
+                { "value": "bedroom", "labels": { "fa": "اتاق خواب", "en": "Bedroom" } },
+                { "value": "dining", "labels": { "fa": "ناهارخوری", "en": "Dining" } },
+                { "value": "office", "labels": { "fa": "دفتر کار خانگی", "en": "Home office" } },
+                { "value": "outdoor", "labels": { "fa": "فضای باز و حیاط", "en": "Outdoor & patio" } }
+              ]
+            },
+            {
+              "id": "budget",
+              "type": "single_select",
+              "required": true,
+              "order": 5,
+              "labels": { "fa": "بودجه معمول برای هر کالا", "en": "Typical budget per item" },
+              "hints": { "fa": "", "en": "" },
+              "placeholders": { "fa": "", "en": "" },
+              "options": [
+                { "value": "under-5m", "labels": { "fa": "زیر ۵ میلیون تومان", "en": "Under 5M Toman" } },
+                { "value": "5m-15m", "labels": { "fa": "۵ تا ۱۵ میلیون تومان", "en": "5M – 15M Toman" } },
+                { "value": "15m-30m", "labels": { "fa": "۱۵ تا ۳۰ میلیون تومان", "en": "15M – 30M Toman" } },
+                { "value": "30m-plus", "labels": { "fa": "بیش از ۳۰ میلیون تومان", "en": "30M+ Toman" } }
+              ]
+            },
+            {
+              "id": "referral",
+              "type": "single_select",
+              "required": true,
+              "order": 6,
+              "labels": { "fa": "از کجا با ما آشنا شدید؟", "en": "How did you hear about us?" },
+              "hints": { "fa": "", "en": "" },
+              "placeholders": { "fa": "", "en": "" },
+              "options": [
+                { "value": "instagram", "labels": { "fa": "اینستاگرام", "en": "Instagram" } },
+                { "value": "friend", "labels": { "fa": "دوستان یا خانواده", "en": "Friend or family" } },
+                { "value": "search", "labels": { "fa": "جستجو در گوگل", "en": "Google search" } },
+                { "value": "store", "labels": { "fa": "مراجعه به شعبه", "en": "Visited a store" } },
+                { "value": "other", "labels": { "fa": "سایر", "en": "Other" } }
+              ]
+            }
+          ]
+        }
+        """;
+}
+

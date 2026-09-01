@@ -230,6 +230,21 @@ export function ProductImagesPanel({
     }
   }
 
+  const handleSetMain = async (item: AdminProductFile) => {
+    if (!accessToken || accessToken === 'mock-access-token' || item.isMain) return
+
+    setSaving(true)
+    setError(null)
+    try {
+      await adminProductFileService.setMain(accessToken, contentLocale, item.id)
+      await loadImages()
+    } catch (err) {
+      setError(resolveAdminMutationError(err, t('dashboard.productImages.setMainFailed')))
+    } finally {
+      setSaving(false)
+    }
+  }
+
   const handleDelete = async (id: string) => {
     if (!accessToken || accessToken === 'mock-access-token') return
     if (!(await confirm({ message: t('dashboard.productImages.deleteConfirm') }))) return
@@ -408,6 +423,21 @@ export function ProductImagesPanel({
                   />
                 </div>
                 <div className="min-w-0 flex-1">
+                  <div className="flex items-start gap-2">
+                    <label
+                      className="mt-0.5 flex shrink-0 cursor-pointer items-center"
+                      title={t('dashboard.productImages.setMainHint')}
+                    >
+                      <input
+                        type="radio"
+                        name={`product-main-${selectedProductId}`}
+                        checked={item.isMain}
+                        onChange={() => void handleSetMain(item)}
+                        disabled={saving || item.isMain}
+                        className="size-4 border-border text-warm focus:ring-warm"
+                      />
+                    </label>
+                    <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-text">
                     {item.title || item.fileName}
                   </p>
@@ -428,6 +458,8 @@ export function ProductImagesPanel({
                         ? t('dashboard.productImages.statusActive')
                         : t('dashboard.productImages.statusInactive')}
                     </span>
+                  </div>
+                    </div>
                   </div>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
