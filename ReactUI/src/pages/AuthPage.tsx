@@ -5,6 +5,7 @@ import { AuthTab } from '@/components/auth/AuthTab'
 import { LoginForm } from '@/components/auth/LoginForm'
 import { SignupForm } from '@/components/auth/SignupForm'
 import { resolveReturnUrl } from '@/extensions/resolveReturnUrl'
+import { useShopPageMeta } from '@/hooks/useShopPageMeta'
 import { useUserStore } from '@/stores/userStore'
 
 type AuthMode = 'signin' | 'signup'
@@ -16,6 +17,12 @@ export function AuthPage() {
   const returnUrl = resolveReturnUrl(searchParams.get('returnUrl'))
   const initialMode = searchParams.get('mode') === 'signup' ? 'signup' : 'signin'
   const [mode, setMode] = useState<AuthMode>(initialMode)
+
+  useShopPageMeta({
+    title: mode === 'signup' ? t('auth.signUpTitle') : t('auth.signInTitle'),
+    noindex: true,
+    path: '/account',
+  })
 
   useEffect(() => {
     setMode(searchParams.get('mode') === 'signup' ? 'signup' : 'signin')

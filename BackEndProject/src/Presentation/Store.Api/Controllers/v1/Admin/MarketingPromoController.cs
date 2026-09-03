@@ -49,6 +49,12 @@ public class MarketingPromoController
     public async Task<ApiResult<OperationResult>> Delete(DeleteMarketingPromoRequest request)
         => await mediator.Send(request);
 
+    [ActionInfo(PermissionType.CreateMarketingPromo)]
+    [HttpPost("upload-image")]
+    [RequestSizeLimit(5 * 1024 * 1024)]
+    public async Task<ApiResult<UploadMarketingPromoImageResponse>> UploadImage([FromForm] IFormFile image)
+        => await mediator.Send(new UploadMarketingPromoImageCommand(image));
+
     [ActionInfo(PermissionType.UpdateMarketingPromoDisclaimer)]
     [HttpPut("update-disclaimer")]
     public async Task<ApiResult<OperationResult>> UpdateDisclaimer(UpdateMarketingStripDisclaimerRequest request)

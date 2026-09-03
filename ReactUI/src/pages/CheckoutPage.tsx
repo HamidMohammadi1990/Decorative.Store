@@ -31,6 +31,7 @@ import { mergeCheckoutAddresses } from '@/extensions/mapCheckoutAddress'
 import { validateCheckoutProperties } from '@/extensions/validateCheckoutProperties'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
 import { useCheckoutData } from '@/hooks/useCheckoutData'
+import { useShopPageMeta } from '@/hooks/useShopPageMeta'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import type { SavedAddress } from '@/models/address/savedAddress.model'
 import { useAddressStore } from '@/stores/addressStore'
@@ -57,6 +58,13 @@ function createOrderRef() {
 
 export function CheckoutPage() {
   const { t } = useTranslation()
+
+  useShopPageMeta({
+    title: t('checkout.title', { defaultValue: 'Checkout' }),
+    noindex: true,
+    path: '/checkout',
+  })
+
   const { currency } = useLocaleSettings()
   const lines = useCartStore((s) => s.lines)
   const closeCart = useCartStore((s) => s.closeCart)

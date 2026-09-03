@@ -62,4 +62,5 @@ public static class SecurityKeyConstant
     public static string UserStoryLike => SecurityKeyRegistry.Get(nameof(UserStoryLike));
     public static string AssistantFaq => SecurityKeyRegistry.Get(nameof(AssistantFaq));
     public static string MarketingPromo => SecurityKeyRegistry.Get(nameof(MarketingPromo));
+    public static string RoomType => SecurityKeyRegistry.Get(nameof(RoomType));
 }

@@ -16,9 +16,12 @@ import { InlineLoading } from '@/components/ui/Spinner'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
 import { adminSectionItemService } from '@/services/adminSectionItemService'
 import { adminSectionService } from '@/services/adminSectionService'
+import { adminCmsMediaService, resolveCmsImageSrc } from '@/services/adminCmsMediaService'
 import { useUserStore } from '@/stores/userStore'
 
 type Mode = 'list' | 'create' | 'edit'
+
+const MAX_FILE_MB = 5
 
 function RelatedMetaLine({ label, value }: { label: string; value?: string | null }) {
   if (!value?.trim()) return null
@@ -46,6 +49,9 @@ export function CmsSectionItemsPanel() {
   const [priority, setPriority] = useState('0')
   const [url, setUrl] = useState('')
   const [description, setDescription] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
+  const [imagePreview, setImagePreview] = useState('')
+  const [uploading, setUploading] = useState(false)
   const [isActive, setIsActive] = useState(true)
 
   const loadList = useCallback(async () => {
@@ -93,8 +99,32 @@ export function CmsSectionItemsPanel() {
   }, [languageLoading, loadFormOptions, mode])
 
   const resetForm = () => {
-    setTitle(''); setPriority('0'); setUrl(''); setDescription(''); setIsActive(true); setEditingId(null); setError(null)
+    setTitle(''); setPriority('0'); setUrl(''); setDescription(''); setImageUrl(''); setImagePreview(''); setIsActive(true); setEditingId(null); setError(null)
     if (sections[0]) setSectionId(sections[0].id)
+  }
+
+  const handleImagePick = async (file: File | null) => {
+    if (!file) return
+    if (file.size > MAX_FILE_MB * 1024 * 1024) {
+      setError(t('dashboard.cms.sectionItems.fileTooLarge', { max: MAX_FILE_MB }))
+      return
+    }
+    if (!accessToken || accessToken === 'mock-access-token') {
+      setError(t('dashboard.cms.sectionItems.authRequired'))
+      return
+    }
+
+    setUploading(true)
+    setError(null)
+    try {
+      const uploaded = await adminCmsMediaService.uploadSectionItemImage(accessToken, locale, file)
+      setImageUrl(uploaded.imageUrl)
+      setImagePreview(resolveCmsImageSrc(uploaded.imageUrl))
+    } catch (err) {
+      setError(resolveAdminMutationError(err, t('dashboard.cms.sectionItems.uploadFailed')))
+    } finally {
+      setUploading(false)
+    }
   }
 
   const handleSave = async () => {
@@ -111,6 +141,7 @@ export function CmsSectionItemsPanel() {
         priority: Number(priority) || 0,
         url: url.trim() || undefined,
         description: description.trim() || undefined,
+        imageUrl: imageUrl.trim() || undefined,
         isActive,
       }
       if (mode === 'edit' && editingId) await adminSectionItemService.update(accessToken, locale, { ...payload, id: editingId })
@@ -143,6 +174,22 @@ export function CmsSectionItemsPanel() {
             <AdminField label={t('dashboard.cms.sectionItems.fieldTitle')}><input value={title} onChange={(e) => setTitle(e.target.value)} className={adminInputClass} /></AdminField>
             <AdminField label={t('dashboard.cms.sectionItems.fieldPriority')}><input value={priority} onChange={(e) => setPriority(e.target.value)} className={adminInputClass} dir="ltr" type="number" /></AdminField>
             <AdminField label={t('dashboard.cms.sectionItems.fieldUrl')}><input value={url} onChange={(e) => setUrl(e.target.value)} className={adminInputClass} dir="ltr" /></AdminField>
+            <AdminField label={t('dashboard.cms.sectionItems.fieldImage')}>
+              <div className="space-y-3">
+                {imagePreview && (
+                  <img src={imagePreview} alt="" className="h-40 w-full rounded-sm border border-border object-cover" />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled={uploading}
+                  onChange={(e) => void handleImagePick(e.target.files?.[0] ?? null)}
+                  className="block w-full text-sm text-text-muted file:me-3 file:rounded-sm file:border-0 file:bg-warm-soft file:px-3 file:py-2 file:text-sm file:font-medium file:text-warm"
+                />
+                {uploading && <InlineLoading label={t('dashboard.cms.sectionItems.uploading')} />}
+                <p className="text-xs text-text-muted">{t('dashboard.cms.sectionItems.fieldImageHint')}</p>
+              </div>
+            </AdminField>
             <AdminField label={t('dashboard.cms.sectionItems.fieldDescription')}><textarea value={description} onChange={(e) => setDescription(e.target.value)} className={adminInputClass} rows={3} /></AdminField>
             {mode === 'edit' && <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} className="size-4" />{t('dashboard.cms.sectionItems.fieldActive')}</label>}
             {error && <p className="text-sm text-sale">{error}</p>}
@@ -187,6 +234,8 @@ export function CmsSectionItemsPanel() {
                     setPriority(String(item.priority))
                     setUrl(item.url ?? '')
                     setDescription(item.description ?? '')
+                    setImageUrl(item.imageUrl ?? '')
+                    setImagePreview(item.imageUrl ? resolveCmsImageSrc(item.imageUrl) : '')
                     setIsActive(item.isActive)
                     setMode('edit')
                   }}

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getDirection } from '@/extensions/getDirection'
+import { syncLocaleFontStylesheet } from '@/extensions/syncLocaleFontStylesheet'
 import { syncI18nLocale } from '@/i18n'
 import type { Locale } from '@/models/shared/locale.model'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -21,6 +22,8 @@ export function useLocaleSettings() {
     const dir = getDirection(locale)
     document.documentElement.lang = locale
     document.documentElement.dir = dir
+    document.documentElement.dataset.locale = locale
+    syncLocaleFontStylesheet(locale)
   }, [locale])
 
   const switchLocale = async (next: Locale) => {

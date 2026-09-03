@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useRouteLoaderData } from 'react-router-dom'
 import {
   mapProductQuestionToItem,
   type ProductQuestionItem,
 } from '@/extensions/productQuestions'
 import { productQuestionService } from '@/services/productQuestionService'
+import type { ProductDetailLoaderData } from '@/routes/loaders/types'
 import { useSettingsStore } from '@/stores/settingsStore'
 
 interface UseProductQuestionsResult {
@@ -17,8 +19,18 @@ interface UseProductQuestionsResult {
 export function useProductQuestions(productId: string | undefined): UseProductQuestionsResult {
   const locale = useSettingsStore((s) => s.locale)
   const { i18n } = useTranslation()
-  const [questions, setQuestions] = useState<ProductQuestionItem[]>([])
-  const [loading, setLoading] = useState(true)
+  const loaderData = useRouteLoaderData('product-detail') as ProductDetailLoaderData | undefined
+  const loaderFresh = Boolean(
+    loaderData &&
+      loaderData.locale === locale &&
+      loaderData.product?.id === productId &&
+      loaderData.questions.length >= 0,
+  )
+
+  const [questions, setQuestions] = useState<ProductQuestionItem[]>(() =>
+    loaderFresh ? loaderData!.questions : [],
+  )
+  const [loading, setLoading] = useState(() => !loaderFresh)
   const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
@@ -48,8 +60,14 @@ export function useProductQuestions(productId: string | undefined): UseProductQu
   }, [i18n.language, locale, productId])
 
   useEffect(() => {
+    if (loaderFresh) {
+      setQuestions(loaderData!.questions)
+      setLoading(false)
+      return
+    }
+
     void load()
-  }, [load])
+  }, [load, loaderFresh, loaderData])
 
   return { questions, loading, error, reload: load }
 }

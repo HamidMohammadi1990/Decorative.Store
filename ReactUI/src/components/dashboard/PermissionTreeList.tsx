@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { AdminPermission } from '@/models/admin/permission.model'
 import type { PermissionTreeNode } from '@/extensions/buildPermissionTree'
 import {
@@ -7,6 +8,53 @@ import {
   filterPermissionTree,
   findPermissionNode,
 } from '@/extensions/buildPermissionTree'
+import {
+  getPermissionLevelPersianLabel,
+  getPermissionPersianLabel,
+} from '@/extensions/permissionPersianLabel'
+
+function PermissionTitleDisplay({
+  title,
+  levelTypeTitle,
+}: {
+  title: string
+  levelTypeTitle: string
+}) {
+  const { i18n } = useTranslation()
+  const persianLabel = useMemo(() => getPermissionPersianLabel(title), [title])
+  const persianLevel = useMemo(
+    () => getPermissionLevelPersianLabel(levelTypeTitle),
+    [levelTypeTitle],
+  )
+  const isFa = i18n.language === 'fa'
+  const showPersianLabel = persianLabel !== title
+
+  return (
+    <span className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5">
+      <span className="min-w-0 truncate text-sm">
+        <span className="font-medium text-text-muted" dir="ltr">
+          {title}
+        </span>
+        {showPersianLabel ? (
+          <>
+            <span className="mx-1.5 text-text-muted/50" aria-hidden>
+              ·
+            </span>
+            <span className="font-medium text-text">{persianLabel}</span>
+          </>
+        ) : null}
+      </span>
+      {levelTypeTitle ? (
+        <span className="inline-flex shrink-0 rounded-sm bg-surface-muted px-1.5 py-0.5 text-[10px] font-medium text-text-muted">
+          {isFa ? persianLevel : levelTypeTitle}
+          {!isFa && persianLevel !== levelTypeTitle ? (
+            <span className="ms-1 text-text-muted/80">· {persianLevel}</span>
+          ) : null}
+        </span>
+      ) : null}
+    </span>
+  )
+}
 
 function PermissionTreeNodeRow({
   node,
@@ -25,6 +73,7 @@ function PermissionTreeNodeRow({
   onToggleCollapse: (id: string) => void
   onTogglePermission: (id: string) => void
 }) {
+  const { t } = useTranslation()
   const hasChildren = node.children.length > 0
   const isCollapsed = collapsedIds.has(node.id)
 
@@ -40,7 +89,9 @@ function PermissionTreeNodeRow({
             onClick={() => onToggleCollapse(node.id)}
             className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-sm text-text-muted transition-colors hover:bg-surface-muted hover:text-text"
             aria-expanded={!isCollapsed}
-            aria-label={isCollapsed ? 'Expand' : 'Collapse'}
+            aria-label={
+              isCollapsed ? t('dashboard.roles.expandPermissionGroup') : t('dashboard.roles.collapsePermissionGroup')
+            }
           >
             <span className={`text-xs transition-transform ${isCollapsed ? '' : 'rotate-90'}`}>
               ▶
@@ -59,9 +110,9 @@ function PermissionTreeNodeRow({
             className="mt-0.5 size-4 shrink-0 rounded border-border text-warm focus:ring-warm"
           />
           <span className="min-w-0">
-            <span className="block text-sm font-medium text-text">{node.title}</span>
+            <PermissionTitleDisplay title={node.title} levelTypeTitle={node.levelTypeTitle} />
             {node.url && (
-              <span className="mt-0.5 block truncate text-xs text-text-muted" dir="ltr">
+              <span className="mt-0.5 block truncate text-xs text-text-muted/80" dir="ltr">
                 {node.url}
               </span>
             )}

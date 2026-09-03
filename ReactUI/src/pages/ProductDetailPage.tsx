@@ -10,10 +10,19 @@ import { Container } from '@/components/ui/Container'
 import { PageLoading } from '@/components/ui/Spinner'
 import { useProductDetail } from '@/hooks/useProductDetail'
 import { useProductReviews } from '@/hooks/useProductReviews'
+import { useShopPageMeta, resolveOgImageSrc } from '@/hooks/useShopPageMeta'
+import {
+  buildBreadcrumbJsonLd,
+  buildProductJsonLd,
+} from '@/components/seo/jsonLdBuilders'
+import { absoluteUrl } from '@/config/site'
 import { NotFoundPage } from '@/pages/NotFoundPage'
+
+import { useSettingsStore } from '@/stores/settingsStore'
 
 export function ProductDetailPage() {
   const { t } = useTranslation()
+  const currencyCode = useSettingsStore((s) => s.currency?.code ?? 'IRR')
   const { product, related, loading, error } = useProductDetail()
   const {
     reviews,
@@ -21,15 +30,50 @@ export function ProductDetailPage() {
     reload: reloadReviews,
   } = useProductReviews(product?.id, product?.slug)
 
-  if (loading) {
+  const primaryCategory = product?.categorySlugs[0] ?? 'shop'
+
+  useShopPageMeta({
+    title: product?.title,
+    description: product?.description?.slice(0, 160),
+    image: product ? resolveOgImageSrc(product.images[0]?.src ?? product.image.src) : undefined,
+    type: 'product',
+    path: product ? `/product/${product.slug}` : undefined,
+    active: Boolean(product),
+    jsonLd: product
+      ? [
+          buildBreadcrumbJsonLd([
+            { name: t('product.breadcrumbHome'), path: '/' },
+            {
+              name: t(`product.categories.${primaryCategory}`, {
+                defaultValue: primaryCategory.replace(/-/g, ' '),
+              }),
+              path: `/${primaryCategory}`,
+            },
+            { name: product.title },
+          ]),
+          buildProductJsonLd({
+            name: product.title,
+            description: product.description,
+            image: resolveOgImageSrc(product.images[0]?.src ?? product.image.src) ?? '',
+            url: absoluteUrl(`/product/${product.slug}`),
+            sku: product.id,
+            price: product.price.amount,
+            currency: currencyCode,
+            inStock: product.inStock,
+            rating: product.averageRating,
+            reviewCount: product.reviewCount,
+          }),
+        ]
+      : null,
+  })
+
+  if (loading && !product) {
     return <PageLoading />
   }
 
   if (error || !product) {
     return <NotFoundPage />
   }
-
-  const primaryCategory = product.categorySlugs[0] ?? 'shop'
 
   return (
     <div className="bg-surface">

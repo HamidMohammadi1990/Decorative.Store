@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useRouteLoaderData } from 'react-router-dom'
 import type { StoryGroup } from '@/models/stories/story.model'
 import { storiesService } from '@/services/storiesService'
-import { useSettingsStore } from '@/stores/settingsStore'
+import type { ShopLayoutLoaderData } from '@/routes/loaders/types'
+import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 import { useUserStore } from '@/stores/userStore'
 
 interface UseStoriesResult {
@@ -12,10 +14,15 @@ interface UseStoriesResult {
 }
 
 export function useStories(): UseStoriesResult {
-  const locale = useSettingsStore((s) => s.locale)
   const accessToken = useUserStore((s) => s.accessToken)
-  const [stories, setStories] = useState<StoryGroup[]>([])
-  const [loading, setLoading] = useState(true)
+  const loaderData = useRouteLoaderData('shop') as ShopLayoutLoaderData | undefined
+  const locale = useStorefrontLocale(loaderData?.locale)
+  const loaderFresh = Boolean(loaderData && loaderData.locale === locale)
+
+  const [stories, setStories] = useState<StoryGroup[]>(() =>
+    loaderFresh ? loaderData!.stories : [],
+  )
+  const [loading, setLoading] = useState(() => !loaderFresh)
   const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
@@ -33,8 +40,14 @@ export function useStories(): UseStoriesResult {
   }, [locale, accessToken])
 
   useEffect(() => {
+    if (loaderFresh && !accessToken) {
+      setStories(loaderData!.stories)
+      setLoading(false)
+      return
+    }
+
     void load()
-  }, [load])
+  }, [load, loaderFresh, loaderData, accessToken])
 
   return { stories, loading, error, reload: load }
 }

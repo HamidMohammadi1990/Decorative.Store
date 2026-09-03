@@ -104,7 +104,29 @@ public static class SwaggerConfigurationExtensions
             });
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(webRoot)
+                FileProvider = new PhysicalFileProvider(webRoot),
+                OnPrepareResponse = ctx =>
+                {
+                    var path = ctx.Context.Request.Path.Value ?? string.Empty;
+                    var headers = ctx.Context.Response.Headers;
+                    if (path.StartsWith("/Uploads/", StringComparison.OrdinalIgnoreCase))
+                    {
+                        headers.CacheControl = "public,max-age=31536000,immutable";
+                        return;
+                    }
+
+                    if (path.EndsWith(".css", StringComparison.OrdinalIgnoreCase)
+                        || path.EndsWith(".js", StringComparison.OrdinalIgnoreCase)
+                        || path.EndsWith(".woff2", StringComparison.OrdinalIgnoreCase)
+                        || path.EndsWith(".svg", StringComparison.OrdinalIgnoreCase)
+                        || path.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+                        || path.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
+                        || path.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase)
+                        || path.EndsWith(".webp", StringComparison.OrdinalIgnoreCase))
+                    {
+                        headers.CacheControl = "public,max-age=604800";
+                    }
+                },
             });
         }
 

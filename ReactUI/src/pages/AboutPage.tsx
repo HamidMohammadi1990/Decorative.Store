@@ -1,47 +1,35 @@
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AboutPageSections } from '@/components/about/AboutPageSections'
+import { buildWebPageJsonLd } from '@/components/seo/jsonLdBuilders'
 import { Container } from '@/components/ui/Container'
 import { PageLoading } from '@/components/ui/Spinner'
-import type { AboutPageContent } from '@/models/about/aboutPage.model'
-import { aboutPageService } from '@/services/aboutPageService'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { absoluteUrl } from '@/config/site'
+import { useAboutPageContent } from '@/hooks/useAboutPageContent'
+import { useShopPageMeta } from '@/hooks/useShopPageMeta'
 
 export function AboutPage() {
   const { t } = useTranslation()
-  const locale = useSettingsStore((s) => s.locale)
-  const [content, setContent] = useState<AboutPageContent | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
+  const { content, loading, error } = useAboutPageContent()
 
-  useEffect(() => {
-    let cancelled = false
-
-    const load = async () => {
-      setLoading(true)
-      setError(false)
-      try {
-        const page = await aboutPageService.getPage(locale)
-        if (!cancelled) setContent(page)
-      } catch {
-        if (!cancelled) setError(true)
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
-    }
-
-    void load()
-    return () => {
-      cancelled = true
-    }
-  }, [locale])
-
-  useEffect(() => {
-    if (!content) return
-    document.title = content.metaTitle?.trim() || content.title
+  const jsonLd = useMemo(() => {
+    if (!content) return null
+    return buildWebPageJsonLd({
+      name: content.title,
+      description: content.metaDescription ?? content.hero.subtitle ?? '',
+      url: absoluteUrl('/about'),
+    })
   }, [content])
 
-  if (loading) {
+  useShopPageMeta({
+    title: content?.metaTitle?.trim() || content?.title,
+    description: content?.metaDescription ?? undefined,
+    path: '/about',
+    active: Boolean(content),
+    jsonLd,
+  })
+
+  if (loading && !content) {
     return <PageLoading />
   }
 

@@ -3,14 +3,14 @@ import { persist } from 'zustand/middleware'
 import type { CartLine } from '@/models/cart/cartLine.model'
 import { inferLayoutFootprint } from '@/extensions/inferLayoutFootprint'
 import { syncRoomLayoutWithCart } from '@/extensions/syncRoomLayoutWithCart'
-import type { PlacedLayoutItem, RoomPresetId } from '@/models/room/roomLayout.model'
+import type { PlacedLayoutItem } from '@/models/room/roomLayout.model'
 
 interface RoomLayoutState {
-  roomPreset: RoomPresetId
+  roomTypeId: string | null
   placedItems: PlacedLayoutItem[]
   selectedId: string | null
   showGrid: boolean
-  setRoomPreset: (preset: RoomPresetId) => void
+  setRoomTypeId: (id: string) => void
   setShowGrid: (show: boolean) => void
   selectItem: (id: string | null) => void
   syncWithCart: (lines: CartLine[]) => void
@@ -30,12 +30,12 @@ function createPlacementId() {
 export const useRoomLayoutStore = create<RoomLayoutState>()(
   persist(
     (set, get) => ({
-      roomPreset: 'living',
+      roomTypeId: null,
       placedItems: [],
       selectedId: null,
       showGrid: true,
 
-      setRoomPreset: (preset) => set({ roomPreset: preset }),
+      setRoomTypeId: (id) => set({ roomTypeId: id }),
       setShowGrid: (show) => set({ showGrid: show }),
       selectItem: (id) => set({ selectedId: id }),
 
@@ -123,7 +123,7 @@ export const useRoomLayoutStore = create<RoomLayoutState>()(
     {
       name: 'diba-room-layout',
       partialize: (state) => ({
-        roomPreset: state.roomPreset,
+        roomTypeId: state.roomTypeId,
         placedItems: state.placedItems,
         showGrid: state.showGrid,
       }),

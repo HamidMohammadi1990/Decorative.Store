@@ -1,32 +1,15 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { BlogCard } from '@/components/blog/BlogCard'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
 import { Container } from '@/components/ui/Container'
 import { useHorizontalDragScroll } from '@/hooks/useHorizontalDragScroll'
-import type { BlogPostSummary } from '@/models/blog/blog.model'
-import { blogService } from '@/services/blogService'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useHomeFeaturedPosts } from '@/hooks/useHomeFeaturedPosts'
 
 export function BlogHomeSection() {
   const { t } = useTranslation()
-  const locale = useSettingsStore((s) => s.locale)
   const drag = useHorizontalDragScroll<HTMLDivElement>()
-  const [posts, setPosts] = useState<BlogPostSummary[]>([])
-
-  useEffect(() => {
-    let cancelled = false
-
-    void blogService.getFeaturedPosts(locale, 3).then((featuredPosts) => {
-      if (cancelled) return
-      setPosts(featuredPosts)
-    })
-
-    return () => {
-      cancelled = true
-    }
-  }, [locale])
+  const posts = useHomeFeaturedPosts()
 
   if (posts.length === 0) return null
 

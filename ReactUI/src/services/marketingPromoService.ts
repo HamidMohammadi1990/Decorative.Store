@@ -9,8 +9,9 @@ import type {
 } from '@/models/admin/marketingPromo.model'
 import type { PromoTileStrip } from '@/models/home/promoTiles.model'
 import type { Locale } from '@/models/shared/locale.model'
-import { apiDelete, apiPost, apiPut } from '@/services/api/apiClient'
-import { readNumberField, readRecord, readStringField } from '@/services/api/apiNormalize'
+import { apiDelete, apiPost, apiPut, toAcceptLanguage } from '@/services/api/apiClient'
+import { normalizeApiEnvelope, readNumberField, readRecord, readStringField } from '@/services/api/apiNormalize'
+import { ApiError } from '@/services/api/apiTypes'
 import {
   normalizeAdminPaged,
   paginationBody,
@@ -22,12 +23,13 @@ import {
 const ADMIN_BASE = '/api/v1/admin/marketing-promo'
 const PUBLIC_BASE = '/api/v1/marketing-promo'
 
-function resolveMarketingImageSrc(imageUrl: string): string {
+export function resolveMarketingImageSrc(imageUrl: string): string {
   if (!imageUrl) return ''
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
   if (imageUrl.startsWith('/images/')) return imageUrl
+  if (imageUrl.startsWith('/Uploads/MarketingPromos/')) return `${API_BASE_URL}${imageUrl}`
   if (imageUrl.startsWith('/')) return `${API_BASE_URL}${imageUrl}`
-  return `${API_BASE_URL}/Uploads/Products/${imageUrl.replace(/^\/+/, '')}`
+  return `${API_BASE_URL}/Uploads/MarketingPromos/${imageUrl.replace(/^\/+/, '')}`
 }
 
 function readPromoType(record: Record<string, unknown>): MarketingPromoType {
@@ -173,6 +175,41 @@ export const adminMarketingPromoService = {
     input: UpdateMarketingStripDisclaimerInput,
   ) {
     return apiPut(`${ADMIN_BASE}/update-disclaimer`, input, accessToken, { locale })
+  },
+
+  async uploadImage(
+    accessToken: string,
+    locale: Locale,
+    file: File,
+  ): Promise<{ imageFileName: string; imageUrl: string }> {
+    const formData = new FormData()
+    formData.append('image', file)
+
+    const response = await fetch(`${API_BASE_URL}${ADMIN_BASE}/upload-image`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-Language': toAcceptLanguage(locale),
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: formData,
+    })
+
+    const responseBody = await response.json()
+    if (!response.ok) {
+      throw new ApiError(response.status, normalizeApiEnvelope(responseBody))
+    }
+
+    const envelope = normalizeApiEnvelope(responseBody)
+    const record = readRecord(envelope.data)
+    const imageFileName = readStringField(record ?? {}, 'imageFileName', 'ImageFileName')
+    const imageUrl = readStringField(record ?? {}, 'imageUrl', 'ImageUrl')
+    if (!imageFileName || !imageUrl) throw new ApiError(response.status, envelope)
+
+    return {
+      imageFileName,
+      imageUrl: resolveMarketingImageSrc(imageUrl),
+    }
   },
 }
 

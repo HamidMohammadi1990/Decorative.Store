@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 import { ListingBreadcrumbs } from '@/components/listing/ListingBreadcrumbs'
 import { ListingSidebar } from '@/components/listing/ListingSidebar'
 import { ListingToolbar } from '@/components/listing/ListingToolbar'
@@ -12,10 +13,17 @@ import { Portal } from '@/components/ui/Portal'
 import { parseListingFilters, toActiveFiltersRecord } from '@/extensions/listingFilters'
 import { useListingFilters } from '@/hooks/useListingFilters'
 import { useProductListing } from '@/hooks/useProductListing'
+import { useShopPageMeta, resolveOgImageSrc } from '@/hooks/useShopPageMeta'
 import { NotFoundPage } from '@/pages/NotFoundPage'
+import {
+  buildBreadcrumbJsonLd,
+  buildItemListJsonLd,
+} from '@/components/seo/jsonLdBuilders'
+import { absoluteUrl } from '@/config/site'
 
 export function ProductListingPage() {
   const { t } = useTranslation()
+  const location = useLocation()
   const { data, loading, error } = useProductListing()
   const { toggleFilter, applyPriceRange, clearFilters, setSort, setPage, currentSort, searchParams } =
     useListingFilters()
@@ -29,8 +37,44 @@ export function ProductListingPage() {
     [activeFilters],
   )
 
-  if (loading) {
+  const listingJsonLd = useMemo(() => {
+    if (!data || data.pathNotFound) return null
+
+    const pageUrl = absoluteUrl(`${location.pathname}${location.search}`)
+    const breadcrumbs = buildBreadcrumbJsonLd(
+      data.breadcrumbs.map((item, index) => ({
+        name: item.label,
+        path: index < data.breadcrumbs.length - 1 ? item.href : undefined,
+      })),
+    )
+    const itemList = buildItemListJsonLd({
+      name: data.title,
+      url: pageUrl,
+      items: data.products.slice(0, 24).map((product, index) => ({
+        name: product.title,
+        url: absoluteUrl(`/product/${product.slug}`),
+        image: resolveOgImageSrc(product.image.src),
+        position: index + 1,
+      })),
+    })
+
+    return [breadcrumbs, itemList]
+  }, [data, location.pathname, location.search])
+
+  useShopPageMeta({
+    title: data?.title,
+    description: data?.description,
+    path: `${location.pathname}${location.search}`,
+    active: !loading && !!data && !data.pathNotFound,
+    jsonLd: listingJsonLd,
+  })
+
+  if (loading && !data) {
     return <PageLoading />
+  }
+
+  if (error === 'not-found' || data?.pathNotFound) {
+    return <NotFoundPage />
   }
 
   if (error || !data) {
@@ -39,10 +83,6 @@ export function ProductListingPage() {
         {t('common.error')}
       </Container>
     )
-  }
-
-  if (data.pathNotFound) {
-    return <NotFoundPage />
   }
 
   return (

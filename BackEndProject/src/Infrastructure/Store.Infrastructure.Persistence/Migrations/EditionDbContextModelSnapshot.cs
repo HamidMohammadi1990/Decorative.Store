@@ -2611,6 +2611,66 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.ToTable("RolePermission");
                 });
 
+            modelBuilder.Entity("Store.Domain.Entities.RoomType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(32)");
+
+                    b.Property<string>("ImageFileName")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(120)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("Priority");
+
+                    b.ToTable("RoomType", (string)null);
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.RoomTypeTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("RoomTypeId", "LanguageId")
+                        .IsUnique();
+
+                    b.ToTable("RoomTypeTranslation", (string)null);
+                });
+
             modelBuilder.Entity("Store.Domain.Entities.Section", b =>
                 {
                     b.Property<int>("Id")
@@ -4460,6 +4520,25 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Store.Domain.Entities.RoomTypeTranslation", b =>
+                {
+                    b.HasOne("Store.Domain.Entities.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Store.Domain.Entities.RoomType", "RoomType")
+                        .WithMany("Translations")
+                        .HasForeignKey("RoomTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("RoomType");
+                });
+
             modelBuilder.Entity("Store.Domain.Entities.Section", b =>
                 {
                     b.HasOne("Store.Domain.Entities.Section", "Parent")
@@ -5002,6 +5081,11 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Navigation("RolePermissions");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.RoomType", b =>
+                {
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("Store.Domain.Entities.Section", b =>

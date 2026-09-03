@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { AuthGate } from '@/components/auth/LoginModal'
@@ -8,12 +8,16 @@ import {
   DashboardMobileNav,
   DashboardSidebar,
 } from '@/components/dashboard/DashboardSidebar'
+import { usePageMeta } from '@/hooks/usePageMeta'
+import { buildPageTitle } from '@/config/site'
+import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { DASHBOARD_FLAT_NAV, isNavItemActive } from '@/config/dashboardNav'
 import { useDashboard } from '@/hooks/useDashboard'
 import { useWishlistSync } from '@/hooks/useWishlistSync'
 import { useAddressSync } from '@/hooks/useAddressSync'
 import { useAuthModalStore } from '@/stores/authModalStore'
 import { useUserStore } from '@/stores/userStore'
+import { RouteFallback } from '@/components/ui/RouteFallback'
 
 function useDashboardPageTitle() {
   const { t } = useTranslation()
@@ -30,12 +34,18 @@ export function DashboardLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const pageTitle = useDashboardPageTitle()
+  const { locale } = useLocaleSettings()
   const user = useUserStore((s) => s.user)
   const logout = useUserStore((s) => s.logout)
   const openModal = useAuthModalStore((s) => s.openModal)
   const { data, loading, error } = useDashboard()
   useWishlistSync()
   useAddressSync()
+
+  usePageMeta({
+    title: buildPageTitle(pageTitle, locale),
+    noindex: true,
+  })
 
   useEffect(() => {
     if (!user) {
@@ -142,7 +152,9 @@ export function DashboardLayout() {
                     <p className="text-sm text-text-muted">{t('common.error')}</p>
                   </div>
                 ) : (
-                  <Outlet context={data} />
+                  <Suspense fallback={<RouteFallback />}>
+                    <Outlet context={data} />
+                  </Suspense>
                 )}
               </div>
             </div>

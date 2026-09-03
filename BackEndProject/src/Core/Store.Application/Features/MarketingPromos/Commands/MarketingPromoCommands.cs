@@ -52,3 +52,9 @@ public record UpdateMarketingStripDisclaimerRequest : IRequest<OperationResult>
     public string? DisclaimerLinkLabel { get; init; }
     public string? DisclaimerLinkHref { get; init; }
 }
+
+public record UploadMarketingPromoImageResponse
+{
+    public string ImageFileName { get; init; } = default!;
+    public string ImageUrl { get; init; } = default!;
+}

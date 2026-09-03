@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import {
@@ -10,8 +10,10 @@ import {
   type DashboardNavGroup,
   type DashboardNavItem,
 } from '@/config/dashboardNav'
+import { DashboardNavSearchField } from '@/components/dashboard/DashboardNavSearchField'
 import { LogoutIcon } from '@/components/dashboard/DashboardIcons'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
+import { searchDashboardNav, type DashboardNavSearchResult } from '@/extensions/dashboardNavSearch'
 import { useUserStore } from '@/stores/userStore'
 import { useProfileCompletion } from '@/hooks/useProfileCompletion'
 
@@ -50,9 +52,17 @@ export function DashboardSidebar() {
   const [expandedGroups, setExpandedGroups] = useState(() =>
     expandedGroupsForPath(location.pathname),
   )
+  const [navSearchQuery, setNavSearchQuery] = useState('')
+
+  const navSearchResults = useMemo(
+    () => searchDashboardNav(navSearchQuery),
+    [navSearchQuery],
+  )
+  const isNavSearchActive = navSearchQuery.trim().length > 0
 
   useEffect(() => {
     setExpandedGroups(expandedGroupsForPath(location.pathname))
+    setNavSearchQuery('')
   }, [location.pathname])
 
   if (!user) return null
@@ -140,7 +150,8 @@ export function DashboardSidebar() {
 
         {/* Back to shop + profile completion */}
         {!collapsed && (
-          <div className="space-y-0.5 border-b border-border px-3 py-2.5">
+          <div className="space-y-2.5 border-b border-border px-3 py-2.5">
+            <DashboardNavSearchField value={navSearchQuery} onChange={setNavSearchQuery} />
             <Link
               to="/"
               className="flex items-center gap-2 rounded-sm px-2 py-2 text-xs font-medium text-text-muted transition-colors hover:bg-surface-muted hover:text-warm"
@@ -148,13 +159,15 @@ export function DashboardSidebar() {
               <ShopIcon />
               {t('dashboard.backToShop')}
             </Link>
-            <ul>
-              <SidebarNavItem
-                item={DASHBOARD_PROFILE_NAV_ITEM}
-                showProfileBadge={!rewardClaimed && progress.percent < 100}
-                profilePercent={progress.percent}
-              />
-            </ul>
+            {!isNavSearchActive && (
+              <ul>
+                <SidebarNavItem
+                  item={DASHBOARD_PROFILE_NAV_ITEM}
+                  showProfileBadge={!rewardClaimed && progress.percent < 100}
+                  profilePercent={progress.percent}
+                />
+              </ul>
+            )}
           </div>
         )}
 
@@ -168,6 +181,12 @@ export function DashboardSidebar() {
                 <CollapsedNavItem key={item.path} item={item} />
               ))}
             </ul>
+          ) : isNavSearchActive ? (
+            <NavSearchResults
+              results={navSearchResults}
+              showProfileBadge={!rewardClaimed && progress.percent < 100}
+              profilePercent={progress.percent}
+            />
           ) : (
             <div className="space-y-1">
               {DASHBOARD_NAV_GROUPS.map((group) => {
@@ -266,12 +285,52 @@ function NavGroupToggle({
   )
 }
 
+function NavSearchResults({
+  results,
+  showProfileBadge = false,
+  profilePercent = 0,
+}: {
+  results: DashboardNavSearchResult[]
+  showProfileBadge?: boolean
+  profilePercent?: number
+}) {
+  const { t } = useTranslation()
+
+  if (results.length === 0) {
+    return (
+      <p className="px-2 py-6 text-center text-sm text-text-muted">{t('dashboard.navSearchNoResults')}</p>
+    )
+  }
+
+  return (
+    <ul className="space-y-0.5">
+      {results.map(({ item, group }) => (
+        <SidebarNavItem
+          key={item.path}
+          item={item}
+          groupLabel={
+            group
+              ? t(`dashboard.navGroups.${group.id}`)
+              : t('dashboard.navGroups.profile')
+          }
+          showProfileBadge={
+            showProfileBadge && item.path === DASHBOARD_PROFILE_NAV_ITEM.path
+          }
+          profilePercent={profilePercent}
+        />
+      ))}
+    </ul>
+  )
+}
+
 function SidebarNavItem({
   item,
+  groupLabel,
   showProfileBadge = false,
   profilePercent = 0,
 }: {
   item: DashboardNavItem
+  groupLabel?: string
   showProfileBadge?: boolean
   profilePercent?: number
 }) {
@@ -303,7 +362,18 @@ function SidebarNavItem({
             >
               <Icon size={14} className="shrink-0" />
             </span>
-            <span className="min-w-0 flex-1 truncate text-start">{label}</span>
+            <span className="min-w-0 flex-1 text-start">
+              <span className="block truncate">{label}</span>
+              {groupLabel ? (
+                <span
+                  className={`block truncate text-[11px] font-normal ${
+                    isActive ? 'text-warm-text/75' : 'text-text-muted'
+                  }`}
+                >
+                  {groupLabel}
+                </span>
+              ) : null}
+            </span>
             {showProfileBadge && (
               <span className="ms-auto rounded-full bg-warm-text/20 px-2 py-0.5 text-[10px] font-bold text-warm-text">
                 {profilePercent}%
@@ -345,12 +415,20 @@ export function DashboardMobileNav() {
   const location = useLocation()
   const { progress, rewardClaimed } = useProfileCompletion()
   const [open, setOpen] = useState(false)
+  const [navSearchQuery, setNavSearchQuery] = useState('')
   const [expandedGroups, setExpandedGroups] = useState(() =>
     expandedGroupsForPath(location.pathname),
   )
 
+  const navSearchResults = useMemo(
+    () => searchDashboardNav(navSearchQuery),
+    [navSearchQuery],
+  )
+  const isNavSearchActive = navSearchQuery.trim().length > 0
+
   useEffect(() => {
     setOpen(false)
+    setNavSearchQuery('')
     setExpandedGroups(expandedGroupsForPath(location.pathname))
   }, [location.pathname])
 
@@ -406,7 +484,21 @@ export function DashboardMobileNav() {
                 <CloseIcon />
               </button>
             </div>
+            <div className="border-b border-border px-4 py-3">
+              <DashboardNavSearchField
+                id="dashboard-nav-search-mobile"
+                value={navSearchQuery}
+                onChange={setNavSearchQuery}
+              />
+            </div>
             <nav className="flex-1 overflow-y-auto px-3 py-3">
+              {isNavSearchActive ? (
+                <NavSearchResults
+                  results={navSearchResults}
+                  showProfileBadge={!rewardClaimed && progress.percent < 100}
+                  profilePercent={progress.percent}
+                />
+              ) : (
               <div className="space-y-1">
                 <ul className="mb-3 space-y-0.5 border-b border-border pb-3">
                   <MobileNavItem
@@ -441,6 +533,7 @@ export function DashboardMobileNav() {
                   )
                 })}
               </div>
+              )}
             </nav>
           </aside>
         </div>

@@ -39,6 +39,8 @@ import { MarketingPromosPanel } from '@/components/dashboard/MarketingPromosPane
 import { NewsletterSubscribersPanel } from '@/components/dashboard/NewsletterSubscribersPanel'
 import { ProfileCompletionAnswersPanel } from '@/components/dashboard/ProfileCompletionAnswersPanel'
 import { AssistantFaqPanel } from '@/components/dashboard/AssistantFaqPanel'
+import { SiteManagementGuidePanel } from '@/components/dashboard/SiteManagementGuidePanel'
+import { RoomTypesPanel } from '@/components/dashboard/RoomTypesPanel'
 import { UsersPanel } from '@/components/dashboard/UsersPanel'
 import { RolesPanel } from '@/components/dashboard/RolesPanel'
 
@@ -210,6 +212,14 @@ export function DashboardProfileCompletionAnswersPage() {
 
 export function DashboardAssistantFaqPage() {
   return <AssistantFaqPanel />
+}
+
+export function DashboardSiteGuidePage() {
+  return <SiteManagementGuidePanel />
+}
+
+export function DashboardRoomTypesPage() {
+  return <RoomTypesPanel />
 }
 
 export function DashboardUsersPage() {

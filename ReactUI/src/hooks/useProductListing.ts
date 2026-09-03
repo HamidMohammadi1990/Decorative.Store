@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useRouteLoaderData } from 'react-router-dom'
 import type { ProductListingResult } from '@/models/catalog/listing.model'
 import { catalogService } from '@/services/catalogService'
+import type { ProductListingLoaderData } from '@/routes/loaders/types'
 import { useSettingsStore } from '@/stores/settingsStore'
 
 interface UseProductListingResult {
@@ -11,12 +12,39 @@ interface UseProductListingResult {
   reload: () => void
 }
 
+function isLoaderFresh(
+  loaderData: ProductListingLoaderData | undefined,
+  locale: string,
+  pathname: string,
+  search: string,
+): loaderData is ProductListingLoaderData & { data: ProductListingResult } {
+  return Boolean(
+    loaderData &&
+      loaderData.locale === locale &&
+      loaderData.pathname === pathname &&
+      loaderData.search === search &&
+      loaderData.data,
+  )
+}
+
 export function useProductListing(): UseProductListingResult {
   const locale = useSettingsStore((s) => s.locale)
   const location = useLocation()
-  const [data, setData] = useState<ProductListingResult | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const loaderData = useRouteLoaderData('product-listing') as ProductListingLoaderData | undefined
+  const loaderFresh = isLoaderFresh(
+    loaderData,
+    locale,
+    location.pathname,
+    location.search,
+  )
+
+  const [data, setData] = useState<ProductListingResult | null>(() =>
+    loaderFresh ? loaderData.data : null,
+  )
+  const [loading, setLoading] = useState(() => !loaderFresh)
+  const [error, setError] = useState<string | null>(() =>
+    loaderFresh ? (loaderData.error ?? null) : null,
+  )
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -30,6 +58,9 @@ export function useProductListing(): UseProductListingResult {
         locale,
       )
       setData(result)
+      if (result.pathNotFound) {
+        setError('not-found')
+      }
     } catch {
       setError('failed')
     } finally {
@@ -38,8 +69,15 @@ export function useProductListing(): UseProductListingResult {
   }, [locale, location.pathname, location.search])
 
   useEffect(() => {
+    if (loaderFresh) {
+      setData(loaderData.data)
+      setError(loaderData.error ?? null)
+      setLoading(false)
+      return
+    }
+
     void load()
-  }, [load])
+  }, [load, loaderFresh, loaderData])
 
   return { data, loading, error, reload: load }
 }

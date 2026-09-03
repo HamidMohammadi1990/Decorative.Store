@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useSearchParams } from 'react-router-dom'
 import { ListingSidebar } from '@/components/listing/ListingSidebar'
@@ -9,14 +9,14 @@ import { Container } from '@/components/ui/Container'
 import { PageLoading } from '@/components/ui/Spinner'
 import { CloseIcon } from '@/components/ui/CloseIcon'
 import { Portal } from '@/components/ui/Portal'
-import type { CatalogSearchResponse } from '@/models/catalog/catalogSearch.model'
 import {
   parseListingFilters,
   productMatchesFilters,
   toActiveFiltersRecord,
 } from '@/extensions/listingFilters'
 import { useListingFilters } from '@/hooks/useListingFilters'
-import { catalogSearchService } from '@/services/catalogSearchService'
+import { useSearchResults } from '@/hooks/useSearchResults'
+import { useShopPageMeta } from '@/hooks/useShopPageMeta'
 import {
   buildListingFacets,
   getListingSortOptions,
@@ -26,7 +26,6 @@ import { useSettingsStore } from '@/stores/settingsStore'
 import type { SortOptionId } from '@/models/catalog/listing.model'
 
 const MIN_QUERY_LENGTH = 2
-const RESULT_LIMIT = 100
 const PAGE_SIZE = 12
 
 function sortSearchProducts<T extends { price: { amount: number }; isNew: boolean; averageRating?: number; reviewCount: number; purchaseCount: number }>(
@@ -58,9 +57,7 @@ export function SearchPage() {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
   const [searchParams] = useSearchParams()
-  const query = (searchParams.get('q') ?? '').trim()
-  const [data, setData] = useState<CatalogSearchResponse | null>(null)
-  const [loading, setLoading] = useState(false)
+  const { query, data, loading } = useSearchResults()
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const {
     toggleFilter,
@@ -71,32 +68,12 @@ export function SearchPage() {
     currentSort,
   } = useListingFilters()
 
-  useEffect(() => {
-    if (query.length < MIN_QUERY_LENGTH) {
-      setData(null)
-      setLoading(false)
-      return
-    }
-
-    let cancelled = false
-    setLoading(true)
-
-    catalogSearchService
-      .search(query, locale, RESULT_LIMIT)
-      .then((response) => {
-        if (!cancelled) setData(response)
-      })
-      .catch(() => {
-        if (!cancelled) setData(null)
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
-      })
-
-    return () => {
-      cancelled = true
-    }
-  }, [query, locale])
+  useShopPageMeta({
+    title: query ? `${t('common.search')}: ${query}` : t('common.search'),
+    description: t('seo.searchDescription'),
+    noindex: query.length > 0,
+    path: query ? `/search?q=${encodeURIComponent(query)}` : '/search',
+  })
 
   const allProducts = useMemo(
     () => data?.products.map(mapCatalogSearchProduct) ?? [],

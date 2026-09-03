@@ -90,6 +90,6 @@ public class GetMarketingPromoStripHandler
         if (fileName.StartsWith('/') || fileName.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             return fileName;
 
-        return ProductDirectory.GetImageUrl(fileName);
+        return MarketingPromoDirectory.GetImageUrl(fileName);
     }
 }

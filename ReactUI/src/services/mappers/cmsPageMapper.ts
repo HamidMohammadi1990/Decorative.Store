@@ -8,6 +8,7 @@ import type { HomePage } from '@/models/home/homePage.model'
 import type { AppLink } from '@/models/shared/link.model'
 import type { ImageAsset } from '@/models/shared/image.model'
 import { readRecord, readStringField } from '@/services/api/apiNormalize'
+import { resolveCmsImageSrc } from '@/services/adminCmsMediaService'
 
 function readNumberField(record: Record<string, unknown>, ...keys: string[]) {
   for (const key of keys) {
@@ -100,7 +101,9 @@ function resolveSectionTypeKey(sectionTypeName: string): string {
 }
 
 function toImage(src: string | null | undefined, alt: string): ImageAsset {
-  return { src: src?.trim() || '/images/home/living-room.jpg', alt }
+  const trimmed = src?.trim()
+  if (!trimmed) return { src: '/images/home/living-room.jpg', alt }
+  return { src: resolveCmsImageSrc(trimmed), alt }
 }
 
 function findItemByIcon(section: CmsPageSection, icon: string) {

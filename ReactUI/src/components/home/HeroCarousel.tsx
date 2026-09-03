@@ -74,6 +74,8 @@ export function HeroCarousel({ data }: HeroCarouselProps) {
         : -index * viewportWidth + dragOffset
       : dragOffset
 
+  if (slideCount === 0) return null
+
   return (
     <section className="relative overflow-hidden bg-surface-muted">
       <div
@@ -106,7 +108,9 @@ export function HeroCarousel({ data }: HeroCarouselProps) {
             >
               <LocalImage
                 image={s.image}
+                priority={i === 0}
                 loading={i <= 1 ? 'eager' : 'lazy'}
+                sizes="100vw"
                 className="pointer-events-none absolute inset-0 size-full object-cover"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />

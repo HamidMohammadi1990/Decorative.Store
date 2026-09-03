@@ -1,17 +1,44 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { BlogCard } from '@/components/blog/BlogCard'
 import { BlogCategoryFilter } from '@/components/blog/BlogCategoryFilter'
 import { BlogFeaturedSlider } from '@/components/blog/BlogFeaturedSlider'
+import { buildBreadcrumbJsonLd } from '@/components/seo/jsonLdBuilders'
 import { Container } from '@/components/ui/Container'
 import { PageLoading } from '@/components/ui/Spinner'
 import { useBlogListing } from '@/hooks/useBlogListing'
+import { useShopPageMeta } from '@/hooks/useShopPageMeta'
 
 export function BlogListingPage() {
   const { t } = useTranslation()
   const { data, loading, error, categorySlug } = useBlogListing()
 
-  if (loading) {
+  const activeCategoryLabel =
+    categorySlug && data
+      ? data.categories.find((category) => category.slug === categorySlug)?.label
+      : undefined
+
+  const blogJsonLd = useMemo(() => {
+    if (!data) return null
+    return buildBreadcrumbJsonLd([
+      { name: t('product.breadcrumbHome'), path: '/' },
+      { name: t('blog.title'), path: '/blog' },
+      ...(activeCategoryLabel ? [{ name: activeCategoryLabel }] : []),
+    ])
+  }, [activeCategoryLabel, data, t])
+
+  useShopPageMeta({
+    title: activeCategoryLabel
+      ? `${activeCategoryLabel} — ${t('blog.title')}`
+      : t('blog.listingTitle'),
+    description: t('blog.listingDescription'),
+    path: categorySlug ? `/blog/category/${categorySlug}` : '/blog',
+    active: !loading && !!data,
+    jsonLd: blogJsonLd,
+  })
+
+  if (loading && !data) {
     return <PageLoading />
   }
 
@@ -29,7 +56,6 @@ export function BlogListingPage() {
 
   const getCategoryLabel = (slug: string) => categoryMap[slug] ?? slug
 
-  const activeCategoryLabel = categorySlug ? categoryMap[categorySlug] : undefined
   const showFeatured = !categorySlug
 
   return (

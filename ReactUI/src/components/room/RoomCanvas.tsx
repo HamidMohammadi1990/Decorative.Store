@@ -1,9 +1,10 @@
 import { useCallback, useRef, type PointerEvent as ReactPointerEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { PlacedLayoutItem } from '@/models/room/roomLayout.model'
-import { ROOM_PRESETS } from '@/models/room/roomLayout.model'
+import { RemoteImage } from '@/components/ui/RemoteImage'
 import { LocalImage } from '@/components/ui/LocalImage'
 import { useRoomLayout } from '@/hooks/useRoomLayout'
+import { useRoomTypeSelection } from '@/hooks/useRoomTypeSelection'
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value))
@@ -13,8 +14,8 @@ export function RoomCanvas() {
   const { t } = useTranslation()
   const canvasRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<{ id: string; offsetX: number; offsetY: number } | null>(null)
+  const { active, loading: roomTypesLoading } = useRoomTypeSelection()
   const {
-    roomPreset,
     placedItems,
     selectedId,
     showGrid,
@@ -23,8 +24,6 @@ export function RoomCanvas() {
     placeFromLine,
     lines,
   } = useRoomLayout()
-
-  const preset = ROOM_PRESETS.find((p) => p.id === roomPreset) ?? ROOM_PRESETS[0]
 
   const toPercent = useCallback((clientX: number, clientY: number) => {
     const rect = canvasRef.current?.getBoundingClientRect()
@@ -82,7 +81,9 @@ export function RoomCanvas() {
         <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-warm">
           {t('roomLayout.canvasEyebrow')}
         </p>
-        <p className="mt-0.5 text-sm text-text-muted">{t('roomLayout.canvasHint')}</p>
+        <p className="mt-0.5 text-sm text-text-muted">
+          {active?.title ?? t('roomLayout.canvasHint')}
+        </p>
       </div>
 
       <div
@@ -97,12 +98,22 @@ export function RoomCanvas() {
         onDragOver={(e) => e.preventDefault()}
         onDrop={onCanvasDrop}
       >
-        <img
-          src={preset.imageSrc}
-          alt=""
-          className="pointer-events-none absolute inset-0 size-full object-cover"
-          draggable={false}
-        />
+        {active?.imageUrl && !roomTypesLoading && (
+          <RemoteImage
+            src={active.imageUrl}
+            alt={active.title}
+            priority
+            className="pointer-events-none absolute inset-0 size-full object-cover"
+            draggable={false}
+          />
+        )}
+
+        {roomTypesLoading && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-surface-muted/80">
+            <p className="text-sm text-text-muted">{t('common.loading')}</p>
+          </div>
+        )}
+
         <div
           data-canvas-bg
           className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-black/10 to-black/5"

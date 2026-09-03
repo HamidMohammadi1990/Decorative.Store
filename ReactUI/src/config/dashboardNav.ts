@@ -17,6 +17,8 @@ import {
   CmsSectionItemsIcon,
   CmsSectionsIcon,
   CmsSectionTypesIcon,
+  GuideBookIcon,
+  RoomTypeIcon,
   CouponsIcon,
   DiscountCodesIcon,
   CartIcon,
@@ -105,6 +107,11 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
         path: '/account/dashboard/discount-codes',
         icon: DiscountCodesIcon,
       },
+      {
+        section: 'roomTypes',
+        path: '/account/dashboard/room-types',
+        icon: RoomTypeIcon,
+      },
     ],
   },
   {
@@ -144,6 +151,11 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
     id: 'cms',
     icon: CmsPagesIcon,
     items: [
+      {
+        section: 'siteGuide',
+        path: '/account/dashboard/site-guide',
+        icon: GuideBookIcon,
+      },
       { section: 'cmsPages', path: '/account/dashboard/cms-pages', icon: CmsPagesIcon },
       {
         section: 'cmsSectionTypes',

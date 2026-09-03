@@ -258,7 +258,11 @@ export function RolesPanel() {
               onChange={(e) => setPermissionSearch(e.target.value)}
               className={adminInputClass}
               placeholder={t('dashboard.roles.permissionsSearch')}
+              aria-describedby="roles-permissions-search-hint"
             />
+            <p id="roles-permissions-search-hint" className="mt-1.5 text-xs text-text-muted">
+              {t('dashboard.roles.permissionsSearchHint')}
+            </p>
           </div>
 
           {permissionsLoading ? (

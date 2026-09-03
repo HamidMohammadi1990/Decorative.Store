@@ -5,11 +5,11 @@ import { remainingPlaceable } from '@/extensions/syncRoomLayoutWithCart'
 
 export function useRoomLayout() {
   const lines = useCartStore((s) => s.lines)
-  const roomPreset = useRoomLayoutStore((s) => s.roomPreset)
+  const roomTypeId = useRoomLayoutStore((s) => s.roomTypeId)
   const placedItems = useRoomLayoutStore((s) => s.placedItems)
   const selectedId = useRoomLayoutStore((s) => s.selectedId)
   const showGrid = useRoomLayoutStore((s) => s.showGrid)
-  const setRoomPreset = useRoomLayoutStore((s) => s.setRoomPreset)
+  const setRoomTypeId = useRoomLayoutStore((s) => s.setRoomTypeId)
   const setShowGrid = useRoomLayoutStore((s) => s.setShowGrid)
   const selectItem = useRoomLayoutStore((s) => s.selectItem)
   const syncWithCart = useRoomLayoutStore((s) => s.syncWithCart)
@@ -35,12 +35,12 @@ export function useRoomLayout() {
   return {
     lines,
     paletteLines,
-    roomPreset,
+    roomTypeId,
     placedItems,
     selectedItem,
     selectedId,
     showGrid,
-    setRoomPreset,
+    setRoomTypeId,
     setShowGrid,
     selectItem,
     placeFromLine,

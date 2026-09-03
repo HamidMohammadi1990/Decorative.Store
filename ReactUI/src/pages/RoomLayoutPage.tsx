@@ -1,10 +1,30 @@
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Container } from '@/components/ui/Container'
 import { RoomLayoutStudio } from '@/components/room/RoomLayoutStudio'
+import { buildWebPageJsonLd } from '@/components/seo/jsonLdBuilders'
+import { absoluteUrl } from '@/config/site'
+import { useShopPageMeta } from '@/hooks/useShopPageMeta'
 
 export function RoomLayoutPage() {
   const { t } = useTranslation()
 
+  const jsonLd = useMemo(
+    () =>
+      buildWebPageJsonLd({
+        name: t('roomLayout.title'),
+        description: t('roomLayout.subtitle'),
+        url: absoluteUrl('/room-layout'),
+      }),
+    [t],
+  )
+
+  useShopPageMeta({
+    title: t('roomLayout.title'),
+    description: t('roomLayout.subtitle'),
+    path: '/room-layout',
+    jsonLd,
+  })
   return (
     <div className="bg-gradient-to-b from-surface-muted/50 via-surface to-surface py-8 md:py-12">
       <Container>

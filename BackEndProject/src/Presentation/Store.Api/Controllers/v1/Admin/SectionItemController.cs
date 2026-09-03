@@ -4,6 +4,7 @@ using Store.Api.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Edition.Application.Features.SectionItems.Queries;
 using Edition.Application.Features.SectionItems.Commands;
+using Edition.Application.Features.Sections.Commands;
 using Store.WebFramework.Api;
 using Store.Common.Enums;
 using Store.Common.Models;
@@ -47,4 +48,10 @@ public class SectionItemController
     [HttpDelete("delete")]
     public async Task<ApiResult<OperationResult>> Delete(DeleteSectionItemRequest request)
         => await mediator.Send(request);
+
+    [ActionInfo(PermissionType.CreateSectionItem)]
+    [HttpPost("upload-image")]
+    [RequestSizeLimit(5 * 1024 * 1024)]
+    public async Task<ApiResult<UploadCmsImageResponse>> UploadImage([FromForm] IFormFile image)
+        => await mediator.Send(new UploadCmsImageCommand(image));
 }

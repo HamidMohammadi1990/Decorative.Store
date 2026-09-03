@@ -1141,4 +1141,25 @@ public enum PermissionType : int
 
     [Display(Name = "PermissionType_DeleteProfileCompletionUserState", ResourceType = typeof(EnumResources))]
     DeleteProfileCompletionUserState = 514,
+
+    [Display(Name = "PermissionType_ManageRoomTypeGroup", ResourceType = typeof(EnumResources))]
+    ManageRoomTypeGroup = 515,
+
+    [Display(Name = "PermissionType_ManageRoomType", ResourceType = typeof(EnumResources))]
+    ManageRoomType = 516,
+
+    [Display(Name = "PermissionType_CreateRoomType", ResourceType = typeof(EnumResources))]
+    CreateRoomType = 517,
+
+    [Display(Name = "PermissionType_UpdateRoomType", ResourceType = typeof(EnumResources))]
+    UpdateRoomType = 518,
+
+    [Display(Name = "PermissionType_DeleteRoomType", ResourceType = typeof(EnumResources))]
+    DeleteRoomType = 519,
+
+    [Display(Name = "PermissionType_ListRoomType", ResourceType = typeof(EnumResources))]
+    ListRoomType = 520,
+
+    [Display(Name = "PermissionType_GetRoomTypeById", ResourceType = typeof(EnumResources))]
+    GetRoomTypeById = 521,
 }

@@ -14,6 +14,7 @@ import { buildCompareRows, findBestPriceIndex } from '@/extensions/buildCompareR
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
 import { calcDiscountPercent } from '@/extensions/calcDiscountPercent'
 import { useCompareProducts } from '@/hooks/useCompareProducts'
+import { useShopPageMeta } from '@/hooks/useShopPageMeta'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { useCompareStore } from '@/stores/compareStore'
 import { MAX_COMPARE_PRODUCTS } from '@/models/catalog/compare.model'
@@ -23,6 +24,13 @@ import type { CompareRow } from '@/models/catalog/compare.model'
 export function ComparePage() {
   const { t } = useTranslation()
   const confirm = useConfirm()
+
+  useShopPageMeta({
+    title: t('compare.title', { defaultValue: 'Compare products' }),
+    description: t('seo.compareDescription'),
+    path: '/compare',
+    noindex: true,
+  })
   const { currency } = useLocaleSettings()
   const slugs = useCompareStore((s) => s.slugs)
   const remove = useCompareStore((s) => s.remove)

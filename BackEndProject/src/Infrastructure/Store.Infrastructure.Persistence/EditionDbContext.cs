@@ -102,6 +102,8 @@ public sealed class EditionDbContext
     public DbSet<MarketingPromo> MarketingPromo { get; set; }
     public DbSet<MarketingStripDisclaimer> MarketingStripDisclaimer { get; set; }
     public DbSet<NewsletterSubscriber> NewsletterSubscriber { get; set; }
+    public DbSet<RoomType> RoomType { get; set; }
+    public DbSet<RoomTypeTranslation> RoomTypeTranslation { get; set; }
     public DbSet<ProfileCompletionSetting> ProfileCompletionSetting { get; set; }
     public DbSet<ProfileCompletionUserState> ProfileCompletionUserState { get; set; }
 

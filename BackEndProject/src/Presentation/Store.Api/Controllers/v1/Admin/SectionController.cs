@@ -47,4 +47,10 @@ public class SectionController
     [HttpDelete("delete")]
     public async Task<ApiResult<OperationResult>> Delete(DeleteSectionRequest request)
         => await mediator.Send(request);
+
+    [ActionInfo(PermissionType.CreateSection)]
+    [HttpPost("upload-image")]
+    [RequestSizeLimit(5 * 1024 * 1024)]
+    public async Task<ApiResult<UploadCmsImageResponse>> UploadImage([FromForm] IFormFile image)
+        => await mediator.Send(new UploadCmsImageCommand(image));
 }

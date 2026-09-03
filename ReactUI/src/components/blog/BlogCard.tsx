@@ -55,6 +55,7 @@ export function BlogCard({ post, categoryLabel, variant = 'grid' }: BlogCardProp
         >
           <LocalImage
             image={post.coverImage}
+            sizes="144px"
             className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
           />
           <div
@@ -95,6 +96,7 @@ export function BlogCard({ post, categoryLabel, variant = 'grid' }: BlogCardProp
         <div className="aspect-[16/10] overflow-hidden bg-surface-muted">
           <LocalImage
             image={post.coverImage}
+            sizes="(max-width: 768px) 100vw, 400px"
             className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
           />
         </div>

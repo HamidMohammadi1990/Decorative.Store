@@ -23,10 +23,13 @@ import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
 import {
   adminMarketingPromoService,
   marketingPromoService,
+  resolveMarketingImageSrc,
 } from '@/services/marketingPromoService'
 import { useUserStore } from '@/stores/userStore'
 
 type Mode = 'list' | 'create' | 'edit'
+
+const MAX_FILE_MB = 5
 
 export function MarketingPromosPanel() {
   const { t } = useTranslation()
@@ -49,6 +52,8 @@ export function MarketingPromosPanel() {
   const [linkLabel, setLinkLabel] = useState('')
   const [linkHref, setLinkHref] = useState('')
   const [imageFileName, setImageFileName] = useState('')
+  const [imagePreview, setImagePreview] = useState('')
+  const [uploading, setUploading] = useState(false)
   const [priority, setPriority] = useState(0)
   const [isActive, setIsActive] = useState(true)
   const [disclaimer, setDisclaimer] = useState('')
@@ -128,6 +133,7 @@ export function MarketingPromosPanel() {
     setLinkLabel('')
     setLinkHref('')
     setImageFileName('')
+    setImagePreview('')
     setPriority(0)
     setIsActive(true)
     setEditingId(null)
@@ -152,10 +158,35 @@ export function MarketingPromosPanel() {
     setLinkLabel(item.linkLabel)
     setLinkHref(item.linkHref)
     setImageFileName(item.imageFileName)
+    setImagePreview(resolveMarketingImageSrc(item.imageFileName))
     setPriority(item.priority)
     setIsActive(item.isActive)
     setFormError(null)
     setMode('edit')
+  }
+
+  const handleImagePick = async (file: File | null) => {
+    if (!file) return
+    if (file.size > MAX_FILE_MB * 1024 * 1024) {
+      setFormError(t('dashboard.marketingPromos.fileTooLarge', { max: MAX_FILE_MB }))
+      return
+    }
+    if (!accessToken || accessToken === 'mock-access-token') {
+      setFormError(t('dashboard.marketingPromos.authRequired'))
+      return
+    }
+
+    setUploading(true)
+    setFormError(null)
+    try {
+      const uploaded = await adminMarketingPromoService.uploadImage(accessToken, locale, file)
+      setImageFileName(uploaded.imageFileName)
+      setImagePreview(uploaded.imageUrl)
+    } catch (err) {
+      setFormError(resolveAdminMutationError(err, t('dashboard.marketingPromos.uploadFailed')))
+    } finally {
+      setUploading(false)
+    }
   }
 
   const handleSave = async () => {
@@ -304,14 +335,24 @@ export function MarketingPromosPanel() {
           </div>
 
           <AdminField label={t('dashboard.marketingPromos.fieldImage')}>
-            <input
-              value={imageFileName}
-              onChange={(e) => setImageFileName(e.target.value)}
-              className={adminInputClass}
-              dir="ltr"
-              placeholder="/images/home/example.jpg"
-            />
-            <p className="mt-1 text-xs text-text-muted">{t('dashboard.marketingPromos.fieldImageHint')}</p>
+            <div className="space-y-3">
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt=""
+                  className="h-40 w-full rounded-sm border border-border object-cover"
+                />
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                disabled={uploading}
+                onChange={(e) => void handleImagePick(e.target.files?.[0] ?? null)}
+                className="block w-full text-sm text-text-muted file:me-3 file:rounded-sm file:border-0 file:bg-warm-soft file:px-3 file:py-2 file:text-sm file:font-medium file:text-warm"
+              />
+              {uploading && <InlineLoading label={t('dashboard.marketingPromos.uploading')} />}
+              <p className="text-xs text-text-muted">{t('dashboard.marketingPromos.fieldImageHint')}</p>
+            </div>
           </AdminField>
 
           <AdminField label={t('dashboard.marketingPromos.fieldPriority')}>

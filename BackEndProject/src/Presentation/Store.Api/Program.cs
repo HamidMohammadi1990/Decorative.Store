@@ -8,8 +8,8 @@ using Store.Infrastructure.LogProviders;
 using Store.Infrastructure.Configurations;
 using Store.Infrastructure;
 using Store.Infrastructure.Persistence;
-using Store.Common.Models;
 using Store.Infrastructure.Persistence.Contracts;
+using Store.Common.Models;
 using Store.Api.Modules;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +46,12 @@ builder.Services.AddJwtAuthentication(siteSettings!.JwtSettings, builder.Environ
 builder.Services.AddCustomApiVersioning();
 builder.Services.AddCustomResponseCompression();
 
+builder.Services.Configure<StorefrontSettings>(
+    builder.Configuration.GetSection(nameof(StorefrontSettings)));
+builder.Services.AddSingleton(
+    builder.Configuration.GetSection(nameof(StorefrontSettings)).Get<StorefrontSettings>()
+    ?? new StorefrontSettings());
+
 var serilogConfiguration = builder.Configuration.GetSection("Serilog:Configuration").Get<SeilogConfiguration>();
 serilogConfiguration!.UseSerilog(builder.Configuration);
 
@@ -75,6 +81,7 @@ app.UserCustomeForwardedHeaders();
 
 app.UseCustomExceptionHandler();
 app.UseHttpsRedirection();
+app.UseResponseCompression();
 app.UseSwaggerAndUI();
 app.UseRouting();
 app.UseCors("CustomCors");

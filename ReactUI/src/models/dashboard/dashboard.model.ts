@@ -144,5 +144,7 @@ export type DashboardSection =
   | 'newsletterSubscribers'
   | 'profileQuestions'
   | 'profileCompletionAnswers'
+  | 'siteGuide'
+  | 'roomTypes'
   | 'users'
   | 'roles'

@@ -33,6 +33,7 @@ public class SeedService(EditionDbContext context) : ISeedService
         await CmsSeedService.SeedContentPagesAsync(context, cancellationToken);
         await SeedProfileCompletionAsync(cancellationToken);
         await SeedMarketingPromosAsync(cancellationToken);
+        await SeedRoomTypesAsync(cancellationToken);
     }
 
     public async Task SeedDataAsync(List<DynamicPermission> dynamicPermissions, CancellationToken cancellationToken = default)
@@ -715,6 +716,32 @@ public class SeedService(EditionDbContext context) : ISeedService
             enDisclaimer.Disclaimer,
             enDisclaimer.DisclaimerLinkLabel,
             enDisclaimer.DisclaimerLinkHref));
+
+        await context.SaveChangesAsync(cancellationToken);
+    }
+
+    private async Task SeedRoomTypesAsync(CancellationToken cancellationToken = default)
+    {
+        if (await context.RoomType.AnyAsync(cancellationToken))
+            return;
+
+        var faLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "fa-IR", cancellationToken);
+        var enLanguage = await context.Language
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Code == "en-US", cancellationToken);
+
+        if (faLanguage is null || enLanguage is null)
+            return;
+
+        foreach (var item in RoomTypeSeedData.Items)
+        {
+            var roomType = RoomType.Create(item.Code, item.ImagePath, item.Priority);
+            roomType.UpsertTranslation(faLanguage.Id, item.FaTitle);
+            roomType.UpsertTranslation(enLanguage.Id, item.EnTitle);
+            context.RoomType.Add(roomType);
+        }
 
         await context.SaveChangesAsync(cancellationToken);
     }

@@ -1,3 +1,5 @@
+using Edition.Application.Common.Directories;
+using Edition.Application.Common.Utilities.Contracts;
 using Edition.Application.Contracts.Persistence;
 using Store.Common.Models;
 using Store.Domain.Entities;
@@ -119,3 +121,30 @@ public class UpdateMarketingStripDisclaimerHandler
         return OperationResult.Success();
     }
 }
+
+public class UploadMarketingPromoImageHandler
+    (ILocalFileService localFileService)
+    : IRequestHandler<UploadMarketingPromoImageCommand, OperationResult<UploadMarketingPromoImageResponse>>
+{
+    public async Task<OperationResult<UploadMarketingPromoImageResponse>> Handle(
+        UploadMarketingPromoImageCommand request,
+        CancellationToken cancellationToken)
+    {
+        if (request.Image is null || request.Image.Length == 0)
+            return ErrorModel.Create("InvalidRequest");
+
+        var filename = await localFileService.SaveFileAsync(request.Image, MarketingPromoDirectory.MarketingPromoImage);
+        if (!filename.IsSuccess)
+            return filename.ToGenericFailure<UploadMarketingPromoImageResponse>();
+
+        var imageFileName = filename.Result!;
+        return new UploadMarketingPromoImageResponse
+        {
+            ImageFileName = imageFileName,
+            ImageUrl = MarketingPromoDirectory.GetImageUrl(imageFileName),
+        };
+    }
+}
+
+public record UploadMarketingPromoImageCommand(Microsoft.AspNetCore.Http.IFormFile Image)
+    : IRequest<OperationResult<UploadMarketingPromoImageResponse>>;

@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useRouteLoaderData } from 'react-router-dom'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import { catalogService } from '@/services/catalogService'
+import type { ComparePageLoaderData } from '@/routes/loaders/types'
 import { useCompareStore } from '@/stores/compareStore'
 import { useSettingsStore } from '@/stores/settingsStore'
 
@@ -11,12 +13,35 @@ interface UseCompareProductsResult {
   reload: () => void
 }
 
+function slugsKey(slugs: string[]) {
+  return slugs.join('\0')
+}
+
+function isLoaderFresh(
+  loaderData: ComparePageLoaderData | undefined,
+  locale: string,
+  slugs: string[],
+): loaderData is ComparePageLoaderData {
+  return Boolean(
+    loaderData &&
+      loaderData.locale === locale &&
+      slugsKey(loaderData.slugs) === slugsKey(slugs),
+  )
+}
+
 export function useCompareProducts(): UseCompareProductsResult {
   const locale = useSettingsStore((s) => s.locale)
   const slugs = useCompareStore((s) => s.slugs)
-  const [products, setProducts] = useState<ProductDetail[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const loaderData = useRouteLoaderData('compare') as ComparePageLoaderData | undefined
+  const loaderFresh = isLoaderFresh(loaderData, locale, slugs)
+
+  const [products, setProducts] = useState<ProductDetail[]>(() =>
+    loaderFresh ? loaderData.products : [],
+  )
+  const [loading, setLoading] = useState(() => slugs.length > 0 && !loaderFresh)
+  const [error, setError] = useState<string | null>(() =>
+    loaderFresh ? (loaderData.error ?? null) : null,
+  )
 
   const load = useCallback(async () => {
     if (slugs.length === 0) {
@@ -48,8 +73,22 @@ export function useCompareProducts(): UseCompareProductsResult {
   }, [locale, slugs])
 
   useEffect(() => {
+    if (slugs.length === 0) {
+      setProducts([])
+      setLoading(false)
+      setError(null)
+      return
+    }
+
+    if (loaderFresh) {
+      setProducts(loaderData.products)
+      setError(loaderData.error ?? null)
+      setLoading(false)
+      return
+    }
+
     void load()
-  }, [load])
+  }, [load, loaderFresh, loaderData, slugs.length])
 
   return { products, loading, error, reload: load }
 }

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { CompareIcon } from '@/components/compare/CompareIcon'
 import { Container } from '@/components/ui/Container'
 import { Button } from '@/components/ui/Button'
+import { useShopPageMeta } from '@/hooks/useShopPageMeta'
 
 const QUICK_LINKS = [
   { to: '/', labelKey: 'notFound.links.home', descKey: 'notFound.links.homeDesc' },
@@ -14,6 +15,13 @@ const QUICK_LINKS = [
 export function NotFoundPage() {
   const { t } = useTranslation()
   const location = useLocation()
+
+  useShopPageMeta({
+    title: t('notFound.title'),
+    description: t('notFound.message'),
+    noindex: true,
+    path: location.pathname,
+  })
 
   return (
     <div className="relative flex-1 overflow-hidden bg-gradient-to-b from-warm-soft/50 via-surface to-surface">

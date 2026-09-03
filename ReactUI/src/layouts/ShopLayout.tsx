@@ -1,5 +1,5 @@
-import { Outlet } from 'react-router-dom'
 import { useRef } from 'react'
+import { Outlet } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { PromoAnnouncementBar } from '@/components/home/PromoAnnouncementBar'
 import { SiteFooter } from '@/components/home/SiteFooter'
@@ -24,6 +24,7 @@ import { useAddressSync } from '@/hooks/useAddressSync'
 import { useWishlistSync } from '@/hooks/useWishlistSync'
 import { useIsAuthenticated } from '@/stores/userStore'
 import { AiAssistantWidget } from '@/components/assistant/AiAssistantWidget'
+import { useShopPageMetaDefaults } from '@/hooks/useShopPageMeta'
 
 function ShopLayoutContent() {
   const { t } = useTranslation()
@@ -36,6 +37,7 @@ function ShopLayoutContent() {
   useAddressSync()
   useWishlistSync()
   const { data, loading } = useHomePage()
+  useShopPageMetaDefaults()
   useShopChromeHeight(chromeRef, !loading && !!data)
 
   return (
@@ -63,6 +65,7 @@ function ShopLayoutContent() {
       {/* Stories load from backend independently of homepage CMS data */}
       <StoriesStrip />
 
+      {/* Shop pages are eagerly imported; Suspense kept for any future async children */}
       <Outlet />
 
       {data && <SiteFooter data={data.footer} />}

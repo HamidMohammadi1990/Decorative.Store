@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { writeCompareSlugsToCookie } from '@/extensions/compareCookie'
 import { persist } from 'zustand/middleware'
 import { MAX_COMPARE_PRODUCTS } from '@/models/catalog/compare.model'
 
@@ -44,6 +45,13 @@ export const useCompareStore = create<CompareState>()(
     {
       name: 'diba-compare',
       partialize: (state) => ({ slugs: state.slugs }),
+      onRehydrateStorage: () => (state) => {
+        if (state) writeCompareSlugsToCookie(state.slugs)
+      },
     },
   ),
 )
+
+useCompareStore.subscribe((state, prev) => {
+  if (state.slugs !== prev.slugs) writeCompareSlugsToCookie(state.slugs)
+})

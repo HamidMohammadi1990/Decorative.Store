@@ -1,4 +1,9 @@
 import type { AdminPermission } from '@/models/admin/permission.model'
+import {
+  getPermissionLevelPersianLabel,
+  getPermissionPersianLabel,
+  normalizePermissionSearchText,
+} from '@/extensions/permissionPersianLabel'
 
 export interface PermissionTreeNode extends AdminPermission {
   children: PermissionTreeNode[]
@@ -36,18 +41,29 @@ export function buildPermissionTree(items: AdminPermission[]): PermissionTreeNod
 }
 
 function permissionMatchesQuery(permission: AdminPermission, query: string) {
-  return (
-    permission.title.toLowerCase().includes(query) ||
-    permission.url.toLowerCase().includes(query) ||
-    (permission.nameSpace?.toLowerCase().includes(query) ?? false)
-  )
+  const persianTitle = getPermissionPersianLabel(permission.title)
+  const persianLevel = getPermissionLevelPersianLabel(permission.levelTypeTitle)
+  const normalizedQuery = normalizePermissionSearchText(query)
+
+  const haystack = [
+    permission.title,
+    persianTitle,
+    permission.url,
+    permission.nameSpace ?? '',
+    permission.levelTypeTitle,
+    persianLevel,
+  ]
+    .map((value) => normalizePermissionSearchText(value))
+    .filter(Boolean)
+
+  return haystack.some((value) => value.includes(normalizedQuery))
 }
 
 export function filterPermissionTree(
   roots: PermissionTreeNode[],
   rawQuery: string,
 ): PermissionTreeNode[] {
-  const query = rawQuery.trim().toLowerCase()
+  const query = normalizePermissionSearchText(rawQuery)
   if (!query) return roots
 
   const filterNode = (node: PermissionTreeNode): PermissionTreeNode | null => {

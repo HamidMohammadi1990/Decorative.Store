@@ -537,6 +537,36 @@ export function LogoutIcon(props: DashboardIconProps) {
   )
 }
 
+export function RoomTypeIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <rect x="4" y="8" width="16" height="12" rx="1.5" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M4 12h16M10 8V5.5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1V8" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M8 16h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </IconBase>
+  )
+}
+
+export function GuideBookIcon(props: DashboardIconProps) {
+  return (
+    <IconBase {...props}>
+      <path
+        d="M6 5.5h9.5a2 2 0 0 1 2 2V19.5H8a2 2 0 0 1-2-2V5.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15.5 7.5H17a2 2 0 0 1 2 2V19.5H15.5V7.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="M8 9h5M8 12.5h5M8 16h3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </IconBase>
+  )
+}
+
 export function CmsPagesIcon(props: DashboardIconProps) {
   return (
     <IconBase {...props}>

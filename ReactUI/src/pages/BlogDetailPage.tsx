@@ -12,6 +12,9 @@ import { Container } from '@/components/ui/Container'
 import { PageLoading } from '@/components/ui/Spinner'
 import { formatBlogDate } from '@/extensions/formatBlogDate'
 import { useBlogPost } from '@/hooks/useBlogPost'
+import { useShopPageMeta, resolveOgImageSrc } from '@/hooks/useShopPageMeta'
+import { buildArticleJsonLd, buildBreadcrumbJsonLd } from '@/components/seo/jsonLdBuilders'
+import { absoluteUrl } from '@/config/site'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { useSettingsStore } from '@/stores/settingsStore'
 
@@ -20,6 +23,32 @@ export function BlogDetailPage() {
   const { slug: routeSlug } = useParams<{ slug: string }>()
   const locale = useSettingsStore((s) => s.locale)
   const { post, related, categoryMap, loading, error, reload } = useBlogPost()
+
+  useShopPageMeta({
+    title: post?.title,
+    description: post?.excerpt,
+    image: post ? resolveOgImageSrc(post.coverImage.src) : undefined,
+    type: 'article',
+    path: post ? `/blog/${post.slug || routeSlug || ''}` : undefined,
+    active: Boolean(post),
+    jsonLd: post
+      ? [
+          buildBreadcrumbJsonLd([
+            { name: t('product.breadcrumbHome'), path: '/' },
+            { name: t('blog.title'), path: '/blog' },
+            { name: post.title },
+          ]),
+          buildArticleJsonLd({
+            headline: post.title,
+            description: post.excerpt,
+            image: resolveOgImageSrc(post.coverImage.src) ?? '',
+            url: absoluteUrl(`/blog/${post.slug || routeSlug || ''}`),
+            datePublished: post.publishedAt,
+            authorName: post.author.name,
+          }),
+        ]
+      : null,
+  })
 
   if (loading) {
     return <PageLoading />

@@ -1,20 +1,18 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useConfirm } from '@/hooks/useConfirm'
-import type { RoomPresetId } from '@/models/room/roomLayout.model'
 import { Button } from '@/components/ui/Button'
 import { useRoomLayout } from '@/hooks/useRoomLayout'
-
-const PRESETS: RoomPresetId[] = ['living', 'bedroom', 'dining']
+import { useRoomTypeSelection } from '@/hooks/useRoomTypeSelection'
+import { RemoteImage } from '@/components/ui/RemoteImage'
 
 export function RoomLayoutToolbar() {
   const { t } = useTranslation()
   const confirm = useConfirm()
+  const { items, loading, roomTypeId, setRoomTypeId } = useRoomTypeSelection()
   const {
-    roomPreset,
     selectedItem,
     showGrid,
-    setRoomPreset,
     setShowGrid,
     rotateItem,
     scaleItem,
@@ -40,22 +38,43 @@ export function RoomLayoutToolbar() {
         <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-text-muted">
           {t('roomLayout.roomType')}
         </p>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {PRESETS.map((preset) => (
-            <button
-              key={preset}
-              type="button"
-              onClick={() => setRoomPreset(preset)}
-              className={`rounded-sm border px-3 py-1.5 text-xs font-medium transition-colors ${
-                roomPreset === preset
-                  ? 'border-warm bg-warm text-warm-text shadow-sm'
-                  : 'border-border bg-surface text-text-muted hover:border-warm/40 hover:text-warm'
-              }`}
-            >
-              {t(`roomLayout.presets.${preset}`)}
-            </button>
-          ))}
-        </div>
+        {loading ? (
+          <p className="mt-2 text-xs text-text-muted">{t('common.loading')}</p>
+        ) : (
+          <div className="mt-2 flex flex-wrap gap-2">
+            {items.map((type) => (
+              <button
+                key={type.id}
+                type="button"
+                onClick={() => setRoomTypeId(type.id)}
+                className={`overflow-hidden rounded-sm border transition-colors ${
+                  roomTypeId === type.id
+                    ? 'border-warm ring-2 ring-warm/30'
+                    : 'border-border hover:border-warm/40'
+                }`}
+              >
+                <span className="block size-14 overflow-hidden bg-surface-muted sm:size-16">
+                  <RemoteImage
+                    src={type.imageUrl}
+                    alt=""
+                    sizes="64px"
+                    className="size-full object-cover"
+                    draggable={false}
+                  />
+                </span>
+                <span
+                  className={`block px-2 py-1.5 text-center text-[11px] font-medium ${
+                    roomTypeId === type.id
+                      ? 'bg-warm text-warm-text'
+                      : 'bg-surface text-text-muted'
+                  }`}
+                >
+                  {type.title}
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
@@ -93,14 +112,8 @@ export function RoomLayoutToolbar() {
               label={t('roomLayout.rotateRight')}
               onClick={() => rotateItem(selectedItem.id, 15)}
             />
-            <ToolbarBtn
-              label="−"
-              onClick={() => scaleItem(selectedItem.id, -0.08)}
-            />
-            <ToolbarBtn
-              label="+"
-              onClick={() => scaleItem(selectedItem.id, 0.08)}
-            />
+            <ToolbarBtn label="−" onClick={() => scaleItem(selectedItem.id, -0.08)} />
+            <ToolbarBtn label="+" onClick={() => scaleItem(selectedItem.id, 0.08)} />
             <ToolbarBtn
               label={t('roomLayout.bringFront')}
               onClick={() => bringToFront(selectedItem.id)}

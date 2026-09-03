@@ -8,7 +8,6 @@ import { categoryService } from '@/services/categoryService'
 import { mapCmsPageToHomePage } from '@/services/mappers/cmsPageMapper'
 import { mapCategoryTreeToCategoryNav, mapCategoryTreeToNav } from '@/services/mappers/categoryTreeMapper'
 import { buildFeaturedShopGrid } from '@/services/mappers/featuredShopMapper'
-import { buildHeroCarouselFromProducts } from '@/services/mappers/heroCarouselMapper'
 import { mapHomePage } from '@/services/mappers/homeMapper'
 import { languageService } from '@/services/languageService'
 import {
@@ -49,7 +48,6 @@ function mergeHomePage(base: HomePage, override: Partial<HomePage>): HomePage {
 function applyCmsOnMock(mock: HomePage, cms: HomePage): HomePage {
   let page = mergeHomePage(mock, cms)
 
-  if (!cms.hero?.slides?.length) page.hero = mock.hero
   if (!cms.promoTiles?.tiles?.length) page.promoTiles = mock.promoTiles
   if (!cms.categoryNav?.items?.length) page.categoryNav = mock.categoryNav
   if (!cms.featuredShop?.sections?.length) page.featuredShop = mock.featuredShop
@@ -105,18 +103,6 @@ async function loadCmsPage(
   }
 }
 
-async function loadHeroCarousel(locale: Locale) {
-  try {
-    const products = await catalogProductService.getNewestProducts(locale, 4)
-    if (products.length > 0) {
-      return buildHeroCarouselFromProducts(products, locale)
-    }
-  } catch {
-    // keep CMS hero
-  }
-  return undefined
-}
-
 async function loadFeaturedShop(locale: Locale, fallback: HomePage['featuredShop']) {
   try {
     const collections = await catalogProductService.getFeaturedCollections(locale)
@@ -157,6 +143,8 @@ async function buildPage(
       const cmsPage = await loadCmsPage(locale, !skipHomeCatalogContent, cmsSlug)
       if (cmsPage) {
         page = applyCmsOnMock(mockPage, cmsPage)
+      } else {
+        page = { ...mockPage, hero: { slides: [] } }
       }
     }
 
@@ -164,13 +152,11 @@ async function buildPage(
 
     let pageWithContent = page
     if (!skipHomeCatalogContent) {
-      const [hero, featuredShop, promoTiles] = await Promise.all([
-        loadHeroCarousel(locale),
+      const [featuredShop, promoTiles] = await Promise.all([
         loadFeaturedShop(locale, page.featuredShop),
         loadPromoTiles(locale, page.promoTiles),
       ])
       pageWithContent = mergeHomePage(page, {
-        ...(hero ? { hero } : {}),
         featuredShop,
         promoTiles,
       })

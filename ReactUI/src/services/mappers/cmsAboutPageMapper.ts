@@ -5,13 +5,16 @@ import type { CmsPage, CmsPageSection } from '@/models/cms/cmsPage.model'
 import type { AboutPageContent } from '@/models/about/aboutPage.model'
 import type { AppLink } from '@/models/shared/link.model'
 import type { ImageAsset } from '@/models/shared/image.model'
+import { resolveCmsImageSrc } from '@/services/adminCmsMediaService'
 
 function toLink(label: string, href: string): AppLink {
   return { label, href: href || '/' }
 }
 
 function toImage(src: string | null | undefined, alt: string): ImageAsset {
-  return { src: src?.trim() || '/images/home/living-room.jpg', alt }
+  const trimmed = src?.trim()
+  if (!trimmed) return { src: '/images/home/living-room.jpg', alt }
+  return { src: resolveCmsImageSrc(trimmed), alt }
 }
 
 function findItemByIcon(section: CmsPageSection, icon: string) {

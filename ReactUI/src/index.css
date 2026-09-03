@@ -30,6 +30,11 @@
     scroll-behavior: smooth;
   }
 
+  html[lang='fa'] {
+    --font-sans: 'Vazirmatn', system-ui, sans-serif;
+    --font-display: 'Vazirmatn', system-ui, sans-serif;
+  }
+
   html.dark {
     color-scheme: dark;
 
