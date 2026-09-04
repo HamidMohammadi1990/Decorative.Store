@@ -21,9 +21,14 @@ const STATIC_NAV_IDS = new Set(['blog'])
 const pageCache = new Map<string, HomePage>()
 const pageRequests = new Map<string, Promise<HomePage>>()
 
+type HomePagePatch = Partial<Omit<HomePage, 'header' | 'footer'>> & {
+  header?: Partial<HomePage['header']>
+  footer?: Partial<HomePage['footer']>
+}
+
 function pageCacheKey(
   locale: Locale,
-  skipCatalogNav: boolean,
+  _skipCatalogNav: boolean,
   skipHomeCatalogContent: boolean,
   skipCmsPage: boolean,
   cmsSlug: string,
@@ -35,7 +40,7 @@ function getStaticPrimaryNav(locale: Locale) {
   return getNavigationMock(locale).primaryNav.filter((item) => STATIC_NAV_IDS.has(item.id))
 }
 
-function mergeHomePage(base: HomePage, override: Partial<HomePage>): HomePage {
+function mergeHomePage(base: HomePage, override: HomePagePatch): HomePage {
   return {
     ...base,
     ...override,
@@ -204,7 +209,7 @@ export const homeService = {
       skipCatalogNav?: boolean
       skipHomeCatalogContent?: boolean
       skipCmsPage?: boolean
-      cmsSlug?: 'shop' | 'blog' | 'about'
+      cmsSlug?: string
     } = {},
   ): Promise<HomePage> {
     const {

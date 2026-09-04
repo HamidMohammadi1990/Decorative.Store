@@ -190,7 +190,7 @@ export function applyOrderDetail(base: DashboardOrder, detailData: unknown): Das
           postType: readStringField(itemRecord, 'postType', 'PostType') || undefined,
           deliveryType: readStringField(itemRecord, 'deliveryType', 'DeliveryType') || undefined,
           properties: Array.isArray(itemRecord.properties ?? itemRecord.Properties)
-            ? (itemRecord.properties ?? itemRecord.Properties).map((property: unknown) => {
+            ? (itemRecord.properties ?? itemRecord.Properties as unknown[]).map((property: unknown) => {
                 const propertyRecord = readRecord(property) ?? {}
                 return {
                   title: readStringField(propertyRecord, 'title', 'Title'),
@@ -199,7 +199,7 @@ export function applyOrderDetail(base: DashboardOrder, detailData: unknown): Das
               })
             : undefined,
           attachments: Array.isArray(itemRecord.attachments ?? itemRecord.Attachments)
-            ? (itemRecord.attachments ?? itemRecord.Attachments).map((attachment: unknown) => {
+            ? (itemRecord.attachments ?? itemRecord.Attachments as unknown[]).map((attachment: unknown) => {
                 const attachmentRecord = readRecord(attachment) ?? {}
                 return {
                   title: readStringField(attachmentRecord, 'typeTitle', 'TypeTitle'),

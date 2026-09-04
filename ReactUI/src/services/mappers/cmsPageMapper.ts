@@ -7,6 +7,10 @@ import type { CmsPage, CmsPageSection, CmsSectionItem } from '@/models/cms/cmsPa
 import type { HomePage } from '@/models/home/homePage.model'
 import type { AppLink } from '@/models/shared/link.model'
 import type { ImageAsset } from '@/models/shared/image.model'
+
+function toLink(label: string, href: string): AppLink {
+  return { label, href: href || '/' }
+}
 import { readRecord, readStringField } from '@/services/api/apiNormalize'
 import { resolveCmsImageSrc } from '@/services/adminCmsMediaService'
 
@@ -254,7 +258,7 @@ function mapPromoTiles(section: CmsPageSection): HomePage['promoTiles'] {
     disclaimerLink: disclaimerLinkItem
       ? toLink(disclaimerLinkItem.title, disclaimerLinkItem.url ?? section.url)
       : section.url
-        ? toLink(disclaimerLinkItem?.title ?? 'Details', section.url)
+        ? toLink('Details', section.url)
         : undefined,
   }
 }

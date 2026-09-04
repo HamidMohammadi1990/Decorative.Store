@@ -162,11 +162,11 @@ export const adminMarketingPromoService = {
   },
 
   async update(accessToken: string, locale: Locale, input: UpdateAdminMarketingPromoInput) {
-    return apiPut(`${ADMIN_BASE}/update`, input, accessToken, { locale })
+    return apiPut(`${ADMIN_BASE}/update`, input, { locale, accessToken })
   },
 
   async delete(accessToken: string, locale: Locale, id: string) {
-    return apiDelete(`${ADMIN_BASE}/delete`, accessToken, { id }, { locale })
+    return apiDelete(`${ADMIN_BASE}/delete`, accessToken, { id })
   },
 
   async updateDisclaimer(
@@ -174,7 +174,7 @@ export const adminMarketingPromoService = {
     locale: Locale,
     input: UpdateMarketingStripDisclaimerInput,
   ) {
-    return apiPut(`${ADMIN_BASE}/update-disclaimer`, input, accessToken, { locale })
+    return apiPut(`${ADMIN_BASE}/update-disclaimer`, input, { locale, accessToken })
   },
 
   async uploadImage(
@@ -197,14 +197,14 @@ export const adminMarketingPromoService = {
 
     const responseBody = await response.json()
     if (!response.ok) {
-      throw new ApiError(response.status, normalizeApiEnvelope(responseBody))
+      throw new ApiError(response.status, normalizeApiEnvelope(responseBody).messages)
     }
 
     const envelope = normalizeApiEnvelope(responseBody)
     const record = readRecord(envelope.data)
     const imageFileName = readStringField(record ?? {}, 'imageFileName', 'ImageFileName')
     const imageUrl = readStringField(record ?? {}, 'imageUrl', 'ImageUrl')
-    if (!imageFileName || !imageUrl) throw new ApiError(response.status, envelope)
+    if (!imageFileName || !imageUrl) throw new ApiError(response.status, envelope.messages)
 
     return {
       imageFileName,

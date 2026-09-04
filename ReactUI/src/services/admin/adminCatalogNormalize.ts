@@ -51,22 +51,23 @@ export function normalizeAdminPaged<T>(
 export function normalizeTranslations(raw: unknown): CatalogTranslation[] {
   if (!Array.isArray(raw)) return []
 
-  return raw
-    .map((item) => {
-      const record = readRecord(item)
-      if (!record) return null
+  const translations: CatalogTranslation[] = []
+  for (const item of raw) {
+    const record = readRecord(item)
+    if (!record) continue
 
-      const title = readStringField(record, 'title', 'Title')
-      if (!title) return null
+    const title = readStringField(record, 'title', 'Title')
+    if (!title) continue
 
-      return {
-        languageId: readNumberField(record, 'languageId', 'LanguageId'),
-        title,
-        slug: readStringField(record, 'slug', 'Slug'),
-        description: readStringField(record, 'description', 'Description') || undefined,
-      }
+    translations.push({
+      languageId: readNumberField(record, 'languageId', 'LanguageId'),
+      title,
+      slug: readStringField(record, 'slug', 'Slug'),
+      description: readStringField(record, 'description', 'Description') || undefined,
     })
-    .filter((item): item is CatalogTranslation => item !== null)
+  }
+
+  return translations
 }
 
 export function pickTranslation(

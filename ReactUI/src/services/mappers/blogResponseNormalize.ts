@@ -235,18 +235,14 @@ export function normalizeBlogPostDetailPage(
   const resolvedSlug = post.slug || requestSlug.trim()
   const tags = tagTitles.length > 0 ? tagTitles : post.tags
 
-  const comments = (Array.isArray(record.comments ?? record.Comments)
-    ? (record.comments ?? record.Comments)
-    : []
-  ).map(normalizeBlogComment)
+  const commentsRaw = record.comments ?? record.Comments
+  const comments = (Array.isArray(commentsRaw) ? commentsRaw : []).map(normalizeBlogComment)
 
   const commentCount =
     readNumberField(postRecord, 'commentCount', 'CommentCount') || comments.length
 
-  const related = (Array.isArray(record.relatedPosts ?? record.RelatedPosts)
-    ? (record.relatedPosts ?? record.RelatedPosts)
-    : []
-  ).map((item) => {
+  const relatedRaw = record.relatedPosts ?? record.RelatedPosts
+  const related = (Array.isArray(relatedRaw) ? relatedRaw : []).map((item: unknown) => {
     const relatedRecord = readRecord(item) ?? {}
     const relatedCategorySlug = readStringField(relatedRecord, 'categorySlug', 'CategorySlug')
     return normalizeBlogPostSummary(item, DEFAULT_DETAIL_COVER, relatedCategorySlug)

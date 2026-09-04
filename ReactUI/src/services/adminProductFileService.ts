@@ -104,15 +104,15 @@ export const adminProductFileService = {
       throw new ApiError(response.status, messages)
     }
 
-    return data
-      .map((item) => {
-        const record = readRecord(item)
-        if (!record) return null
-        const id = readEncryptedId(record, 'id', 'Id')
-        const imageUrl = readStringField(record, 'imageUrl', 'ImageUrl')
-        const title = readStringField(record, 'title', 'Title')
-        if (!id || !imageUrl) return null
-        return {
+    return data.flatMap((item) => {
+      const record = readRecord(item)
+      if (!record) return []
+      const id = readEncryptedId(record, 'id', 'Id')
+      const imageUrl = readStringField(record, 'imageUrl', 'ImageUrl')
+      const title = readStringField(record, 'title', 'Title')
+      if (!id || !imageUrl) return []
+      return [
+        {
           id,
           productId: files[0]?.productId ?? '',
           productTitle: '',
@@ -121,9 +121,9 @@ export const adminProductFileService = {
           imageUrl,
           isActive: true,
           isMain: files.some((f) => f.isIndex),
-        } satisfies AdminProductFile
-      })
-      .filter((item): item is AdminProductFile => item !== null)
+        },
+      ]
+    })
   },
 
   async updateStatus(

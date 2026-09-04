@@ -486,7 +486,7 @@ async function getMockListing(
 ): Promise<ProductListingResult> {
   const { pathname, searchParams } = query
   const { collection, segments } = resolveListingPath(pathname)
-  const allProducts = getProductsMock(locale) as ProductSummary[]
+  const allProducts = getProductsMock(locale) as unknown as ProductSummary[]
 
   let filtered = allProducts.filter((product) => {
     if (
@@ -624,7 +624,7 @@ export const catalogService = {
     }
 
     return mockFetch(async () => {
-      const products = getProductsMock(locale) as ProductSummary[]
+      const products = getProductsMock(locale) as unknown as ProductSummary[]
       const product = products.find((p) => p.slug === slug)
       if (!product) return null
       return buildProductDetailFromSummary(product)
@@ -652,7 +652,7 @@ export const catalogService = {
     }
 
     return mockFetch(async () => {
-      const products = getProductsMock(locale) as ProductSummary[]
+      const products = getProductsMock(locale) as unknown as ProductSummary[]
       return products
         .filter((p) => slugs.includes(p.slug))
         .sort((a, b) => (order.get(a.slug) ?? 0) - (order.get(b.slug) ?? 0))
@@ -670,7 +670,7 @@ export const catalogService = {
       return mapRelatedCatalogProducts(products)
     } catch {
       return mockFetch(async () => {
-        const products = getProductsMock(locale) as ProductSummary[]
+        const products = getProductsMock(locale) as unknown as ProductSummary[]
         const current = products.find((p) => p.slug === slug)
         if (!current) return []
 

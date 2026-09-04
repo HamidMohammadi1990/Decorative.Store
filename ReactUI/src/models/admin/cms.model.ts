@@ -1,5 +1,3 @@
-import type { CatalogTranslation } from '@/models/admin/catalog.model'
-
 export interface CmsContentTranslation {
   languageId: number
   title: string

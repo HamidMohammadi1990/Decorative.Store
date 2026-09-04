@@ -111,7 +111,7 @@ export function StoryViewerModal() {
 
   const progressBars = useMemo(() => {
     if (!group) return []
-    return group.slides.map((s, i) => {
+    return group.slides.map((_slide, i) => {
       if (i < slideIndex) return 1
       if (i > slideIndex) return 0
       return slideProgress

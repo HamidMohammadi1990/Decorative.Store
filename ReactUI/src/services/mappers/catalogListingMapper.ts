@@ -2,7 +2,6 @@ import { API_BASE_URL } from '@/config/api'
 import type {
   CatalogListingFacetGroup,
   CatalogListingProduct,
-  CatalogListingResponse,
 } from '@/models/catalog/catalogListing.model'
 import type { ProductSummary } from '@/models/catalog/product.model'
 import type { FilterFacet } from '@/models/catalog/listing.model'

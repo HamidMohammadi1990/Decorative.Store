@@ -104,15 +104,15 @@ export const adminBlogPostFileService = {
       throw new ApiError(response.status, messages)
     }
 
-    return data
-      .map((item) => {
-        const record = readRecord(item)
-        if (!record) return null
-        const id = readEncryptedId(record, 'id', 'Id')
-        const imageUrl = readStringField(record, 'imageUrl', 'ImageUrl')
-        const title = readStringField(record, 'title', 'Title')
-        if (!id || !imageUrl) return null
-        return {
+    return data.flatMap((item) => {
+      const record = readRecord(item)
+      if (!record) return []
+      const id = readEncryptedId(record, 'id', 'Id')
+      const imageUrl = readStringField(record, 'imageUrl', 'ImageUrl')
+      const title = readStringField(record, 'title', 'Title')
+      if (!id || !imageUrl) return []
+      return [
+        {
           id,
           blogPostId: files[0]?.blogPostId ?? '',
           blogPostTitle: '',
@@ -121,9 +121,9 @@ export const adminBlogPostFileService = {
           imageUrl,
           isActive: true,
           isMain: files.some((f) => f.isIndex),
-        } satisfies AdminBlogPostFile
-      })
-      .filter((item): item is AdminBlogPostFile => item !== null)
+        },
+      ]
+    })
   },
 
   async updateStatus(

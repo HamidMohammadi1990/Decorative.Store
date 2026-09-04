@@ -32,7 +32,6 @@ function useDashboardPageTitle() {
 export function DashboardLayout() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const location = useLocation()
   const pageTitle = useDashboardPageTitle()
   const { locale } = useLocaleSettings()
   const user = useUserStore((s) => s.user)

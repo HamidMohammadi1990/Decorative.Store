@@ -1,6 +1,5 @@
 import { API_BASE_URL } from '@/config/api'
 import type { FeaturedShopGrid } from '@/models/home/featuredShop.model'
-import type { Locale } from '@/models/shared/locale.model'
 
 export interface FeaturedCatalogCollection {
   id: string

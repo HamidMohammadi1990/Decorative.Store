@@ -43,17 +43,17 @@ export default defineConfig(({ mode }) => ({
   server: {
     proxy: {
       '/api': {
-        target: 'https://localhost:60927',
+        target: 'https://localhost:55274',
         changeOrigin: true,
         secure: false,
       },
       '/Uploads': {
-        target: 'https://localhost:60927',
+        target: 'https://localhost:55274',
         changeOrigin: true,
         secure: false,
       },
       '/sitemap-dynamic.xml': {
-        target: 'https://localhost:60927',
+        target: 'https://localhost:55274',
         changeOrigin: true,
         secure: false,
         rewrite: () => '/api/v1/seo/sitemap.xml',

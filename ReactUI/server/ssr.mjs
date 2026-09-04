@@ -16,7 +16,7 @@ if (!process.env.SSR_API_TARGET && env.SSR_API_TARGET) {
 const isProd = process.env.NODE_ENV === 'production'
 const port = Number(process.env.PORT) || 5173
 const host = process.env.HOST ?? '127.0.0.1'
-const apiTarget = process.env.SSR_API_TARGET ?? 'https://localhost:60927'
+const apiTarget = process.env.SSR_API_TARGET ?? 'https://localhost:55274'
 
 async function createSsrServer() {
   const app = express()

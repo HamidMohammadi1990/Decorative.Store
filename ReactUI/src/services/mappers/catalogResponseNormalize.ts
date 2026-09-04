@@ -53,15 +53,18 @@ export function normalizeCatalogListingProduct(data: unknown): CatalogListingPro
 
 export function normalizeCatalogProductResponse(data: unknown): CatalogProductResponse {
   const record = readRecord(data) ?? {}
-  const images = Array.isArray(record.images ?? record.Images)
-    ? (record.images ?? record.Images).map(normalizeCatalogProductImage)
+  const imagesRaw = record.images ?? record.Images
+  const images = Array.isArray(imagesRaw)
+    ? imagesRaw.map(normalizeCatalogProductImage)
     : []
-  const features = Array.isArray(record.features ?? record.Features)
-    ? (record.features ?? record.Features).map(normalizeCatalogProductFeature)
+  const featuresRaw = record.features ?? record.Features
+  const features = Array.isArray(featuresRaw)
+    ? featuresRaw.map(normalizeCatalogProductFeature)
     : []
-  const longDescriptions = Array.isArray(record.longDescriptions ?? record.LongDescriptions)
-    ? (record.longDescriptions ?? record.LongDescriptions).filter(
-        (item): item is string => typeof item === 'string',
+  const longDescriptionsRaw = record.longDescriptions ?? record.LongDescriptions
+  const longDescriptions = Array.isArray(longDescriptionsRaw)
+    ? longDescriptionsRaw.filter(
+        (item: unknown): item is string => typeof item === 'string',
       )
     : []
 

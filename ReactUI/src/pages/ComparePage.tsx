@@ -31,7 +31,6 @@ export function ComparePage() {
     path: '/compare',
     noindex: true,
   })
-  const { currency } = useLocaleSettings()
   const slugs = useCompareStore((s) => s.slugs)
   const remove = useCompareStore((s) => s.remove)
   const clear = useCompareStore((s) => s.clear)

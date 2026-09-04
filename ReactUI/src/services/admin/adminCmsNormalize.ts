@@ -4,25 +4,26 @@ import { readRecord, readStringField, readNumberField } from '@/services/api/api
 export function normalizeCmsTranslations(raw: unknown): CmsContentTranslation[] {
   if (!Array.isArray(raw)) return []
 
-  return raw
-    .map((item) => {
-      const record = readRecord(item)
-      if (!record) return null
+  const translations: CmsContentTranslation[] = []
+  for (const item of raw) {
+    const record = readRecord(item)
+    if (!record) continue
 
-      const title = readStringField(record, 'title', 'Title')
-      if (!title) return null
+    const title = readStringField(record, 'title', 'Title')
+    if (!title) continue
 
-      return {
-        languageId: readNumberField(record, 'languageId', 'LanguageId'),
-        title,
-        slug: readStringField(record, 'slug', 'Slug') || undefined,
-        description: readStringField(record, 'description', 'Description') || undefined,
-        url: readStringField(record, 'url', 'Url') || undefined,
-        metaTitle: readStringField(record, 'metaTitle', 'MetaTitle') || undefined,
-        metaDescription: readStringField(record, 'metaDescription', 'MetaDescription') || undefined,
-      }
+    translations.push({
+      languageId: readNumberField(record, 'languageId', 'LanguageId'),
+      title,
+      slug: readStringField(record, 'slug', 'Slug') || undefined,
+      description: readStringField(record, 'description', 'Description') || undefined,
+      url: readStringField(record, 'url', 'Url') || undefined,
+      metaTitle: readStringField(record, 'metaTitle', 'MetaTitle') || undefined,
+      metaDescription: readStringField(record, 'metaDescription', 'MetaDescription') || undefined,
     })
-    .filter((item): item is CmsContentTranslation => item !== null)
+  }
+
+  return translations
 }
 
 export function normalizeSectionTypeTranslations(raw: unknown) {

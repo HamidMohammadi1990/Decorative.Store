@@ -37,14 +37,14 @@ async function uploadCmsImage(
 
   const responseBody = await response.json()
   if (!response.ok) {
-    throw new ApiError(response.status, normalizeApiEnvelope(responseBody))
+    throw new ApiError(response.status, normalizeApiEnvelope(responseBody).messages)
   }
 
   const envelope = normalizeApiEnvelope(responseBody)
   const record = readRecord(envelope.data)
   const imageFileName = readStringField(record ?? {}, 'imageFileName', 'ImageFileName')
   const imageUrl = readStringField(record ?? {}, 'imageUrl', 'ImageUrl')
-  if (!imageFileName || !imageUrl) throw new ApiError(response.status, envelope)
+  if (!imageFileName || !imageUrl) throw new ApiError(response.status, envelope.messages)
 
   return { imageFileName, imageUrl }
 }
