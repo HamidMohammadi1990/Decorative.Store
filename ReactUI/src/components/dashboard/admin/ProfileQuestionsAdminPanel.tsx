@@ -111,7 +111,8 @@ export function ProfileQuestionsAdminPanel() {
 
   const handleAddQuestion = () => {
     addQuestion()
-    const sorted = [...useProfileCompletionAdminStore.getState().config.questions].sort(
+    const configState = useProfileCompletionAdminStore.getState().config
+    const sorted = [...(configState?.questions ?? [])].sort(
       (a, b) => a.order - b.order,
     )
     const newest = sorted[sorted.length - 1]

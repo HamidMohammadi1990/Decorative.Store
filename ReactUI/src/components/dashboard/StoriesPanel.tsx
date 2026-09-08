@@ -134,7 +134,7 @@ export function StoriesPanel() {
   }, [accessToken, languageId, locale, mode, productSearch])
 
   const productSelectOptions = useMemo((): AdminSearchableSelectOption[] => {
-    const options = products.map((item) => ({
+    const options: AdminSearchableSelectOption[] = products.map((item) => ({
       value: item.slug,
       label: item.title,
       hint: item.productCode || undefined,
@@ -145,7 +145,7 @@ export function StoriesPanel() {
       options.unshift(
         selected
           ? { value: selected.slug, label: selected.title, hint: selected.productCode || undefined }
-          : { value: productSlug, label: productSlug },
+          : { value: productSlug, label: productSlug, hint: undefined },
       )
     }
 
@@ -201,7 +201,6 @@ export function StoriesPanel() {
       mediaAlt: slide.mediaAlt,
       posterSrc: slide.posterSrc,
     }))
-    const first = items[0]
     setMediaItems(items)
     setError(null)
     setMode('edit')

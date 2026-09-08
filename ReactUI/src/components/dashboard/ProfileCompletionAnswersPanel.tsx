@@ -422,7 +422,7 @@ export function ProfileCompletionAnswersPanel() {
               {
                 id: 'actions',
                 header: t('dashboard.profileCompletionAnswers.colActions'),
-                align: 'end',
+                align: 'right',
                 cell: (item) => (
                   <AdminGridActions>
                     <Button

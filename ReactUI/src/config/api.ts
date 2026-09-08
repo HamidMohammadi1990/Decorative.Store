@@ -3,7 +3,7 @@ export const API_BASE_URL = (() => {
   if (configured) return configured.replace(/\/+$/, '')
 
   if (import.meta.env.SSR && typeof process !== 'undefined') {
-    const ssrTarget = process.env.SSR_API_TARGET?.trim()
+    const ssrTarget = process.env?.SSR_API_TARGET?.trim()
     if (ssrTarget) return ssrTarget.replace(/\/+$/, '')
   }
 

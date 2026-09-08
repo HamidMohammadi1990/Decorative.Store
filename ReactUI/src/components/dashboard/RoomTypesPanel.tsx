@@ -219,7 +219,6 @@ export function RoomTypesPanel() {
             languages={formLanguages}
             value={contentLanguageId}
             onChange={setContentLanguageId}
-            hint={t('dashboard.contentLocale.editingHint')}
           />
 
           <AdminField label={t('dashboard.roomTypes.fieldCode')}>

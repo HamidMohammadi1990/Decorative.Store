@@ -189,24 +189,30 @@ export function applyOrderDetail(base: DashboardOrder, detailData: unknown): Das
           description: readStringField(itemRecord, 'description', 'Description') || undefined,
           postType: readStringField(itemRecord, 'postType', 'PostType') || undefined,
           deliveryType: readStringField(itemRecord, 'deliveryType', 'DeliveryType') || undefined,
-          properties: Array.isArray(itemRecord.properties ?? itemRecord.Properties)
-            ? (itemRecord.properties ?? itemRecord.Properties as unknown[]).map((property: unknown) => {
+          properties: (() => {
+            const raw = itemRecord.properties ?? itemRecord.Properties
+            return Array.isArray(raw)
+              ? raw.map((property: unknown) => {
                 const propertyRecord = readRecord(property) ?? {}
                 return {
                   title: readStringField(propertyRecord, 'title', 'Title'),
                   value: formatPropertyValue(propertyRecord),
                 }
               })
-            : undefined,
-          attachments: Array.isArray(itemRecord.attachments ?? itemRecord.Attachments)
-            ? (itemRecord.attachments ?? itemRecord.Attachments as unknown[]).map((attachment: unknown) => {
+              : undefined
+          })(),
+          attachments: (() => {
+            const raw = itemRecord.attachments ?? itemRecord.Attachments
+            return Array.isArray(raw)
+              ? raw.map((attachment: unknown) => {
                 const attachmentRecord = readRecord(attachment) ?? {}
                 return {
                   title: readStringField(attachmentRecord, 'typeTitle', 'TypeTitle'),
                   fileName: readStringField(attachmentRecord, 'fileName', 'FileName'),
                 }
               })
-            : undefined,
+              : undefined
+          })(),
         }
       })
     : base.items

@@ -5,6 +5,7 @@ import { ChevronIcon } from '@/components/ui/ChevronIcon'
 import { LocalImage } from '@/components/ui/LocalImage'
 import { useSettingsStore } from '@/stores/settingsStore'
 import type { BlogPostSummary } from '@/models/blog/blog.model'
+import type { Locale } from '@/models/shared/locale.model'
 
 interface BlogCardProps {
   post: BlogPostSummary
@@ -12,7 +13,7 @@ interface BlogCardProps {
   variant?: 'grid' | 'horizontal'
 }
 
-function BlogCardMeta({ post, locale }: { post: BlogPostSummary; locale: string }) {
+function BlogCardMeta({ post, locale }: { post: BlogPostSummary; locale: Locale }) {
   const { t } = useTranslation()
 
   return (

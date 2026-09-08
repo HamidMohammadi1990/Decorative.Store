@@ -165,7 +165,7 @@ export const adminMarketingPromoService = {
     return apiPut(`${ADMIN_BASE}/update`, input, { locale, accessToken })
   },
 
-  async delete(accessToken: string, locale: Locale, id: string) {
+  async delete(accessToken: string, _locale: Locale, id: string) {
     return apiDelete(`${ADMIN_BASE}/delete`, accessToken, { id })
   },
 

@@ -17,7 +17,6 @@ import {
   resolveAdminMutationError,
 } from '@/components/dashboard/admin/adminFormShared'
 import { Button } from '@/components/ui/Button'
-import { InlineLoading } from '@/components/ui/Spinner'
 import { useAdminPagedList } from '@/hooks/useAdminPagedList'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
 import { UserRolesModal } from '@/components/dashboard/UserRolesModal'
@@ -355,6 +354,7 @@ export function UsersPanel() {
 
       {listErrorMessage ? (
         <DashboardEmptyState
+          icon={<UsersIcon size={28} />}
           title={t('dashboard.users.loadFailedTitle')}
           message={listErrorMessage}
           action={

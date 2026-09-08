@@ -1,12 +1,12 @@
-import type { Router } from 'react-router-dom'
-import { RouterProvider } from 'react-router-dom'
-
-interface AppProps {
-  router: Router
-}
-
-function App({ router }: AppProps) {
-  return <RouterProvider router={router} />
-}
-
-export default App
+import { RouterProvider } from 'react-router-dom'
+import { createAppRouter } from '@/routes/createAppRouter'
+
+interface AppProps {
+  router: ReturnType<typeof createAppRouter>
+}
+
+function App({ router }: AppProps) {
+  return <RouterProvider router={router} />
+}
+
+export default App
