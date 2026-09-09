@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Edition.Application.Contracts.Localization;
 using Edition.Application.Features.Catalog.Services;
 using Microsoft.EntityFrameworkCore;
+using Store.Common.Catalog;
 using Store.Infrastructure.Persistence.Extensions;
 using Store.Domain.Dtos.Catalog;
 using Store.Domain.Dtos.Products;
@@ -193,7 +194,7 @@ public class ProductRepository
         string catalogPath,
         CancellationToken cancellationToken = default)
     {
-        var normalizedPath = catalogPath.Trim().Trim('/').ToLowerInvariant();
+        var normalizedPath = CatalogSlugNormalizer.NormalizePath(catalogPath);
         var (languageId, defaultLanguageId) = await ResolveLanguageIdsAsync(cancellationToken);
 
         if (string.IsNullOrWhiteSpace(normalizedPath))
@@ -225,66 +226,56 @@ public class ProductRepository
                 cancellationToken);
         }
 
-        var subCategoryMatch = await (
-                from translation in Context.SubCategoryTranslation.AsNoTracking()
-                join subCategory in Context.SubCategory.AsNoTracking() on translation.SubCategoryId equals subCategory.Id
-                join category in Context.Category.AsNoTracking() on subCategory.CategoryId equals category.Id
-                where subCategory.IsActive
-                      && category.IsActive
-                      && translation.Slug.ToLower() == normalizedPath
-                select new
-                {
-                    SubCategoryId = subCategory.Id,
-                    CategoryId = category.Id
-                })
-            .FirstOrDefaultAsync(cancellationToken);
+        var subCategoryMatch = await FindActiveSubCategoryByNormalizedSlugAsync(
+            normalizedPath,
+            categoryId: null,
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
 
         if (subCategoryMatch is not null)
         {
-            var categoryTranslation = await ResolveCategoryTranslationAsync(
-                subCategoryMatch.CategoryId,
-                languageId,
-                defaultLanguageId,
-                cancellationToken);
-
-            var subCategoryTranslation = await ResolveSubCategoryTranslationAsync(
-                subCategoryMatch.SubCategoryId,
-                languageId,
-                defaultLanguageId,
-                cancellationToken);
-
-            var homeLabel = await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken);
-            var breadcrumbs = new List<CatalogBreadcrumbDto>
-            {
-                new(homeLabel, "/"),
-                new(categoryTranslation.Title, $"/{categoryTranslation.Slug}"),
-                new(subCategoryTranslation.Title, $"/{subCategoryTranslation.Slug}")
-            };
-
-            var products = await LoadCatalogProductsAsync(
-                [subCategoryMatch.SubCategoryId],
-                languageId,
-                defaultLanguageId,
-                cancellationToken);
-
             return await WithEnrichedProductsAsync(
-                new CatalogListingDto
-                {
-                    Title = subCategoryTranslation.Title,
-                    Breadcrumbs = breadcrumbs,
-                    Products = products
-                },
+                await BuildSubCategoryListingAsync(
+                    subCategoryMatch.Value.SubCategoryId,
+                    subCategoryMatch.Value.CategoryId,
+                    languageId,
+                    defaultLanguageId,
+                    cancellationToken),
                 languageId,
                 defaultLanguageId,
                 cancellationToken);
         }
 
-        var categoryMatch = await (
-                from translation in Context.CategoryTranslation.AsNoTracking()
-                join category in Context.Category.AsNoTracking() on translation.CategoryId equals category.Id
-                where category.IsActive && translation.Slug.ToLower() == normalizedPath
-                select category.Id)
-            .FirstOrDefaultAsync(cancellationToken);
+        if (TryParseSplitCategoryPath(normalizedPath, out var categorySegment, out var subCategorySegment))
+        {
+            var splitMatch = await TryMatchCategorySubCategorySegmentsAsync(
+                categorySegment,
+                subCategorySegment,
+                languageId,
+                defaultLanguageId,
+                cancellationToken);
+
+            if (splitMatch is not null)
+            {
+                return await WithEnrichedProductsAsync(
+                    await BuildSubCategoryListingAsync(
+                        splitMatch.Value.SubCategoryId,
+                        splitMatch.Value.CategoryId,
+                        languageId,
+                        defaultLanguageId,
+                        cancellationToken),
+                    languageId,
+                    defaultLanguageId,
+                    cancellationToken);
+            }
+        }
+
+        var categoryMatch = await FindActiveCategoryIdByNormalizedSlugAsync(
+            normalizedPath,
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
 
         if (categoryMatch != default)
         {
@@ -1131,6 +1122,190 @@ public class ProductRepository
         "sale", "new", "in-stock", "best-sellers", "clearance",
     };
 
+    private static bool TryParseSplitCategoryPath(
+        string normalizedPath,
+        out string categorySegment,
+        out string subCategorySegment)
+    {
+        var segments = normalizedPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (segments.Length == 2)
+        {
+            categorySegment = segments[0];
+            subCategorySegment = segments[1];
+            return true;
+        }
+
+        categorySegment = string.Empty;
+        subCategorySegment = string.Empty;
+        return false;
+    }
+
+    private static string BuildSubCategoryListingPath(string categorySlug, string subCategorySlug)
+    {
+        var normalizedCategory = categorySlug.Trim().Trim('/');
+        var normalizedSub = subCategorySlug.Trim().Trim('/');
+        if (string.IsNullOrWhiteSpace(normalizedSub))
+            return normalizedCategory;
+        if (normalizedSub.Contains('/'))
+            return normalizedSub;
+        if (string.IsNullOrWhiteSpace(normalizedCategory))
+            return normalizedSub;
+
+        return $"{normalizedCategory}/{normalizedSub}";
+    }
+
+    private async Task<int> FindActiveCategoryIdByNormalizedSlugAsync(
+        string normalizedSlug,
+        int languageId,
+        int defaultLanguageId,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(normalizedSlug))
+            return default;
+
+        var rows = await (
+                from translation in Context.CategoryTranslation.AsNoTracking()
+                join category in Context.Category.AsNoTracking() on translation.CategoryId equals category.Id
+                where category.IsActive
+                select new { category.Id, translation.Slug, translation.LanguageId })
+            .ToListAsync(cancellationToken);
+
+        return rows
+            .Where(x => CatalogSlugNormalizer.Normalize(x.Slug) == normalizedSlug)
+            .OrderBy(x => x.LanguageId == languageId ? 0 : x.LanguageId == defaultLanguageId ? 1 : 2)
+            .Select(x => x.Id)
+            .FirstOrDefault();
+    }
+
+    private async Task<(int SubCategoryId, int CategoryId)?> FindActiveSubCategoryByNormalizedSlugAsync(
+        string normalizedSlug,
+        int? categoryId,
+        int languageId,
+        int defaultLanguageId,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(normalizedSlug))
+            return null;
+
+        var rows = await (
+                from translation in Context.SubCategoryTranslation.AsNoTracking()
+                join subCategory in Context.SubCategory.AsNoTracking() on translation.SubCategoryId equals subCategory.Id
+                join category in Context.Category.AsNoTracking() on subCategory.CategoryId equals category.Id
+                where subCategory.IsActive && category.IsActive
+                select new
+                {
+                    subCategory.Id,
+                    subCategory.CategoryId,
+                    translation.Slug,
+                    translation.LanguageId,
+                })
+            .ToListAsync(cancellationToken);
+
+        IEnumerable<(int Id, int CategoryId, string Slug, int LanguageId)> candidates = rows
+            .Select(x => (x.Id, x.CategoryId, x.Slug, x.LanguageId));
+
+        if (categoryId is not null)
+            candidates = candidates.Where(x => x.CategoryId == categoryId);
+
+        var match = candidates
+            .Where(x => CatalogSlugNormalizer.Normalize(x.Slug) == normalizedSlug)
+            .OrderBy(x => x.LanguageId == languageId ? 0 : x.LanguageId == defaultLanguageId ? 1 : 2)
+            .Select(x => ((int SubCategoryId, int CategoryId)?)(x.Id, x.CategoryId))
+            .FirstOrDefault();
+
+        if (match is not null)
+            return match;
+
+        var leafSlug = normalizedSlug.Split('/', StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+        if (string.IsNullOrWhiteSpace(leafSlug) || leafSlug == normalizedSlug)
+            return null;
+
+        return candidates
+            .Where(x =>
+            {
+                var normalized = CatalogSlugNormalizer.Normalize(x.Slug);
+                return normalized == leafSlug || normalized.EndsWith("/" + leafSlug, StringComparison.Ordinal);
+            })
+            .OrderBy(x => x.LanguageId == languageId ? 0 : x.LanguageId == defaultLanguageId ? 1 : 2)
+            .Select(x => ((int SubCategoryId, int CategoryId)?)(x.Id, x.CategoryId))
+            .FirstOrDefault();
+    }
+
+    private async Task<(int SubCategoryId, int CategoryId)?> TryMatchCategorySubCategorySegmentsAsync(
+        string categorySegment,
+        string subCategorySegment,
+        int languageId,
+        int defaultLanguageId,
+        CancellationToken cancellationToken)
+    {
+        var normalizedCategory = CatalogSlugNormalizer.Normalize(categorySegment);
+        var normalizedSub = CatalogSlugNormalizer.Normalize(subCategorySegment);
+        if (string.IsNullOrWhiteSpace(normalizedCategory) || string.IsNullOrWhiteSpace(normalizedSub))
+            return null;
+
+        var categoryId = await FindActiveCategoryIdByNormalizedSlugAsync(
+            normalizedCategory,
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
+
+        if (categoryId == default)
+            return null;
+
+        var compositePath = CatalogSlugNormalizer.Normalize($"{normalizedCategory}/{normalizedSub}");
+
+        return await FindActiveSubCategoryByNormalizedSlugAsync(
+                   compositePath,
+                   categoryId,
+                   languageId,
+                   defaultLanguageId,
+                   cancellationToken)
+               ?? await FindActiveSubCategoryByNormalizedSlugAsync(
+                   normalizedSub,
+                   categoryId,
+                   languageId,
+                   defaultLanguageId,
+                   cancellationToken);
+    }
+
+    private async Task<CatalogListingDto> BuildSubCategoryListingAsync(
+        int subCategoryId,
+        int categoryId,
+        int languageId,
+        int defaultLanguageId,
+        CancellationToken cancellationToken)
+    {
+        var categoryTranslation = await ResolveCategoryTranslationAsync(
+            categoryId,
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
+        var subCategoryTranslation = await ResolveSubCategoryTranslationAsync(
+            subCategoryId,
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
+        var homeLabel = await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken);
+        var listingPath = BuildSubCategoryListingPath(categoryTranslation.Slug, subCategoryTranslation.Slug);
+        var products = await LoadCatalogProductsAsync(
+            [subCategoryId],
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
+
+        return new CatalogListingDto
+        {
+            Title = subCategoryTranslation.Title,
+            Breadcrumbs =
+            [
+                new(homeLabel, "/"),
+                new(categoryTranslation.Title, $"/{categoryTranslation.Slug.Trim('/')}"),
+                new(subCategoryTranslation.Title, $"/{listingPath}"),
+            ],
+            Products = products,
+        };
+    }
+
     private static (string? Collection, string RemainingPath) ParseCollectionPrefix(string normalizedPath)
     {
         var segments = normalizedPath.Split('/', StringSplitOptions.RemoveEmptyEntries);
@@ -1244,60 +1419,50 @@ public class ProductRepository
         int defaultLanguageId,
         CancellationToken cancellationToken)
     {
-        var normalizedPath = categoryPath.Trim().Trim('/').ToLowerInvariant();
+        var normalizedPath = CatalogSlugNormalizer.NormalizePath(categoryPath);
 
-        var subCategoryMatch = await (
-                from translation in Context.SubCategoryTranslation.AsNoTracking()
-                join subCategory in Context.SubCategory.AsNoTracking() on translation.SubCategoryId equals subCategory.Id
-                join category in Context.Category.AsNoTracking() on subCategory.CategoryId equals category.Id
-                where subCategory.IsActive
-                      && category.IsActive
-                      && translation.Slug.ToLower() == normalizedPath
-                select new
-                {
-                    SubCategoryId = subCategory.Id,
-                    CategoryId = category.Id
-                })
-            .FirstOrDefaultAsync(cancellationToken);
+        var subCategoryMatch = await FindActiveSubCategoryByNormalizedSlugAsync(
+            normalizedPath,
+            categoryId: null,
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
 
         if (subCategoryMatch is not null)
         {
-            var categoryTranslation = await ResolveCategoryTranslationAsync(
-                subCategoryMatch.CategoryId,
+            return await BuildSubCategoryListingAsync(
+                subCategoryMatch.Value.SubCategoryId,
+                subCategoryMatch.Value.CategoryId,
                 languageId,
                 defaultLanguageId,
                 cancellationToken);
-            var subCategoryTranslation = await ResolveSubCategoryTranslationAsync(
-                subCategoryMatch.SubCategoryId,
-                languageId,
-                defaultLanguageId,
-                cancellationToken);
-            var homeLabel = await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken);
-            var products = await LoadCatalogProductsAsync(
-                [subCategoryMatch.SubCategoryId],
-                languageId,
-                defaultLanguageId,
-                cancellationToken);
-
-            return new CatalogListingDto
-            {
-                Title = subCategoryTranslation.Title,
-                Breadcrumbs =
-                [
-                    new(homeLabel, "/"),
-                    new(categoryTranslation.Title, $"/{categoryTranslation.Slug}"),
-                    new(subCategoryTranslation.Title, $"/{subCategoryTranslation.Slug}"),
-                ],
-                Products = products,
-            };
         }
 
-        var categoryMatch = await (
-                from translation in Context.CategoryTranslation.AsNoTracking()
-                join category in Context.Category.AsNoTracking() on translation.CategoryId equals category.Id
-                where category.IsActive && translation.Slug.ToLower() == normalizedPath
-                select category.Id)
-            .FirstOrDefaultAsync(cancellationToken);
+        if (TryParseSplitCategoryPath(normalizedPath, out var categorySegment, out var subCategorySegment))
+        {
+            var splitMatch = await TryMatchCategorySubCategorySegmentsAsync(
+                categorySegment,
+                subCategorySegment,
+                languageId,
+                defaultLanguageId,
+                cancellationToken);
+
+            if (splitMatch is not null)
+            {
+                return await BuildSubCategoryListingAsync(
+                    splitMatch.Value.SubCategoryId,
+                    splitMatch.Value.CategoryId,
+                    languageId,
+                    defaultLanguageId,
+                    cancellationToken);
+            }
+        }
+
+        var categoryMatch = await FindActiveCategoryIdByNormalizedSlugAsync(
+            normalizedPath,
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
 
         if (categoryMatch == default)
         {

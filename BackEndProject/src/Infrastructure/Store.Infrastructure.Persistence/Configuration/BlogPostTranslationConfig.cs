@@ -18,7 +18,7 @@ internal class BlogPostTranslationConfig : IEntityTypeConfiguration<BlogPostTran
 
         builder
             .Property(x => x.Slug)
-            .HasVarcharMaxLength(150)
+            .HasNVarcharMaxLength(150)
             .IsRequired();
 
         builder

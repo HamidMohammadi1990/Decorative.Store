@@ -7,8 +7,21 @@ function slugToNavId(slug: string): string {
   return parts[parts.length - 1] ?? slug
 }
 
+function slugLeaf(slug: string): string {
+  const parts = slug.split('/').filter(Boolean)
+  return parts[parts.length - 1] ?? slug
+}
+
 function toHref(slug: string): string {
   return `/${slug.replace(/^\/+/, '')}`
+}
+
+function toSubCategoryHref(categorySlug: string, subCategorySlug: string): string {
+  const normalizedSub = subCategorySlug.replace(/^\/+/, '')
+  if (normalizedSub.includes('/')) return toHref(normalizedSub)
+  const normalizedCategory = categorySlug.replace(/^\/+/, '')
+  if (!normalizedCategory) return toHref(normalizedSub)
+  return `/${normalizedCategory}/${slugLeaf(normalizedSub)}`
 }
 
 export function mapCategoryTreeToNav(items: CategoryTreeItem[]): NavLinkGroup[] {
@@ -26,7 +39,7 @@ export function mapCategoryTreeToNav(items: CategoryTreeItem[]): NavLinkGroup[] 
           title: category.title,
           links: subCategories.map((subCategory) => ({
             label: subCategory.title,
-            href: toHref(subCategory.slug),
+            href: toSubCategoryHref(category.slug, subCategory.slug),
           })),
         },
       ]

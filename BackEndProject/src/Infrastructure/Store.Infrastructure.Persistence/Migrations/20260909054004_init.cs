@@ -273,6 +273,19 @@ namespace Store.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProfileCompletionSetting",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ConfigJson = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProfileCompletionSetting", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PropertyCategory",
                 columns: table => new
                 {
@@ -320,6 +333,22 @@ namespace Store.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Role", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoomType",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "VARCHAR(32)", nullable: false),
+                    ImageFileName = table.Column<string>(type: "NVARCHAR(120)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoomType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -459,6 +488,29 @@ namespace Store.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AssistantFaq",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    Question = table.Column<string>(type: "NVARCHAR(200)", nullable: false),
+                    Answer = table.Column<string>(type: "NVARCHAR(2000)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AssistantFaq", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AssistantFaq_Language_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Language",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BlogPostCategoryTranslation",
                 columns: table => new
                 {
@@ -467,7 +519,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                     BlogPostCategoryId = table.Column<int>(type: "int", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "NVARCHAR(70)", nullable: false),
-                    Slug = table.Column<string>(type: "VARCHAR(150)", nullable: false)
+                    Slug = table.Column<string>(type: "NVARCHAR(150)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -495,7 +547,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "NVARCHAR(60)", nullable: false),
-                    Slug = table.Column<string>(type: "VARCHAR(150)", nullable: false)
+                    Slug = table.Column<string>(type: "NVARCHAR(150)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -508,6 +560,77 @@ namespace Store.Infrastructure.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CategoryTranslation_Language_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Language",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MarketingPromo",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    PromoType = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "NVARCHAR(200)", nullable: false),
+                    Subtitle = table.Column<string>(type: "NVARCHAR(200)", nullable: true),
+                    LinkLabel = table.Column<string>(type: "NVARCHAR(50)", nullable: false),
+                    LinkHref = table.Column<string>(type: "NVARCHAR(200)", nullable: false),
+                    ImageFileName = table.Column<string>(type: "NVARCHAR(35)", nullable: false),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MarketingPromo", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MarketingPromo_Language_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Language",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MarketingStripDisclaimer",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    Disclaimer = table.Column<string>(type: "NVARCHAR(500)", nullable: true),
+                    DisclaimerLinkLabel = table.Column<string>(type: "NVARCHAR(50)", nullable: true),
+                    DisclaimerLinkHref = table.Column<string>(type: "NVARCHAR(200)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MarketingStripDisclaimer", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MarketingStripDisclaimer_Language_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Language",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NewsletterSubscriber",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "VARCHAR(256)", nullable: false),
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    SubscribedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NewsletterSubscriber", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_NewsletterSubscriber_Language_LanguageId",
                         column: x => x.LanguageId,
                         principalTable: "Language",
                         principalColumn: "Id",
@@ -654,6 +777,33 @@ namespace Store.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RoomTypeTranslation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoomTypeId = table.Column<int>(type: "int", nullable: false),
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "NVARCHAR(100)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoomTypeTranslation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RoomTypeTranslation_Language_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Language",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RoomTypeTranslation_RoomType_RoomTypeId",
+                        column: x => x.RoomTypeId,
+                        principalTable: "RoomType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Section",
                 columns: table => new
                 {
@@ -779,6 +929,28 @@ namespace Store.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProfileCompletionUserState",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    AnswersJson = table.Column<string>(type: "NVARCHAR(MAX)", nullable: false),
+                    RewardClaimedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProfileCompletionUserState", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProfileCompletionUserState_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserRole",
                 columns: table => new
                 {
@@ -892,7 +1064,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                     SubCategoryId = table.Column<int>(type: "int", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "NVARCHAR(60)", nullable: false),
-                    Slug = table.Column<string>(type: "VARCHAR(150)", nullable: false)
+                    Slug = table.Column<string>(type: "NVARCHAR(150)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1054,9 +1226,9 @@ namespace Store.Infrastructure.Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SectionId = table.Column<int>(type: "int", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "NVARCHAR(80)", nullable: false),
-                    Description = table.Column<string>(type: "NVARCHAR(160)", nullable: true),
-                    Url = table.Column<string>(type: "NVARCHAR(150)", nullable: false)
+                    Title = table.Column<string>(type: "NVARCHAR(300)", nullable: false),
+                    Description = table.Column<string>(type: "NVARCHAR(500)", nullable: true),
+                    Url = table.Column<string>(type: "NVARCHAR(200)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1115,6 +1287,28 @@ namespace Store.Infrastructure.Persistence.Migrations
                         name: "FK_BlogPostComment_User_CreatedByUserId",
                         column: x => x.CreatedByUserId,
                         principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BlogPostFile",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BlogPostId = table.Column<int>(type: "int", nullable: false),
+                    FileName = table.Column<string>(type: "VARCHAR(70)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsMain = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlogPostFile", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BlogPostFile_BlogPost_BlogPostId",
+                        column: x => x.BlogPostId,
+                        principalTable: "BlogPost",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -1182,7 +1376,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                     BlogPostId = table.Column<int>(type: "int", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "NVARCHAR(70)", nullable: false),
-                    Slug = table.Column<string>(type: "VARCHAR(150)", nullable: false),
+                    Slug = table.Column<string>(type: "NVARCHAR(150)", nullable: false),
                     MetaDescription = table.Column<string>(type: "NVARCHAR(200)", nullable: false),
                     SeoKeywords = table.Column<string>(type: "NVARCHAR(150)", nullable: false),
                     Content = table.Column<string>(type: "NVARCHAR(2500)", nullable: false)
@@ -1338,6 +1532,8 @@ namespace Store.Infrastructure.Persistence.Migrations
                     QualityRating = table.Column<int>(type: "int", nullable: false),
                     AffordableRating = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
+                    ParentId = table.Column<int>(type: "int", nullable: true),
+                    CreatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -1347,6 +1543,12 @@ namespace Store.Infrastructure.Persistence.Migrations
                         name: "FK_ProductComment_CommentTopic_CommentTopicId",
                         column: x => x.CommentTopicId,
                         principalTable: "CommentTopic",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProductComment_ProductComment_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "ProductComment",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -1424,7 +1626,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    FileName = table.Column<string>(type: "VARCHAR(35)", nullable: false),
+                    FileName = table.Column<string>(type: "VARCHAR(70)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     IsMain = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -1513,7 +1715,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     LanguageId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "NVARCHAR(150)", nullable: false),
-                    Slug = table.Column<string>(type: "VARCHAR(150)", nullable: false),
+                    Slug = table.Column<string>(type: "NVARCHAR(150)", nullable: false),
                     Description = table.Column<string>(type: "NVARCHAR(400)", nullable: false)
                 },
                 constraints: table =>
@@ -1709,6 +1911,33 @@ namespace Store.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BlogPostFileTranslation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BlogPostFileId = table.Column<int>(type: "int", nullable: false),
+                    LanguageId = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "NVARCHAR(30)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlogPostFileTranslation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BlogPostFileTranslation_BlogPostFile_BlogPostFileId",
+                        column: x => x.BlogPostFileId,
+                        principalTable: "BlogPostFile",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BlogPostFileTranslation_Language_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Language",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Order",
                 columns: table => new
                 {
@@ -1739,6 +1968,34 @@ namespace Store.Infrastructure.Persistence.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Order_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductCommentReaction",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductCommentId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    IsHelpful = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductCommentReaction", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductCommentReaction_ProductComment_ProductCommentId",
+                        column: x => x.ProductCommentId,
+                        principalTable: "ProductComment",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductCommentReaction_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -1798,6 +2055,70 @@ namespace Store.Infrastructure.Persistence.Migrations
                         name: "FK_OrderItemAttachmentTypeRestriction_ProductOrderItemAttachmentType_ProductOrderItemAttachmentTypeId",
                         column: x => x.ProductOrderItemAttachmentTypeId,
                         principalTable: "ProductOrderItemAttachmentType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserStoryComment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserStoryId = table.Column<int>(type: "int", nullable: false),
+                    Content = table.Column<string>(type: "NVARCHAR(500)", nullable: false),
+                    ApprovedByUserId = table.Column<int>(type: "int", nullable: true),
+                    CreatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ApprovedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsApproved = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserStoryComment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserStoryComment_UserStory_UserStoryId",
+                        column: x => x.UserStoryId,
+                        principalTable: "UserStory",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserStoryComment_User_ApprovedByUserId",
+                        column: x => x.ApprovedByUserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserStoryComment_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserStoryLike",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UserStoryId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOnUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserStoryLike", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserStoryLike_UserStory_UserStoryId",
+                        column: x => x.UserStoryId,
+                        principalTable: "UserStory",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserStoryLike_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -2156,7 +2477,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                         column: x => x.OrderItemId,
                         principalTable: "OrderItem",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_OrderItemAttachment_ProductOrderItemAttachmentType_ProductOrderItemAttachmentTypeId",
                         column: x => x.ProductOrderItemAttachmentTypeId,
@@ -2264,6 +2585,11 @@ namespace Store.Infrastructure.Persistence.Migrations
                 values: new object[] { 1, true, 1, "", null, 0, "Product", "" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AssistantFaq_LanguageId_Priority",
+                table: "AssistantFaq",
+                columns: new[] { "LanguageId", "Priority" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BankAccount_BankId",
                 table: "BankAccount",
                 column: "BankId");
@@ -2336,6 +2662,22 @@ namespace Store.Infrastructure.Persistence.Migrations
                 name: "IX_BlogPostComment_ParentId",
                 table: "BlogPostComment",
                 column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BlogPostFile_BlogPostId",
+                table: "BlogPostFile",
+                column: "BlogPostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BlogPostFileTranslation_BlogPostFileId_LanguageId",
+                table: "BlogPostFileTranslation",
+                columns: new[] { "BlogPostFileId", "LanguageId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BlogPostFileTranslation_LanguageId",
+                table: "BlogPostFileTranslation",
+                column: "LanguageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BlogPostLike_BlogPostId",
@@ -2523,6 +2865,28 @@ namespace Store.Infrastructure.Persistence.Migrations
                 filter: "[IsDefault] = 1");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MarketingPromo_LanguageId_Priority",
+                table: "MarketingPromo",
+                columns: new[] { "LanguageId", "Priority" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MarketingStripDisclaimer_LanguageId",
+                table: "MarketingStripDisclaimer",
+                column: "LanguageId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NewsletterSubscriber_Email",
+                table: "NewsletterSubscriber",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_NewsletterSubscriber_LanguageId_SubscribedAtUtc",
+                table: "NewsletterSubscriber",
+                columns: new[] { "LanguageId", "SubscribedAtUtc" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Order_AppliedDiscountId",
                 table: "Order",
                 column: "AppliedDiscountId");
@@ -2668,6 +3032,11 @@ namespace Store.Infrastructure.Persistence.Migrations
                 column: "CommentTopicId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductComment_ParentId",
+                table: "ProductComment",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductComment_ProductId",
                 table: "ProductComment",
                 column: "ProductId");
@@ -2678,6 +3047,17 @@ namespace Store.Infrastructure.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductCommentReaction_ProductCommentId",
+                table: "ProductCommentReaction",
+                column: "ProductCommentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductCommentReaction_UserId_ProductCommentId",
+                table: "ProductCommentReaction",
+                columns: new[] { "UserId", "ProductCommentId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductDescription_LanguageId",
                 table: "ProductDescription",
                 column: "LanguageId");
@@ -2685,8 +3065,7 @@ namespace Store.Infrastructure.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_ProductDescription_ProductId_LanguageId",
                 table: "ProductDescription",
-                columns: new[] { "ProductId", "LanguageId" },
-                unique: true);
+                columns: new[] { "ProductId", "LanguageId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductFeature_ProductFeatureTypeId",
@@ -2780,6 +3159,12 @@ namespace Store.Infrastructure.Persistence.Migrations
                 name: "IX_ProductWishlist_UserId_ProductId",
                 table: "ProductWishlist",
                 columns: new[] { "UserId", "ProductId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProfileCompletionUserState_UserId",
+                table: "ProfileCompletionUserState",
+                column: "UserId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -2883,6 +3268,28 @@ namespace Store.Infrastructure.Persistence.Migrations
                 name: "IX_RolePermission_RoleId",
                 table: "RolePermission",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoomType_Code",
+                table: "RoomType",
+                column: "Code",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoomType_Priority",
+                table: "RoomType",
+                column: "Priority");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoomTypeTranslation_LanguageId",
+                table: "RoomTypeTranslation",
+                column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoomTypeTranslation_RoomTypeId_LanguageId",
+                table: "RoomTypeTranslation",
+                columns: new[] { "RoomTypeId", "LanguageId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Section_ParentId",
@@ -3014,6 +3421,37 @@ namespace Store.Infrastructure.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserStoryComment_ApprovedByUserId",
+                table: "UserStoryComment",
+                column: "ApprovedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserStoryComment_IsApproved",
+                table: "UserStoryComment",
+                column: "IsApproved");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserStoryComment_UserId",
+                table: "UserStoryComment",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserStoryComment_UserStoryId",
+                table: "UserStoryComment",
+                column: "UserStoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserStoryLike_UserId_UserStoryId",
+                table: "UserStoryLike",
+                columns: new[] { "UserId", "UserStoryId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserStoryLike_UserStoryId",
+                table: "UserStoryLike",
+                column: "UserStoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Wallet_UserId",
                 table: "Wallet",
                 column: "UserId");
@@ -3043,10 +3481,16 @@ namespace Store.Infrastructure.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AssistantFaq");
+
+            migrationBuilder.DropTable(
                 name: "BlogPostCategoryTranslation");
 
             migrationBuilder.DropTable(
                 name: "BlogPostComment");
+
+            migrationBuilder.DropTable(
+                name: "BlogPostFileTranslation");
 
             migrationBuilder.DropTable(
                 name: "BlogPostLike");
@@ -3079,6 +3523,15 @@ namespace Store.Infrastructure.Persistence.Migrations
                 name: "FinancialDocumentDetail");
 
             migrationBuilder.DropTable(
+                name: "MarketingPromo");
+
+            migrationBuilder.DropTable(
+                name: "MarketingStripDisclaimer");
+
+            migrationBuilder.DropTable(
+                name: "NewsletterSubscriber");
+
+            migrationBuilder.DropTable(
                 name: "OrderCommission");
 
             migrationBuilder.DropTable(
@@ -3103,7 +3556,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                 name: "PageTranslation");
 
             migrationBuilder.DropTable(
-                name: "ProductComment");
+                name: "ProductCommentReaction");
 
             migrationBuilder.DropTable(
                 name: "ProductDescription");
@@ -3127,6 +3580,12 @@ namespace Store.Infrastructure.Persistence.Migrations
                 name: "ProductWishlist");
 
             migrationBuilder.DropTable(
+                name: "ProfileCompletionSetting");
+
+            migrationBuilder.DropTable(
+                name: "ProfileCompletionUserState");
+
+            migrationBuilder.DropTable(
                 name: "PropertyCategoryTranslation");
 
             migrationBuilder.DropTable(
@@ -3145,6 +3604,9 @@ namespace Store.Infrastructure.Persistence.Migrations
                 name: "RolePermission");
 
             migrationBuilder.DropTable(
+                name: "RoomTypeTranslation");
+
+            migrationBuilder.DropTable(
                 name: "SectionItemTranslation");
 
             migrationBuilder.DropTable(
@@ -3160,16 +3622,19 @@ namespace Store.Infrastructure.Persistence.Migrations
                 name: "UserRole");
 
             migrationBuilder.DropTable(
-                name: "UserStory");
+                name: "UserStoryComment");
+
+            migrationBuilder.DropTable(
+                name: "UserStoryLike");
 
             migrationBuilder.DropTable(
                 name: "WebSiteSetting");
 
             migrationBuilder.DropTable(
-                name: "Tag");
+                name: "BlogPostFile");
 
             migrationBuilder.DropTable(
-                name: "BlogPost");
+                name: "Tag");
 
             migrationBuilder.DropTable(
                 name: "ContentPolicy");
@@ -3199,7 +3664,7 @@ namespace Store.Infrastructure.Persistence.Migrations
                 name: "Page");
 
             migrationBuilder.DropTable(
-                name: "CommentTopic");
+                name: "ProductComment");
 
             migrationBuilder.DropTable(
                 name: "ProductFeatureType");
@@ -3217,13 +3682,19 @@ namespace Store.Infrastructure.Persistence.Migrations
                 name: "Permission");
 
             migrationBuilder.DropTable(
+                name: "RoomType");
+
+            migrationBuilder.DropTable(
                 name: "SectionItem");
 
             migrationBuilder.DropTable(
                 name: "Language");
 
             migrationBuilder.DropTable(
-                name: "BlogPostCategory");
+                name: "UserStory");
+
+            migrationBuilder.DropTable(
+                name: "BlogPost");
 
             migrationBuilder.DropTable(
                 name: "Role");
@@ -3250,10 +3721,16 @@ namespace Store.Infrastructure.Persistence.Migrations
                 name: "UserAddress");
 
             migrationBuilder.DropTable(
+                name: "CommentTopic");
+
+            migrationBuilder.DropTable(
                 name: "Property");
 
             migrationBuilder.DropTable(
                 name: "Section");
+
+            migrationBuilder.DropTable(
+                name: "BlogPostCategory");
 
             migrationBuilder.DropTable(
                 name: "Bank");

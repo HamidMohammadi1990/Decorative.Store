@@ -268,7 +268,7 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(150)");
+                        .HasColumnType("NVARCHAR(150)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -469,7 +469,7 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(150)");
+                        .HasColumnType("NVARCHAR(150)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -522,7 +522,7 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(150)");
+                        .HasColumnType("NVARCHAR(150)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -2188,7 +2188,7 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(150)");
+                        .HasColumnType("NVARCHAR(150)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -2888,7 +2888,7 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Slug")
                         .IsRequired()
-                        .HasColumnType("VARCHAR(150)");
+                        .HasColumnType("NVARCHAR(150)");
 
                     b.Property<int>("SubCategoryId")
                         .HasColumnType("int");

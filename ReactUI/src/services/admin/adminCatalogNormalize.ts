@@ -120,8 +120,16 @@ export async function fetchAllAdminPages<T>(
   return items
 }
 
-export function slugifyTitle(value: string): string {
+function normalizePersianSlugChars(value: string): string {
   return value
+    .replace(/\u064A/g, '\u06CC')
+    .replace(/\u0643/g, '\u06A9')
+    .replace(/\u0629/g, '\u0647')
+    .replace(/\u200C/g, ' ')
+}
+
+export function slugifyTitle(value: string): string {
+  return normalizePersianSlugChars(value)
     .trim()
     .toLowerCase()
     .replace(/\s+/g, '-')

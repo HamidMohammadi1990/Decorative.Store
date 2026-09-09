@@ -5,6 +5,7 @@ import { ListingBreadcrumbs } from '@/components/listing/ListingBreadcrumbs'
 import { ListingSidebar } from '@/components/listing/ListingSidebar'
 import { ListingToolbar } from '@/components/listing/ListingToolbar'
 import { ListingPagination } from '@/components/listing/ListingPagination'
+import { ListingCategoryEmptyState } from '@/components/listing/ListingCategoryEmptyState'
 import { ProductGrid } from '@/components/listing/ProductGrid'
 import { Container } from '@/components/ui/Container'
 import { PageLoading } from '@/components/ui/Spinner'
@@ -85,6 +86,8 @@ export function ProductListingPage() {
     )
   }
 
+  const isCategoryEmpty = data.totalCount === 0 && activeFilterCount === 0
+
   return (
     <div className="bg-gradient-to-b from-surface-muted/40 via-surface to-surface py-8 md:py-10">
       <Container>
@@ -94,11 +97,16 @@ export function ProductListingPage() {
           <h1 className="font-display text-2xl font-semibold tracking-tight text-text md:text-3xl lg:text-4xl">
             {data.title}
           </h1>
-          <p className="mt-2 text-sm text-text-muted">
-            {t('listing.resultCount', { count: data.totalCount })}
-          </p>
+          {!isCategoryEmpty && (
+            <p className="mt-2 text-sm text-text-muted">
+              {t('listing.resultCount', { count: data.totalCount })}
+            </p>
+          )}
         </header>
 
+        {isCategoryEmpty ? (
+          <ListingCategoryEmptyState categoryTitle={data.title} />
+        ) : (
         <div className="flex gap-6 lg:gap-8 xl:gap-10">
           <ListingSidebar
             facets={data.facets}
@@ -144,9 +152,10 @@ export function ProductListingPage() {
             )}
           </div>
         </div>
+        )}
       </Container>
 
-      {mobileFiltersOpen && (
+      {!isCategoryEmpty && mobileFiltersOpen && (
         <Portal>
           <button
             type="button"
