@@ -11,7 +11,13 @@ export interface FeaturedCatalogCollection {
 function resolveProductImageSrc(imageUrl: string): string {
   if (!imageUrl) return ''
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
-  return `${API_BASE_URL}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`
+  if (imageUrl.startsWith('/')) return imageUrl
+  return `${API_BASE_URL}/${imageUrl}`
+}
+
+function isCustomCmsUpload(src?: string): boolean {
+  if (!src) return false
+  return src.includes('/Uploads/Cms/')
 }
 
 export function buildFeaturedShopGrid(
@@ -23,6 +29,8 @@ export function buildFeaturedShopGrid(
   const collectionById = new Map(collections.map((collection) => [collection.id, collection]))
 
   const sections = fallback.sections.map((section) => {
+    if (isCustomCmsUpload(section.image?.src)) return section
+
     const collection = collectionById.get(section.id)
     if (!collection?.imageUrl) return section
 

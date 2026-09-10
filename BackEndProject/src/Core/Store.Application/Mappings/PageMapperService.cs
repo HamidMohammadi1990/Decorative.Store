@@ -17,6 +17,7 @@ public class PageMapperService : IPageMapperService
             Id = x.Id,
             Type = x.Type,
             IsActive = x.IsActive,
+            AdminDescription = x.AdminDescription,
             Translations = x.Translations,
         }).ToList();
 

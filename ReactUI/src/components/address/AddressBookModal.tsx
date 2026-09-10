@@ -9,10 +9,12 @@ import { CloseIcon } from '@/components/ui/CloseIcon'
 import { Portal } from '@/components/ui/Portal'
 import { InlineLoading } from '@/components/ui/Spinner'
 import type { SavedAddress } from '@/models/address/savedAddress.model'
+import type { MapCoordinates } from '@/config/map'
 import {
   addressFormToInput,
   emptyAddressForm,
   validateAddressForm,
+  type AddressFormErrorField,
   type AddressFormField,
   type AddressFormValues,
 } from '@/extensions/validateAddressForm'
@@ -37,7 +39,8 @@ export function AddressBookModal() {
   const [mode, setMode] = useState<ModalMode>('list')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [form, setForm] = useState<AddressFormValues>(emptyAddressForm)
-  const [errors, setErrors] = useState<Partial<Record<AddressFormField, string>>>({})
+  const [coordinates, setCoordinates] = useState<MapCoordinates | null>(null)
+  const [errors, setErrors] = useState<Partial<Record<AddressFormErrorField, string>>>({})
   const [makeDefault, setMakeDefault] = useState(false)
 
   useEffect(() => {
@@ -45,6 +48,7 @@ export function AddressBookModal() {
       setMode('list')
       setEditingId(null)
       setForm(emptyAddressForm)
+      setCoordinates(null)
       setErrors({})
       setMakeDefault(false)
       clearMutationError()
@@ -64,6 +68,7 @@ export function AddressBookModal() {
     setMode('add')
     setEditingId(null)
     setForm(emptyAddressForm)
+    setCoordinates(null)
     setErrors({})
     setMakeDefault(addresses.length === 0)
   }
@@ -81,6 +86,11 @@ export function AddressBookModal() {
       postcode: address.postcode,
       phone: address.phone,
     })
+    setCoordinates(
+      address.latitude != null && address.longitude != null ?
+        { latitude: address.latitude, longitude: address.longitude }
+      : null,
+    )
     setErrors({})
     setMakeDefault(address.isDefault)
   }
@@ -96,14 +106,36 @@ export function AddressBookModal() {
     }
   }
 
+  const handleCoordinatesChange = (coords: MapCoordinates) => {
+    setCoordinates(coords)
+    if (errors.map) {
+      setErrors((prev) => {
+        const next = { ...prev }
+        delete next.map
+        return next
+      })
+    }
+  }
+
+  const handleAddressHint = (addressLine: string) => {
+    if (!form.address.trim()) {
+      setForm((prev) => ({ ...prev, address: addressLine }))
+    }
+  }
+
   const handleSave = async () => {
-    const nextErrors = validateAddressForm(form, {
-      required: t('address.validation.required'),
-    })
+    const nextErrors = validateAddressForm(
+      form,
+      {
+        required: t('address.validation.required'),
+        mapRequired: t('address.validation.mapRequired'),
+      },
+      coordinates,
+    )
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) return
 
-    const input = addressFormToInput(form, { isDefault: makeDefault })
+    const input = addressFormToInput(form, { isDefault: makeDefault, coordinates })
     const saved = await saveAddress(input, {
       editingId,
       makeDefault,
@@ -114,6 +146,7 @@ export function AddressBookModal() {
     setMode('list')
     setEditingId(null)
     setForm(emptyAddressForm)
+    setCoordinates(null)
     setMakeDefault(false)
   }
 
@@ -202,7 +235,10 @@ export function AddressBookModal() {
               <AddressFormFields
                 values={form}
                 errors={errors}
+                coordinates={coordinates}
                 onChange={updateField}
+                onCoordinatesChange={handleCoordinatesChange}
+                onAddressHint={handleAddressHint}
                 showDefaultCheckbox
                 isDefault={makeDefault}
                 onDefaultChange={setMakeDefault}

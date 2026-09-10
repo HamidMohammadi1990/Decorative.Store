@@ -8,6 +8,7 @@ public record SearchBlogPostCommentResponseDto
     public int CreatedByUserId { get; init; }
     public string? CreatedByUserFirstName { get; init; }
     public string? CreatedByUserLastName { get; init; }
+    public string? CreatedByUserProfileImageFileName { get; init; }
     public int BlogPostId { get; init; }
     public DateTime CreatedOnUtc { get; init; }
     public DateTime? ApprovedOnUtc { get; init; }

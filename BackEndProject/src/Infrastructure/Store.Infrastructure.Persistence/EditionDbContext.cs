@@ -98,6 +98,7 @@ public sealed class EditionDbContext
     public DbSet<SectionType> SectionType { get; set; }
     public DbSet<SectionTypeTranslation> SectionTypeTranslation { get; set; }
     public DbSet<PageSection> PageSection { get; set; }
+    public DbSet<PageTypeGuide> PageTypeGuide { get; set; }
     public DbSet<AssistantFaq> AssistantFaq { get; set; }
     public DbSet<MarketingPromo> MarketingPromo { get; set; }
     public DbSet<MarketingStripDisclaimer> MarketingStripDisclaimer { get; set; }

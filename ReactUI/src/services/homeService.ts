@@ -18,7 +18,6 @@ import { pageService } from '@/services/pageService'
 
 const STATIC_NAV_IDS = new Set(['blog'])
 
-const pageCache = new Map<string, HomePage>()
 const pageRequests = new Map<string, Promise<HomePage>>()
 
 type HomePagePatch = Partial<Omit<HomePage, 'header' | 'footer'>> & {
@@ -121,6 +120,11 @@ async function loadFeaturedShop(locale: Locale, fallback: HomePage['featuredShop
 }
 
 async function loadPromoTiles(locale: Locale, fallback: HomePage['promoTiles']) {
+  // CMS PromoTileStrip section items take precedence over marketing promos.
+  if (fallback?.tiles?.length) {
+    return fallback
+  }
+
   try {
     const languageId = await languageService.resolveLanguageId(locale)
     const strip = await marketingPromoService.getPromoStrip(locale, languageId)
@@ -223,24 +227,16 @@ export const homeService = {
     const cacheKey = pageCacheKey(locale, skipCatalogNav, skipHomeCatalogContent, skipCmsPage, cmsSlug)
 
     if (!force) {
-      const cached = pageCache.get(cacheKey)
-      if (cached) return cached
-
       const inFlight = pageRequests.get(cacheKey)
       if (inFlight) return inFlight
-    } else {
-      pageCache.delete(cacheKey)
     }
 
     const request = buildPage(locale, skipCatalogNav, skipHomeCatalogContent, skipCmsPage, cmsSlug)
     pageRequests.set(cacheKey, request)
 
     try {
-      const page = await request
-      pageCache.set(cacheKey, page)
-      return page
+      return await request
     } catch (error) {
-      pageCache.delete(cacheKey)
       throw error
     } finally {
       pageRequests.delete(cacheKey)

@@ -10,12 +10,16 @@ public class SectionItemConfig : IEntityTypeConfiguration<SectionItem>
     public void Configure(EntityTypeBuilder<SectionItem> builder)
     {
         builder
+            .Property(x => x.AdminDescription)
+            .HasNVarcharMaxLength(500);
+
+        builder
             .Property(x => x.Icon)
             .HasVarcharMaxLength(24);
 
         builder
             .Property(x => x.ImageUrl)
-            .HasVarcharMaxLength(36);
+            .HasVarcharMaxLength(256);
 
         builder
             .HasOne(x => x.Section)

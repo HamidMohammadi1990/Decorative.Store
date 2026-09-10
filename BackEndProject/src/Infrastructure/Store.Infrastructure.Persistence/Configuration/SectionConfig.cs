@@ -10,6 +10,10 @@ public class SectionConfig : IEntityTypeConfiguration<Section>
     public void Configure(EntityTypeBuilder<Section> builder)
     {
         builder
+            .Property(x => x.AdminDescription)
+            .HasNVarcharMaxLength(500);
+
+        builder
             .Property(x => x.ImageUrl)
             .HasVarcharMaxLength(80);
 

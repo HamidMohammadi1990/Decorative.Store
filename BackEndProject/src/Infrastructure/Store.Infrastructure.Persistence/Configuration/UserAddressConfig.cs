@@ -40,6 +40,14 @@ internal class UserAddressConfig : IEntityTypeConfiguration<UserAddress>
             .HasVarcharMaxLength(11);
 
         builder
+            .Property(x => x.Latitude)
+            .HasPrecision(10, 7);
+
+        builder
+            .Property(x => x.Longitude)
+            .HasPrecision(10, 7);
+
+        builder
             .Property(x => x.IsDefault)
             .IsRequired();
 

@@ -78,6 +78,7 @@ public class BlogPostCommentRepository
                 ApprovedOnUtc = x.blogPostComment.ApprovedOnUtc,
                 CreatedByUserFirstName = x.createdByUser.FirstName,
                 CreatedByUserLastName = x.createdByUser.LastName,
+                CreatedByUserProfileImageFileName = x.createdByUser.ProfileImageFileName,
                 CreatedByUserId = x.blogPostComment.CreatedByUserId
             })
             .AsNoTracking()

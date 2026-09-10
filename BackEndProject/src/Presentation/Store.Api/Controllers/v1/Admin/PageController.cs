@@ -28,6 +28,11 @@ public class PageController
     public async Task<ApiResult<PagedResult<GetAllPageResponse>>> GetAll(GetAllPageRequest request)
         => await mediator.Send(request);
 
+    [ActionInfo(PermissionType.ListPage)]
+    [HttpPost("page-type-guides")]
+    public async Task<ApiResult<List<GetPageTypeGuidesResponse>>> GetPageTypeGuides(GetPageTypeGuidesRequest request)
+        => await mediator.Send(request);
+
     [ActionInfo(PermissionType.GetPageById)]
     [HttpPost("get")]
     public async Task<ApiResult<GetPageResponse?>> Get(GetPageRequest request)

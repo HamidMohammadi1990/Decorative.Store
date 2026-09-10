@@ -40,7 +40,8 @@ public class UserRepository
                     LoginPermission = x.LoginPermission,
                     AccessFailedCount = x.AccessFailedCount,
                     LastLoginDateOnUtc = x.LastLoginDateOnUtc,
-                    PhoneNumberConfirmed = x.PhoneNumberConfirmed
+                    PhoneNumberConfirmed = x.PhoneNumberConfirmed,
+                    ProfileImageFileName = x.ProfileImageFileName,
                 })
                 .AsNoTracking()
                 .ToPagedAsync(request.Pagination);

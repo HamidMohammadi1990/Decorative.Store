@@ -20,4 +20,5 @@ public record UpdateSectionRequest : IRequest<OperationResult>
     public DateTime? StartDateOnUtc { get; init; }
     public DateTime? EndDateOnUtc { get; init; }
     public bool IsActive { get; init; }
+    public string? AdminDescription { get; init; }
 }

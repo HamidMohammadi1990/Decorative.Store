@@ -7,13 +7,22 @@ import { ApiError } from '@/services/api/apiTypes'
 const SECTION_UPLOAD = '/api/v1/admin/section/upload-image'
 const SECTION_ITEM_UPLOAD = '/api/v1/admin/section-item/upload-image'
 
+/** Stored value may be a filename, `/Uploads/Cms/...`, or static `/images/...` path. */
+export function normalizeCmsImageStorageValue(imageUrl: string | null | undefined): string {
+  const trimmed = imageUrl?.trim() ?? ''
+  if (!trimmed) return ''
+  if (trimmed.startsWith('/Uploads/Cms/')) {
+    return trimmed.slice('/Uploads/Cms/'.length)
+  }
+  return trimmed
+}
+
 export function resolveCmsImageSrc(imageUrl: string): string {
   if (!imageUrl) return ''
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
   if (imageUrl.startsWith('/images/')) return imageUrl
-  if (imageUrl.startsWith('/Uploads/Cms/')) return `${API_BASE_URL}${imageUrl}`
-  if (imageUrl.startsWith('/')) return `${API_BASE_URL}${imageUrl}`
-  return `${API_BASE_URL}/Uploads/Cms/${imageUrl.replace(/^\/+/, '')}`
+  if (imageUrl.startsWith('/Uploads/')) return imageUrl
+  return `/Uploads/Cms/${imageUrl.replace(/^\/+/, '')}`
 }
 
 async function uploadCmsImage(
@@ -21,7 +30,7 @@ async function uploadCmsImage(
   accessToken: string,
   locale: Locale,
   file: File,
-): Promise<{ imageFileName: string; imageUrl: string }> {
+): Promise<{ imageFileName: string; imageUrl: string; storageValue: string }> {
   const formData = new FormData()
   formData.append('image', file)
 
@@ -46,7 +55,11 @@ async function uploadCmsImage(
   const imageUrl = readStringField(record ?? {}, 'imageUrl', 'ImageUrl')
   if (!imageFileName || !imageUrl) throw new ApiError(response.status, envelope.messages)
 
-  return { imageFileName, imageUrl }
+  return {
+    imageFileName,
+    imageUrl: resolveCmsImageSrc(imageFileName),
+    storageValue: normalizeCmsImageStorageValue(imageUrl),
+  }
 }
 
 export const adminCmsMediaService = {

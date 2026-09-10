@@ -1,5 +1,11 @@
 import type { SavedAddress, SavedAddressInput } from '@/models/address/savedAddress.model'
-import { readBooleanField, readRecord, readStringField } from '@/services/api/apiNormalize'
+import {
+  readBooleanField,
+  readNullableNumberField,
+  readRecord,
+  readStringField,
+} from '@/services/api/apiNormalize'
+import { roundCoordinate } from '@/config/map'
 
 export function normalizeUserAddress(data: unknown): SavedAddress {
   const record = readRecord(data) ?? {}
@@ -13,6 +19,8 @@ export function normalizeUserAddress(data: unknown): SavedAddress {
     apartment: readStringField(record, 'apartment', 'Apartment'),
     postcode: readStringField(record, 'postalCode', 'PostalCode'),
     phone: readStringField(record, 'phoneNumber', 'PhoneNumber'),
+    latitude: readNullableNumberField(record, 'latitude', 'Latitude'),
+    longitude: readNullableNumberField(record, 'longitude', 'Longitude'),
     isDefault: readBooleanField(record, 'isDefault', 'IsDefault'),
   }
 }
@@ -27,6 +35,8 @@ export function buildSavedAddressFromInput(id: string, input: SavedAddressInput)
     apartment: input.apartment.trim(),
     postcode: input.postcode.trim(),
     phone: input.phone.trim(),
+    latitude: input.latitude,
+    longitude: input.longitude,
     isDefault: input.isDefault ?? false,
   }
 }
@@ -41,6 +51,8 @@ export function buildCreateUserAddressPayload(input: SavedAddressInput) {
     recipientFirstName: input.firstName.trim(),
     recipientLastName: input.lastName.trim(),
     phoneNumber: input.phone.trim(),
+    latitude: input.latitude != null ? roundCoordinate(input.latitude) : null,
+    longitude: input.longitude != null ? roundCoordinate(input.longitude) : null,
     isDefault: input.isDefault ?? false,
   }
 }
@@ -66,6 +78,8 @@ export function savedAddressToInput(address: SavedAddress, isDefault?: boolean):
     apartment: address.apartment,
     postcode: address.postcode,
     phone: address.phone,
+    latitude: address.latitude,
+    longitude: address.longitude,
     isDefault: isDefault ?? address.isDefault,
   }
 }

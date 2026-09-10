@@ -9,6 +9,12 @@ import {
   AdminGridIconButton,
 } from '@/components/dashboard/admin/AdminGridActions'
 import { AdminField, adminInputClass, resolveAdminMutationError } from '@/components/dashboard/admin/adminFormShared'
+import { AdminListSearchField } from '@/components/dashboard/admin/AdminListSearchField'
+import {
+  CmsAdminDescriptionField,
+  CmsAdminDescriptionNote,
+} from '@/components/dashboard/admin/CmsAdminDescriptionField'
+import { CMS_ENTITY_ADMIN_HINT_FA } from '@/data/cmsAdminGuideFa'
 import { AdminListGridHeader } from '@/components/dashboard/admin/AdminListGridHeader'
 import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import { Button } from '@/components/ui/Button'
@@ -16,7 +22,11 @@ import { InlineLoading } from '@/components/ui/Spinner'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
 import { adminSectionItemService } from '@/services/adminSectionItemService'
 import { adminSectionService } from '@/services/adminSectionService'
-import { adminCmsMediaService, resolveCmsImageSrc } from '@/services/adminCmsMediaService'
+import {
+  adminCmsMediaService,
+  normalizeCmsImageStorageValue,
+  resolveCmsImageSrc,
+} from '@/services/adminCmsMediaService'
 import { useUserStore } from '@/stores/userStore'
 
 type Mode = 'list' | 'create' | 'edit'
@@ -49,10 +59,15 @@ export function CmsSectionItemsPanel() {
   const [priority, setPriority] = useState('0')
   const [url, setUrl] = useState('')
   const [description, setDescription] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
+  const [icon, setIcon] = useState('')
+  const [imageFileName, setImageFileName] = useState('')
   const [imagePreview, setImagePreview] = useState('')
   const [uploading, setUploading] = useState(false)
   const [isActive, setIsActive] = useState(true)
+  const [search, setSearch] = useState('')
+  const [appliedSearch, setAppliedSearch] = useState('')
+  const [filterSectionId, setFilterSectionId] = useState('')
+  const [adminDescription, setAdminDescription] = useState('')
 
   const loadList = useCallback(async () => {
     if (!accessToken || accessToken === 'mock-access-token') {
@@ -65,6 +80,8 @@ export function CmsSectionItemsPanel() {
       const sectionItems = await adminSectionItemService.getAll(accessToken, locale, {
         pageSize: 200,
         languageId: languageId ?? undefined,
+        title: appliedSearch.trim() || null,
+        sectionId: filterSectionId || null,
       })
       setItems(sectionItems.items)
     } catch (err) {
@@ -73,7 +90,7 @@ export function CmsSectionItemsPanel() {
     } finally {
       setLoading(false)
     }
-  }, [accessToken, languageId, locale, t])
+  }, [accessToken, appliedSearch, filterSectionId, languageId, locale, t])
 
   const loadFormOptions = useCallback(async () => {
     if (!accessToken || accessToken === 'mock-access-token') return
@@ -92,14 +109,25 @@ export function CmsSectionItemsPanel() {
     }
   }, [accessToken, languageId, locale, sectionId, t])
 
-  useEffect(() => { if (!languageLoading) void loadList() }, [languageLoading, loadList])
+  useEffect(() => {
+    if (!languageLoading) void loadList()
+  }, [languageLoading, loadList])
+
+  useEffect(() => {
+    if (!languageLoading && mode === 'list' && sections.length === 0) {
+      void adminSectionService
+        .getAll(accessToken!, locale, { pageSize: 200, languageId: languageId ?? undefined })
+        .then((result) => setSections(result.items))
+        .catch(() => setSections([]))
+    }
+  }, [accessToken, languageId, languageLoading, locale, mode, sections.length])
 
   useEffect(() => {
     if (mode !== 'list' && !languageLoading) void loadFormOptions()
   }, [languageLoading, loadFormOptions, mode])
 
   const resetForm = () => {
-    setTitle(''); setPriority('0'); setUrl(''); setDescription(''); setImageUrl(''); setImagePreview(''); setIsActive(true); setEditingId(null); setError(null)
+    setTitle(''); setPriority('0'); setUrl(''); setDescription(''); setAdminDescription(''); setIcon(''); setImageFileName(''); setImagePreview(''); setIsActive(true); setEditingId(null); setError(null)
     if (sections[0]) setSectionId(sections[0].id)
   }
 
@@ -118,8 +146,8 @@ export function CmsSectionItemsPanel() {
     setError(null)
     try {
       const uploaded = await adminCmsMediaService.uploadSectionItemImage(accessToken, locale, file)
-      setImageUrl(uploaded.imageUrl)
-      setImagePreview(resolveCmsImageSrc(uploaded.imageUrl))
+      setImageFileName(uploaded.storageValue)
+      setImagePreview(uploaded.imageUrl)
     } catch (err) {
       setError(resolveAdminMutationError(err, t('dashboard.cms.sectionItems.uploadFailed')))
     } finally {
@@ -139,9 +167,11 @@ export function CmsSectionItemsPanel() {
         sectionId,
         title: title.trim(),
         priority: Number(priority) || 0,
+        icon: icon.trim() || undefined,
         url: url.trim() || undefined,
         description: description.trim() || undefined,
-        imageUrl: imageUrl.trim() || undefined,
+        adminDescription: adminDescription.trim() || undefined,
+        imageUrl: imageFileName.trim() || undefined,
         isActive,
       }
       if (mode === 'edit' && editingId) await adminSectionItemService.update(accessToken, locale, { ...payload, id: editingId })
@@ -173,6 +203,15 @@ export function CmsSectionItemsPanel() {
             </AdminField>
             <AdminField label={t('dashboard.cms.sectionItems.fieldTitle')}><input value={title} onChange={(e) => setTitle(e.target.value)} className={adminInputClass} /></AdminField>
             <AdminField label={t('dashboard.cms.sectionItems.fieldPriority')}><input value={priority} onChange={(e) => setPriority(e.target.value)} className={adminInputClass} dir="ltr" type="number" /></AdminField>
+            <AdminField label={t('dashboard.cms.sectionItems.fieldIcon')}>
+              <input
+                value={icon}
+                onChange={(e) => setIcon(e.target.value)}
+                className={adminInputClass}
+                dir="ltr"
+                placeholder={t('dashboard.cms.sectionItems.fieldIconHint')}
+              />
+            </AdminField>
             <AdminField label={t('dashboard.cms.sectionItems.fieldUrl')}><input value={url} onChange={(e) => setUrl(e.target.value)} className={adminInputClass} dir="ltr" /></AdminField>
             <AdminField label={t('dashboard.cms.sectionItems.fieldImage')}>
               <div className="space-y-3">
@@ -191,6 +230,12 @@ export function CmsSectionItemsPanel() {
               </div>
             </AdminField>
             <AdminField label={t('dashboard.cms.sectionItems.fieldDescription')}><textarea value={description} onChange={(e) => setDescription(e.target.value)} className={adminInputClass} rows={3} /></AdminField>
+            <CmsAdminDescriptionField
+              label={t('dashboard.cms.common.fieldAdminDescription')}
+              hint={CMS_ENTITY_ADMIN_HINT_FA.sectionItem}
+              value={adminDescription}
+              onChange={setAdminDescription}
+            />
             {mode === 'edit' && <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} className="size-4" />{t('dashboard.cms.sectionItems.fieldActive')}</label>}
             {error && <p className="text-sm text-sale">{error}</p>}
             <div className="flex gap-3">
@@ -206,6 +251,29 @@ export function CmsSectionItemsPanel() {
   return (
     <div>
       <DashboardPageHeader title={t('dashboard.cms.sectionItems.title')} description={t('dashboard.cms.sectionItems.description')} icon={<CmsSectionItemsIcon size={22} />} action={<Button variant="warm" onClick={() => { resetForm(); setMode('create') }}>{t('dashboard.cms.sectionItems.add')}</Button>} />
+      <div className="mb-5 grid gap-3 sm:grid-cols-2">
+        <AdminListSearchField
+          label={t('dashboard.cms.common.search')}
+          placeholder={t('dashboard.cms.sectionItems.searchPlaceholder')}
+          value={search}
+          onChange={setSearch}
+          onApply={() => setAppliedSearch(search)}
+        />
+        <AdminField label={t('dashboard.cms.sectionItems.fieldSection')}>
+          <select
+            value={filterSectionId}
+            onChange={(e) => setFilterSectionId(e.target.value)}
+            className={adminInputClass}
+          >
+            <option value="">{t('dashboard.cms.common.allSections')}</option>
+            {sections.map((section) => (
+              <option key={section.id} value={section.id}>
+                {section.title}{section.sectionTypeName ? ` · ${section.sectionTypeName}` : ''}
+              </option>
+            ))}
+          </select>
+        </AdminField>
+      </div>
       {loading || languageLoading ? <div className="flex justify-center py-16"><InlineLoading label={t('dashboard.cms.sectionItems.loading')} /></div> : items.length === 0 ? (
         <DashboardEmptyState icon={<CmsSectionItemsIcon size={28} />} title={t('dashboard.cms.sectionItems.emptyTitle')} message={error ?? t('dashboard.cms.sectionItems.emptyMessage')} />
       ) : (
@@ -222,6 +290,7 @@ export function CmsSectionItemsPanel() {
                   <span>{t('dashboard.cms.sectionItems.colPriority')}: {item.priority}</span>
                   {item.icon && <RelatedMetaLine label={t('dashboard.cms.sectionItems.colIcon')} value={item.icon} />}
                 </p>
+                <CmsAdminDescriptionNote text={item.adminDescription} />
               </div>
               <AdminGridActions>
                 <AdminGridIconButton
@@ -234,7 +303,9 @@ export function CmsSectionItemsPanel() {
                     setPriority(String(item.priority))
                     setUrl(item.url ?? '')
                     setDescription(item.description ?? '')
-                    setImageUrl(item.imageUrl ?? '')
+                    setAdminDescription(item.adminDescription ?? '')
+                    setIcon(item.icon ?? '')
+                    setImageFileName(normalizeCmsImageStorageValue(item.imageUrl))
                     setImagePreview(item.imageUrl ? resolveCmsImageSrc(item.imageUrl) : '')
                     setIsActive(item.isActive)
                     setMode('edit')

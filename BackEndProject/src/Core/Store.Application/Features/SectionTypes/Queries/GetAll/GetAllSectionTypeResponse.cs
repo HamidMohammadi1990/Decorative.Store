@@ -9,5 +9,6 @@ public record GetAllSectionTypeResponse
     [JsonConverter(typeof(SectionTypeEncryptor))]
     public int Id { get; init; }
     public bool IsActive { get; init; }
+    public string? AdminDescription { get; init; }
     public List<SectionTypeTranslationItemDto> Translations { get; init; } = [];
 }

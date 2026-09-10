@@ -14,7 +14,7 @@ public class UpdateSectionTypeHandler
         if (model is null)
             return ErrorModel.Create("InvalidId");
 
-        model.Update(request.IsActive, request.LanguageId, request.Name);
+        model.Update(request.IsActive, request.LanguageId, request.Name, request.AdminDescription);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

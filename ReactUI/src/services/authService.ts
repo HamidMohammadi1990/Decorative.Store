@@ -1,4 +1,5 @@
 import type { DashboardUser } from '@/models/dashboard/dashboard.model'
+import { resolveUserImageUrl } from '@/utils/resolveUserImageUrl'
 import { apiGetAuth, apiPost } from '@/services/api/apiClient'
 import {
   readNumberField,
@@ -26,6 +27,7 @@ export interface CurrentUserResponse {
   lastName?: string | null
   email?: string | null
   phoneNumber?: string | null
+  profileImageUrl?: string | null
 }
 
 export interface RefreshTokenResponse {
@@ -64,6 +66,7 @@ function normalizeCurrentUserResponse(data: unknown): CurrentUserResponse | null
     lastName: readOptionalStringField(record, 'lastName', 'LastName'),
     email: readOptionalStringField(record, 'email', 'Email'),
     phoneNumber: readOptionalStringField(record, 'phoneNumber', 'PhoneNumber'),
+    profileImageUrl: readOptionalStringField(record, 'profileImageUrl', 'ProfileImageUrl'),
   }
 }
 
@@ -78,6 +81,9 @@ export function mapCurrentUserToDashboardUser(user: CurrentUserResponse): Dashbo
     lastName,
     email: user.email?.trim() || (userName.includes('@') ? userName : user.phoneNumber?.trim() || userName),
     memberSince: new Date().toISOString().slice(0, 10),
+    profileImageUrl: user.profileImageUrl
+      ? resolveUserImageUrl(user.profileImageUrl)
+      : undefined,
   }
 }
 

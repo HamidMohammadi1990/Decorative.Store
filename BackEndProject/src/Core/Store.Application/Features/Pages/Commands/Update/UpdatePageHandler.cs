@@ -21,7 +21,8 @@ public class UpdatePageHandler
             request.Title,
             request.Slug,
             request.MetaTitle,
-            request.MetaDescription);
+            request.MetaDescription,
+            request.AdminDescription);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         return saveChangesResult.IsSuccess

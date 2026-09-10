@@ -12,6 +12,7 @@ export interface DashboardUser {
   lastName: string
   email: string
   memberSince: string
+  profileImageUrl?: string
 }
 
 export interface WalletInfo {

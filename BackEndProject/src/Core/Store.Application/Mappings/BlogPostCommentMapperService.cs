@@ -1,4 +1,5 @@
-﻿using Edition.Application.Common.Extensions;
+﻿using Edition.Application.Common.Directories;
+using Edition.Application.Common.Extensions;
 using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Contracts.Mapping;
 using Edition.Application.Features.BlogPostComments.Queries;
@@ -50,6 +51,7 @@ public class BlogPostCommentMapperService : IBlogPostCommentMapperService
                 ApprovedOnUtc = x.ApprovedOnUtc,
                 CreatedByUserFirstName = x.CreatedByUserFirstName!,
                 CreatedByUserLastName = x.CreatedByUserLastName!,
+                CreatedByUserAvatarUrl = UserDirectory.GetImageUrl(x.CreatedByUserProfileImageFileName),
                 CreatedByUserId = x.CreatedByUserId
             })
             .ToList();

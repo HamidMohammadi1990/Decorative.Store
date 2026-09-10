@@ -60,6 +60,7 @@ public class PageRepository
                 Id = x.Id,
                 Type = x.Type,
                 IsActive = x.IsActive,
+                AdminDescription = x.AdminDescription,
                 Translations = x.Translations
                     .Select(t => new PageTranslationItemDto
                     {
@@ -166,11 +167,23 @@ public class PageRepository
 
     private static IQueryable<Page> ApplyTranslationFilters(IQueryable<Page> query, string? title, string? slug)
     {
-        if (!string.IsNullOrWhiteSpace(title))
-            query = query.Where(x => x.Translations.Any(t => t.Title.Contains(title)));
+        var normalizedTitle = title?.Trim();
+        var normalizedSlug = slug?.Trim();
 
-        if (!string.IsNullOrWhiteSpace(slug))
-            query = query.Where(x => x.Translations.Any(t => t.Slug.Contains(slug)));
+        if (!string.IsNullOrWhiteSpace(normalizedTitle)
+            && !string.IsNullOrWhiteSpace(normalizedSlug)
+            && string.Equals(normalizedTitle, normalizedSlug, StringComparison.Ordinal))
+        {
+            return query.Where(x =>
+                x.Translations.Any(t =>
+                    t.Title.Contains(normalizedTitle) || t.Slug.Contains(normalizedSlug)));
+        }
+
+        if (!string.IsNullOrWhiteSpace(normalizedTitle))
+            query = query.Where(x => x.Translations.Any(t => t.Title.Contains(normalizedTitle)));
+
+        if (!string.IsNullOrWhiteSpace(normalizedSlug))
+            query = query.Where(x => x.Translations.Any(t => t.Slug.Contains(normalizedSlug)));
 
         return query;
     }

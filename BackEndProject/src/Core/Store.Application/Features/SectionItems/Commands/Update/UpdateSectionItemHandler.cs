@@ -23,7 +23,8 @@ public class UpdateSectionItemHandler
             request.LanguageId,
             request.Title,
             request.Description,
-            request.Url);
+            request.Url,
+            request.AdminDescription);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

@@ -1677,6 +1677,9 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AdminDescription")
+                        .HasColumnType("NVARCHAR(500)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1695,6 +1698,9 @@ namespace Store.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdminDescription")
+                        .HasColumnType("NVARCHAR(500)");
 
                     b.Property<int>("PageId")
                         .HasColumnType("int");
@@ -1752,6 +1758,20 @@ namespace Store.Infrastructure.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("PageTranslation", (string)null);
+                });
+
+            modelBuilder.Entity("Store.Domain.Entities.PageTypeGuide", b =>
+                {
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AdminDescription")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(500)");
+
+                    b.HasKey("Type");
+
+                    b.ToTable("PageTypeGuide", (string)null);
                 });
 
             modelBuilder.Entity("Store.Domain.Entities.Permission", b =>
@@ -2679,6 +2699,9 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AdminDescription")
+                        .HasColumnType("NVARCHAR(500)");
+
                     b.Property<DateTime?>("EndDateOnUtc")
                         .HasColumnType("datetime2");
 
@@ -2714,11 +2737,14 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AdminDescription")
+                        .HasColumnType("NVARCHAR(500)");
+
                     b.Property<string>("Icon")
                         .HasColumnType("VARCHAR(24)");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("VARCHAR(36)");
+                        .HasColumnType("VARCHAR(256)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -2812,6 +2838,9 @@ namespace Store.Infrastructure.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdminDescription")
+                        .HasColumnType("NVARCHAR(500)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -2986,6 +3015,9 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfileImageFileName")
+                        .HasColumnType("VARCHAR(256)");
+
                     b.Property<int>("RefundMethod")
                         .HasColumnType("int");
 
@@ -3043,6 +3075,14 @@ namespace Store.Infrastructure.Persistence.Migrations
 
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
+
+                    b.Property<decimal?>("Latitude")
+                        .HasPrecision(10, 7)
+                        .HasColumnType("decimal(10,7)");
+
+                    b.Property<decimal?>("Longitude")
+                        .HasPrecision(10, 7)
+                        .HasColumnType("decimal(10,7)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()

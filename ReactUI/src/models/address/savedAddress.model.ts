@@ -7,6 +7,8 @@ export interface SavedAddress {
   apartment: string
   postcode: string
   phone: string
+  latitude: number | null
+  longitude: number | null
   isDefault: boolean
 }
 

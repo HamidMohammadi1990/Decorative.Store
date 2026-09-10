@@ -7,15 +7,17 @@ public class Page : BaseEntity
 {
     public PageType Type { get; private set; }
     public bool IsActive { get; private set; } = true;
+    public string? AdminDescription { get; private set; }
 
     public ICollection<PageSection> PageSections { get; private set; } = [];
     public ICollection<PageTranslation> Translations { get; private set; } = [];
 
-    public static Page Create(PageType type, bool isActive)
+    public static Page Create(PageType type, bool isActive, string? adminDescription = null)
         => new()
         {
             Type = type,
             IsActive = isActive,
+            AdminDescription = NormalizeAdminDescription(adminDescription),
         };
 
     public PageTranslation UpsertTranslation(
@@ -37,10 +39,25 @@ public class Page : BaseEntity
         return translation;
     }
 
-    public void Update(PageType type, bool isActive, int languageId, string title, string slug, string? metaTitle, string? metaDescription)
+    public void Update(
+        PageType type,
+        bool isActive,
+        int languageId,
+        string title,
+        string slug,
+        string? metaTitle,
+        string? metaDescription,
+        string? adminDescription = null)
     {
         Type = type;
         IsActive = isActive;
+        AdminDescription = NormalizeAdminDescription(adminDescription);
         UpsertTranslation(languageId, title, slug, metaTitle, metaDescription);
+    }
+
+    private static string? NormalizeAdminDescription(string? adminDescription)
+    {
+        var trimmed = adminDescription?.Trim();
+        return string.IsNullOrEmpty(trimmed) ? null : trimmed;
     }
 }

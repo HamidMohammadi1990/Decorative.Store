@@ -69,26 +69,31 @@ export function RemoteImage({
     ...rest,
   }
 
-  const content = webpSrc ? (
-    <picture>
-      <source srcSet={webpSrc} type="image/webp" sizes={sizes} />
-      <img {...imgProps} src={resolvedSrc} />
-    </picture>
-  ) : (
-    <img {...imgProps} src={resolvedSrc} />
-  )
+  const imgRef = ref as RefObject<HTMLImageElement>
 
   if (aspectRatio) {
     return (
-      <span ref={ref as RefObject<HTMLSpanElement>} className="block overflow-hidden" style={wrapperStyle}>
-        {content}
+      <span className="block overflow-hidden" style={wrapperStyle}>
+        {webpSrc ? (
+          <picture>
+            <source srcSet={webpSrc} type="image/webp" sizes={sizes} />
+            <img ref={imgRef} {...imgProps} src={resolvedSrc} />
+          </picture>
+        ) : (
+          <img ref={imgRef} {...imgProps} src={resolvedSrc} />
+        )}
       </span>
     )
   }
 
-  return (
-    <span ref={ref as RefObject<HTMLSpanElement>} className="contents">
-      {content}
-    </span>
-  )
+  if (webpSrc) {
+    return (
+      <picture>
+        <source srcSet={webpSrc} type="image/webp" sizes={sizes} />
+        <img ref={imgRef} {...imgProps} src={resolvedSrc} />
+      </picture>
+    )
+  }
+
+  return <img ref={imgRef} {...imgProps} src={resolvedSrc} />
 }

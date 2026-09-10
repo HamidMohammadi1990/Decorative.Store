@@ -1,6 +1,10 @@
 import type { CmsContentTranslation } from '@/models/admin/cms.model'
 import { readRecord, readStringField, readNumberField } from '@/services/api/apiNormalize'
 
+export function readAdminDescription(record: Record<string, unknown>): string | undefined {
+  return readStringField(record, 'adminDescription', 'AdminDescription') || undefined
+}
+
 export function normalizeCmsTranslations(raw: unknown): CmsContentTranslation[] {
   if (!Array.isArray(raw)) return []
 

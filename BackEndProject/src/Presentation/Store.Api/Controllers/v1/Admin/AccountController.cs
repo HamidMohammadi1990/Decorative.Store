@@ -2,6 +2,7 @@ using MediatR;
 using Asp.Versioning;
 using Store.Api.Attributes;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Edition.Application.Features.Users.Queries;
 using Edition.Application.Features.Users.Commands;
 using Store.WebFramework.Api;
@@ -47,4 +48,10 @@ public class AccountController
     [HttpDelete("delete")]
     public async Task<ApiResult<OperationResult>> Delete(DeleteUserRequest request)
         => await mediator.Send(request);
+
+    [ActionInfo(PermissionType.UpdateUser)]
+    [HttpPost("upload-profile-image")]
+    [RequestSizeLimit(5 * 1024 * 1024)]
+    public async Task<ApiResult<UploadUserProfileImageResponse>> UploadProfileImage([FromForm] IFormFile image)
+        => await mediator.Send(new UploadUserProfileImageCommand(image));
 }

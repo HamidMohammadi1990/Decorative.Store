@@ -9,6 +9,12 @@ import {
   AdminGridIconButton,
 } from '@/components/dashboard/admin/AdminGridActions'
 import { AdminField, adminInputClass, resolveAdminMutationError } from '@/components/dashboard/admin/adminFormShared'
+import { AdminListSearchField } from '@/components/dashboard/admin/AdminListSearchField'
+import {
+  CmsAdminDescriptionField,
+  CmsAdminDescriptionNote,
+} from '@/components/dashboard/admin/CmsAdminDescriptionField'
+import { CMS_ENTITY_ADMIN_HINT_FA } from '@/data/cmsAdminGuideFa'
 import { AdminListGridHeader } from '@/components/dashboard/admin/AdminListGridHeader'
 import { AdminRowNumber } from '@/components/dashboard/admin/AdminRowNumber'
 import { Button } from '@/components/ui/Button'
@@ -16,7 +22,11 @@ import { InlineLoading } from '@/components/ui/Spinner'
 import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
 import { adminSectionService } from '@/services/adminSectionService'
 import { adminSectionTypeService } from '@/services/adminSectionTypeService'
-import { adminCmsMediaService, resolveCmsImageSrc } from '@/services/adminCmsMediaService'
+import {
+  adminCmsMediaService,
+  normalizeCmsImageStorageValue,
+  resolveCmsImageSrc,
+} from '@/services/adminCmsMediaService'
 import { useUserStore } from '@/stores/userStore'
 
 type Mode = 'list' | 'create' | 'edit'
@@ -48,10 +58,14 @@ export function CmsSectionsPanel() {
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
   const [description, setDescription] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
+  const [imageFileName, setImageFileName] = useState('')
   const [imagePreview, setImagePreview] = useState('')
   const [uploading, setUploading] = useState(false)
   const [isActive, setIsActive] = useState(true)
+  const [search, setSearch] = useState('')
+  const [appliedSearch, setAppliedSearch] = useState('')
+  const [filterSectionTypeId, setFilterSectionTypeId] = useState('')
+  const [adminDescription, setAdminDescription] = useState('')
 
   const loadList = useCallback(async () => {
     if (!accessToken || accessToken === 'mock-access-token') {
@@ -64,6 +78,8 @@ export function CmsSectionsPanel() {
       const sections = await adminSectionService.getAll(accessToken, locale, {
         pageSize: 200,
         languageId: languageId ?? undefined,
+        title: appliedSearch.trim() || null,
+        sectionTypeId: filterSectionTypeId || null,
       })
       setItems(sections.items)
     } catch (err) {
@@ -72,7 +88,7 @@ export function CmsSectionsPanel() {
     } finally {
       setLoading(false)
     }
-  }, [accessToken, languageId, locale, t])
+  }, [accessToken, appliedSearch, filterSectionTypeId, languageId, locale, t])
 
   const loadFormOptions = useCallback(async () => {
     if (!accessToken || accessToken === 'mock-access-token') return
@@ -91,14 +107,25 @@ export function CmsSectionsPanel() {
     }
   }, [accessToken, languageId, locale, sectionTypeId, t])
 
-  useEffect(() => { if (!languageLoading) void loadList() }, [languageLoading, loadList])
+  useEffect(() => {
+    if (!languageLoading) void loadList()
+  }, [languageLoading, loadList])
+
+  useEffect(() => {
+    if (!languageLoading && mode === 'list' && sectionTypes.length === 0) {
+      void adminSectionTypeService
+        .getAll(accessToken!, locale, { pageSize: 200, languageId: languageId ?? undefined })
+        .then((result) => setSectionTypes(result.items))
+        .catch(() => setSectionTypes([]))
+    }
+  }, [accessToken, languageId, languageLoading, locale, mode, sectionTypes.length])
 
   useEffect(() => {
     if (mode !== 'list' && !languageLoading) void loadFormOptions()
   }, [languageLoading, loadFormOptions, mode])
 
   const resetForm = () => {
-    setTitle(''); setUrl(''); setDescription(''); setImageUrl(''); setImagePreview(''); setIsActive(true); setEditingId(null); setError(null)
+    setTitle(''); setUrl(''); setDescription(''); setAdminDescription(''); setImageFileName(''); setImagePreview(''); setIsActive(true); setEditingId(null); setError(null)
     if (sectionTypes[0]) setSectionTypeId(sectionTypes[0].id)
   }
 
@@ -117,8 +144,8 @@ export function CmsSectionsPanel() {
     setError(null)
     try {
       const uploaded = await adminCmsMediaService.uploadSectionImage(accessToken, locale, file)
-      setImageUrl(uploaded.imageUrl)
-      setImagePreview(resolveCmsImageSrc(uploaded.imageUrl))
+      setImageFileName(uploaded.storageValue)
+      setImagePreview(uploaded.imageUrl)
     } catch (err) {
       setError(resolveAdminMutationError(err, t('dashboard.cms.sections.uploadFailed')))
     } finally {
@@ -139,7 +166,8 @@ export function CmsSectionsPanel() {
         title: title.trim(),
         url: url.trim(),
         description: description.trim() || undefined,
-        imageUrl: imageUrl.trim() || undefined,
+        adminDescription: adminDescription.trim() || undefined,
+        imageUrl: imageFileName.trim() || undefined,
         isActive,
       }
       if (mode === 'edit' && editingId) await adminSectionService.update(accessToken, locale, { ...payload, id: editingId })
@@ -184,6 +212,12 @@ export function CmsSectionsPanel() {
               </div>
             </AdminField>
             <AdminField label={t('dashboard.cms.sections.fieldDescription')}><textarea value={description} onChange={(e) => setDescription(e.target.value)} className={adminInputClass} rows={3} /></AdminField>
+            <CmsAdminDescriptionField
+              label={t('dashboard.cms.common.fieldAdminDescription')}
+              hint={CMS_ENTITY_ADMIN_HINT_FA.section}
+              value={adminDescription}
+              onChange={setAdminDescription}
+            />
             {mode === 'edit' && <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={isActive} onChange={(e) => setIsActive(e.target.checked)} className="size-4" />{t('dashboard.cms.sections.fieldActive')}</label>}
             {error && <p className="text-sm text-sale">{error}</p>}
             <div className="flex gap-3">
@@ -199,6 +233,29 @@ export function CmsSectionsPanel() {
   return (
     <div>
       <DashboardPageHeader title={t('dashboard.cms.sections.title')} description={t('dashboard.cms.sections.description')} icon={<CmsSectionsIcon size={22} />} action={<Button variant="warm" onClick={() => { resetForm(); setMode('create') }}>{t('dashboard.cms.sections.add')}</Button>} />
+      <div className="mb-5 grid gap-3 sm:grid-cols-2">
+        <AdminListSearchField
+          label={t('dashboard.cms.common.search')}
+          placeholder={t('dashboard.cms.sections.searchPlaceholder')}
+          value={search}
+          onChange={setSearch}
+          onApply={() => setAppliedSearch(search)}
+        />
+        <AdminField label={t('dashboard.cms.sections.fieldSectionType')}>
+          <select
+            value={filterSectionTypeId}
+            onChange={(e) => setFilterSectionTypeId(e.target.value)}
+            className={adminInputClass}
+          >
+            <option value="">{t('dashboard.cms.common.allSectionTypes')}</option>
+            {sectionTypes.map((type) => (
+              <option key={type.id} value={type.id}>
+                {type.name}
+              </option>
+            ))}
+          </select>
+        </AdminField>
+      </div>
       {loading || languageLoading ? <div className="flex justify-center py-16"><InlineLoading label={t('dashboard.cms.sections.loading')} /></div> : items.length === 0 ? (
         <DashboardEmptyState icon={<CmsSectionsIcon size={28} />} title={t('dashboard.cms.sections.emptyTitle')} message={error ?? t('dashboard.cms.sections.emptyMessage')} />
       ) : (
@@ -214,6 +271,7 @@ export function CmsSectionsPanel() {
                   <RelatedMetaLine label={t('dashboard.cms.sections.colParent')} value={item.parentTitle} />
                   {item.url && <RelatedMetaLine label={t('dashboard.cms.sections.fieldUrl')} value={item.url} />}
                 </p>
+                <CmsAdminDescriptionNote text={item.adminDescription} />
               </div>
               <AdminGridActions>
                 <AdminGridIconButton
@@ -225,7 +283,8 @@ export function CmsSectionsPanel() {
                     setTitle(item.title)
                     setUrl(item.url)
                     setDescription(item.description ?? '')
-                    setImageUrl(item.imageUrl ?? '')
+                    setAdminDescription(item.adminDescription ?? '')
+                    setImageFileName(normalizeCmsImageStorageValue(item.imageUrl))
                     setImagePreview(item.imageUrl ? resolveCmsImageSrc(item.imageUrl) : '')
                     setIsActive(item.isActive)
                     setMode('edit')

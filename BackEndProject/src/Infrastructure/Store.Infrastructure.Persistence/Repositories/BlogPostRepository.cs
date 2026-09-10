@@ -303,6 +303,7 @@ public class BlogPostRepository
                     CreatedByUserId = blogPostComment.CreatedByUserId,
                     CreatedByUserFirstName = createdByUser.FirstName,
                     CreatedByUserLastName = createdByUser.LastName,
+                    CreatedByUserProfileImageFileName = createdByUser.ProfileImageFileName,
                 })
             .Take(50)
             .ToListAsync(cancellationToken);
@@ -477,6 +478,7 @@ public class BlogPostRepository
             UpdatedOnUtc = blogPost.UpdatedOnUtc,
             UserFirstName = user.FirstName!,
             UserLastName = user.LastName!,
+            UserProfileImageFileName = user.ProfileImageFileName,
             CategoryTitle = blogPostCategory.Translations
                     .Where(t => t.LanguageId == languageId)
                     .Select(t => t.Title)

@@ -10,6 +10,7 @@ public class Section : BaseEntity
     public DateTime? StartDateOnUtc { get; private set; }
     public DateTime? EndDateOnUtc { get; private set; }
     public bool IsActive { get; private set; } = true;
+    public string? AdminDescription { get; private set; }
 
     public SectionType SectionType { get; private set; } = default!;
     public Section? Parent { get; private set; }
@@ -24,7 +25,8 @@ public class Section : BaseEntity
         string? imageUrl,
         DateTime? startDateOnUtc,
         DateTime? endDateOnUtc,
-        bool isActive)
+        bool isActive,
+        string? adminDescription = null)
         => new()
         {
             SectionTypeId = sectionTypeId,
@@ -33,6 +35,7 @@ public class Section : BaseEntity
             StartDateOnUtc = startDateOnUtc,
             EndDateOnUtc = endDateOnUtc,
             IsActive = isActive,
+            AdminDescription = NormalizeAdminDescription(adminDescription),
         };
 
     public SectionTranslation UpsertTranslation(int languageId, string title, string url, string? description = null)
@@ -59,7 +62,8 @@ public class Section : BaseEntity
         int languageId,
         string title,
         string url,
-        string? description)
+        string? description,
+        string? adminDescription = null)
     {
         SectionTypeId = sectionTypeId;
         ParentId = parentId;
@@ -67,7 +71,14 @@ public class Section : BaseEntity
         StartDateOnUtc = startDateOnUtc;
         EndDateOnUtc = endDateOnUtc;
         IsActive = isActive;
+        AdminDescription = NormalizeAdminDescription(adminDescription);
         UpsertTranslation(languageId, title, url, description);
+    }
+
+    private static string? NormalizeAdminDescription(string? adminDescription)
+    {
+        var trimmed = adminDescription?.Trim();
+        return string.IsNullOrEmpty(trimmed) ? null : trimmed;
     }
 
     public bool IsVisibleAt(DateTime utcNow, bool sectionTypeIsActive)

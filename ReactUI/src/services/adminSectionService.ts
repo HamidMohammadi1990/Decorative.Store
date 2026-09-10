@@ -10,7 +10,11 @@ import {
   readOptionalEncryptedId,
   type AdminPagedResult,
 } from '@/services/admin/adminCatalogNormalize'
-import { normalizeCmsTranslations, pickCmsTranslation } from '@/services/admin/adminCmsNormalize'
+import {
+  normalizeCmsTranslations,
+  pickCmsTranslation,
+  readAdminDescription,
+} from '@/services/admin/adminCmsNormalize'
 
 const BASE = '/api/v1/admin/section'
 
@@ -38,6 +42,7 @@ function normalizeSection(data: unknown, languageId?: number): AdminCmsSection |
     url: translation?.url ?? '',
     sectionTypeName: readStringField(record, 'sectionTypeName', 'SectionTypeName') || undefined,
     parentTitle: readStringField(record, 'parentTitle', 'ParentTitle') || null,
+    adminDescription: readAdminDescription(record),
     translations,
   }
 }
@@ -51,6 +56,7 @@ export const adminSectionService = {
       pageSize?: number
       languageId?: number
       sectionTypeId?: string | null
+      title?: string | null
     } = {},
   ): Promise<AdminPagedResult<AdminCmsSection>> {
     const data = await apiPost<unknown>(
@@ -58,7 +64,7 @@ export const adminSectionService = {
       {
         sectionTypeId: options.sectionTypeId ?? null,
         parentId: null,
-        title: null,
+        title: options.title?.trim() || null,
         url: null,
         isActive: null,
         pagination: paginationBody(options.pageNumber ?? 1, options.pageSize ?? 100),

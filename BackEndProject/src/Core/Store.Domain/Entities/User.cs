@@ -20,6 +20,7 @@ public class User : BaseEntity
     public RefundMethodType RefundMethod { get; private set; }
     public string SecurityStamp { get; private set; } = null!;
     public string? EconomicCode { get; private set; }
+    public string? ProfileImageFileName { get; private set; }
 
 
     public ICollection<Order> Orders { get; private set; } = default!;
@@ -115,6 +116,15 @@ public class User : BaseEntity
         Gender = gender;
         IsActive = isActive;
         LoginPermission = loginPermission;
+    }
+
+    public void SetProfileImageFileName(string? profileImageFileName)
+        => ProfileImageFileName = NormalizeProfileImageFileName(profileImageFileName);
+
+    private static string? NormalizeProfileImageFileName(string? profileImageFileName)
+    {
+        var trimmed = profileImageFileName?.Trim();
+        return string.IsNullOrEmpty(trimmed) ? null : trimmed;
     }
 
     public void Deactivate()

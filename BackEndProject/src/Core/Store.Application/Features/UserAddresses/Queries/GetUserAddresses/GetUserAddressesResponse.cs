@@ -26,5 +26,7 @@ public record GetUserAddressesResponse
     public string? Apartment { get; init; }
     public string? PostalCode { get; init; }
     public string PhoneNumber { get; init; } = default!;
+    public decimal? Latitude { get; init; }
+    public decimal? Longitude { get; init; }
     public bool IsDefault { get; init; }
 }

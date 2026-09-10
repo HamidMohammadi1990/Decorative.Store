@@ -766,23 +766,38 @@ public class ProductRepository
             .Select(group => new
             {
                 ProductId = group.Key,
-                Sold = group.Sum(item => item.Quantity)
+                Sold = group.Sum(item => item.Quantity),
             })
             .ToDictionaryAsync(x => x.ProductId, x => x.Sold, cancellationToken);
 
-        var rows = await BuildActiveCatalogProductQuery().ToListAsync(cancellationToken);
+        var activeProducts = await Context.Product
+            .AsNoTracking()
+            .Where(product =>
+                product.IsActive
+                && product.SubCategory.IsActive
+                && product.SubCategory.Category.IsActive)
+            .Select(product => new
+            {
+                product.Id,
+                product.CreatedOnUtc,
+            })
+            .ToListAsync(cancellationToken);
 
-        IEnumerable<Product> ordered = rows
+        var productIds = activeProducts
             .OrderByDescending(product => salesByProductId.GetValueOrDefault(product.Id))
             .ThenByDescending(product => product.CreatedOnUtc)
-            .ThenByDescending(product => product.Id);
+            .ThenByDescending(product => product.Id)
+            .Select(product => product.Id)
+            .ToList();
 
         if (limit is > 0)
-            ordered = ordered.Take(limit.Value);
+            productIds = productIds.Take(limit.Value).ToList();
 
-        return ordered
-            .Select(product => MapToCatalogListingProductDto(product, languageId, defaultLanguageId))
-            .ToList();
+        return await LoadCatalogListingProductsByIdsAsync(
+            productIds,
+            languageId,
+            defaultLanguageId,
+            cancellationToken);
     }
 
     private async Task<List<CatalogListingProductDto>> LoadCategoryCollectionProductsAsync(
@@ -862,6 +877,29 @@ public class ProductRepository
             .Include(product => product.SubCategory)
             .ThenInclude(subCategory => subCategory.Category)
             .ThenInclude(category => category.Translations);
+
+    private async Task<List<CatalogListingProductDto>> LoadCatalogListingProductsByIdsAsync(
+        IReadOnlyList<int> productIds,
+        int languageId,
+        int defaultLanguageId,
+        CancellationToken cancellationToken)
+    {
+        if (productIds.Count == 0)
+            return [];
+
+        var rows = await BuildActiveCatalogProductQuery()
+            .Where(product => productIds.Contains(product.Id))
+            .ToListAsync(cancellationToken);
+
+        var orderMap = productIds
+            .Select((id, index) => (id, index))
+            .ToDictionary(x => x.id, x => x.index);
+
+        return rows
+            .OrderBy(product => orderMap.GetValueOrDefault(product.Id, int.MaxValue))
+            .Select(product => MapToCatalogListingProductDto(product, languageId, defaultLanguageId))
+            .ToList();
+    }
 
     private static CatalogListingProductDto MapToCatalogListingProductDto(
         Product product,

@@ -684,6 +684,32 @@
     "validation": {
       "required": "This field is required",
       "emailInvalid": "Please enter a valid email address"
+    },
+    "discountTitle": "Discount code",
+    "discountCodeLabel": "Promo code",
+    "discountCodePlaceholder": "Enter code",
+    "applyDiscount": "Apply",
+    "applyingDiscount": "Applying…",
+    "removeDiscount": "Remove",
+    "discountApplied": "Code applied",
+    "discountActive": "Active discount",
+    "discountRequired": "Enter a discount code",
+    "discountSignInHint": "Sign in to apply a discount code to your order.",
+    "discountErrors": {
+      "generic": "Could not apply this discount code. Please try again.",
+      "DiscountNotFound": "This discount code was not found.",
+      "DiscountInactive": "This discount code is no longer active.",
+      "DiscountExpired": "This discount code has expired.",
+      "DiscountCooperationOnly": "This code is reserved for partner accounts.",
+      "DiscountUsageLimitReached": "This discount code has reached its usage limit.",
+      "DiscountUserNotEligible": "You are not eligible to use this discount code.",
+      "DiscountMinimumAmountNotMet": "Your order does not meet the minimum amount for this code.",
+      "DiscountNoEligibleItems": "None of the items in your bag qualify for this discount.",
+      "DiscountInvalidType": "This discount type cannot be applied to your order.",
+      "DiscountAlreadyConsumed": "You have already used this discount code.",
+      "DiscountIsNotValid": "This discount code is not valid.",
+      "OrderIsNotFound": "Your cart could not be found. Please refresh and try again.",
+      "PaymentInProgress": "A payment is already in progress for this order."
     }
   },
   "address": {
@@ -705,8 +731,14 @@
     "labelField": "Address label",
     "labelPlaceholder": "e.g. Home, Office",
     "setAsDefault": "Set as default address",
+    "mapTitle": "Location on map",
+    "mapHint": "Click the map or drag the pin to set the exact delivery point.",
+    "mapLocateMe": "Use my location",
+    "mapLocating": "Locating…",
+    "mapPreviewAlt": "Map preview of saved address location",
     "validation": {
-      "required": "This field is required"
+      "required": "This field is required",
+      "mapRequired": "Please select a location on the map"
     },
     "errors": {
       "saveFailed": "Could not save the address. Please try again.",
@@ -1181,6 +1213,12 @@
       "fieldPasswordOptional": "New password (optional)",
       "fieldActive": "Active",
       "fieldLoginPermission": "Login allowed",
+      "fieldProfileImage": "Profile image",
+      "fieldProfileImageHint": "Square or round photo — shown on the blog author card.",
+      "profileImageEmpty": "No image",
+      "uploading": "Uploading…",
+      "uploadFailed": "Image upload failed.",
+      "fileTooLarge": "Maximum file size is {{max}} MB.",
       "genderFemale": "Female",
       "genderMale": "Male",
       "save": "Save",
@@ -2143,6 +2181,14 @@
       "quickStep3": "Select content language (fa/en) before saving."
     },
     "cms": {
+      "common": {
+        "search": "Search",
+        "allPages": "All pages",
+        "allSections": "All sections",
+        "allSectionTypes": "All section types",
+        "fieldAdminDescription": "Placement guide (admin)",
+        "pageTypeGuide": "Page type guide"
+      },
       "pages": {
         "title": "CMS pages",
         "description": "Manage multilingual storefront pages.",
@@ -2176,7 +2222,8 @@
         "emptyTitle": "No pages yet",
         "emptyMessage": "Create the first CMS page.",
         "statusActive": "Active",
-        "statusInactive": "Inactive"
+        "statusInactive": "Inactive",
+        "searchPlaceholder": "Search by title or slug…"
       },
       "sectionTypes": {
         "title": "Section types",
@@ -2200,7 +2247,8 @@
         "retry": "Retry",
         "saving": "Saving…",
         "statusActive": "Active",
-        "statusInactive": "Inactive"
+        "statusInactive": "Inactive",
+        "searchPlaceholder": "Search by name…"
       },
       "sections": {
         "title": "Sections",
@@ -2229,7 +2277,8 @@
         "emptyTitle": "No sections",
         "emptyMessage": "Create the first section.",
         "colSectionType": "Type",
-        "colParent": "Parent section"
+        "colParent": "Parent section",
+        "searchPlaceholder": "Search by title…"
       },
       "sectionItems": {
         "title": "Section items",
@@ -2240,6 +2289,8 @@
         "fieldSection": "Section",
         "fieldTitle": "Title",
         "fieldPriority": "Priority",
+        "fieldIcon": "Icon key",
+        "fieldIconHint": "e.g. cta, search, living-room",
         "fieldUrl": "URL",
         "fieldDescription": "Description",
         "fieldImage": "Image",
@@ -2261,7 +2312,8 @@
         "colSection": "Section",
         "colSectionType": "Type",
         "colPriority": "Priority",
-        "colIcon": "Icon"
+        "colIcon": "Icon",
+        "searchPlaceholder": "Search by title…"
       },
       "pageSections": {
         "title": "Page sections",

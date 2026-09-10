@@ -61,6 +61,16 @@
         "garden": "Garden",
         "home-office": "Home office"
       }
+    },
+    {
+      "code": "pack-quantity",
+      "title": "Pack quantity",
+      "values": {}
+    },
+    {
+      "code": "measurement-unit",
+      "title": "Measurement unit",
+      "values": {}
     }
   ]
 }

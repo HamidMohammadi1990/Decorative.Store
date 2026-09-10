@@ -12,6 +12,7 @@ public record SearchBlogPostDto
     public string Content { get; init; } = default!;
     public string UserFirstName { get; set; } = default!;
     public string UserLastName { get; set; } = default!;
+    public string? UserProfileImageFileName { get; init; }
     public int UserId { get; init; }
     public int ReadingTimeInMinutes { get; set; }
     public DateTime CreatedOnUtc { get; init; }

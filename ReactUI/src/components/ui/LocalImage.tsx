@@ -56,18 +56,12 @@ export function LocalImage({
 
   if (webpSrc) {
     return (
-      <span ref={ref as RefObject<HTMLSpanElement>} className="contents">
-        <picture>
-          <source srcSet={webpSrc} type="image/webp" sizes={sizes} />
-          <img {...imgProps} src={resolvedSrc} />
-        </picture>
-      </span>
+      <picture>
+        <source srcSet={webpSrc} type="image/webp" sizes={sizes} />
+        <img ref={ref as RefObject<HTMLImageElement>} {...imgProps} src={resolvedSrc} />
+      </picture>
     )
   }
 
-  return (
-    <span ref={ref as RefObject<HTMLSpanElement>} className="contents">
-      <img {...imgProps} src={resolvedSrc} />
-    </span>
-  )
+  return <img ref={ref as RefObject<HTMLImageElement>} {...imgProps} src={resolvedSrc} />
 }

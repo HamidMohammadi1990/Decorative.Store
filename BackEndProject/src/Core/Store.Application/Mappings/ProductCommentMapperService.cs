@@ -1,4 +1,5 @@
-﻿using Edition.Application.Common.Extensions;
+﻿using Edition.Application.Common.Directories;
+using Edition.Application.Common.Extensions;
 using Edition.Application.Contracts.ContentPolicies;
 using Edition.Application.Contracts.Mapping;
 using Edition.Application.Features.ProductComments.Queries;
@@ -69,6 +70,7 @@ public class ProductCommentMapperService : IProductCommentMapperService
                 UserName = x.UserName,
                 UserFirstName = x.UserFirstName,
                 UserLastName = x.UserLastName,
+                UserAvatarUrl = UserDirectory.GetImageUrl(x.UserProfileImageFileName),
                 ProductTitle = x.ProductTitle,
                 AffordableRating = x.AffordableRating,
                 CommentTopicTitle = x.CommentTopicTitle,

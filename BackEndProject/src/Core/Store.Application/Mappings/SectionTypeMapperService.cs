@@ -16,6 +16,7 @@ public class SectionTypeMapperService : ISectionTypeMapperService
         {
             Id = x.Id,
             IsActive = x.IsActive,
+            AdminDescription = x.AdminDescription,
             Translations = x.Translations,
         }).ToList();
 

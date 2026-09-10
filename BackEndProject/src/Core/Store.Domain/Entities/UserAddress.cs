@@ -15,6 +15,8 @@ public class UserAddress : BaseEntity
     public string? Apartment { get; private set; }
     public string? PostalCode { get; private set; }
     public string PhoneNumber { get; private set; } = default!;
+    public decimal? Latitude { get; private set; }
+    public decimal? Longitude { get; private set; }
 
 
     public User User { get; private set; } = default!;
@@ -24,7 +26,7 @@ public class UserAddress : BaseEntity
 
     public static UserAddress Create(string title, int userId, string address, string? apartment, string? postalCode,
                                      int? cityId, string? recipientFirstName, string? recipientLastName,
-                                     string phoneNumber, bool isDefault)
+                                     string phoneNumber, decimal? latitude, decimal? longitude, bool isDefault)
         => new()
         {
             Title = title,
@@ -36,11 +38,14 @@ public class UserAddress : BaseEntity
             RecipientFirstName = recipientFirstName,
             RecipientLastName = recipientLastName,
             PhoneNumber = phoneNumber,
+            Latitude = latitude,
+            Longitude = longitude,
             IsDefault = isDefault
         };
 
     public void Update(string title, bool isActive, string address, string? apartment, string? postalCode, int? cityId,
-                       string? recipientFirstName, string? recipientLastName, string phoneNumber, bool isDefault)
+                       string? recipientFirstName, string? recipientLastName, string phoneNumber,
+                       decimal? latitude, decimal? longitude, bool isDefault)
     {
         Title = title;
         CityId = cityId;
@@ -52,6 +57,8 @@ public class UserAddress : BaseEntity
         PhoneNumber = phoneNumber;
         RecipientLastName = recipientLastName;
         RecipientFirstName = recipientFirstName;
+        Latitude = latitude;
+        Longitude = longitude;
     }
 
     public void SetDefault(bool isDefault) => IsDefault = isDefault;

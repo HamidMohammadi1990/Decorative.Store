@@ -12,6 +12,7 @@ public record GetAllPageResponseDto
     public int Id { get; init; }
     public PageType Type { get; init; }
     public bool IsActive { get; init; }
+    public string? AdminDescription { get; init; }
     public List<PageTranslationItemDto> Translations { get; init; } = [];
 }
 

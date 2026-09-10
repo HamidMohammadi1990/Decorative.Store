@@ -16,6 +16,7 @@ import { ChevronIcon } from '@/components/ui/ChevronIcon'
 import { searchDashboardNav, type DashboardNavSearchResult } from '@/extensions/dashboardNavSearch'
 import { useUserStore } from '@/stores/userStore'
 import { useProfileCompletion } from '@/hooks/useProfileCompletion'
+import { UserAvatar } from '@/components/ui/UserAvatar'
 
 const SIDEBAR_COLLAPSED_KEY = 'westelm-dashboard-sidebar-collapsed'
 
@@ -30,12 +31,6 @@ function readSidebarCollapsed() {
 function expandedGroupsForPath(pathname: string): Set<string> {
   const active = findActiveNavGroup(pathname)
   return active ? new Set([active]) : new Set()
-}
-
-function getInitials(firstName: string, lastName: string) {
-  const first = firstName.charAt(0).toUpperCase()
-  const last = lastName ? lastName.charAt(0).toUpperCase() : ''
-  return `${first}${last}` || first
 }
 
 function navItemLabelKey(section: DashboardNavItem['section']) {
@@ -67,7 +62,6 @@ export function DashboardSidebar() {
 
   if (!user) return null
 
-  const initials = getInitials(user.firstName, user.lastName)
   const displayName = user.lastName ? `${user.firstName} ${user.lastName}` : user.firstName
 
   const toggleCollapsed = () => {
@@ -109,14 +103,13 @@ export function DashboardSidebar() {
             className="pointer-events-none absolute -end-10 -top-10 size-36 rounded-full bg-warm/8"
           />
           <div className={`relative flex items-center ${collapsed ? 'justify-center' : 'gap-3'}`}>
-            <span
-              className={`flex shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-warm to-warm-hover font-semibold text-warm-text shadow-sm ring-1 ring-warm/30 ${
-                collapsed ? 'size-10 text-sm' : 'size-11 text-base'
-              }`}
+            <UserAvatar
+              name={displayName}
+              imageUrl={user.profileImageUrl}
+              size={collapsed ? 'md' : 'lg'}
+              className="shadow-sm ring-1 ring-warm/30"
               title={collapsed ? displayName : undefined}
-            >
-              {initials}
-            </span>
+            />
             {!collapsed && (
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-text">{displayName}</p>

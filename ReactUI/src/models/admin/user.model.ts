@@ -13,6 +13,8 @@ export interface AdminUser {
   loginPermission: boolean
   isActive: boolean
   lastLoginDateOnUtc: string | null
+  profileImageFileName?: string
+  profileImageUrl?: string
 }
 
 export interface CreateAdminUserInput {
@@ -23,6 +25,7 @@ export interface CreateAdminUserInput {
   phoneNumber: string
   password: string
   gender: AdminUserGender
+  profileImageFileName?: string
 }
 
 export interface UpdateAdminUserInput {
@@ -36,4 +39,5 @@ export interface UpdateAdminUserInput {
   gender: AdminUserGender
   isActive: boolean
   loginPermission: boolean
+  profileImageFileName?: string | null
 }

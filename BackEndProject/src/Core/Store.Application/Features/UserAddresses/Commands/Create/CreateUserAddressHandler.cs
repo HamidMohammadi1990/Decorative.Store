@@ -30,6 +30,8 @@ public class CreateUserAddressHandler
             request.RecipientFirstName,
             request.RecipientLastName,
             request.PhoneNumber,
+            request.Latitude,
+            request.Longitude,
             makeDefault);
 
         userAddressRepository.Add(userAddress);

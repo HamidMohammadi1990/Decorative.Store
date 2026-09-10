@@ -11,7 +11,7 @@ public class CreatePageSectionHandler
 {
     public async Task<OperationResult<CreatePageSectionResponse>> Handle(CreatePageSectionRequest request, CancellationToken cancellationToken)
     {
-        var model = PageSection.Create(request.PageId, request.SectionId, request.Priority);
+        var model = PageSection.Create(request.PageId, request.SectionId, request.Priority, request.AdminDescription);
 
         repository.Add(model);
 

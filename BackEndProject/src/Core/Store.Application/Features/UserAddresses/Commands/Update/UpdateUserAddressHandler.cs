@@ -30,6 +30,8 @@ public class UpdateUserAddressHandler
             request.RecipientFirstName,
             request.RecipientLastName,
             request.PhoneNumber,
+            request.Latitude,
+            request.Longitude,
             makeDefault);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);

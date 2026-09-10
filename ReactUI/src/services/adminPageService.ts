@@ -1,4 +1,9 @@
-import type { AdminCmsPage, CreateCmsPageInput, UpdateCmsPageInput } from '@/models/admin/cms.model'
+import type {
+  AdminCmsPage,
+  AdminCmsPageTypeGuide,
+  CreateCmsPageInput,
+  UpdateCmsPageInput,
+} from '@/models/admin/cms.model'
 import type { Locale } from '@/models/shared/locale.model'
 import { apiPost, apiPut } from '@/services/api/apiClient'
 import { readRecord, readStringField } from '@/services/api/apiNormalize'
@@ -9,7 +14,12 @@ import {
   readIsActive,
   type AdminPagedResult,
 } from '@/services/admin/adminCatalogNormalize'
-import { normalizeCmsTranslations, pickCmsTranslation, readPageType } from '@/services/admin/adminCmsNormalize'
+import {
+  normalizeCmsTranslations,
+  pickCmsTranslation,
+  readAdminDescription,
+  readPageType,
+} from '@/services/admin/adminCmsNormalize'
 
 const BASE = '/api/v1/admin/page'
 
@@ -31,6 +41,7 @@ function normalizePage(data: unknown, languageId?: number): AdminCmsPage | null 
     slug: translation?.slug ?? '',
     metaTitle: translation?.metaTitle,
     metaDescription: translation?.metaDescription,
+    adminDescription: readAdminDescription(record),
     translations,
   }
 }
@@ -39,13 +50,19 @@ export const adminPageService = {
   async getAll(
     accessToken: string,
     locale: Locale,
-    options: { pageNumber?: number; pageSize?: number; languageId?: number } = {},
+    options: {
+      pageNumber?: number
+      pageSize?: number
+      languageId?: number
+      title?: string | null
+      slug?: string | null
+    } = {},
   ): Promise<AdminPagedResult<AdminCmsPage>> {
     const data = await apiPost<unknown>(
       `${BASE}/get-all`,
       {
-        title: null,
-        slug: null,
+        title: options.title?.trim() || null,
+        slug: options.slug?.trim() || null,
         type: null,
         isActive: null,
         pagination: paginationBody(options.pageNumber ?? 1, options.pageSize ?? 100),
@@ -72,8 +89,26 @@ export const adminPageService = {
       slug: readStringField(record, 'slug', 'Slug'),
       metaTitle: readStringField(record, 'metaTitle', 'MetaTitle') || undefined,
       metaDescription: readStringField(record, 'metaDescription', 'MetaDescription') || undefined,
+      adminDescription: readAdminDescription(record),
       translations: [],
     }
+  },
+
+  async getPageTypeGuides(
+    accessToken: string,
+    locale: Locale,
+  ): Promise<AdminCmsPageTypeGuide[]> {
+    const data = await apiPost<unknown>(`${BASE}/page-type-guides`, {}, { locale, accessToken })
+    if (!Array.isArray(data)) return []
+
+    return data.flatMap((item) => {
+      const record = readRecord(item)
+      if (!record) return []
+      const type = readPageType(record.type ?? record.Type)
+      const adminDescription = readStringField(record, 'adminDescription', 'AdminDescription')
+      if (!adminDescription) return []
+      return [{ type, adminDescription }]
+    })
   },
 
   async create(accessToken: string, locale: Locale, input: CreateCmsPageInput): Promise<string> {

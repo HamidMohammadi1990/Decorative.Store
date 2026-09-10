@@ -14,6 +14,12 @@ import {
   adminInputClass,
   resolveAdminMutationError,
 } from '@/components/dashboard/admin/adminFormShared'
+import { AdminListSearchField } from '@/components/dashboard/admin/AdminListSearchField'
+import {
+  CmsAdminDescriptionField,
+  CmsAdminDescriptionNote,
+} from '@/components/dashboard/admin/CmsAdminDescriptionField'
+import { CMS_ENTITY_ADMIN_HINT_FA } from '@/data/cmsAdminGuideFa'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { useAdminPagedList } from '@/hooks/useAdminPagedList'
@@ -34,6 +40,9 @@ export function CmsSectionTypesPanel() {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [name, setName] = useState('')
   const [isActive, setIsActive] = useState(true)
+  const [search, setSearch] = useState('')
+  const [appliedSearch, setAppliedSearch] = useState('')
+  const [adminDescription, setAdminDescription] = useState('')
 
   const fetchPage = useCallback(
     (pageNumber: number, pageSize: number) =>
@@ -41,8 +50,9 @@ export function CmsSectionTypesPanel() {
         pageNumber,
         pageSize,
         languageId: languageId ?? undefined,
+        name: appliedSearch.trim() || null,
       }),
-    [accessToken, languageId, locale],
+    [accessToken, appliedSearch, languageId, locale],
   )
 
   const {
@@ -60,12 +70,18 @@ export function CmsSectionTypesPanel() {
     enabled: Boolean(accessToken && accessToken !== 'mock-access-token' && !languageLoading),
   })
 
+  const applySearch = () => {
+    setAppliedSearch(search)
+    goToPage(1)
+  }
+
   const listErrorMessage = listError
     ? resolveAdminMutationError(listError, t('dashboard.cms.sectionTypes.loadFailed'))
     : null
 
   const resetForm = () => {
     setName('')
+    setAdminDescription('')
     setIsActive(true)
     setEditingId(null)
     setFormError(null)
@@ -84,6 +100,7 @@ export function CmsSectionTypesPanel() {
   const openEdit = (item: AdminCmsSectionType) => {
     setEditingId(item.id)
     setName(item.name)
+    setAdminDescription(item.adminDescription ?? '')
     setIsActive(item.isActive)
     setFormError(null)
     setMode('edit')
@@ -102,7 +119,12 @@ export function CmsSectionTypesPanel() {
     setSaving(true)
     setFormError(null)
     try {
-      const payload = { languageId, name: name.trim(), isActive }
+      const payload = {
+        languageId,
+        name: name.trim(),
+        adminDescription: adminDescription.trim() || undefined,
+        isActive,
+      }
       if (mode === 'edit' && editingId) {
         await adminSectionTypeService.update(accessToken, locale, { ...payload, id: editingId })
       } else {
@@ -137,6 +159,12 @@ export function CmsSectionTypesPanel() {
               dir="ltr"
             />
           </AdminField>
+          <CmsAdminDescriptionField
+            label={t('dashboard.cms.common.fieldAdminDescription')}
+            hint={CMS_ENTITY_ADMIN_HINT_FA.sectionType}
+            value={adminDescription}
+            onChange={setAdminDescription}
+          />
           {mode === 'edit' && (
             <label className="flex items-center gap-2 text-sm text-text">
               <input
@@ -189,6 +217,16 @@ export function CmsSectionTypesPanel() {
         }
       />
 
+      <div className="mb-5">
+        <AdminListSearchField
+          label={t('dashboard.cms.common.search')}
+          placeholder={t('dashboard.cms.sectionTypes.searchPlaceholder')}
+          value={search}
+          onChange={setSearch}
+          onApply={applySearch}
+        />
+      </div>
+
       {languageLoading || (listLoading && items.length === 0) ? (
         <div className="flex justify-center py-16">
           <InlineLoading label={t('dashboard.cms.sectionTypes.loading')} />
@@ -226,9 +264,12 @@ export function CmsSectionTypesPanel() {
                 id: 'name',
                 header: t('dashboard.cms.sectionTypes.fieldName'),
                 cell: (item) => (
-                  <span className="font-semibold text-text" dir="ltr">
-                    {item.name || '—'}
-                  </span>
+                  <div>
+                    <span className="font-semibold text-text" dir="ltr">
+                      {item.name || '—'}
+                    </span>
+                    <CmsAdminDescriptionNote text={item.adminDescription} />
+                  </div>
                 ),
               },
               {

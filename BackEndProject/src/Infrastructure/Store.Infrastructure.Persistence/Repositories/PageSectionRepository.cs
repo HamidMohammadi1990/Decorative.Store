@@ -30,6 +30,7 @@ public class PageSectionRepository
                 PageId = x.PageId,
                 SectionId = x.SectionId,
                 Priority = x.Priority,
+                AdminDescription = x.AdminDescription,
                 PageTitle = x.Page.Translations
                         .Where(t => t.LanguageId == languageId)
                         .Select(t => t.Title)

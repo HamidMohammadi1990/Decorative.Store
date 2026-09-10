@@ -16,7 +16,8 @@ public class CreateSectionItemHandler
             request.Priority,
             request.Icon,
             request.ImageUrl,
-            request.IsActive);
+            request.IsActive,
+            request.AdminDescription);
 
         model.UpsertTranslation(
             request.LanguageId,

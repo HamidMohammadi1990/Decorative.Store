@@ -7,4 +7,5 @@ public record CreateSectionTypeRequest : IRequest<OperationResult<CreateSectionT
     public int LanguageId { get; init; }
     public string Name { get; init; } = default!;
     public bool IsActive { get; init; }
+    public string? AdminDescription { get; init; }
 }

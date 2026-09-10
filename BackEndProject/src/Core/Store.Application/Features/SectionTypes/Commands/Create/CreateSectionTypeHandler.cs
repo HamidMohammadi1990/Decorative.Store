@@ -11,7 +11,7 @@ public class CreateSectionTypeHandler
 {
     public async Task<OperationResult<CreateSectionTypeResponse>> Handle(CreateSectionTypeRequest request, CancellationToken cancellationToken)
     {
-        var model = SectionType.Create(request.IsActive);
+        var model = SectionType.Create(request.IsActive, request.AdminDescription);
         model.UpsertTranslation(request.LanguageId, request.Name);
 
         repository.Add(model);

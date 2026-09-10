@@ -13,7 +13,11 @@ import {
   readIsActive,
   type AdminPagedResult,
 } from '@/services/admin/adminCatalogNormalize'
-import { normalizeSectionTypeTranslations, pickSectionTypeName } from '@/services/admin/adminCmsNormalize'
+import {
+  normalizeSectionTypeTranslations,
+  pickSectionTypeName,
+  readAdminDescription,
+} from '@/services/admin/adminCmsNormalize'
 
 const BASE = '/api/v1/admin/section-type'
 
@@ -30,6 +34,7 @@ function normalizeSectionType(data: unknown, languageId?: number): AdminCmsSecti
     id,
     isActive: readIsActive(record),
     name: pickSectionTypeName(translations, languageId) || readStringField(record, 'name', 'Name'),
+    adminDescription: readAdminDescription(record),
     translations,
   }
 }
@@ -38,12 +43,17 @@ export const adminSectionTypeService = {
   async getAll(
     accessToken: string,
     locale: Locale,
-    options: { pageNumber?: number; pageSize?: number; languageId?: number } = {},
+    options: {
+      pageNumber?: number
+      pageSize?: number
+      languageId?: number
+      name?: string | null
+    } = {},
   ): Promise<AdminPagedResult<AdminCmsSectionType>> {
     const data = await apiPost<unknown>(
       `${BASE}/get-all`,
       {
-        name: null,
+        name: options.name?.trim() || null,
         isActive: null,
         pagination: paginationBody(options.pageNumber ?? 1, options.pageSize ?? 100),
       },

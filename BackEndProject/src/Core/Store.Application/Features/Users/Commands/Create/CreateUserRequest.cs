@@ -12,4 +12,5 @@ public record CreateUserRequest : IRequest<OperationResult<CreateUserResponse>>
     public string PhoneNumber { get; init; } = default!;
     public string Password { get; init; } = default!;
     public GenderType Gender { get; init; }
+    public string? ProfileImageFileName { get; init; }
 }

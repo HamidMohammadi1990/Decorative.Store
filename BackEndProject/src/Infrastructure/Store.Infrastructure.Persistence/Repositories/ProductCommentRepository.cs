@@ -110,6 +110,7 @@ public class ProductCommentRepository
                 UserName = x.user.UserName,
                 UserFirstName = x.user.FirstName,
                 UserLastName = x.user.LastName,
+                UserProfileImageFileName = x.user.ProfileImageFileName,
                 QualityRating = x.productComment.QualityRating,
                 CommentTopicId = x.productComment.CommentTopicId,
                 AffordableRating = x.productComment.AffordableRating,

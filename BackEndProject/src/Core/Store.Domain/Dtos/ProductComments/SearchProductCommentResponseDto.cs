@@ -8,6 +8,7 @@ public record SearchProductCommentResponseDto
     public int UserId { get; init; }
     public string? UserFirstName { get; init; }
     public string? UserLastName { get; init; }
+    public string? UserProfileImageFileName { get; init; }
     public string UserName { get; init; } = default!;
     public int CommentTopicId { get; init; }
     public string CommentTopicTitle { get; init; } = default!;

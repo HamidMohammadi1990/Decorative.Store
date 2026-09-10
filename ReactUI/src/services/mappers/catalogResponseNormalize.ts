@@ -1,4 +1,9 @@
-import type { CatalogListingProduct } from '@/models/catalog/catalogListing.model'
+import type {
+  CatalogListingBreadcrumb,
+  CatalogListingFacetGroup,
+  CatalogListingProduct,
+  CatalogListingResponse,
+} from '@/models/catalog/catalogListing.model'
 import type {
   CatalogProductFeature,
   CatalogProductImage,
@@ -31,6 +36,47 @@ function normalizeCatalogProductFeature(data: unknown): CatalogProductFeature {
   }
 }
 
+function normalizeCatalogListingBreadcrumb(data: unknown): CatalogListingBreadcrumb {
+  const record = readRecord(data) ?? {}
+  return {
+    label: readStringField(record, 'label', 'Label'),
+    href: readStringField(record, 'href', 'Href'),
+  }
+}
+
+function normalizeCatalogListingFacetGroup(data: unknown): CatalogListingFacetGroup {
+  const record = readRecord(data) ?? {}
+  const optionsRaw = record.options ?? record.Options
+  const options = Array.isArray(optionsRaw)
+    ? optionsRaw.map((option) => {
+        const optionRecord = readRecord(option) ?? {}
+        return {
+          value: readStringField(optionRecord, 'value', 'Value'),
+          label: readStringField(optionRecord, 'label', 'Label'),
+          count: readNumberField(optionRecord, 'count', 'Count'),
+          swatch: readOptionalStringField(optionRecord, 'swatch', 'Swatch') ?? undefined,
+        }
+      })
+    : []
+  const rangeRecord = readRecord(record.range ?? record.Range)
+
+  return {
+    id: readStringField(record, 'id', 'Id'),
+    label: readStringField(record, 'label', 'Label'),
+    type: (readStringField(record, 'type', 'Type') || 'checkbox') as CatalogListingFacetGroup['type'],
+    options,
+    range: rangeRecord
+      ? {
+          min: readNumberField(rangeRecord, 'min', 'Min'),
+          max: readNumberField(rangeRecord, 'max', 'Max'),
+          step: readNumberField(rangeRecord, 'step', 'Step') || 1,
+          selectedMin: readOptionalNumberField(rangeRecord, 'selectedMin', 'SelectedMin'),
+          selectedMax: readOptionalNumberField(rangeRecord, 'selectedMax', 'SelectedMax'),
+        }
+      : undefined,
+  }
+}
+
 export function normalizeCatalogListingProduct(data: unknown): CatalogListingProduct {
   const record = readRecord(data) ?? {}
 
@@ -48,6 +94,33 @@ export function normalizeCatalogListingProduct(data: unknown): CatalogListingPro
     isNew: readBooleanField(record, 'isNew', 'IsNew'),
     categorySlug: readStringField(record, 'categorySlug', 'CategorySlug'),
     subCategorySlug: readStringField(record, 'subCategorySlug', 'SubCategorySlug'),
+  }
+}
+
+export function normalizeCatalogListingResponse(data: unknown): CatalogListingResponse {
+  const record = readRecord(data) ?? {}
+  const productsRaw = record.products ?? record.Products
+  const products = Array.isArray(productsRaw)
+    ? productsRaw.map(normalizeCatalogListingProduct)
+    : []
+  const breadcrumbsRaw = record.breadcrumbs ?? record.Breadcrumbs
+  const breadcrumbs = Array.isArray(breadcrumbsRaw)
+    ? breadcrumbsRaw.map(normalizeCatalogListingBreadcrumb)
+    : []
+  const facetGroupsRaw = record.facetGroups ?? record.FacetGroups
+  const facetGroups = Array.isArray(facetGroupsRaw)
+    ? facetGroupsRaw.map(normalizeCatalogListingFacetGroup)
+    : []
+
+  return {
+    title: readStringField(record, 'title', 'Title'),
+    pathNotFound: readBooleanField(record, 'pathNotFound', 'PathNotFound'),
+    breadcrumbs,
+    products,
+    totalCount: readNumberField(record, 'totalCount', 'TotalCount'),
+    page: readNumberField(record, 'page', 'Page') || 1,
+    pageSize: readNumberField(record, 'pageSize', 'PageSize') || 12,
+    facetGroups,
   }
 }
 

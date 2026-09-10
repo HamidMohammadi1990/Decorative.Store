@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Store.Domain.Entities;
+using Store.Infrastructure.Persistence.Extensions;
 
 namespace Store.Infrastructure.Persistence.Configuration;
 
@@ -8,6 +9,10 @@ public class PageSectionConfig : IEntityTypeConfiguration<PageSection>
 {
     public void Configure(EntityTypeBuilder<PageSection> builder)
     {
+        builder
+            .Property(x => x.AdminDescription)
+            .HasNVarcharMaxLength(500);
+
         builder
             .HasOne(x => x.Page)
             .WithMany(x => x.PageSections)

@@ -31,6 +31,7 @@ public class SeedService(EditionDbContext context) : ISeedService
         await CmsSeedService.SeedAboutPagesAsync(context, cancellationToken);
         await CmsSeedService.SeedContactPagesAsync(context, cancellationToken);
         await CmsSeedService.SeedContentPagesAsync(context, cancellationToken);
+        await CmsAdminDescriptionSeedData.SeedAsync(context, cancellationToken);
         await SeedProfileCompletionAsync(cancellationToken);
         await SeedMarketingPromosAsync(cancellationToken);
         await SeedRoomTypesAsync(cancellationToken);

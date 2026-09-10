@@ -684,6 +684,32 @@
     "validation": {
       "required": "این فیلد الزامی است",
       "emailInvalid": "یک ایمیل معتبر وارد کنید"
+    },
+    "discountTitle": "کد تخفیف",
+    "discountCodeLabel": "کد تخفیف",
+    "discountCodePlaceholder": "کد را وارد کنید",
+    "applyDiscount": "اعمال",
+    "applyingDiscount": "در حال اعمال…",
+    "removeDiscount": "حذف",
+    "discountApplied": "کد اعمال شد",
+    "discountActive": "تخفیف فعال",
+    "discountRequired": "کد تخفیف را وارد کنید",
+    "discountSignInHint": "برای اعمال کد تخفیف وارد حساب کاربری شوید.",
+    "discountErrors": {
+      "generic": "اعمال این کد تخفیف ممکن نشد. دوباره تلاش کنید.",
+      "DiscountNotFound": "این کد تخفیف یافت نشد.",
+      "DiscountInactive": "این کد تخفیف غیرفعال است.",
+      "DiscountExpired": "مهلت استفاده از این کد تخفیف به پایان رسیده است.",
+      "DiscountCooperationOnly": "این کد مخصوص حساب‌های همکار است.",
+      "DiscountUsageLimitReached": "سقف استفاده از این کد تخفیف پر شده است.",
+      "DiscountUserNotEligible": "شما مجاز به استفاده از این کد تخفیف نیستید.",
+      "DiscountMinimumAmountNotMet": "مبلغ سفارش برای این کد تخفیف کافی نیست.",
+      "DiscountNoEligibleItems": "هیچ‌یک از اقلام سبد شما مشمول این تخفیف نیست.",
+      "DiscountInvalidType": "نوع این تخفیف برای سفارش شما قابل اعمال نیست.",
+      "DiscountAlreadyConsumed": "شما قبلاً از این کد تخفیف استفاده کرده‌اید.",
+      "DiscountIsNotValid": "این کد تخفیف معتبر نیست.",
+      "OrderIsNotFound": "سبد خرید یافت نشد. صفحه را تازه‌سازی کنید.",
+      "PaymentInProgress": "پرداخت این سفارش در حال انجام است."
     }
   },
   "address": {
@@ -705,8 +731,14 @@
     "labelField": "عنوان آدرس",
     "labelPlaceholder": "مثلاً خانه، محل کار",
     "setAsDefault": "تنظیم به‌عنوان آدرس پیش‌فرض",
+    "mapTitle": "موقعیت روی نقشه",
+    "mapHint": "روی نقشه کلیک کنید یا پین را بکشید تا محل دقیق تحویل مشخص شود.",
+    "mapLocateMe": "موقعیت من",
+    "mapLocating": "در حال یافتن موقعیت…",
+    "mapPreviewAlt": "پیش‌نمایش نقشه موقعیت آدرس",
     "validation": {
-      "required": "این فیلد الزامی است"
+      "required": "این فیلد الزامی است",
+      "mapRequired": "لطفاً موقعیت را روی نقشه انتخاب کنید"
     },
     "errors": {
       "saveFailed": "ذخیره آدرس انجام نشد. دوباره تلاش کنید.",
@@ -1181,6 +1213,12 @@
       "fieldPasswordOptional": "رمز عبور جدید (اختیاری)",
       "fieldActive": "فعال",
       "fieldLoginPermission": "اجازه ورود",
+      "fieldProfileImage": "تصویر پروفایل",
+      "fieldProfileImageHint": "تصویر مربعی یا دایره‌ای — در کارت نویسنده بلاگ نمایش داده می‌شود.",
+      "profileImageEmpty": "بدون تصویر",
+      "uploading": "در حال آپلود…",
+      "uploadFailed": "آپلود تصویر انجام نشد.",
+      "fileTooLarge": "حداکثر حجم فایل {{max}} مگابایت است.",
       "genderFemale": "زن",
       "genderMale": "مرد",
       "save": "ذخیره",
@@ -2143,6 +2181,14 @@
       "quickStep3": "زبان محتوا (fa/en) را قبل از ذخیره انتخاب کنید."
     },
     "cms": {
+      "common": {
+        "search": "جستجو",
+        "allPages": "همه صفحات",
+        "allSections": "همه بخش‌ها",
+        "allSectionTypes": "همه انواع بخش",
+        "fieldAdminDescription": "راهنمای محل نمایش (ادمین)",
+        "pageTypeGuide": "راهنمای نوع صفحه"
+      },
       "pages": {
         "title": "صفحات CMS",
         "description": "مدیریت صفحات چندزبانه فروشگاه.",
@@ -2176,7 +2222,8 @@
         "emptyTitle": "صفحه‌ای نیست",
         "emptyMessage": "اولین صفحه CMS را بسازید.",
         "statusActive": "فعال",
-        "statusInactive": "غیرفعال"
+        "statusInactive": "غیرفعال",
+        "searchPlaceholder": "جستجو بر اساس عنوان یا اسلاگ…"
       },
       "sectionTypes": {
         "title": "انواع بخش",
@@ -2200,7 +2247,8 @@
         "retry": "تلاش مجدد",
         "saving": "در حال ذخیره…",
         "statusActive": "فعال",
-        "statusInactive": "غیرفعال"
+        "statusInactive": "غیرفعال",
+        "searchPlaceholder": "جستجو بر اساس نام…"
       },
       "sections": {
         "title": "بخش‌ها",
@@ -2229,7 +2277,8 @@
         "emptyTitle": "بخشی نیست",
         "emptyMessage": "اولین بخش را بسازید.",
         "colSectionType": "نوع",
-        "colParent": "بخش والد"
+        "colParent": "بخش والد",
+        "searchPlaceholder": "جستجو بر اساس عنوان…"
       },
       "sectionItems": {
         "title": "آیتم‌های بخش",
@@ -2240,6 +2289,8 @@
         "fieldSection": "بخش",
         "fieldTitle": "عنوان",
         "fieldPriority": "اولویت",
+        "fieldIcon": "شناسه (Icon)",
+        "fieldIconHint": "مثلاً cta، search، living-room",
         "fieldUrl": "آدرس",
         "fieldDescription": "توضیح",
         "fieldImage": "تصویر",
@@ -2261,7 +2312,8 @@
         "colSection": "بخش",
         "colSectionType": "نوع",
         "colPriority": "اولویت",
-        "colIcon": "آیکن"
+        "colIcon": "آیکن",
+        "searchPlaceholder": "جستجو بر اساس عنوان…"
       },
       "pageSections": {
         "title": "بخش‌های صفحه",

@@ -18,6 +18,7 @@ public class PageSectionMapperService : IPageSectionMapperService
             PageId = x.PageId,
             SectionId = x.SectionId,
             Priority = x.Priority,
+            AdminDescription = x.AdminDescription,
             PageTitle = x.PageTitle,
             PageSlug = x.PageSlug,
             SectionTitle = x.SectionTitle,

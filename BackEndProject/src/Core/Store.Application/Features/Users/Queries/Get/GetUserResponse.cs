@@ -14,4 +14,6 @@ public record GetUserResponse
     public string? Email { get; init; }
     public string? PhoneNumber { get; init; }
     public GenderType? Gender { get; init; }
+    public string? ProfileImageFileName { get; init; }
+    public string? ProfileImageUrl { get; init; }
 }

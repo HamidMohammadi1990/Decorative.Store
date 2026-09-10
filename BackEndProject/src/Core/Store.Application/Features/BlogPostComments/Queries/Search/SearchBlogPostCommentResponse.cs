@@ -16,6 +16,7 @@ public record SearchBlogPostCommentResponse
     public int CreatedByUserId { get; init; }
     public string CreatedByUserFirstName { get; init; } = default!;
     public string CreatedByUserLastName { get; init; } = default!;
+    public string? CreatedByUserAvatarUrl { get; init; }
 
     [JsonConverter(typeof(BlogPostEncryptor))]
     public int BlogPostId { get; init; }

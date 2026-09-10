@@ -1,4 +1,5 @@
 ﻿using Edition.Application.Models.Dtos;
+using Edition.Application.Common.Directories;
 using Edition.Application.Common.Extensions;
 using Edition.Application.Contracts.Mapping;
 using Edition.Application.Features.Users.Queries;
@@ -41,7 +42,9 @@ public class UserMapperService : IUserMapperService
             UserName = model.UserName,
             FirstName = model.FirstName,
             LastName = model.LastName,
-            PhoneNumber = model.PhoneNumber
+            PhoneNumber = model.PhoneNumber,
+            ProfileImageFileName = model.ProfileImageFileName,
+            ProfileImageUrl = UserDirectory.GetImageUrl(model.ProfileImageFileName),
         };
     }
 
@@ -65,7 +68,9 @@ public class UserMapperService : IUserMapperService
                 LoginPermission = x.LoginPermission,
                 AccessFailedCount = x.AccessFailedCount,
                 LastLoginDateOnUtc = x.LastLoginDateOnUtc,
-                PhoneNumberConfirmed = x.PhoneNumberConfirmed
+                PhoneNumberConfirmed = x.PhoneNumberConfirmed,
+                ProfileImageFileName = x.ProfileImageFileName,
+                ProfileImageUrl = UserDirectory.GetImageUrl(x.ProfileImageFileName),
             })
             .ToList();
 

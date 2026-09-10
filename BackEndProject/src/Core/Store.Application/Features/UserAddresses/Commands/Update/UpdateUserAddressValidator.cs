@@ -54,5 +54,20 @@ public class UpdateUserAddressValidator : AbstractValidator<UpdateUserAddressReq
             .MaximumLength(50)
             .WithMessage(MessageKeys.MaxLength50Characters)
             .When(x => !string.IsNullOrEmpty(x.Apartment));
+
+        RuleFor(x => x.Latitude)
+            .InclusiveBetween(-90m, 90m)
+            .WithMessage(MessageKeys.InvalidLatitude)
+            .When(x => x.Latitude.HasValue);
+
+        RuleFor(x => x.Longitude)
+            .InclusiveBetween(-180m, 180m)
+            .WithMessage(MessageKeys.InvalidLongitude)
+            .When(x => x.Longitude.HasValue);
+
+        RuleFor(x => x)
+            .Must(x => x.Latitude.HasValue == x.Longitude.HasValue)
+            .WithMessage(MessageKeys.InvalidLatitude)
+            .When(x => x.Latitude.HasValue || x.Longitude.HasValue);
     }
 }

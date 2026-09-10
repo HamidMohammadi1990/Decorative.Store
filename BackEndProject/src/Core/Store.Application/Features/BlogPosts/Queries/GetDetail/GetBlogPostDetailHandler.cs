@@ -24,6 +24,11 @@ public class GetBlogPostDetailHandler(
             detail.Post.Id,
             cancellationToken);
 
+        var relatedPostIds = detail.RelatedPosts.Select(x => x.Id).ToList();
+        var relatedCoverMap = await blogPostFileRepository.GetCoverFileNamesByBlogPostIdsAsync(
+            relatedPostIds,
+            cancellationToken);
+
         return new GetBlogPostDetailResponse
         {
             NotFound = false,
@@ -41,6 +46,7 @@ public class GetBlogPostDetailHandler(
                 UserFirstName = detail.Post.UserFirstName,
                 UserLastName = detail.Post.UserLastName,
                 UserId = detail.Post.UserId,
+                UserAvatarUrl = UserDirectory.GetImageUrl(detail.Post.UserProfileImageFileName),
                 ReadingTimeInMinutes = detail.Post.ReadingTimeInMinutes,
                 CreatedOnUtc = detail.Post.CreatedOnUtc,
                 UpdatedOnUtc = detail.Post.UpdatedOnUtc,
@@ -65,6 +71,7 @@ public class GetBlogPostDetailHandler(
                     Content = comment.Content,
                     CreatedByUserFirstName = comment.CreatedByUserFirstName ?? string.Empty,
                     CreatedByUserLastName = comment.CreatedByUserLastName ?? string.Empty,
+                    CreatedByUserAvatarUrl = UserDirectory.GetImageUrl(comment.CreatedByUserProfileImageFileName),
                     CreatedOnUtc = comment.CreatedOnUtc,
                     ApprovedOnUtc = comment.ApprovedOnUtc,
                 })
@@ -84,6 +91,9 @@ public class GetBlogPostDetailHandler(
                     CreatedOnUtc = post.CreatedOnUtc,
                     UpdatedOnUtc = post.UpdatedOnUtc,
                     PublishedOnUtc = post.PublishedOnUtc,
+                    CoverImageUrl = relatedCoverMap.TryGetValue(post.Id, out var fileName)
+                        ? BlogPostDirectory.GetImageUrl(fileName)
+                        : null,
                 })
                 .ToList(),
             CategoryLabels = detail.CategoryLabels,

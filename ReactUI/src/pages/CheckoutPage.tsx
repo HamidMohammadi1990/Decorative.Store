@@ -11,6 +11,7 @@ import {
   CheckoutFulfillmentSection,
   type CheckoutAddressFields,
 } from '@/components/checkout/CheckoutFulfillmentSection'
+import { CheckoutDiscountField } from '@/components/checkout/CheckoutDiscountField'
 import { CheckoutOrderSummary } from '@/components/checkout/CheckoutOrderSummary'
 import { CheckoutPaymentPanel } from '@/components/checkout/CheckoutPaymentPanel'
 import { CheckoutProductOptionsSection } from '@/components/checkout/CheckoutProductOptionsSection'
@@ -23,10 +24,13 @@ import { Button } from '@/components/ui/Button'
 import { Container } from '@/components/ui/Container'
 import { InlineLoading } from '@/components/ui/Spinner'
 import {
+  applyCartDiscountToTotals,
   calculateCheckoutTotals,
   type DeliveryMethod,
   type FulfillmentType,
 } from '@/extensions/calculateCheckoutTotals'
+import { useCheckoutDiscount } from '@/hooks/useCheckoutDiscount'
+import type { ServerCartSummary } from '@/services/cartService'
 import { mergeCheckoutAddresses } from '@/extensions/mapCheckoutAddress'
 import { validateCheckoutProperties } from '@/extensions/validateCheckoutProperties'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
@@ -71,6 +75,15 @@ export function CheckoutPage() {
   const localAddresses = useAddressStore((s) => s.addresses)
   const user = useUserStore((s) => s.user)
   const { sessions, addresses: apiAddresses, loading, error } = useCheckoutData(lines)
+  const {
+    summary: discountSummary,
+    appliedCode,
+    applying: discountApplying,
+    errorKey: discountErrorKey,
+    applyDiscount,
+    removeDiscount,
+    canApply: canApplyDiscount,
+  } = useCheckoutDiscount()
   const checkoutAddresses = useMemo(
     () => mergeCheckoutAddresses(localAddresses, apiAddresses),
     [apiAddresses, localAddresses],
@@ -101,9 +114,14 @@ export function CheckoutPage() {
     }
   }, [contactForm.email, user?.email])
 
-  const totals = useMemo(
+  const baseTotals = useMemo(
     () => calculateCheckoutTotals(lines, fulfillment, delivery),
     [lines, fulfillment, delivery],
+  )
+
+  const totals = useMemo(
+    () => applyCartDiscountToTotals(baseTotals, discountSummary),
+    [baseTotals, discountSummary],
   )
 
   if (lines.length === 0) {
@@ -363,6 +381,16 @@ export function CheckoutPage() {
                     lines={lines}
                     totals={totals}
                     currency={currency}
+                    summary={discountSummary}
+                    discountProps={{
+                      appliedCode,
+                      applying: discountApplying,
+                      errorKey: discountErrorKey,
+                      canApply: canApplyDiscount,
+                      onApply: applyDiscount,
+                      onRemove: removeDiscount,
+                      isDiscountApplied: discountSummary?.isDiscountApplied ?? false,
+                    }}
                     actionLabel={t('checkout.reviewOrder')}
                     actionHint={t('checkout.reviewOrderHint')}
                     onAction={() => goToReview()}
@@ -377,6 +405,16 @@ export function CheckoutPage() {
                     lines={lines}
                     totals={totals}
                     currency={currency}
+                    summary={discountSummary}
+                    discountProps={{
+                      appliedCode,
+                      applying: discountApplying,
+                      errorKey: discountErrorKey,
+                      canApply: canApplyDiscount,
+                      onApply: applyDiscount,
+                      onRemove: removeDiscount,
+                      isDiscountApplied: discountSummary?.isDiscountApplied ?? false,
+                    }}
                     actionLabel={t('checkout.reviewOrder')}
                     actionHint={t('checkout.reviewOrderHint')}
                     onAction={() => goToReview()}
@@ -450,6 +488,19 @@ export function CheckoutPage() {
                 lines={lines}
                 totals={totals}
                 currency={currency}
+                summary={discountSummary}
+                discountSlot={
+                  <CheckoutDiscountField
+                    appliedCode={appliedCode}
+                    isDiscountApplied={discountSummary?.isDiscountApplied ?? false}
+                    applying={discountApplying}
+                    errorKey={discountErrorKey}
+                    canApply={canApplyDiscount}
+                    onApply={applyDiscount}
+                    onRemove={removeDiscount}
+                    compact
+                  />
+                }
                 compact
               />
               <button
@@ -467,10 +518,22 @@ export function CheckoutPage() {
   )
 }
 
+interface CheckoutDiscountProps {
+  appliedCode: string | null
+  isDiscountApplied: boolean
+  applying: boolean
+  errorKey: string | null
+  canApply: boolean
+  onApply: (code: string) => Promise<boolean>
+  onRemove: () => Promise<boolean>
+}
+
 function SidebarSummary({
   lines,
   totals,
   currency,
+  summary,
+  discountProps,
   actionLabel,
   actionHint,
   onAction,
@@ -478,6 +541,8 @@ function SidebarSummary({
   lines: CartLine[]
   totals: CheckoutTotals
   currency: CurrencyConfig
+  summary?: ServerCartSummary | null
+  discountProps: CheckoutDiscountProps
   actionLabel: string
   actionHint: string
   onAction: () => void
@@ -487,6 +552,8 @@ function SidebarSummary({
       lines={lines}
       totals={totals}
       currency={currency}
+      summary={summary}
+      discountSlot={<CheckoutDiscountField {...discountProps} />}
       showAction
       actionLabel={actionLabel}
       actionHint={actionHint}

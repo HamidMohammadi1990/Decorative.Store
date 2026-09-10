@@ -28,6 +28,7 @@ public record SearchProductCommentResponse
 
     public string? UserFirstName { get; init; }
     public string? UserLastName { get; init; }
+    public string? UserAvatarUrl { get; init; }
     public string UserName { get; init; } = default!;
 
     public int CommentRate { get; init; }

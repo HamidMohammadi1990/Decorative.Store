@@ -5,8 +5,10 @@ import type {
   UpdateAdminUserInput,
 } from '@/models/admin/user.model'
 import type { Locale } from '@/models/shared/locale.model'
-import { apiDelete, apiPost, apiPut } from '@/services/api/apiClient'
-import { readBooleanField, readRecord, readStringField } from '@/services/api/apiNormalize'
+import { API_BASE_URL } from '@/config/api'
+import { apiDelete, apiPost, apiPut, toAcceptLanguage } from '@/services/api/apiClient'
+import { normalizeApiEnvelope, readBooleanField, readRecord, readStringField } from '@/services/api/apiNormalize'
+import { ApiError } from '@/services/api/apiTypes'
 import {
   normalizeAdminPaged,
   paginationBody,
@@ -15,6 +17,13 @@ import {
 } from '@/services/admin/adminCatalogNormalize'
 
 const BASE = '/api/v1/admin/account'
+
+function resolveUserProfileImageUrl(url: string): string {
+  if (!url) return ''
+  if (url.startsWith('http://') || url.startsWith('https://')) return url
+  if (url.startsWith('/')) return `${API_BASE_URL}${url}`
+  return `${API_BASE_URL}/${url}`
+}
 
 function readGender(record: Record<string, unknown>): AdminUserGender {
   const raw = record.gender ?? record.Gender
@@ -45,6 +54,11 @@ function normalizeAdminUser(data: unknown): AdminUser | null {
     isActive: readBooleanField(record, 'isActive', 'IsActive'),
     lastLoginDateOnUtc:
       readStringField(record, 'lastLoginDateOnUtc', 'LastLoginDateOnUtc') || null,
+    profileImageFileName:
+      readStringField(record, 'profileImageFileName', 'ProfileImageFileName') || undefined,
+    profileImageUrl: resolveUserProfileImageUrl(
+      readStringField(record, 'profileImageUrl', 'ProfileImageUrl'),
+    ) || undefined,
   }
 }
 
@@ -103,5 +117,40 @@ export const adminUserService = {
 
   async delete(accessToken: string, id: string): Promise<void> {
     await apiDelete(`${BASE}/delete`, accessToken, { id })
+  },
+
+  async uploadProfileImage(
+    accessToken: string,
+    locale: Locale,
+    file: File,
+  ): Promise<{ imageFileName: string; imageUrl: string }> {
+    const formData = new FormData()
+    formData.append('image', file)
+
+    const response = await fetch(`${API_BASE_URL}${BASE}/upload-profile-image`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-Language': toAcceptLanguage(locale),
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: formData,
+    })
+
+    const responseBody = await response.json()
+    if (!response.ok) {
+      throw new ApiError(response.status, normalizeApiEnvelope(responseBody).messages)
+    }
+
+    const envelope = normalizeApiEnvelope(responseBody)
+    const record = readRecord(envelope.data)
+    const imageFileName = readStringField(record ?? {}, 'imageFileName', 'ImageFileName')
+    const imageUrl = readStringField(record ?? {}, 'imageUrl', 'ImageUrl')
+    if (!imageFileName || !imageUrl) throw new ApiError(response.status, envelope.messages)
+
+    return {
+      imageFileName,
+      imageUrl: resolveUserProfileImageUrl(imageUrl),
+    }
   },
 }

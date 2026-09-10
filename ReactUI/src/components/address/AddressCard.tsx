@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next'
+import { AddressMapThumbnail } from '@/components/address/AddressMapThumbnail'
 import { AddressesIcon, DeleteIcon, EditIcon, StarIcon } from '@/components/dashboard/DashboardIcons'
 import { AdminGridIconButton } from '@/components/dashboard/admin/AdminGridActions'
+import { isValidMapCoordinates } from '@/config/map'
 import type { SavedAddress } from '@/models/address/savedAddress.model'
 
 interface AddressCardProps {
@@ -125,13 +127,27 @@ export function AddressCard({
     )
   }
 
+  const mapCoords = isValidMapCoordinates({
+    latitude: address.latitude,
+    longitude: address.longitude,
+  }) ?
+    { latitude: address.latitude!, longitude: address.longitude! }
+  : null
+
   return (
-    <article className="flex items-start gap-3 overflow-hidden rounded-lg border border-border bg-surface p-3 shadow-sm transition-shadow hover:shadow-md">
-      {iconTile}
-      <div className="flex min-w-0 flex-1 flex-col gap-2.5 sm:flex-row sm:items-end sm:justify-between">
-        {body}
-        {actions}
+    <article className="overflow-hidden rounded-lg border border-border bg-surface shadow-sm transition-shadow hover:shadow-md">
+      <div className="flex items-start gap-3 p-3">
+        {iconTile}
+        <div className="flex min-w-0 flex-1 flex-col gap-2.5 sm:flex-row sm:items-end sm:justify-between">
+          {body}
+          {actions}
+        </div>
       </div>
+      {mapCoords && !selectable && (
+        <div className="border-t border-border px-3 pb-3 pt-2">
+          <AddressMapThumbnail coordinates={mapCoords} />
+        </div>
+      )}
     </article>
   )
 }

@@ -48,6 +48,7 @@ public class SectionItemRepository
                 Icon = x.Icon,
                 ImageUrl = x.ImageUrl,
                 IsActive = x.IsActive,
+                AdminDescription = x.AdminDescription,
                 SectionTitle = x.Section.Translations
                         .Where(t => t.LanguageId == languageId)
                         .Select(t => t.Title)

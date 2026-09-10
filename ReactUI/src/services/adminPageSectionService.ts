@@ -12,6 +12,7 @@ import {
   readEncryptedId,
   type AdminPagedResult,
 } from '@/services/admin/adminCatalogNormalize'
+import { readAdminDescription } from '@/services/admin/adminCmsNormalize'
 
 const BASE = '/api/v1/admin/page-section'
 
@@ -33,6 +34,7 @@ function normalizePageSection(data: unknown): AdminCmsPageSection | null {
     pageSlug: readStringField(record, 'pageSlug', 'PageSlug') || undefined,
     sectionTitle: readStringField(record, 'sectionTitle', 'SectionTitle') || undefined,
     sectionTypeName: readStringField(record, 'sectionTypeName', 'SectionTypeName') || undefined,
+    adminDescription: readAdminDescription(record),
   }
 }
 
@@ -40,13 +42,18 @@ export const adminPageSectionService = {
   async getAll(
     accessToken: string,
     locale: Locale,
-    options: { pageNumber?: number; pageSize?: number; pageId?: string | null } = {},
+    options: {
+      pageNumber?: number
+      pageSize?: number
+      pageId?: string | null
+      sectionId?: string | null
+    } = {},
   ): Promise<AdminPagedResult<AdminCmsPageSection>> {
     const data = await apiPost<unknown>(
       `${BASE}/get-all`,
       {
         pageId: options.pageId ?? null,
-        sectionId: null,
+        sectionId: options.sectionId ?? null,
         pagination: paginationBody(options.pageNumber ?? 1, options.pageSize ?? 100),
       },
       { locale, accessToken },

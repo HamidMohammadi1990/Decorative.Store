@@ -9,6 +9,7 @@ public class SectionItem : BaseEntity
     public string? Icon { get; private set; }
     public string? ImageUrl { get; private set; }
     public bool IsActive { get; private set; } = true;
+    public string? AdminDescription { get; private set; }
 
     public Section Section { get; private set; } = default!;
     public ICollection<SectionItemTranslation> Translations { get; private set; } = [];
@@ -18,7 +19,8 @@ public class SectionItem : BaseEntity
         int priority,
         string? icon,
         string? imageUrl,
-        bool isActive)
+        bool isActive,
+        string? adminDescription = null)
         => new()
         {
             SectionId = sectionId,
@@ -26,6 +28,7 @@ public class SectionItem : BaseEntity
             Icon = icon,
             ImageUrl = imageUrl,
             IsActive = isActive,
+            AdminDescription = NormalizeAdminDescription(adminDescription),
         };
 
     public SectionItemTranslation UpsertTranslation(
@@ -55,13 +58,21 @@ public class SectionItem : BaseEntity
         int languageId,
         string title,
         string? description,
-        string? url)
+        string? url,
+        string? adminDescription = null)
     {
         SectionId = sectionId;
         Priority = priority;
         Icon = icon;
         ImageUrl = imageUrl;
         IsActive = isActive;
+        AdminDescription = NormalizeAdminDescription(adminDescription);
         UpsertTranslation(languageId, title, description, url);
+    }
+
+    private static string? NormalizeAdminDescription(string? adminDescription)
+    {
+        var trimmed = adminDescription?.Trim();
+        return string.IsNullOrEmpty(trimmed) ? null : trimmed;
     }
 }

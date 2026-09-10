@@ -1,4 +1,4 @@
-import { LocalImage } from '@/components/ui/LocalImage'
+import { UserAvatar } from '@/components/ui/UserAvatar'
 import type { BlogAuthor } from '@/models/blog/blog.model'
 
 interface BlogAuthorCardProps {
@@ -12,9 +12,12 @@ export function BlogAuthorCard({ author, label }: BlogAuthorCardProps) {
       <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">{label}</p>
 
       <div className="mt-4 flex items-start gap-4">
-        <div className="size-16 shrink-0 overflow-hidden rounded-full border-2 border-surface shadow-sm">
-          <LocalImage image={author.avatar} className="size-full object-cover" />
-        </div>
+        <UserAvatar
+          name={author.name}
+          imageUrl={author.avatar.src || undefined}
+          size="xl"
+          className="border-2 border-surface shadow-sm"
+        />
 
         <div className="min-w-0">
           <h3 className="text-base font-bold text-text">{author.name}</h3>

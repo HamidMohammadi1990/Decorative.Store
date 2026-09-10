@@ -2,6 +2,7 @@ import type { CatalogListingResponse } from '@/models/catalog/catalogListing.mod
 import type { Locale } from '@/models/shared/locale.model'
 import { apiGet } from '@/services/api/apiClient'
 import { buildCatalogListingQuery } from '@/services/mappers/catalogListingMapper'
+import { normalizeCatalogListingResponse } from '@/services/mappers/catalogResponseNormalize'
 
 const CATALOG_LISTING_PATH = '/api/v1/catalog/listing'
 
@@ -19,6 +20,7 @@ export const catalogListingService = {
         ? `?${filterQuery.slice(1)}`
         : ''
 
-    return apiGet<CatalogListingResponse>(`${CATALOG_LISTING_PATH}${query}`, locale)
+    const data = await apiGet<unknown>(`${CATALOG_LISTING_PATH}${query}`, locale)
+    return normalizeCatalogListingResponse(data)
   },
 }

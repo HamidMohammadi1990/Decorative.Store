@@ -1,4 +1,5 @@
 import type { SavedAddressInput } from '@/models/address/savedAddress.model'
+import { isValidMapCoordinates, type MapCoordinates } from '@/config/map'
 
 export type AddressFormField = keyof AddressFormValues
 
@@ -24,11 +25,14 @@ export const emptyAddressForm: AddressFormValues = {
 
 type ValidationMessages = Record<string, string>
 
+export type AddressFormErrorField = AddressFormField | 'map'
+
 export function validateAddressForm(
   values: AddressFormValues,
   messages: ValidationMessages,
+  coordinates?: MapCoordinates | null,
 ) {
-  const errors: Partial<Record<AddressFormField, string>> = {}
+  const errors: Partial<Record<AddressFormErrorField, string>> = {}
   const required: (keyof AddressFormValues)[] = [
     'label',
     'firstName',
@@ -44,12 +48,16 @@ export function validateAddressForm(
     }
   }
 
+  if (!isValidMapCoordinates(coordinates)) {
+    errors.map = messages.mapRequired
+  }
+
   return errors
 }
 
 export function addressFormToInput(
   values: AddressFormValues,
-  options: { isDefault?: boolean } = {},
+  options: { isDefault?: boolean; coordinates?: MapCoordinates | null } = {},
 ): SavedAddressInput {
   return {
     label: values.label.trim(),
@@ -59,6 +67,8 @@ export function addressFormToInput(
     apartment: values.apartment.trim(),
     postcode: values.postcode.trim(),
     phone: values.phone.trim(),
+    latitude: options.coordinates?.latitude ?? null,
+    longitude: options.coordinates?.longitude ?? null,
     isDefault: options.isDefault,
   }
 }

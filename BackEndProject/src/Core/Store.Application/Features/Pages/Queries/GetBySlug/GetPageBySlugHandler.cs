@@ -1,3 +1,4 @@
+using Edition.Application.Common.Directories;
 using Edition.Application.Common.Localization;
 using Edition.Application.Contracts.Localization;
 using Store.Common.Models;
@@ -54,7 +55,7 @@ public class GetPageBySlugHandler
                     Title = sectionTitle,
                     Description = sectionDescription,
                     Url = sectionUrl,
-                    ImageUrl = ps.Section.ImageUrl,
+                    ImageUrl = CmsDirectory.ResolvePublicImageUrl(ps.Section.ImageUrl),
                     Items = ps.Section.SectionItems
                         .Where(i => i.IsActive)
                         .OrderBy(i => i.Priority)
@@ -70,7 +71,7 @@ public class GetPageBySlugHandler
                                 Title = itemTitle,
                                 Priority = i.Priority,
                                 Icon = i.Icon,
-                                ImageUrl = i.ImageUrl,
+                                ImageUrl = CmsDirectory.ResolvePublicImageUrl(i.ImageUrl),
                                 Url = itemUrl,
                                 Description = itemDescription,
                             };

@@ -88,6 +88,12 @@ function readAuthorName(record: Record<string, unknown>) {
   return [firstName, lastName].filter(Boolean).join(' ')
 }
 
+function readUserAvatar(record: Record<string, unknown>, alt: string): ImageAsset | null {
+  const avatarUrl = readOptionalStringField(record, 'userAvatarUrl', 'UserAvatarUrl')
+  if (!avatarUrl) return null
+  return toImageAsset(avatarUrl, alt)
+}
+
 export function normalizeBlogPostCategory(data: unknown): BlogCategory {
   const record = readRecord(data) ?? {}
 
@@ -155,7 +161,7 @@ export function normalizeBlogPostDetail(
     id: summary.authorId,
     name: authorName || summary.title,
     role: '',
-    avatar: coverImage,
+    avatar: readUserAvatar(record, authorName || summary.title) ?? { src: '', alt: authorName || summary.title },
     bio: '',
   }
 
@@ -176,9 +182,16 @@ export function normalizeBlogComment(data: unknown): BlogComment {
   const lastName = readStringField(record, 'createdByUserLastName', 'CreatedByUserLastName')
   const authorName = [firstName, lastName].filter(Boolean).join(' ')
 
+  const avatarUrl = readOptionalStringField(
+    record,
+    'createdByUserAvatarUrl',
+    'CreatedByUserAvatarUrl',
+  )
+
   return {
     id: readStringField(record, 'id', 'Id'),
     authorName,
+    authorAvatarUrl: avatarUrl ? resolveBlogImageUrl(avatarUrl) : undefined,
     date:
       readOptionalStringField(record, 'approvedOnUtc', 'ApprovedOnUtc') ??
       readOptionalStringField(record, 'createdOnUtc', 'CreatedOnUtc') ??

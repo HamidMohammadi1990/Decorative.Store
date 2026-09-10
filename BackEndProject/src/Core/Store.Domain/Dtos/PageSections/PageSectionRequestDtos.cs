@@ -12,6 +12,7 @@ public record GetAllPageSectionResponseDto
     public int PageId { get; init; }
     public int SectionId { get; init; }
     public int Priority { get; init; }
+    public string? AdminDescription { get; init; }
     public string PageTitle { get; init; } = string.Empty;
     public string PageSlug { get; init; } = string.Empty;
     public string SectionTitle { get; init; } = string.Empty;

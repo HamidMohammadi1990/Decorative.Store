@@ -6,6 +6,7 @@ import { submitBlogComment } from '@/services/blogCommentSubmitService'
 import { openLoginModal } from '@/stores/authModalStore'
 import { useBlogInteractionStore } from '@/stores/blogInteractionStore'
 import { useSettingsStore } from '@/stores/settingsStore'
+import { UserAvatar } from '@/components/ui/UserAvatar'
 import { useAccessToken, useUserStore } from '@/stores/userStore'
 
 interface BlogCommentsProps {
@@ -225,9 +226,11 @@ function CommentItem({
     <li className="rounded-xl border border-border bg-surface-muted/30 p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-warm-soft text-sm font-bold text-warm">
-            {authorName.charAt(0) || '?'}
-          </span>
+          <UserAvatar
+            name={authorName}
+            imageUrl={comment.authorAvatarUrl}
+            size="md"
+          />
           <div>
             <p className="text-sm font-semibold text-text">{authorName}</p>
             <p className="text-xs text-text-muted">{formatBlogDate(comment.date, locale)}</p>

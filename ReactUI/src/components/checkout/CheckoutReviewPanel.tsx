@@ -147,6 +147,20 @@ export function CheckoutReviewPanel({
               />
             }
           />
+          {totals.discountAmount > 0 && (
+            <ReviewRow
+              label={t('cartPage.discount')}
+              value={
+                <span className="font-medium text-accent">
+                  −{' '}
+                  <PriceDisplay
+                    money={{ amount: totals.discountAmount, currencyCode: currency.code }}
+                    currency={currency}
+                  />
+                </span>
+              }
+            />
+          )}
           <ReviewRow
             label={
               totals.fulfillment === 'pickup'

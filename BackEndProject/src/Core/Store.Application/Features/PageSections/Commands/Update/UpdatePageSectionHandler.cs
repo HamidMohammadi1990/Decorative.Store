@@ -14,7 +14,7 @@ public class UpdatePageSectionHandler
         if (model is null)
             return ErrorModel.Create("InvalidId");
 
-        model.Update(request.PageId, request.SectionId, request.Priority);
+        model.Update(request.PageId, request.SectionId, request.Priority, request.AdminDescription);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)

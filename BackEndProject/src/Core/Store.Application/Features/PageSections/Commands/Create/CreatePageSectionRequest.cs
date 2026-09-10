@@ -11,4 +11,5 @@ public record CreatePageSectionRequest : IRequest<OperationResult<CreatePageSect
     [JsonConverter(typeof(SectionEncryptor))]
     public int SectionId { get; init; }
     public int Priority { get; init; }
+    public string? AdminDescription { get; init; }
 }

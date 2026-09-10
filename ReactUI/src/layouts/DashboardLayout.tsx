@@ -18,6 +18,7 @@ import { useAddressSync } from '@/hooks/useAddressSync'
 import { useAuthModalStore } from '@/stores/authModalStore'
 import { useUserStore } from '@/stores/userStore'
 import { RouteFallback } from '@/components/ui/RouteFallback'
+import { UserAvatar } from '@/components/ui/UserAvatar'
 
 function useDashboardPageTitle() {
   const { t } = useTranslation()
@@ -66,7 +67,9 @@ export function DashboardLayout() {
     )
   }
 
-  const initials = user.firstName.charAt(0).toUpperCase()
+  const displayName = user.lastName
+    ? `${user.firstName} ${user.lastName}`
+    : user.firstName
 
   return (
     <div className="flex-1 bg-surface-muted/35">
@@ -77,9 +80,12 @@ export function DashboardLayout() {
         {/* Mobile welcome strip */}
         <div className="mb-4 flex items-center justify-between gap-3 lg:hidden">
           <div className="flex min-w-0 items-center gap-3">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-warm text-sm font-semibold text-warm-text shadow-sm">
-              {initials}
-            </span>
+            <UserAvatar
+              name={displayName}
+              imageUrl={user.profileImageUrl}
+              size="md"
+              className="shadow-sm ring-2 ring-surface"
+            />
             <div className="min-w-0">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-warm">
                 {t('dashboard.breadcrumb')}

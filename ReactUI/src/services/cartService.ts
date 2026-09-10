@@ -34,6 +34,13 @@ export interface ServerCartResponse {
   items: ServerCartItem[]
 }
 
+export interface ValidateDiscountResponse {
+  discountCode: string
+  totalPrice: number
+  discountAmount: number
+  finalPrice: number
+}
+
 function resolveImageSrc(imageUrl?: string | null): string {
   if (!imageUrl?.trim()) return '/images/home/new-arrivals.svg'
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
@@ -104,7 +111,36 @@ export const cartService = {
     return this.getCart(accessToken)
   },
 
+  async validateDiscount(
+    accessToken: string,
+    discountCode: string,
+  ): Promise<ValidateDiscountResponse> {
+    const data = await apiPost<Record<string, unknown>>(
+      '/api/v1/order/validate-discount',
+      { discountCode: discountCode.trim() },
+      { accessToken },
+    )
+
+    return {
+      discountCode: String(data.discountCode ?? data.DiscountCode ?? ''),
+      totalPrice: Number(data.totalPrice ?? data.TotalPrice ?? 0),
+      discountAmount: Number(data.discountAmount ?? data.DiscountAmount ?? 0),
+      finalPrice: Number(data.finalPrice ?? data.FinalPrice ?? 0),
+    }
+  },
+
+  async removeDiscount(accessToken: string): Promise<ServerCartResponse> {
+    await apiDelete<ServerCartSummary>('/api/v1/order/discount', accessToken)
+    return this.getCart(accessToken)
+  },
+
   isConfigurationRequired(error: unknown) {
     return error instanceof ApiError && error.hasCode('ProductRequiresConfiguration')
+  },
+
+  getDiscountErrorCode(error: unknown): string | null {
+    if (!(error instanceof ApiError)) return null
+    const code = error.messages[0]?.code
+    return code ?? null
   },
 }

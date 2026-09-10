@@ -19,4 +19,5 @@ public record UpdateUserRequest : IRequest<OperationResult>
     public GenderType Gender { get; init; }
     public bool IsActive { get; init; }
     public bool LoginPermission { get; init; }
+    public string? ProfileImageFileName { get; init; }
 }

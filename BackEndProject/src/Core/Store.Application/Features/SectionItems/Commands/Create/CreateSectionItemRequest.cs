@@ -16,4 +16,5 @@ public record CreateSectionItemRequest : IRequest<OperationResult<CreateSectionI
     public string? Url { get; init; }
     public string? Description { get; init; }
     public bool IsActive { get; init; }
+    public string? AdminDescription { get; init; }
 }

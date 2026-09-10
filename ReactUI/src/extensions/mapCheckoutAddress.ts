@@ -11,6 +11,8 @@ export function mapCheckoutAddressToSaved(address: CheckoutUserAddress): SavedAd
     apartment: '',
     postcode: '',
     phone: '',
+    latitude: null,
+    longitude: null,
     isDefault: false,
   }
 }

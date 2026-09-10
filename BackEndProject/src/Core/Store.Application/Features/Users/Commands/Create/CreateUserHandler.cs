@@ -27,6 +27,9 @@ public class CreateUserHandler
         var user = User.Create(request.Email, request.Gender, request.UserName, request.FirstName, 
                                request.LastName, request.PhoneNumber, passwordHash, Guid.NewGuid().ToString());
 
+        if (!string.IsNullOrWhiteSpace(request.ProfileImageFileName))
+            user.SetProfileImageFileName(request.ProfileImageFileName);
+
         userRepository.Add(user);
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);

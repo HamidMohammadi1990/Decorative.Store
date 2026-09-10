@@ -61,6 +61,16 @@
         "garden": "باغ",
         "home-office": "دفتر"
       }
+    },
+    {
+      "code": "pack-quantity",
+      "title": "تعداد در بسته",
+      "values": {}
+    },
+    {
+      "code": "measurement-unit",
+      "title": "واحد اندازه‌گیری",
+      "values": {}
     }
   ]
 }

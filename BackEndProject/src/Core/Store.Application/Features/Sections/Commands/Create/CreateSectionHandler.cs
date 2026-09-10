@@ -17,7 +17,8 @@ public class CreateSectionHandler
             request.ImageUrl,
             request.StartDateOnUtc,
             request.EndDateOnUtc,
-            request.IsActive);
+            request.IsActive,
+            request.AdminDescription);
 
         model.UpsertTranslation(
             request.LanguageId,

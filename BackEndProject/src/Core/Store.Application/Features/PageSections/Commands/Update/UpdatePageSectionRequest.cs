@@ -13,4 +13,5 @@ public record UpdatePageSectionRequest : IRequest<OperationResult>
     [JsonConverter(typeof(SectionEncryptor))]
     public int SectionId { get; init; }
     public int Priority { get; init; }
+    public string? AdminDescription { get; init; }
 }

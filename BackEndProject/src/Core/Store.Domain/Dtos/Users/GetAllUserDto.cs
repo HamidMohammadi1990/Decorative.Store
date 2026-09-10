@@ -19,4 +19,5 @@ public record GetAllUserDto
     public int AccessFailedCount { get; init; }
     public RefundMethodType RefundMethod { get; init; }
     public string? EconomicCode { get; init; }
+    public string? ProfileImageFileName { get; init; }
 }

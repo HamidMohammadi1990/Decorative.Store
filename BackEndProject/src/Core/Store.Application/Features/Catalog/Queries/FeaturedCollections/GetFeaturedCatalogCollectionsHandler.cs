@@ -11,6 +11,7 @@ public class GetFeaturedCatalogCollectionsHandler(IProductRepository productRepo
         GetFeaturedCatalogCollectionsRequest request,
         CancellationToken cancellationToken)
     {
+        // DbContext is scoped per request — queries must run sequentially.
         var newArrivals = await productRepository.GetNewArrivalsCatalogProductsAsync(1, cancellationToken);
         var inStock = await productRepository.GetInStockCatalogProductsAsync(1, cancellationToken);
         var bestSellers = await productRepository.GetBestSellingCatalogProductsAsync(1, cancellationToken);

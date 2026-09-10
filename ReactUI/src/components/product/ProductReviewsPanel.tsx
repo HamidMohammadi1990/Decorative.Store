@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
+import { UserAvatar } from '@/components/ui/UserAvatar'
 import { ReviewReplyModal } from '@/components/product/ReviewReplyModal'
 import { ReviewSubmitModal } from '@/components/product/ReviewSubmitModal'
 import {
@@ -519,7 +520,7 @@ function ReviewReplyCard({
       </div>
 
       <div className="mt-2.5 flex items-center gap-2">
-        <UserAvatar name={reply.author} size="sm" />
+        <UserAvatar name={reply.author} imageUrl={reply.authorAvatarUrl} size="sm" />
         <div className="min-w-0">
           <span className="text-sm font-semibold text-text">{reply.author}</span>
           <span className="mt-0.5 block text-xs text-text-muted">{reply.date}</span>
@@ -589,7 +590,7 @@ function MobileReviewCard({
   return (
     <article className="w-[calc(50%-0.375rem)] min-w-[calc(50%-0.375rem)] shrink-0 snap-start rounded-lg border border-border bg-surface p-3.5">
       <div className="flex items-start gap-2.5">
-        <UserAvatar name={review.author} />
+        <UserAvatar name={review.author} imageUrl={review.authorAvatarUrl} />
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="truncate text-xs font-semibold text-text">{review.author}</span>
@@ -689,7 +690,9 @@ function ReviewCard({
     <li className={`border-b border-border ${compact ? 'py-4' : 'py-5'} last:border-b-0`}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-wrap items-center gap-2">
-          {!compact && <UserAvatar name={review.author} size="sm" />}
+          {!compact && (
+            <UserAvatar name={review.author} imageUrl={review.authorAvatarUrl} size="sm" />
+          )}
           <span className="text-sm font-semibold text-text">{review.author}</span>
           {review.isBuyer && (
             <span className="rounded-md bg-accent/10 px-2 py-0.5 text-[11px] font-medium text-accent">
@@ -799,20 +802,6 @@ function ReviewCard({
         />
       )}
     </li>
-  )
-}
-
-function UserAvatar({ name, size = 'md' }: { name: string; size?: 'sm' | 'md' }) {
-  const initial = name.trim().charAt(0) || '?'
-  const dim = size === 'sm' ? 'size-7 text-xs' : 'size-9 text-sm'
-
-  return (
-    <span
-      className={`inline-flex shrink-0 items-center justify-center rounded-full bg-amber-100 font-semibold text-amber-700 ${dim}`}
-      aria-hidden
-    >
-      {initial}
-    </span>
   )
 }
 

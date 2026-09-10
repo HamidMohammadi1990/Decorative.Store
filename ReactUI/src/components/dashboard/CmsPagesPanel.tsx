@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { AdminCmsPage } from '@/models/admin/cms.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
@@ -14,6 +14,13 @@ import {
   adminInputClass,
   resolveAdminMutationError,
 } from '@/components/dashboard/admin/adminFormShared'
+import { AdminListSearchField } from '@/components/dashboard/admin/AdminListSearchField'
+import {
+  CmsAdminDescriptionField,
+  CmsAdminDescriptionNote,
+} from '@/components/dashboard/admin/CmsAdminDescriptionField'
+import { CMS_ENTITY_ADMIN_HINT_FA, CMS_PAGE_TYPE_HINTS_FA } from '@/data/cmsAdminGuideFa'
+import type { AdminCmsPageTypeGuide } from '@/models/admin/cms.model'
 import { Button } from '@/components/ui/Button'
 import { InlineLoading } from '@/components/ui/Spinner'
 import { useAdminPagedList } from '@/hooks/useAdminPagedList'
@@ -55,6 +62,20 @@ export function CmsPagesPanel() {
   const [metaDescription, setMetaDescription] = useState('')
   const [isActive, setIsActive] = useState(true)
   const [slugTouched, setSlugTouched] = useState(false)
+  const [search, setSearch] = useState('')
+  const [appliedSearch, setAppliedSearch] = useState('')
+  const [adminDescription, setAdminDescription] = useState('')
+  const [pageTypeGuides, setPageTypeGuides] = useState<AdminCmsPageTypeGuide[]>([])
+
+  const pageTypeGuideText = useMemo(() => {
+    const fromDb = pageTypeGuides.find((guide) => guide.type === type)?.adminDescription
+    return fromDb ?? CMS_PAGE_TYPE_HINTS_FA[type] ?? ''
+  }, [pageTypeGuides, type])
+
+  useEffect(() => {
+    if (!accessToken || accessToken === 'mock-access-token') return
+    void adminPageService.getPageTypeGuides(accessToken, locale).then(setPageTypeGuides).catch(() => setPageTypeGuides([]))
+  }, [accessToken, locale])
 
   const canLoad =
     !languageLoading &&
@@ -66,13 +87,16 @@ export function CmsPagesPanel() {
       if (!accessToken || accessToken === 'mock-access-token') {
         throw new Error(t('dashboard.cms.pages.authRequired'))
       }
+      const term = appliedSearch.trim() || null
       return adminPageService.getAll(accessToken, locale, {
         pageNumber,
         pageSize,
         languageId: languageId ?? undefined,
+        title: term,
+        slug: term,
       })
     },
-    [accessToken, languageId, locale, t],
+    [accessToken, appliedSearch, languageId, locale, t],
   )
 
   const {
@@ -92,6 +116,11 @@ export function CmsPagesPanel() {
     enabled: canLoad && mode === 'list',
   })
 
+  const applySearch = () => {
+    setAppliedSearch(search)
+    goToPage(1)
+  }
+
   const listErrorMessage = listError
     ? resolveAdminMutationError(listError, t('dashboard.cms.pages.loadFailed'))
     : null
@@ -104,6 +133,7 @@ export function CmsPagesPanel() {
     setMetaDescription('')
     setIsActive(true)
     setSlugTouched(false)
+    setAdminDescription('')
     setEditingId(null)
     setFormError(null)
   }
@@ -121,6 +151,7 @@ export function CmsPagesPanel() {
     setMetaTitle(item.metaTitle ?? '')
     setMetaDescription(item.metaDescription ?? '')
     setIsActive(item.isActive)
+    setAdminDescription(item.adminDescription ?? '')
     setSlugTouched(true)
     setFormError(null)
     setMode('edit')
@@ -152,6 +183,7 @@ export function CmsPagesPanel() {
         type,
         metaTitle: metaTitle.trim() || undefined,
         metaDescription: metaDescription.trim() || undefined,
+        adminDescription: adminDescription.trim() || undefined,
         isActive,
       }
 
@@ -207,7 +239,19 @@ export function CmsPagesPanel() {
                 </option>
               ))}
             </select>
+            {pageTypeGuideText && (
+              <p className="mt-2 text-xs leading-relaxed text-text-muted">
+                <span className="font-medium">{t('dashboard.cms.common.pageTypeGuide')}:</span>{' '}
+                {pageTypeGuideText}
+              </p>
+            )}
           </AdminField>
+          <CmsAdminDescriptionField
+            label={t('dashboard.cms.common.fieldAdminDescription')}
+            hint={CMS_ENTITY_ADMIN_HINT_FA.page}
+            value={adminDescription}
+            onChange={setAdminDescription}
+          />
           <AdminField label={t('dashboard.cms.pages.fieldMetaTitle')}>
             <input value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} className={adminInputClass} />
           </AdminField>
@@ -253,6 +297,16 @@ export function CmsPagesPanel() {
         action={<Button variant="warm" onClick={openCreate}>{t('dashboard.cms.pages.add')}</Button>}
       />
 
+      <div className="mb-5">
+        <AdminListSearchField
+          label={t('dashboard.cms.common.search')}
+          placeholder={t('dashboard.cms.pages.searchPlaceholder')}
+          value={search}
+          onChange={setSearch}
+          onApply={applySearch}
+        />
+      </div>
+
       {languageLoading || (listLoading && items.length === 0) ? (
         <div className="flex justify-center py-16">
           <InlineLoading label={t('dashboard.cms.pages.loading')} />
@@ -295,6 +349,7 @@ export function CmsPagesPanel() {
                     <p className="mt-0.5 text-xs text-text-muted" dir="ltr">
                       {item.slug || '—'}
                     </p>
+                    <CmsAdminDescriptionNote text={item.adminDescription} />
                   </div>
                 ),
               },

@@ -34,6 +34,8 @@ public record BlogPostDetailPostResponse
     [JsonConverter(typeof(UserEncryptor))]
     public int UserId { get; init; }
 
+    public string? UserAvatarUrl { get; init; }
+
     public int ReadingTimeInMinutes { get; init; }
     public DateTime CreatedOnUtc { get; init; }
     public DateTime? UpdatedOnUtc { get; init; }
@@ -60,6 +62,7 @@ public record BlogPostDetailCommentResponse
     public string Content { get; init; } = string.Empty;
     public string CreatedByUserFirstName { get; init; } = string.Empty;
     public string CreatedByUserLastName { get; init; } = string.Empty;
+    public string? CreatedByUserAvatarUrl { get; init; }
     public DateTime CreatedOnUtc { get; init; }
     public DateTime? ApprovedOnUtc { get; init; }
 }
@@ -83,4 +86,5 @@ public record BlogPostDetailRelatedResponse
     public DateTime CreatedOnUtc { get; init; }
     public DateTime? UpdatedOnUtc { get; init; }
     public DateTime? PublishedOnUtc { get; init; }
+    public string? CoverImageUrl { get; init; }
 }

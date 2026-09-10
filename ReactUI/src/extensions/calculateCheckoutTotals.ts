@@ -1,4 +1,5 @@
 import type { CartLine } from '@/models/cart/cartLine.model'
+import type { ServerCartSummary } from '@/services/cartService'
 
 export type FulfillmentType = 'delivery' | 'pickup'
 export type DeliveryMethod = 'standard' | 'express'
@@ -6,6 +7,7 @@ export type DeliveryMethod = 'standard' | 'express'
 export interface CheckoutTotals {
   itemCount: number
   subtotal: number
+  discountAmount: number
   shipping: number
   tax: number
   total: number
@@ -48,5 +50,23 @@ export function calculateCheckoutTotals(
   const tax = Math.round(taxable * TAX_RATE * 100) / 100
   const total = Math.round((taxable + tax) * 100) / 100
 
-  return { itemCount, subtotal, shipping, tax, total, shippingIsFree, fulfillment }
+  return { itemCount, subtotal, discountAmount: 0, shipping, tax, total, shippingIsFree, fulfillment }
+}
+
+/** Apply server-side discount preview to locally calculated checkout totals. */
+export function applyCartDiscountToTotals(
+  totals: CheckoutTotals,
+  summary: ServerCartSummary | null,
+): CheckoutTotals {
+  const discountAmount = summary?.isDiscountApplied ? summary.discountAmount : 0
+  if (discountAmount <= 0) {
+    return { ...totals, discountAmount: 0 }
+  }
+
+  const adjustedSubtotal = summary?.isDiscountApplied ? summary.finalPrice : totals.subtotal
+  const taxable = adjustedSubtotal + totals.shipping
+  const tax = Math.round(taxable * TAX_RATE * 100) / 100
+  const total = Math.round((taxable + tax) * 100) / 100
+
+  return { ...totals, discountAmount, tax, total }
 }

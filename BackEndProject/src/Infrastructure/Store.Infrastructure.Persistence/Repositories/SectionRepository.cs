@@ -48,6 +48,7 @@ public class SectionRepository
                 StartDateOnUtc = x.StartDateOnUtc,
                 EndDateOnUtc = x.EndDateOnUtc,
                 IsActive = x.IsActive,
+                AdminDescription = x.AdminDescription,
                 SectionTypeName = x.SectionType.Translations
                         .Where(t => t.LanguageId == languageId)
                         .Select(t => t.Name)

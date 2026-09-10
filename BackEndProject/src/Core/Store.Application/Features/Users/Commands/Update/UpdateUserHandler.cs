@@ -37,6 +37,8 @@ public class UpdateUserHandler
             request.IsActive,
             request.LoginPermission);
 
+        user.SetProfileImageFileName(request.ProfileImageFileName);
+
         if (!string.IsNullOrWhiteSpace(request.Password))
             user.UpdatePassword(passwordHasher.HashPassword(request.Password));
 

@@ -18,6 +18,7 @@ export interface BlogCategory {
 export interface BlogComment {
   id: string
   authorName: string
+  authorAvatarUrl?: string
   date: string
   text: string
   likes: number

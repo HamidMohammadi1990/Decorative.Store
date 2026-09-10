@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import type { CartLine } from '@/models/cart/cartLine.model'
 import type { CurrencyConfig } from '@/models/shared/currency.model'
 import type { CheckoutTotals } from '@/extensions/calculateCheckoutTotals'
+import type { ServerCartSummary } from '@/services/cartService'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
 import { Button } from '@/components/ui/Button'
 import { LocalImage } from '@/components/ui/LocalImage'
@@ -12,6 +13,8 @@ interface CheckoutOrderSummaryProps {
   lines: CartLine[]
   totals: CheckoutTotals
   currency: CurrencyConfig
+  summary?: ServerCartSummary | null
+  discountSlot?: ReactNode
   showAction?: boolean
   actionLabel?: string
   actionHint?: string
@@ -24,6 +27,8 @@ export function CheckoutOrderSummary({
   lines,
   totals,
   currency,
+  summary = null,
+  discountSlot,
   showAction = false,
   actionLabel,
   actionHint,
@@ -73,6 +78,10 @@ export function CheckoutOrderSummary({
         })}
       </ul>
 
+      {discountSlot ? (
+        <div className="border-t border-border">{discountSlot}</div>
+      ) : null}
+
       <div className="space-y-2.5 border-t border-border px-5 py-4 text-sm">
         <SummaryRow
           label={t('common.subtotal')}
@@ -83,6 +92,28 @@ export function CheckoutOrderSummary({
             />
           }
         />
+
+        {totals.discountAmount > 0 && (
+          <SummaryRow
+            label={t('cartPage.discount')}
+            value={
+              <span className="font-medium text-accent">
+                −{' '}
+                <PriceDisplay
+                  money={{ amount: totals.discountAmount, currencyCode: currency.code }}
+                  currency={currency}
+                />
+              </span>
+            }
+          />
+        )}
+
+        {summary?.isDiscountInvalidated && summary.discountInvalidationMessage && (
+          <p className="rounded-sm bg-sale/10 px-3 py-2 text-xs text-sale">
+            {summary.discountInvalidationMessage}
+          </p>
+        )}
+
         <SummaryRow
           label={
             totals.fulfillment === 'pickup'

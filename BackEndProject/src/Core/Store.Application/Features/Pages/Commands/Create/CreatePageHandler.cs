@@ -11,7 +11,7 @@ public class CreatePageHandler
 {
     public async Task<OperationResult<CreatePageResponse>> Handle(CreatePageRequest request, CancellationToken cancellationToken)
     {
-        var model = Page.Create(request.Type, request.IsActive);
+        var model = Page.Create(request.Type, request.IsActive, request.AdminDescription);
         model.UpsertTranslation(
             request.LanguageId,
             request.Title,

@@ -16,6 +16,7 @@ public record GetAllSectionResponse
     public DateTime? StartDateOnUtc { get; init; }
     public DateTime? EndDateOnUtc { get; init; }
     public bool IsActive { get; init; }
+    public string? AdminDescription { get; init; }
     public string SectionTypeName { get; init; } = string.Empty;
     public string? ParentTitle { get; init; }
     public List<SectionTranslationItemDto> Translations { get; init; } = [];

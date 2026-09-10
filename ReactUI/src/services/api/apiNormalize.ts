@@ -84,6 +84,23 @@ export function readOptionalNumberField(
   return undefined
 }
 
+export function readNullableNumberField(
+  record: Record<string, unknown>,
+  ...keys: string[]
+): number | null {
+  for (const key of keys) {
+    const value = record[key]
+    if (value === null) return null
+    if (value === undefined) continue
+    if (typeof value === 'number' && Number.isFinite(value)) return value
+    if (typeof value === 'string' && value.trim().length > 0) {
+      const parsed = Number(value)
+      if (Number.isFinite(parsed)) return parsed
+    }
+  }
+  return null
+}
+
 export function readBooleanField(record: Record<string, unknown>, ...keys: string[]) {
   for (const key of keys) {
     const value = record[key]

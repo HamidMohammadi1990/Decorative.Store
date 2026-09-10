@@ -1,11 +1,16 @@
 import { useTranslation } from 'react-i18next'
+import { AddressMapPicker } from '@/components/address/AddressMapPicker'
 import { AuthCheckbox, AuthField } from '@/components/auth/AuthField'
-import type { AddressFormField, AddressFormValues } from '@/extensions/validateAddressForm'
+import type { MapCoordinates } from '@/config/map'
+import type { AddressFormErrorField, AddressFormField, AddressFormValues } from '@/extensions/validateAddressForm'
 
 interface AddressFormFieldsProps {
   values: AddressFormValues
-  errors: Partial<Record<AddressFormField, string>>
+  errors: Partial<Record<AddressFormErrorField, string>>
+  coordinates: MapCoordinates | null
   onChange: (field: AddressFormField, value: string) => void
+  onCoordinatesChange: (coords: MapCoordinates) => void
+  onAddressHint?: (addressLine: string) => void
   showDefaultCheckbox?: boolean
   isDefault?: boolean
   onDefaultChange?: (checked: boolean) => void
@@ -14,7 +19,10 @@ interface AddressFormFieldsProps {
 export function AddressFormFields({
   values,
   errors,
+  coordinates,
   onChange,
+  onCoordinatesChange,
+  onAddressHint,
   showDefaultCheckbox = false,
   isDefault = false,
   onDefaultChange,
@@ -23,6 +31,13 @@ export function AddressFormFields({
 
   return (
     <div className="space-y-4">
+      <AddressMapPicker
+        value={coordinates}
+        onChange={onCoordinatesChange}
+        onAddressHint={onAddressHint}
+        error={errors.map}
+      />
+
       <AuthField
         name="label"
         label={t('address.labelField')}
