@@ -110,6 +110,7 @@ public class ProductRepository
                         .FirstOrDefault()
                     ?? string.Empty,
                 Images = x.ProductFiles!
+                    .Where(file => file.IsActive && file.FileTypeId == ProductFileKind.Gallery)
                     .OrderByDescending(file => file.IsMain)
                     .ThenBy(file => file.Id)
                     .Select(file => new CheckoutProductImageDto
@@ -124,7 +125,24 @@ public class ProductRepository
                                 .Select(t => t.Title)
                                 .FirstOrDefault()
                             ?? string.Empty
-                    }).ToList()
+                    }).ToList(),
+                LayoutImage = x.ProductFiles!
+                    .Where(file => file.IsActive && file.FileTypeId == ProductFileKind.RoomLayout)
+                    .OrderBy(file => file.Id)
+                    .Select(file => new CheckoutProductImageDto
+                    {
+                        Url = file.FileName,
+                        Title = file.Translations
+                                .Where(t => t.LanguageId == languageId)
+                                .Select(t => t.Title)
+                                .FirstOrDefault()
+                            ?? file.Translations
+                                .Where(t => t.LanguageId == defaultLanguageId)
+                                .Select(t => t.Title)
+                                .FirstOrDefault()
+                            ?? string.Empty
+                    })
+                    .FirstOrDefault()
             })
             .SingleOrDefaultAsync();
     }
@@ -459,7 +477,7 @@ public class ProductRepository
             .AsNoTracking()
             .Where(x => x.IsActive)
             .Include(x => x.Translations)
-            .Include(x => x.ProductFiles.Where(file => file.IsActive))
+            .Include(x => x.ProductFiles.Where(file => file.IsActive && file.FileTypeId == ProductFileKind.Gallery))
             .ThenInclude(file => file.Translations)
             .Include(x => x.SubCategory)
             .ThenInclude(subCategory => subCategory.Translations)
@@ -481,10 +499,7 @@ public class ProductRepository
             defaultLanguageId,
             t => t.Description);
 
-        var mainFile = product.ProductFiles
-            .OrderByDescending(file => file.IsMain)
-            .ThenBy(file => file.Id)
-            .FirstOrDefault();
+        var mainFile = SelectPrimaryGalleryFile(product.ProductFiles);
         var imageAlt = mainFile is null
             ? title
             : ResolveProductFileTranslation(mainFile.Translations, languageId, defaultLanguageId);
@@ -532,7 +547,7 @@ public class ProductRepository
                 .ToListAsync(cancellationToken);
         }
 
-        var images = product.ProductFiles
+        var images = ActiveGalleryFiles(product.ProductFiles)
             .OrderByDescending(file => file.IsMain)
             .ThenBy(file => file.Id)
             .Select(file => new CatalogProductImageDto
@@ -617,7 +632,7 @@ public class ProductRepository
                 product.Id != currentProduct.Id &&
                 product.SubCategoryId == currentProduct.SubCategoryId)
             .Include(product => product.Translations)
-            .Include(product => product.ProductFiles.Where(file => file.IsActive))
+            .Include(product => product.ProductFiles.Where(file => file.IsActive && file.FileTypeId == ProductFileKind.Gallery))
             .ThenInclude(file => file.Translations)
             .Include(product => product.SubCategory)
             .ThenInclude(subCategory => subCategory.Translations)
@@ -632,10 +647,7 @@ public class ProductRepository
         {
             var title = ResolveProductTranslation(product.Translations, languageId, defaultLanguageId, t => t.Title);
             var productSlug = ResolveProductTranslation(product.Translations, languageId, defaultLanguageId, t => t.Slug);
-            var mainFile = product.ProductFiles
-                .OrderByDescending(file => file.IsMain)
-                .ThenBy(file => file.Id)
-                .FirstOrDefault();
+            var mainFile = SelectPrimaryGalleryFile(product.ProductFiles);
             var imageAlt = mainFile is null
                 ? title
                 : ResolveProductFileTranslation(mainFile.Translations, languageId, defaultLanguageId);
@@ -685,7 +697,7 @@ public class ProductRepository
                 product.SubCategory.IsActive &&
                 product.SubCategory.Category.IsActive)
             .Include(product => product.Translations)
-            .Include(product => product.ProductFiles.Where(file => file.IsActive))
+            .Include(product => product.ProductFiles.Where(file => file.IsActive && file.FileTypeId == ProductFileKind.Gallery))
             .ThenInclude(file => file.Translations)
             .Include(product => product.SubCategory)
             .ThenInclude(subCategory => subCategory.Translations)
@@ -701,10 +713,7 @@ public class ProductRepository
         {
             var title = ResolveProductTranslation(product.Translations, languageId, defaultLanguageId, t => t.Title);
             var productSlug = ResolveProductTranslation(product.Translations, languageId, defaultLanguageId, t => t.Slug);
-            var mainFile = product.ProductFiles
-                .OrderByDescending(file => file.IsMain)
-                .ThenBy(file => file.Id)
-                .FirstOrDefault();
+            var mainFile = SelectPrimaryGalleryFile(product.ProductFiles);
             var imageAlt = mainFile is null
                 ? title
                 : ResolveProductFileTranslation(mainFile.Translations, languageId, defaultLanguageId);
@@ -870,7 +879,7 @@ public class ProductRepository
                 && product.SubCategory.IsActive
                 && product.SubCategory.Category.IsActive)
             .Include(product => product.Translations)
-            .Include(product => product.ProductFiles.Where(file => file.IsActive))
+            .Include(product => product.ProductFiles.Where(file => file.IsActive && file.FileTypeId == ProductFileKind.Gallery))
             .ThenInclude(file => file.Translations)
             .Include(product => product.SubCategory)
             .ThenInclude(subCategory => subCategory.Translations)
@@ -908,10 +917,7 @@ public class ProductRepository
     {
         var title = ResolveProductTranslation(product.Translations, languageId, defaultLanguageId, t => t.Title);
         var productSlug = ResolveProductTranslation(product.Translations, languageId, defaultLanguageId, t => t.Slug);
-        var mainFile = product.ProductFiles
-            .OrderByDescending(file => file.IsMain)
-            .ThenBy(file => file.Id)
-            .FirstOrDefault();
+        var mainFile = SelectPrimaryGalleryFile(product.ProductFiles);
         var imageAlt = mainFile is null
             ? title
             : ResolveProductFileTranslation(mainFile.Translations, languageId, defaultLanguageId);
@@ -979,7 +985,7 @@ public class ProductRepository
             .AsNoTracking()
             .Where(product => product.IsActive && subCategoryIds.Contains(product.SubCategoryId))
             .Include(product => product.Translations)
-            .Include(product => product.ProductFiles.Where(file => file.IsActive))
+            .Include(product => product.ProductFiles.Where(file => file.IsActive && file.FileTypeId == ProductFileKind.Gallery))
             .ThenInclude(file => file.Translations)
             .Include(product => product.SubCategory)
             .ThenInclude(subCategory => subCategory.Translations)
@@ -1734,4 +1740,13 @@ public class ProductRepository
             })
             .ToDictionaryAsync(row => row.ProductId, row => row.Sold, cancellationToken);
     }
+
+    private static IEnumerable<ProductFile> ActiveGalleryFiles(IEnumerable<ProductFile> files)
+        => files.Where(file => file.IsActive && file.FileTypeId == ProductFileKind.Gallery);
+
+    private static ProductFile? SelectPrimaryGalleryFile(IEnumerable<ProductFile> files)
+        => ActiveGalleryFiles(files)
+            .OrderByDescending(file => file.IsMain)
+            .ThenBy(file => file.Id)
+            .FirstOrDefault();
 }

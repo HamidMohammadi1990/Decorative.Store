@@ -2,7 +2,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useConfirm } from '@/hooks/useConfirm'
-import type { AdminProductFile, AdminProductListItem } from '@/models/admin/catalog.model'
+import type {
+  AdminProductFile,
+  AdminProductListItem,
+  ProductFileKind,
+} from '@/models/admin/catalog.model'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
 import { ProductsIcon } from '@/components/dashboard/DashboardIcons'
@@ -62,6 +66,7 @@ export function ProductImagesPanel({
   const [error, setError] = useState<string | null>(null)
 
   const [title, setTitle] = useState('')
+  const [fileKind, setFileKind] = useState<ProductFileKind>('Gallery')
   const [isMain, setIsMain] = useState(false)
   const [pendingFiles, setPendingFiles] = useState<File[]>([])
   const [previews, setPreviews] = useState<string[]>([])
@@ -200,10 +205,12 @@ export function ProductImagesPanel({
           title: title.trim() || file.name.replace(/\.[^.]+$/, ''),
           image: file,
           isIndex: isMain && index === 0,
+          kind: fileKind,
         })),
       )
       setTitle('')
       setIsMain(false)
+      setFileKind('Gallery')
       setPendingFiles([])
       previews.forEach((url) => URL.revokeObjectURL(url))
       setPreviews([])
@@ -231,7 +238,14 @@ export function ProductImagesPanel({
   }
 
   const handleSetMain = async (item: AdminProductFile) => {
-    if (!accessToken || accessToken === 'mock-access-token' || item.isMain) return
+    if (
+      !accessToken
+      || accessToken === 'mock-access-token'
+      || item.isMain
+      || item.kind !== 'Gallery'
+    ) {
+      return
+    }
 
     setSaving(true)
     setError(null)
@@ -326,6 +340,27 @@ export function ProductImagesPanel({
           />
         </AdminField>
 
+        <AdminField label={t('dashboard.productImages.fieldKind')}>
+          <select
+            value={fileKind}
+            onChange={(e) => {
+              const nextKind = e.target.value as ProductFileKind
+              setFileKind(nextKind)
+              if (nextKind !== 'Gallery') setIsMain(false)
+            }}
+            className={adminInputClass}
+            disabled={!selectedProductId}
+          >
+            <option value="Gallery">{t('dashboard.productImages.kindGallery')}</option>
+            <option value="RoomLayout">{t('dashboard.productImages.kindRoomLayout')}</option>
+          </select>
+          {fileKind === 'RoomLayout' && (
+            <p className="mt-1.5 text-xs text-text-muted">
+              {t('dashboard.productImages.kindRoomLayoutHint')}
+            </p>
+          )}
+        </AdminField>
+
         <AdminField label={t('dashboard.productImages.fieldFiles')}>
           <label className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-surface px-4 py-8 transition-colors hover:border-warm hover:bg-warm-soft/30">
             {previews.length > 0 ? (
@@ -335,7 +370,9 @@ export function ProductImagesPanel({
                     key={preview}
                     src={preview}
                     alt=""
-                    className="aspect-square w-full rounded-md object-cover"
+                    className={`aspect-square w-full rounded-md ${
+                      fileKind === 'RoomLayout' ? 'object-contain' : 'object-cover'
+                    }`}
                   />
                 ))}
               </div>
@@ -345,13 +382,15 @@ export function ProductImagesPanel({
                   {t('dashboard.productImages.uploadHint')}
                 </span>
                 <span className="mt-1 text-xs text-text-muted">
-                  {t('dashboard.productImages.uploadFormats', { max: MAX_FILE_MB })}
+                  {fileKind === 'RoomLayout'
+                    ? t('dashboard.productImages.uploadFormatsLayout', { max: MAX_FILE_MB })
+                    : t('dashboard.productImages.uploadFormats', { max: MAX_FILE_MB })}
                 </span>
               </>
             )}
             <input
               type="file"
-              accept="image/*"
+              accept={fileKind === 'RoomLayout' ? 'image/png,image/webp' : 'image/*'}
               multiple
               className="sr-only"
               onChange={(e) => handleFileChange(e.target.files)}
@@ -360,16 +399,18 @@ export function ProductImagesPanel({
           </label>
         </AdminField>
 
-        <label className="flex items-center gap-2 text-sm text-text">
-          <input
-            type="checkbox"
-            checked={isMain}
-            onChange={(e) => setIsMain(e.target.checked)}
-            className="size-4 rounded border-border text-warm focus:ring-warm"
-            disabled={!selectedProductId}
-          />
-          {t('dashboard.productImages.fieldMain')}
-        </label>
+        {fileKind === 'Gallery' && (
+          <label className="flex items-center gap-2 text-sm text-text">
+            <input
+              type="checkbox"
+              checked={isMain}
+              onChange={(e) => setIsMain(e.target.checked)}
+              className="size-4 rounded border-border text-warm focus:ring-warm"
+              disabled={!selectedProductId}
+            />
+            {t('dashboard.productImages.fieldMain')}
+          </label>
+        )}
 
         {error && <p className="text-sm text-sale">{error}</p>}
 
@@ -419,29 +460,38 @@ export function ProductImagesPanel({
                   <img
                     src={item.imageUrl}
                     alt={item.title || item.productTitle}
-                    className="size-full object-cover"
+                    className={`size-full ${
+                      item.kind === 'RoomLayout' ? 'object-contain' : 'object-cover'
+                    }`}
                   />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start gap-2">
-                    <label
-                      className="mt-0.5 flex shrink-0 cursor-pointer items-center"
-                      title={t('dashboard.productImages.setMainHint')}
-                    >
-                      <input
-                        type="radio"
-                        name={`product-main-${selectedProductId}`}
-                        checked={item.isMain}
-                        onChange={() => void handleSetMain(item)}
-                        disabled={saving || item.isMain}
-                        className="size-4 border-border text-warm focus:ring-warm"
-                      />
-                    </label>
+                    {item.kind === 'Gallery' && (
+                      <label
+                        className="mt-0.5 flex shrink-0 cursor-pointer items-center"
+                        title={t('dashboard.productImages.setMainHint')}
+                      >
+                        <input
+                          type="radio"
+                          name={`product-main-${selectedProductId}`}
+                          checked={item.isMain}
+                          onChange={() => void handleSetMain(item)}
+                          disabled={saving || item.isMain}
+                          className="size-4 border-border text-warm focus:ring-warm"
+                        />
+                      </label>
+                    )}
                     <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-semibold text-text">
                     {item.title || item.fileName}
                   </p>
                   <div className="mt-1.5 flex flex-wrap gap-2">
+                    <span className="rounded-sm bg-surface-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-text-muted">
+                      {item.kind === 'RoomLayout'
+                        ? t('dashboard.productImages.kindRoomLayoutBadge')
+                        : t('dashboard.productImages.kindGalleryBadge')}
+                    </span>
                     {item.isMain && (
                       <span className="rounded-sm bg-warm-soft px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-warm">
                         {t('dashboard.productImages.mainBadge')}

@@ -15,7 +15,11 @@ export function syncRoomLayoutWithCart(
     const line = lineById.get(item.lineId)!
     const count = used.get(item.lineId) ?? 0
     if (count < line.quantity) {
-      kept.push(item)
+      kept.push({
+        ...item,
+        image: line.layoutImage ?? line.image,
+        title: line.title,
+      })
       used.set(item.lineId, count + 1)
     }
   }

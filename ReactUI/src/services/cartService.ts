@@ -13,6 +13,8 @@ export interface ServerCartItem {
   title: string
   imageUrl?: string | null
   imageAlt?: string | null
+  layoutImageUrl?: string | null
+  layoutImageAlt?: string | null
   quantity: number
   unitPrice: number
   currencyCode: string
@@ -58,6 +60,12 @@ export function mapServerCartToLines(cart: ServerCartResponse): CartLine[] {
       src: resolveImageSrc(item.imageUrl),
       alt: item.imageAlt || item.title,
     },
+    layoutImage: item.layoutImageUrl
+      ? {
+          src: resolveImageSrc(item.layoutImageUrl),
+          alt: item.layoutImageAlt || item.title,
+        }
+      : undefined,
     unitPrice: {
       amount: item.unitPrice,
       currencyCode: item.currencyCode,

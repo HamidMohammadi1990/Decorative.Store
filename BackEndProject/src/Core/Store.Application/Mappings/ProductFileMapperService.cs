@@ -55,6 +55,7 @@ public class ProductFileMapperService : IProductFileMapperService
                 Title = x.Title,
                 IsMain = x.IsMain,
                 IsActive = x.IsActive,
+                Kind = x.Kind,
                 FileName = x.FileName,
                 ProductId = x.ProductId,
                 ProductTitle = x.ProductTitle
@@ -73,6 +74,7 @@ public class ProductFileMapperService : IProductFileMapperService
                 Id = x.Id,
                 Title = x.Title,
                 IsMain = x.IsMain,
+                Kind = x.Kind,
                 FileName = x.FileName,
                 ProductId = x.ProductId
             })

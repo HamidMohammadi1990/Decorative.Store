@@ -51,6 +51,17 @@ public static class ProductTextHelper
         product.DescriptionEn = BuildDescriptionEn(product);
     }
 
+    public static void EnrichBelza(ParsedInventoryProduct product)
+    {
+        product.TitleFa = NormalizeFaTitle(product.TitleFa);
+        product.TitleEn = TranslateBelzaTitle(product.TitleFa);
+        product.SlugFa = BuildSlug(product.TitleFa, product.ProductCode, latin: false);
+        product.SlugEn = BuildSlug(product.TitleEn, product.ProductCode, latin: true);
+        product.SubCategorySlug = ResolveBelzaSubCategorySlug(product.TitleFa);
+        product.DescriptionFa = BuildBelzaDescriptionFa(product);
+        product.DescriptionEn = BuildBelzaDescriptionEn(product);
+    }
+
     private static string NormalizeFaTitle(string title)
     {
         var normalized = Regex.Replace(title, @"\s+", " ").Trim();
@@ -110,6 +121,47 @@ public static class ProductTextHelper
         return "kitchen-dining/glassware";
     }
 
+    public static string ResolveBelzaSubCategorySlug(string titleFa)
+    {
+        if (titleFa.Contains("کاسه", StringComparison.Ordinal))
+            return "kitchen-dining/bowls";
+        if (titleFa.Contains("بشقاب", StringComparison.Ordinal)
+            || titleFa.Contains("پیش دستی", StringComparison.Ordinal)
+            || titleFa.Contains("پیاله", StringComparison.Ordinal)
+            || titleFa.Contains("سینی", StringComparison.Ordinal))
+            return "kitchen-dining/plates";
+        if (titleFa.Contains("اردو", StringComparison.Ordinal))
+            return "kitchen-dining/sets";
+        if (titleFa.Contains("گلدان", StringComparison.Ordinal))
+            return "garden/planters-indoor";
+        if (titleFa.Contains("میوه", StringComparison.Ordinal)
+            || titleFa.Contains("شیرینی", StringComparison.Ordinal)
+            || titleFa.Contains("شکلات", StringComparison.Ordinal)
+            || titleFa.Contains("قندان", StringComparison.Ordinal)
+            || titleFa.Contains("استند", StringComparison.Ordinal)
+            || titleFa.Contains("شمعدان", StringComparison.Ordinal)
+            || titleFa.Contains("سطل", StringComparison.Ordinal)
+            || titleFa.Contains("جا دستمال", StringComparison.Ordinal)
+            || titleFa.Contains("جاکاردی", StringComparison.Ordinal)
+            || titleFa.Contains("انگاره", StringComparison.Ordinal))
+            return "kitchen-dining/serveware";
+
+        return "kitchen-dining/serveware";
+    }
+
+    public static string TranslateBelzaTitle(string titleFa)
+    {
+        var result = titleFa;
+        foreach (var (fa, en) in TermReplacements.OrderByDescending(x => x.Fa.Length))
+            result = result.Replace(fa, en, StringComparison.Ordinal);
+
+        result = Regex.Replace(result, @"\s+", " ").Trim();
+        if (!result.StartsWith("Belza", StringComparison.OrdinalIgnoreCase))
+            result = $"Belza {result}";
+
+        return result;
+    }
+
     private static string BuildDescriptionFa(ParsedInventoryProduct product)
     {
         var measurement = string.IsNullOrWhiteSpace(product.MeasurementFa)
@@ -138,4 +190,30 @@ public static class ProductTextHelper
 
     public static string TranslatePackValue(string valueFa)
         => TranslateTitle(valueFa);
+
+    private static string BuildBelzaDescriptionFa(ParsedInventoryProduct product)
+    {
+        var carton = string.IsNullOrWhiteSpace(product.PackQuantity)
+            ? string.Empty
+            : $" هر کارتن شامل {product.PackQuantity} {product.PackUnitFa} است.";
+
+        var status = product.IsDiscontinued ? " (توقف تولید)" : string.Empty;
+
+        return
+            $"{product.TitleFa} با کد {product.ProductCode}.{carton}{status} " +
+            "محصول تولیدی بلزا مناسب سرو و پذیرایی.";
+    }
+
+    private static string BuildBelzaDescriptionEn(ParsedInventoryProduct product)
+    {
+        var carton = string.IsNullOrWhiteSpace(product.PackQuantity)
+            ? string.Empty
+            : $" Each carton contains {product.PackQuantity} {TranslatePackValue(product.PackUnitFa)}.";
+
+        var status = product.IsDiscontinued ? " (discontinued)" : string.Empty;
+
+        return
+            $"{product.TitleEn} (code {product.ProductCode}).{carton}{status} " +
+            "Belza product suitable for dining and hospitality use.";
+    }
 }

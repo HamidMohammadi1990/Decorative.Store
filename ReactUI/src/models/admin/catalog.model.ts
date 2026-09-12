@@ -93,6 +93,8 @@ export interface UpdateProductInput extends CreateProductInput {
   status: boolean
 }
 
+export type ProductFileKind = 'Gallery' | 'RoomLayout'
+
 export interface AdminProductFile {
   id: string
   productId: string
@@ -102,6 +104,7 @@ export interface AdminProductFile {
   imageUrl: string
   isActive: boolean
   isMain: boolean
+  kind: ProductFileKind
 }
 
 export interface CreateProductFileInput {
@@ -110,6 +113,7 @@ export interface CreateProductFileInput {
   title: string
   image: File
   isIndex: boolean
+  kind?: ProductFileKind
 }
 
 export interface AdminProductDescription {

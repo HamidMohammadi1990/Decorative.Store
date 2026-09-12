@@ -1,4 +1,6 @@
-﻿namespace Store.Domain.Dtos.ProductFiles;
+﻿using Store.Domain.Enums;
+
+namespace Store.Domain.Dtos.ProductFiles;
 
 public record GetAllProductFileResponseDto
 {
@@ -9,4 +11,5 @@ public record GetAllProductFileResponseDto
     public string FileName { get; init; } = default!;
     public bool IsActive { get; init; }
     public bool IsMain { get; init; }
+    public ProductFileKind Kind { get; init; }
 }

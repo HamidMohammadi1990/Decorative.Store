@@ -26,6 +26,8 @@ public record CartItemResponse
     public string Title { get; init; } = string.Empty;
     public string? ImageUrl { get; init; }
     public string? ImageAlt { get; init; }
+    public string? LayoutImageUrl { get; init; }
+    public string? LayoutImageAlt { get; init; }
     public int Quantity { get; init; }
     public decimal UnitPrice { get; init; }
     public string CurrencyCode { get; init; } = "IRT";

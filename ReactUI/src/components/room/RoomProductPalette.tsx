@@ -36,7 +36,10 @@ export function RoomProductPalette() {
           <li key={line.lineId}>
             <div className="flex gap-3 rounded-sm border border-border bg-surface-muted/20 p-2.5">
               <div className="size-14 shrink-0 overflow-hidden rounded-sm border border-border bg-surface">
-                <LocalImage image={line.image} className="size-full object-cover" />
+                <LocalImage
+                  image={line.layoutImage ?? line.image}
+                  className="size-full object-contain"
+                />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="line-clamp-2 text-sm font-medium leading-snug text-text">

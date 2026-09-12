@@ -9,6 +9,7 @@ public record ProductSummaryDto
     public string ProductCode { get; set; } = null!;
     public string SubCategoryTitle { get; set; } = null!;
     public List<CheckoutProductImageDto> Images { get; set; } = [];
+    public CheckoutProductImageDto? LayoutImage { get; set; }
 }
 
 public record CheckoutProductImageDto

@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using Edition.Application.Common.Utilities.Security.Attributes;
+using Store.Domain.Enums;
 
 namespace Edition.Application.Features.ProductFiles.Queries;
 
@@ -17,4 +18,5 @@ public record GetAllProductFileResponse
     public string FileName { get; init; } = default!;
     public bool IsActive { get; init; }
     public bool IsMain { get; init; }
+    public ProductFileKind Kind { get; init; }
 }

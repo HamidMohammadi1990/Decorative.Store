@@ -1,5 +1,9 @@
 import { API_BASE_URL } from '@/config/api'
-import type { AdminProductFile, CreateProductFileInput } from '@/models/admin/catalog.model'
+import type {
+  AdminProductFile,
+  CreateProductFileInput,
+  ProductFileKind,
+} from '@/models/admin/catalog.model'
 import type { Locale } from '@/models/shared/locale.model'
 import { apiDelete, apiPost, apiPut, toAcceptLanguage } from '@/services/api/apiClient'
 import { normalizeApiEnvelope, readRecord, readStringField } from '@/services/api/apiNormalize'
@@ -35,6 +39,10 @@ function normalizeProductFile(data: unknown): AdminProductFile | null {
   const imageUrl =
     readStringField(record, 'imageUrl', 'ImageUrl') || resolveProductFileUrl(fileName)
 
+  const kindRaw = readStringField(record, 'kind', 'Kind')
+  const kind: ProductFileKind =
+    kindRaw === 'RoomLayout' ? 'RoomLayout' : 'Gallery'
+
   return {
     id,
     productId,
@@ -44,6 +52,7 @@ function normalizeProductFile(data: unknown): AdminProductFile | null {
     imageUrl,
     isActive: readIsActive(record),
     isMain: Boolean(record.isMain ?? record.IsMain),
+    kind,
   }
 }
 
@@ -84,6 +93,7 @@ export const adminProductFileService = {
       formData.append(`Files[${index}].LanguageId`, String(file.languageId))
       formData.append(`Files[${index}].Title`, file.title)
       formData.append(`Files[${index}].IsIndex`, String(file.isIndex))
+      formData.append(`Files[${index}].Kind`, file.kind ?? 'Gallery')
       formData.append(`Files[${index}].Image`, file.image)
     })
 
@@ -121,6 +131,7 @@ export const adminProductFileService = {
           imageUrl,
           isActive: true,
           isMain: files.some((f) => f.isIndex),
+          kind: files[0]?.kind ?? 'Gallery',
         },
       ]
     })

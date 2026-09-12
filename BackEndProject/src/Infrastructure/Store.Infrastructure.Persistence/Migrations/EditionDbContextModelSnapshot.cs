@@ -2043,6 +2043,11 @@ namespace Store.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("VARCHAR(70)");
 
+                    b.Property<byte>("FileTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint")
+                        .HasDefaultValue((byte)0);
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 

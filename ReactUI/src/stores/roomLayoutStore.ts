@@ -61,7 +61,7 @@ export const useRoomLayoutStore = create<RoomLayoutState>()(
           lineId: line.lineId,
           sku: line.sku,
           title: line.title,
-          image: line.image,
+          image: line.layoutImage ?? line.image,
           x,
           y,
           rotation: 0,

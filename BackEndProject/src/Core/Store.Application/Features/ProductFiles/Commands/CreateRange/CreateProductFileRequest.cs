@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Store.Common.Models;
+using Store.Domain.Enums;
 
 namespace Edition.Application.Features.ProductFiles.Commands;
 
@@ -15,4 +16,5 @@ public record ProductFileRequest
     public string Title { get; init; } = default!;
     public IFormFile Image { get; init; } = default!;
     public bool IsIndex { get; init; }
+    public ProductFileKind Kind { get; init; } = ProductFileKind.Gallery;
 }

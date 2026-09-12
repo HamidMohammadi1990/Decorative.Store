@@ -2,48 +2,91 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Store.Infrastructure.Persistence;
 using Store.ProductImport.Import;
+using Store.ProductImport.Models;
 using Store.ProductImport.Parsing;
 using System.Text;
 using System.Text.Json;
 
-const string defaultPdfPath = @"c:\Users\40312758\Downloads\__گزارش موجودی کالا با عکس و قیمت_.pdf";
+static string ResolveDefaultStoreFilesFolder()
+{
+    var fromRepo = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "Store Files"));
+    if (Directory.Exists(fromRepo))
+        return fromRepo;
 
-var pdfPath = args.FirstOrDefault(arg => !arg.StartsWith("--", StringComparison.Ordinal)) ?? defaultPdfPath;
+    return Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "Store Files"));
+}
+
+var folderArg = args.FirstOrDefault(arg => arg.StartsWith("--folder=", StringComparison.OrdinalIgnoreCase));
+var positionalPath = args.FirstOrDefault(arg => !arg.StartsWith("--", StringComparison.Ordinal));
 var dryRun = args.Any(arg => arg.Equals("--dry-run", StringComparison.OrdinalIgnoreCase));
 var parseOnly = args.Any(arg => arg.Equals("--parse-only", StringComparison.OrdinalIgnoreCase));
 var exportJson = args.FirstOrDefault(arg => arg.StartsWith("--export=", StringComparison.OrdinalIgnoreCase));
 var dumpText = args.FirstOrDefault(arg => arg.StartsWith("--dump-text=", StringComparison.OrdinalIgnoreCase));
 
-if (!File.Exists(pdfPath))
+string? singlePdfPath = null;
+string? folderPath = null;
+
+if (folderArg is not null)
 {
-    Console.Error.WriteLine($"PDF not found: {pdfPath}");
-    return 1;
+    folderPath = Path.GetFullPath(folderArg["--folder=".Length..]);
+}
+else if (!string.IsNullOrWhiteSpace(positionalPath))
+{
+    if (Directory.Exists(positionalPath))
+        folderPath = Path.GetFullPath(positionalPath);
+    else if (File.Exists(positionalPath) && positionalPath.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+        singlePdfPath = Path.GetFullPath(positionalPath);
+    else
+    {
+        Console.Error.WriteLine($"Path not found: {positionalPath}");
+        return 1;
+    }
+}
+else
+{
+    folderPath = ResolveDefaultStoreFilesFolder();
 }
 
-Console.WriteLine($"Parsing PDF: {pdfPath}");
+IReadOnlyList<ParsedInventoryProduct> products;
 
-if (!string.IsNullOrWhiteSpace(dumpText))
+if (folderPath is not null)
+{
+    if (!Directory.Exists(folderPath))
+    {
+        Console.Error.WriteLine($"Folder not found: {folderPath}");
+        return 1;
+    }
+
+    Console.WriteLine($"Parsing PDF folder: {folderPath}");
+    products = CatalogPdfParser.ParseFolder(folderPath);
+}
+else
+{
+    Console.WriteLine($"Parsing PDF: {singlePdfPath}");
+    products = CatalogPdfParser.ParsePdf(singlePdfPath!);
+}
+
+Console.WriteLine($"Parsed products (unique codes): {products.Count}");
+Console.WriteLine($"Belza catalog: {products.Count(p => p.CatalogKind == ImportCatalogKind.Belza)}");
+Console.WriteLine($"With images: {products.Count(p => p.ImageBytes is { Length: > 0 })}");
+
+if (!string.IsNullOrWhiteSpace(dumpText) && singlePdfPath is not null)
 {
     var dumpPath = dumpText["--dump-text=".Length..];
-    var rawText = InventoryPdfParser.ExtractText(pdfPath);
+    var rawText = InventoryPdfParser.ExtractText(singlePdfPath);
     await File.WriteAllTextAsync(dumpPath, rawText, Encoding.UTF8);
     Console.WriteLine($"Dumped raw PDF text ({rawText.Length} chars): {dumpPath}");
 }
 
-var products = InventoryPdfParser.ParsePdf(pdfPath);
-Console.WriteLine($"Parsed products: {products.Count}");
-Console.WriteLine($"With images: {products.Count(p => p.ImageBytes is { Length: > 0 })}");
-
 if (products.Count == 0)
 {
     Console.WriteLine("No products parsed. Dump raw text to inspect layout:");
-    Console.WriteLine("  dotnet run --project tools/Store.ProductImport -- --dump-text=tools/pdf-raw.txt --parse-only");
+    Console.WriteLine("  dotnet run --project tools/Store.ProductImport -- \"..\\Store Files\\تاینی.pdf\" --dump-text=tools/pdf-raw.txt --parse-only");
 }
-else if (products.Count > 0)
+else
 {
-    var sample = products.Take(3).Select(p => $"  #{p.Row} {p.TitleFa} | code={p.ExternalCode} | {p.PriceToman:N0} T");
     Console.WriteLine("Sample:");
-    foreach (var line in sample)
+    foreach (var line in products.Take(5).Select(FormatSampleLine))
         Console.WriteLine(line);
 }
 
@@ -52,6 +95,7 @@ if (!string.IsNullOrWhiteSpace(exportJson))
     var exportPath = exportJson["--export=".Length..];
     var payload = products.Select(p => new
     {
+        p.CatalogKind,
         p.Row,
         p.Barcode,
         p.ProductCode,
@@ -61,6 +105,8 @@ if (!string.IsNullOrWhiteSpace(exportJson))
         p.SlugFa,
         p.SlugEn,
         p.PriceToman,
+        p.PurchasePriceToman,
+        p.IsDiscontinued,
         p.PackQuantity,
         p.PackUnitFa,
         p.MeasurementFa,
@@ -133,3 +179,6 @@ if (summary.Errors.Count > 0)
 }
 
 return summary.Failed > 0 ? 2 : 0;
+
+static string FormatSampleLine(ParsedInventoryProduct p)
+    => $"  #{p.Row} {p.TitleFa} | code={p.ProductCode} | buy={p.PurchasePriceToman:N0} | sell={p.PriceToman:N0} T | {p.SubCategorySlug}";

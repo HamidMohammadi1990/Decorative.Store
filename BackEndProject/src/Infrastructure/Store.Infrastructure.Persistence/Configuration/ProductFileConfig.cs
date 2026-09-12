@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Store.Domain.Entities;
+using Store.Domain.Enums;
 using Store.Infrastructure.Persistence.Extensions;
 
 namespace Store.Infrastructure.Persistence.Configuration;
@@ -22,5 +23,9 @@ internal class ProductFileConfig : IEntityTypeConfiguration<ProductFile>
 
         builder
             .HasIndex(x => x.ProductId);
+
+        builder
+            .Property(x => x.FileTypeId)
+            .HasDefaultValue(ProductFileKind.Gallery);
     }
 }

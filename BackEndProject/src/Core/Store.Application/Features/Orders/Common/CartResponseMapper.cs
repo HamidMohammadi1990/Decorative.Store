@@ -19,7 +19,8 @@ internal static class CartResponseMapper
         foreach (var orderItem in order.OrderItems)
         {
             var summary = await productRepository.GetProductSummaryByIdAsync(orderItem.ProductId);
-            var image = summary?.Images.FirstOrDefault();
+            var galleryImage = summary?.Images.FirstOrDefault();
+            var layoutImage = summary?.LayoutImage ?? galleryImage;
 
             items.Add(new CartItemResponse
             {
@@ -27,10 +28,14 @@ internal static class CartResponseMapper
                 ProductId = orderItem.ProductId,
                 Slug = summary?.Slug ?? string.Empty,
                 Title = summary?.Title ?? string.Empty,
-                ImageUrl = string.IsNullOrWhiteSpace(image?.Url)
+                ImageUrl = string.IsNullOrWhiteSpace(galleryImage?.Url)
                     ? null
-                    : ProductDirectory.GetImageUrl(image.Url),
-                ImageAlt = image?.Title,
+                    : ProductDirectory.GetImageUrl(galleryImage.Url),
+                ImageAlt = galleryImage?.Title,
+                LayoutImageUrl = string.IsNullOrWhiteSpace(layoutImage?.Url)
+                    ? null
+                    : ProductDirectory.GetImageUrl(layoutImage.Url),
+                LayoutImageAlt = layoutImage?.Title,
                 Quantity = orderItem.Quantity,
                 UnitPrice = orderItem.ProductPrice,
                 CurrencyCode = "IRT"

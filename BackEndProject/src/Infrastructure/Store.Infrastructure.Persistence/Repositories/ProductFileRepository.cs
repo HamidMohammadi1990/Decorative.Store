@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Store.Infrastructure.Persistence.Extensions;
 using Store.Domain.Dtos.Pagination;
 using Store.Domain.Dtos.ProductFiles;
+using Store.Domain.Enums;
 using Store.Domain.Repositories;
 using Store.Domain.Entities;
 
@@ -26,7 +27,7 @@ public class ProductFileRepository
     public async Task ClearMainFlagsAsync(int productId, CancellationToken cancellationToken = default)
     {
         var mainFiles = await Context.ProductFile
-            .Where(x => x.ProductId == productId && x.IsMain)
+            .Where(x => x.ProductId == productId && x.IsMain && x.FileTypeId == ProductFileKind.Gallery)
             .ToListAsync(cancellationToken);
 
         foreach (var file in mainFiles)
@@ -65,6 +66,7 @@ public class ProductFileRepository
                 Id = x.productFile.Id,
                 IsMain = x.productFile.IsMain,
                 IsActive = x.productFile.IsActive,
+                Kind = x.productFile.FileTypeId,
                 FileName = x.productFile.FileName,
                 ProductId = x.productFile.ProductId,
                 Title = x.productFile.Translations
@@ -120,6 +122,7 @@ public class ProductFileRepository
             {
                 Id = x.Id,
                 IsMain = x.IsMain,
+                Kind = x.FileTypeId,
                 FileName = x.FileName,
                 ProductId = x.ProductId,
                 Title = x.Translations

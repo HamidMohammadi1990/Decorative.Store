@@ -4,6 +4,7 @@ using Edition.Application.Common.Utilities.Security;
 using Edition.Application.Contracts.Persistence;
 using Edition.Application.Models.Constants;
 using Store.Common.Models;
+using Store.Domain.Enums;
 using Store.Domain.Repositories;
 using Store.Domain.Entities;
 
@@ -16,7 +17,7 @@ public class CreateProductFileHandler
     public async Task<OperationResult<List<CreateProductFileResponse>>> Handle(CreateProductFileRequest request, CancellationToken cancellationToken)
     {
         var productIdsWithNewMain = request.Files
-            .Where(file => file.IsIndex)
+            .Where(file => file.IsIndex && file.Kind == ProductFileKind.Gallery)
             .Select(file => ResolveProductId(file.ProductId))
             .Where(productId => productId > 0)
             .Distinct()
@@ -39,7 +40,8 @@ public class CreateProductFileHandler
             var filename = await localFileService.SaveFileAsync(file.Image, ProductDirectory.ProductImage);
             if (filename.IsSuccess)
             {
-                var productFile = ProductFile.Create(productId, filename.Result!, file.IsIndex);
+                var isMain = file.IsIndex && file.Kind == ProductFileKind.Gallery;
+                var productFile = ProductFile.Create(productId, filename.Result!, isMain, file.Kind);
                 productFile.UpsertTranslation(file.LanguageId, file.Title);
                 productFileRepository.Add(productFile);
                 productFiles.Add((productFile, file.Title));

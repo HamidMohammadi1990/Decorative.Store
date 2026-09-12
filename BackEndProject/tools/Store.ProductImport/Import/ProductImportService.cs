@@ -14,11 +14,14 @@ public sealed class ProductImportService(EditionDbContext context, string upload
     private int _enLanguageId;
     private readonly Dictionary<string, int> _subCategorySlugMap = new(StringComparer.OrdinalIgnoreCase);
     private int? _packPropertyId;
+    private int? _cartonPropertyId;
     private int? _measurePropertyId;
     private int? _materialPropertyId;
     private int? _materialGlassItemId;
     private readonly Dictionary<string, int> _propertyItemCache = new(StringComparer.OrdinalIgnoreCase);
     private int? _packFeatureTypeId;
+    private int? _cartonFeatureTypeId;
+    private int? _purchasePriceFeatureTypeId;
     private int? _measureFeatureTypeId;
 
     public async Task<ImportSummary> ImportAsync(
@@ -89,7 +92,7 @@ public sealed class ProductImportService(EditionDbContext context, string upload
         var slugEn = await EnsureUniqueSlugAsync(item.SlugEn, _enLanguageId, cancellationToken);
 
         var product = Product.Create(item.ProductCode, subCategoryId, item.PriceToman);
-        product.SetInStock(true);
+        product.SetInStock(!item.IsDiscontinued && item.PriceToman > 0);
         product.UpsertTranslation(_faLanguageId, TrimToLength(item.TitleFa, 150), slugFa, shortDescriptionFa);
         product.UpsertTranslation(_enLanguageId, TrimToLength(item.TitleEn, 150), slugEn, shortDescriptionEn);
         context.Product.Add(product);
@@ -112,6 +115,12 @@ public sealed class ProductImportService(EditionDbContext context, string upload
         ParsedInventoryProduct item,
         CancellationToken cancellationToken)
     {
+        if (item.CatalogKind == ImportCatalogKind.Belza)
+        {
+            await AssignBelzaPropertiesAsync(product, item, cancellationToken);
+            return;
+        }
+
         if (_materialPropertyId is int materialPropertyId && _materialGlassItemId is int glassItemId)
         {
             context.ProductProperty.Add(ProductProperty.Create(
@@ -144,14 +153,53 @@ public sealed class ProductImportService(EditionDbContext context, string upload
         }
     }
 
+    private async Task AssignBelzaPropertiesAsync(
+        Product product,
+        ParsedInventoryProduct item,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(item.PackQuantity))
+            return;
+
+        var cartonValueFa = $"{item.PackQuantity} {item.PackUnitFa}".Trim();
+        var cartonValueEn = $"{item.PackQuantity} {ProductTextHelper.TranslatePackValue(item.PackUnitFa)}".Trim();
+        var cartonItemId = await GetOrCreatePropertyItemAsync(
+            _cartonPropertyId!.Value,
+            cartonValueFa,
+            cartonValueFa,
+            cartonValueEn,
+            cancellationToken);
+        context.ProductProperty.Add(ProductProperty.Create(product.Id, _cartonPropertyId.Value, true, cartonItemId));
+    }
+
     private void AssignFeatures(Product product, ParsedInventoryProduct item)
     {
+        if (item.CatalogKind == ImportCatalogKind.Belza)
+        {
+            AssignBelzaFeatures(product, item);
+            return;
+        }
+
         var packValueFa = $"{item.PackQuantity} {item.PackUnitFa}".Trim();
-        var packValueEn = $"{item.PackQuantity} {ProductTextHelper.TranslatePackValue(item.PackUnitFa)}".Trim();
         product.AddFeature(ProductFeature.Create(product.Id, _packFeatureTypeId!.Value, packValueFa));
 
         if (!string.IsNullOrWhiteSpace(item.MeasurementFa))
             product.AddFeature(ProductFeature.Create(product.Id, _measureFeatureTypeId!.Value, item.MeasurementFa));
+    }
+
+    private void AssignBelzaFeatures(Product product, ParsedInventoryProduct item)
+    {
+        if (!string.IsNullOrWhiteSpace(item.PackQuantity))
+        {
+            var cartonValueFa = $"{item.PackQuantity} {item.PackUnitFa}".Trim();
+            product.AddFeature(ProductFeature.Create(product.Id, _cartonFeatureTypeId!.Value, cartonValueFa));
+        }
+
+        if (item.PurchasePriceToman > 0)
+        {
+            var purchaseValue = item.PurchasePriceToman.ToString("0", System.Globalization.CultureInfo.InvariantCulture);
+            product.AddFeature(ProductFeature.Create(product.Id, _purchasePriceFeatureTypeId!.Value, purchaseValue));
+        }
     }
 
     private async Task SaveProductImageAsync(
@@ -238,6 +286,12 @@ public sealed class ProductImportService(EditionDbContext context, string upload
             "Pack quantity",
             cancellationToken);
 
+        _cartonPropertyId = await EnsurePropertyAsync(
+            "carton-quantity",
+            "تعداد در کارتن",
+            "Carton quantity",
+            cancellationToken);
+
         _measurePropertyId = await EnsurePropertyAsync(
             "measurement-unit",
             "واحد اندازه‌گیری",
@@ -286,6 +340,8 @@ public sealed class ProductImportService(EditionDbContext context, string upload
     private async Task EnsureFeatureTypesAsync(CancellationToken cancellationToken)
     {
         _packFeatureTypeId = await EnsureFeatureTypeAsync("تعداد در بسته", cancellationToken);
+        _cartonFeatureTypeId = await EnsureFeatureTypeAsync("تعداد در کارتن", cancellationToken);
+        _purchasePriceFeatureTypeId = await EnsureFeatureTypeAsync("قیمت خرید", cancellationToken);
         _measureFeatureTypeId = await EnsureFeatureTypeAsync("واحد اندازه‌گیری", cancellationToken);
     }
 

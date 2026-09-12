@@ -8,6 +8,7 @@ export interface CartLine {
   slug?: string
   title: string
   image: ImageAsset
+  layoutImage?: ImageAsset
   unitPrice: Money
   quantity: number
 }

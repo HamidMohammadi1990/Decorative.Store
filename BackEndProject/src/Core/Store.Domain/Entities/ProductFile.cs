@@ -1,4 +1,5 @@
 ﻿using Store.Domain.Common;
+using Store.Domain.Enums;
 
 namespace Store.Domain.Entities;
 
@@ -8,16 +9,22 @@ public class ProductFile : BaseEntity
     public string FileName { get; private set; } = null!;
     public bool IsActive { get; private set; } = true;
     public bool IsMain { get; private set; }
+    public ProductFileKind FileTypeId { get; private set; } = ProductFileKind.Gallery;
 
     public Product Product { get; private set; } = default!;
     public ICollection<ProductFileTranslation> Translations { get; private set; } = [];
 
-    public static ProductFile Create(int productId, string fileName, bool isMain)
+    public static ProductFile Create(
+        int productId,
+        string fileName,
+        bool isMain,
+        ProductFileKind kind = ProductFileKind.Gallery)
         => new()
         {
             ProductId = productId,
             FileName = fileName,
-            IsMain = isMain
+            IsMain = isMain,
+            FileTypeId = kind
         };
 
     public ProductFileTranslation UpsertTranslation(int languageId, string title)

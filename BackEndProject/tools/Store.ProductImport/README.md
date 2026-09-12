@@ -1,37 +1,47 @@
-# Pasabahce inventory PDF import
+# Product catalog PDF import
 
-Imports products from the inventory PDF report into `DecorativeStoreDB`.
+Imports products from inventory / price-list PDFs into `DecorativeStoreDB`.
 
-## What it does
+## Supported formats
 
-- Parses ~1038 products from the PDF (title, external code, pack quantity, measurement, price)
-- Converts **Rial → Toman** (÷10)
-- Skips rows when `ProductCode` already exists (no duplicates)
-- Creates FA + EN translations, slugs, short + long descriptions
-- Assigns subcategory from product name (mugs, glassware, sets, …)
-- Adds properties: **تعداد در بسته**, **واحد اندازه‌گیری**, plus `material=glass`
-- Extracts product images from PDF pages when available
-- Saves images to `Store.Api/wwwroot/Uploads/Products/`
+### Belza price lists (`Store Files/*.pdf`)
+
+Columns: row, product name, product code, carton quantity, sale price (purchase), consumer price (selling).
+
+- **Product code** → `Product.ProductCode`
+- **Consumer price** → `Product.Price` (۰ if empty / توقف تولید)
+- **Sale price** → stored as feature **قیمت خرید** (not used as selling price)
+- **Carton quantity** → property + feature **تعداد در کارتن**
+- **Subcategory** → inferred from product name (bowls, plates, serveware, …)
+
+### Pasabahce inventory PDF (legacy)
+
+Barcode-based report with images — uses the original parser.
 
 ## Usage
 
 ```powershell
 cd BackEndProject
 
-# Parse PDF only (no database connection)
-dotnet run --project tools/Store.ProductImport -- --parse-only --export=tools/parsed-products.json
+# Parse all 15 PDFs in Store Files (default folder)
+dotnet run --project tools/Store.ProductImport -- --parse-only
 
-# Dry-run against DB (validates subcategories, skips writes)
+# Preview JSON export
+dotnet run --project tools/Store.ProductImport -- --parse-only --export=tools/parsed-belza.json
+
+# Dry-run against DB (validates subcategories, no writes)
 dotnet run --project tools/Store.ProductImport -- --dry-run
 
-# Export parsed JSON preview
-dotnet run --project tools/Store.ProductImport -- --dry-run --export=tools/parsed-products.json
-
-# Full import (uses appsettings.Development.json connection string)
+# Full import from Store Files folder
 dotnet run --project tools/Store.ProductImport
 
-# Custom PDF path
-dotnet run --project tools/Store.ProductImport -- "C:\path\to\report.pdf"
+# Custom folder
+dotnet run --project tools/Store.ProductImport -- --folder="D:\Projects\DecorativeStore\Store Files"
+
+# Single PDF
+dotnet run --project tools/Store.ProductImport -- "..\Store Files\تاینی.pdf" --parse-only
 ```
 
-Ensure SQL Server is running and categories are already seeded before import.
+Uses `appsettings.Development.json` connection string. Skips rows when `ProductCode` already exists.
+
+Ensure SQL Server is running and categories are seeded before import.
