@@ -14,6 +14,7 @@ interface MegaMenuDropdownProps {
   scrollEl?: RefObject<HTMLElement | null>
   onClose: () => void
   onCancelClose: () => void
+  onNavigate?: () => void
 }
 
 export function MegaMenuDropdown({
@@ -23,6 +24,7 @@ export function MegaMenuDropdown({
   scrollEl,
   onClose,
   onCancelClose,
+  onNavigate,
 }: MegaMenuDropdownProps) {
   const { t } = useTranslation()
   const panelRef = useRef<HTMLDivElement>(null)
@@ -64,7 +66,7 @@ export function MegaMenuDropdown({
         ref={panelRef}
         data-mega-menu
         className="fixed z-[60]"
-        style={{ paddingTop: 8, marginTop: -8 }}
+        style={{ paddingTop: 12, marginTop: -12 }}
         onMouseEnter={onCancelClose}
         onMouseLeave={onClose}
       >
@@ -74,7 +76,7 @@ export function MegaMenuDropdown({
         >
           {group.href && (
             <div className="border-b border-warm-muted/60 bg-warm-soft/70 px-8 py-3.5">
-              <Link to={group.href} className={`group ${navShopAllLinkClass}`}>
+              <Link to={group.href} className={`group ${navShopAllLinkClass}`} onClick={onNavigate}>
                 {t('common.shopAll', { category: group.label })}
                 <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5">
                   →
@@ -82,7 +84,7 @@ export function MegaMenuDropdown({
               </Link>
             </div>
           )}
-          <MegaMenuPanel group={group} />
+          <MegaMenuPanel group={group} onNavigate={onNavigate} />
         </div>
       </div>
     </Portal>

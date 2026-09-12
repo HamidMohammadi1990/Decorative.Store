@@ -13,7 +13,7 @@ interface MainNavProps {
   items: NavLinkGroup[]
 }
 
-const CLOSE_DELAY_MS = 120
+const CLOSE_DELAY_MS = 300
 
 export function MainNav({ items }: MainNavProps) {
   const { t } = useTranslation()
@@ -40,7 +40,16 @@ export function MainNav({ items }: MainNavProps) {
 
   const scheduleClose = useCallback(() => {
     clearCloseTimer()
-    closeTimer.current = setTimeout(() => setOpenId(null), CLOSE_DELAY_MS)
+    closeTimer.current = setTimeout(() => {
+      const menu = document.querySelector('[data-mega-menu]')
+      if (menu?.matches(':hover')) return
+      setOpenId(null)
+    }, CLOSE_DELAY_MS)
+  }, [clearCloseTimer])
+
+  const closeMenu = useCallback(() => {
+    clearCloseTimer()
+    setOpenId(null)
   }, [clearCloseTimer])
 
   const openItem = useCallback(
@@ -126,7 +135,15 @@ export function MainNav({ items }: MainNavProps) {
                 }}
                 className="relative shrink-0"
                 onMouseEnter={() => hasPanel && openItem(item.id)}
-                onMouseLeave={() => hasPanel && scheduleClose()}
+                onMouseLeave={(e) => {
+                  if (!hasPanel) return
+                  const related = e.relatedTarget
+                  if (related instanceof Node) {
+                    if (navRef.current?.contains(related)) return
+                    if (related instanceof Element && related.closest('[data-mega-menu]')) return
+                  }
+                  scheduleClose()
+                }}
               >
                 {item.href && !hasPanel ? (
                   <Link
@@ -146,7 +163,12 @@ export function MainNav({ items }: MainNavProps) {
                         navigate(item.href)
                         return
                       }
-                      setOpenId(isOpen ? null : item.id)
+                      if (hasPanel && item.href) {
+                        closeMenu()
+                        navigate(item.href)
+                        return
+                      }
+                      if (!isOpen) setOpenId(item.id)
                     }}
                     className={`inline-flex items-center gap-1 py-2 text-sm font-medium tracking-wide whitespace-nowrap transition-colors hover:text-accent ${
                       isOpen ? 'text-accent' : ''
@@ -179,6 +201,7 @@ export function MainNav({ items }: MainNavProps) {
           scrollEl={scrollRef}
           onClose={scheduleClose}
           onCancelClose={clearCloseTimer}
+          onNavigate={closeMenu}
         />
       )}
     </nav>

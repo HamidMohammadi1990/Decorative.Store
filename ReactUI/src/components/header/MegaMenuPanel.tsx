@@ -3,9 +3,10 @@ import { MegaMenuLink } from '@/components/header/MegaMenuLink'
 
 interface MegaMenuPanelProps {
   group: NavLinkGroup
+  onNavigate?: () => void
 }
 
-export function MegaMenuPanel({ group }: MegaMenuPanelProps) {
+export function MegaMenuPanel({ group, onNavigate }: MegaMenuPanelProps) {
   if (group.columns?.length) {
     const columnCount = group.columns.length
 
@@ -24,7 +25,7 @@ export function MegaMenuPanel({ group }: MegaMenuPanelProps) {
             <ul className="flex flex-col gap-1">
               {col.links.map((link) => (
                 <li key={link.href}>
-                  <MegaMenuLink link={link} />
+                  <MegaMenuLink link={link} onNavigate={onNavigate} />
                 </li>
               ))}
             </ul>
@@ -39,7 +40,7 @@ export function MegaMenuPanel({ group }: MegaMenuPanelProps) {
       <ul className="flex flex-col gap-1 px-8 py-5">
         {group.children.map((link) => (
           <li key={link.href}>
-            <MegaMenuLink link={link} />
+            <MegaMenuLink link={link} onNavigate={onNavigate} />
           </li>
         ))}
       </ul>
