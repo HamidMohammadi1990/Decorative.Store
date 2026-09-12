@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import {
-  DASHBOARD_FLAT_NAV,
   DASHBOARD_NAV_GROUPS,
   DASHBOARD_PROFILE_NAV_ITEM,
   findActiveNavGroup,
@@ -10,11 +9,18 @@ import {
   type DashboardNavGroup,
   type DashboardNavItem,
 } from '@/config/dashboardNav'
+import {
+  DASHBOARD_FILTERABLE_FLAT_NAV,
+  filterDashboardFlatNav,
+  filterDashboardNavGroups,
+  filterDashboardNavSearchResults,
+} from '@/config/dashboardPermissions'
 import { DashboardNavSearchField } from '@/components/dashboard/DashboardNavSearchField'
 import { LogoutIcon } from '@/components/dashboard/DashboardIcons'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
 import { searchDashboardNav, type DashboardNavSearchResult } from '@/extensions/dashboardNavSearch'
 import { useUserStore } from '@/stores/userStore'
+import { usePermissionStore } from '@/stores/permissionStore'
 import { useProfileCompletion } from '@/hooks/useProfileCompletion'
 import { UserAvatar } from '@/components/ui/UserAvatar'
 
@@ -42,6 +48,9 @@ export function DashboardSidebar() {
   const location = useLocation()
   const user = useUserStore((s) => s.user)
   const logout = useUserStore((s) => s.logout)
+  const permissionsLoaded = usePermissionStore((s) => s.loaded)
+  const permissions = usePermissionStore((s) => s.permissions)
+  const mockAllGranted = usePermissionStore((s) => s.mockAllGranted)
   const { progress, rewardClaimed } = useProfileCompletion()
   const [collapsed, setCollapsed] = useState(readSidebarCollapsed)
   const [expandedGroups, setExpandedGroups] = useState(() =>
@@ -49,9 +58,22 @@ export function DashboardSidebar() {
   )
   const [navSearchQuery, setNavSearchQuery] = useState('')
 
+  const hasPermission = usePermissionStore((s) => s.hasPermission)
+
+  const filteredNavGroups = useMemo(
+    () => filterDashboardNavGroups(DASHBOARD_NAV_GROUPS, hasPermission),
+    [hasPermission, mockAllGranted, permissions, permissionsLoaded],
+  )
+
+  const filteredFlatNav = useMemo(
+    () => filterDashboardFlatNav(DASHBOARD_FILTERABLE_FLAT_NAV, hasPermission),
+    [hasPermission, mockAllGranted, permissions, permissionsLoaded],
+  )
+
   const navSearchResults = useMemo(
-    () => searchDashboardNav(navSearchQuery),
-    [navSearchQuery],
+    () =>
+      filterDashboardNavSearchResults(searchDashboardNav(navSearchQuery), hasPermission),
+    [hasPermission, mockAllGranted, navSearchQuery, permissions, permissionsLoaded],
   )
   const isNavSearchActive = navSearchQuery.trim().length > 0
 
@@ -170,7 +192,7 @@ export function DashboardSidebar() {
         >
           {collapsed ? (
             <ul className="space-y-1">
-              {DASHBOARD_FLAT_NAV.map((item) => (
+              {filteredFlatNav.map((item) => (
                 <CollapsedNavItem key={item.path} item={item} />
               ))}
             </ul>
@@ -182,7 +204,7 @@ export function DashboardSidebar() {
             />
           ) : (
             <div className="space-y-1">
-              {DASHBOARD_NAV_GROUPS.map((group) => {
+              {filteredNavGroups.map((group) => {
                 const isExpanded = expandedGroups.has(group.id)
                 const groupActive = group.items.some((item) =>
                   isNavItemActive(location.pathname, item),
@@ -413,9 +435,20 @@ export function DashboardMobileNav() {
     expandedGroupsForPath(location.pathname),
   )
 
+  const hasPermission = usePermissionStore((s) => s.hasPermission)
+  const permissionsLoaded = usePermissionStore((s) => s.loaded)
+  const permissions = usePermissionStore((s) => s.permissions)
+  const mockAllGranted = usePermissionStore((s) => s.mockAllGranted)
+
+  const filteredNavGroups = useMemo(
+    () => filterDashboardNavGroups(DASHBOARD_NAV_GROUPS, hasPermission),
+    [hasPermission, mockAllGranted, permissions, permissionsLoaded],
+  )
+
   const navSearchResults = useMemo(
-    () => searchDashboardNav(navSearchQuery),
-    [navSearchQuery],
+    () =>
+      filterDashboardNavSearchResults(searchDashboardNav(navSearchQuery), hasPermission),
+    [hasPermission, mockAllGranted, navSearchQuery, permissions, permissionsLoaded],
   )
   const isNavSearchActive = navSearchQuery.trim().length > 0
 
@@ -500,7 +533,7 @@ export function DashboardMobileNav() {
                     profilePercent={progress.percent}
                   />
                 </ul>
-                {DASHBOARD_NAV_GROUPS.map((group) => {
+                {filteredNavGroups.map((group) => {
                   const isExpanded = expandedGroups.has(group.id)
                   const groupActive = group.items.some((item) =>
                     isNavItemActive(location.pathname, item),

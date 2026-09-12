@@ -24,8 +24,8 @@ public class UserAddressMapperService : IUserAddressMapperService
             PhoneNumber = model.PhoneNumber,
             RecipientFirstName = model.RecipientFirstName,
             RecipientLastName = model.RecipientLastName,
-            Latitude = model.Latitude,
-            Longitude = model.Longitude,
+            Latitude = model.Lat,
+            Longitude = model.Long,
             IsDefault = model.IsDefault
         };
     }

@@ -113,9 +113,7 @@ export function AddressesPanel() {
   }
 
   const handleAddressHint = (addressLine: string) => {
-    if (!form.address.trim()) {
-      setForm((prev) => ({ ...prev, address: addressLine }))
-    }
+    setForm((prev) => ({ ...prev, address: addressLine }))
   }
 
   const handleSave = async () => {
@@ -165,6 +163,7 @@ export function AddressesPanel() {
             values={form}
             errors={errors}
             coordinates={coordinates}
+            mapSessionKey={editingId ?? 'new'}
             onChange={updateField}
             onCoordinatesChange={handleCoordinatesChange}
             onAddressHint={handleAddressHint}

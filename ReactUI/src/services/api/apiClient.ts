@@ -49,6 +49,16 @@ async function requestApi<T>(
   })
 
   if (
+    response.status === 403 &&
+    accessToken &&
+    accessToken !== 'mock-access-token' &&
+    !path.includes('/account/permissions')
+  ) {
+    const { usePermissionStore } = await import('@/stores/permissionStore')
+    void usePermissionStore.getState().reload()
+  }
+
+  if (
     response.status === 401 &&
     allowRefreshRetry &&
     accessToken &&

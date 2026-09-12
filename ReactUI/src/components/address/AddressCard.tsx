@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { AddressMapThumbnail } from '@/components/address/AddressMapThumbnail'
+import { AddressMapPreview } from '@/components/address/AddressMapPreview'
 import { AddressesIcon, DeleteIcon, EditIcon, StarIcon } from '@/components/dashboard/DashboardIcons'
 import { AdminGridIconButton } from '@/components/dashboard/admin/AdminGridActions'
 import { isValidMapCoordinates } from '@/config/map'
@@ -145,7 +145,7 @@ export function AddressCard({
       </div>
       {mapCoords && !selectable && (
         <div className="border-t border-border px-3 pb-3 pt-2">
-          <AddressMapThumbnail coordinates={mapCoords} />
+          <AddressMapPreview coordinates={mapCoords} />
         </div>
       )}
     </article>

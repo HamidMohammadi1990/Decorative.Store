@@ -6,7 +6,10 @@ export const DEFAULT_MAP_CENTER = {
 
 export const DEFAULT_MAP_ZOOM = 13
 
-/** Override with VITE_MAP_TILE_URL for providers such as Neshan or Map.ir */
+/**
+ * Free OpenStreetMap tiles (no API key).
+ * Only set VITE_MAP_TILE_URL if you use a paid provider (Neshan, Map.ir, …) with your own key.
+ */
 export const MAP_TILE_URL =
   import.meta.env.VITE_MAP_TILE_URL ?? 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
 

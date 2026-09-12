@@ -1,5 +1,7 @@
+import type { ReactNode } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import type { DashboardData } from '@/models/dashboard/dashboard.model'
+import { DashboardAdminGate } from '@/components/dashboard/DashboardAdminGate'
 import { CartPanel } from '@/components/cart/CartPanel'
 import { WalletPanel } from '@/components/dashboard/WalletPanel'
 import { OrdersPanel } from '@/components/dashboard/OrdersPanel'
@@ -48,6 +50,10 @@ function useDashboardContext() {
   return useOutletContext<DashboardData>()
 }
 
+function AdminPage({ permission, children }: { permission: string; children: ReactNode }) {
+  return <DashboardAdminGate permission={permission}>{children}</DashboardAdminGate>
+}
+
 export function DashboardWalletPage() {
   const data = useDashboardContext()
   return <WalletPanel wallet={data.wallet} recentTransactions={data.transactions} />
@@ -75,7 +81,11 @@ export function DashboardProfilePage() {
 }
 
 export function DashboardProfileQuestionsPage() {
-  return <ProfileQuestionsAdminPage />
+  return (
+    <AdminPage permission="GetProfileCompletionConfig">
+      <ProfileQuestionsAdminPage />
+    </AdminPage>
+  )
 }
 
 export function DashboardStoriesPage() {
@@ -83,7 +93,11 @@ export function DashboardStoriesPage() {
 }
 
 export function DashboardUserStoryCommentsPage() {
-  return <UserStoryCommentsPanel />
+  return (
+    <AdminPage permission="ListUserStoryComment">
+      <UserStoryCommentsPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardWishlistPage() {
@@ -99,133 +113,265 @@ export function DashboardCouponsPage() {
 }
 
 export function DashboardCategoriesPage() {
-  return <CategoriesPanel />
+  return (
+    <AdminPage permission="ListCategory">
+      <CategoriesPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardSubCategoriesPage() {
-  return <SubCategoriesPanel />
+  return (
+    <AdminPage permission="ListSubCategory">
+      <SubCategoriesPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardProductsPage() {
-  return <ProductsPanel />
+  return (
+    <AdminPage permission="ListProduct">
+      <ProductsPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardDiscountCodesPage() {
-  return <DiscountCodesPanel />
+  return (
+    <AdminPage permission="ListDiscount">
+      <DiscountCodesPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardProductCreatePage() {
-  return <ProductFormPanel />
+  return (
+    <AdminPage permission="ListProduct">
+      <ProductFormPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardProductEditPage() {
-  return <ProductFormPanel />
+  return (
+    <AdminPage permission="ListProduct">
+      <ProductFormPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardProductImagesPage() {
-  return <ProductImagesPanel />
+  return (
+    <AdminPage permission="ListProductFile">
+      <ProductImagesPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardProductDescriptionsPage() {
-  return <ProductDescriptionsPanel />
+  return (
+    <AdminPage permission="ListProductDescription">
+      <ProductDescriptionsPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardProductCommentsPage() {
-  return <ProductCommentsPanel />
+  return (
+    <AdminPage permission="ListProductComment">
+      <ProductCommentsPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardPropertiesPage() {
-  return <PropertiesPanel />
+  return (
+    <AdminPage permission="ListProperty">
+      <PropertiesPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardPropertyCategoriesPage() {
-  return <PropertyCategoriesPanel />
+  return (
+    <AdminPage permission="ListPropertyCategory">
+      <PropertyCategoriesPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardPropertyItemsPage() {
-  return <PropertyItemsPanel />
+  return (
+    <AdminPage permission="ListPropertyItem">
+      <PropertyItemsPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardProductPropertiesPage() {
-  return <ProductPropertiesPanel />
+  return (
+    <AdminPage permission="ListProductProperty">
+      <ProductPropertiesPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardBlogPostCategoriesPage() {
-  return <BlogPostCategoriesPanel />
+  return (
+    <AdminPage permission="ListBlogPostCategory">
+      <BlogPostCategoriesPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardBlogTagsPage() {
-  return <BlogTagsPanel />
+  return (
+    <AdminPage permission="ListTag">
+      <BlogTagsPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardBlogPostsPage() {
-  return <BlogPostsPanel />
+  return (
+    <AdminPage permission="ListBlogPost">
+      <BlogPostsPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardBlogPostCreatePage() {
-  return <BlogPostFormPanel />
+  return (
+    <AdminPage permission="ListBlogPost">
+      <BlogPostFormPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardBlogPostEditPage() {
-  return <BlogPostFormPanel />
+  return (
+    <AdminPage permission="ListBlogPost">
+      <BlogPostFormPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardBlogPostTagsPage() {
-  return <BlogPostTagsPanel />
+  return (
+    <AdminPage permission="ListBlogPostTag">
+      <BlogPostTagsPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardBlogPostCommentsPage() {
-  return <BlogPostCommentsPanel />
+  return (
+    <AdminPage permission="ListBlogPostComment">
+      <BlogPostCommentsPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardCmsPagesPage() {
-  return <CmsPagesPanel />
+  return (
+    <AdminPage permission="ListPage">
+      <CmsPagesPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardCmsSectionTypesPage() {
-  return <CmsSectionTypesPanel />
+  return (
+    <AdminPage permission="ListSectionType">
+      <CmsSectionTypesPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardCmsSectionsPage() {
-  return <CmsSectionsPanel />
+  return (
+    <AdminPage permission="ListSection">
+      <CmsSectionsPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardCmsSectionItemsPage() {
-  return <CmsSectionItemsPanel />
+  return (
+    <AdminPage permission="ListSectionItem">
+      <CmsSectionItemsPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardCmsPageSectionsPage() {
-  return <CmsPageSectionsPanel />
+  return (
+    <AdminPage permission="ListPageSection">
+      <CmsPageSectionsPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardMarketingPromosPage() {
-  return <MarketingPromosPanel />
+  return (
+    <AdminPage permission="ListMarketingPromo">
+      <MarketingPromosPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardNewsletterSubscribersPage() {
-  return <NewsletterSubscribersPanel />
+  return (
+    <AdminPage permission="ListMarketingPromo">
+      <NewsletterSubscribersPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardProfileCompletionAnswersPage() {
-  return <ProfileCompletionAnswersPanel />
+  return (
+    <AdminPage permission="ListProfileCompletionUserState">
+      <ProfileCompletionAnswersPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardAssistantFaqPage() {
-  return <AssistantFaqPanel />
+  return (
+    <AdminPage permission="ListAssistantFaq">
+      <AssistantFaqPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardSiteGuidePage() {
-  return <SiteManagementGuidePanel />
+  return (
+    <AdminPage permission="ListPage">
+      <SiteManagementGuidePanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardRoomTypesPage() {
-  return <RoomTypesPanel />
+  return (
+    <AdminPage permission="ListRoomType">
+      <RoomTypesPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardUsersPage() {
-  return <UsersPanel />
+  return (
+    <AdminPage permission="ListUser">
+      <UsersPanel />
+    </AdminPage>
+  )
 }
 
 export function DashboardRolesPage() {
-  return <RolesPanel />
+  return (
+    <AdminPage permission="ListRole">
+      <RolesPanel />
+    </AdminPage>
+  )
 }

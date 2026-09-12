@@ -3076,11 +3076,11 @@ namespace Store.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
-                    b.Property<decimal?>("Latitude")
+                    b.Property<decimal?>("Lat")
                         .HasPrecision(10, 7)
                         .HasColumnType("decimal(10,7)");
 
-                    b.Property<decimal?>("Longitude")
+                    b.Property<decimal?>("Long")
                         .HasPrecision(10, 7)
                         .HasColumnType("decimal(10,7)");
 

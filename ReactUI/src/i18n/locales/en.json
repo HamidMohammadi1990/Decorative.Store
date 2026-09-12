@@ -735,7 +735,10 @@
     "mapHint": "Click the map or drag the pin to set the exact delivery point.",
     "mapLocateMe": "Use my location",
     "mapLocating": "Locating…",
+    "mapLoading": "Loading map…",
+    "mapLoadFailed": "Map could not be loaded. Check your connection and try again.",
     "mapPreviewAlt": "Map preview of saved address location",
+    "mapPreviewFailed": "Map preview could not be loaded. Coordinates are saved below.",
     "validation": {
       "required": "This field is required",
       "mapRequired": "Please select a location on the map"
@@ -798,6 +801,10 @@
     "navSearchPlaceholder": "Search menu (English or Persian)…",
     "navSearchClear": "Clear search",
     "navSearchNoResults": "No menu items match your search.",
+    "accessDenied": {
+      "title": "Access denied",
+      "message": "You do not have permission to view this section. Contact an administrator if you need access."
+    },
     "navGroups": {
       "account": "My account",
       "users": "Users & access",

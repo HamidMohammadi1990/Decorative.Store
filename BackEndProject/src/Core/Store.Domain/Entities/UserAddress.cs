@@ -15,8 +15,8 @@ public class UserAddress : BaseEntity
     public string? Apartment { get; private set; }
     public string? PostalCode { get; private set; }
     public string PhoneNumber { get; private set; } = default!;
-    public decimal? Latitude { get; private set; }
-    public decimal? Longitude { get; private set; }
+    public decimal? Lat { get; private set; }
+    public decimal? Long { get; private set; }
 
 
     public User User { get; private set; } = default!;
@@ -38,8 +38,8 @@ public class UserAddress : BaseEntity
             RecipientFirstName = recipientFirstName,
             RecipientLastName = recipientLastName,
             PhoneNumber = phoneNumber,
-            Latitude = latitude,
-            Longitude = longitude,
+            Lat = latitude,
+            Long = longitude,
             IsDefault = isDefault
         };
 
@@ -57,8 +57,8 @@ public class UserAddress : BaseEntity
         PhoneNumber = phoneNumber;
         RecipientLastName = recipientLastName;
         RecipientFirstName = recipientFirstName;
-        Latitude = latitude;
-        Longitude = longitude;
+        Lat = latitude;
+        Long = longitude;
     }
 
     public void SetDefault(bool isDefault) => IsDefault = isDefault;

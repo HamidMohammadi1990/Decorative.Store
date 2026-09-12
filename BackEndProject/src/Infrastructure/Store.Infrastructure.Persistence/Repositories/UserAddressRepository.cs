@@ -47,8 +47,8 @@ public class UserAddressRepository
                 PhoneNumber = x.address.PhoneNumber,
                 RecipientLastName = x.address.RecipientLastName,
                 RecipientFirstName = x.address.RecipientFirstName,
-                Latitude = x.address.Latitude,
-                Longitude = x.address.Longitude,
+                Latitude = x.address.Lat,
+                Longitude = x.address.Long,
                 IsDefault = x.address.IsDefault
             })
             .AsNoTracking()
@@ -89,8 +89,8 @@ public class UserAddressRepository
                 PhoneNumber = x.address.PhoneNumber,
                 RecipientLastName = x.address.RecipientLastName,
                 RecipientFirstName = x.address.RecipientFirstName,
-                Latitude = x.address.Latitude,
-                Longitude = x.address.Longitude,
+                Latitude = x.address.Lat,
+                Longitude = x.address.Long,
                 IsDefault = x.address.IsDefault
             })
             .AsNoTracking()

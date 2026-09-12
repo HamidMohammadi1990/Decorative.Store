@@ -299,4 +299,15 @@
   .room-layout-item {
     transition: box-shadow 0.2s ease;
   }
+
+  .leaflet-container {
+    height: 100%;
+    width: 100%;
+    z-index: 0;
+    font: inherit;
+  }
+
+  .leaflet-control-attribution {
+    font-size: 9px;
+  }
 }

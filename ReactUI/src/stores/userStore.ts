@@ -7,6 +7,7 @@ import {
   mapCurrentUserToDashboardUser,
 } from '@/services/authService'
 import { useCartStore } from '@/stores/cartStore'
+import { usePermissionStore } from '@/stores/permissionStore'
 
 interface LoginInput {
   userName: string
@@ -68,6 +69,7 @@ export const useUserStore = create<UserState>()(
           tokenExpiresAt: null,
           authError: null,
         })
+        void usePermissionStore.getState().loadPermissions('mock-access-token')
       },
 
       login: async (input) => {
@@ -81,6 +83,7 @@ export const useUserStore = create<UserState>()(
             tokenExpiresAt: null,
             authLoading: false,
           })
+          void usePermissionStore.getState().loadPermissions('mock-access-token')
           return
         }
 
@@ -109,6 +112,7 @@ export const useUserStore = create<UserState>()(
             authLoading: false,
             authError: null,
           })
+          void usePermissionStore.getState().loadPermissions(tokens.accessToken)
         } catch {
           set({
             authLoading: false,
@@ -130,6 +134,7 @@ export const useUserStore = create<UserState>()(
         }
 
         useCartStore.getState().clearCart()
+        usePermissionStore.getState().clear()
         set({
           user: null,
           accessToken: null,
@@ -144,6 +149,7 @@ export const useUserStore = create<UserState>()(
         if (!accessToken) return false
 
         if (accessToken === 'mock-access-token') {
+          void usePermissionStore.getState().ensureLoaded(accessToken)
           return user !== null
         }
 
@@ -160,6 +166,8 @@ export const useUserStore = create<UserState>()(
         } catch {
           // Keep persisted session when /me is temporarily unavailable.
         }
+
+        void usePermissionStore.getState().ensureLoaded(get().accessToken ?? activeToken)
 
         return get().accessToken !== null
       },
@@ -198,6 +206,7 @@ export const useUserStore = create<UserState>()(
             return refreshed.accessToken
           } catch {
             useCartStore.getState().clearCart()
+            usePermissionStore.getState().clear()
             set({
               user: null,
               accessToken: null,

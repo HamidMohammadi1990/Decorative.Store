@@ -75,6 +75,11 @@ public class AccountController
     public async Task<ApiResult<GetUserResponse?>> GetCurrentUser()
         => await mediator.Send(new GetCurrentUserRequest());
 
+    [Authorize]
+    [HttpGet("permissions")]
+    public async Task<ApiResult<GetMyPermissionsResponse>> GetMyPermissions()
+        => await mediator.Send(new GetMyPermissionsRequest());
+
     [Authorize]    
     [HttpPost("is-authenticated")]
     public ApiResult<bool> IsAuthenticated()

@@ -109,7 +109,9 @@ public class ContentPolicyRepository
         return Context.ContentPolicy
             .AsNoTracking()
             .Where(x => x.IsActive && x.EntityType == entityType)
-            .Where(x => ContentPolicyQueryActionExtensions.Matches(x.QueryAction, queryAction));
+            .Where(x =>
+                x.QueryAction == ContentPolicyQueryAction.All ||
+                x.QueryAction == queryAction);
     }
 
     private static ContentPolicyWithRulesDto MapPolicy(ContentPolicy x)

@@ -8,6 +8,7 @@ interface AddressFormFieldsProps {
   values: AddressFormValues
   errors: Partial<Record<AddressFormErrorField, string>>
   coordinates: MapCoordinates | null
+  mapSessionKey?: string
   onChange: (field: AddressFormField, value: string) => void
   onCoordinatesChange: (coords: MapCoordinates) => void
   onAddressHint?: (addressLine: string) => void
@@ -20,6 +21,7 @@ export function AddressFormFields({
   values,
   errors,
   coordinates,
+  mapSessionKey = 'new',
   onChange,
   onCoordinatesChange,
   onAddressHint,
@@ -32,6 +34,7 @@ export function AddressFormFields({
   return (
     <div className="space-y-4">
       <AddressMapPicker
+        sessionKey={mapSessionKey}
         value={coordinates}
         onChange={onCoordinatesChange}
         onAddressHint={onAddressHint}

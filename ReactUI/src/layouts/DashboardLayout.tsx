@@ -17,6 +17,7 @@ import { useWishlistSync } from '@/hooks/useWishlistSync'
 import { useAddressSync } from '@/hooks/useAddressSync'
 import { useAuthModalStore } from '@/stores/authModalStore'
 import { useUserStore } from '@/stores/userStore'
+import { usePermissionStore } from '@/stores/permissionStore'
 import { RouteFallback } from '@/components/ui/RouteFallback'
 import { UserAvatar } from '@/components/ui/UserAvatar'
 
@@ -36,7 +37,9 @@ export function DashboardLayout() {
   const pageTitle = useDashboardPageTitle()
   const { locale } = useLocaleSettings()
   const user = useUserStore((s) => s.user)
+  const accessToken = useUserStore((s) => s.accessToken)
   const logout = useUserStore((s) => s.logout)
+  const ensurePermissionsLoaded = usePermissionStore((s) => s.ensureLoaded)
   const openModal = useAuthModalStore((s) => s.openModal)
   const { data, loading, error } = useDashboard()
   useWishlistSync()
@@ -52,6 +55,12 @@ export function DashboardLayout() {
       openModal({ mode: 'signin' })
     }
   }, [openModal, user])
+
+  useEffect(() => {
+    if (user && accessToken) {
+      void ensurePermissionsLoaded(accessToken)
+    }
+  }, [accessToken, ensurePermissionsLoaded, user])
 
   const handleLogout = () => {
     void logout().then(() => navigate('/account'))
