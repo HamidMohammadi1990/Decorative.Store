@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none" role="img" aria-label="Diba Gallery">
+  <defs>
+    <linearGradient id="bg" x1="64" y1="48" x2="448" y2="464" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#c4a06a"/>
+      <stop offset="0.55" stop-color="#9a7448"/>
+      <stop offset="1" stop-color="#6f5233"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="128" y1="96" x2="320" y2="280" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffaf5" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#fffaf5" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="112" fill="url(#shine)"/>
+  <g fill="#fffaf5">
+    <path d="M256 118c-58 0-105 47-105 105v24c0 12 10 22 22 22h166c12 0 22-10 22-22v-24c0-58-47-105-105-105Z" opacity="0.92"/>
+    <path d="M149 291v73c0 14 11 25 25 25h164c14 0 25-11 25-25v-73H149Z" opacity="0.96"/>
+    <path d="M214 334h84v55h-84v-55Z" fill="#826038"/>
+    <circle cx="292" cy="361" r="8" fill="#fffaf5"/>
+    <path d="M188 176h136v18c0 8-6 14-14 14H202c-8 0-14-6-14-14v-18Z" fill="#826038" opacity="0.85"/>
+  </g>
+  <path d="M168 388h176" stroke="#fffaf5" stroke-width="10" stroke-linecap="round" opacity="0.55"/>
+</svg>

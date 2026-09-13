@@ -2479,5 +2479,11 @@
       "sustainability": "Sustainability",
       "seasonal": "Seasonal"
     }
+  },
+  "pwa": {
+    "updateAvailable": "A new version of Diba Gallery is ready.",
+    "updateNow": "Refresh",
+    "updateLater": "Later",
+    "offlineReady": "App ready to browse offline."
   }
 }

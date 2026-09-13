@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "dev:ssr": "node server/ssr.mjs",
+    "generate:pwa-icons": "node scripts/generatePwaIcons.mjs",
+    "prebuild": "node scripts/generatePwaIcons.mjs",
     "build": "tsc -b && vite build",
+    "prebuild:ssr": "node scripts/generatePwaIcons.mjs",
     "build:ssr": "tsc -b && vite build && node scripts/copySsrTemplate.mjs && vite build --ssr src/entry-server.tsx --outDir dist/server",
     "build:seo": "npm run build:ssr && node scripts/prerender.mjs",
     "build:analyze": "tsc -b && vite build --mode analyze",
@@ -41,8 +44,10 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "express": "^4.21.2",
     "globals": "^17.6.0",
+    "sharp": "^0.34.5",
     "sirv": "^3.0.2",
     "tailwindcss": "^4.3.0",
+    "vite-plugin-pwa": "^1.2.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12"

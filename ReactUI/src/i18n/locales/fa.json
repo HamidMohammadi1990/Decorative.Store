@@ -2479,5 +2479,11 @@
       "sustainability": "پایداری",
       "seasonal": "فصلی"
     }
+  },
+  "pwa": {
+    "updateAvailable": "نسخه جدید دیبا گالری آماده است.",
+    "updateNow": "به‌روزرسانی",
+    "updateLater": "بعداً",
+    "offlineReady": "اپ برای مرور آفلاین آماده است."
   }
 }

@@ -1,4 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="4" fill="#1a1a1a"/>
-  <text x="16" y="21" text-anchor="middle" fill="white" font-family="system-ui" font-size="10" font-weight="600">WE</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none" role="img" aria-label="Diba Gallery">
+  <defs>
+    <linearGradient id="g" x1="4" y1="3" x2="28" y2="29" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#c4a06a"/>
+      <stop offset="1" stop-color="#826038"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="7" fill="url(#g)"/>
+  <g fill="#fffaf5">
+    <path d="M16 8.5c-3.6 0-6.5 2.9-6.5 6.5v1.5c0 .75.6 1.35 1.35 1.35h10.3c.75 0 1.35-.6 1.35-1.35V15c0-3.6-2.9-6.5-6.5-6.5Z"/>
+    <path d="M9.5 18.2v4.55c0 .85.7 1.55 1.55 1.55h10.9c.85 0 1.55-.7 1.55-1.55V18.2H9.5Z"/>
+    <path d="M13.4 20.9h5.2v3.4h-5.2v-3.4Z" fill="#826038"/>
+  </g>
 </svg>
