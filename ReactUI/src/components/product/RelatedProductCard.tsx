@@ -16,7 +16,7 @@ export function RelatedProductCard({ product }: RelatedProductCardProps) {
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-border/55 bg-surface transition-all hover:border-warm/25 hover:shadow-sm">
-      <Link to={productPath} className="relative block aspect-square overflow-hidden bg-surface-muted" prefetch="intent">
+      <Link to={productPath} className="relative block aspect-square overflow-hidden bg-surface-muted" prefetch="none">
         <LocalImage
           image={product.image}
           sizes="160px"

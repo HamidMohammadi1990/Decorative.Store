@@ -40,7 +40,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-border/60 bg-surface shadow-sm transition-all duration-300 hover:-translate-y-px hover:border-warm/25 hover:shadow-md">
       <div className="relative aspect-[5/6] overflow-hidden bg-surface-muted">
-        <Link to={productPath} className="block size-full" prefetch="intent">
+        <Link to={productPath} className="block size-full" prefetch="none">
           <LocalImage
             image={product.image}
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 280px"

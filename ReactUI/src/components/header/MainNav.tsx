@@ -8,8 +8,6 @@ import { ChevronIcon } from '@/components/ui/ChevronIcon'
 import { JournalIcon } from '@/components/ui/NavCategoryIcons'
 import { ScrollArrowButton } from '@/components/ui/ScrollArrowButton'
 import { useHorizontalScrollArrows } from '@/hooks/useHorizontalScrollArrows'
-import { prefetchCatalogRoute } from '@/extensions/prefetchCatalogRoute'
-
 interface MainNavProps {
   items: NavLinkGroup[]
 }
@@ -135,7 +133,6 @@ export function MainNav({ items }: MainNavProps) {
                 }}
                 className="relative shrink-0"
                 onMouseEnter={() => {
-                  if (item.href) prefetchCatalogRoute(item.href)
                   if (hasPanel) openItem(item.id)
                 }}
                 onMouseLeave={(e) => {
@@ -151,7 +148,7 @@ export function MainNav({ items }: MainNavProps) {
                 {item.href ? (
                   <Link
                     to={item.href}
-                    onFocus={() => prefetchCatalogRoute(item.href!)}
+                    prefetch="none"
                     onClick={() => closeMenu()}
                     className={`inline-flex items-center gap-1 py-2 text-sm font-medium tracking-wide whitespace-nowrap transition-colors hover:text-accent ${
                       isOpen ? 'text-accent' : ''

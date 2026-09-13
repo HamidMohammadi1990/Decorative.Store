@@ -55,7 +55,7 @@ export function ButtonLink({
   }
 
   return (
-    <Link to={link.href} className={classes} prefetch="intent">
+    <Link to={link.href} className={classes} prefetch="none">
       {link.label}
     </Link>
   )

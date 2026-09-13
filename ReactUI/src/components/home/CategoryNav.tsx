@@ -68,6 +68,7 @@ export function CategoryNav({ data }: CategoryNavProps) {
                   <Link
                     key={item.href}
                     to={item.href}
+                    prefetch="none"
                     draggable={false}
                     className="shrink-0 rounded-full bg-surface px-5 py-2.5 text-sm font-medium whitespace-nowrap text-text shadow-sm ring-1 ring-warm-muted/70 transition-all duration-200 hover:-translate-y-0.5 hover:bg-warm hover:text-warm-text hover:ring-warm hover:shadow-none active:translate-y-0"
                   >

@@ -5,7 +5,6 @@ import type { NavLinkGroup } from '@/models/shared/link.model'
 import { MegaMenuPanel } from '@/components/header/MegaMenuPanel'
 import { navShopAllLinkClass } from '@/components/header/MegaMenuLink'
 import { Portal } from '@/components/ui/Portal'
-import { prefetchCatalogRoute } from '@/extensions/prefetchCatalogRoute'
 import { positionMegaMenuDropdown } from '@/extensions/positionMegaMenu'
 
 interface MegaMenuDropdownProps {
@@ -80,9 +79,8 @@ export function MegaMenuDropdown({
               <Link
                 to={group.href}
                 className={`group ${navShopAllLinkClass}`}
+                prefetch="none"
                 onClick={onNavigate}
-                onMouseEnter={() => prefetchCatalogRoute(group.href!)}
-                onFocus={() => prefetchCatalogRoute(group.href!)}
               >
                 {t('common.shopAll', { category: group.label })}
                 <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5">
