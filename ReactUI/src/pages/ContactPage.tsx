@@ -24,7 +24,7 @@ export function ContactPage() {
   useShopPageMeta({
     title: content?.metaTitle?.trim() || content?.title,
     description: content?.metaDescription ?? undefined,
-    image: content ? resolveOgImageSrc(content.hero.image.src) : undefined,
+    image: content ? resolveOgImageSrc(undefined) : undefined,
     imageAlt: content?.hero.title ?? content?.title,
     path: '/contact',
     active: Boolean(content),

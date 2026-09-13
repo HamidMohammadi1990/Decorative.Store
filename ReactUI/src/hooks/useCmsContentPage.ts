@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import type { CmsContentPageContent } from '@/models/content/cmsContentPage.model'
 import { cmsContentPageService } from '@/services/cmsContentPageService'
 import { useCmsContentLoaderData } from '@/hooks/useCmsContentLoaderData'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 
 export function useCmsContentPage(slug: string) {
-  const locale = useSettingsStore((s) => s.locale)
   const loaderData = useCmsContentLoaderData(slug)
+  const locale = useStorefrontLocale(loaderData?.locale)
   const loaderFresh = Boolean(
     loaderData && loaderData.locale === locale && loaderData.slug === slug && loaderData.content,
   )

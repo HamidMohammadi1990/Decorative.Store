@@ -4,7 +4,7 @@ import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import { catalogService } from '@/services/catalogService'
 import type { ComparePageLoaderData } from '@/routes/loaders/types'
 import { useCompareStore } from '@/stores/compareStore'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 
 interface UseCompareProductsResult {
   products: ProductDetail[]
@@ -30,9 +30,9 @@ function isLoaderFresh(
 }
 
 export function useCompareProducts(): UseCompareProductsResult {
-  const locale = useSettingsStore((s) => s.locale)
   const slugs = useCompareStore((s) => s.slugs)
   const loaderData = useRouteLoaderData('compare') as ComparePageLoaderData | undefined
+  const locale = useStorefrontLocale(loaderData?.locale)
   const loaderFresh = isLoaderFresh(loaderData, locale, slugs)
 
   const [products, setProducts] = useState<ProductDetail[]>(() =>

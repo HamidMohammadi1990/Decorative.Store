@@ -86,8 +86,20 @@ export function HomePageProvider({ children }: { children: ReactNode }) {
       return
     }
 
+    // Reuse SSR loader payload when locale/key match but homePage was briefly unavailable.
+    if (
+      loaderData?.homePage &&
+      loaderData.locale === locale &&
+      loaderData.fetchKey === fetchKey
+    ) {
+      setData(loaderData.homePage)
+      setError(loaderData.error ?? null)
+      setLoading(false)
+      return
+    }
+
     void load()
-  }, [load, loaderFresh, loaderData])
+  }, [fetchKey, load, loaderFresh, loaderData, locale])
 
   const reload = useCallback(() => {
     void load(true)

@@ -3,6 +3,7 @@ import path from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { loadEnv } from 'vite'
 import { PRERENDER_ROUTES } from './prerender-routes.mjs'
+import { configureSsrTlsForLocalApi } from './configureSsrTls.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
@@ -13,13 +14,22 @@ if (!process.env.SSR_API_TARGET && env.SSR_API_TARGET) {
   process.env.SSR_API_TARGET = env.SSR_API_TARGET
 }
 
+configureSsrTlsForLocalApi(process.env.SSR_API_TARGET)
+
 const siteOrigin = (env.VITE_SITE_URL || process.env.VITE_SITE_URL || 'http://127.0.0.1:5173').replace(
   /\/+$/,
   '',
 )
 
 async function readTemplate() {
-  return fs.readFile(path.resolve(root, 'dist/client/index.html'), 'utf-8')
+  const ssrTemplatePath = path.resolve(root, 'dist/client/index.ssr.html')
+  const clientIndexPath = path.resolve(root, 'dist/client/index.html')
+
+  try {
+    return await fs.readFile(ssrTemplatePath, 'utf-8')
+  } catch {
+    return fs.readFile(clientIndexPath, 'utf-8')
+  }
 }
 
 function outputPathForRoute(route) {
@@ -35,16 +45,63 @@ function applyHtmlDocumentAttrs(template, locale) {
   return template.replace(/<html\b[^>]*>/i, `<html lang="${lang}" dir="${dir}">`)
 }
 
+function buildHydrationScript(result) {
+  const parts = []
+  if (result.locale) {
+    parts.push(`window.__SSR_LOCALE__=${JSON.stringify(result.locale)}`)
+  }
+  if (result.lazyRouteIds?.length) {
+    parts.push(
+      `window.__SSR_LAZY_ROUTES__=${JSON.stringify(result.lazyRouteIds).replace(/</g, '\\u003c')}`,
+    )
+  }
+  if (result.hydrationData) {
+    parts.push(
+      `window.__ROUTER_HYDRATION__=${JSON.stringify(result.hydrationData).replace(/</g, '\\u003c')}`,
+    )
+  }
+  return parts.length ? `<script>${parts.join(';')}</script>` : ''
+}
+
+function injectRenderedHtml(template, { html = '', headHtml = '', hydrationScript = '' }) {
+  let output = template
+
+  if (output.includes('<!--ssr-outlet-->')) {
+    output = output.replace('<!--ssr-outlet-->', html)
+  } else {
+    output = output.replace(
+      /(<div id="root"[^>]*>)([\s\S]*?)(<\/div>)/i,
+      `$1${html}$3`,
+    )
+  }
+
+  if (output.includes('<!--ssr-head-->')) {
+    output = output.replace('<!--ssr-head-->', headHtml)
+  } else if (headHtml) {
+    output = output.replace('</head>', `${headHtml}\n</head>`)
+  }
+
+  if (output.includes('<!--ssr-data-->')) {
+    output = output.replace('<!--ssr-data-->', hydrationScript)
+  } else if (hydrationScript) {
+    output = output.replace(
+      /(<script type="module"[^>]*><\/script>)/i,
+      `${hydrationScript}\n$1`,
+    )
+  }
+
+  return output
+}
+
 function buildHtml(template, result) {
-  const hydrationScript = result.hydrationData
-    ? `<script>window.__ROUTER_HYDRATION__=${JSON.stringify(result.hydrationData).replace(/</g, '\\u003c')}</script>`
-    : ''
+  const hydrationScript = buildHydrationScript(result)
 
   return applyHtmlDocumentAttrs(
-    template
-      .replace('<!--ssr-outlet-->', result.html ?? '')
-      .replace('<!--ssr-head-->', result.headHtml ?? '')
-      .replace('<!--ssr-data-->', hydrationScript),
+    injectRenderedHtml(template, {
+      html: result.html ?? '',
+      headHtml: result.headHtml ?? '',
+      hydrationScript,
+    }),
     result.locale,
   )
 }

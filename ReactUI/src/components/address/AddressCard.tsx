@@ -128,8 +128,8 @@ export function AddressCard({
   }
 
   const mapCoords = isValidMapCoordinates({
-    latitude: address.latitude,
-    longitude: address.longitude,
+    latitude: address.latitude ?? undefined,
+    longitude: address.longitude ?? undefined,
   }) ?
     { latitude: address.latitude!, longitude: address.longitude! }
   : null

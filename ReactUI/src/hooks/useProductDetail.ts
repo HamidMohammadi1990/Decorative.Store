@@ -4,7 +4,7 @@ import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import type { ProductSummary } from '@/models/catalog/product.model'
 import { catalogService } from '@/services/catalogService'
 import type { ProductDetailLoaderData } from '@/routes/loaders/types'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 
 interface UseProductDetailResult {
   product: ProductDetail | null
@@ -23,8 +23,8 @@ function isLoaderFresh(
 
 export function useProductDetail(): UseProductDetailResult {
   const { slug } = useParams<{ slug: string }>()
-  const locale = useSettingsStore((s) => s.locale)
   const loaderData = useRouteLoaderData('product-detail') as ProductDetailLoaderData | undefined
+  const locale = useStorefrontLocale(loaderData?.locale)
   const loaderFresh = isLoaderFresh(loaderData, slug, locale)
 
   const [product, setProduct] = useState<ProductDetail | null>(() =>

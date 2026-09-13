@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/config/api'
+import { resolveApiBaseUrl } from '@/config/api'
 import type { Locale } from '@/models/shared/locale.model'
 import { ApiError } from '@/services/api/apiTypes'
 import { normalizeApiEnvelope } from '@/services/api/apiNormalize'
@@ -42,7 +42,7 @@ async function requestApi<T>(
     headers['Content-Type'] = 'application/json'
   }
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await fetch(`${resolveApiBaseUrl()}${path}`, {
     method,
     headers,
     body: body !== undefined ? JSON.stringify(body) : undefined,

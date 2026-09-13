@@ -7,7 +7,7 @@
     "dev": "vite",
     "dev:ssr": "node server/ssr.mjs",
     "build": "tsc -b && vite build",
-    "build:ssr": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist/server",
+    "build:ssr": "tsc -b && vite build && node scripts/copySsrTemplate.mjs && vite build --ssr src/entry-server.tsx --outDir dist/server",
     "build:seo": "npm run build:ssr && node scripts/prerender.mjs",
     "build:analyze": "tsc -b && vite build --mode analyze",
     "lint": "eslint .",

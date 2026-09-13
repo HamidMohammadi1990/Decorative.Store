@@ -3,7 +3,7 @@ import { useParams, useRouteLoaderData } from 'react-router-dom'
 import type { BlogPostDetail, BlogPostSummary } from '@/models/blog/blog.model'
 import { blogService } from '@/services/blogService'
 import type { BlogDetailLoaderData } from '@/routes/loaders/types'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 
 function isLoaderFresh(
   loaderData: BlogDetailLoaderData | undefined,
@@ -15,8 +15,8 @@ function isLoaderFresh(
 
 export function useBlogPost() {
   const { slug } = useParams<{ slug: string }>()
-  const locale = useSettingsStore((s) => s.locale)
   const loaderData = useRouteLoaderData('blog-detail') as BlogDetailLoaderData | undefined
+  const locale = useStorefrontLocale(loaderData?.locale)
   const loaderFresh = isLoaderFresh(loaderData, slug, locale)
 
   const [post, setPost] = useState<BlogPostDetail | null>(() =>

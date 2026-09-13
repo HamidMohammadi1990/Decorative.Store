@@ -3,7 +3,7 @@ import { useLocation, useRouteLoaderData } from 'react-router-dom'
 import type { ProductListingResult } from '@/models/catalog/listing.model'
 import { getCatalogListingCached } from '@/services/catalogListingCache'
 import type { ProductListingLoaderData } from '@/routes/loaders/types'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 
 interface UseProductListingResult {
   data: ProductListingResult | null
@@ -28,9 +28,9 @@ function isLoaderFresh(
 }
 
 export function useProductListing(): UseProductListingResult {
-  const locale = useSettingsStore((s) => s.locale)
   const location = useLocation()
   const loaderData = useRouteLoaderData('product-listing') as ProductListingLoaderData | undefined
+  const locale = useStorefrontLocale(loaderData?.locale)
   const requestKey = `${locale}|${location.pathname}|${location.search}`
   const loaderFresh = isLoaderFresh(
     loaderData,

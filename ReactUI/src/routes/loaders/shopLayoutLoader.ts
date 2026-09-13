@@ -19,22 +19,31 @@ export async function shopLayoutLoader({
   const fetchKey = buildHomePageFetchKey(options)
   const blogNavEnabled = isBlogRoute(pathname)
 
-  try {
-    const [homePage, stories, blogNavCategories] = await Promise.all([
-      homeService.getPage(locale, options),
-      storiesService.getStories(locale, null),
-      blogNavEnabled ? blogService.getNavCategories(locale) : Promise.resolve([]),
-    ])
+  const [homeResult, storiesResult, blogNavResult] = await Promise.allSettled([
+    homeService.getPage(locale, options),
+    storiesService.getStories(locale, null),
+    blogNavEnabled ? blogService.getNavCategories(locale) : Promise.resolve([]),
+  ])
 
-    return { locale, fetchKey, homePage, stories, blogNavCategories }
-  } catch {
-    return {
-      locale,
-      fetchKey,
-      homePage: null,
-      stories: [],
-      blogNavCategories: [],
-      error: 'failed',
+  const homePage = homeResult.status === 'fulfilled' ? homeResult.value : null
+  const stories = storiesResult.status === 'fulfilled' ? storiesResult.value : []
+  const blogNavCategories = blogNavResult.status === 'fulfilled' ? blogNavResult.value : []
+
+  if (import.meta.env.SSR) {
+    if (homeResult.status === 'rejected') {
+      console.error('[shopLayoutLoader] homePage failed:', homeResult.reason)
     }
+    if (storiesResult.status === 'rejected') {
+      console.error('[shopLayoutLoader] stories failed:', storiesResult.reason)
+    }
+  }
+
+  return {
+    locale,
+    fetchKey,
+    homePage,
+    stories,
+    blogNavCategories,
+    error: homePage ? undefined : 'failed',
   }
 }

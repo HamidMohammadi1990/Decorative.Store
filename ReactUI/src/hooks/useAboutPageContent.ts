@@ -3,11 +3,11 @@ import { useRouteLoaderData } from 'react-router-dom'
 import type { AboutPageContent } from '@/models/about/aboutPage.model'
 import { aboutPageService } from '@/services/aboutPageService'
 import type { AboutPageLoaderData } from '@/routes/loaders/types'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 
 export function useAboutPageContent() {
-  const locale = useSettingsStore((s) => s.locale)
   const loaderData = useRouteLoaderData('about') as AboutPageLoaderData | undefined
+  const locale = useStorefrontLocale(loaderData?.locale)
   const loaderFresh = Boolean(loaderData && loaderData.locale === locale && loaderData.content)
 
   const [content, setContent] = useState<AboutPageContent | null>(() =>

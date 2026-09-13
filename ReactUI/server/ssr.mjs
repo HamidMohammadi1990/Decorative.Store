@@ -5,6 +5,7 @@ import express from 'express'
 import compression from 'compression'
 import sirv from 'sirv'
 import { createServer as createViteServer, loadEnv } from 'vite'
+import { configureSsrTlsForLocalApi } from '../scripts/configureSsrTls.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
@@ -16,12 +17,43 @@ if (!process.env.SSR_API_TARGET && env.SSR_API_TARGET) {
 const isProd = process.env.NODE_ENV === 'production'
 const port = Number(process.env.PORT) || 5173
 const host = process.env.HOST ?? '127.0.0.1'
-const apiTarget = process.env.SSR_API_TARGET ?? 'https://localhost:55274'
+const apiTarget = process.env.SSR_API_TARGET ?? 'https://localhost:60927'
+configureSsrTlsForLocalApi(apiTarget)
 
 function applyHtmlDocumentAttrs(template, locale) {
   const lang = locale === 'fa' ? 'fa' : 'en'
   const dir = locale === 'fa' ? 'rtl' : 'ltr'
   return template.replace(/<html\b[^>]*>/i, `<html lang="${lang}" dir="${dir}">`)
+}
+
+function injectRenderedHtml(template, { html = '', headHtml = '', hydrationScript = '' }) {
+  let output = template
+
+  if (output.includes('<!--ssr-outlet-->')) {
+    output = output.replace('<!--ssr-outlet-->', html)
+  } else {
+    output = output.replace(
+      /(<div id="root"[^>]*>)([\s\S]*?)(<\/div>)/i,
+      `$1${html}$3`,
+    )
+  }
+
+  if (output.includes('<!--ssr-head-->')) {
+    output = output.replace('<!--ssr-head-->', headHtml)
+  } else if (headHtml) {
+    output = output.replace('</head>', `${headHtml}\n</head>`)
+  }
+
+  if (output.includes('<!--ssr-data-->')) {
+    output = output.replace('<!--ssr-data-->', hydrationScript)
+  } else if (hydrationScript) {
+    output = output.replace(
+      /(<script type="module"[^>]*><\/script>)/i,
+      `${hydrationScript}\n$1`,
+    )
+  }
+
+  return output
 }
 
 async function createSsrServer() {
@@ -43,12 +75,24 @@ async function createSsrServer() {
     })
     app.use(vite.middlewares)
   } else {
-    app.use(
-      sirv(path.resolve(root, 'dist/client'), {
-        extensions: [],
-        gzip: true,
-      }),
-    )
+    const clientRoot = path.resolve(root, 'dist/client')
+    const serveClientAssets = sirv(clientRoot, {
+      extensions: [],
+      gzip: true,
+    })
+
+    // Serve built JS/CSS/images only. HTML routes are rendered by the SSR handler
+    // so prerendered index.html files do not bypass dynamic render + hydration data.
+    app.use((req, res, next) => {
+      if (req.method !== 'GET' && req.method !== 'HEAD') return next()
+
+      const pathname = req.path.split('?')[0]
+      if (/\.[a-z0-9]{2,5}$/i.test(pathname) && !pathname.endsWith('.html')) {
+        return serveClientAssets(req, res, next)
+      }
+
+      return next()
+    })
   }
 
   // Same-origin API for browser requests in SSR mode.
@@ -66,10 +110,16 @@ async function createSsrServer() {
     try {
       const url = req.originalUrl
       const templatePath = isProd
-        ? path.resolve(root, 'dist/client/index.html')
+        ? path.resolve(root, 'dist/client/index.ssr.html')
         : path.resolve(root, 'index.html')
 
-      let template = await fs.readFile(templatePath, 'utf-8')
+      let template
+      try {
+        template = await fs.readFile(templatePath, 'utf-8')
+      } catch {
+        if (!isProd) throw new Error(`SSR template not found: ${templatePath}`)
+        template = await fs.readFile(path.resolve(root, 'dist/client/index.html'), 'utf-8')
+      }
 
       if (!isProd && vite) {
         template = await vite.transformIndexHtml(url, template)
@@ -111,10 +161,11 @@ async function createSsrServer() {
         : ''
 
       const html = applyHtmlDocumentAttrs(
-        template
-          .replace('<!--ssr-outlet-->', result.html ?? '')
-          .replace('<!--ssr-head-->', result.headHtml ?? '')
-          .replace('<!--ssr-data-->', hydrationScript),
+        injectRenderedHtml(template, {
+          html: result.html ?? '',
+          headHtml: result.headHtml ?? '',
+          hydrationScript,
+        }),
         result.locale,
       )
 
@@ -130,6 +181,10 @@ async function createSsrServer() {
 
   app.listen(port, host, () => {
     console.log(`SSR server running at http://${host}:${port}`)
+    console.log(`[ssr] API target: ${apiTarget}`)
+    if (isProd) {
+      console.log('[ssr] HTML template: dist/client/index.ssr.html')
+    }
   })
 }
 

@@ -3,11 +3,11 @@ import { useRouteLoaderData } from 'react-router-dom'
 import type { BlogPostSummary } from '@/models/blog/blog.model'
 import { blogService } from '@/services/blogService'
 import type { HomePageLoaderData } from '@/routes/loaders/types'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 
 export function useHomeFeaturedPosts() {
-  const locale = useSettingsStore((s) => s.locale)
   const loaderData = useRouteLoaderData('home') as HomePageLoaderData | undefined
+  const locale = useStorefrontLocale(loaderData?.locale)
   const loaderFresh = Boolean(loaderData && loaderData.locale === locale)
 
   const [posts, setPosts] = useState<BlogPostSummary[]>(() =>

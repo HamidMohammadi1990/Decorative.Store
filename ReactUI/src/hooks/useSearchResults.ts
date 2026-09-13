@@ -3,7 +3,7 @@ import { useSearchParams, useRouteLoaderData } from 'react-router-dom'
 import type { CatalogSearchResponse } from '@/models/catalog/catalogSearch.model'
 import { catalogSearchService } from '@/services/catalogSearchService'
 import type { SearchPageLoaderData } from '@/routes/loaders/types'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 
 const MIN_QUERY_LENGTH = 2
 const RESULT_LIMIT = 100
@@ -17,10 +17,10 @@ function isLoaderFresh(
 }
 
 export function useSearchResults() {
-  const locale = useSettingsStore((s) => s.locale)
   const [searchParams] = useSearchParams()
   const query = (searchParams.get('q') ?? '').trim()
   const loaderData = useRouteLoaderData('search') as SearchPageLoaderData | undefined
+  const locale = useStorefrontLocale(loaderData?.locale)
   const loaderFresh = isLoaderFresh(loaderData, locale, query) && query.length >= MIN_QUERY_LENGTH
 
   const [data, setData] = useState<CatalogSearchResponse | null>(() =>

@@ -3,7 +3,7 @@ import { useParams, useRouteLoaderData } from 'react-router-dom'
 import type { BlogListingResult } from '@/models/blog/blog.model'
 import { blogService } from '@/services/blogService'
 import type { BlogListingLoaderData } from '@/routes/loaders/types'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 
 function readListingLoaderData(
   indexData: BlogListingLoaderData | undefined,
@@ -29,10 +29,10 @@ function isLoaderFresh(
 
 export function useBlogListing() {
   const { categorySlug } = useParams<{ categorySlug?: string }>()
-  const locale = useSettingsStore((s) => s.locale)
   const indexLoaderData = useRouteLoaderData('blog-index') as BlogListingLoaderData | undefined
   const categoryLoaderData = useRouteLoaderData('blog-category') as BlogListingLoaderData | undefined
   const loaderData = readListingLoaderData(indexLoaderData, categoryLoaderData, categorySlug)
+  const locale = useStorefrontLocale(loaderData?.locale)
   const loaderFresh = isLoaderFresh(loaderData, locale, categorySlug)
 
   const [data, setData] = useState<BlogListingResult | null>(() =>

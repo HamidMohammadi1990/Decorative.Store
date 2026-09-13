@@ -3,11 +3,11 @@ import { useRouteLoaderData } from 'react-router-dom'
 import type { ContactPageContent } from '@/models/contact/contactPage.model'
 import { contactPageService } from '@/services/contactPageService'
 import type { ContactPageLoaderData } from '@/routes/loaders/types'
-import { useSettingsStore } from '@/stores/settingsStore'
+import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 
 export function useContactPageContent() {
-  const locale = useSettingsStore((s) => s.locale)
   const loaderData = useRouteLoaderData('contact') as ContactPageLoaderData | undefined
+  const locale = useStorefrontLocale(loaderData?.locale)
   const loaderFresh = Boolean(loaderData && loaderData.locale === locale && loaderData.content)
 
   const [content, setContent] = useState<ContactPageContent | null>(() =>
