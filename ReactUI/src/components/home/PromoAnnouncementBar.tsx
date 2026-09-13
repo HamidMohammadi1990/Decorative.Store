@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import type { PromoAnnouncement } from '@/models/home/promoAnnouncement.model'
 import { Container } from '@/components/ui/Container'
 import { TextLink } from '@/components/ui/TextLink'
+import { useHydrated } from '@/hooks/useHydrated'
 import { usePromoDismissStore } from '@/stores/promoDismissStore'
 
 interface PromoAnnouncementBarProps {
@@ -10,10 +11,11 @@ interface PromoAnnouncementBarProps {
 
 export function PromoAnnouncementBar({ data }: PromoAnnouncementBarProps) {
   const { t } = useTranslation()
-  const isDismissed = usePromoDismissStore((s) => s.isDismissed(data.id))
+  const hydrated = useHydrated()
+  const dismissedInStore = usePromoDismissStore((s) => s.isDismissed(data.id))
   const dismiss = usePromoDismissStore((s) => s.dismiss)
 
-  if (isDismissed) return null
+  if (hydrated && dismissedInStore) return null
 
   return (
     <div className="bg-surface-inverse text-center text-sm text-text-inverse">

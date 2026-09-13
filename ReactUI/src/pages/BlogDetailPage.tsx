@@ -1,4 +1,5 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
 import { PageBreadcrumbs } from '@/components/ui/PageBreadcrumbs'
 import { BlogAuthorCard } from '@/components/blog/BlogAuthorCard'
@@ -53,7 +54,7 @@ export function BlogDetailPage() {
       : null,
   })
 
-  if (loading) {
+  if (loading && !post) {
     return <PageLoading />
   }
 
@@ -84,12 +85,12 @@ export function BlogDetailPage() {
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-12">
           <div className="min-w-0">
-            <Link
-              to={`/blog/category/${post.categorySlug}`}
+            <CatalogNavLink
+              href={`/blog/category/${post.categorySlug}`}
               className="inline-flex rounded-full bg-warm-soft px-3 py-1 text-xs font-semibold text-warm"
             >
               {categoryLabel}
-            </Link>
+            </CatalogNavLink>
 
             <h1 className="mt-4 text-2xl font-bold leading-tight text-text md:text-4xl">
               {post.title}

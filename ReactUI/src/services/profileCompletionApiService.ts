@@ -143,39 +143,92 @@ function normalizeUserState(data: unknown): AdminProfileCompletionUserState | nu
   }
 }
 
+type MyState = {
+  answers: Record<string, string | string[]>
+  rewardClaimedAt: string | null
+}
+
+let configCache: AdminProfileCompletionConfig | null | undefined
+let configRequest: Promise<AdminProfileCompletionConfig | null> | null = null
+const myStateCache = new Map<string, MyState>()
+const myStateRequests = new Map<string, Promise<MyState>>()
+
+function parseMyState(data: {
+  answersJson?: string
+  AnswersJson?: string
+  rewardClaimedOnUtc?: string | null
+  RewardClaimedOnUtc?: string | null
+}): MyState {
+  const answersJson = data.answersJson ?? data.AnswersJson ?? '{}'
+  const rewardClaimedOnUtc = data.rewardClaimedOnUtc ?? data.RewardClaimedOnUtc ?? null
+
+  try {
+    const answers = JSON.parse(answersJson) as Record<string, string | string[]>
+    return {
+      answers: answers && typeof answers === 'object' ? answers : {},
+      rewardClaimedAt: rewardClaimedOnUtc,
+    }
+  } catch {
+    return { answers: {}, rewardClaimedAt: null }
+  }
+}
+
 export const profileCompletionApiService = {
-  async getConfig(): Promise<AdminProfileCompletionConfig | null> {
-    const data = await apiPost<{ configJson?: string; ConfigJson?: string }>(
-      '/api/v1/profile-completion/config',
-      {},
-    )
-    const configJson = readConfigJson(data)
-    if (!configJson) return null
-    return parseAdminConfig(configJson)
+  invalidateMyState(accessToken: string) {
+    myStateCache.delete(accessToken)
+    myStateRequests.delete(accessToken)
   },
 
-  async getMyState(accessToken: string): Promise<{
-    answers: Record<string, string | string[]>
-    rewardClaimedAt: string | null
-  }> {
-    const data = await apiPost<{
-      answersJson?: string
-      AnswersJson?: string
-      rewardClaimedOnUtc?: string | null
-      RewardClaimedOnUtc?: string | null
-    }>('/api/v1/profile-completion/my-state', {}, { accessToken })
+  async getConfig(): Promise<AdminProfileCompletionConfig | null> {
+    if (configCache !== undefined) return configCache
 
-    const answersJson = data.answersJson ?? data.AnswersJson ?? '{}'
-    const rewardClaimedOnUtc = data.rewardClaimedOnUtc ?? data.RewardClaimedOnUtc ?? null
+    if (!configRequest) {
+      configRequest = apiPost<{ configJson?: string; ConfigJson?: string }>(
+        '/api/v1/profile-completion/config',
+        {},
+      )
+        .then((data) => {
+          const configJson = readConfigJson(data)
+          const parsed = configJson ? parseAdminConfig(configJson) : null
+          configCache = parsed
+          return parsed
+        })
+        .catch((error) => {
+          configRequest = null
+          throw error
+        })
+    }
+
+    return configRequest
+  },
+
+  async getMyState(accessToken: string): Promise<MyState> {
+    const cached = myStateCache.get(accessToken)
+    if (cached) return cached
+
+    const inFlight = myStateRequests.get(accessToken)
+    if (inFlight) return inFlight
+
+    const request = (async () => {
+      const data = await apiPost<{
+        answersJson?: string
+        AnswersJson?: string
+        rewardClaimedOnUtc?: string | null
+        RewardClaimedOnUtc?: string | null
+      }>('/api/v1/profile-completion/my-state', {}, { accessToken })
+
+      const parsed = parseMyState(data)
+      myStateCache.set(accessToken, parsed)
+      return parsed
+    })()
+
+    myStateRequests.set(accessToken, request)
 
     try {
-      const answers = JSON.parse(answersJson) as Record<string, string | string[]>
-      return {
-        answers: answers && typeof answers === 'object' ? answers : {},
-        rewardClaimedAt: rewardClaimedOnUtc,
-      }
-    } catch {
-      return { answers: {}, rewardClaimedAt: null }
+      return await request
+    } catch (error) {
+      myStateRequests.delete(accessToken)
+      throw error
     }
   },
 
@@ -188,6 +241,10 @@ export const profileCompletionApiService = {
       { answersJson: JSON.stringify(answers) },
       { accessToken },
     )
+    myStateCache.set(accessToken, {
+      answers,
+      rewardClaimedAt: myStateCache.get(accessToken)?.rewardClaimedAt ?? null,
+    })
   },
 
   async claimReward(accessToken: string): Promise<string> {

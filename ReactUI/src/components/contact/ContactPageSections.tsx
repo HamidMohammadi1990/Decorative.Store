@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
 import type {
   ContactFormField,
@@ -45,9 +45,9 @@ function ContactLink({
   }
 
   return (
-    <Link to={href} className={className}>
+    <CatalogNavLink href={href} className={className}>
       {children}
-    </Link>
+    </CatalogNavLink>
   )
 }
 

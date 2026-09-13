@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatBlogDate } from '@/extensions/formatBlogDate'
@@ -96,9 +96,9 @@ export function BlogFeaturedSlider({ posts, getCategoryLabel }: BlogFeaturedSlid
                   {getCategoryLabel(post.categorySlug)}
                 </span>
                 <h2 className="mt-3 max-w-3xl text-2xl font-bold leading-tight md:text-4xl">
-                  <Link to={`/blog/${post.slug}`} className="hover:text-warm-soft">
+                  <CatalogNavLink href={`/blog/${post.slug}`} className="hover:text-warm-soft">
                     {post.title}
-                  </Link>
+                  </CatalogNavLink>
                 </h2>
                 <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/80 md:text-base">
                   {post.excerpt}
@@ -106,12 +106,12 @@ export function BlogFeaturedSlider({ posts, getCategoryLabel }: BlogFeaturedSlid
                 <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-white/70 md:text-sm">
                   <span>{formatBlogDate(post.publishedAt, locale)}</span>
                   <span>{t('blog.readTime', { count: post.readTimeMinutes })}</span>
-                  <Link
-                    to={`/blog/${post.slug}`}
+                  <CatalogNavLink
+                    href={`/blog/${post.slug}`}
                     className="font-semibold text-warm-soft hover:text-white"
                   >
                     {t('blog.readArticle')}
-                  </Link>
+                  </CatalogNavLink>
                 </div>
               </Container>
             </article>

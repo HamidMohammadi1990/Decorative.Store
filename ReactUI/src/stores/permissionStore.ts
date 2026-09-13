@@ -6,6 +6,9 @@ interface PermissionState {
   loaded: boolean
   loading: boolean
   mockAllGranted: boolean
+  /** True only while DashboardLayout is mounted (admin area). */
+  dashboardActive: boolean
+  setDashboardActive: (active: boolean) => void
   loadPermissions: (accessToken: string) => Promise<void>
   ensureLoaded: (accessToken: string) => Promise<void>
   reload: () => Promise<void>
@@ -18,13 +21,24 @@ const initialState = {
   loaded: false,
   loading: false,
   mockAllGranted: false,
+  dashboardActive: false,
 }
 
 export const usePermissionStore = create<PermissionState>()((set, get) => ({
   ...initialState,
 
+  setDashboardActive: (active) => {
+    set({ dashboardActive: active })
+  },
+
   clear: () => {
-    set({ ...initialState, permissions: new Set<string>() })
+    set((state) => ({
+      ...state,
+      permissions: new Set<string>(),
+      loaded: false,
+      loading: false,
+      mockAllGranted: false,
+    }))
   },
 
   hasPermission: (code) => {
@@ -36,6 +50,8 @@ export const usePermissionStore = create<PermissionState>()((set, get) => ({
   },
 
   loadPermissions: async (accessToken) => {
+    if (!get().dashboardActive) return
+
     if (!accessToken) {
       get().clear()
       return
@@ -72,12 +88,16 @@ export const usePermissionStore = create<PermissionState>()((set, get) => ({
   },
 
   ensureLoaded: async (accessToken) => {
+    if (!get().dashboardActive) return
+
     const { loaded, loading } = get()
     if (loaded || loading) return
     await get().loadPermissions(accessToken)
   },
 
   reload: async () => {
+    if (!get().dashboardActive) return
+
     const { useUserStore } = await import('@/stores/userStore')
     const accessToken = useUserStore.getState().accessToken
     if (!accessToken) {

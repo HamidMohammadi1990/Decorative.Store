@@ -71,6 +71,15 @@ export function ProductImagesPanel({
   const [pendingFiles, setPendingFiles] = useState<File[]>([])
   const [previews, setPreviews] = useState<string[]>([])
 
+  const canLoad =
+    !languageLoading &&
+    !contentLanguageLoading &&
+    contentLanguageId != null &&
+    Boolean(accessToken) &&
+    accessToken !== 'mock-access-token'
+
+  const canLoadProducts = canLoad && !embedded
+
   const selectedProduct = useMemo(() => {
     if (embedded && fixedProductId) {
       return {
@@ -133,12 +142,12 @@ export function ProductImagesPanel({
   }, [accessToken, contentLocale, selectedProductId, t])
 
   useEffect(() => {
-    if (embedded || languageLoading || contentLanguageLoading) return
+    if (!canLoadProducts) return
 
     void loadProducts().catch((err) => {
       setError(resolveAdminMutationError(err, t('dashboard.productImages.loadFailed')))
     })
-  }, [embedded, languageLoading, contentLanguageLoading, loadProducts, t])
+  }, [canLoadProducts, loadProducts, t])
 
   useEffect(() => {
     if (embedded) return
@@ -150,8 +159,9 @@ export function ProductImagesPanel({
   }, [embedded, productIdFromSource, products, selectedProductId, setSearchParams])
 
   useEffect(() => {
-    if (!languageLoading && !contentLanguageLoading && selectedProductId) void loadImages()
-  }, [contentLanguageLoading, languageLoading, loadImages, selectedProductId])
+    if (!canLoad || !selectedProductId) return
+    void loadImages()
+  }, [canLoad, loadImages, selectedProductId])
 
   const handleProductChange = (productId: string) => {
     setSelectedProductId(productId)

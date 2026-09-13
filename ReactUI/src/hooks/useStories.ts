@@ -17,12 +17,11 @@ export function useStories(): UseStoriesResult {
   const accessToken = useUserStore((s) => s.accessToken)
   const loaderData = useRouteLoaderData('shop') as ShopLayoutLoaderData | undefined
   const locale = useStorefrontLocale(loaderData?.locale)
-  const loaderFresh = Boolean(loaderData && loaderData.locale === locale)
+  const hasLoaderSnapshot = loaderData !== undefined
+  const loaderLocaleFresh = loaderData?.locale === locale
 
-  const [stories, setStories] = useState<StoryGroup[]>(() =>
-    loaderFresh ? loaderData!.stories : [],
-  )
-  const [loading, setLoading] = useState(() => !loaderFresh)
+  const [stories, setStories] = useState<StoryGroup[]>(() => loaderData?.stories ?? [])
+  const [loading, setLoading] = useState(() => !hasLoaderSnapshot)
   const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
@@ -40,14 +39,18 @@ export function useStories(): UseStoriesResult {
   }, [locale, accessToken])
 
   useEffect(() => {
-    if (loaderFresh && !accessToken) {
+    if (loaderLocaleFresh) {
       setStories(loaderData!.stories)
       setLoading(false)
-      return
+      if (!accessToken) {
+        return
+      }
     }
 
-    void load()
-  }, [load, loaderFresh, loaderData, accessToken])
+    if (!loaderLocaleFresh || accessToken) {
+      void load()
+    }
+  }, [load, loaderData, loaderLocaleFresh, accessToken])
 
   return { stories, loading, error, reload: load }
 }

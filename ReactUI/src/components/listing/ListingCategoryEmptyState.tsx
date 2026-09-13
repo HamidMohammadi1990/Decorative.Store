@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@/components/ui/Button'
+import { ButtonLink } from '@/components/ui/ButtonLink'
 
 interface ListingCategoryEmptyStateProps {
   categoryTitle: string
@@ -42,12 +41,14 @@ export function ListingCategoryEmptyState({ categoryTitle }: ListingCategoryEmpt
         </p>
 
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Link to="/">
-            <Button variant="warm">{t('listing.categoryEmptyBrowseHome')}</Button>
-          </Link>
-          <Link to="/contact">
-            <Button variant="secondary">{t('listing.categoryEmptyContact')}</Button>
-          </Link>
+          <ButtonLink
+            link={{ label: t('listing.categoryEmptyBrowseHome'), href: '/' }}
+            variant="warm"
+          />
+          <ButtonLink
+            link={{ label: t('listing.categoryEmptyContact'), href: '/contact' }}
+            variant="secondary"
+          />
         </div>
       </div>
     </section>

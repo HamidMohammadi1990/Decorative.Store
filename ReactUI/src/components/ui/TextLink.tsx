@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
 import type { AppLink } from '@/models/shared/link.model'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 
 interface TextLinkProps {
   link: AppLink
@@ -26,8 +26,8 @@ export function TextLink({ link, className = '' }: TextLinkProps) {
   }
 
   return (
-    <Link to={link.href} className={classes}>
+    <CatalogNavLink href={link.href} className={classes}>
       {link.label}
-    </Link>
+    </CatalogNavLink>
   )
 }

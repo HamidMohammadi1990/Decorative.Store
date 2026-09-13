@@ -1,9 +1,9 @@
 import { useLayoutEffect, useRef, type RefObject } from 'react'
-import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { NavLinkGroup } from '@/models/shared/link.model'
 import { MegaMenuPanel } from '@/components/header/MegaMenuPanel'
 import { navShopAllLinkClass } from '@/components/header/MegaMenuLink'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { Portal } from '@/components/ui/Portal'
 import { positionMegaMenuDropdown } from '@/extensions/positionMegaMenu'
 
@@ -76,17 +76,16 @@ export function MegaMenuDropdown({
         >
           {group.href && (
             <div className="border-b border-warm-muted/60 bg-warm-soft/70 px-8 py-3.5">
-              <Link
-                to={group.href}
+              <CatalogNavLink
+                href={group.href}
                 className={`group ${navShopAllLinkClass}`}
-                prefetch="none"
                 onClick={onNavigate}
               >
                 {t('common.shopAll', { category: group.label })}
                 <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5">
                   →
                 </span>
-              </Link>
+              </CatalogNavLink>
             </div>
           )}
           <MegaMenuPanel group={group} onNavigate={onNavigate} />

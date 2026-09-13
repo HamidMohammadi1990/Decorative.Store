@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
 import type { SiteHeader as SiteHeaderModel } from '@/models/home/siteHeader.model'
 import { BlogMainNav } from '@/components/header/BlogNav'
@@ -17,6 +18,7 @@ import { CartIcon, LocationIcon } from '@/components/ui/HeaderIcons'
 import { useCompareStore } from '@/stores/compareStore'
 import { useCartStore } from '@/stores/cartStore'
 import { useAddressStore } from '@/stores/addressStore'
+import { useHydrated } from '@/hooks/useHydrated'
 import { useIsAuthenticated } from '@/stores/userStore'
 
 interface SiteHeaderProps {
@@ -31,13 +33,16 @@ export function SiteHeader({ data }: SiteHeaderProps) {
     enabled: onBlogRoute,
   })
   const [mobileOpen, setMobileOpen] = useState(false)
+  const hydrated = useHydrated()
   const isAuthenticated = useIsAuthenticated()
+  const showAuthChrome = hydrated && isAuthenticated
   const itemCount = useCartStore((s) =>
-    isAuthenticated ? s.lines.reduce((sum, line) => sum + line.quantity, 0) : 0,
+    showAuthChrome ? s.lines.reduce((sum, line) => sum + line.quantity, 0) : 0,
   )
   const openCart = useCartStore((s) => s.openCart)
   const openAddressModal = useAddressStore((s) => s.openModal)
-  const compareCount = useCompareStore((s) => s.slugs.length)
+  const compareCountRaw = useCompareStore((s) => s.slugs.length)
+  const compareCount = hydrated ? compareCountRaw : 0
   return (
     <header className="sticky top-0 z-30 overflow-visible border-b border-border bg-surface">
       <Container className="flex flex-col gap-1 overflow-visible py-2">
@@ -51,19 +56,19 @@ export function SiteHeader({ data }: SiteHeaderProps) {
             <MenuIcon />
           </button>
 
-          <Link
-            to="/"
+          <CatalogNavLink
+            href="/"
             className="font-display text-xl font-semibold tracking-tight md:text-2xl"
           >
             {data.brandLabel}
-          </Link>
+          </CatalogNavLink>
 
           <HeaderSearch placeholder={data.searchPlaceholder} className="min-w-0 flex-1 max-lg:order-last max-lg:w-full" />
 
           <div className="ms-auto flex shrink-0 items-center gap-2 text-sm sm:gap-3">
             <ThemeSwitcher />
             <LanguageSwitcher />
-            {isAuthenticated && (
+            {showAuthChrome && (
               <button
                 type="button"
                 onClick={openAddressModal}
@@ -91,7 +96,7 @@ export function SiteHeader({ data }: SiteHeaderProps) {
                 {compareCount > 9 ? '9+' : compareCount}
               </span>
             </Link>
-            {isAuthenticated && (
+            {showAuthChrome && (
               <button
                 type="button"
                 onClick={openCart}

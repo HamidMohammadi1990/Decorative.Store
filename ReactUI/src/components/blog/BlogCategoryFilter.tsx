@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
 import { useHorizontalDragScroll } from '@/hooks/useHorizontalDragScroll'
 import type { BlogCategory } from '@/models/blog/blog.model'
@@ -31,7 +32,7 @@ export function BlogCategoryFilter({ categories, activeCategory }: BlogCategoryF
       onDragStart={(e) => e.preventDefault()}
     >
       <CategoryPill
-        to="/blog"
+        href="/blog"
         label={t('blog.allCategories')}
         count={categories.reduce((sum, item) => sum + (item.count ?? 0), 0)}
         active={isAllActive}
@@ -39,7 +40,7 @@ export function BlogCategoryFilter({ categories, activeCategory }: BlogCategoryF
       {categories.map((category) => (
         <CategoryPill
           key={category.id}
-          to={`/blog/category/${category.slug}`}
+          href={`/blog/category/${category.slug}`}
           label={category.label}
           count={category.count}
           active={activeCategory === category.slug}
@@ -50,19 +51,19 @@ export function BlogCategoryFilter({ categories, activeCategory }: BlogCategoryF
 }
 
 function CategoryPill({
-  to,
+  href,
   label,
   count,
   active,
 }: {
-  to: string
+  href: string
   label: string
   count?: number
   active: boolean
 }) {
   return (
-    <Link
-      to={to}
+    <CatalogNavLink
+      href={href}
       className={`inline-flex shrink-0 snap-start items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 ${
         active
           ? 'border-warm bg-warm text-warm-text shadow-sm shadow-warm/20'
@@ -79,6 +80,6 @@ function CategoryPill({
           {count}
         </span>
       )}
-    </Link>
+    </CatalogNavLink>
   )
 }

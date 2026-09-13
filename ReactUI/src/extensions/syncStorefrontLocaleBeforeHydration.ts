@@ -2,16 +2,12 @@ import { syncI18nLocale } from '@/i18n'
 import type { Locale } from '@/models/shared/locale.model'
 import { useSettingsStore } from '@/stores/settingsStore'
 
-/** Align zustand locale with SSR before React hydration to avoid refetching loader data. */
+/** Sync i18n to SSR locale before hydration — user settings locale is preserved. */
 export async function syncStorefrontLocaleBeforeHydration(ssrLocale?: Locale) {
   await new Promise<void>((resolve) => {
     const applyLocale = () => {
-      if (ssrLocale) {
-        useSettingsStore.setState({ locale: ssrLocale })
-        syncI18nLocale(ssrLocale)
-      } else {
-        syncI18nLocale(useSettingsStore.getState().locale)
-      }
+      const bootLocale = ssrLocale ?? useSettingsStore.getState().locale
+      syncI18nLocale(bootLocale)
       resolve()
     }
 

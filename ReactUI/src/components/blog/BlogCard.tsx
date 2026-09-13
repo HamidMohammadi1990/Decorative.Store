@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
 import { formatBlogDate } from '@/extensions/formatBlogDate'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
@@ -50,8 +50,8 @@ export function BlogCard({ post, categoryLabel, variant = 'grid' }: BlogCardProp
   if (variant === 'horizontal') {
     return (
       <article className="group flex gap-4 overflow-hidden rounded-2xl border border-border/70 bg-surface p-3 shadow-sm ring-1 ring-black/[0.02] transition-all duration-300 hover:-translate-y-0.5 hover:border-warm/25 hover:shadow-md sm:gap-5 sm:p-4">
-        <Link
-          to={articlePath}
+        <CatalogNavLink
+          href={articlePath}
           className="relative size-28 shrink-0 overflow-hidden rounded-xl sm:size-36"
         >
           <LocalImage
@@ -68,14 +68,14 @@ export function BlogCard({ post, categoryLabel, variant = 'grid' }: BlogCardProp
               {categoryLabel}
             </span>
           )}
-        </Link>
+        </CatalogNavLink>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <Link to={articlePath}>
+          <CatalogNavLink href={articlePath}>
             <h3 className="line-clamp-2 text-base font-semibold leading-snug text-text transition-colors group-hover:text-warm sm:text-lg">
               {post.title}
             </h3>
-          </Link>
+          </CatalogNavLink>
           <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-text-muted">
             {post.excerpt}
           </p>
@@ -93,7 +93,7 @@ export function BlogCard({ post, categoryLabel, variant = 'grid' }: BlogCardProp
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-surface shadow-sm ring-1 ring-black/[0.02] transition-all duration-300 hover:-translate-y-1 hover:border-warm/25 hover:shadow-lg">
-      <Link to={articlePath} className="relative block overflow-hidden">
+      <CatalogNavLink href={articlePath} className="relative block overflow-hidden">
         <div className="aspect-[16/10] overflow-hidden bg-surface-muted">
           <LocalImage
             image={post.coverImage}
@@ -110,14 +110,14 @@ export function BlogCard({ post, categoryLabel, variant = 'grid' }: BlogCardProp
             {categoryLabel}
           </span>
         )}
-      </Link>
+      </CatalogNavLink>
 
       <div className="flex flex-1 flex-col p-4 md:p-5">
-        <Link to={articlePath}>
+        <CatalogNavLink href={articlePath}>
           <h3 className="line-clamp-2 text-base font-semibold leading-snug text-text transition-colors group-hover:text-warm md:text-lg">
             {post.title}
           </h3>
-        </Link>
+        </CatalogNavLink>
         <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-text-muted">
           {post.excerpt}
         </p>

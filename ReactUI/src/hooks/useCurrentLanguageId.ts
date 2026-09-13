@@ -2,10 +2,16 @@ import { useCallback, useEffect, useState } from 'react'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { languageService } from '@/services/languageService'
 
-export function useCurrentLanguageId() {
+interface UseCurrentLanguageIdOptions {
+  /** When false, skips the mount fetch until reload() is called. */
+  enabled?: boolean
+}
+
+export function useCurrentLanguageId(options: UseCurrentLanguageIdOptions = {}) {
+  const { enabled = true } = options
   const { locale } = useLocaleSettings()
   const [languageId, setLanguageId] = useState<number | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(enabled)
   const [error, setError] = useState<string | null>(null)
 
   const reload = useCallback(async () => {
@@ -23,8 +29,12 @@ export function useCurrentLanguageId() {
   }, [locale])
 
   useEffect(() => {
+    if (!enabled) {
+      setLoading(false)
+      return
+    }
     void reload()
-  }, [reload])
+  }, [enabled, reload])
 
   return { languageId, loading, error, reload, locale }
 }

@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react'
@@ -26,7 +27,17 @@ interface HomePageContextValue {
 
 const HomePageContext = createContext<HomePageContextValue | null>(null)
 
-function isLoaderFresh(
+function getLoaderHomeSnapshot(
+  loaderData: ShopLayoutLoaderData | undefined,
+  fetchKey: string,
+): HomePage | null {
+  if (!loaderData?.homePage || loaderData.fetchKey !== fetchKey) {
+    return null
+  }
+  return loaderData.homePage
+}
+
+function isLoaderLocaleFresh(
   loaderData: ShopLayoutLoaderData | undefined,
   locale: string,
   fetchKey: string,
@@ -39,6 +50,10 @@ function isLoaderFresh(
   )
 }
 
+function hasShopNavChrome(page: HomePage | null | undefined) {
+  return Boolean(page?.header?.primaryNav?.length && page?.categoryNav?.items?.length)
+}
+
 export function HomePageProvider({ children }: { children: ReactNode }) {
   const location = useLocation()
   const loaderData = useRouteLoaderData('shop') as ShopLayoutLoaderData | undefined
@@ -48,19 +63,28 @@ export function HomePageProvider({ children }: { children: ReactNode }) {
     [location.pathname],
   )
   const fetchKey = buildHomePageFetchKey(fetchOptions)
-  const loaderFresh = isLoaderFresh(loaderData, locale, fetchKey)
+  const loaderSnapshot = getLoaderHomeSnapshot(loaderData, fetchKey)
+  const loaderLocaleFresh = isLoaderLocaleFresh(loaderData, locale, fetchKey)
 
-  const [data, setData] = useState<HomePage | null>(() =>
-    loaderFresh ? loaderData.homePage : null,
-  )
-  const [loading, setLoading] = useState(() => !loaderFresh)
+  const [data, setData] = useState<HomePage | null>(() => loaderSnapshot)
+  const [loading, setLoading] = useState(() => !loaderSnapshot)
   const [error, setError] = useState<string | null>(() =>
-    loaderData?.error && !loaderFresh ? 'failed' : null,
+    loaderData?.error && !loaderSnapshot ? 'failed' : null,
   )
+  const dataRef = useRef(data)
+  dataRef.current = data
 
   const load = useCallback(
     async (force = false) => {
-      setLoading(true)
+      const needsFreshLocale =
+        force ||
+        !dataRef.current ||
+        loaderData?.locale !== locale ||
+        loaderData?.fetchKey !== fetchKey
+
+      if (needsFreshLocale) {
+        setLoading(true)
+      }
       setError(null)
 
       try {
@@ -75,31 +99,38 @@ export function HomePageProvider({ children }: { children: ReactNode }) {
         setLoading(false)
       }
     },
-    [fetchOptions, locale],
+    [fetchKey, fetchOptions, loaderData?.fetchKey, loaderData?.locale, locale],
   )
 
   useEffect(() => {
-    if (loaderFresh) {
+    if (loaderLocaleFresh) {
       setData(loaderData.homePage)
       setError(loaderData.error ?? null)
       setLoading(false)
       return
     }
 
-    // Reuse SSR loader payload when locale/key match but homePage was briefly unavailable.
+    // Listing/CMS-lite routes reuse nav chrome only when it already matches the active locale.
     if (
-      loaderData?.homePage &&
-      loaderData.locale === locale &&
-      loaderData.fetchKey === fetchKey
+      loaderData?.locale === locale &&
+      fetchOptions.skipHomeCatalogContent &&
+      fetchOptions.skipCmsPage &&
+      hasShopNavChrome(dataRef.current)
     ) {
-      setData(loaderData.homePage)
-      setError(loaderData.error ?? null)
       setLoading(false)
       return
     }
 
-    void load()
-  }, [fetchKey, load, loaderFresh, loaderData, locale])
+    void load(true)
+  }, [
+    fetchKey,
+    fetchOptions.skipCmsPage,
+    fetchOptions.skipHomeCatalogContent,
+    load,
+    loaderData,
+    loaderLocaleFresh,
+    locale,
+  ])
 
   const reload = useCallback(() => {
     void load(true)

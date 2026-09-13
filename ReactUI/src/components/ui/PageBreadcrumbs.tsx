@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 
 export interface PageBreadcrumbItem {
   label: string
@@ -71,8 +71,8 @@ export function PageBreadcrumbs({ items, className = '' }: PageBreadcrumbsProps)
                   {item.label}
                 </span>
               ) : item.home ? (
-                <Link
-                  to={item.href}
+                <CatalogNavLink
+                  href={item.href}
                   className="inline-flex items-center gap-1.5 rounded-full px-1.5 py-1 text-[11px] font-medium text-text-muted transition-colors hover:bg-surface/80 hover:text-warm sm:px-2 sm:text-xs"
                   title={item.label}
                 >
@@ -80,15 +80,15 @@ export function PageBreadcrumbs({ items, className = '' }: PageBreadcrumbsProps)
                     <HomeIcon />
                   </span>
                   <span className="hidden sm:inline">{item.label}</span>
-                </Link>
+                </CatalogNavLink>
               ) : (
-                <Link
-                  to={item.href}
+                <CatalogNavLink
+                  href={item.href}
                   className="max-w-[8rem] truncate rounded-full px-2.5 py-1 text-[11px] font-medium text-text-muted transition-colors hover:bg-surface/80 hover:text-warm sm:max-w-[10rem] sm:text-xs"
                   title={item.label}
                 >
                   {item.label}
-                </Link>
+                </CatalogNavLink>
               )}
             </li>
           )

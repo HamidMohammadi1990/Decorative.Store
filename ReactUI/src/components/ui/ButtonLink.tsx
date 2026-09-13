@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
 import type { AppLink } from '@/models/shared/link.model'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 
 type ButtonLinkVariant = 'primary' | 'secondary' | 'ghost' | 'warm'
 type ButtonLinkSize = 'sm' | 'md'
@@ -55,8 +55,8 @@ export function ButtonLink({
   }
 
   return (
-    <Link to={link.href} className={classes} prefetch="none">
+    <CatalogNavLink href={link.href} className={classes}>
       {link.label}
-    </Link>
+    </CatalogNavLink>
   )
 }

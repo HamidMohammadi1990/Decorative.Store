@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useConfirm } from '@/hooks/useConfirm'
@@ -190,7 +191,7 @@ function ProductColumnHeader({
         <CloseIcon />
       </button>
 
-      <Link to={`/product/${product.slug}`} className="group block">
+      <CatalogNavLink href={`/product/${product.slug}`} className="group block">
         <div className="mx-auto aspect-[4/5] w-full max-w-[11rem] overflow-hidden rounded-sm bg-surface-muted ring-1 ring-border transition-shadow group-hover:shadow-md">
           <LocalImage
             image={product.image}
@@ -200,7 +201,7 @@ function ProductColumnHeader({
         <p className="mt-4 line-clamp-2 text-sm font-semibold text-text transition-colors group-hover:text-warm">
           {product.title}
         </p>
-      </Link>
+      </CatalogNavLink>
 
       {currency && (
         <div className="mt-2 flex flex-wrap items-baseline gap-2">

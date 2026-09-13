@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import type {
   AboutHero,
   AboutPageContent,
@@ -7,7 +6,7 @@ import type {
   AboutTimelineItem,
   AboutValue,
 } from '@/models/about/aboutPage.model'
-import { Button } from '@/components/ui/Button'
+import { ButtonLink } from '@/components/ui/ButtonLink'
 import { Container } from '@/components/ui/Container'
 import { LocalImage } from '@/components/ui/LocalImage'
 
@@ -39,9 +38,7 @@ export function AboutHeroSection({ data }: { data: AboutHero }) {
             )}
             {data.cta.label && (
               <div className="mt-8">
-                <Link to={data.cta.href} className="inline-block">
-                  <Button variant="primary">{data.cta.label}</Button>
-                </Link>
+                <ButtonLink link={data.cta} variant="primary" />
               </div>
             )}
           </Container>

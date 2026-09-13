@@ -74,6 +74,15 @@ export function ProductDescriptionsPanel({
   const [productId, setProductId] = useState(productIdFromSource)
   const [description, setDescription] = useState('')
 
+  const canLoad =
+    !languageLoading &&
+    !contentLanguageLoading &&
+    contentLanguageId != null &&
+    Boolean(accessToken) &&
+    accessToken !== 'mock-access-token'
+
+  const canLoadProducts = canLoad && !embedded
+
   const selectedProduct = useMemo(() => {
     if (embedded && fixedProductId) {
       return {
@@ -134,15 +143,16 @@ export function ProductDescriptionsPanel({
   }, [accessToken, contentLocale, selectedProductId, t])
 
   useEffect(() => {
-    if (embedded || languageLoading || contentLanguageLoading) return
+    if (!canLoadProducts) return
     void loadProducts().catch((err) => {
       setError(resolveAdminMutationError(err, t('dashboard.productDescriptions.loadFailed')))
     })
-  }, [embedded, languageLoading, contentLanguageLoading, loadProducts, t])
+  }, [canLoadProducts, loadProducts, t])
 
   useEffect(() => {
-    if (!languageLoading && !contentLanguageLoading) void loadDescriptions()
-  }, [contentLanguageLoading, languageLoading, loadDescriptions])
+    if (!canLoad || !selectedProductId) return
+    void loadDescriptions()
+  }, [canLoad, loadDescriptions, selectedProductId])
 
   useEffect(() => {
     if (embedded) return

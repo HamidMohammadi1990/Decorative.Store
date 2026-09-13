@@ -4,6 +4,7 @@ import type { StoryGroup } from '@/models/stories/story.model'
 import { LocalImage } from '@/components/ui/LocalImage'
 import { ScrollArrowButton } from '@/components/ui/ScrollArrowButton'
 import { useHorizontalDragScroll } from '@/hooks/useHorizontalDragScroll'
+import { useHydrated } from '@/hooks/useHydrated'
 import { useStoryInteractionStore } from '@/stores/storyInteractionStore'
 import { useStoryViewerStore } from '@/stores/storyViewerStore'
 
@@ -93,7 +94,9 @@ export function StoriesCarousel({ stories }: StoriesCarouselProps) {
 
 function StoryRing({ story, onOpen }: { story: StoryGroup; onOpen: () => void }) {
   const { t } = useTranslation()
-  const viewed = useStoryInteractionStore((s) => s.isViewed(story.id))
+  const hydrated = useHydrated()
+  const viewedInStore = useStoryInteractionStore((s) => s.isViewed(story.id))
+  const viewed = hydrated && viewedInStore
   const hasVideo = story.slides.some((s) => s.media.type === 'video')
 
   return (

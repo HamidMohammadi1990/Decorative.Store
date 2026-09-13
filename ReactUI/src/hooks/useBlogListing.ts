@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams, useRouteLoaderData } from 'react-router-dom'
 import type { BlogListingResult } from '@/models/blog/blog.model'
 import { blogService } from '@/services/blogService'
@@ -42,9 +42,13 @@ export function useBlogListing() {
   const [error, setError] = useState<string | null>(() =>
     loaderFresh ? (loaderData.error ?? null) : null,
   )
+  const dataRef = useRef(data)
+  dataRef.current = data
 
   const load = useCallback(async () => {
-    setLoading(true)
+    if (!dataRef.current) {
+      setLoading(true)
+    }
     setError(null)
 
     try {

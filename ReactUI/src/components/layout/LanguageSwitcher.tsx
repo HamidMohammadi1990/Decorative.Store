@@ -1,3 +1,4 @@
+import { useHydrated } from '@/hooks/useHydrated'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import type { Locale } from '@/models/shared/locale.model'
 
@@ -8,6 +9,7 @@ const LOCALE_OPTIONS: { value: Locale; short: string; fullKey: 'english' | 'pers
 
 export function LanguageSwitcher() {
   const { locale, switchLocale, t } = useLocaleSettings()
+  const hydrated = useHydrated()
 
   return (
     <div
@@ -17,7 +19,7 @@ export function LanguageSwitcher() {
     >
       <GlobeIcon className="ms-1.5 hidden text-warm sm:block" />
       {LOCALE_OPTIONS.map((opt) => {
-        const isActive = locale === opt.value
+        const isActive = hydrated && locale === opt.value
 
         return (
           <button

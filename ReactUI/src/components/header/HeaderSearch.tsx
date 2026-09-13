@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
+import { navigateSsr } from '@/extensions/catalogNavLink'
 import { useTranslation } from 'react-i18next'
 import type { CatalogSearchResponse } from '@/models/catalog/catalogSearch.model'
 import { catalogSearchService } from '@/services/catalogSearchService'
@@ -16,7 +17,6 @@ interface HeaderSearchProps {
 
 export function HeaderSearch({ placeholder, className }: HeaderSearchProps) {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const locale = useSettingsStore((s) => s.locale)
   const containerRef = useRef<HTMLDivElement>(null)
   const [query, setQuery] = useState('')
@@ -73,7 +73,7 @@ export function HeaderSearch({ placeholder, className }: HeaderSearchProps) {
     const trimmed = query.trim()
     if (trimmed.length < MIN_QUERY_LENGTH) return
     setOpen(false)
-    navigate(`/search?q=${encodeURIComponent(trimmed)}`)
+    navigateSsr(`/search?q=${encodeURIComponent(trimmed)}`)
   }
 
   const trimmed = query.trim()
@@ -203,14 +203,14 @@ function SearchLink({
 }) {
   return (
     <li>
-      <Link
-        to={href}
+      <CatalogNavLink
+        href={href}
         onClick={onNavigate}
         className="flex flex-col gap-0.5 px-3 py-2 hover:bg-surface-muted"
       >
         <span className="text-text">{label}</span>
         {hint ? <span className="text-xs text-text-muted">{hint}</span> : null}
-      </Link>
+      </CatalogNavLink>
     </li>
   )
 }

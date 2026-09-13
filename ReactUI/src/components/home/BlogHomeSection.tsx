@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
 import { BlogCard } from '@/components/blog/BlogCard'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
@@ -24,13 +24,13 @@ export function BlogHomeSection() {
             </p>
           </div>
 
-          <Link
-            to="/blog"
+          <CatalogNavLink
+            href="/blog"
             className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-warm transition-colors hover:underline"
           >
             {t('home.viewJournal')}
             <ChevronIcon expanded={false} className="text-warm rtl:rotate-90 ltr:-rotate-90" />
-          </Link>
+          </CatalogNavLink>
         </div>
 
         <div className="mt-8 hidden gap-6 md:grid md:grid-cols-2 lg:grid-cols-3">

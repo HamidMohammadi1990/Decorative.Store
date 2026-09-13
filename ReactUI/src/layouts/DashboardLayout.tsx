@@ -20,6 +20,7 @@ import { useUserStore } from '@/stores/userStore'
 import { usePermissionStore } from '@/stores/permissionStore'
 import { RouteFallback } from '@/components/ui/RouteFallback'
 import { UserAvatar } from '@/components/ui/UserAvatar'
+import { ProfileCompletionProvider } from '@/providers/ProfileCompletionProvider'
 
 function useDashboardPageTitle() {
   const { t } = useTranslation()
@@ -40,6 +41,8 @@ export function DashboardLayout() {
   const accessToken = useUserStore((s) => s.accessToken)
   const logout = useUserStore((s) => s.logout)
   const ensurePermissionsLoaded = usePermissionStore((s) => s.ensureLoaded)
+  const setDashboardActive = usePermissionStore((s) => s.setDashboardActive)
+  const clearPermissions = usePermissionStore((s) => s.clear)
   const openModal = useAuthModalStore((s) => s.openModal)
   const { data, loading, error } = useDashboard()
   useWishlistSync()
@@ -55,6 +58,14 @@ export function DashboardLayout() {
       openModal({ mode: 'signin' })
     }
   }, [openModal, user])
+
+  useEffect(() => {
+    setDashboardActive(true)
+    return () => {
+      setDashboardActive(false)
+      clearPermissions()
+    }
+  }, [clearPermissions, setDashboardActive])
 
   useEffect(() => {
     if (user && accessToken) {
@@ -81,6 +92,7 @@ export function DashboardLayout() {
     : user.firstName
 
   return (
+    <ProfileCompletionProvider>
     <div className="flex-1 bg-surface-muted/35">
       {/* Subtle top accent */}
       <div className="h-1 bg-gradient-to-r from-warm via-warm-hover to-warm/60" aria-hidden />
@@ -176,5 +188,6 @@ export function DashboardLayout() {
         </div>
       </Container>
     </div>
+    </ProfileCompletionProvider>
   )
 }

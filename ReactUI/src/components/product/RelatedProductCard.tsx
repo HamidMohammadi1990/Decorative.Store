@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
 import type { ProductSummary } from '@/models/catalog/product.model'
 import { LocalImage } from '@/components/ui/LocalImage'
@@ -16,7 +16,7 @@ export function RelatedProductCard({ product }: RelatedProductCardProps) {
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-border/55 bg-surface transition-all hover:border-warm/25 hover:shadow-sm">
-      <Link to={productPath} className="relative block aspect-square overflow-hidden bg-surface-muted" prefetch="none">
+      <CatalogNavLink href={productPath} className="relative block aspect-square overflow-hidden bg-surface-muted">
         <LocalImage
           image={product.image}
           sizes="160px"
@@ -37,15 +37,15 @@ export function RelatedProductCard({ product }: RelatedProductCardProps) {
             )}
           </div>
         )}
-      </Link>
+      </CatalogNavLink>
 
       <div className="flex flex-1 flex-col gap-1 p-2">
-        <Link
-          to={productPath}
+        <CatalogNavLink
+          href={productPath}
           className="line-clamp-2 text-[11px] font-medium leading-snug text-text transition-colors group-hover:text-warm sm:text-xs"
         >
           {product.title}
-        </Link>
+        </CatalogNavLink>
 
         {currency && (
           <div className="mt-auto flex flex-wrap items-baseline gap-1">

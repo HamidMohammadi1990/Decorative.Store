@@ -6,7 +6,8 @@ import { TextLink } from '@/components/ui/TextLink'
 import { Button } from '@/components/ui/Button'
 import { BackToTop } from '@/components/ui/BackToTop'
 import { showToast } from '@/stores/toastStore'
-import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
+import { useLocaleSettings } from '@/hooks/useLocaleSettings'
+import { languageService } from '@/services/languageService'
 import { newsletterService } from '@/services/newsletterService'
 
 interface SiteFooterProps {
@@ -15,7 +16,7 @@ interface SiteFooterProps {
 
 export function SiteFooter({ data }: SiteFooterProps) {
   const { t } = useTranslation()
-  const { languageId, locale } = useCurrentLanguageId()
+  const { locale } = useLocaleSettings()
   const [email, setEmail] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
@@ -28,13 +29,9 @@ export function SiteFooter({ data }: SiteFooterProps) {
       return
     }
 
-    if (languageId == null) {
-      showToast(t('footer.newsletter.error'), 'error')
-      return
-    }
-
     setSubmitting(true)
     try {
+      const languageId = await languageService.resolveLanguageId(locale)
       await newsletterService.subscribe(locale, languageId, trimmed)
       setEmail('')
       showToast(t('footer.newsletter.success'), 'success')

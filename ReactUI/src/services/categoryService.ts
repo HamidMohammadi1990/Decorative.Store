@@ -17,9 +17,23 @@ function normalizeCategoryTree(data: unknown): CategoryTreeItem[] {
   return []
 }
 
+const treeRequests = new Map<Locale, Promise<CategoryTreeItem[]>>()
+
 export const categoryService = {
-  async getTree(locale: Locale): Promise<CategoryTreeItem[]> {
-    const data = await apiGet<unknown>(CATEGORY_TREE_PATH, locale)
-    return normalizeCategoryTree(data)
+  async getTree(locale: Locale, force = false): Promise<CategoryTreeItem[]> {
+    if (!force) {
+      const cached = treeRequests.get(locale)
+      if (cached) return cached
+    }
+
+    const request = apiGet<unknown>(CATEGORY_TREE_PATH, locale).then(normalizeCategoryTree)
+    treeRequests.set(locale, request)
+
+    try {
+      return await request
+    } catch (error) {
+      treeRequests.delete(locale)
+      throw error
+    }
   },
 }

@@ -1,8 +1,9 @@
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useConfirm } from '@/hooks/useConfirm'
+import { useHydrated } from '@/hooks/useHydrated'
 import { CompareIcon } from '@/components/compare/CompareIcon'
-import { Button } from '@/components/ui/Button'
+import { ButtonLink } from '@/components/ui/ButtonLink'
 import { LocalImage } from '@/components/ui/LocalImage'
 import { useCompareProducts } from '@/hooks/useCompareProducts'
 import { useCompareStore } from '@/stores/compareStore'
@@ -11,6 +12,7 @@ import { MAX_COMPARE_PRODUCTS } from '@/models/catalog/compare.model'
 export function CompareFloatingBar() {
   const { t } = useTranslation()
   const confirm = useConfirm()
+  const hydrated = useHydrated()
   const location = useLocation()
   const slugs = useCompareStore((s) => s.slugs)
   const clear = useCompareStore((s) => s.clear)
@@ -21,7 +23,7 @@ export function CompareFloatingBar() {
     clear()
   }
 
-  if (location.pathname === '/compare' || slugs.length === 0) return null
+  if (!hydrated || location.pathname === '/compare' || slugs.length === 0) return null
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-4 pb-4 sm:px-6">
@@ -66,11 +68,11 @@ export function CompareFloatingBar() {
           >
             {t('compare.clearAll')}
           </button>
-          <Link to="/compare">
-            <Button variant="warm" className="px-4 py-2 text-xs sm:text-sm">
-              {t('compare.open')}
-            </Button>
-          </Link>
+          <ButtonLink
+            link={{ label: t('compare.open'), href: '/compare' }}
+            variant="warm"
+            className="px-4 py-2 text-xs sm:text-sm"
+          />
         </div>
       </div>
     </div>

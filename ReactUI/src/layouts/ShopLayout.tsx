@@ -22,6 +22,7 @@ import { useResumePendingCartAdd } from '@/hooks/useResumePendingCartAdd'
 import { useCartSync } from '@/hooks/useCartSync'
 import { useAddressSync } from '@/hooks/useAddressSync'
 import { useWishlistSync } from '@/hooks/useWishlistSync'
+import { useHydrated } from '@/hooks/useHydrated'
 import { useIsAuthenticated } from '@/stores/userStore'
 import { AiAssistantWidget } from '@/components/assistant/AiAssistantWidget'
 import { useShopPageMetaDefaults } from '@/hooks/useShopPageMeta'
@@ -29,7 +30,9 @@ import { useShopPageMetaDefaults } from '@/hooks/useShopPageMeta'
 function ShopLayoutContent() {
   const { t } = useTranslation()
   const chromeRef = useRef<HTMLDivElement>(null)
+  const hydrated = useHydrated()
   const isAuthenticated = useIsAuthenticated()
+  const showAuthChrome = hydrated && isAuthenticated
   useLocaleSettings()
   useTheme()
   useResumePendingCartAdd()
@@ -42,7 +45,7 @@ function ShopLayoutContent() {
 
   return (
     <>
-      {loading || !data ? (
+      {!data ? (
         <header className="border-b border-border bg-surface">
           <Container className="flex items-center justify-between py-3">
             <span className="font-display text-xl font-semibold tracking-tight md:text-2xl">
@@ -51,7 +54,7 @@ function ShopLayoutContent() {
             <div className="flex items-center gap-2 sm:gap-3">
               <ThemeSwitcher />
               <LanguageSwitcher />
-              <Spinner size="sm" />
+              {loading && <Spinner size="sm" />}
             </div>
           </Container>
         </header>
@@ -69,9 +72,9 @@ function ShopLayoutContent() {
       <Outlet />
 
       {data && <SiteFooter data={data.footer} />}
-      {isAuthenticated && <CartDrawer />}
+      {showAuthChrome && <CartDrawer />}
       <CompareFloatingBar />
-      {isAuthenticated && <AddressBookModal />}
+      {showAuthChrome && <AddressBookModal />}
       <LoginModal />
       <StoryViewerModal />
       <AiAssistantWidget />

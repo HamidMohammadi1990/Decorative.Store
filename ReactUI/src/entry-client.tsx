@@ -13,6 +13,8 @@ import { AppProviders } from '@/providers/AppProviders'
 import { createAppRouter } from '@/routes/createAppRouter'
 import { preloadLazyRoutes, preloadLazyRoutesForPath } from '@/routes/preloadLazyRoutes'
 import type { Locale } from '@/models/shared/locale.model'
+import { seedLanguageFromHydration } from '@/extensions/seedLanguageFromHydration'
+import { resolveSsrBootLocale } from '@/ssr/resolveSsrBootLocale'
 import './index.css'
 
 declare global {
@@ -62,7 +64,14 @@ function ClientShell({ router }: { router: ReturnType<typeof createAppRouter> })
 async function boot() {
   applyTheme(getStoredTheme())
 
-  await syncStorefrontLocaleBeforeHydration(window.__SSR_LOCALE__)
+  const hydrationData = window.__ROUTER_HYDRATION__
+  const bootLocale = resolveSsrBootLocale(window.__SSR_LOCALE__, hydrationData)
+  if (bootLocale && !window.__SSR_LOCALE__) {
+    window.__SSR_LOCALE__ = bootLocale
+  }
+
+  await syncStorefrontLocaleBeforeHydration(bootLocale)
+  seedLanguageFromHydration(hydrationData)
 
   initWebVitalsReporting()
 
@@ -83,6 +92,7 @@ async function boot() {
 
   if (rootEl.hasChildNodes()) {
     hydrateRoot(rootEl, app)
+    delete window.__SSR_LOCALE__
   } else {
     createRoot(rootEl).render(app)
   }

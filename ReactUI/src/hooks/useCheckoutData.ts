@@ -18,7 +18,8 @@ function buildProductIdsKey(lines: CartLine[]) {
 
 export function useCheckoutData(lines: CartLine[]): UseCheckoutDataResult {
   const { locale } = useLocaleSettings()
-  const userId = useUserStore((s) => s.user?.id ?? '')
+  const accessToken = useUserStore((s) => s.accessToken)
+  const userId = useUserStore((s) => s.user?.id)
   const [sessions, setSessions] = useState<CheckoutProductSession[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -45,17 +46,23 @@ export function useCheckoutData(lines: CartLine[]): UseCheckoutDataResult {
   }, [lines])
 
   useEffect(() => {
-    if (!authReady || !productIdsKey) {
-      if (!productIdsKey) {
-        setSessions([])
-        setLoading(false)
-        setError(null)
-      }
+    if (!productIdsKey) {
+      setSessions([])
+      setLoading(false)
+      setError(null)
+      return
+    }
+
+    if (!authReady) {
+      return
+    }
+
+    // Avoid a guest fetch before persisted user id is available (caused duplicate calls).
+    if (accessToken && !userId) {
       return
     }
 
     const productIds = productIdsKey.split('|')
-    const accessToken = useUserStore.getState().accessToken
     let cancelled = false
 
     setLoading(true)
@@ -63,12 +70,7 @@ export function useCheckoutData(lines: CartLine[]): UseCheckoutDataResult {
 
     void Promise.all(
       productIds.map(async (productId) => {
-        const data = await checkoutService.getProductCheckout(
-          productId,
-          locale,
-          accessToken,
-          userId,
-        )
+        const data = await checkoutService.getProductCheckout(productId, locale, accessToken)
         return {
           productId,
           productTitle: productTitlesRef.current.get(productId) ?? data.product.title,
@@ -93,7 +95,7 @@ export function useCheckoutData(lines: CartLine[]): UseCheckoutDataResult {
     return () => {
       cancelled = true
     }
-  }, [authReady, locale, productIdsKey, userId])
+  }, [authReady, accessToken, locale, productIdsKey, userId])
 
   const addresses = useMemo(() => {
     const map = new Map<string, CheckoutUserAddress>()

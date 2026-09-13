@@ -6,6 +6,9 @@ import {
   readStringField,
 } from '@/services/api/apiNormalize'
 
+/** Page size for admin dropdown/select lists (categories, sub-categories, etc.). */
+export const ADMIN_SELECT_PAGE_SIZE = 500
+
 export interface AdminPagedResult<T> {
   items: T[]
   totalCount: number

@@ -124,8 +124,7 @@ export function ProductsPanel() {
 
     setSubCategoriesLoading(true)
     try {
-      const subResult = await adminSubCategoryService.getAll(accessToken, locale, {
-        pageSize: 100,
+      const subResult = await adminSubCategoryService.getAllForSelect(accessToken, locale, {
         languageId: contentLanguageId ?? undefined,
       })
       setSubCategories(subResult.items)
@@ -137,8 +136,9 @@ export function ProductsPanel() {
   }, [accessToken, contentLanguageId, locale])
 
   useEffect(() => {
-    if (!languageLoading) void loadSubCategories()
-  }, [languageLoading, loadSubCategories])
+    if (!canLoad) return
+    void loadSubCategories()
+  }, [canLoad, loadSubCategories])
 
   const applySearch = () => {
     setAppliedSearch(search)

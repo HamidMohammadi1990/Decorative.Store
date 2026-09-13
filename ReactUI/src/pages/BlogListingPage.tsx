@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
 import { BlogCard } from '@/components/blog/BlogCard'
 import { BlogCategoryFilter } from '@/components/blog/BlogCategoryFilter'
@@ -90,13 +90,13 @@ export function BlogListingPage() {
           aria-label="Breadcrumb"
           className="mb-6 flex flex-wrap items-center gap-1.5 text-xs text-text-muted"
         >
-          <Link to="/" className="transition-colors hover:text-warm">
+          <CatalogNavLink href="/" className="transition-colors hover:text-warm">
             {t('product.breadcrumbHome')}
-          </Link>
+          </CatalogNavLink>
           <span aria-hidden>/</span>
-          <Link to="/blog" className="transition-colors hover:text-warm">
+          <CatalogNavLink href="/blog" className="transition-colors hover:text-warm">
             {t('blog.title')}
-          </Link>
+          </CatalogNavLink>
           {activeCategoryLabel && (
             <>
               <span aria-hidden>/</span>
@@ -141,12 +141,12 @@ export function BlogListingPage() {
             <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-text-muted">
               {t('blog.emptyMessage')}
             </p>
-            <Link
-              to="/blog"
+            <CatalogNavLink
+              href="/blog"
               className="mt-6 inline-flex items-center justify-center rounded-full bg-warm px-5 py-2.5 text-sm font-semibold text-warm-text transition-opacity hover:opacity-90"
             >
               {t('blog.viewAll')}
-            </Link>
+            </CatalogNavLink>
           </div>
         ) : (
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6 xl:gap-7">

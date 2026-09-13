@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSearchParams, useRouteLoaderData } from 'react-router-dom'
 import type { CatalogSearchResponse } from '@/models/catalog/catalogSearch.model'
 import { catalogSearchService } from '@/services/catalogSearchService'
@@ -27,6 +27,8 @@ export function useSearchResults() {
     loaderFresh ? (loaderData.data ?? null) : null,
   )
   const [loading, setLoading] = useState(() => query.length >= MIN_QUERY_LENGTH && !loaderFresh)
+  const dataRef = useRef(data)
+  dataRef.current = data
 
   useEffect(() => {
     if (query.length < MIN_QUERY_LENGTH) {
@@ -42,7 +44,9 @@ export function useSearchResults() {
     }
 
     let cancelled = false
-    setLoading(true)
+    if (!dataRef.current) {
+      setLoading(true)
+    }
 
     catalogSearchService
       .search(query, locale, RESULT_LIMIT)

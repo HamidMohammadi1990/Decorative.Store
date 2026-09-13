@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { useHydrated } from '@/hooks/useHydrated'
 import { MoonIcon, SunIcon, SystemThemeIcon } from '@/components/ui/ThemeIcons'
 import { useTheme } from '@/hooks/useTheme'
 import type { ThemeMode } from '@/models/shared/theme.model'
@@ -16,6 +17,7 @@ const THEME_OPTIONS: {
 export function ThemeSwitcher() {
   const { t } = useTranslation()
   const { theme, setTheme } = useTheme()
+  const hydrated = useHydrated()
 
   return (
     <div
@@ -24,7 +26,7 @@ export function ThemeSwitcher() {
       className="inline-flex items-center gap-0.5 rounded-full border border-warm-muted bg-warm-soft/60 p-0.5"
     >
       {THEME_OPTIONS.map(({ value, labelKey, Icon }) => {
-        const isActive = theme === value
+        const isActive = hydrated && theme === value
 
         return (
           <button

@@ -55,7 +55,10 @@ async function requestApi<T>(
     !path.includes('/account/permissions')
   ) {
     const { usePermissionStore } = await import('@/stores/permissionStore')
-    void usePermissionStore.getState().reload()
+    const permissionStore = usePermissionStore.getState()
+    if (permissionStore.dashboardActive) {
+      void permissionStore.reload()
+    }
   }
 
   if (

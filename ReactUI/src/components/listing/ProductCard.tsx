@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
 import type { ProductSummary } from '@/models/catalog/product.model'
 import { AddToBagButton } from '@/components/cart/AddToBagButton'
@@ -40,13 +40,13 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-border/60 bg-surface shadow-sm transition-all duration-300 hover:-translate-y-px hover:border-warm/25 hover:shadow-md">
       <div className="relative aspect-[5/6] overflow-hidden bg-surface-muted">
-        <Link to={productPath} className="block size-full" prefetch="none">
+        <CatalogNavLink href={productPath} className="block size-full">
           <LocalImage
             image={product.image}
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 280px"
             className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
           />
-        </Link>
+        </CatalogNavLink>
 
         <div
           aria-hidden
@@ -81,12 +81,12 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       <div className="flex flex-1 flex-col p-2.5 sm:p-3">
-        <Link
-          to={productPath}
+        <CatalogNavLink
+          href={productPath}
           className="line-clamp-2 min-h-[2.5rem] text-[13px] font-semibold leading-snug text-text transition-colors group-hover:text-warm sm:min-h-[2.75rem] sm:text-sm"
         >
           {product.title}
-        </Link>
+        </CatalogNavLink>
 
         <div className="mt-1 flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5">
           <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5">

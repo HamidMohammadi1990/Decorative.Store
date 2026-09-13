@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useParams, useRouteLoaderData } from 'react-router-dom'
 import type { BlogPostDetail, BlogPostSummary } from '@/models/blog/blog.model'
 import { blogService } from '@/services/blogService'
@@ -32,6 +32,8 @@ export function useBlogPost() {
   const [error, setError] = useState<string | null>(() =>
     loaderFresh ? (loaderData.error ?? null) : null,
   )
+  const postRef = useRef(post)
+  postRef.current = post
 
   const load = useCallback(async () => {
     if (!slug) {
@@ -40,7 +42,9 @@ export function useBlogPost() {
       return
     }
 
-    setLoading(true)
+    if (!postRef.current) {
+      setLoading(true)
+    }
     setError(null)
 
     try {

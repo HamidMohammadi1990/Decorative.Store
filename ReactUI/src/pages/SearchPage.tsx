@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { ListingSidebar } from '@/components/listing/ListingSidebar'
 import { ListingToolbar } from '@/components/listing/ListingToolbar'
 import { ListingPagination } from '@/components/listing/ListingPagination'
@@ -102,7 +103,7 @@ export function SearchPage() {
     )
   }
 
-  if (loading) {
+  if (loading && !data) {
     return <PageLoading />
   }
 
@@ -132,12 +133,12 @@ export function SearchPage() {
                 <ul className="divide-y divide-border rounded-sm border border-border">
                   {data!.categories.map((item) => (
                     <li key={item.slug}>
-                      <Link
-                        to={`/${item.slug}`}
+                      <CatalogNavLink
+                        href={`/${item.slug}`}
                         className="block px-4 py-3 text-sm hover:bg-surface-muted"
                       >
                         {item.title}
-                      </Link>
+                      </CatalogNavLink>
                     </li>
                   ))}
                 </ul>
@@ -152,8 +153,8 @@ export function SearchPage() {
                 <ul className="divide-y divide-border rounded-sm border border-border">
                   {data!.subCategories.map((item) => (
                     <li key={item.slug}>
-                      <Link
-                        to={`/${item.slug}`}
+                      <CatalogNavLink
+                        href={`/${item.slug}`}
                         className="block px-4 py-3 text-sm hover:bg-surface-muted"
                       >
                         <span>{item.title}</span>
@@ -162,7 +163,7 @@ export function SearchPage() {
                             {item.categoryTitle}
                           </span>
                         ) : null}
-                      </Link>
+                      </CatalogNavLink>
                     </li>
                   ))}
                 </ul>

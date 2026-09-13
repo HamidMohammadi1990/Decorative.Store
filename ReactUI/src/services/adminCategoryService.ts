@@ -7,6 +7,9 @@ import type { Locale } from '@/models/shared/locale.model'
 import { apiDelete, apiPost, apiPut } from '@/services/api/apiClient'
 import { readRecord, readStringField } from '@/services/api/apiNormalize'
 import {
+  ADMIN_SELECT_PAGE_SIZE,
+  computeTotalPages,
+  fetchAllAdminPages,
   normalizeAdminPaged,
   normalizeTranslations,
   paginationBody,
@@ -15,8 +18,14 @@ import {
   readIsActive,
   type AdminPagedResult,
 } from '@/services/admin/adminCatalogNormalize'
+import {
+  buildAdminSelectCacheKey,
+  createAdminSelectCache,
+} from '@/services/admin/adminSelectListCache'
 
 const BASE = '/api/v1/admin/category'
+
+const categorySelectCache = createAdminSelectCache<AdminPagedResult<AdminCategory>>()
 
 function normalizeCategory(data: unknown, languageId?: number): AdminCategory | null {
   const record = readRecord(data)
@@ -84,18 +93,27 @@ export const adminCategoryService = {
     locale: Locale,
     options: { languageId?: number } = {},
   ): Promise<AdminPagedResult<AdminCategory>> {
-    const probe = await this.getAll(accessToken, locale, {
-      pageNumber: 1,
-      pageSize: 1,
-      languageId: options.languageId,
-    })
-    const pageSize = Math.max(probe.totalCount, 1)
-    if (pageSize <= probe.items.length) return probe
+    const cacheKey = buildAdminSelectCacheKey(accessToken, locale, options.languageId)
 
-    return this.getAll(accessToken, locale, {
-      pageNumber: 1,
-      pageSize,
-      languageId: options.languageId,
+    return categorySelectCache.get(cacheKey, async () => {
+      const items = await fetchAllAdminPages(
+        (pageNumber, pageSize) =>
+          this.getAll(accessToken, locale, {
+            pageNumber,
+            pageSize,
+            languageId: options.languageId,
+          }),
+        ADMIN_SELECT_PAGE_SIZE,
+      )
+
+      const pageSize = Math.max(items.length, 1)
+      return {
+        items,
+        totalCount: items.length,
+        pageNumber: 1,
+        pageSize,
+        totalPages: computeTotalPages(items.length, pageSize),
+      }
     })
   },
 
@@ -106,15 +124,18 @@ export const adminCategoryService = {
 
   async create(accessToken: string, locale: Locale, input: CreateCategoryInput): Promise<string> {
     const data = await apiPost<unknown>(`${BASE}/create`, input, { locale, accessToken })
+    categorySelectCache.invalidate()
     const record = readRecord(data)
     return readStringField(record ?? {}, 'id', 'Id')
   },
 
   async update(accessToken: string, locale: Locale, input: UpdateCategoryInput): Promise<void> {
     await apiPut(`${BASE}/update`, input, { locale, accessToken })
+    categorySelectCache.invalidate()
   },
 
   async delete(accessToken: string, id: string): Promise<void> {
     await apiDelete(`${BASE}/delete`, accessToken, { id })
+    categorySelectCache.invalidate()
   },
 }

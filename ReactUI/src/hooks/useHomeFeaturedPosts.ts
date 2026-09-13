@@ -8,14 +8,14 @@ import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 export function useHomeFeaturedPosts() {
   const loaderData = useRouteLoaderData('home') as HomePageLoaderData | undefined
   const locale = useStorefrontLocale(loaderData?.locale)
-  const loaderFresh = Boolean(loaderData && loaderData.locale === locale)
+  const loaderLocaleFresh = loaderData?.locale === locale
 
-  const [posts, setPosts] = useState<BlogPostSummary[]>(() =>
-    loaderFresh ? loaderData!.featuredPosts : [],
+  const [posts, setPosts] = useState<BlogPostSummary[]>(
+    () => loaderData?.featuredPosts ?? [],
   )
 
   useEffect(() => {
-    if (loaderFresh) {
+    if (loaderLocaleFresh) {
       setPosts(loaderData!.featuredPosts)
       return
     }
@@ -30,7 +30,7 @@ export function useHomeFeaturedPosts() {
     return () => {
       cancelled = true
     }
-  }, [locale, loaderFresh, loaderData])
+  }, [locale, loaderLocaleFresh, loaderData])
 
   return posts
 }

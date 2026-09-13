@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, useRouteLoaderData } from 'react-router-dom'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import type { ProductSummary } from '@/models/catalog/product.model'
@@ -37,6 +37,8 @@ export function useProductDetail(): UseProductDetailResult {
   const [error, setError] = useState<string | null>(() =>
     loaderFresh ? (loaderData.error ?? null) : null,
   )
+  const productRef = useRef(product)
+  productRef.current = product
 
   useEffect(() => {
     if (!slug) {
@@ -57,7 +59,9 @@ export function useProductDetail(): UseProductDetailResult {
 
     let cancelled = false
 
-    setLoading(true)
+    if (!productRef.current) {
+      setLoading(true)
+    }
     setError(null)
 
     void Promise.all([

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import type { NavLinkGroup } from '@/models/shared/link.model'
 import { navGroupHasPanel, splitJournalNav } from '@/extensions/flattenNavLinks'
 import { MegaMenuDropdown } from '@/components/header/MegaMenuDropdown'
@@ -104,13 +104,13 @@ export function MainNav({ items }: MainNavProps) {
         <ul className="flex w-max flex-nowrap items-center gap-x-4 xl:gap-x-5">
           {journal?.href && (
             <li className="relative shrink-0">
-              <Link
-                to={journal.href}
+              <CatalogNavLink
+                href={journal.href}
                 className="inline-flex items-center gap-1.5 rounded-full bg-warm-soft/70 px-3 py-1.5 text-sm font-semibold tracking-wide whitespace-nowrap text-warm transition-colors hover:bg-warm-soft hover:text-warm"
               >
                 <JournalIcon className="text-warm" />
                 {journal.label}
-              </Link>
+              </CatalogNavLink>
             </li>
           )}
 
@@ -146,9 +146,8 @@ export function MainNav({ items }: MainNavProps) {
                 }}
               >
                 {item.href ? (
-                  <Link
-                    to={item.href}
-                    prefetch="none"
+                  <CatalogNavLink
+                    href={item.href}
                     onClick={() => closeMenu()}
                     className={`inline-flex items-center gap-1 py-2 text-sm font-medium tracking-wide whitespace-nowrap transition-colors hover:text-accent ${
                       isOpen ? 'text-accent' : ''
@@ -156,7 +155,7 @@ export function MainNav({ items }: MainNavProps) {
                   >
                     {item.label}
                     {hasPanel && <ChevronIcon expanded={isOpen} />}
-                  </Link>
+                  </CatalogNavLink>
                 ) : (
                   <button
                     type="button"

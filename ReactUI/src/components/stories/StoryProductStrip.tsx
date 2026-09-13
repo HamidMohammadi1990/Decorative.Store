@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import { LocalImage } from '@/components/ui/LocalImage'
@@ -22,9 +22,9 @@ export function StoryProductStrip({ products }: StoryProductStripProps) {
       </p>
       <div className="flex gap-2 overflow-x-auto pb-1">
         {products.map((product) => (
-          <Link
+          <CatalogNavLink
             key={product.slug}
-            to={`/product/${product.slug}`}
+            href={`/product/${product.slug}`}
             className="flex min-w-[11rem] max-w-[13rem] shrink-0 items-center gap-2.5 rounded-lg border border-white/15 bg-black/40 p-2 backdrop-blur-sm transition-colors hover:border-warm/50 hover:bg-black/55"
           >
             <div className="size-12 shrink-0 overflow-hidden rounded-md bg-white/10">
@@ -42,7 +42,7 @@ export function StoryProductStrip({ products }: StoryProductStripProps) {
                 />
               )}
             </div>
-          </Link>
+          </CatalogNavLink>
         ))}
       </div>
     </div>

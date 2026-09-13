@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation, useRouteLoaderData } from 'react-router-dom'
+import { useLocation, useNavigation, useRouteLoaderData } from 'react-router-dom'
 import type { ProductListingResult } from '@/models/catalog/listing.model'
 import { getCatalogListingCached } from '@/services/catalogListingCache'
 import type { ProductListingLoaderData } from '@/routes/loaders/types'
@@ -12,7 +12,16 @@ interface UseProductListingResult {
   reload: () => void
 }
 
-function isLoaderFresh(
+type ClientListingState = {
+  data: ProductListingResult | null
+  error: string | null
+  loading: boolean
+  locale: string
+  pathname: string
+  search: string
+}
+
+function matchesLoaderRoute(
   loaderData: ProductListingLoaderData | undefined,
   locale: string,
   pathname: string,
@@ -27,39 +36,64 @@ function isLoaderFresh(
   )
 }
 
+function sameRoute(
+  loaderData: ProductListingLoaderData | undefined,
+  pathname: string,
+  search: string,
+) {
+  return Boolean(loaderData && loaderData.pathname === pathname && loaderData.search === search)
+}
+
+function resolveClientState(
+  clientState: ClientListingState | null,
+  locale: string,
+  pathname: string,
+  search: string,
+): ClientListingState | null {
+  if (!clientState) return null
+  if (
+    clientState.locale !== locale ||
+    clientState.pathname !== pathname ||
+    clientState.search !== search
+  ) {
+    return null
+  }
+  return clientState
+}
+
 export function useProductListing(): UseProductListingResult {
   const location = useLocation()
+  const navigation = useNavigation()
   const loaderData = useRouteLoaderData('product-listing') as ProductListingLoaderData | undefined
   const locale = useStorefrontLocale(loaderData?.locale)
-  const requestKey = `${locale}|${location.pathname}|${location.search}`
-  const loaderFresh = isLoaderFresh(
+  const loaderMatches = matchesLoaderRoute(
     loaderData,
     locale,
     location.pathname,
     location.search,
   )
+  const loaderStaleForLocale =
+    sameRoute(loaderData, location.pathname, location.search) &&
+    loaderData!.locale !== locale
 
-  const [data, setData] = useState<ProductListingResult | null>(() =>
-    loaderFresh ? loaderData.data : null,
-  )
-  const [loading, setLoading] = useState(() => !loaderFresh)
-  const [error, setError] = useState<string | null>(() =>
-    loaderFresh ? (loaderData.error ?? null) : null,
-  )
   const [reloadToken, setReloadToken] = useState(0)
+  const [clientState, setClientState] = useState<ClientListingState | null>(null)
+
+  const reload = () => setReloadToken((value) => value + 1)
 
   useEffect(() => {
-    if (loaderFresh) {
-      setData(loaderData.data)
-      setError(loaderData.error ?? null)
-      setLoading(false)
-      return
-    }
+    const shouldRefetch = reloadToken > 0 || loaderStaleForLocale
+    if (!shouldRefetch) return
 
     let cancelled = false
-    setLoading(true)
-    setData(null)
-    setError(null)
+    setClientState({
+      data: null,
+      error: null,
+      loading: true,
+      locale,
+      pathname: location.pathname,
+      search: location.search,
+    })
 
     void getCatalogListingCached(
       {
@@ -70,27 +104,82 @@ export function useProductListing(): UseProductListingResult {
     )
       .then((result) => {
         if (cancelled) return
-        setData(result)
-        setError(result.pathNotFound ? 'not-found' : null)
+        setClientState({
+          data: result,
+          error: result.pathNotFound ? 'not-found' : null,
+          loading: false,
+          locale,
+          pathname: location.pathname,
+          search: location.search,
+        })
       })
       .catch(() => {
         if (cancelled) return
-        setError('failed')
-      })
-      .finally(() => {
-        if (cancelled) return
-        setLoading(false)
+        setClientState({
+          data: null,
+          error: 'failed',
+          loading: false,
+          locale,
+          pathname: location.pathname,
+          search: location.search,
+        })
       })
 
     return () => {
       cancelled = true
     }
-  }, [requestKey, reloadToken, loaderFresh, loaderData, locale, location.pathname, location.search])
+  }, [loaderStaleForLocale, reloadToken, locale, location.pathname, location.search])
+
+  const clientFresh = resolveClientState(
+    clientState,
+    locale,
+    location.pathname,
+    location.search,
+  )
+
+  if (clientFresh?.loading) {
+    return { data: null, loading: true, error: null, reload }
+  }
+
+  if (clientFresh && (clientFresh.data || clientFresh.error)) {
+    return {
+      data: clientFresh.data,
+      loading: false,
+      error: clientFresh.error,
+      reload,
+    }
+  }
+
+  if (loaderStaleForLocale) {
+    return { data: null, loading: true, error: null, reload }
+  }
+
+  const loaderPending =
+    navigation.state === 'loading' &&
+    navigation.location?.pathname === location.pathname
+
+  if (loaderMatches) {
+    return {
+      data: loaderData.data,
+      loading: false,
+      error: loaderData.error ?? null,
+      reload,
+    }
+  }
+
+  if (sameRoute(loaderData, location.pathname, location.search)) {
+    return {
+      data: loaderData!.data ?? null,
+      loading: loaderPending,
+      error: loaderData!.error ?? null,
+      reload,
+    }
+  }
 
   return {
-    data,
-    loading,
-    error,
-    reload: () => setReloadToken((value) => value + 1),
+    data: null,
+    loading: loaderPending,
+    error: null,
+    reload,
   }
 }

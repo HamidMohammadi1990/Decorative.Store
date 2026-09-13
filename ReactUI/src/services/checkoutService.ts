@@ -7,8 +7,8 @@ const CHECKOUT_PATH = '/api/v1/order/checkout'
 const checkoutCache = new Map<string, CheckoutOrderData>()
 const checkoutRequests = new Map<string, Promise<CheckoutOrderData>>()
 
-function requestKey(productId: string, locale: Locale, userId?: string | null) {
-  return `${locale}:${userId ?? 'guest'}:${productId}`
+function requestKey(productId: string, locale: Locale, accessToken?: string | null) {
+  return `${locale}:${accessToken ? 'auth' : 'guest'}:${productId}`
 }
 
 export const checkoutService = {
@@ -16,9 +16,8 @@ export const checkoutService = {
     productId: string,
     locale: Locale,
     accessToken?: string | null,
-    userId?: string | null,
   ): Promise<CheckoutOrderData> {
-    const key = requestKey(productId, locale, userId)
+    const key = requestKey(productId, locale, accessToken)
 
     const cached = checkoutCache.get(key)
     if (cached) return cached

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
 import { CloseIcon } from '@/components/ui/CloseIcon'
@@ -37,12 +37,12 @@ export function CartPageLineItem({
   const productImage = (
     <div className="size-[5.5rem] shrink-0 overflow-hidden rounded-lg bg-surface-muted ring-1 ring-border/60 sm:size-24">
       {productHref ? (
-        <Link to={productHref} className="block size-full">
+        <CatalogNavLink href={productHref} className="block size-full">
           <LocalImage
             image={line.image}
             className="size-full object-cover transition-transform duration-300 hover:scale-105"
           />
-        </Link>
+        </CatalogNavLink>
       ) : (
         <LocalImage image={line.image} className="size-full object-cover" />
       )}
@@ -51,12 +51,12 @@ export function CartPageLineItem({
 
   const productTitle = (compact = false) =>
     productHref ? (
-      <Link
-        to={productHref}
+      <CatalogNavLink
+        href={productHref}
         className={`line-clamp-2 text-sm font-semibold leading-snug text-text transition-colors hover:text-warm sm:text-base${compact ? ' pe-8' : ''}`}
       >
         {line.title}
-      </Link>
+      </CatalogNavLink>
     ) : (
       <p
         className={`line-clamp-2 text-sm font-semibold leading-snug text-text sm:text-base${compact ? ' pe-8' : ''}`}

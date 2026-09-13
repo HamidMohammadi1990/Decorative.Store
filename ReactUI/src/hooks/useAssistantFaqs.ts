@@ -1,21 +1,21 @@
 import { useCallback, useRef, useState } from 'react'
 import type { AssistantFaqItem } from '@/models/admin/assistantFaq.model'
-import { useCurrentLanguageId } from '@/hooks/useCurrentLanguageId'
+import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { assistantFaqService } from '@/services/assistantFaqService'
+import { languageService } from '@/services/languageService'
 
 export function useAssistantFaqs() {
-  const { languageId, locale, loading: languageLoading } = useCurrentLanguageId()
+  const { locale } = useLocaleSettings()
   const [faqs, setFaqs] = useState<AssistantFaqItem[]>([])
   const [loading, setLoading] = useState(false)
   const requestIdRef = useRef(0)
 
   const loadFaqs = useCallback(async () => {
-    if (languageLoading || languageId == null) return
-
     const requestId = ++requestIdRef.current
     setLoading(true)
 
     try {
+      const languageId = await languageService.resolveLanguageId(locale)
       const items = await assistantFaqService.search(locale, languageId)
       if (requestIdRef.current === requestId) {
         setFaqs(items)
@@ -29,7 +29,7 @@ export function useAssistantFaqs() {
         setLoading(false)
       }
     }
-  }, [languageId, languageLoading, locale])
+  }, [locale])
 
   return { faqs, loading, loadFaqs }
 }

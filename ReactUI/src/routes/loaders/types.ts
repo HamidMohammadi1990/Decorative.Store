@@ -17,6 +17,7 @@ import type { Locale } from '@/models/shared/locale.model'
 export interface ShopLayoutLoaderData {
   locale: Locale
   fetchKey: string
+  languageId: number
   homePage: HomePage | null
   stories: StoryGroup[]
   blogNavCategories: BlogCategory[]

@@ -14,6 +14,7 @@ import { Portal } from '@/components/ui/Portal'
 import { UserIcon } from '@/components/ui/HeaderIcons'
 import { UserAvatar } from '@/components/ui/UserAvatar'
 import { positionAnchorDropdown } from '@/extensions/positionAnchorDropdown'
+import { useHydrated } from '@/hooks/useHydrated'
 import { useUserStore } from '@/stores/userStore'
 
 interface UserAccountMenuProps {
@@ -40,7 +41,9 @@ export function UserAccountMenu({ accountLabel }: UserAccountMenuProps) {
   const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
+  const hydrated = useHydrated()
   const user = useUserStore((s) => s.user)
+  const displayUser = hydrated ? user : null
   const logout = useUserStore((s) => s.logout)
   const [open, setOpen] = useState(false)
   const anchorRef = useRef<HTMLButtonElement>(null)
@@ -99,7 +102,7 @@ export function UserAccountMenu({ accountLabel }: UserAccountMenuProps) {
       window.removeEventListener('resize', updatePosition)
       window.removeEventListener('scroll', updatePosition, true)
     }
-  }, [open, user])
+  }, [open, displayUser])
 
   const handleLogout = () => {
     void logout().then(() => {
@@ -108,10 +111,10 @@ export function UserAccountMenu({ accountLabel }: UserAccountMenuProps) {
     })
   }
 
-  const displayName = user
-    ? user.lastName
-      ? `${user.firstName} ${user.lastName}`
-      : user.firstName
+  const displayName = displayUser
+    ? displayUser.lastName
+      ? `${displayUser.firstName} ${displayUser.lastName}`
+      : displayUser.firstName
     : null
 
   const menuLabel = (section: DashboardSection | 'cart') =>
@@ -131,17 +134,17 @@ export function UserAccountMenu({ accountLabel }: UserAccountMenuProps) {
           open ? 'text-warm' : ''
         }`}
       >
-        {user && displayName ? (
+        {displayUser && displayName ? (
           <UserAvatar
             name={displayName}
-            imageUrl={user.profileImageUrl}
+            imageUrl={displayUser.profileImageUrl}
             size="sm"
             className={`ring-2 transition-shadow ${open ? 'ring-warm/35' : 'ring-transparent group-hover:ring-warm/20'}`}
           />
         ) : (
           <UserIcon size={22} />
         )}
-        {user && (
+        {displayUser && (
           <span
             aria-hidden
             className="absolute -end-0.5 -top-0.5 size-2 rounded-full border border-surface bg-accent"
@@ -159,7 +162,7 @@ export function UserAccountMenu({ accountLabel }: UserAccountMenuProps) {
               aria-label={t('accountMenu.label')}
               className="w-[17.5rem] overflow-hidden rounded-xl border border-border/80 bg-surface shadow-[0_16px_48px_-16px_rgba(0,0,0,0.22)] ring-1 ring-black/[0.03]"
             >
-              {user && displayName ? (
+              {displayUser && displayName ? (
                 <>
                   <div className="border-b border-border/80 bg-gradient-to-br from-warm-soft/80 via-surface to-surface px-3 pt-3 pb-2">
                     <Link
@@ -170,14 +173,14 @@ export function UserAccountMenu({ accountLabel }: UserAccountMenuProps) {
                     >
                       <UserAvatar
                         name={displayName}
-                        imageUrl={user.profileImageUrl}
+                        imageUrl={displayUser.profileImageUrl}
                         size="md"
                       />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-semibold text-text">
-                          {t('accountMenu.greeting', { name: user.firstName })}
+                          {t('accountMenu.greeting', { name: displayUser.firstName })}
                         </p>
-                        <p className="mt-0.5 truncate text-xs text-text-muted">{user.email}</p>
+                        <p className="mt-0.5 truncate text-xs text-text-muted">{displayUser.email}</p>
                         <p className="mt-1.5 text-[11px] font-medium text-warm">
                           {t('accountMenu.manageAccount')}
                         </p>

@@ -8,6 +8,7 @@ import type { NavLinkGroup } from '@/models/shared/link.model'
 import { BlogMobileNav } from '@/components/header/BlogNav'
 import { navGroupHasPanel, splitJournalNav } from '@/extensions/flattenNavLinks'
 import { MegaMenuLink, navShopAllLinkClass } from '@/components/header/MegaMenuLink'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
 import { CloseIcon } from '@/components/ui/CloseIcon'
 import { JournalIcon, NavCategoryIcon } from '@/components/ui/NavCategoryIcons'
@@ -96,14 +97,14 @@ export function MobileNavDrawer({
             <ul className="px-2">
               {journal?.href && (
                 <li className="border-b border-border">
-                  <Link
-                    to={journal.href}
+                  <CatalogNavLink
+                    href={journal.href}
                     className="flex items-center gap-2 px-2 py-2.5 text-base font-semibold text-text transition-colors hover:text-warm"
                     onClick={onClose}
                   >
                     <JournalIcon className="text-warm" />
                     {journal.label}
-                  </Link>
+                  </CatalogNavLink>
                 </li>
               )}
               {categories.map((group) => (
@@ -169,14 +170,14 @@ function MobileNavCategory({
       {hasPanel && isExpanded && (
         <div className="mb-3 ms-4 border-s-2 border-warm-muted ps-3">
           {group.href && (
-            <Link
-              to={group.href}
+            <CatalogNavLink
+              href={group.href}
               className={`${navShopAllLinkClass} mb-3 w-full bg-warm-soft/80`}
               onClick={onClose}
             >
               <NavLinkIcon className="text-warm" />
               {shopAllLabel}
-            </Link>
+            </CatalogNavLink>
           )}
 
           {group.columns?.map((col) => (

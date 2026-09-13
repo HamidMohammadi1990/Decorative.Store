@@ -2,11 +2,14 @@ import { useTranslation } from 'react-i18next'
 import { AiChatPanel } from '@/components/assistant/AiChatPanel'
 import { useAssistantChat } from '@/hooks/useAssistantChat'
 import { useAssistantFaqs } from '@/hooks/useAssistantFaqs'
+import { useHydrated } from '@/hooks/useHydrated'
 import { useCompareStore } from '@/stores/compareStore'
 
 export function AiAssistantWidget() {
   const { t } = useTranslation()
-  const compareCount = useCompareStore((s) => s.slugs.length)
+  const hydrated = useHydrated()
+  const compareCountRaw = useCompareStore((s) => s.slugs.length)
+  const compareCount = hydrated ? compareCountRaw : 0
   const { faqs, loading: faqsLoading, loadFaqs } = useAssistantFaqs()
   const {
     isOpen,

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { CmsContentPageContent } from '@/models/content/cmsContentPage.model'
 import { cmsContentPageService } from '@/services/cmsContentPageService'
 import { useCmsContentLoaderData } from '@/hooks/useCmsContentLoaderData'
@@ -16,6 +16,8 @@ export function useCmsContentPage(slug: string) {
   )
   const [loading, setLoading] = useState(() => !loaderFresh && Boolean(slug))
   const [notFound, setNotFound] = useState(() => loaderData?.notFound ?? false)
+  const contentRef = useRef(content)
+  contentRef.current = content
 
   useEffect(() => {
     if (!slug) {
@@ -41,7 +43,9 @@ export function useCmsContentPage(slug: string) {
     let cancelled = false
 
     const load = async () => {
-      setLoading(true)
+      if (!contentRef.current) {
+        setLoading(true)
+      }
       setNotFound(false)
       try {
         const page = await cmsContentPageService.getPage(slug, locale)

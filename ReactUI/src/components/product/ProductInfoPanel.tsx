@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import { ProductColorSelector } from '@/components/product/ProductColorSelector'
@@ -55,20 +55,20 @@ export function ProductInfoPanel({
   return (
     <div className="min-w-0">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-        <Link to="/" className="font-medium text-accent hover:underline">
+        <CatalogNavLink href="/" className="font-medium text-accent hover:underline">
           {t('product.brandName')}
-        </Link>
+        </CatalogNavLink>
         <span className="text-border-strong" aria-hidden>
           |
         </span>
-        <Link
-          to={`/${primaryCategory}`}
+        <CatalogNavLink
+          href={`/${primaryCategory}`}
           className="text-text-muted transition-colors hover:text-text"
         >
           {t(`product.categories.${primaryCategory}`, {
             defaultValue: primaryCategory.replace(/-/g, ' '),
           })}
-        </Link>
+        </CatalogNavLink>
       </div>
 
       <h1 className="mt-3 text-xl font-bold leading-snug text-text md:text-2xl">

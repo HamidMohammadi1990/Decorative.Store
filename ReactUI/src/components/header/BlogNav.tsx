@@ -1,4 +1,5 @@
-import { Link, useLocation, useMatch } from 'react-router-dom'
+import { useLocation, useMatch } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
 import type { BlogCategory } from '@/models/blog/blog.model'
 import { JournalIcon } from '@/components/ui/NavCategoryIcons'
@@ -58,8 +59,8 @@ export function BlogMainNav({ categories, loading = false }: BlogMainNavProps) {
       >
         <ul className="flex w-max flex-nowrap items-center gap-x-4 xl:gap-x-5">
           <li className="shrink-0">
-            <Link
-              to="/blog"
+            <CatalogNavLink
+              href="/blog"
               className={`inline-flex items-center gap-1.5 py-2 text-sm font-medium tracking-wide whitespace-nowrap transition-colors ${
                 isAllActive
                   ? 'font-semibold text-warm'
@@ -68,7 +69,7 @@ export function BlogMainNav({ categories, loading = false }: BlogMainNavProps) {
             >
               <JournalIcon className={isAllActive ? 'text-warm' : 'text-text-muted'} />
               {t('blog.allCategories')}
-            </Link>
+            </CatalogNavLink>
           </li>
 
           {categories.map((category) => {
@@ -79,8 +80,8 @@ export function BlogMainNav({ categories, loading = false }: BlogMainNavProps) {
 
             return (
               <li key={category.id} className="shrink-0">
-                <Link
-                  to={`/blog/category/${category.slug}`}
+                <CatalogNavLink
+                  href={`/blog/category/${category.slug}`}
                   className={`inline-block py-2 text-sm font-medium tracking-wide whitespace-nowrap transition-colors ${
                     isActive
                       ? 'font-semibold text-warm'
@@ -88,7 +89,7 @@ export function BlogMainNav({ categories, loading = false }: BlogMainNavProps) {
                   }`}
                 >
                   {label}
-                </Link>
+                </CatalogNavLink>
               </li>
             )
           })}
@@ -96,12 +97,12 @@ export function BlogMainNav({ categories, loading = false }: BlogMainNavProps) {
           <li className="h-5 w-px shrink-0 bg-border" aria-hidden />
 
           <li className="shrink-0">
-            <Link
-              to="/"
+            <CatalogNavLink
+              href="/"
               className="inline-block py-2 text-sm font-medium tracking-wide whitespace-nowrap text-text-muted transition-colors hover:text-text"
             >
               {t('blog.backToShop')}
-            </Link>
+            </CatalogNavLink>
           </li>
         </ul>
       </div>
@@ -142,8 +143,8 @@ export function BlogMobileNav({
   return (
     <ul className="px-2">
       <li className="border-b border-border">
-        <Link
-          to="/blog"
+        <CatalogNavLink
+          href="/blog"
           className={`flex items-center gap-2 px-2 py-2.5 text-base font-semibold transition-colors ${
             isAllActive ? 'text-warm' : 'text-text hover:text-warm'
           }`}
@@ -151,7 +152,7 @@ export function BlogMobileNav({
         >
           <JournalIcon className="text-warm" />
           {t('blog.allCategories')}
-        </Link>
+        </CatalogNavLink>
       </li>
 
       {categories.map((category) => {
@@ -162,27 +163,27 @@ export function BlogMobileNav({
 
         return (
           <li key={category.id} className="border-b border-border">
-            <Link
-              to={`/blog/category/${category.slug}`}
+            <CatalogNavLink
+              href={`/blog/category/${category.slug}`}
               className={`block px-2 py-2.5 text-base font-semibold transition-colors ${
                 isActive ? 'text-warm' : 'text-text hover:text-warm'
               }`}
               onClick={onClose}
             >
               {label}
-            </Link>
+            </CatalogNavLink>
           </li>
         )
       })}
 
       <li className="border-b border-border">
-        <Link
-          to="/"
+        <CatalogNavLink
+          href="/"
           className="block px-2 py-2.5 text-base font-medium text-text-muted transition-colors hover:text-text"
           onClick={onClose}
         >
           {t('blog.backToShop')}
-        </Link>
+        </CatalogNavLink>
       </li>
     </ul>
   )

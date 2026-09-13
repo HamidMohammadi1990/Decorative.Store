@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import type { ReactNode } from 'react'
 import type {
   ContentBodyBlock,
@@ -30,9 +30,9 @@ function CtaLink({
     )
   }
   return (
-    <Link to={href} className={className}>
+    <CatalogNavLink href={href} className={className}>
       {children}
-    </Link>
+    </CatalogNavLink>
   )
 }
 

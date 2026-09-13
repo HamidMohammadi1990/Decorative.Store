@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouteLoaderData } from 'react-router-dom'
 import type { AboutPageContent } from '@/models/about/aboutPage.model'
 import { aboutPageService } from '@/services/aboutPageService'
@@ -15,6 +15,8 @@ export function useAboutPageContent() {
   )
   const [loading, setLoading] = useState(() => !loaderFresh)
   const [error, setError] = useState(() => loaderFresh ? Boolean(loaderData!.error) : false)
+  const contentRef = useRef(content)
+  contentRef.current = content
 
   useEffect(() => {
     if (loaderFresh) {
@@ -27,7 +29,9 @@ export function useAboutPageContent() {
     let cancelled = false
 
     const load = async () => {
-      setLoading(true)
+      if (!contentRef.current) {
+        setLoading(true)
+      }
       setError(false)
       try {
         const page = await aboutPageService.getPage(locale)
