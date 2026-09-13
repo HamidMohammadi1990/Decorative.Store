@@ -4,6 +4,8 @@ import privacyEn from '@/data/mock/content/privacy.en.json'
 import privacyFa from '@/data/mock/content/privacy.fa.json'
 import designServicesEn from '@/data/mock/content/design-services.en.json'
 import designServicesFa from '@/data/mock/content/design-services.fa.json'
+import storesEn from '@/data/mock/content/stores.en.json'
+import storesFa from '@/data/mock/content/stores.fa.json'
 
 const contentBySlug: Record<string, Record<Locale, CmsContentPageContent>> = {
   privacy: { en: privacyEn as CmsContentPageContent, fa: privacyFa as CmsContentPageContent },
@@ -11,6 +13,7 @@ const contentBySlug: Record<string, Record<Locale, CmsContentPageContent>> = {
     en: designServicesEn as CmsContentPageContent,
     fa: designServicesFa as CmsContentPageContent,
   },
+  stores: { en: storesEn as CmsContentPageContent, fa: storesFa as CmsContentPageContent },
 }
 
 export function getContentPageMock(slug: string, locale: Locale): CmsContentPageContent | null {

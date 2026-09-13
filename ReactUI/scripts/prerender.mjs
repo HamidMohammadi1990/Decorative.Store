@@ -29,15 +29,24 @@ function outputPathForRoute(route) {
   return path.join(clientDir, segment, 'index.html')
 }
 
+function applyHtmlDocumentAttrs(template, locale) {
+  const lang = locale === 'fa' ? 'fa' : 'en'
+  const dir = locale === 'fa' ? 'rtl' : 'ltr'
+  return template.replace(/<html\b[^>]*>/i, `<html lang="${lang}" dir="${dir}">`)
+}
+
 function buildHtml(template, result) {
   const hydrationScript = result.hydrationData
     ? `<script>window.__ROUTER_HYDRATION__=${JSON.stringify(result.hydrationData).replace(/</g, '\\u003c')}</script>`
     : ''
 
-  return template
-    .replace('<!--ssr-outlet-->', result.html ?? '')
-    .replace('<!--ssr-head-->', result.headHtml ?? '')
-    .replace('<!--ssr-data-->', hydrationScript)
+  return applyHtmlDocumentAttrs(
+    template
+      .replace('<!--ssr-outlet-->', result.html ?? '')
+      .replace('<!--ssr-head-->', result.headHtml ?? '')
+      .replace('<!--ssr-data-->', hydrationScript),
+    result.locale,
+  )
 }
 
 async function prerenderRoute(render, template, route) {

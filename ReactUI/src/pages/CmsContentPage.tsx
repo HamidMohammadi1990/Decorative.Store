@@ -9,7 +9,7 @@ import { NotFoundPage } from '@/pages/NotFoundPage'
 import { cmsContentPagePath } from '@/extensions/cmsContentRoute'
 import { absoluteUrl } from '@/config/site'
 import { useCmsContentPage } from '@/hooks/useCmsContentPage'
-import { useShopPageMeta } from '@/hooks/useShopPageMeta'
+import { useShopPageMeta, resolveOgImageSrc } from '@/hooks/useShopPageMeta'
 
 interface CmsContentPageProps {
   slug?: string
@@ -34,6 +34,8 @@ export function CmsContentPage({ slug: slugProp }: CmsContentPageProps) {
   useShopPageMeta({
     title: content?.metaTitle?.trim() || content?.title,
     description: content?.metaDescription ?? undefined,
+    image: content ? resolveOgImageSrc(undefined) : undefined,
+    imageAlt: content?.hero.title ?? content?.title,
     path: pagePath,
     active: Boolean(content),
     jsonLd,

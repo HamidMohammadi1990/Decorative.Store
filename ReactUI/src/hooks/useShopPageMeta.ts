@@ -12,15 +12,26 @@ import { useLocaleSettings } from '@/hooks/useLocaleSettings'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import type { PageMetaInput, PageMetaType } from '@/seo/pageMetaManager'
 import { setPageMetaDefaults } from '@/seo/pageMetaManager'
+import { stripLocaleHintFromPath } from '@/seo/canonicalPath'
 import { buildHreflangAlternates } from '@/seo/hreflang'
+import { OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from '@/seo/ogConstants'
 
 interface UseShopPageMetaOptions {
   title?: string
   description?: string
   image?: string
+  imageAlt?: string
+  imageWidth?: number
+  imageHeight?: number
   type?: PageMetaType
   noindex?: boolean
   jsonLd?: object | object[] | null
+  keywords?: string
+  author?: string
+  publishedTime?: string
+  modifiedTime?: string
+  productPrice?: number
+  productCurrency?: string
   /** Override canonical path (defaults to current location). */
   path?: string
   active?: boolean
@@ -42,9 +53,18 @@ export function useShopPageMeta(options: UseShopPageMetaOptions = {}) {
     title,
     description,
     image,
+    imageAlt,
+    imageWidth = OG_IMAGE_WIDTH,
+    imageHeight = OG_IMAGE_HEIGHT,
     type = 'website',
     noindex = false,
     jsonLd = null,
+    keywords,
+    author,
+    publishedTime,
+    modifiedTime,
+    productPrice,
+    productCurrency,
     path,
     active = true,
   } = options
@@ -58,30 +78,50 @@ export function useShopPageMeta(options: UseShopPageMetaOptions = {}) {
     )
     const resolvedDescription =
       description?.trim() || DEFAULT_DESCRIPTION[locale]
-    const canonicalPath = path ?? `${location.pathname}${location.search}`
+    const rawPath = path ?? `${location.pathname}${location.search}`
+    const canonicalPath = stripLocaleHintFromPath(rawPath)
     const canonical = absoluteUrl(canonicalPath)
+    const resolvedImage = resolveOgImageSrc(image)
 
     return {
       title: resolvedTitle,
       description: resolvedDescription,
       canonical,
-      image: resolveOgImageSrc(image),
+      image: resolvedImage,
+      imageAlt: imageAlt ?? title,
+      imageWidth,
+      imageHeight,
       type,
       locale,
       noindex,
       jsonLd,
-      alternates: noindex ? undefined : buildHreflangAlternates(canonicalPath),
+      keywords,
+      author,
+      publishedTime,
+      modifiedTime,
+      productPrice,
+      productCurrency,
+      alternates: noindex ? undefined : buildHreflangAlternates(rawPath),
     }
   }, [
     active,
+    author,
     description,
     image,
+    imageAlt,
+    imageHeight,
+    imageWidth,
     jsonLd,
+    keywords,
     locale,
     location.pathname,
     location.search,
+    modifiedTime,
     noindex,
     path,
+    productCurrency,
+    productPrice,
+    publishedTime,
     t,
     title,
     type,

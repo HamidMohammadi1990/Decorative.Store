@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import type { NavLinkGroup } from '@/models/shared/link.model'
 import { navGroupHasPanel, splitJournalNav } from '@/extensions/flattenNavLinks'
@@ -8,6 +8,7 @@ import { ChevronIcon } from '@/components/ui/ChevronIcon'
 import { JournalIcon } from '@/components/ui/NavCategoryIcons'
 import { ScrollArrowButton } from '@/components/ui/ScrollArrowButton'
 import { useHorizontalScrollArrows } from '@/hooks/useHorizontalScrollArrows'
+import { prefetchCatalogRoute } from '@/extensions/prefetchCatalogRoute'
 
 interface MainNavProps {
   items: NavLinkGroup[]
@@ -17,7 +18,6 @@ const CLOSE_DELAY_MS = 300
 
 export function MainNav({ items }: MainNavProps) {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const [openId, setOpenId] = useState<string | null>(null)
   const navRef = useRef<HTMLElement>(null)
   const itemRefs = useRef<Record<string, HTMLLIElement | null>>({})
@@ -134,7 +134,10 @@ export function MainNav({ items }: MainNavProps) {
                   itemRefs.current[item.id] = el
                 }}
                 className="relative shrink-0"
-                onMouseEnter={() => hasPanel && openItem(item.id)}
+                onMouseEnter={() => {
+                  if (item.href) prefetchCatalogRoute(item.href)
+                  if (hasPanel) openItem(item.id)
+                }}
                 onMouseLeave={(e) => {
                   if (!hasPanel) return
                   const related = e.relatedTarget
@@ -145,12 +148,17 @@ export function MainNav({ items }: MainNavProps) {
                   scheduleClose()
                 }}
               >
-                {item.href && !hasPanel ? (
+                {item.href ? (
                   <Link
                     to={item.href}
-                    className="inline-block py-2 text-sm font-medium tracking-wide whitespace-nowrap transition-colors hover:text-accent"
+                    onFocus={() => prefetchCatalogRoute(item.href!)}
+                    onClick={() => closeMenu()}
+                    className={`inline-flex items-center gap-1 py-2 text-sm font-medium tracking-wide whitespace-nowrap transition-colors hover:text-accent ${
+                      isOpen ? 'text-accent' : ''
+                    }`}
                   >
                     {item.label}
+                    {hasPanel && <ChevronIcon expanded={isOpen} />}
                   </Link>
                 ) : (
                   <button
@@ -159,15 +167,6 @@ export function MainNav({ items }: MainNavProps) {
                     aria-haspopup={hasPanel ? 'true' : undefined}
                     onClick={(e) => {
                       e.stopPropagation()
-                      if (!hasPanel && item.href) {
-                        navigate(item.href)
-                        return
-                      }
-                      if (hasPanel && item.href) {
-                        closeMenu()
-                        navigate(item.href)
-                        return
-                      }
                       if (!isOpen) setOpenId(item.id)
                     }}
                     className={`inline-flex items-center gap-1 py-2 text-sm font-medium tracking-wide whitespace-nowrap transition-colors hover:text-accent ${

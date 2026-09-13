@@ -59,8 +59,16 @@
   "seo": {
     "homeTitle": "صفحه اصلی",
     "homeDescription": "خرید مبلمان معاصر، فرش و دکوراسیون. کالکشن‌های طراحی‌شده، چیدمان اتاق و الهام دکوراسیون.",
+    "homeKeywords": "مبلمان, دکوراسیون, فرش, دکوراسیون منزل, دیبا گالری, مبل, لوستر, اتاق خواب",
+    "roomLayoutKeywords": "چیدمان اتاق, استودیو چیدمان, دکوراسیون منزل, چیدمان مبلمان, پذیرایی, اتاق خواب, دیبا گالری",
     "searchDescription": "جستجو در مبلمان، دکور و کالکشن‌های دیبا گالری.",
     "compareDescription": "مقایسه محصولات — قیمت، مشخصات و ویژگی‌ها در یک نگاه."
+  },
+  "share": {
+    "whatsApp": "اشتراک در واتساپ",
+    "telegram": "اشتراک در تلگرام",
+    "facebook": "اشتراک در فیسبوک",
+    "pinterest": "اشتراک در پینترست"
   },
   "lightbox": {
     "enlarge": "بزرگنمایی",
@@ -289,6 +297,7 @@
     "clearFilters": "پاک کردن همه",
     "sortBy": "مرتب‌سازی",
     "resultCount": "{{count}} محصول",
+    "productsLabel": "محصول",
     "emptyTitle": "محصولی یافت نشد",
     "emptyMessage": "فیلترها را تغییر دهید یا دسته دیگری را ببینید.",
     "categoryEmptyEyebrow": "به‌زودی",
@@ -309,8 +318,18 @@
     "paginationLabel": "صفحه‌بندی محصولات",
     "paginationPrevious": "قبلی",
     "paginationNext": "بعدی",
+    "paginationRange": "{{from}} تا {{to}}",
+    "paginationTotal": "{{total}} محصول",
+    "paginationPageOf": "صفحه {{page}} از {{totalPages}}",
+    "paginationGoToPage": "رفتن به صفحه {{page}}",
+    "paginationContinue": "ادامه مشاهده محصولات",
     "activeFilters": "{{count}} فیلتر فعال",
-    "showResults": "نمایش {{count}} نتیجه"
+    "showResults": "نمایش {{count}} نتیجه",
+    "filterSearchPlaceholder": "جستجو در {{facet}}…",
+    "filterSearchClear": "پاک کردن جستجو",
+    "showMoreOptions": "مشاهده {{count}} مورد دیگر",
+    "showLessOptions": "نمایش کمتر",
+    "filterNoResults": "گزینه‌ای یافت نشد"
   },
   "siteSearch": {
     "categories": "دسته‌بندی‌ها",
@@ -349,6 +368,7 @@
     "wishlist": "افزودن به علاقه‌مندی",
     "inWishlist": "در علاقه‌مندی‌ها",
     "share": "اشتراک‌گذاری",
+    "shareTitle": "اشتراک‌گذاری این محصول",
     "compare": "مقایسه",
     "bestseller": "پرفروش",
     "color": "رنگ",
@@ -510,8 +530,10 @@
   "accountMenu": {
     "label": "منوی حساب کاربری",
     "guestTitle": "خوش آمدید",
-    "guestDescription": "برای مدیریت سفارش‌ها و پروفایل، وارد شوید یا حساب بسازید.",
-    "viewDashboard": "رفتن به داشبورد",
+    "guestDescription": "برای پیگیری سفارش‌ها و مدیریت پروفایل، وارد شوید یا حساب بسازید.",
+    "greeting": "سلام، {{name}}",
+    "manageAccount": "مشاهده و ویرایش پروفایل",
+    "quickLinks": "دسترسی سریع",
     "cart": "سبد خرید"
   },
   "auth": {
@@ -733,8 +755,6 @@
     "setAsDefault": "تنظیم به‌عنوان آدرس پیش‌فرض",
     "mapTitle": "موقعیت روی نقشه",
     "mapHint": "روی نقشه کلیک کنید یا پین را بکشید تا محل دقیق تحویل مشخص شود.",
-    "mapLocateMe": "موقعیت من",
-    "mapLocating": "در حال یافتن موقعیت…",
     "mapLoading": "در حال بارگذاری نقشه…",
     "mapLoadFailed": "بارگذاری نقشه ممکن نشد. اتصال اینترنت را بررسی کنید.",
     "mapPreviewAlt": "پیش‌نمایش نقشه موقعیت آدرس",
@@ -807,6 +827,7 @@
     },
     "navGroups": {
       "account": "حساب کاربری",
+      "orders": "سفارشات",
       "users": "کاربران و دسترسی",
       "profile": "تکمیل پروفایل",
       "catalog": "فروشگاه و محصولات",
@@ -855,7 +876,8 @@
       "profileCompletionAnswers": "پاسخ‌های کاربران",
       "siteGuide": "راهنمای مدیریت سایت",
       "users": "کاربران",
-      "roles": "نقش‌ها"
+      "roles": "نقش‌ها",
+      "adminOrders": "مدیریت سفارشات"
     },
     "contentLocale": {
       "editingHint": "عنوان و توضیحات برای زبان انتخاب‌شده ذخیره می‌شوند. زبان را عوض کنید تا نسخه دیگر را ویرایش یا اضافه کنید.",
@@ -1262,6 +1284,38 @@
       "rolesSaving": "در حال ذخیره…",
       "rolesSaveFailed": "ذخیره نقش‌ها انجام نشد.",
       "rolesEmpty": "نقشی برای تخصیص وجود ندارد."
+    },
+    "adminOrders": {
+      "title": "مدیریت سفارشات",
+      "description": "مشاهده و پیگیری سفارش‌های همه کاربران.",
+      "loadFailed": "بارگذاری سفارش‌ها ناموفق بود.",
+      "detailFailed": "بارگذاری جزئیات سفارش ناموفق بود.",
+      "emptyTitle": "سفارشی یافت نشد",
+      "emptyMessage": "با فیلتر دیگری جستجو کنید یا بعداً دوباره بررسی کنید.",
+      "filterStatus": "وضعیت",
+      "filterTitle": "عنوان سفارش",
+      "filterTitlePlaceholder": "جستجو در عنوان…",
+      "filterTracking": "کد پیگیری",
+      "filterTrackingPlaceholder": "مثلاً 123456",
+      "applyFilters": "اعمال فیلتر",
+      "statusAll": "همه وضعیت‌ها",
+      "status": {
+        "1": "در انتظار",
+        "2": "رد شده",
+        "3": "در حال پردازش",
+        "4": "تکمیل شده"
+      },
+      "colTracking": "پیگیری",
+      "colTitle": "عنوان",
+      "colCustomer": "مشتری",
+      "colStatus": "وضعیت",
+      "colTotal": "مبلغ",
+      "colDate": "تاریخ",
+      "viewDetail": "جزئیات",
+      "hideDetail": "بستن",
+      "detailEyebrow": "جزئیات سفارش",
+      "customerLine": "مشتری: {{name}}",
+      "loadingDetail": "در حال بارگذاری جزئیات…"
     },
     "roles": {
       "title": "مدیریت نقش‌ها",

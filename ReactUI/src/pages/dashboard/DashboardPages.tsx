@@ -45,6 +45,7 @@ import { SiteManagementGuidePanel } from '@/components/dashboard/SiteManagementG
 import { RoomTypesPanel } from '@/components/dashboard/RoomTypesPanel'
 import { UsersPanel } from '@/components/dashboard/UsersPanel'
 import { RolesPanel } from '@/components/dashboard/RolesPanel'
+import { AdminOrdersPanel } from '@/components/dashboard/AdminOrdersPanel'
 
 function useDashboardContext() {
   return useOutletContext<DashboardData>()
@@ -372,6 +373,14 @@ export function DashboardRolesPage() {
   return (
     <AdminPage permission="ListRole">
       <RolesPanel />
+    </AdminPage>
+  )
+}
+
+export function DashboardAdminOrdersPage() {
+  return (
+    <AdminPage permission="ListOrder">
+      <AdminOrdersPanel />
     </AdminPage>
   )
 }

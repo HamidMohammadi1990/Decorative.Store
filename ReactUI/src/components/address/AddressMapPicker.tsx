@@ -43,7 +43,6 @@ export function AddressMapPicker({
   const onChangeRef = useRef(onChange)
   const onAddressHintRef = useRef(onAddressHint)
   const [mapStatus, setMapStatus] = useState<'loading' | 'ready' | 'error'>('loading')
-  const [locating, setLocating] = useState(false)
   const [retryTick, setRetryTick] = useState(0)
 
   onChangeRef.current = onChange
@@ -129,26 +128,6 @@ export function AddressMapPicker({
     mapRef.current.panTo([value.latitude, value.longitude], { animate: true })
   }, [mapStatus, value?.latitude, value?.longitude])
 
-  const handleLocateMe = () => {
-    if (readOnly || !navigator.geolocation) return
-
-    setLocating(true)
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const coords = {
-          latitude: roundCoordinate(position.coords.latitude),
-          longitude: roundCoordinate(position.coords.longitude),
-        }
-        onChange(coords)
-        mapRef.current?.setView([coords.latitude, coords.longitude], 16, { animate: true })
-        markerRef.current?.setLatLng([coords.latitude, coords.longitude])
-        setLocating(false)
-      },
-      () => setLocating(false),
-      { enableHighAccuracy: true, timeout: 12000 },
-    )
-  }
-
   const handleRetry = () => {
     resetLeafletLoader()
     setRetryTick((tick) => tick + 1)
@@ -156,21 +135,9 @@ export function AddressMapPicker({
 
   return (
     <div className={className}>
-      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <p className="text-sm font-medium text-text">{t('address.mapTitle')}</p>
-          <p className="text-xs text-text-muted">{t('address.mapHint')}</p>
-        </div>
-        {!readOnly && mapStatus === 'ready' && (
-          <button
-            type="button"
-            onClick={handleLocateMe}
-            disabled={locating}
-            className="rounded-sm border border-border bg-surface px-3 py-1.5 text-xs font-medium text-text transition-colors hover:border-warm hover:text-warm disabled:opacity-60"
-          >
-            {locating ? t('address.mapLocating') : t('address.mapLocateMe')}
-          </button>
-        )}
+      <div className="mb-2">
+        <p className="text-sm font-medium text-text">{t('address.mapTitle')}</p>
+        <p className="text-xs text-text-muted">{t('address.mapHint')}</p>
       </div>
 
       <div

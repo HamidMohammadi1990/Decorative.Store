@@ -169,15 +169,15 @@ public class OrderRepository
         return result;
     }
 
-    public async Task<OrderDetailDto?> GetOrderDetailAsync(int orderId, int userId, CancellationToken cancellationToken = default)
+    public async Task<OrderDetailDto?> GetOrderDetailAsync(int orderId, int? userId, CancellationToken cancellationToken = default)
     {
         var defaultLanguage = await languageRegistry.GetDefaultAsync(cancellationToken);
         var languageId = languageContext.IsResolved ? languageContext.LanguageId : defaultLanguage.Id;
         var defaultLanguageId = defaultLanguage.Id;
 
-        var query =
+        var itemRows = await (
             from order in Context.Order
-            where order.Id == orderId && order.UserId == userId
+            where order.Id == orderId && (userId == null || order.UserId == userId)
             join item in Context.OrderItem on order.Id equals item.OrderId
             join product in Context.Product on item.ProductId equals product.Id
             join deliveryType in Context.DeliveryType on item.DeliveryTypeId equals deliveryType.Id into deliveryTypeJoin
@@ -188,34 +188,19 @@ public class OrderRepository
             from address in addressJoin.DefaultIfEmpty()
             join city in Context.City on address.CityId equals city.Id into cityJoin
             from city in cityJoin.DefaultIfEmpty()
-            join orderItemAttachment in Context.OrderItemAttachment on item.Id equals orderItemAttachment.OrderItemId into orderItemAttachmentJoin
-            from orderItemAttachment in orderItemAttachmentJoin.DefaultIfEmpty()
-            join productOrderItemAttachmentType in Context.ProductOrderItemAttachmentType
-                on orderItemAttachment.ProductOrderItemAttachmentTypeId equals productOrderItemAttachmentType.Id into productOrderItemAttachmentTypeJoin
-            from productOrderItemAttachmentType in productOrderItemAttachmentTypeJoin.DefaultIfEmpty()
-            join orderItemAttachmentType in Context.OrderItemAttachmentType
-                on productOrderItemAttachmentType.OrderItemAttachmentTypeId equals orderItemAttachmentType.Id into orderItemAttachmentTypeJoin
-            from orderItemAttachmentType in orderItemAttachmentTypeJoin.DefaultIfEmpty()
-            join orderItemProperty in Context.OrderItemProperty on item.Id equals orderItemProperty.OrderItemId into orderItemPropertyJoin
-            from orderItemProperty in orderItemPropertyJoin.DefaultIfEmpty()
-            join propertyItem in Context.PropertyItem on orderItemProperty.PropertyItemId equals propertyItem.Id into propertyItemJoin
-            from propertyItem in propertyItemJoin.DefaultIfEmpty()
-            join property in Context.Property on propertyItem.PropertyId equals property.Id into propertyJoin
-            from property in propertyJoin.DefaultIfEmpty()
             select new
             {
                 ItemId = item.Id,
                 OrderId = order.Id,
-                address.PostalCode,
+                PostalCode = address != null ? address.PostalCode : null,
                 product.ProductCode,
-                address.PhoneNumber,
-                CityName = city.Name,
-                AddressId = address.Id,
+                PhoneNumber = address != null ? address.PhoneNumber : null,
+                CityName = city != null ? city.Name : null,
                 ProductId = product.Id,
                 OrderTitle = order.Title,
-                address.RecipientLastName,
-                address.RecipientFirstName,
-                PostTitle = postType.Title,
+                RecipientLastName = address != null ? address.RecipientLastName : null,
+                RecipientFirstName = address != null ? address.RecipientFirstName : null,
+                PostTitle = postType != null ? postType.Title : null,
                 ProductSlug = product.Translations
                         .Where(t => t.LanguageId == languageId)
                         .Select(t => t.Slug)
@@ -236,126 +221,186 @@ public class OrderRepository
                         .FirstOrDefault()
                     ?? string.Empty,
                 ItemQuantity = item.Quantity,
-                AddressTitle = address.Title,
-                PropertyTitle = property.Translations
-                        .Where(t => t.LanguageId == languageId)
-                        .Select(t => t.Title)
-                        .FirstOrDefault()
-                    ?? property.Translations
-                        .Where(t => t.LanguageId == defaultLanguageId)
-                        .Select(t => t.Title)
-                        .FirstOrDefault()
-                    ?? string.Empty,
-                orderItemProperty.PropertyType,
+                AddressTitle = address != null ? address.Title : null,
                 OrderIsFinaly = order.IsFinaly,
-                orderItemProperty.PropertyPrice,
-                AddressDetail = address.Address,
+                AddressDetail = address != null ? address.Address : null,
                 OrderItemStatusType = item.Status,
-                PropertyId = orderItemProperty.Id,
                 ItemDescription = item.Description,
                 DeliveryTitle = deliveryType != null ? deliveryType.Title : null,
                 OrderFinalPrice = order.FinalPrice,
                 OrderTotalPrice = order.TotalPrice,
-                orderItemProperty.PropertyItemPrice,
                 ItemCreatedOnUtc = item.CreatedOnUtc,
                 ItemProductPrice = item.ProductPrice,
                 OrderTrackingCode = order.TrackingCode,
                 OrderCreatedOnUtc = order.CreatedOnUtc,
-                PropertyItemTitle = propertyItem.Translations
-                        .Where(t => t.LanguageId == languageId)
-                        .Select(t => t.Title)
-                        .FirstOrDefault()
-                    ?? propertyItem.Translations
-                        .Where(t => t.LanguageId == defaultLanguageId)
-                        .Select(t => t.Title)
-                        .FirstOrDefault()
-                    ?? string.Empty,
-                AttachmentFileName = orderItemAttachment.FileName,
                 ItemIsNeedToDesign = item.IsNeedToDesign,
-                AttachmentTypeTitle = orderItemAttachmentType.Title,
                 ItemEmergencyPhoneNumber = item.EmergencyPhoneNumber,
-                ((TextOrderItemProperty)orderItemProperty).Value,
-                ((NumericOrderItemProperty)orderItemProperty).Quantity,
-                ((DimensionsOrderItemProperty)orderItemProperty).Width,
-                ((DimensionsOrderItemProperty)orderItemProperty).Height,
-                ((BooleanOrderItemProperty)orderItemProperty).IsSelected,
-            };
+            })
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
 
-        var orderDetail = await query.AsNoTracking().ToListAsync(cancellationToken);
+        if (itemRows.Count == 0)
+            return null;
 
-        var result = orderDetail
-            .Select(order => new OrderDetailDto
+        var itemIds = itemRows.Select(row => row.ItemId).Distinct().ToList();
+
+        var attachmentRows = await (
+            from attachment in Context.OrderItemAttachment.AsNoTracking()
+            where itemIds.Contains(attachment.OrderItemId)
+            join productOrderItemAttachmentType in Context.ProductOrderItemAttachmentType
+                on attachment.ProductOrderItemAttachmentTypeId equals productOrderItemAttachmentType.Id
+            join orderItemAttachmentType in Context.OrderItemAttachmentType
+                on productOrderItemAttachmentType.OrderItemAttachmentTypeId equals orderItemAttachmentType.Id
+            select new
             {
-                Id = order.OrderId,
-                Title = order.OrderTitle,
-                Status = order.OrderStatus,
-                IsFinaly = order.OrderIsFinaly,
-                TotalPrice = order.OrderTotalPrice,
-                FinalPrice = order.OrderFinalPrice,
-                CreatedOnUtc = order.OrderCreatedOnUtc,
-                TrackingCode = order.OrderTrackingCode,
-                Items = [.. orderDetail
-                    .GroupBy(i => i.ItemId)
-                    .Select(itemGroup =>
+                attachment.OrderItemId,
+                attachment.FileName,
+                TypeTitle = orderItemAttachmentType.Title,
+            })
+            .ToListAsync(cancellationToken);
+
+        var attachmentsByItemId = attachmentRows
+            .GroupBy(row => row.OrderItemId)
+            .ToDictionary(
+                group => group.Key,
+                group => group
+                    .Select(row => new OrderItemAttachmentDetailDto
                     {
-                        var orderItem = itemGroup.First();
-                        var items = new OrderDetailItemDto
-                        {
-                            Id = itemGroup.Key,
-                            Quantity = orderItem.ItemQuantity,
-                            PostTypeTitle = orderItem.PostTitle,
-                            Status = orderItem.OrderItemStatusType,
-                            Description = orderItem.ItemDescription,
-                            ProductPrice = orderItem.ItemProductPrice,
-                            CreatedOnUtc = orderItem.ItemCreatedOnUtc,
-                            DeliveryTypeTitle = orderItem.DeliveryTitle,
-                            IsNeedToDesign = orderItem.ItemIsNeedToDesign,
-                            EmergencyPhoneNumber = orderItem.ItemEmergencyPhoneNumber,
-                            Product = new OrderItemProductSummaryDto
-                            {
-                                Id = orderItem.ProductId,
-                                Title = orderItem.ProductTitle,
-                                Slug = orderItem.ProductSlug,
-                                ProductCode = orderItem.ProductCode
-                            },
-                            UserAddress = new OrderItemUserAddressDto
-                            {
-                                Title = orderItem.AddressTitle,
-                                CityTitle = orderItem.CityName,
-                                Address = orderItem.AddressDetail,
-                                PostalCode = orderItem.PostalCode,
-                                PhoneNumber = orderItem.PhoneNumber,
-                                RecipientLastName = orderItem.RecipientLastName,
-                                RecipientFirstName = orderItem.RecipientFirstName,
-                            },
-                            Attachments = [.. itemGroup
-                            .Where(a => a.AttachmentFileName != null)
-                            .Select(a => new OrderItemAttachmentDetailDto
-                            {
-                                FileName = a.AttachmentFileName!,
-                                TypeTitle = a.AttachmentTypeTitle!
-                            })],
-                            Properties = [.. itemGroup
-                            .Where(p => p.PropertyId != null)
-                            .Select(p => new OrderItemPropertyDetailDto
-                            {
-                                Width = p.Width,
-                                Height = p.Height,
-                                Quantity = p.Quantity,
-                                Title = p.PropertyTitle,
-                                Price = p.PropertyPrice,
-                                Value = p.Value,
-                                IsSelected = p.IsSelected,
-                                PropertyType = p.PropertyType,
-                                ItemTitle = p.PropertyItemTitle,
-                                ItemPrice = p.PropertyItemPrice,
-                            })]
-                        };
+                        FileName = row.FileName,
+                        TypeTitle = row.TypeTitle,
+                    })
+                    .ToList());
 
-                        return items;
-                    })]
-            }).FirstOrDefault();
+        var propertyEntities = await Context.OrderItemProperty
+            .AsNoTracking()
+            .Where(property => itemIds.Contains(property.OrderItemId) && property.IsActive)
+            .Include(property => property.Property!)
+                .ThenInclude(p => p.Translations)
+            .Include(property => property.PropertyItem!)
+                .ThenInclude(item => item.Translations)
+            .ToListAsync(cancellationToken);
 
-        return result;
+        var propertiesByItemId = propertyEntities
+            .GroupBy(property => property.OrderItemId)
+            .ToDictionary(
+                group => group.Key,
+                group => group
+                    .Select(property => MapOrderItemProperty(property, languageId, defaultLanguageId))
+                    .ToList());
+
+        var header = itemRows[0];
+
+        return new OrderDetailDto
+        {
+            Id = header.OrderId,
+            Title = header.OrderTitle,
+            Status = header.OrderStatus,
+            IsFinaly = header.OrderIsFinaly,
+            TotalPrice = header.OrderTotalPrice,
+            FinalPrice = header.OrderFinalPrice,
+            CreatedOnUtc = header.OrderCreatedOnUtc,
+            TrackingCode = header.OrderTrackingCode,
+            Items = [.. itemRows.Select(row => new OrderDetailItemDto
+            {
+                Id = row.ItemId,
+                Quantity = row.ItemQuantity,
+                PostTypeTitle = row.PostTitle,
+                Status = row.OrderItemStatusType,
+                Description = row.ItemDescription,
+                ProductPrice = row.ItemProductPrice,
+                CreatedOnUtc = row.ItemCreatedOnUtc,
+                DeliveryTypeTitle = row.DeliveryTitle,
+                IsNeedToDesign = row.ItemIsNeedToDesign,
+                EmergencyPhoneNumber = row.ItemEmergencyPhoneNumber,
+                Product = new OrderItemProductSummaryDto
+                {
+                    Id = row.ProductId,
+                    Title = row.ProductTitle,
+                    Slug = row.ProductSlug,
+                    ProductCode = row.ProductCode,
+                },
+                UserAddress = new OrderItemUserAddressDto
+                {
+                    Title = row.AddressTitle ?? string.Empty,
+                    CityTitle = row.CityName ?? string.Empty,
+                    Address = row.AddressDetail ?? string.Empty,
+                    PostalCode = row.PostalCode,
+                    PhoneNumber = row.PhoneNumber ?? string.Empty,
+                    RecipientLastName = row.RecipientLastName,
+                    RecipientFirstName = row.RecipientFirstName,
+                },
+                Attachments = attachmentsByItemId.GetValueOrDefault(row.ItemId) ?? [],
+                Properties = propertiesByItemId.GetValueOrDefault(row.ItemId) ?? [],
+            })],
+        };
+    }
+
+    private static OrderItemPropertyDetailDto MapOrderItemProperty(
+        OrderItemProperty property,
+        int languageId,
+        int defaultLanguageId)
+    {
+        var propertyTitle = ResolveTranslationTitle(property.Property?.Translations, languageId, defaultLanguageId);
+        var propertyItemTitle = ResolveTranslationTitle(property.PropertyItem?.Translations, languageId, defaultLanguageId);
+
+        var detail = new OrderItemPropertyDetailDto
+        {
+            Title = propertyTitle,
+            Price = property.PropertyPrice,
+            PropertyType = property.PropertyType,
+            ItemTitle = propertyItemTitle,
+            ItemPrice = property.PropertyItemPrice,
+        };
+
+        return property switch
+        {
+            TextOrderItemProperty text => detail with { Value = text.Value },
+            NumericOrderItemProperty numeric => detail with { Quantity = numeric.Quantity },
+            DimensionsOrderItemProperty dimensions => detail with
+            {
+                Width = dimensions.Width,
+                Height = dimensions.Height,
+            },
+            BooleanOrderItemProperty boolean => detail with { IsSelected = boolean.IsSelected },
+            _ => detail,
+        };
+    }
+
+    private static string ResolveTranslationTitle(
+        IEnumerable<PropertyTranslation>? translations,
+        int languageId,
+        int defaultLanguageId)
+    {
+        if (translations == null)
+            return string.Empty;
+
+        return translations
+            .Where(translation => translation.LanguageId == languageId)
+            .Select(translation => translation.Title)
+            .FirstOrDefault()
+            ?? translations
+                .Where(translation => translation.LanguageId == defaultLanguageId)
+                .Select(translation => translation.Title)
+                .FirstOrDefault()
+            ?? string.Empty;
+    }
+
+    private static string ResolveTranslationTitle(
+        IEnumerable<PropertyItemTranslation>? translations,
+        int languageId,
+        int defaultLanguageId)
+    {
+        if (translations == null)
+            return string.Empty;
+
+        return translations
+            .Where(translation => translation.LanguageId == languageId)
+            .Select(translation => translation.Title)
+            .FirstOrDefault()
+            ?? translations
+                .Where(translation => translation.LanguageId == defaultLanguageId)
+                .Select(translation => translation.Title)
+                .FirstOrDefault()
+            ?? string.Empty;
     }
 }

@@ -19,6 +19,6 @@ public interface IOrderRepository
     Task<bool> HasFinancialDocumentsAsync(int orderId, CancellationToken cancellationToken = default);
     Task<bool> ExistsByTrackingCodeAsync(long trackingCode, CancellationToken cancellationToken = default);
     Task<List<GetStatusSummaryPropertiesDto>> GetUserOrderStatusSummaryAsync(int userId);
-    Task<OrderDetailDto?> GetOrderDetailAsync(int orderId, int userId, CancellationToken cancellationToken = default);
+    Task<OrderDetailDto?> GetOrderDetailAsync(int orderId, int? userId, CancellationToken cancellationToken = default);
     Task<List<GetUserOrdersByStatusDto>> GetUserOrdersByStatusAsync(int userId, OrderStatusType status, PagedRequest pagination);
 }

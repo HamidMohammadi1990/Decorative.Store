@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { HeroCarousel as HeroCarouselModel } from '@/models/home/heroCarousel.model'
-import { Button } from '@/components/ui/Button'
+import { ButtonLink } from '@/components/ui/ButtonLink'
 import { Container } from '@/components/ui/Container'
 import { LocalImage } from '@/components/ui/LocalImage'
 import { getDirection } from '@/extensions/getDirection'
@@ -114,7 +113,7 @@ export function HeroCarousel({ data }: HeroCarouselProps) {
                 className="pointer-events-none absolute inset-0 size-full object-cover"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent" />
-              <Container className="relative flex h-full flex-col justify-end pb-10 pt-16">
+              <Container className="pointer-events-none relative flex h-full flex-col justify-end pb-10 pt-16">
                 {s.eyebrow && (
                   <p className="mb-2 text-xs font-medium uppercase tracking-widest text-white/90">
                     {s.eyebrow}
@@ -128,9 +127,11 @@ export function HeroCarousel({ data }: HeroCarouselProps) {
                     {s.subtitle}
                   </p>
                 )}
-                <Link to={s.cta.href} className="mt-5 inline-block w-fit">
-                  <Button variant="warm">{s.cta.label}</Button>
-                </Link>
+                <ButtonLink
+                  link={s.cta}
+                  variant="warm"
+                  className="pointer-events-auto mt-5 w-fit"
+                />
               </Container>
             </article>
           ))}

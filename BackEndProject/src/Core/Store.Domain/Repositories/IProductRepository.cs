@@ -23,7 +23,10 @@ public interface IProductRepository
         int? excludeProductId = null,
         CancellationToken cancellationToken = default);
     Task<PagedResult<GetAllProductResponseDto>> GetAllAsync(GetAllProductRequestDto request, CancellationToken cancellationToken = default);
-    Task<CatalogListingDto> GetCatalogListingByPathAsync(string catalogPath, CancellationToken cancellationToken = default);
+    Task<CatalogListingResult> GetCatalogListingByPathAsync(
+        string catalogPath,
+        CatalogListingQueryDto query,
+        CancellationToken cancellationToken = default);
     Task<CatalogProductDto?> GetCatalogProductBySlugAsync(string slug, CancellationToken cancellationToken = default);
     Task<List<CatalogListingProductDto>> GetRelatedCatalogProductsBySlugAsync(string slug, int limit, CancellationToken cancellationToken = default);
     Task<List<CatalogListingProductDto>> GetNewestCatalogProductsAsync(int limit, CancellationToken cancellationToken = default);

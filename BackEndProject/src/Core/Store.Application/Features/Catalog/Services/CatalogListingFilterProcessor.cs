@@ -56,38 +56,18 @@ public static class CatalogListingFilterProcessor
     public static bool IsNewProduct(DateTime createdOnUtc)
         => createdOnUtc >= DateTime.UtcNow.Subtract(NewProductWindow);
 
-    public static CatalogListingDto Apply(
+    public static CatalogListingDto ApplyFacets(
         CatalogListingDto listing,
+        IReadOnlyList<CatalogListingProductDto> facetScopeProducts,
         GetCatalogListingRequest request,
         bool isFa)
     {
         if (listing.PathNotFound)
             return listing;
 
-        var page = request.Page < 1 ? 1 : request.Page;
-        var pageSize = request.PageSize < 1 ? 12 : Math.Min(request.PageSize, 48);
-        var allProducts = listing.Products;
-
-        var filtered = allProducts
-            .Where(product => MatchesFilters(product, request))
-            .ToList();
-
-        var sorted = SortProducts(filtered, request.Sort);
-        var totalCount = sorted.Count;
-        var pageProducts = sorted
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .ToList();
-
-        var facetGroups = BuildFacetGroups(allProducts, request, isFa, listing.FacetLabels);
-
         return listing with
         {
-            Products = pageProducts,
-            TotalCount = totalCount,
-            Page = page,
-            PageSize = pageSize,
-            FacetGroups = facetGroups,
+            FacetGroups = BuildFacetGroups(facetScopeProducts.ToList(), request, isFa, listing.FacetLabels),
         };
     }
 

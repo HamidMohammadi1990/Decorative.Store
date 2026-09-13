@@ -1,6 +1,6 @@
 import type { Locale } from '@/models/shared/locale.model'
 import type { CmsContentPageContent } from '@/models/content/cmsContentPage.model'
-import { applyContentPageFallback } from '@/data/mock/contentPageDefaults'
+import { applyContentPageFallback, getContentPageMock } from '@/data/mock/contentPageDefaults'
 import { mapCmsPageToContentPage } from '@/services/mappers/cmsContentPageMapper'
 import { pageService } from '@/services/pageService'
 
@@ -28,7 +28,7 @@ export const cmsContentPageService = {
 
     const request = (async () => {
       const cmsPage = await pageService.getBySlug(slug, locale)
-      if (!cmsPage) return null
+      if (!cmsPage) return getContentPageMock(slug, locale)
       return applyContentPageFallback(mapCmsPageToContentPage(cmsPage), slug, locale)
     })()
 

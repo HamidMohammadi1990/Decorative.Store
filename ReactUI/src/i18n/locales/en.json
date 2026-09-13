@@ -59,8 +59,16 @@
   "seo": {
     "homeTitle": "Home",
     "homeDescription": "Shop contemporary furniture, rugs, and home décor. Design-led collections, room layout tools, and interior inspiration.",
+    "homeKeywords": "furniture, home décor, rugs, interior design, Diba Gallery, sofas, lighting, bedroom",
+    "roomLayoutKeywords": "room layout, furniture planner, interior design tool, living room layout, bedroom layout, Diba Gallery",
     "searchDescription": "Search furniture, décor, and collections at Diba Gallery.",
     "compareDescription": "Compare products side by side — prices, specs, and highlights."
+  },
+  "share": {
+    "whatsApp": "Share on WhatsApp",
+    "telegram": "Share on Telegram",
+    "facebook": "Share on Facebook",
+    "pinterest": "Share on Pinterest"
   },
   "lightbox": {
     "enlarge": "Enlarge",
@@ -289,6 +297,7 @@
     "clearFilters": "Clear all",
     "sortBy": "Sort by",
     "resultCount": "{{count}} items",
+    "productsLabel": "items",
     "emptyTitle": "No products found",
     "emptyMessage": "Try adjusting your filters or browse another category.",
     "categoryEmptyEyebrow": "Coming soon",
@@ -309,8 +318,18 @@
     "paginationLabel": "Product pagination",
     "paginationPrevious": "Previous",
     "paginationNext": "Next",
+    "paginationRange": "{{from}}–{{to}}",
+    "paginationTotal": "{{total}} items",
+    "paginationPageOf": "Page {{page}} of {{totalPages}}",
+    "paginationGoToPage": "Go to page {{page}}",
+    "paginationContinue": "Continue browsing",
     "activeFilters": "{{count}} active filters",
-    "showResults": "Show {{count}} results"
+    "showResults": "Show {{count}} results",
+    "filterSearchPlaceholder": "Search {{facet}}…",
+    "filterSearchClear": "Clear search",
+    "showMoreOptions": "Show {{count}} more",
+    "showLessOptions": "Show less",
+    "filterNoResults": "No options found"
   },
   "siteSearch": {
     "categories": "Categories",
@@ -349,6 +368,7 @@
     "wishlist": "Add to wishlist",
     "inWishlist": "In wishlist",
     "share": "Share",
+    "shareTitle": "Share this product",
     "compare": "Compare",
     "bestseller": "Bestseller",
     "color": "Color",
@@ -510,8 +530,10 @@
   "accountMenu": {
     "label": "Account menu",
     "guestTitle": "Welcome",
-    "guestDescription": "Sign in or create an account to manage orders and your profile.",
-    "viewDashboard": "Go to dashboard",
+    "guestDescription": "Sign in or create an account to track orders and manage your profile.",
+    "greeting": "Hello, {{name}}",
+    "manageAccount": "View & edit profile",
+    "quickLinks": "Quick links",
     "cart": "Shopping bag"
   },
   "auth": {
@@ -733,8 +755,6 @@
     "setAsDefault": "Set as default address",
     "mapTitle": "Location on map",
     "mapHint": "Click the map or drag the pin to set the exact delivery point.",
-    "mapLocateMe": "Use my location",
-    "mapLocating": "Locating…",
     "mapLoading": "Loading map…",
     "mapLoadFailed": "Map could not be loaded. Check your connection and try again.",
     "mapPreviewAlt": "Map preview of saved address location",
@@ -807,6 +827,7 @@
     },
     "navGroups": {
       "account": "My account",
+      "orders": "Orders",
       "users": "Users & access",
       "profile": "Profile completion",
       "catalog": "Store & products",
@@ -855,7 +876,8 @@
       "profileCompletionAnswers": "Profile answers",
       "siteGuide": "Site management guide",
       "users": "Users",
-      "roles": "Roles"
+      "roles": "Roles",
+      "adminOrders": "Order management"
     },
     "contentLocale": {
       "editingHint": "Titles and descriptions are saved for the selected language. Switch language to edit or add another locale.",
@@ -1262,6 +1284,38 @@
       "rolesSaving": "Saving…",
       "rolesSaveFailed": "Could not save roles.",
       "rolesEmpty": "No roles available to assign."
+    },
+    "adminOrders": {
+      "title": "Order management",
+      "description": "View and track orders from all customers.",
+      "loadFailed": "Could not load orders.",
+      "detailFailed": "Could not load order details.",
+      "emptyTitle": "No orders found",
+      "emptyMessage": "Try different filters or check again later.",
+      "filterStatus": "Status",
+      "filterTitle": "Order title",
+      "filterTitlePlaceholder": "Search by title…",
+      "filterTracking": "Tracking code",
+      "filterTrackingPlaceholder": "e.g. 123456",
+      "applyFilters": "Apply filters",
+      "statusAll": "All statuses",
+      "status": {
+        "1": "Pending",
+        "2": "Rejected",
+        "3": "In progress",
+        "4": "Completed"
+      },
+      "colTracking": "Tracking",
+      "colTitle": "Title",
+      "colCustomer": "Customer",
+      "colStatus": "Status",
+      "colTotal": "Total",
+      "colDate": "Date",
+      "viewDetail": "Details",
+      "hideDetail": "Close",
+      "detailEyebrow": "Order details",
+      "customerLine": "Customer: {{name}}",
+      "loadingDetail": "Loading details…"
     },
     "roles": {
       "title": "Role management",

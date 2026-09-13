@@ -149,3 +149,4 @@ export type DashboardSection =
   | 'roomTypes'
   | 'users'
   | 'roles'
+  | 'adminOrders'

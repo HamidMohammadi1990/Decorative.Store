@@ -2,26 +2,46 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Container } from '@/components/ui/Container'
 import { RoomLayoutStudio } from '@/components/room/RoomLayoutStudio'
-import { buildWebPageJsonLd } from '@/components/seo/jsonLdBuilders'
+import {
+  buildBreadcrumbJsonLd,
+  buildWebApplicationJsonLd,
+} from '@/components/seo/jsonLdBuilders'
 import { absoluteUrl } from '@/config/site'
-import { useShopPageMeta } from '@/hooks/useShopPageMeta'
+import { useLocaleSettings } from '@/hooks/useLocaleSettings'
+import { useShopPageMeta, resolveOgImageSrc } from '@/hooks/useShopPageMeta'
+
+const ROOM_LAYOUT_OG_IMAGE = '/images/home/living-room.svg'
 
 export function RoomLayoutPage() {
   const { t } = useTranslation()
+  const { locale } = useLocaleSettings()
+
+  const pageUrl = absoluteUrl('/room-layout')
+  const ogImage = resolveOgImageSrc(ROOM_LAYOUT_OG_IMAGE)
 
   const jsonLd = useMemo(
-    () =>
-      buildWebPageJsonLd({
+    () => [
+      buildWebApplicationJsonLd({
         name: t('roomLayout.title'),
         description: t('roomLayout.subtitle'),
-        url: absoluteUrl('/room-layout'),
+        url: pageUrl,
+        image: ogImage,
+        locale,
       }),
-    [t],
+      buildBreadcrumbJsonLd([
+        { name: t('product.breadcrumbHome'), path: '/' },
+        { name: t('roomLayout.title') },
+      ]),
+    ],
+    [locale, ogImage, pageUrl, t],
   )
 
   useShopPageMeta({
     title: t('roomLayout.title'),
     description: t('roomLayout.subtitle'),
+    image: ogImage,
+    imageAlt: `${t('roomLayout.eyebrow')} — ${t('roomLayout.title')}`,
+    keywords: t('seo.roomLayoutKeywords'),
     path: '/room-layout',
     jsonLd,
   })

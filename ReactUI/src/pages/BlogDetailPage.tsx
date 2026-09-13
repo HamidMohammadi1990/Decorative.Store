@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { CopyableShortLink } from '@/components/ui/CopyableShortLink'
+import { PageBreadcrumbs } from '@/components/ui/PageBreadcrumbs'
 import { BlogAuthorCard } from '@/components/blog/BlogAuthorCard'
 import { BlogComments } from '@/components/blog/BlogComments'
 import { BlogDetailGallery } from '@/components/blog/BlogDetailGallery'
@@ -10,6 +10,7 @@ import { BlogShareBar } from '@/components/blog/BlogShareBar'
 import { BlogTagList } from '@/components/blog/BlogTagList'
 import { Container } from '@/components/ui/Container'
 import { PageLoading } from '@/components/ui/Spinner'
+import { buildBlogBreadcrumbJsonLdItems, buildBlogPageBreadcrumbs } from '@/extensions/blogPageBreadcrumbs'
 import { formatBlogDate } from '@/extensions/formatBlogDate'
 import { useBlogPost } from '@/hooks/useBlogPost'
 import { useShopPageMeta, resolveOgImageSrc } from '@/hooks/useShopPageMeta'
@@ -28,16 +29,16 @@ export function BlogDetailPage() {
     title: post?.title,
     description: post?.excerpt,
     image: post ? resolveOgImageSrc(post.coverImage.src) : undefined,
+    imageAlt: post?.coverImage.alt ?? post?.title,
     type: 'article',
     path: post ? `/blog/${post.slug || routeSlug || ''}` : undefined,
+    author: post?.author.name,
+    publishedTime: post?.publishedAt,
+    keywords: post?.tags.join(', '),
     active: Boolean(post),
     jsonLd: post
       ? [
-          buildBreadcrumbJsonLd([
-            { name: t('product.breadcrumbHome'), path: '/' },
-            { name: t('blog.title'), path: '/blog' },
-            { name: post.title },
-          ]),
+          buildBreadcrumbJsonLd(buildBlogBreadcrumbJsonLdItems(post, t, categoryMap)),
           buildArticleJsonLd({
             headline: post.title,
             description: post.excerpt,
@@ -45,6 +46,8 @@ export function BlogDetailPage() {
             url: absoluteUrl(`/blog/${post.slug || routeSlug || ''}`),
             datePublished: post.publishedAt,
             authorName: post.author.name,
+            locale,
+            keywords: post.tags,
           }),
         ]
       : null,
@@ -70,26 +73,14 @@ export function BlogDetailPage() {
   const sharePath = `/blog/${postSlug}`
   const shareUrl = typeof window !== 'undefined' ? window.location.href : sharePath
   const categoryLabel = post.categoryLabel || post.categorySlug
+  const breadcrumbItems = buildBlogPageBreadcrumbs(post, t, categoryMap)
 
   const getCategoryLabel = (slug: string) => categoryMap[slug] ?? slug
 
   return (
     <article className="bg-surface pb-16">
       <Container className="py-6 md:py-8">
-        <nav
-          aria-label="Breadcrumb"
-          className="mb-6 flex flex-wrap items-center gap-1.5 text-xs text-text-muted"
-        >
-          <Link to="/" className="transition-colors hover:text-warm">
-            {t('product.breadcrumbHome')}
-          </Link>
-          <span aria-hidden>/</span>
-          <Link to="/blog" className="transition-colors hover:text-warm">
-            {t('blog.title')}
-          </Link>
-          <span aria-hidden>/</span>
-          <span className="line-clamp-1 text-text">{post.title}</span>
-        </nav>
+        <PageBreadcrumbs items={breadcrumbItems} className="mb-6" />
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-12">
           <div className="min-w-0">
@@ -111,8 +102,6 @@ export function BlogDetailPage() {
               <span aria-hidden>•</span>
               <span>{t('blog.readTime', { count: post.readTimeMinutes })}</span>
             </div>
-
-            <CopyableShortLink path={sharePath} className="mt-4" />
 
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <BlogLikeButton postId={post.id} baseLikes={post.likes} />

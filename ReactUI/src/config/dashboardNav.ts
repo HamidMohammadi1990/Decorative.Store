@@ -52,7 +52,7 @@ export interface DashboardNavItem {
 }
 
 export interface DashboardNavGroup {
-  id: 'account' | 'users' | 'catalog' | 'properties' | 'blog' | 'cms'
+  id: 'account' | 'orders' | 'users' | 'catalog' | 'properties' | 'blog' | 'cms'
   icon: DashboardNavIcon
   items: DashboardNavItem[]
 }
@@ -77,6 +77,18 @@ export const DASHBOARD_NAV_GROUPS: DashboardNavGroup[] = [
       { section: 'stories', path: '/account/dashboard/stories', icon: StoriesIcon },
       { section: 'addresses', path: '/account/dashboard/addresses', icon: AddressesIcon },
       { section: 'coupons', path: '/account/dashboard/coupons', icon: CouponsIcon },
+    ],
+  },
+  {
+    id: 'orders',
+    icon: OrdersIcon,
+    items: [
+      {
+        section: 'adminOrders',
+        path: '/account/dashboard/admin-orders',
+        icon: OrdersIcon,
+        permission: 'ListOrder',
+      },
     ],
   },
   {

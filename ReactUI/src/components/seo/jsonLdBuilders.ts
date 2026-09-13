@@ -48,6 +48,9 @@ export function buildProductJsonLd(input: {
   inStock: boolean
   rating?: number
   reviewCount?: number
+  brand?: string
+  category?: string
+  locale?: string
 }) {
   const offer: Record<string, unknown> = {
     '@type': 'Offer',
@@ -70,6 +73,14 @@ export function buildProductJsonLd(input: {
   }
 
   if (input.sku) product.sku = input.sku
+  if (input.brand) {
+    product.brand = {
+      '@type': 'Brand',
+      name: input.brand,
+    }
+  }
+  if (input.category) product.category = input.category
+  if (input.locale) product.inLanguage = input.locale === 'fa' ? 'fa-IR' : 'en-US'
   if (input.rating != null && input.reviewCount != null && input.reviewCount > 0) {
     product.aggregateRating = {
       '@type': 'AggregateRating',
@@ -106,6 +117,8 @@ export function buildWebPageJsonLd(input: {
   name: string
   description: string
   url: string
+  locale?: string
+  image?: string
 }) {
   return {
     '@context': 'https://schema.org',
@@ -113,6 +126,39 @@ export function buildWebPageJsonLd(input: {
     name: input.name,
     description: input.description,
     url: input.url,
+    ...(input.image ? { primaryImageOfPage: input.image, image: input.image } : {}),
+    ...(input.locale ? { inLanguage: input.locale === 'fa' ? 'fa-IR' : 'en-US' } : {}),
+    isPartOf: {
+      '@type': 'WebSite',
+      name: SITE_NAME,
+      url: absoluteUrl('/'),
+    },
+  }
+}
+
+export function buildWebApplicationJsonLd(input: {
+  name: string
+  description: string
+  url: string
+  image?: string
+  locale?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: input.name,
+    description: input.description,
+    url: input.url,
+    ...(input.image ? { image: input.image, screenshot: input.image } : {}),
+    ...(input.locale ? { inLanguage: input.locale === 'fa' ? 'fa-IR' : 'en-US' } : {}),
+    applicationCategory: 'DesignApplication',
+    operatingSystem: 'Any',
+    browserRequirements: 'Requires JavaScript',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
     isPartOf: {
       '@type': 'WebSite',
       name: SITE_NAME,
@@ -128,6 +174,9 @@ export function buildArticleJsonLd(input: {
   url: string
   datePublished: string
   authorName: string
+  dateModified?: string
+  locale?: string
+  keywords?: string[]
 }) {
   return {
     '@context': 'https://schema.org',
@@ -136,7 +185,11 @@ export function buildArticleJsonLd(input: {
     description: input.description,
     image: input.image,
     url: input.url,
+    mainEntityOfPage: input.url,
     datePublished: input.datePublished,
+    ...(input.dateModified ? { dateModified: input.dateModified } : {}),
+    ...(input.locale ? { inLanguage: input.locale === 'fa' ? 'fa-IR' : 'en-US' } : {}),
+    ...(input.keywords?.length ? { keywords: input.keywords.join(', ') } : {}),
     author: {
       '@type': 'Person',
       name: input.authorName,
@@ -148,6 +201,27 @@ export function buildArticleJsonLd(input: {
         '@type': 'ImageObject',
         url: absoluteUrl('/favicon.svg'),
       },
+    },
+  }
+}
+
+export function buildCollectionPageJsonLd(input: {
+  name: string
+  description: string
+  url: string
+  locale?: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: input.name,
+    description: input.description,
+    url: input.url,
+    ...(input.locale ? { inLanguage: input.locale === 'fa' ? 'fa-IR' : 'en-US' } : {}),
+    isPartOf: {
+      '@type': 'WebSite',
+      name: SITE_NAME,
+      url: absoluteUrl('/'),
     },
   }
 }

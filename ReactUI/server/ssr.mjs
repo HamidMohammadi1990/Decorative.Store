@@ -18,6 +18,12 @@ const port = Number(process.env.PORT) || 5173
 const host = process.env.HOST ?? '127.0.0.1'
 const apiTarget = process.env.SSR_API_TARGET ?? 'https://localhost:55274'
 
+function applyHtmlDocumentAttrs(template, locale) {
+  const lang = locale === 'fa' ? 'fa' : 'en'
+  const dir = locale === 'fa' ? 'rtl' : 'ltr'
+  return template.replace(/<html\b[^>]*>/i, `<html lang="${lang}" dir="${dir}">`)
+}
+
 async function createSsrServer() {
   const app = express()
   app.use(compression())
@@ -104,10 +110,13 @@ async function createSsrServer() {
         ? `<script>${ssrBootParts.join(';')}</script>`
         : ''
 
-      const html = template
-        .replace('<!--ssr-outlet-->', result.html ?? '')
-        .replace('<!--ssr-head-->', result.headHtml ?? '')
-        .replace('<!--ssr-data-->', hydrationScript)
+      const html = applyHtmlDocumentAttrs(
+        template
+          .replace('<!--ssr-outlet-->', result.html ?? '')
+          .replace('<!--ssr-head-->', result.headHtml ?? '')
+          .replace('<!--ssr-data-->', hydrationScript),
+        result.locale,
+      )
 
       res
         .status(result.status ?? 200)

@@ -6,7 +6,7 @@ import { Container } from '@/components/ui/Container'
 import { PageLoading } from '@/components/ui/Spinner'
 import { absoluteUrl } from '@/config/site'
 import { useAboutPageContent } from '@/hooks/useAboutPageContent'
-import { useShopPageMeta } from '@/hooks/useShopPageMeta'
+import { useShopPageMeta, resolveOgImageSrc } from '@/hooks/useShopPageMeta'
 
 export function AboutPage() {
   const { t } = useTranslation()
@@ -24,6 +24,8 @@ export function AboutPage() {
   useShopPageMeta({
     title: content?.metaTitle?.trim() || content?.title,
     description: content?.metaDescription ?? undefined,
+    image: content ? resolveOgImageSrc(content.hero.image.src) : undefined,
+    imageAlt: content?.hero.title ?? content?.title,
     path: '/about',
     active: Boolean(content),
     jsonLd,

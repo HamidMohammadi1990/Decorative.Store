@@ -9,7 +9,8 @@ import { PromoTileStrip } from '@/components/home/PromoTileStrip'
 import { Container } from '@/components/ui/Container'
 import { PageLoading } from '@/components/ui/Spinner'
 import { useHomePage } from '@/hooks/useHomePage'
-import { useShopPageMeta } from '@/hooks/useShopPageMeta'
+import { useShopPageMeta, resolveOgImageSrc } from '@/hooks/useShopPageMeta'
+import { DEFAULT_OG_IMAGE } from '@/config/site'
 import { usePreloadImage } from '@/hooks/usePreloadImage'
 
 export function HomePage() {
@@ -19,9 +20,14 @@ export function HomePage() {
   const lcpSrc = data?.hero.slides[0]?.image.src
   usePreloadImage(lcpSrc, Boolean(lcpSrc))
 
+  const heroImage = data?.hero.slides[0]?.image
+
   useShopPageMeta({
     title: t('seo.homeTitle', { defaultValue: 'Home' }),
     description: t('seo.homeDescription'),
+    image: resolveOgImageSrc(heroImage?.src ?? DEFAULT_OG_IMAGE),
+    imageAlt: heroImage?.alt ?? t('seo.homeTitle'),
+    keywords: t('seo.homeKeywords'),
     jsonLd: [buildOrganizationJsonLd(), buildWebSiteJsonLd()],
     active: !loading && !!data,
   })

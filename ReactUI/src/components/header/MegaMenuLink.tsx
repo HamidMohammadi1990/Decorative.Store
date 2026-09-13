@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { AppLink } from '@/models/shared/link.model'
 import { NavLinkIcon } from '@/components/ui/NavTreeIcons'
+import { prefetchCatalogRoute } from '@/extensions/prefetchCatalogRoute'
 
 export const navSubmenuLinkClass =
   'group flex items-center gap-2.5 rounded-md border-s-2 border-transparent py-2 pe-3 ps-2.5 text-sm font-normal leading-snug text-text-muted transition-all duration-200 hover:border-warm hover:bg-warm-soft hover:ps-3.5 hover:text-warm focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-warm'
@@ -35,8 +36,16 @@ export function MegaMenuLink({ link, className = '', onNavigate }: MegaMenuLinkP
     )
   }
 
+  const prefetch = () => prefetchCatalogRoute(link.href)
+
   return (
-    <Link to={link.href} className={classes} onClick={onNavigate}>
+    <Link
+      to={link.href}
+      className={classes}
+      onClick={onNavigate}
+      onMouseEnter={prefetch}
+      onFocus={prefetch}
+    >
       {icon}
       <span>{link.label}</span>
     </Link>

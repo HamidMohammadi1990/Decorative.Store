@@ -68,36 +68,43 @@ export function PriceRangeGroup({
     (bounds.selectedMin > bounds.min || bounds.selectedMax < bounds.max)
 
   return (
-    <div className="border-b border-border/60 px-4 py-4 last:border-b-0">
-      <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-        {facet.label}
-      </h3>
-
-      <div className="space-y-4 rounded-lg bg-surface-muted/40 p-3 ring-1 ring-border/50">
-        <div className="flex items-center justify-between gap-2 text-sm font-medium text-text">
-          <span className="rounded-lg border border-border/60 bg-surface px-2.5 py-1.5 shadow-sm">
-            {currency ? (
-              <PriceDisplay
-                money={{ amount: localMin, currencyCode: currency.code }}
-                currency={currency}
-                iconSize={12}
-              />
-            ) : (
-              localMin.toLocaleString()
-            )}
-          </span>
-          <span className="text-[11px] text-text-muted">{t('listing.priceTo')}</span>
-          <span className="rounded-lg border border-border/60 bg-surface px-2.5 py-1.5 shadow-sm">
-            {currency ? (
-              <PriceDisplay
-                money={{ amount: localMax, currencyCode: currency.code }}
-                currency={currency}
-                iconSize={12}
-              />
-            ) : (
-              localMax.toLocaleString()
-            )}
-          </span>
+    <div className="min-w-0 space-y-4">
+      <div className="space-y-3 rounded-lg bg-surface-muted/25 p-3 ring-1 ring-border/40">
+        <div className="grid grid-cols-1 gap-2 text-sm font-medium text-text">
+          <div className="flex min-w-0 items-center justify-between gap-2 rounded-lg border border-border/50 bg-surface px-2.5 py-1.5">
+            <span className="shrink-0 text-[11px] font-normal text-text-muted">
+              {t('listing.priceMin')}
+            </span>
+            <span className="min-w-0 truncate text-end">
+              {currency ? (
+                <PriceDisplay
+                  money={{ amount: localMin, currencyCode: currency.code }}
+                  currency={currency}
+                  iconSize={11}
+                  className="text-xs"
+                />
+              ) : (
+                <span className="text-xs tabular-nums">{localMin.toLocaleString()}</span>
+              )}
+            </span>
+          </div>
+          <div className="flex min-w-0 items-center justify-between gap-2 rounded-lg border border-border/50 bg-surface px-2.5 py-1.5">
+            <span className="shrink-0 text-[11px] font-normal text-text-muted">
+              {t('listing.priceMax')}
+            </span>
+            <span className="min-w-0 truncate text-end">
+              {currency ? (
+                <PriceDisplay
+                  money={{ amount: localMax, currencyCode: currency.code }}
+                  currency={currency}
+                  iconSize={11}
+                  className="text-xs"
+                />
+              ) : (
+                <span className="text-xs tabular-nums">{localMax.toLocaleString()}</span>
+              )}
+            </span>
+          </div>
         </div>
 
         <DualRangeSlider
@@ -131,7 +138,7 @@ export function PriceRangeGroup({
       </div>
 
       {facet.options.length > 0 && (
-        <ul className="mt-3 flex flex-wrap gap-2">
+        <ul className="flex flex-wrap gap-2">
           {facet.options.map((option) => {
             const checked = activeBucketValues.includes(option.value)
 
@@ -144,7 +151,7 @@ export function PriceRangeGroup({
                   className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-all ${
                     checked
                       ? 'border-warm bg-warm-soft text-text ring-1 ring-warm/20'
-                      : 'border-border/70 bg-surface text-text-muted hover:border-warm/30 hover:text-text'
+                      : 'border-border/70 bg-surface-muted/30 text-text-muted hover:border-warm/30 hover:text-text'
                   }`}
                 >
                   {option.label}
@@ -157,4 +164,18 @@ export function PriceRangeGroup({
       )}
     </div>
   )
+}
+
+export function getPriceFacetActiveCount(
+  facet: FilterFacet,
+  activeBucketValues: string[],
+): number {
+  if (!facet.range) return activeBucketValues.length
+
+  const hasCustomRange =
+    facet.range.selectedMin != null &&
+    facet.range.selectedMax != null &&
+    (facet.range.selectedMin > facet.range.min || facet.range.selectedMax < facet.range.max)
+
+  return activeBucketValues.length + (hasCustomRange ? 1 : 0)
 }

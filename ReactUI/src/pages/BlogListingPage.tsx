@@ -4,7 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { BlogCard } from '@/components/blog/BlogCard'
 import { BlogCategoryFilter } from '@/components/blog/BlogCategoryFilter'
 import { BlogFeaturedSlider } from '@/components/blog/BlogFeaturedSlider'
-import { buildBreadcrumbJsonLd } from '@/components/seo/jsonLdBuilders'
+import { buildBreadcrumbJsonLd, buildCollectionPageJsonLd } from '@/components/seo/jsonLdBuilders'
+import { resolveOgImageSrc } from '@/hooks/useShopPageMeta'
+import { useSettingsStore } from '@/stores/settingsStore'
+import { absoluteUrl } from '@/config/site'
 import { Container } from '@/components/ui/Container'
 import { PageLoading } from '@/components/ui/Spinner'
 import { useBlogListing } from '@/hooks/useBlogListing'
@@ -12,6 +15,7 @@ import { useShopPageMeta } from '@/hooks/useShopPageMeta'
 
 export function BlogListingPage() {
   const { t } = useTranslation()
+  const locale = useSettingsStore((s) => s.locale)
   const { data, loading, error, categorySlug } = useBlogListing()
 
   const activeCategoryLabel =
@@ -19,21 +23,35 @@ export function BlogListingPage() {
       ? data.categories.find((category) => category.slug === categorySlug)?.label
       : undefined
 
+  const listingPath = categorySlug ? `/blog/category/${categorySlug}` : '/blog'
+  const featuredCover = data?.featuredPosts[0]?.coverImage
+
   const blogJsonLd = useMemo(() => {
     if (!data) return null
-    return buildBreadcrumbJsonLd([
+    const breadcrumbs = buildBreadcrumbJsonLd([
       { name: t('product.breadcrumbHome'), path: '/' },
       { name: t('blog.title'), path: '/blog' },
       ...(activeCategoryLabel ? [{ name: activeCategoryLabel }] : []),
     ])
-  }, [activeCategoryLabel, data, t])
+    const collectionPage = buildCollectionPageJsonLd({
+      name: activeCategoryLabel
+        ? `${activeCategoryLabel} — ${t('blog.title')}`
+        : t('blog.listingTitle'),
+      description: t('blog.listingDescription'),
+      url: absoluteUrl(listingPath),
+      locale,
+    })
+    return [breadcrumbs, collectionPage]
+  }, [activeCategoryLabel, data, listingPath, locale, t])
 
   useShopPageMeta({
     title: activeCategoryLabel
       ? `${activeCategoryLabel} — ${t('blog.title')}`
       : t('blog.listingTitle'),
     description: t('blog.listingDescription'),
-    path: categorySlug ? `/blog/category/${categorySlug}` : '/blog',
+    image: featuredCover ? resolveOgImageSrc(featuredCover.src) : undefined,
+    imageAlt: featuredCover?.alt ?? t('blog.listingTitle'),
+    path: listingPath,
     active: !loading && !!data,
     jsonLd: blogJsonLd,
   })

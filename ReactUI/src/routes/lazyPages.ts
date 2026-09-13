@@ -61,6 +61,7 @@ export const DashboardProfileCompletionAnswersPage = lazyNamed(
 )
 export const DashboardUsersPage = lazyNamed(loadDashboardPages, 'DashboardUsersPage')
 export const DashboardRolesPage = lazyNamed(loadDashboardPages, 'DashboardRolesPage')
+export const DashboardAdminOrdersPage = lazyNamed(loadDashboardPages, 'DashboardAdminOrdersPage')
 
 export async function preloadDashboardPages() {
   await loadDashboardPages()

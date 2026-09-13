@@ -208,39 +208,39 @@ public class ProductRepository
         return result;
     }
 
-    public async Task<CatalogListingDto> GetCatalogListingByPathAsync(
+    public async Task<CatalogListingResult> GetCatalogListingByPathAsync(
         string catalogPath,
+        CatalogListingQueryDto query,
         CancellationToken cancellationToken = default)
     {
         var normalizedPath = CatalogSlugNormalizer.NormalizePath(catalogPath);
-        var (languageId, defaultLanguageId) = await ResolveLanguageIdsAsync(cancellationToken);
+        var languageId = await ResolveCurrentLanguageIdAsync(cancellationToken);
 
         if (string.IsNullOrWhiteSpace(normalizedPath))
         {
-            return new CatalogListingDto
+            return new CatalogListingResult
             {
-                PathNotFound = true,
-                Breadcrumbs =
-                [
-                    new CatalogBreadcrumbDto(
-                        await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken),
-                        "/")
-                ]
+                Listing = new CatalogListingDto
+                {
+                    PathNotFound = true,
+                    Breadcrumbs =
+                    [
+                        new CatalogBreadcrumbDto(
+                            await ResolveHomeLabelAsync(languageId, cancellationToken),
+                            "/")
+                    ]
+                }
             };
         }
 
         var (collectionSlug, categoryPath) = ParseCollectionPrefix(normalizedPath);
         if (collectionSlug is not null)
         {
-            return await WithEnrichedProductsAsync(
-                await BuildCollectionListingAsync(
-                    collectionSlug,
-                    categoryPath,
-                    languageId,
-                    defaultLanguageId,
-                    cancellationToken),
+            return await BuildCollectionListingAsync(
+                collectionSlug,
+                categoryPath,
                 languageId,
-                defaultLanguageId,
+                query,
                 cancellationToken);
         }
 
@@ -248,20 +248,15 @@ public class ProductRepository
             normalizedPath,
             categoryId: null,
             languageId,
-            defaultLanguageId,
             cancellationToken);
 
         if (subCategoryMatch is not null)
         {
-            return await WithEnrichedProductsAsync(
-                await BuildSubCategoryListingAsync(
-                    subCategoryMatch.Value.SubCategoryId,
-                    subCategoryMatch.Value.CategoryId,
-                    languageId,
-                    defaultLanguageId,
-                    cancellationToken),
+            return await BuildSubCategoryListingAsync(
+                subCategoryMatch.Value.SubCategoryId,
+                subCategoryMatch.Value.CategoryId,
                 languageId,
-                defaultLanguageId,
+                query,
                 cancellationToken);
         }
 
@@ -271,20 +266,15 @@ public class ProductRepository
                 categorySegment,
                 subCategorySegment,
                 languageId,
-                defaultLanguageId,
                 cancellationToken);
 
             if (splitMatch is not null)
             {
-                return await WithEnrichedProductsAsync(
-                    await BuildSubCategoryListingAsync(
-                        splitMatch.Value.SubCategoryId,
-                        splitMatch.Value.CategoryId,
-                        languageId,
-                        defaultLanguageId,
-                        cancellationToken),
+                return await BuildSubCategoryListingAsync(
+                    splitMatch.Value.SubCategoryId,
+                    splitMatch.Value.CategoryId,
                     languageId,
-                    defaultLanguageId,
+                    query,
                     cancellationToken);
             }
         }
@@ -292,7 +282,6 @@ public class ProductRepository
         var categoryMatch = await FindActiveCategoryIdByNormalizedSlugAsync(
             normalizedPath,
             languageId,
-            defaultLanguageId,
             cancellationToken);
 
         if (categoryMatch != default)
@@ -300,8 +289,15 @@ public class ProductRepository
             var categoryTranslation = await ResolveCategoryTranslationAsync(
                 categoryMatch,
                 languageId,
-                defaultLanguageId,
                 cancellationToken);
+
+            if (categoryTranslation is null)
+            {
+                return new CatalogListingResult
+                {
+                    Listing = new CatalogListingDto { PathNotFound = true, Title = normalizedPath }
+                };
+            }
 
             var subCategoryIds = await Context.SubCategory
                 .AsNoTracking()
@@ -309,38 +305,39 @@ public class ProductRepository
                 .Select(x => x.Id)
                 .ToListAsync(cancellationToken);
 
-            var homeLabel = await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken);
+            var homeLabel = await ResolveHomeLabelAsync(languageId, cancellationToken);
             var breadcrumbs = new List<CatalogBreadcrumbDto>
             {
                 new(homeLabel, "/"),
-                new(categoryTranslation.Title, $"/{categoryTranslation.Slug}")
+                new(categoryTranslation.Value.Title, $"/{categoryTranslation.Value.Slug}")
             };
 
-            var products = await LoadCatalogProductsAsync(
+            return await LoadOptimizedListingForScopeAsync(
                 subCategoryIds,
                 languageId,
-                defaultLanguageId,
-                cancellationToken);
-
-            return await WithEnrichedProductsAsync(
+                query,
                 new CatalogListingDto
                 {
-                    Title = categoryTranslation.Title,
+                    Title = categoryTranslation.Value.Title,
                     Breadcrumbs = breadcrumbs,
-                    Products = products
                 },
-                languageId,
-                defaultLanguageId,
                 cancellationToken);
         }
 
         if (normalizedPath == "in-stock")
         {
-            var homeLabel = await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken);
-            var title = await ResolveCollectionLabelAsync("in-stock", languageId, defaultLanguageId, cancellationToken);
-            var products = await GetInStockCatalogProductsAsync(cancellationToken: cancellationToken);
+            var homeLabel = await ResolveHomeLabelAsync(languageId, cancellationToken);
+            var title = await ResolveCollectionLabelAsync("in-stock", languageId, cancellationToken);
+            var subCategoryIds = await Context.SubCategory
+                .AsNoTracking()
+                .Where(x => x.IsActive && x.Category.IsActive)
+                .Select(x => x.Id)
+                .ToListAsync(cancellationToken);
 
-            return await WithEnrichedProductsAsync(
+            return await LoadOptimizedListingForScopeAsync(
+                subCategoryIds,
+                languageId,
+                query with { InStock = query.InStock ?? true },
                 new CatalogListingDto
                 {
                     Title = title,
@@ -349,20 +346,24 @@ public class ProductRepository
                         new(homeLabel, "/"),
                         new(title, "/in-stock")
                     ],
-                    Products = products
                 },
-                languageId,
-                defaultLanguageId,
                 cancellationToken);
         }
 
         if (normalizedPath == "best-sellers")
         {
-            var homeLabel = await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken);
-            var title = await ResolveCollectionLabelAsync("best-sellers", languageId, defaultLanguageId, cancellationToken);
-            var products = await GetBestSellingCatalogProductsAsync(cancellationToken: cancellationToken);
+            var homeLabel = await ResolveHomeLabelAsync(languageId, cancellationToken);
+            var title = await ResolveCollectionLabelAsync("best-sellers", languageId, cancellationToken);
+            var subCategoryIds = await Context.SubCategory
+                .AsNoTracking()
+                .Where(x => x.IsActive && x.Category.IsActive)
+                .Select(x => x.Id)
+                .ToListAsync(cancellationToken);
 
-            return await WithEnrichedProductsAsync(
+            return await LoadOptimizedListingForScopeAsync(
+                subCategoryIds,
+                languageId,
+                query with { Sort = string.IsNullOrWhiteSpace(query.Sort) ? "best-selling" : query.Sort },
                 new CatalogListingDto
                 {
                     Title = title,
@@ -371,23 +372,23 @@ public class ProductRepository
                         new(homeLabel, "/"),
                         new(title, "/best-sellers")
                     ],
-                    Products = products
                 },
-                languageId,
-                defaultLanguageId,
                 cancellationToken);
         }
 
-        return new CatalogListingDto
+        return new CatalogListingResult
         {
-            PathNotFound = true,
-            Title = normalizedPath,
-            Breadcrumbs =
-            [
-                new CatalogBreadcrumbDto(
-                    await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken),
-                    "/")
-            ]
+            Listing = new CatalogListingDto
+            {
+                PathNotFound = true,
+                Title = normalizedPath,
+                Breadcrumbs =
+                [
+                    new CatalogBreadcrumbDto(
+                        await ResolveHomeLabelAsync(languageId, cancellationToken),
+                        "/")
+                ]
+            }
         };
     }
 
@@ -954,11 +955,9 @@ public class ProductRepository
     private async Task<string> ResolveCollectionLabelAsync(
         string collectionSlug,
         int languageId,
-        int defaultLanguageId,
         CancellationToken cancellationToken)
     {
-        var language = await languageRegistry.GetByIdAsync(languageId, cancellationToken)
-                       ?? await languageRegistry.GetByIdAsync(defaultLanguageId, cancellationToken);
+        var language = await languageRegistry.GetByIdAsync(languageId, cancellationToken);
         var isFa = (language?.Code ?? "en-US").StartsWith("fa", StringComparison.OrdinalIgnoreCase);
 
         return collectionSlug switch
@@ -1051,55 +1050,47 @@ public class ProductRepository
         return translation is null ? string.Empty : selector(translation);
     }
 
-    private async Task<(string Title, string Slug)> ResolveCategoryTranslationAsync(
+    private async Task<(string Title, string Slug)?> ResolveCategoryTranslationAsync(
         int categoryId,
         int languageId,
-        int defaultLanguageId,
         CancellationToken cancellationToken)
     {
-        var translations = await Context.CategoryTranslation
+        var current = await Context.CategoryTranslation
             .AsNoTracking()
-            .Where(x => x.CategoryId == categoryId)
-            .ToListAsync(cancellationToken);
+            .Where(x => x.CategoryId == categoryId && x.LanguageId == languageId)
+            .Select(x => new { x.Title, x.Slug })
+            .FirstOrDefaultAsync(cancellationToken);
 
-        var current = translations.FirstOrDefault(x => x.LanguageId == languageId)
-                      ?? translations.FirstOrDefault(x => x.LanguageId == defaultLanguageId)
-                      ?? translations.FirstOrDefault();
-
-        return current is null
-            ? (string.Empty, string.Empty)
-            : (current.Title, current.Slug);
+        return current is null ? null : (current.Title, current.Slug);
     }
 
-    private async Task<(string Title, string Slug)> ResolveSubCategoryTranslationAsync(
+    private async Task<(string Title, string Slug)?> ResolveSubCategoryTranslationAsync(
         int subCategoryId,
         int languageId,
-        int defaultLanguageId,
         CancellationToken cancellationToken)
     {
-        var translations = await Context.SubCategoryTranslation
+        var current = await Context.SubCategoryTranslation
             .AsNoTracking()
-            .Where(x => x.SubCategoryId == subCategoryId)
-            .ToListAsync(cancellationToken);
+            .Where(x => x.SubCategoryId == subCategoryId && x.LanguageId == languageId)
+            .Select(x => new { x.Title, x.Slug })
+            .FirstOrDefaultAsync(cancellationToken);
 
-        var current = translations.FirstOrDefault(x => x.LanguageId == languageId)
-                      ?? translations.FirstOrDefault(x => x.LanguageId == defaultLanguageId)
-                      ?? translations.FirstOrDefault();
-
-        return current is null
-            ? (string.Empty, string.Empty)
-            : (current.Title, current.Slug);
+        return current is null ? null : (current.Title, current.Slug);
     }
 
     private async Task<string> ResolveHomeLabelAsync(
         int languageId,
-        int defaultLanguageId,
         CancellationToken cancellationToken)
     {
-        var language = await languageRegistry.GetByIdAsync(languageId, cancellationToken)
-                       ?? await languageRegistry.GetByIdAsync(defaultLanguageId, cancellationToken);
+        var language = await languageRegistry.GetByIdAsync(languageId, cancellationToken);
         var code = language?.Code ?? "en-US";
         return code.StartsWith("fa", StringComparison.OrdinalIgnoreCase) ? "خانه" : "Home";
+    }
+
+    private async Task<int> ResolveCurrentLanguageIdAsync(CancellationToken cancellationToken = default)
+    {
+        var defaultLanguage = await languageRegistry.GetDefaultAsync(cancellationToken);
+        return languageContext.IsResolved ? languageContext.LanguageId : defaultLanguage.Id;
     }
 
     private async Task<(int LanguageId, int DefaultLanguageId)> ResolveLanguageIdsAsync(CancellationToken cancellationToken = default)
@@ -1107,6 +1098,50 @@ public class ProductRepository
         var defaultLanguage = await languageRegistry.GetDefaultAsync(cancellationToken);
         var languageId = languageContext.IsResolved ? languageContext.LanguageId : defaultLanguage.Id;
         return (languageId, defaultLanguage.Id);
+    }
+
+    private async Task<CatalogListingResult> LoadOptimizedListingForScopeAsync(
+        IReadOnlyCollection<int> subCategoryIds,
+        int languageId,
+        CatalogListingQueryDto query,
+        CatalogListingDto listingMetadata,
+        CancellationToken cancellationToken)
+    {
+        var (page, pageSize) = CatalogListingQueryBuilder.NormalizePaging(query);
+        var scopedQuery = CatalogListingQueryBuilder.BuildLanguageScopedQuery(Context, subCategoryIds, languageId);
+        var filteredQuery = CatalogListingQueryBuilder.ApplyFilters(Context, scopedQuery, query);
+        var totalCount = await filteredQuery.CountAsync(cancellationToken);
+        var sortedQuery = CatalogListingQueryBuilder.ApplySort(Context, filteredQuery, query.Sort);
+
+        var pageProducts = await CatalogListingQueryBuilder
+            .ProjectListingProducts(
+                sortedQuery.Skip((page - 1) * pageSize).Take(pageSize),
+                languageId)
+            .ToListAsync(cancellationToken);
+
+        var facetScopeProducts = await CatalogListingQueryBuilder
+            .ProjectFacetScopeProducts(scopedQuery)
+            .ToListAsync(cancellationToken);
+
+        var listing = listingMetadata with
+        {
+            Products = pageProducts,
+            TotalCount = totalCount,
+            Page = page,
+            PageSize = pageSize,
+        };
+
+        await EnrichListingProductsAsync(
+            [.. listing.Products, .. facetScopeProducts],
+            listing.FacetLabels,
+            languageId,
+            cancellationToken);
+
+        return new CatalogListingResult
+        {
+            Listing = listing,
+            FacetScopeProducts = facetScopeProducts,
+        };
     }
 
     private async Task<List<CatalogProductFeatureDto>> LoadCatalogFeaturesByProductIdAsync(
@@ -1201,7 +1236,6 @@ public class ProductRepository
     private async Task<int> FindActiveCategoryIdByNormalizedSlugAsync(
         string normalizedSlug,
         int languageId,
-        int defaultLanguageId,
         CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(normalizedSlug))
@@ -1210,13 +1244,12 @@ public class ProductRepository
         var rows = await (
                 from translation in Context.CategoryTranslation.AsNoTracking()
                 join category in Context.Category.AsNoTracking() on translation.CategoryId equals category.Id
-                where category.IsActive
-                select new { category.Id, translation.Slug, translation.LanguageId })
+                where category.IsActive && translation.LanguageId == languageId
+                select new { category.Id, translation.Slug })
             .ToListAsync(cancellationToken);
 
         return rows
             .Where(x => CatalogSlugNormalizer.Normalize(x.Slug) == normalizedSlug)
-            .OrderBy(x => x.LanguageId == languageId ? 0 : x.LanguageId == defaultLanguageId ? 1 : 2)
             .Select(x => x.Id)
             .FirstOrDefault();
     }
@@ -1225,7 +1258,6 @@ public class ProductRepository
         string normalizedSlug,
         int? categoryId,
         int languageId,
-        int defaultLanguageId,
         CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(normalizedSlug))
@@ -1235,25 +1267,20 @@ public class ProductRepository
                 from translation in Context.SubCategoryTranslation.AsNoTracking()
                 join subCategory in Context.SubCategory.AsNoTracking() on translation.SubCategoryId equals subCategory.Id
                 join category in Context.Category.AsNoTracking() on subCategory.CategoryId equals category.Id
-                where subCategory.IsActive && category.IsActive
+                where subCategory.IsActive
+                      && category.IsActive
+                      && translation.LanguageId == languageId
+                      && (categoryId == null || subCategory.CategoryId == categoryId)
                 select new
                 {
                     subCategory.Id,
                     subCategory.CategoryId,
                     translation.Slug,
-                    translation.LanguageId,
                 })
             .ToListAsync(cancellationToken);
 
-        IEnumerable<(int Id, int CategoryId, string Slug, int LanguageId)> candidates = rows
-            .Select(x => (x.Id, x.CategoryId, x.Slug, x.LanguageId));
-
-        if (categoryId is not null)
-            candidates = candidates.Where(x => x.CategoryId == categoryId);
-
-        var match = candidates
+        var match = rows
             .Where(x => CatalogSlugNormalizer.Normalize(x.Slug) == normalizedSlug)
-            .OrderBy(x => x.LanguageId == languageId ? 0 : x.LanguageId == defaultLanguageId ? 1 : 2)
             .Select(x => ((int SubCategoryId, int CategoryId)?)(x.Id, x.CategoryId))
             .FirstOrDefault();
 
@@ -1264,13 +1291,12 @@ public class ProductRepository
         if (string.IsNullOrWhiteSpace(leafSlug) || leafSlug == normalizedSlug)
             return null;
 
-        return candidates
+        return rows
             .Where(x =>
             {
                 var normalized = CatalogSlugNormalizer.Normalize(x.Slug);
                 return normalized == leafSlug || normalized.EndsWith("/" + leafSlug, StringComparison.Ordinal);
             })
-            .OrderBy(x => x.LanguageId == languageId ? 0 : x.LanguageId == defaultLanguageId ? 1 : 2)
             .Select(x => ((int SubCategoryId, int CategoryId)?)(x.Id, x.CategoryId))
             .FirstOrDefault();
     }
@@ -1279,7 +1305,6 @@ public class ProductRepository
         string categorySegment,
         string subCategorySegment,
         int languageId,
-        int defaultLanguageId,
         CancellationToken cancellationToken)
     {
         var normalizedCategory = CatalogSlugNormalizer.Normalize(categorySegment);
@@ -1290,7 +1315,6 @@ public class ProductRepository
         var categoryId = await FindActiveCategoryIdByNormalizedSlugAsync(
             normalizedCategory,
             languageId,
-            defaultLanguageId,
             cancellationToken);
 
         if (categoryId == default)
@@ -1302,52 +1326,58 @@ public class ProductRepository
                    compositePath,
                    categoryId,
                    languageId,
-                   defaultLanguageId,
                    cancellationToken)
                ?? await FindActiveSubCategoryByNormalizedSlugAsync(
                    normalizedSub,
                    categoryId,
                    languageId,
-                   defaultLanguageId,
                    cancellationToken);
     }
 
-    private async Task<CatalogListingDto> BuildSubCategoryListingAsync(
+    private async Task<CatalogListingResult> BuildSubCategoryListingAsync(
         int subCategoryId,
         int categoryId,
         int languageId,
-        int defaultLanguageId,
+        CatalogListingQueryDto query,
         CancellationToken cancellationToken)
     {
         var categoryTranslation = await ResolveCategoryTranslationAsync(
             categoryId,
             languageId,
-            defaultLanguageId,
             cancellationToken);
         var subCategoryTranslation = await ResolveSubCategoryTranslationAsync(
             subCategoryId,
             languageId,
-            defaultLanguageId,
-            cancellationToken);
-        var homeLabel = await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken);
-        var listingPath = BuildSubCategoryListingPath(categoryTranslation.Slug, subCategoryTranslation.Slug);
-        var products = await LoadCatalogProductsAsync(
-            [subCategoryId],
-            languageId,
-            defaultLanguageId,
             cancellationToken);
 
-        return new CatalogListingDto
+        if (categoryTranslation is null || subCategoryTranslation is null)
         {
-            Title = subCategoryTranslation.Title,
-            Breadcrumbs =
-            [
-                new(homeLabel, "/"),
-                new(categoryTranslation.Title, $"/{categoryTranslation.Slug.Trim('/')}"),
-                new(subCategoryTranslation.Title, $"/{listingPath}"),
-            ],
-            Products = products,
-        };
+            return new CatalogListingResult
+            {
+                Listing = new CatalogListingDto { PathNotFound = true }
+            };
+        }
+
+        var homeLabel = await ResolveHomeLabelAsync(languageId, cancellationToken);
+        var listingPath = BuildSubCategoryListingPath(
+            categoryTranslation.Value.Slug,
+            subCategoryTranslation.Value.Slug);
+
+        return await LoadOptimizedListingForScopeAsync(
+            [subCategoryId],
+            languageId,
+            query,
+            new CatalogListingDto
+            {
+                Title = subCategoryTranslation.Value.Title,
+                Breadcrumbs =
+                [
+                    new(homeLabel, "/"),
+                    new(categoryTranslation.Value.Title, $"/{categoryTranslation.Value.Slug.Trim('/')}"),
+                    new(subCategoryTranslation.Value.Title, $"/{listingPath}"),
+                ],
+            },
+            cancellationToken);
     }
 
     private static (string? Collection, string RemainingPath) ParseCollectionPrefix(string normalizedPath)
@@ -1361,106 +1391,106 @@ public class ProductRepository
         return (collection, remaining);
     }
 
-    private async Task<CatalogListingDto> WithEnrichedProductsAsync(
-        CatalogListingDto listing,
-        int languageId,
-        int defaultLanguageId,
-        CancellationToken cancellationToken)
-    {
-        if (!listing.PathNotFound && listing.Products.Count > 0)
-            await EnrichListingProductsAsync(listing, languageId, defaultLanguageId, cancellationToken);
-
-        return listing;
-    }
-
-    private async Task<CatalogListingDto> BuildCollectionListingAsync(
+    private async Task<CatalogListingResult> BuildCollectionListingAsync(
         string collectionSlug,
         string categoryPath,
         int languageId,
-        int defaultLanguageId,
+        CatalogListingQueryDto query,
         CancellationToken cancellationToken)
     {
-        var homeLabel = await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken);
-        var collectionTitle = await ResolveCollectionLabelAsync(
-            collectionSlug,
-            languageId,
-            defaultLanguageId,
-            cancellationToken);
-
-        List<CatalogListingProductDto> products;
-        List<CatalogBreadcrumbDto> breadcrumbs =
-        [
-            new(homeLabel, "/"),
-            new(collectionTitle, $"/{collectionSlug}"),
-        ];
+        var homeLabel = await ResolveHomeLabelAsync(languageId, cancellationToken);
+        var collectionTitle = await ResolveCollectionLabelAsync(collectionSlug, languageId, cancellationToken);
 
         if (string.IsNullOrWhiteSpace(categoryPath))
         {
-            products = collectionSlug switch
+            var subCategoryIds = await Context.SubCategory
+                .AsNoTracking()
+                .Where(x => x.IsActive && x.Category.IsActive)
+                .Select(x => x.Id)
+                .ToListAsync(cancellationToken);
+
+            var scopedQuery = query with
             {
-                "sale" or "clearance" => await LoadFilteredCatalogProductsAsync(
-                    product => product.CompareAtPrice != null && product.CompareAtPrice > product.Price,
-                    null,
-                    cancellationToken),
-                "new" => await LoadFilteredCatalogProductsAsync(
-                    product => product.CreatedOnUtc >= DateTime.UtcNow.AddDays(-90),
-                    null,
-                    cancellationToken),
-                "in-stock" => await GetInStockCatalogProductsAsync(cancellationToken: cancellationToken),
-                "best-sellers" => await GetBestSellingCatalogProductsAsync(cancellationToken: cancellationToken),
-                _ => [],
-            };
-        }
-        else
-        {
-            var scopedListing = await ResolveScopedCategoryListingAsync(
-                categoryPath,
-                languageId,
-                defaultLanguageId,
-                cancellationToken);
-
-            if (scopedListing.PathNotFound)
-                return scopedListing;
-
-            await EnrichListingProductsAsync(
-                scopedListing,
-                languageId,
-                defaultLanguageId,
-                cancellationToken);
-
-            products = collectionSlug switch
-            {
-                "sale" or "clearance" => scopedListing.Products.Where(product => product.OnSale).ToList(),
-                "new" => scopedListing.Products.Where(product => product.IsNew).ToList(),
-                "in-stock" => scopedListing.Products.Where(product => product.InStock).ToList(),
-                "best-sellers" => scopedListing.Products
-                    .OrderByDescending(product => product.PurchaseCount)
-                    .ThenByDescending(product => product.Id)
-                    .ToList(),
-                _ => scopedListing.Products,
+                OnSale = collectionSlug is "sale" or "clearance" ? query.OnSale ?? true : query.OnSale,
+                IsNew = collectionSlug == "new" ? query.IsNew ?? true : query.IsNew,
+                InStock = collectionSlug == "in-stock" ? query.InStock ?? true : query.InStock,
+                Sort = collectionSlug == "best-sellers" && string.IsNullOrWhiteSpace(query.Sort)
+                    ? "best-selling"
+                    : query.Sort,
             };
 
-            breadcrumbs =
-            [
-                new(homeLabel, "/"),
-                new(collectionTitle, $"/{collectionSlug}"),
-                .. scopedListing.Breadcrumbs.Skip(1),
-            ];
-            collectionTitle = $"{collectionTitle} — {scopedListing.Title}";
+            return await LoadOptimizedListingForScopeAsync(
+                subCategoryIds,
+                languageId,
+                scopedQuery,
+                new CatalogListingDto
+                {
+                    Title = collectionTitle,
+                    Breadcrumbs =
+                    [
+                        new(homeLabel, "/"),
+                        new(collectionTitle, $"/{collectionSlug}"),
+                    ],
+                },
+                cancellationToken);
         }
 
-        return new CatalogListingDto
+        var subCategoryIdsForScope = await ResolveSubCategoryIdsForPathAsync(
+            categoryPath,
+            languageId,
+            cancellationToken);
+
+        if (subCategoryIdsForScope.Count == 0)
         {
-            Title = collectionTitle,
-            Breadcrumbs = breadcrumbs,
-            Products = products,
+            return new CatalogListingResult
+            {
+                Listing = new CatalogListingDto { PathNotFound = true, Title = categoryPath }
+            };
+        }
+
+        var scopedMetadata = await ResolveScopedListingMetadataAsync(
+            categoryPath,
+            languageId,
+            cancellationToken);
+
+        if (scopedMetadata is null)
+        {
+            return new CatalogListingResult
+            {
+                Listing = new CatalogListingDto { PathNotFound = true, Title = categoryPath }
+            };
+        }
+
+        var scopedQueryWithCollection = query with
+        {
+            OnSale = collectionSlug is "sale" or "clearance" ? query.OnSale ?? true : query.OnSale,
+            IsNew = collectionSlug == "new" ? query.IsNew ?? true : query.IsNew,
+            InStock = collectionSlug == "in-stock" ? query.InStock ?? true : query.InStock,
+            Sort = collectionSlug == "best-sellers" && string.IsNullOrWhiteSpace(query.Sort)
+                ? "best-selling"
+                : query.Sort,
         };
+
+        return await LoadOptimizedListingForScopeAsync(
+            subCategoryIdsForScope,
+            languageId,
+            scopedQueryWithCollection,
+            new CatalogListingDto
+            {
+                Title = $"{collectionTitle} — {scopedMetadata.Title}",
+                Breadcrumbs =
+                [
+                    new(homeLabel, "/"),
+                    new(collectionTitle, $"/{collectionSlug}"),
+                    .. scopedMetadata.Breadcrumbs.Skip(1),
+                ],
+            },
+            cancellationToken);
     }
 
-    private async Task<CatalogListingDto> ResolveScopedCategoryListingAsync(
+    private async Task<CatalogListingDto?> ResolveScopedListingMetadataAsync(
         string categoryPath,
         int languageId,
-        int defaultLanguageId,
         CancellationToken cancellationToken)
     {
         var normalizedPath = CatalogSlugNormalizer.NormalizePath(categoryPath);
@@ -1469,7 +1499,96 @@ public class ProductRepository
             normalizedPath,
             categoryId: null,
             languageId,
-            defaultLanguageId,
+            cancellationToken);
+
+        if (subCategoryMatch is not null)
+        {
+            var categoryTranslation = await ResolveCategoryTranslationAsync(
+                subCategoryMatch.Value.CategoryId,
+                languageId,
+                cancellationToken);
+            var subCategoryTranslation = await ResolveSubCategoryTranslationAsync(
+                subCategoryMatch.Value.SubCategoryId,
+                languageId,
+                cancellationToken);
+
+            if (categoryTranslation is null || subCategoryTranslation is null)
+                return null;
+
+            var homeLabel = await ResolveHomeLabelAsync(languageId, cancellationToken);
+            var listingPath = BuildSubCategoryListingPath(
+                categoryTranslation.Value.Slug,
+                subCategoryTranslation.Value.Slug);
+
+            return new CatalogListingDto
+            {
+                Title = subCategoryTranslation.Value.Title,
+                Breadcrumbs =
+                [
+                    new(homeLabel, "/"),
+                    new(categoryTranslation.Value.Title, $"/{categoryTranslation.Value.Slug.Trim('/')}"),
+                    new(subCategoryTranslation.Value.Title, $"/{listingPath}"),
+                ],
+            };
+        }
+
+        if (TryParseSplitCategoryPath(normalizedPath, out var categorySegment, out var subCategorySegment))
+        {
+            var splitMatch = await TryMatchCategorySubCategorySegmentsAsync(
+                categorySegment,
+                subCategorySegment,
+                languageId,
+                cancellationToken);
+
+            if (splitMatch is not null)
+            {
+                return await ResolveScopedListingMetadataAsync(
+                    CatalogSlugNormalizer.Normalize($"{categorySegment}/{subCategorySegment}"),
+                    languageId,
+                    cancellationToken);
+            }
+        }
+
+        var categoryMatch = await FindActiveCategoryIdByNormalizedSlugAsync(
+            normalizedPath,
+            languageId,
+            cancellationToken);
+
+        if (categoryMatch == default)
+            return null;
+
+        var categoryTranslationOnly = await ResolveCategoryTranslationAsync(
+            categoryMatch,
+            languageId,
+            cancellationToken);
+
+        if (categoryTranslationOnly is null)
+            return null;
+
+        var home = await ResolveHomeLabelAsync(languageId, cancellationToken);
+        return new CatalogListingDto
+        {
+            Title = categoryTranslationOnly.Value.Title,
+            Breadcrumbs =
+            [
+                new(home, "/"),
+                new(categoryTranslationOnly.Value.Title, $"/{categoryTranslationOnly.Value.Slug}"),
+            ],
+        };
+    }
+
+    private async Task<CatalogListingResult> ResolveScopedCategoryListingAsync(
+        string categoryPath,
+        int languageId,
+        CatalogListingQueryDto query,
+        CancellationToken cancellationToken)
+    {
+        var normalizedPath = CatalogSlugNormalizer.NormalizePath(categoryPath);
+
+        var subCategoryMatch = await FindActiveSubCategoryByNormalizedSlugAsync(
+            normalizedPath,
+            categoryId: null,
+            languageId,
             cancellationToken);
 
         if (subCategoryMatch is not null)
@@ -1478,7 +1597,7 @@ public class ProductRepository
                 subCategoryMatch.Value.SubCategoryId,
                 subCategoryMatch.Value.CategoryId,
                 languageId,
-                defaultLanguageId,
+                query,
                 cancellationToken);
         }
 
@@ -1488,7 +1607,6 @@ public class ProductRepository
                 categorySegment,
                 subCategorySegment,
                 languageId,
-                defaultLanguageId,
                 cancellationToken);
 
             if (splitMatch is not null)
@@ -1497,7 +1615,7 @@ public class ProductRepository
                     splitMatch.Value.SubCategoryId,
                     splitMatch.Value.CategoryId,
                     languageId,
-                    defaultLanguageId,
+                    query,
                     cancellationToken);
             }
         }
@@ -1505,54 +1623,105 @@ public class ProductRepository
         var categoryMatch = await FindActiveCategoryIdByNormalizedSlugAsync(
             normalizedPath,
             languageId,
-            defaultLanguageId,
             cancellationToken);
 
         if (categoryMatch == default)
         {
-            return new CatalogListingDto
+            return new CatalogListingResult
             {
-                PathNotFound = true,
-                Title = normalizedPath,
+                Listing = new CatalogListingDto
+                {
+                    PathNotFound = true,
+                    Title = normalizedPath,
+                }
             };
         }
 
         var categoryTranslationOnly = await ResolveCategoryTranslationAsync(
             categoryMatch,
             languageId,
-            defaultLanguageId,
             cancellationToken);
+
+        if (categoryTranslationOnly is null)
+        {
+            return new CatalogListingResult
+            {
+                Listing = new CatalogListingDto { PathNotFound = true, Title = normalizedPath }
+            };
+        }
+
         var subCategoryIds = await Context.SubCategory
             .AsNoTracking()
             .Where(x => x.IsActive && x.CategoryId == categoryMatch)
             .Select(x => x.Id)
             .ToListAsync(cancellationToken);
-        var home = await ResolveHomeLabelAsync(languageId, defaultLanguageId, cancellationToken);
-        var categoryProducts = await LoadCatalogProductsAsync(
+        var home = await ResolveHomeLabelAsync(languageId, cancellationToken);
+
+        return await LoadOptimizedListingForScopeAsync(
             subCategoryIds,
             languageId,
-            defaultLanguageId,
+            query,
+            new CatalogListingDto
+            {
+                Title = categoryTranslationOnly.Value.Title,
+                Breadcrumbs =
+                [
+                    new(home, "/"),
+                    new(categoryTranslationOnly.Value.Title, $"/{categoryTranslationOnly.Value.Slug}"),
+                ],
+            },
+            cancellationToken);
+    }
+
+    private async Task<List<int>> ResolveSubCategoryIdsForPathAsync(
+        string categoryPath,
+        int languageId,
+        CancellationToken cancellationToken)
+    {
+        var normalizedPath = CatalogSlugNormalizer.NormalizePath(categoryPath);
+
+        var subCategoryMatch = await FindActiveSubCategoryByNormalizedSlugAsync(
+            normalizedPath,
+            categoryId: null,
+            languageId,
             cancellationToken);
 
-        return new CatalogListingDto
+        if (subCategoryMatch is not null)
+            return [subCategoryMatch.Value.SubCategoryId];
+
+        if (TryParseSplitCategoryPath(normalizedPath, out var categorySegment, out var subCategorySegment))
         {
-            Title = categoryTranslationOnly.Title,
-            Breadcrumbs =
-            [
-                new(home, "/"),
-                new(categoryTranslationOnly.Title, $"/{categoryTranslationOnly.Slug}"),
-            ],
-            Products = categoryProducts,
-        };
+            var splitMatch = await TryMatchCategorySubCategorySegmentsAsync(
+                categorySegment,
+                subCategorySegment,
+                languageId,
+                cancellationToken);
+
+            if (splitMatch is not null)
+                return [splitMatch.Value.SubCategoryId];
+        }
+
+        var categoryMatch = await FindActiveCategoryIdByNormalizedSlugAsync(
+            normalizedPath,
+            languageId,
+            cancellationToken);
+
+        if (categoryMatch == default)
+            return [];
+
+        return await Context.SubCategory
+            .AsNoTracking()
+            .Where(x => x.IsActive && x.CategoryId == categoryMatch)
+            .Select(x => x.Id)
+            .ToListAsync(cancellationToken);
     }
 
     private async Task EnrichListingProductsAsync(
-        CatalogListingDto listing,
+        IList<CatalogListingProductDto> products,
+        CatalogListingFacetLabelLookupDto facetLabels,
         int languageId,
-        int defaultLanguageId,
         CancellationToken cancellationToken)
     {
-        var products = listing.Products;
         if (products.Count == 0)
             return;
 
@@ -1560,18 +1729,15 @@ public class ProductRepository
         var facetBatch = await LoadProductFacetsWithLabelsBatchAsync(
             productIds,
             languageId,
-            defaultLanguageId,
             cancellationToken);
         var reviewStats = await LoadProductReviewStatsBatchAsync(productIds, cancellationToken);
         var purchaseCounts = await LoadProductPurchaseCountsBatchAsync(productIds, cancellationToken);
 
-        listing.FacetLabels.GroupLabels.Clear();
         foreach (var (key, label) in facetBatch.GroupLabels)
-            listing.FacetLabels.GroupLabels[key] = label;
+            facetLabels.GroupLabels[key] = label;
 
-        listing.FacetLabels.OptionLabels.Clear();
         foreach (var (facetKey, options) in facetBatch.OptionLabels)
-            listing.FacetLabels.OptionLabels[facetKey] = options;
+            facetLabels.OptionLabels[facetKey] = options;
 
         foreach (var product in products)
         {
@@ -1601,7 +1767,6 @@ public class ProductRepository
     private async Task<ProductFacetBatchResult> LoadProductFacetsWithLabelsBatchAsync(
         IReadOnlyCollection<int> productIds,
         int languageId,
-        int defaultLanguageId,
         CancellationToken cancellationToken)
     {
         if (productIds.Count == 0)
@@ -1632,10 +1797,6 @@ public class ProductRepository
                         .Where(t => t.LanguageId == languageId)
                         .Select(t => t.Title)
                         .FirstOrDefault()
-                        ?? propertyCategory.Translations
-                            .Where(t => t.LanguageId == defaultLanguageId)
-                            .Select(t => t.Title)
-                            .FirstOrDefault()
                         ?? propertyCategory.Code,
                     Value = productProperty.PropertyItemId == null
                         ? string.Empty
@@ -1646,10 +1807,6 @@ public class ProductRepository
                             .Where(t => t.LanguageId == languageId)
                             .Select(t => t.Title)
                             .FirstOrDefault()
-                            ?? propertyItem.Translations
-                                .Where(t => t.LanguageId == defaultLanguageId)
-                                .Select(t => t.Title)
-                                .FirstOrDefault()
                             ?? propertyItem.Code,
                 })
             .Where(row => !string.IsNullOrWhiteSpace(row.Value))

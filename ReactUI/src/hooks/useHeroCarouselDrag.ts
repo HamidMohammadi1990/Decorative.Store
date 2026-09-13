@@ -132,6 +132,9 @@ export function useHeroCarouselDrag({
     (e: ReactPointerEvent<HTMLDivElement>) => {
       if (slideCount <= 1 || e.button !== 0) return
 
+      const target = e.target as HTMLElement
+      if (target.closest('a, button, input, textarea, [role="button"]')) return
+
       isDragging.current = true
       didDrag.current = false
       startX.current = e.clientX

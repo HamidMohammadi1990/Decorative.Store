@@ -49,8 +49,8 @@ export function DualRangeSlider({
   if (min >= max) return null
 
   return (
-    <div className="relative pb-1 pt-1">
-      <div className="relative mx-2 h-7">
+    <div className="relative min-w-0 pb-1 pt-1">
+      <div className="relative h-7 w-full min-w-0 px-1">
         <div className="absolute inset-x-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-border" />
         <div
           className="absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-warm"

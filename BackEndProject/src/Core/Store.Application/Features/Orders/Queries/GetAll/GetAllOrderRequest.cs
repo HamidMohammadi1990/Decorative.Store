@@ -16,7 +16,7 @@ public record GetAllOrderRequest : ContentPolicyRequest<Order>, IRequest<Operati
     [JsonConverter(typeof(UserNullableEncryptor))]
     public int? UserId { get; init; }
 
-    public OrderStatusType? Status { get; init; } = OrderStatusType.Completed;
+    public OrderStatusType? Status { get; init; }
     public bool? IsFinaly { get; init; }
 
     public PagedRequest Pagination { get; init; } = default!;

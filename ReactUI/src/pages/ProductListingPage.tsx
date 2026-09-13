@@ -8,7 +8,7 @@ import { ListingPagination } from '@/components/listing/ListingPagination'
 import { ListingCategoryEmptyState } from '@/components/listing/ListingCategoryEmptyState'
 import { ProductGrid } from '@/components/listing/ProductGrid'
 import { Container } from '@/components/ui/Container'
-import { PageLoading } from '@/components/ui/Spinner'
+import { ListingPageSkeleton } from '@/components/listing/ListingPageSkeleton'
 import { CloseIcon } from '@/components/ui/CloseIcon'
 import { Portal } from '@/components/ui/Portal'
 import { parseListingFilters, toActiveFiltersRecord } from '@/extensions/listingFilters'
@@ -18,12 +18,15 @@ import { useShopPageMeta, resolveOgImageSrc } from '@/hooks/useShopPageMeta'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import {
   buildBreadcrumbJsonLd,
+  buildCollectionPageJsonLd,
   buildItemListJsonLd,
 } from '@/components/seo/jsonLdBuilders'
+import { useSettingsStore } from '@/stores/settingsStore'
 import { absoluteUrl } from '@/config/site'
 
 export function ProductListingPage() {
   const { t } = useTranslation()
+  const locale = useSettingsStore((s) => s.locale)
   const location = useLocation()
   const { data, loading, error } = useProductListing()
   const { toggleFilter, applyPriceRange, clearFilters, setSort, setPage, currentSort, searchParams } =
@@ -58,20 +61,28 @@ export function ProductListingPage() {
         position: index + 1,
       })),
     })
+    const collectionPage = buildCollectionPageJsonLd({
+      name: data.title,
+      description: data.description ?? data.title,
+      url: pageUrl,
+      locale,
+    })
 
-    return [breadcrumbs, itemList]
-  }, [data, location.pathname, location.search])
+    return [breadcrumbs, collectionPage, itemList]
+  }, [data, locale, location.pathname, location.search])
 
   useShopPageMeta({
     title: data?.title,
     description: data?.description,
+    image: data?.products[0] ? resolveOgImageSrc(data.products[0].image.src) : undefined,
+    imageAlt: data?.products[0]?.image.alt ?? data?.title,
     path: `${location.pathname}${location.search}`,
     active: !loading && !!data && !data.pathNotFound,
     jsonLd: listingJsonLd,
   })
 
-  if (loading && !data) {
-    return <PageLoading />
+  if (loading) {
+    return <ListingPageSkeleton />
   }
 
   if (error === 'not-found' || data?.pathNotFound) {
@@ -89,25 +100,20 @@ export function ProductListingPage() {
   const isCategoryEmpty = data.totalCount === 0 && activeFilterCount === 0
 
   return (
-    <div className="bg-gradient-to-b from-surface-muted/40 via-surface to-surface py-8 md:py-10">
+    <div className="bg-gradient-to-b from-surface-muted/30 via-surface to-surface py-6 md:py-8">
       <Container>
         <ListingBreadcrumbs items={data.breadcrumbs} />
 
-        <header className="mt-4 mb-8 md:mb-10">
-          <h1 className="font-display text-2xl font-semibold tracking-tight text-text md:text-3xl lg:text-4xl">
+        <header className="mt-3 mb-5 md:mb-6">
+          <h1 className="font-display text-xl font-semibold tracking-tight text-text sm:text-2xl md:text-3xl">
             {data.title}
           </h1>
-          {!isCategoryEmpty && (
-            <p className="mt-2 text-sm text-text-muted">
-              {t('listing.resultCount', { count: data.totalCount })}
-            </p>
-          )}
         </header>
 
         {isCategoryEmpty ? (
           <ListingCategoryEmptyState categoryTitle={data.title} />
         ) : (
-        <div className="flex gap-6 lg:gap-8 xl:gap-10">
+        <div className="flex gap-5 lg:gap-7 xl:gap-8">
           <ListingSidebar
             facets={data.facets}
             activeFilters={activeFilters}
@@ -138,7 +144,7 @@ export function ProductListingPage() {
                 />
               </>
             ) : (
-              <div className="rounded-xl border border-dashed border-border bg-surface/80 px-6 py-16 text-center shadow-sm">
+              <div className="rounded-xl border border-dashed border-border/70 bg-surface/80 px-6 py-12 text-center">
                 <p className="text-base font-semibold text-text">{t('listing.emptyTitle')}</p>
                 <p className="mt-2 text-sm text-text-muted">{t('listing.emptyMessage')}</p>
                 <button

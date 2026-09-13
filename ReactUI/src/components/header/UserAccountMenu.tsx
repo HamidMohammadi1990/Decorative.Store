@@ -4,13 +4,15 @@ import { useTranslation } from 'react-i18next'
 import type { DashboardSection } from '@/models/dashboard/dashboard.model'
 import {
   AddressesIcon,
+  CartIcon,
   LogoutIcon,
   OrdersIcon,
-  TransactionsIcon,
+  ProfileCompletionIcon,
   WalletIcon,
 } from '@/components/dashboard/DashboardIcons'
 import { Portal } from '@/components/ui/Portal'
 import { UserIcon } from '@/components/ui/HeaderIcons'
+import { UserAvatar } from '@/components/ui/UserAvatar'
 import { positionAnchorDropdown } from '@/extensions/positionAnchorDropdown'
 import { useUserStore } from '@/stores/userStore'
 
@@ -18,17 +20,20 @@ interface UserAccountMenuProps {
   accountLabel: string
 }
 
-const menuItems: { section: DashboardSection; path: string; icon: typeof WalletIcon }[] = [
-  { section: 'wallet', path: '/account/dashboard/wallet', icon: WalletIcon },
+const menuItems: {
+  section: DashboardSection | 'cart'
+  path: string
+  icon: typeof WalletIcon
+}[] = [
+  { section: 'profile', path: '/account/dashboard/profile', icon: ProfileCompletionIcon },
   { section: 'orders', path: '/account/dashboard/orders', icon: OrdersIcon },
-  { section: 'transactions', path: '/account/dashboard/transactions', icon: TransactionsIcon },
+  { section: 'cart', path: '/account/dashboard/cart', icon: CartIcon },
+  { section: 'wallet', path: '/account/dashboard/wallet', icon: WalletIcon },
   { section: 'addresses', path: '/account/dashboard/addresses', icon: AddressesIcon },
 ]
 
-function getInitials(firstName: string, lastName: string) {
-  const first = firstName.charAt(0).toUpperCase()
-  const last = lastName ? lastName.charAt(0).toUpperCase() : ''
-  return `${first}${last}` || first
+function isMenuPathActive(pathname: string, path: string) {
+  return pathname === path || pathname.startsWith(`${path}/`)
 }
 
 export function UserAccountMenu({ accountLabel }: UserAccountMenuProps) {
@@ -109,6 +114,9 @@ export function UserAccountMenu({ accountLabel }: UserAccountMenuProps) {
       : user.firstName
     : null
 
+  const menuLabel = (section: DashboardSection | 'cart') =>
+    section === 'cart' ? t('accountMenu.cart') : t(`dashboard.nav.${section}`)
+
   return (
     <>
       <button
@@ -119,11 +127,20 @@ export function UserAccountMenu({ accountLabel }: UserAccountMenuProps) {
         aria-expanded={open}
         aria-haspopup="menu"
         aria-controls="user-account-menu"
-        className={`relative inline-flex p-0.5 transition-colors hover:text-warm ${
+        className={`group relative inline-flex items-center rounded-full p-0.5 transition-colors hover:text-warm ${
           open ? 'text-warm' : ''
         }`}
       >
-        <UserIcon size={22} />
+        {user && displayName ? (
+          <UserAvatar
+            name={displayName}
+            imageUrl={user.profileImageUrl}
+            size="sm"
+            className={`ring-2 transition-shadow ${open ? 'ring-warm/35' : 'ring-transparent group-hover:ring-warm/20'}`}
+          />
+        ) : (
+          <UserIcon size={22} />
+        )}
         {user && (
           <span
             aria-hidden
@@ -140,56 +157,78 @@ export function UserAccountMenu({ accountLabel }: UserAccountMenuProps) {
               data-dropdown-inner
               role="menu"
               aria-label={t('accountMenu.label')}
-              className="w-64 overflow-hidden rounded-sm border border-border/80 bg-surface shadow-[0_12px_40px_-12px_rgba(0,0,0,0.2)]"
+              className="w-[17.5rem] overflow-hidden rounded-xl border border-border/80 bg-surface shadow-[0_16px_48px_-16px_rgba(0,0,0,0.22)] ring-1 ring-black/[0.03]"
             >
-              {user ? (
+              {user && displayName ? (
                 <>
-                  <div className="border-b border-border bg-gradient-to-br from-warm-soft via-surface to-surface px-4 py-4">
-                    <div className="flex items-center gap-3">
-                      <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-warm to-warm-hover text-sm font-semibold text-warm-text shadow-sm">
-                        {getInitials(user.firstName, user.lastName)}
-                      </span>
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold text-text">{displayName}</p>
-                        <p className="truncate text-xs text-text-muted">{user.email}</p>
-                      </div>
-                    </div>
+                  <div className="border-b border-border/80 bg-gradient-to-br from-warm-soft/80 via-surface to-surface px-3 pt-3 pb-2">
                     <Link
-                      to="/account/dashboard/wallet"
+                      to="/account/dashboard/profile"
                       role="menuitem"
                       onClick={() => setOpen(false)}
-                      className="mt-3 inline-flex text-xs font-medium text-warm hover:underline"
+                      className="flex items-center gap-3 rounded-lg border border-border/50 bg-surface/90 p-3 shadow-sm transition-all hover:border-warm/25 hover:bg-surface hover:shadow-md"
                     >
-                      {t('accountMenu.viewDashboard')}
+                      <UserAvatar
+                        name={displayName}
+                        imageUrl={user.profileImageUrl}
+                        size="md"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-text">
+                          {t('accountMenu.greeting', { name: user.firstName })}
+                        </p>
+                        <p className="mt-0.5 truncate text-xs text-text-muted">{user.email}</p>
+                        <p className="mt-1.5 text-[11px] font-medium text-warm">
+                          {t('accountMenu.manageAccount')}
+                        </p>
+                      </div>
                     </Link>
                   </div>
 
-                  <ul className="p-2">
-                    {menuItems.map(({ section, path, icon: Icon }) => (
-                      <li key={section}>
-                        <Link
-                          to={path}
-                          role="menuitem"
-                          onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-surface-muted hover:text-text"
-                        >
-                          <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-warm-soft text-warm">
-                            <Icon size={16} />
-                          </span>
-                          {t(`dashboard.nav.${section}`)}
-                        </Link>
-                      </li>
-                    ))}
+                  <div className="px-3 pt-2">
+                    <p className="px-1 pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-text-muted">
+                      {t('accountMenu.quickLinks')}
+                    </p>
+                  </div>
+
+                  <ul className="px-2 pb-2">
+                    {menuItems.map(({ section, path, icon: Icon }) => {
+                      const active = isMenuPathActive(location.pathname, path)
+                      return (
+                        <li key={section}>
+                          <Link
+                            to={path}
+                            role="menuitem"
+                            onClick={() => setOpen(false)}
+                            aria-current={active ? 'page' : undefined}
+                            className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                              active
+                                ? 'bg-warm-soft text-warm'
+                                : 'text-text-muted hover:bg-surface-muted hover:text-text'
+                            }`}
+                          >
+                            <span
+                              className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${
+                                active ? 'bg-surface text-warm' : 'bg-warm-soft/70 text-warm'
+                              }`}
+                            >
+                              <Icon size={16} />
+                            </span>
+                            {menuLabel(section)}
+                          </Link>
+                        </li>
+                      )
+                    })}
                   </ul>
 
-                  <div className="border-t border-border p-2">
+                  <div className="border-t border-border/80 p-2">
                     <button
                       type="button"
                       role="menuitem"
                       onClick={handleLogout}
-                      className="flex w-full items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-sale/5 hover:text-sale"
+                      className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-sale/5 hover:text-sale"
                     >
-                      <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-surface-muted text-text-muted">
+                      <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-surface-muted text-text-muted">
                         <LogoutIcon size={16} />
                       </span>
                       {t('dashboard.logout')}
@@ -198,21 +237,21 @@ export function UserAccountMenu({ accountLabel }: UserAccountMenuProps) {
                 </>
               ) : (
                 <div className="p-2">
-                  <div className="border-b border-border px-3 py-3">
+                  <div className="rounded-lg border border-border/60 bg-surface-muted/40 px-4 py-4">
                     <p className="text-sm font-semibold text-text">{t('accountMenu.guestTitle')}</p>
-                    <p className="mt-1 text-xs leading-relaxed text-text-muted">
+                    <p className="mt-1.5 text-xs leading-relaxed text-text-muted">
                       {t('accountMenu.guestDescription')}
                     </p>
                   </div>
-                  <ul className="py-2">
+                  <ul className="mt-2 space-y-0.5 px-1 pb-1">
                     <li>
                       <Link
                         to="/account"
                         role="menuitem"
                         onClick={() => setOpen(false)}
-                        className="flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium text-text transition-colors hover:bg-surface-muted"
+                        className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-text transition-colors hover:bg-surface-muted"
                       >
-                        <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-warm text-warm-text">
+                        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-warm text-warm-text">
                           <UserIcon size={16} />
                         </span>
                         {t('auth.signInTab')}
@@ -223,9 +262,9 @@ export function UserAccountMenu({ accountLabel }: UserAccountMenuProps) {
                         to="/account?mode=signup"
                         role="menuitem"
                         onClick={() => setOpen(false)}
-                        className="flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-surface-muted hover:text-text"
+                        className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-text-muted transition-colors hover:bg-surface-muted hover:text-text"
                       >
-                        <span className="flex size-8 shrink-0 items-center justify-center rounded-sm border border-border bg-surface text-warm">
+                        <span className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-surface text-warm">
                           <UserIcon size={16} />
                         </span>
                         {t('auth.signUpTab')}

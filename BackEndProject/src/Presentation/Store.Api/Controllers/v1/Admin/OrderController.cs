@@ -38,7 +38,7 @@ public class OrderController
 
     [ActionInfo(PermissionType.GetOrderDetail)]
     [HttpPost("detail")]
-    public async Task<ApiResult<GetOrderDetailResponse?>> GetDetail(GetOrderDetailRequest request)
+    public async Task<ApiResult<GetOrderDetailResponse?>> GetDetail(GetAdminOrderDetailRequest request)
         => await mediator.Send(request);
 
     [ActionInfo(PermissionType.GetOrderStatusSummary)]

@@ -2,6 +2,7 @@ using Edition.Application.Common.Directories;
 using Edition.Application.Contracts.Localization;
 using Edition.Application.Features.Catalog.Services;
 using Store.Common.Models;
+using Store.Domain.Dtos.Catalog;
 using Store.Domain.Repositories;
 
 namespace Edition.Application.Features.Catalog.Queries;
@@ -16,9 +17,28 @@ public class GetCatalogListingHandler(
         GetCatalogListingRequest request,
         CancellationToken cancellationToken)
     {
-        var listing = await productRepository.GetCatalogListingByPathAsync(request.Path, cancellationToken);
+        var query = new CatalogListingQueryDto
+        {
+            MinPrice = request.MinPrice,
+            MaxPrice = request.MaxPrice,
+            InStock = request.InStock,
+            OnSale = request.OnSale,
+            IsNew = request.IsNew,
+            MinRating = request.MinRating,
+            Sort = request.Sort,
+            Page = request.Page,
+            PageSize = request.PageSize,
+            PriceBuckets = request.PriceBuckets,
+            AttributeFilters = request.AttributeFilters,
+        };
+
+        var result = await productRepository.GetCatalogListingByPathAsync(request.Path, query, cancellationToken);
         var isFa = await ResolveIsFaAsync(cancellationToken);
-        var processed = CatalogListingFilterProcessor.Apply(listing, request, isFa);
+        var processed = CatalogListingFilterProcessor.ApplyFacets(
+            result.Listing,
+            result.FacetScopeProducts,
+            request,
+            isFa);
 
         return new GetCatalogListingResponse
         {

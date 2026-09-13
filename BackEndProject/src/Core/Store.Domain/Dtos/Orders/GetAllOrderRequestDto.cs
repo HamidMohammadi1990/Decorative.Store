@@ -16,7 +16,7 @@ public record GetAllOrderRequestDto : IContentPolicyQueryDto<Order>
     public bool? IsFinaly { get; init; }
 
     [QueryFilter(MemberPath = "order.Status")]
-    public OrderStatusType? Status { get; init; } = OrderStatusType.Completed;
+    public OrderStatusType? Status { get; init; }
 
     [QueryFilter(MemberPath = "order.TrackingCode")]
     public long? TrackingCode { get; init; }
