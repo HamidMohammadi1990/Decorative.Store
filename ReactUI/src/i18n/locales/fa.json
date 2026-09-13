@@ -2481,6 +2481,11 @@
     }
   },
   "pwa": {
+    "installTitle": "نصب اپ دیبا گالری",
+    "installDescription": "دسترسی سریع‌تر از صفحه اصلی گوشی یا دسکتاپ.",
+    "installIosHint": "در Safari دکمه Share را بزنید و «Add to Home Screen» را انتخاب کنید.",
+    "installNow": "نصب",
+    "installLater": "بعداً",
     "updateAvailable": "نسخه جدید دیبا گالری آماده است.",
     "updateNow": "به‌روزرسانی",
     "updateLater": "بعداً",

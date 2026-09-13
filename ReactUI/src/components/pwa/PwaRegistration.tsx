@@ -7,8 +7,8 @@ export function PwaRegistration() {
 
   useEffect(() => {
     if (!import.meta.env.PROD) return
-    void import('./PwaUpdatePrompt').then((mod) => {
-      setPrompt(() => mod.PwaUpdatePrompt)
+    void import('./PwaPrompts').then((mod) => {
+      setPrompt(() => mod.PwaPrompts)
     })
   }, [])
 

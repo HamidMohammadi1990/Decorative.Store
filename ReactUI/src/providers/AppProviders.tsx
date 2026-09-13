@@ -7,7 +7,6 @@ export function AppProviders({ children }: { children: ReactNode }) {
   return (
     <ConfirmProvider>
       {children}
-      <div id="pwa-root" suppressHydrationWarning />
       <PwaRegistration />
     </ConfirmProvider>
   )

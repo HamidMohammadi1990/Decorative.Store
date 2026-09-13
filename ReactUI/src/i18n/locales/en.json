@@ -2481,6 +2481,11 @@
     }
   },
   "pwa": {
+    "installTitle": "Install Diba Gallery",
+    "installDescription": "Get quick access from your home screen or desktop.",
+    "installIosHint": "In Safari, tap Share, then choose Add to Home Screen.",
+    "installNow": "Install",
+    "installLater": "Later",
     "updateAvailable": "A new version of Diba Gallery is ready.",
     "updateNow": "Refresh",
     "updateLater": "Later",

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Edition — پلتفرم یکپارچه چاپ و تجارت الکترونیک. وب‌سرویس RESTful با معماری Clean Architecture برای کاتالوگ، سفارش، پرداخت، CMS و مدیریت سازمانی." />
-  <title>Edition Platform — پلتفرم چاپ و تجارت الکترونیک</title>
+  <meta name="description" content="Diba Gallery — بک‌اند فروشگاه آنلاین مبلمان و دکوراسیون. وب‌سرویس RESTful برای کاتالوگ، سبد خرید، سفارش، CMS، استوری و پنل ادمین." />
+  <title>Diba Gallery — API فروشگاه مبلمان و دکوراسیون</title>
   <link rel="icon" href="data:," />
   <link rel="stylesheet" href="/lib/fonts/vazirmatn/vazirmatn.css" />
   <link rel="stylesheet" href="/portal.css" />
@@ -13,8 +13,8 @@
   <header class="site-header">
     <div class="container">
       <a class="brand" href="/">
-        <span class="brand-mark">E</span>
-        <span>Edition Platform</span>
+        <span class="brand-mark">D</span>
+        <span>Diba Gallery</span>
       </a>
       <nav class="site-nav">
         <a href="#about">درباره</a>
@@ -34,11 +34,12 @@
           <span class="badge">Clean Architecture</span>
         </div>
         <h1>
-          زیرساخت دیجیتال <span>چاپ و فروش آنلاین</span>
+          بک‌اند فروشگاه <span>مبلمان و دکوراسیون</span>
         </h1>
         <p class="hero-lead">
-          Edition یک پلتفرم سازمانی برای مدیریت کاتالوگ محصولات چاپی، ثبت سفارش، پرداخت چندکاناله،
-          کیف پول، CMS و پنل ادمین است — با وب‌سرویس RESTful استاندارد برای یکپارچه‌سازی با وب، موبایل و سیستم‌های شریک.
+          Diba Gallery یک پلتفرم API برای فروش آنلاین مبلمان، فرش و دکوراسیون منزل است —
+          از کاتالوگ و لیست علاقه‌مندی تا سبد خرید، پرداخت، CMS، بلاگ، استوری کاربران و پنل ادمین،
+          با وب‌سرویس RESTful برای اتصال به وب‌سایت React و اپلیکیشن‌های موبایل.
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="/docs">ورود به پورتال API</a>
@@ -72,34 +73,34 @@
   <section class="section" id="about">
     <div class="container">
       <div class="section-header">
-        <h2>چرا Edition؟</h2>
+        <h2>چرا Diba Gallery؟</h2>
         <p>
-          پلتفرمی که فرایندهای پیچیده صنعت چاپ — از قیمت‌گذاری و ویژگی محصول تا سبد خرید، پرداخت و حسابداری —
-          را در یک معماری منسجم و قابل توسعه جمع کرده است.
+          بک‌اندی که تجربه خرید یک فروشگاه دکوراسیون مدرن را پشتیبانی می‌کند —
+          از مرور دسته‌بندی‌ها و مقایسه محصول تا checkout، پیگیری سفارش و مدیریت محتوا.
         </p>
       </div>
       <div class="about-grid">
         <article class="about-card">
-          <div class="icon icon-blue">🖨️</div>
-          <h3>تخصص در حوزه چاپ</h3>
+          <div class="icon icon-blue">🛋️</div>
+          <h3>کاتالوگ تخصصی دکوراسیون</h3>
           <p>
-            کاتالوگ محصولات با ویژگی‌های پویا، قیمت‌گذاری، فایل سفارش، پیوست و قوانین خاص صنعت چاپ —
-            نه یک فروشگاه عمومی، بلکه موتور اختصاصی چاپ آنلاین.
+            دسته‌بندی چندسطحی، ویژگی محصول، تصاویر، توضیحات، تخفیف، جستجو و لیستینگ —
+            متناسب با مبلمان، فرش، روشنایی و اکسسوری منزل.
           </p>
         </article>
         <article class="about-card">
           <div class="icon icon-green">🔗</div>
-          <h3>یکپارچه‌سازی سازمانی</h3>
+          <h3>یکپارچه با فرانت React</h3>
           <p>
-            API استاندارد برای اتصال به وب‌سایت، اپلیکیشن موبایل، ERP و درگاه‌های پرداخت.
-            مستندات OpenAPI، نمونه درخواست و محیط تست برای تیم فنی شریک.
+            API استاندارد برای وب‌سایت SSR، PWA و داشبورد کاربر/ادمین.
+            مستندات OpenAPI، نمونه درخواست و محیط تست برای تیم توسعه.
           </p>
         </article>
         <article class="about-card">
           <div class="icon icon-amber">🛡️</div>
           <h3>امنیت و مقیاس‌پذیری</h3>
           <p>
-            احراز هویت JWT، مدیریت نشست، RBAC با permission داینامیک، Content Policy برای کنترل داده
+            احراز هویت JWT، مدیریت نشست، RBAC با permission داینامیک، Content Policy
             و معماری لایه‌ای برای رشد تدریجی بدون فروپاشی ساختار.
           </p>
         </article>
@@ -111,40 +112,40 @@
     <div class="container">
       <div class="section-header">
         <h2>دامنه کسب‌وکار</h2>
-        <p>ماژول‌های اصلی پلتفرم که از طریق وب‌سرویس در دسترس هستند</p>
+        <p>ماژول‌های اصلی فروشگاه که از طریق وب‌سرویس در دسترس هستند</p>
       </div>
       <div class="modules-grid">
         <article class="module-card">
           <h3><span class="module-dot"></span>کاتالوگ و محصولات</h3>
-          <p>دسته‌بندی، زیردسته، تگ، تخفیف، ویژگی‌ها، قیمت، فایل و توضیحات محصول چاپی</p>
+          <p>دسته‌بندی، زیردسته، تگ، تخفیف، ویژگی‌ها، قیمت، تصاویر، توضیحات و جستجوی محصول</p>
         </article>
         <article class="module-card">
-          <h3><span class="module-dot"></span>سفارش و خرید</h3>
-          <p>سبد خرید، ثبت سفارش، property سفارشی، پیوست، مالیات، کمیسیون و پیگیری وضعیت</p>
+          <h3><span class="module-dot"></span>سبد خرید و سفارش</h3>
+          <p>سبد خرید، checkout، ثبت سفارش، کد تخفیف، پیگیری وضعیت و جزئیات سفارش</p>
         </article>
         <article class="module-card">
           <h3><span class="module-dot"></span>پرداخت و کیف پول</h3>
-          <p>پرداخت چندشرکتی، شارژ کیف پول، تراکنش بانکی و زیرساخت حسابداری</p>
+          <p>درگاه پرداخت، شارژ کیف پول، تراکنش‌ها و زیرساخت مالی سفارش</p>
+        </article>
+        <article class="module-card">
+          <h3><span class="module-dot"></span>تجربه خرید</h3>
+          <p>لیست علاقه‌مندی، مقایسه محصول، چیدمان اتاق، استوری کاربران و پروموهای مارکتینگ</p>
         </article>
         <article class="module-card">
           <h3><span class="module-dot"></span>CMS و بلاگ</h3>
-          <p>صفحات، سکشن‌ها، بلاگ، دسته‌بندی، تگ، نظرات و تعامل کاربران</p>
-        </article>
-        <article class="module-card">
-          <h3><span class="module-dot"></span>شرکت و چندشعبه‌ای</h3>
-          <p>مدیریت شرکت‌ها، نظرات، دستگاه POS و تنظیمات اختصاصی هر مجموعه</p>
+          <p>صفحات، سکشن‌ها، بلاگ، دسته‌بندی، تگ، نظرات و محتوای صفحه اصلی</p>
         </article>
         <article class="module-card">
           <h3><span class="module-dot"></span>کاربران و احراز هویت</h3>
-          <p>ثبت‌نام، ورود، OTP، نشست فعال، refresh token و مدیریت پروفایل</p>
+          <p>ثبت‌نام، ورود، نشست فعال، refresh token، پروفایل و آدرس‌های تحویل</p>
         </article>
         <article class="module-card">
           <h3><span class="module-dot"></span>ادمین و دسترسی</h3>
           <p>نقش‌ها، permission داینامیک، Content Policy و جداسازی API عمومی و مدیریتی</p>
         </article>
         <article class="module-card">
-          <h3><span class="module-dot"></span>زیرساخت مکانی</h3>
-          <p>استان، شهر، آدرس کاربر، روش ارسال و گزینه‌های تحویل</p>
+          <h3><span class="module-dot"></span>ارسال و مکان</h3>
+          <p>استان، شهر، آدرس کاربر، روش ارسال و گزینه‌های تحویل سفارش</p>
         </article>
       </div>
     </div>
@@ -170,8 +171,8 @@
           <p>ارسال درخواست واقعی با Try it out و انتخاب زبان fa / en</p>
         </article>
         <article class="flow-step">
-          <h3>استقرار در محصول</h3>
-          <p>استفاده از swagger.json در Postman، codegen یا کلاینت اختصاصی</p>
+          <h3>اتصال به فرانت</h3>
+          <p>استفاده از swagger.json در React UI، Postman یا کلاینت اختصاصی</p>
         </article>
       </div>
     </div>
@@ -212,7 +213,7 @@
     <div class="container">
       <div class="section-header">
         <h2>پورتال توسعه‌دهندگان</h2>
-        <p>ابزارهای آماده برای تیم فنی، QA و شرکای یکپارچه‌سازی</p>
+        <p>ابزارهای آماده برای تیم فنی، QA و توسعه فرانت React</p>
       </div>
       <div class="portal-cards">
         <article class="portal-card">
@@ -248,12 +249,12 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a class="brand" href="/">
-            <span class="brand-mark">E</span>
-            <span>Edition Platform</span>
+            <span class="brand-mark">D</span>
+            <span>Diba Gallery</span>
           </a>
           <p>
-            پلتفرم یکپارچه چاپ و تجارت الکترونیک — زیرساخت API برای کسب‌وکارهایی
-            که به راه‌حل سازمانی، قابل اتکا و قابل توسعه نیاز دارند.
+            فروشگاه آنلاین مبلمان و دکوراسیون معاصر — بک‌اند API برای مدیریت کاتالوگ،
+            سفارش، محتوا و تجربه خرید دیجیتال.
           </p>
         </div>
         <div class="footer-col">
@@ -274,7 +275,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© Edition Platform — REST API v1</span>
+        <span>© Diba Gallery — REST API v1</span>
         <span>ساخته‌شده با .NET 10 · Clean Architecture</span>
       </div>
     </div>

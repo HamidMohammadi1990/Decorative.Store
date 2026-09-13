@@ -10,8 +10,34 @@ const root = path.resolve(__dirname, '..')
 const mode = process.env.NODE_ENV ?? 'production'
 const env = loadEnv(mode, root, '')
 
-if (!process.env.SSR_API_TARGET && env.SSR_API_TARGET) {
-  process.env.SSR_API_TARGET = env.SSR_API_TARGET
+const devEnv = loadEnv('development', root, '')
+
+function resolveSsrApiTarget() {
+  const fromProcess = process.env.SSR_API_TARGET?.trim()
+  if (fromProcess) return fromProcess
+
+  const fromModeEnv = env.SSR_API_TARGET?.trim()
+  if (fromModeEnv) return fromModeEnv
+
+  // Local builds often only define SSR_API_TARGET in .env.development.
+  const fromDevEnv = devEnv.SSR_API_TARGET?.trim()
+  if (fromDevEnv) return fromDevEnv
+
+  return 'https://localhost:60927'
+}
+
+const hadExplicitTarget = Boolean(
+  process.env.SSR_API_TARGET?.trim() ||
+    env.SSR_API_TARGET?.trim() ||
+    devEnv.SSR_API_TARGET?.trim(),
+)
+
+process.env.SSR_API_TARGET = resolveSsrApiTarget()
+
+if (!hadExplicitTarget) {
+  console.warn(
+    `[prerender] SSR_API_TARGET is not set — defaulting to ${process.env.SSR_API_TARGET}. Set it in .env.production.`,
+  )
 }
 
 configureSsrTlsForLocalApi(process.env.SSR_API_TARGET)

@@ -20,6 +20,22 @@ const host = process.env.HOST ?? '127.0.0.1'
 const apiTarget = process.env.SSR_API_TARGET ?? 'https://localhost:60927'
 configureSsrTlsForLocalApi(apiTarget)
 
+function isBuiltStaticAsset(pathname) {
+  if (!pathname || pathname.endsWith('.html')) return false
+  if (
+    pathname === '/manifest.webmanifest' ||
+    pathname === '/sw.js' ||
+    pathname.startsWith('/workbox-') ||
+    pathname.startsWith('/assets/') ||
+    pathname.startsWith('/pwa/') ||
+    pathname === '/favicon.svg' ||
+    pathname === '/offline.html'
+  ) {
+    return true
+  }
+  return /\.[a-z0-9]{2,8}$/i.test(pathname)
+}
+
 function applyHtmlDocumentAttrs(template, locale) {
   const lang = locale === 'fa' ? 'fa' : 'en'
   const dir = locale === 'fa' ? 'rtl' : 'ltr'
@@ -81,13 +97,12 @@ async function createSsrServer() {
       gzip: true,
     })
 
-    // Serve built JS/CSS/images only. HTML routes are rendered by the SSR handler
-    // so prerendered index.html files do not bypass dynamic render + hydration data.
+    // Serve built static assets (PWA manifest/SW, JS/CSS, icons). HTML routes use SSR below.
     app.use((req, res, next) => {
       if (req.method !== 'GET' && req.method !== 'HEAD') return next()
 
       const pathname = req.path.split('?')[0]
-      if (/\.[a-z0-9]{2,5}$/i.test(pathname) && !pathname.endsWith('.html')) {
+      if (isBuiltStaticAsset(pathname)) {
         return serveClientAssets(req, res, next)
       }
 

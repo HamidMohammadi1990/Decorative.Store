@@ -22,7 +22,6 @@ export default defineConfig(({ mode }) => ({
           options.workbox.globPatterns = [
             'assets/**/*.js',
             'assets/**/*.css',
-            'offline.html',
             'favicon.svg',
             'pwa/apple-touch-icon.png',
             'pwa/icon-192.png',
@@ -103,7 +102,6 @@ export default defineConfig(({ mode }) => ({
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: false,
-        additionalManifestEntries: [{ url: '/offline.html', revision: null }],
         runtimeCaching: [
           {
             urlPattern: ({ request }) => request.mode === 'navigate',

@@ -11,7 +11,7 @@ export function PwaUpdatePrompt() {
   const offlineToastShown = useRef(false)
 
   const {
-    needRefresh: [needRefresh],
+    needRefresh: [needRefresh, setNeedRefresh],
     offlineReady: [offlineReady],
     updateServiceWorker,
   } = useRegisterSW({
@@ -23,11 +23,27 @@ export function PwaUpdatePrompt() {
       }, UPDATE_CHECK_MS)
     },
     onRegisterError(error) {
-      if (import.meta.env.DEV) {
-        console.warn('[pwa] service worker registration failed', error)
-      }
+      console.warn('[pwa] service worker registration failed', error)
     },
   })
+
+  const handleUpdate = async () => {
+    setDismissed(true)
+    setNeedRefresh(false)
+    try {
+      await updateServiceWorker(true)
+    } catch (error) {
+      console.warn('[pwa] service worker update failed', error)
+    }
+    window.setTimeout(() => {
+      void navigator.serviceWorker?.ready.then((registration) => {
+        if (registration.waiting) {
+          registration.waiting.postMessage({ type: 'SKIP_WAITING' })
+        }
+      })
+      window.location.reload()
+    }, 300)
+  }
 
   useEffect(() => {
     if (!offlineReady || offlineToastShown.current) return
@@ -57,7 +73,7 @@ export function PwaUpdatePrompt() {
           </button>
           <button
             type="button"
-            onClick={() => void updateServiceWorker(true)}
+            onClick={() => void handleUpdate()}
             className="rounded-sm bg-warm px-3 py-1.5 text-xs font-semibold text-warm-text transition-colors hover:bg-warm-hover"
           >
             {t('pwa.updateNow')}
