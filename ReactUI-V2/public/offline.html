@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#9a7448" />
+    <meta name="robots" content="noindex" />
+    <title>Offline — Diba Gallery</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f6f4;
+        --text: #1a1a1a;
+        --muted: #5c5c5c;
+        --warm: #9a7448;
+        --card: #ffffff;
+        --border: #e8e6e3;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          color-scheme: dark;
+          --bg: #1a120c;
+          --text: #ede4d8;
+          --muted: #b5a390;
+          --warm: #c4a06a;
+          --card: #261c15;
+          --border: #3d2e24;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        font-family: 'DM Sans', system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      main {
+        width: min(100%, 420px);
+        padding: 32px 28px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--card);
+        text-align: center;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+      }
+
+      .mark {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 20px;
+        border-radius: 16px;
+        background: linear-gradient(145deg, #c4a06a, #826038);
+        display: grid;
+        place-items: center;
+        color: #fffaf5;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 1.35rem;
+        font-weight: 600;
+      }
+
+      p {
+        margin: 0 0 24px;
+        line-height: 1.55;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      button {
+        appearance: none;
+        border: 0;
+        border-radius: 8px;
+        padding: 12px 18px;
+        font: inherit;
+        font-weight: 600;
+        color: #fffaf5;
+        background: var(--warm);
+        cursor: pointer;
+      }
+
+      button:focus-visible {
+        outline: 2px solid var(--warm);
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mark" aria-hidden="true">DG</div>
+      <h1>You are offline</h1>
+      <p>
+        Diba Gallery needs an internet connection for the latest products and checkout.
+        Reconnect, then try again.
+      </p>
+      <button type="button" onclick="window.location.reload()">Try again</button>
+    </main>
+  </body>
+</html>

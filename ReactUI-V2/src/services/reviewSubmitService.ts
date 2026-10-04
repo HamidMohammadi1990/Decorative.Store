@@ -1,0 +1,60 @@
+import type { ProductDetail } from '@/models/catalog/productDetail.model'
+import type { Locale } from '@/models/shared/locale.model'
+import { catalogProductService } from '@/services/catalogProductService'
+import { productCommentService } from '@/services/productCommentService'
+import { useUserStore } from '@/stores/userStore'
+
+export async function resolveReviewProductId(
+  product: ProductDetail,
+  locale: Locale,
+): Promise<string> {
+  if (product.id) return product.id
+
+  const catalogProduct = await catalogProductService.getProduct(product.slug, locale)
+  return catalogProduct.id
+}
+
+export async function submitProductReview(input: {
+  product: ProductDetail
+  locale: Locale
+  description: string
+  commentTopicId: string
+  commentRate: number
+  qualityRating: number
+  affordableRating: number
+  parentId?: string | null
+}) {
+  let accessToken = useUserStore.getState().accessToken
+  if (!accessToken) {
+    throw new Error('missing-access-token')
+  }
+
+  const refreshedToken = await useUserStore.getState().refreshAccessToken()
+  if (refreshedToken) {
+    accessToken = refreshedToken
+  }
+
+  const productId = await resolveReviewProductId(input.product, input.locale)
+
+  if (!productId) {
+    throw new Error('missing-product-id')
+  }
+
+  if (!input.commentTopicId) {
+    throw new Error('missing-comment-topic')
+  }
+
+  await productCommentService.create(
+    {
+      productId,
+      commentTopicId: input.commentTopicId,
+      description: input.description,
+      commentRate: input.commentRate,
+      qualityRating: input.qualityRating,
+      affordableRating: input.affordableRating,
+      parentId: input.parentId ?? null,
+    },
+    input.locale,
+    accessToken,
+  )
+}

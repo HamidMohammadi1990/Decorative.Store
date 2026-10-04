@@ -1,0 +1,22 @@
+{
+  "slug": "stores",
+  "title": "Find a Store",
+  "metaTitle": "Stores — Diba Gallery",
+  "metaDescription": "Visit a Diba Gallery showroom near you.",
+  "hero": {
+    "title": "Find a store",
+    "subtitle": "Experience fabrics, finishes, and full room sets in person at our showrooms."
+  },
+  "blocks": [
+    {
+      "heading": "Showrooms",
+      "paragraphs": [
+        "Tehran — Vanak Square",
+        "Isfahan — Chahar Bagh Abbasi Blvd",
+        "Shiraz — Zand Street",
+        "Opening hours vary by location — see our contact page for details."
+      ]
+    }
+  ],
+  "steps": { "heading": "", "items": [] }
+}

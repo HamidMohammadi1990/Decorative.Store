@@ -1,0 +1,264 @@
+{
+  "wallet": {
+    "balance": 2450000,
+    "currencyCode": "IRT"
+  },
+  "orders": [
+    {
+      "id": "WE-10482",
+      "date": "2026-05-28",
+      "status": "delivered",
+      "subtotal": 12800000,
+      "shippingCost": 0,
+      "total": 12800000,
+      "paymentMethod": "card",
+      "trackingNumber": "TRK-8829104",
+      "carrier": "Tipax",
+      "estimatedDelivery": "2026-05-28",
+      "shippingAddress": {
+        "label": "Home",
+        "recipient": "Sarah Johnson",
+        "lines": ["No. 12, Jordan St", "Tehran", "09120000000"]
+      },
+      "timeline": [
+        { "key": "placed", "date": "2026-05-22", "done": true },
+        { "key": "confirmed", "date": "2026-05-22", "done": true },
+        { "key": "processing", "date": "2026-05-23", "done": true },
+        { "key": "shipped", "date": "2026-05-25", "done": true },
+        { "key": "delivered", "date": "2026-05-28", "done": true }
+      ],
+      "items": [
+        {
+          "title": "Mid-Century Dining Chair",
+          "imageUrl": "/images/home/dining.jpg",
+          "quantity": 2,
+          "price": 4200000
+        },
+        {
+          "title": "Linen Table Runner",
+          "imageUrl": "/images/home/bedroom-set.jpg",
+          "quantity": 1,
+          "price": 4400000
+        }
+      ]
+    },
+    {
+      "id": "WE-10391",
+      "date": "2026-05-12",
+      "status": "shipped",
+      "subtotal": 8350000,
+      "shippingCost": 400000,
+      "total": 8750000,
+      "paymentMethod": "wallet",
+      "trackingNumber": "TRK-7712048",
+      "carrier": "Post",
+      "estimatedDelivery": "2026-05-18",
+      "shippingAddress": {
+        "label": "Office",
+        "recipient": "Sarah Johnson",
+        "lines": ["Floor 4, West Tower", "Tehran", "02100000000"]
+      },
+      "timeline": [
+        { "key": "placed", "date": "2026-05-10", "done": true },
+        { "key": "confirmed", "date": "2026-05-10", "done": true },
+        { "key": "processing", "date": "2026-05-11", "done": true },
+        { "key": "shipped", "date": "2026-05-12", "done": true },
+        { "key": "delivered", "done": false }
+      ],
+      "items": [
+        {
+          "title": "Ceramic Vase Set",
+          "imageUrl": "/images/home/living-room.jpg",
+          "quantity": 1,
+          "price": 8750000
+        }
+      ]
+    },
+    {
+      "id": "WE-10355",
+      "date": "2026-04-30",
+      "status": "processing",
+      "subtotal": 15200000,
+      "shippingCost": 400000,
+      "total": 15600000,
+      "paymentMethod": "card",
+      "estimatedDelivery": "2026-05-08",
+      "shippingAddress": {
+        "label": "Home",
+        "recipient": "Sarah Johnson",
+        "lines": ["No. 12, Jordan St", "Tehran", "09120000000"]
+      },
+      "timeline": [
+        { "key": "placed", "date": "2026-04-30", "done": true },
+        { "key": "confirmed", "date": "2026-04-30", "done": true },
+        { "key": "processing", "date": "2026-05-01", "done": true },
+        { "key": "shipped", "done": false },
+        { "key": "delivered", "done": false }
+      ],
+      "items": [
+        {
+          "title": "Walnut Sideboard",
+          "imageUrl": "/images/home/trade-interior.jpg",
+          "quantity": 1,
+          "price": 15600000
+        }
+      ]
+    },
+    {
+      "id": "WE-10288",
+      "date": "2026-04-12",
+      "status": "pending",
+      "subtotal": 5900000,
+      "shippingCost": 400000,
+      "total": 6300000,
+      "paymentMethod": "cod",
+      "estimatedDelivery": "2026-04-20",
+      "shippingAddress": {
+        "label": "Home",
+        "recipient": "Sarah Johnson",
+        "lines": ["No. 12, Jordan St", "Tehran", "09120000000"]
+      },
+      "timeline": [
+        { "key": "placed", "date": "2026-04-12", "done": true },
+        { "key": "confirmed", "done": false },
+        { "key": "processing", "done": false },
+        { "key": "shipped", "done": false },
+        { "key": "delivered", "done": false }
+      ],
+      "items": [
+        {
+          "title": "Wool Area Rug",
+          "imageUrl": "/images/home/new-arrivals.jpg",
+          "quantity": 1,
+          "price": 6300000
+        }
+      ]
+    },
+    {
+      "id": "WE-10140",
+      "date": "2026-03-05",
+      "status": "cancelled",
+      "subtotal": 3200000,
+      "shippingCost": 0,
+      "total": 3200000,
+      "paymentMethod": "card",
+      "shippingAddress": {
+        "label": "Home",
+        "recipient": "Sarah Johnson",
+        "lines": ["No. 12, Jordan St", "Tehran", "09120000000"]
+      },
+      "timeline": [
+        { "key": "placed", "date": "2026-03-05", "done": true },
+        { "key": "cancelled", "date": "2026-03-06", "done": true }
+      ],
+      "items": [
+        {
+          "title": "Ceramic Table Lamp",
+          "imageUrl": "/images/home/living-room.jpg",
+          "quantity": 1,
+          "price": 3200000
+        }
+      ]
+    }
+  ],
+  "transactions": [
+    {
+      "id": "TX-8821",
+      "date": "2026-05-28",
+      "description": "Refund for order WE-10320",
+      "amount": 1200000,
+      "type": "credit"
+    },
+    {
+      "id": "TX-8794",
+      "date": "2026-05-15",
+      "description": "Wallet top-up",
+      "amount": 5000000,
+      "type": "credit"
+    },
+    {
+      "id": "TX-8762",
+      "date": "2026-05-12",
+      "description": "Payment for order WE-10391",
+      "amount": 8750000,
+      "type": "debit"
+    },
+    {
+      "id": "TX-8710",
+      "date": "2026-04-30",
+      "description": "Payment for order WE-10355",
+      "amount": 15600000,
+      "type": "debit"
+    },
+    {
+      "id": "TX-8688",
+      "date": "2026-04-18",
+      "description": "Welcome bonus",
+      "amount": 500000,
+      "type": "credit"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "RV-301",
+      "productTitle": "Mid-Century Dining Chair",
+      "productSlug": "mid-century-dining-chair",
+      "rating": 5,
+      "comment": "Beautiful craftsmanship and very comfortable. The walnut finish looks even better in person.",
+      "date": "2026-06-01",
+      "status": "published"
+    },
+    {
+      "id": "RV-298",
+      "productTitle": "Ceramic Vase Set",
+      "productSlug": "ceramic-vase-set",
+      "rating": 4,
+      "comment": "Lovely texture and perfect size for the shelf. One vase had a tiny glaze variation.",
+      "date": "2026-05-20",
+      "status": "published"
+    },
+    {
+      "id": "RV-295",
+      "productTitle": "Linen Table Runner",
+      "productSlug": "linen-table-runner",
+      "rating": 5,
+      "comment": "Soft linen and the neutral tone works with everything. Waiting for moderation.",
+      "date": "2026-06-05",
+      "status": "pending"
+    }
+  ],
+  "coupons": [
+    {
+      "id": "CP-101",
+      "code": "WELCOME15",
+      "description": "15% off your first order",
+      "discount": "15%",
+      "expiresAt": "2026-08-31",
+      "status": "active"
+    },
+    {
+      "id": "CP-102",
+      "code": "SPRING500K",
+      "description": "500,000 off orders over 5,000,000",
+      "discount": "500,000",
+      "expiresAt": "2026-06-30",
+      "status": "active"
+    },
+    {
+      "id": "CP-103",
+      "code": "VIP20",
+      "description": "20% off select furniture",
+      "discount": "20%",
+      "expiresAt": "2026-03-01",
+      "status": "expired"
+    },
+    {
+      "id": "CP-104",
+      "code": "FREESHIP",
+      "description": "Free shipping on any order",
+      "discount": "Free shipping",
+      "expiresAt": "2026-04-15",
+      "status": "used"
+    }
+  ]
+}

@@ -1,0 +1,238 @@
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useConfirm } from '@/hooks/useConfirm'
+import { useLocaleSettings } from '@/hooks/useLocaleSettings'
+import { AddressCard } from '@/components/address/AddressCard'
+import { AddressFormFields } from '@/components/address/AddressFormFields'
+import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
+import { DashboardEmptyState } from '@/components/dashboard/DashboardEmptyState'
+import { AddressesIcon } from '@/components/dashboard/DashboardIcons'
+import { Button } from '@/components/ui/Button'
+import { InlineLoading } from '@/components/ui/Spinner'
+import type { SavedAddress } from '@/models/address/savedAddress.model'
+import type { MapCoordinates } from '@/config/map'
+import {
+  addressFormToInput,
+  emptyAddressForm,
+  validateAddressForm,
+  type AddressFormErrorField,
+  type AddressFormField,
+  type AddressFormValues,
+} from '@/extensions/validateAddressForm'
+import { useAddressMutations } from '@/hooks/useAddressMutations'
+import { useAddressStore } from '@/stores/addressStore'
+import { useUserStore } from '@/stores/userStore'
+
+type PanelMode = 'list' | 'add' | 'edit'
+
+export function AddressesPanel() {
+  const { t } = useTranslation()
+  const confirm = useConfirm()
+  const addresses = useAddressStore((s) => s.addresses)
+  const isLoading = useAddressStore((s) => s.isLoading)
+  const loadAddresses = useAddressStore((s) => s.loadAddresses)
+  const accessToken = useUserStore((s) => s.accessToken)
+  const { locale } = useLocaleSettings()
+  const { isSaving, mutationError, saveAddress, setAsDefault, deleteAddress, clearMutationError } =
+    useAddressMutations()
+
+  const [mode, setMode] = useState<PanelMode>('list')
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [form, setForm] = useState<AddressFormValues>(emptyAddressForm)
+  const [coordinates, setCoordinates] = useState<MapCoordinates | null>(null)
+  const [errors, setErrors] = useState<Partial<Record<AddressFormErrorField, string>>>({})
+  const [makeDefault, setMakeDefault] = useState(false)
+
+  useEffect(() => {
+    if (!accessToken || accessToken === 'mock-access-token') return
+    void loadAddresses(accessToken, locale)
+  }, [accessToken, loadAddresses, locale])
+
+  useEffect(() => {
+    if (mode === 'list') {
+      setEditingId(null)
+      setForm(emptyAddressForm)
+      setCoordinates(null)
+      setErrors({})
+      setMakeDefault(false)
+      clearMutationError()
+    }
+  }, [clearMutationError, mode])
+
+  const startAdd = () => {
+    clearMutationError()
+    setMode('add')
+    setForm(emptyAddressForm)
+    setCoordinates(null)
+    setErrors({})
+    setMakeDefault(addresses.length === 0)
+  }
+
+  const startEdit = (address: SavedAddress) => {
+    clearMutationError()
+    setMode('edit')
+    setEditingId(address.id)
+    setForm({
+      label: address.label,
+      firstName: address.firstName,
+      lastName: address.lastName,
+      address: address.address,
+      apartment: address.apartment,
+      postcode: address.postcode,
+      phone: address.phone,
+    })
+    setCoordinates(
+      address.latitude != null && address.longitude != null ?
+        { latitude: address.latitude, longitude: address.longitude }
+      : null,
+    )
+    setErrors({})
+    setMakeDefault(address.isDefault)
+  }
+
+  const updateField = (field: AddressFormField, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }))
+    if (errors[field]) {
+      setErrors((prev) => {
+        const next = { ...prev }
+        delete next[field]
+        return next
+      })
+    }
+  }
+
+  const handleCoordinatesChange = (coords: MapCoordinates) => {
+    setCoordinates(coords)
+    if (errors.map) {
+      setErrors((prev) => {
+        const next = { ...prev }
+        delete next.map
+        return next
+      })
+    }
+  }
+
+  const handleAddressHint = (addressLine: string) => {
+    setForm((prev) => ({ ...prev, address: addressLine }))
+  }
+
+  const handleSave = async () => {
+    const nextErrors = validateAddressForm(
+      form,
+      {
+        required: t('address.validation.required'),
+        mapRequired: t('address.validation.mapRequired'),
+      },
+      coordinates,
+    )
+    setErrors(nextErrors)
+    if (Object.keys(nextErrors).length > 0) return
+
+    const input = addressFormToInput(form, { isDefault: makeDefault, coordinates })
+    const saved = await saveAddress(input, {
+      editingId,
+      makeDefault,
+    })
+
+    if (!saved) return
+    setMode('list')
+  }
+
+  const handleDelete = async (id: string) => {
+    if (!(await confirm({ message: t('address.deleteConfirm') }))) return
+    await deleteAddress(id)
+  }
+
+  if (mode === 'add' || mode === 'edit') {
+    return (
+      <div>
+        <DashboardPageHeader
+          title={mode === 'add' ? t('address.addTitle') : t('address.editTitle')}
+          description={t('dashboard.addresses.formDescription')}
+          icon={<AddressesIcon size={22} />}
+        />
+
+        <div className="rounded-sm border border-border bg-surface-muted/20 p-5 shadow-sm ring-1 ring-border/50 sm:p-6">
+          {mutationError && (
+            <p className="mb-4 rounded-sm border border-red-200 bg-red-50 px-3 py-2 text-sm text-sale">
+              {mutationError}
+            </p>
+          )}
+
+          <AddressFormFields
+            values={form}
+            errors={errors}
+            coordinates={coordinates}
+            mapSessionKey={editingId ?? 'new'}
+            onChange={updateField}
+            onCoordinatesChange={handleCoordinatesChange}
+            onAddressHint={handleAddressHint}
+            showDefaultCheckbox
+            isDefault={makeDefault}
+            onDefaultChange={setMakeDefault}
+          />
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button variant="warm" onClick={() => void handleSave()} disabled={isSaving}>
+              {isSaving ? <InlineLoading label={t('address.save')} /> : t('address.save')}
+            </Button>
+            <Button variant="secondary" onClick={() => setMode('list')} disabled={isSaving}>
+              {t('address.cancel')}
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <DashboardPageHeader
+        title={t('dashboard.addresses.title')}
+        description={t('dashboard.addresses.description')}
+        icon={<AddressesIcon size={22} />}
+        action={
+          <Button variant="warm" onClick={startAdd} disabled={isSaving}>
+            {t('address.addNew')}
+          </Button>
+        }
+      />
+
+      {mutationError && (
+        <p className="mb-4 rounded-sm border border-red-200 bg-red-50 px-3 py-2 text-sm text-sale">
+          {mutationError}
+        </p>
+      )}
+
+      {isLoading ? (
+        <div className="flex justify-center py-16">
+          <InlineLoading label={t('address.loading')} />
+        </div>
+      ) : addresses.length === 0 ? (
+        <DashboardEmptyState
+          icon={<AddressesIcon size={28} />}
+          title={t('address.emptyTitle')}
+          message={t('address.emptyMessage')}
+          action={
+            <Button variant="warm" onClick={startAdd}>
+              {t('address.addNew')}
+            </Button>
+          }
+        />
+      ) : (
+        <div className="grid gap-3 sm:grid-cols-2">
+          {addresses.map((address) => (
+            <AddressCard
+              key={address.id}
+              address={address}
+              disabled={isSaving}
+              onEdit={() => startEdit(address)}
+              onDelete={() => void handleDelete(address.id)}
+              onSetDefault={() => void setAsDefault(address)}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}

@@ -1,0 +1,144 @@
+/**
+ * Zara Home–inspired storefront (scoped to .storefront-zara).
+ * Plain CSS only — loaded from ShopLayout, not via @import in index.css.
+ */
+.storefront-zara {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f7f7f7;
+  --color-border: #e8e8e8;
+  --color-text: #111111;
+  --color-text-muted: #666666;
+  --color-warm: #111111;
+  --color-warm-hover: #333333;
+  --color-warm-text: #ffffff;
+  --color-accent: #111111;
+  --color-accent-hover: #333333;
+  --color-sale: #9b2335;
+  --font-sans: 'Libre Franklin', system-ui, sans-serif;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --sf-nav-tracking: 0.14em;
+}
+
+html[lang='fa'] .storefront-zara,
+html[dir='rtl'] .storefront-zara {
+  font-family: 'Vazirmatn', Tahoma, system-ui, sans-serif;
+  --font-sans: 'Vazirmatn', Tahoma, system-ui, sans-serif;
+  --font-display: 'Vazirmatn', Tahoma, system-ui, sans-serif;
+}
+
+/* Persian: avoid Latin-style uppercase/tracking on editorial hero type */
+html[lang='fa'] .storefront-zara .zara-hero-title,
+html[lang='fa'] .storefront-zara .zara-hero-eyebrow {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+/* Dark: same espresso palette as global theme (ReactUI legacy) */
+html.dark .storefront-zara {
+  --color-surface: #1a120c;
+  --color-surface-muted: #261c15;
+  --color-surface-inverse: #f0e6d8;
+  --color-border: #3d2e24;
+  --color-border-strong: #524033;
+  --color-text: #ede4d8;
+  --color-text-muted: #b5a390;
+  --color-text-inverse: #1a120c;
+  --color-accent: #5d9678;
+  --color-accent-hover: #72ab8c;
+  --color-warm: #c4a06a;
+  --color-warm-hover: #d4b078;
+  --color-warm-text: #1f1610;
+  --color-warm-muted: #33261c;
+  --color-warm-soft: #2b2018;
+  --color-sale: #d85c5c;
+  --color-promo: #ede4d8;
+}
+
+.storefront-zara .sf-container {
+  box-sizing: border-box;
+  margin-inline: auto;
+  width: 100%;
+  max-width: 90rem;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .storefront-zara .sf-container {
+    padding-inline: 2.5rem;
+  }
+}
+
+.storefront-zara .sf-icon-btn {
+  display: inline-flex;
+  padding: 0.25rem;
+  transition: opacity 0.2s ease;
+}
+
+.storefront-zara .sf-icon-btn:hover {
+  opacity: 0.55;
+}
+
+.storefront-zara .zara-hero-title {
+  text-shadow: 0 1px 24px rgba(0, 0, 0, 0.35);
+}
+
+.storefront-zara .zara-hero-bottom-nav {
+  scrollbar-width: none;
+}
+
+.storefront-zara .zara-hero-bottom-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.storefront-zara .zara-search-input::placeholder {
+  opacity: 0.65;
+}
+
+/* Drawer portals to document.body — keep selectors on .zara-nav-drawer-root wrapper */
+.zara-nav-drawer-root .zara-nav-drawer-backdrop {
+  opacity: 0;
+  transition: opacity 380ms ease;
+  pointer-events: none;
+}
+
+.zara-nav-drawer-root .zara-nav-drawer-backdrop--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.zara-nav-drawer-root .zara-nav-drawer-panel {
+  transform: translate3d(-100%, 0, 0);
+  transition: transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+html[dir='rtl'] .zara-nav-drawer-root .zara-nav-drawer-panel {
+  transform: translate3d(100%, 0, 0);
+}
+
+.zara-nav-drawer-root .zara-nav-drawer-panel--open {
+  transform: translate3d(0, 0, 0);
+}
+
+.zara-nav-drawer-root .zara-nav-drawer-subpanel {
+  display: grid;
+  transition: grid-template-rows 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.zara-nav-drawer-root .zara-nav-drawer-subpanel--open {
+  grid-template-rows: 1fr;
+}
+
+.zara-nav-drawer-root .zara-nav-drawer-subpanel--closed {
+  grid-template-rows: 0fr;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zara-nav-drawer-root .zara-nav-drawer-backdrop,
+  .zara-nav-drawer-root .zara-nav-drawer-panel,
+  .zara-nav-drawer-root .zara-nav-drawer-subpanel {
+    transition: none;
+  }
+}

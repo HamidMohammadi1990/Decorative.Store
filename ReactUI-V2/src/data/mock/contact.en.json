@@ -1,0 +1,69 @@
+{
+  "slug": "contact",
+  "title": "Contact Us",
+  "metaTitle": "Contact Diba Gallery",
+  "metaDescription": "Support, store locations, and ways to reach our team.",
+  "hero": {
+    "eyebrow": "We're here to help",
+    "title": "Get in touch",
+    "subtitle": "Questions about an order, delivery, or a design project? Our team is ready to assist by phone, email, or in store."
+  },
+  "methods": {
+    "heading": "How to reach us",
+    "items": [
+      {
+        "id": "phone",
+        "title": "Phone",
+        "description": "Mon–Fri, 9am–6pm · Sat, 10am–4pm",
+        "href": "tel:08004049780"
+      },
+      {
+        "id": "email",
+        "title": "Email",
+        "description": "We reply within one business day",
+        "href": "mailto:support@dibagallery.com"
+      },
+      {
+        "id": "chat",
+        "title": "Live chat",
+        "description": "Available during opening hours on our website",
+        "href": "/"
+      },
+      {
+        "id": "design",
+        "title": "Design consultation",
+        "description": "Book a free session with our in-house team",
+        "href": "/design-services"
+      }
+    ]
+  },
+  "locations": {
+    "heading": "Visit a showroom",
+    "items": [
+      {
+        "title": "Tehran — Vanak",
+        "address": "No. 12, Vanak Square, Tehran",
+        "hours": "Sat–Thu, 10am–8pm · Fri, 4pm–9pm",
+        "mapHref": "https://maps.google.com"
+      },
+      {
+        "title": "Isfahan — Chahar Bagh",
+        "address": "Chahar Bagh Abbasi Blvd, Isfahan",
+        "hours": "Sat–Thu, 10am–7pm · Fri, closed",
+        "mapHref": "https://maps.google.com"
+      },
+      {
+        "title": "Shiraz — Zand",
+        "address": "Zand Street, near Arg-e Karim Khan, Shiraz",
+        "hours": "Sat–Thu, 10am–7pm · Fri, 5pm–9pm",
+        "mapHref": "https://maps.google.com"
+      }
+    ]
+  },
+  "formIntro": {
+    "heading": "Send us a message",
+    "lead": "Fill in the form and we'll get back to you as soon as we can.",
+    "email": "support@dibagallery.com",
+    "note": "For urgent order issues, please call us so we can help faster."
+  }
+}

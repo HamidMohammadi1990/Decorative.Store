@@ -1,0 +1,47 @@
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ContactPageSections } from '@/components/contact/ContactPageSections'
+import { buildWebPageJsonLd } from '@/components/seo/jsonLdBuilders'
+import { Container } from '@/components/ui/Container'
+import { PageLoading } from '@/components/ui/Spinner'
+import { absoluteUrl } from '@/config/site'
+import { useContactPageContent } from '@/hooks/useContactPageContent'
+import { useShopPageMeta, resolveOgImageSrc } from '@/hooks/useShopPageMeta'
+
+export function ContactPage() {
+  const { t } = useTranslation()
+  const { content, loading, error } = useContactPageContent()
+
+  const jsonLd = useMemo(() => {
+    if (!content) return null
+    return buildWebPageJsonLd({
+      name: content.title,
+      description: content.metaDescription ?? content.hero.subtitle ?? '',
+      url: absoluteUrl('/contact'),
+    })
+  }, [content])
+
+  useShopPageMeta({
+    title: content?.metaTitle?.trim() || content?.title,
+    description: content?.metaDescription ?? undefined,
+    image: content ? resolveOgImageSrc(undefined) : undefined,
+    imageAlt: content?.hero.title ?? content?.title,
+    path: '/contact',
+    active: Boolean(content),
+    jsonLd,
+  })
+
+  if (loading && !content) {
+    return <PageLoading />
+  }
+
+  if (error || !content) {
+    return (
+      <Container className="py-20 text-center text-sm text-sale">
+        {t('common.error')}
+      </Container>
+    )
+  }
+
+  return <ContactPageSections content={content} />
+}

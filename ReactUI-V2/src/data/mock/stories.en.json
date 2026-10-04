@@ -1,0 +1,380 @@
+[
+  {
+    "id": "sg1",
+    "slug": "living-room-refresh",
+    "title": "Living room refresh",
+    "avatar": { "src": "/images/home/living-room.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/living-room.jpg", "alt": "Living room refresh" },
+    "productSlugs": ["harmony-armchair", "andes-3-seater-sofa"],
+    "likes": 428,
+    "publishedAt": "2026-05-28",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg1-s1",
+        "caption": "Layer warm neutrals with textured cushions for an inviting lounge.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/living-room.jpg",
+          "alt": "Styled living room",
+          "durationMs": 5000
+        }
+      },
+      {
+        "id": "sg1-s2",
+        "caption": "The Harmony armchair pairs beautifully with natural light.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/velvet-sofa.jpg",
+          "alt": "Harmony armchair detail",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": [
+      {
+        "id": "sg1-c1",
+        "authorName": "Sara M.",
+        "date": "2026-05-29",
+        "text": "Love this palette — exactly what I was looking for.",
+        "likes": 12
+      }
+    ]
+  },
+  {
+    "id": "sg2",
+    "slug": "dining-essentials",
+    "title": "Dining essentials",
+    "avatar": { "src": "/images/home/dining.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/dining.jpg", "alt": "Dining essentials" },
+    "productSlugs": ["mid-century-dining-table"],
+    "likes": 312,
+    "publishedAt": "2026-05-25",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg2-s1",
+        "caption": "Mid-century lines meet everyday hosting.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/dining.jpg",
+          "alt": "Dining table styling",
+          "durationMs": 5000
+        }
+      },
+      {
+        "id": "sg2-s2",
+        "media": {
+          "type": "video",
+          "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+          "poster": "/images/home/dining.jpg",
+          "alt": "Table setting video",
+          "durationMs": 12000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg3",
+    "slug": "bedroom-calm",
+    "title": "Bedroom calm",
+    "avatar": { "src": "/images/home/bedroom.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/bedroom.jpg", "alt": "Bedroom calm" },
+    "productSlugs": ["artisan-bed-frame"],
+    "likes": 267,
+    "publishedAt": "2026-05-20",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg3-s1",
+        "caption": "Soft linens and warm wood for restful nights.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/bedroom.jpg",
+          "alt": "Bedroom styling",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": [
+      {
+        "id": "sg3-c1",
+        "authorName": "Alex R.",
+        "date": "2026-05-21",
+        "text": "So calming. Saving this for our guest room.",
+        "likes": 5
+      }
+    ]
+  },
+  {
+    "id": "sg4",
+    "slug": "outdoor-living",
+    "title": "Outdoor living",
+    "avatar": { "src": "/images/home/in-stock.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/in-stock.jpg", "alt": "Outdoor living" },
+    "productSlugs": [],
+    "likes": 189,
+    "publishedAt": "2026-05-15",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg4-s1",
+        "caption": "Extend your living space into the garden.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/in-stock.jpg",
+          "alt": "Garden lounge",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg5",
+    "slug": "lighting-tips",
+    "title": "Lighting tips",
+    "avatar": { "src": "/images/home/trade-interior.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/trade-interior.jpg", "alt": "Lighting tips" },
+    "productSlugs": [],
+    "likes": 156,
+    "publishedAt": "2026-05-10",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg5-s1",
+        "caption": "Layer ambient, task, and accent lighting.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/trade-interior.jpg",
+          "alt": "Lighting vignette",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg6",
+    "slug": "new-arrivals",
+    "title": "New arrivals",
+    "avatar": { "src": "/images/home/new-arrivals.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/new-arrivals.jpg", "alt": "New arrivals" },
+    "productSlugs": ["harmony-armchair"],
+    "likes": 502,
+    "publishedAt": "2026-06-01",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg6-s1",
+        "caption": "Fresh pieces just landed — tap to shop.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/new-arrivals.jpg",
+          "alt": "New collection",
+          "durationMs": 5000
+        }
+      },
+      {
+        "id": "sg6-s2",
+        "media": {
+          "type": "image",
+          "src": "/images/home/bedroom-set.jpg",
+          "alt": "Collection detail",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg7",
+    "slug": "velvet-sofa-styling",
+    "title": "Velvet sofa",
+    "avatar": { "src": "/images/home/velvet-sofa.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/velvet-sofa.jpg", "alt": "Velvet sofa styling" },
+    "productSlugs": ["andes-3-seater-sofa"],
+    "likes": 241,
+    "publishedAt": "2026-05-08",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg7-s1",
+        "caption": "Rich texture, timeless silhouette.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/velvet-sofa.jpg",
+          "alt": "Velvet sofa",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg8",
+    "slug": "bedroom-set-ideas",
+    "title": "Bedroom set",
+    "avatar": { "src": "/images/home/bedroom-set.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/bedroom-set.jpg", "alt": "Bedroom set ideas" },
+    "productSlugs": ["artisan-bed-frame"],
+    "likes": 198,
+    "publishedAt": "2026-05-05",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg8-s1",
+        "media": {
+          "type": "image",
+          "src": "/images/home/bedroom-set.jpg",
+          "alt": "Bedroom set",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg9",
+    "slug": "collaboration-edit",
+    "title": "Designer edit",
+    "avatar": { "src": "/images/home/collaboration.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/collaboration.jpg", "alt": "Designer collaboration" },
+    "productSlugs": [],
+    "likes": 175,
+    "publishedAt": "2026-05-02",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg9-s1",
+        "caption": "Curated picks from our design studio.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/collaboration.jpg",
+          "alt": "Collaboration edit",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg10",
+    "slug": "office-corner",
+    "title": "Home office",
+    "avatar": { "src": "/images/home/commercial-office.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/commercial-office.jpg", "alt": "Home office corner" },
+    "productSlugs": [],
+    "likes": 143,
+    "publishedAt": "2026-04-28",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg10-s1",
+        "media": {
+          "type": "image",
+          "src": "/images/home/commercial-office.jpg",
+          "alt": "Office styling",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg11",
+    "slug": "in-stock-now",
+    "title": "In stock now",
+    "avatar": { "src": "/images/home/in-stock.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/in-stock.jpg", "alt": "In stock picks" },
+    "productSlugs": ["harmony-armchair"],
+    "likes": 388,
+    "publishedAt": "2026-04-25",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg11-s1",
+        "caption": "Ready to ship — limited pieces.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/in-stock.jpg",
+          "alt": "In stock",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg12",
+    "slug": "trade-interior-tour",
+    "title": "Interior tour",
+    "avatar": { "src": "/images/home/trade-interior.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/trade-interior.jpg", "alt": "Interior tour" },
+    "productSlugs": [],
+    "likes": 221,
+    "publishedAt": "2026-04-20",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg12-s1",
+        "media": {
+          "type": "video",
+          "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+          "poster": "/images/home/trade-interior.jpg",
+          "alt": "Interior walkthrough",
+          "durationMs": 12000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg13",
+    "slug": "cozy-corners",
+    "title": "Cozy corners",
+    "avatar": { "src": "/images/home/living-room.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/bedroom.jpg", "alt": "Cozy corners" },
+    "productSlugs": ["harmony-armchair"],
+    "likes": 167,
+    "publishedAt": "2026-04-15",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg13-s1",
+        "media": {
+          "type": "image",
+          "src": "/images/home/bedroom.jpg",
+          "alt": "Cozy corner",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  },
+  {
+    "id": "sg14",
+    "slug": "summer-refresh",
+    "title": "Summer refresh",
+    "avatar": { "src": "/images/home/new-arrivals.jpg", "alt": "Diba Gallery" },
+    "coverImage": { "src": "/images/home/dining.jpg", "alt": "Summer refresh" },
+    "productSlugs": ["mid-century-dining-table"],
+    "likes": 294,
+    "publishedAt": "2026-04-10",
+    "isOfficial": true,
+    "slides": [
+      {
+        "id": "sg14-s1",
+        "caption": "Light layers for the season ahead.",
+        "media": {
+          "type": "image",
+          "src": "/images/home/dining.jpg",
+          "alt": "Summer styling",
+          "durationMs": 5000
+        }
+      }
+    ],
+    "comments": []
+  }
+]
