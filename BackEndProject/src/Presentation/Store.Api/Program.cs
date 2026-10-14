@@ -58,6 +58,7 @@ serilogConfiguration!.UseSerilog(builder.Configuration);
 
 var app = builder.Build();
 
+await app.ApplyPendingMigrationsAsync();
 await app.SeedApplicationDataAsync();
 
 await app.ConfigureEditionLocalizationFromRegistryAsync();
@@ -66,7 +67,11 @@ app.UseEditionLocalization();
 app.UseMiddleware<CurrentLanguageMiddleware>();
 app.UseMiddleware<BlockTokenControlMiddleware>();
 
-if (app.Environment.IsDevelopment())
+var seedPermissions =
+    app.Environment.IsDevelopment() ||
+    app.Configuration.GetValue<bool>("Database:SeedPermissionsOnStartup");
+
+if (seedPermissions)
 {
     using var scope = app.Services.CreateScope();
     var seedService = scope.ServiceProvider.GetRequiredService<ISeedService>();
@@ -85,6 +90,7 @@ app.UseResponseCompression();
 app.UseSwaggerAndUI();
 app.UseRouting();
 app.UseCors("CustomCors");
+app.MapGet("/health", () => Results.Ok(new { status = "healthy" })).AllowAnonymous();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

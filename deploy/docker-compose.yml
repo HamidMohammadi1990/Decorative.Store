@@ -1,0 +1,135 @@
+name: decorative-store
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: ${MSSQL_PID:-Express}
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?Set MSSQL_SA_PASSWORD in .env}
+    volumes:
+      - mssql_data:/var/opt/mssql
+    networks:
+      - internal
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q \"SELECT 1\" || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    # Do not publish SQL to the host in production.
+    # ports:
+    #   - "1433:1433"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command:
+      [
+        "redis-server",
+        "--appendonly",
+        "yes",
+        "--requirepass",
+        "${REDIS_PASSWORD:?Set REDIS_PASSWORD in .env}",
+      ]
+    environment:
+      REDISCLI_AUTH: ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/api/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      WAIT_FOR_SQL_HOST: sqlserver
+      WAIT_FOR_SQL_PORT: "1433"
+      WAIT_FOR_SQL_TIMEOUT: "120"
+      Database__ApplyMigrationsOnStartup: ${DATABASE_APPLY_MIGRATIONS:-true}
+      Database__SeedPermissionsOnStartup: ${DATABASE_SEED_PERMISSIONS:-false}
+      ConnectionStrings__EditionDbContext: Server=sqlserver,1433;Database=${MSSQL_DATABASE:-DecorativeStoreDB};User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;Encrypt=True;MultipleActiveResultSets=True
+      Serilog__Configuration__SQLConnectionString: Server=sqlserver,1433;Database=${MSSQL_DATABASE:-DecorativeStoreDB};User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;Encrypt=True;MultipleActiveResultSets=True
+      RedisConfiguration__Hosts__0__Host: redis
+      RedisConfiguration__Hosts__0__Port: "6379"
+      RedisConfiguration__Password: ${REDIS_PASSWORD}
+      CorsSettings__AllowedOrigins__0: ${PUBLIC_SITE_URL:?Set PUBLIC_SITE_URL in .env}
+      StorefrontSettings__BaseUrl: ${PUBLIC_SITE_URL}
+      AllowedHosts: ${ALLOWED_HOSTS:-*}
+      SiteSettings__JwtSettings__SecretKey: ${JWT_SECRET_KEY:?Set JWT_SECRET_KEY in .env}
+      SiteSettings__JwtSettings__EncryptKey: ${JWT_ENCRYPT_KEY:?Set JWT_ENCRYPT_KEY in .env}
+      SecuritySettings__GeneralKey: ${SECURITY_GENERAL_KEY:?Set SECURITY_GENERAL_KEY in .env}
+    volumes:
+      - api_uploads:/app/wwwroot/Uploads
+    networks:
+      - internal
+    expose:
+      - "8080"
+
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/web/Dockerfile
+      args:
+        SSR_API_TARGET: http://api:8080
+        VITE_SITE_URL: ${PUBLIC_SITE_URL}
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: "3000"
+      SSR_API_TARGET: http://api:8080
+      VITE_SITE_URL: ${PUBLIC_SITE_URL}
+    networks:
+      - internal
+    expose:
+      - "3000"
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      web:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - internal
+
+volumes:
+  mssql_data:
+    name: decorative-store-mssql-data
+  redis_data:
+    name: decorative-store-redis-data
+  api_uploads:
+    name: decorative-store-api-uploads
+
+networks:
+  internal:
+    name: decorative-store-internal

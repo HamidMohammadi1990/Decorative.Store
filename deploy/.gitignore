@@ -1,0 +1,5 @@
+.env
+.env.local
+*.bak
+backup-*
+uploads-*.tar.gz

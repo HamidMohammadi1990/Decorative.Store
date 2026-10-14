@@ -1,12 +1,26 @@
-﻿using Serilog;
+﻿using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Edition.Application.Contracts.Localization;
 using Store.Infrastructure.LogProviders;
+using Store.Infrastructure.Persistence;
 using Store.Infrastructure.Persistence.Contracts;
 
 namespace Store.Api.Extensions;
 
 public static class WebApplicationExtensions
 {
+    public static async Task ApplyPendingMigrationsAsync(
+        this WebApplication app,
+        CancellationToken cancellationToken = default)
+    {
+        if (!app.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup"))
+            return;
+
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<EditionDbContext>();
+        await db.Database.MigrateAsync(cancellationToken);
+    }
+
     /// <summary>
     /// Seeds required reference data on startup: Language (fa-IR, en-US) then catalog and blog categories.
     /// </summary>

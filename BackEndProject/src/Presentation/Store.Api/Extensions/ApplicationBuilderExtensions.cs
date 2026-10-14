@@ -15,10 +15,18 @@ public static class ApplicationBuilderExtensions
             ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
         };
 
-        foreach (var proxy in settings.KnownProxies)
+        if (settings.TrustReverseProxy)
         {
-            if (IPAddress.TryParse(proxy, out var ipAddress))
-                options.KnownProxies.Add(ipAddress);
+            options.KnownNetworks.Clear();
+            options.KnownProxies.Clear();
+        }
+        else
+        {
+            foreach (var proxy in settings.KnownProxies)
+            {
+                if (IPAddress.TryParse(proxy, out var ipAddress))
+                    options.KnownProxies.Add(ipAddress);
+            }
         }
 
         app.UseForwardedHeaders(options);
