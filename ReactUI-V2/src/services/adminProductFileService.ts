@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '@/config/api'
+import { resolveProductImageSrc } from '@/utils/publicUploadUrl'
 import type {
   AdminProductFile,
   CreateProductFileInput,
@@ -19,12 +20,7 @@ import { ApiError } from '@/services/api/apiTypes'
 const BASE = '/api/v1/admin/product-file'
 
 export function resolveProductFileUrl(fileName: string): string {
-  if (!fileName) return ''
-  if (fileName.startsWith('http://') || fileName.startsWith('https://')) return fileName
-  const path = fileName.startsWith('/')
-    ? fileName
-    : `/Uploads/Products/${fileName.replace(/^\/+/, '')}`
-  return `${API_BASE_URL}${path}`
+  return resolveProductImageSrc(fileName)
 }
 
 function normalizeProductFile(data: unknown): AdminProductFile | null {

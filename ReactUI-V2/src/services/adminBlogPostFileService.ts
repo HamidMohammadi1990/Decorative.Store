@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '@/config/api'
+import { resolveSameOriginMediaSrc } from '@/utils/publicUploadUrl'
 import type { AdminBlogPostFile, CreateBlogPostFileInput } from '@/models/admin/blog.model'
 import type { Locale } from '@/models/shared/locale.model'
 import { apiDelete, apiPost, apiPut, toAcceptLanguage } from '@/services/api/apiClient'
@@ -15,12 +16,7 @@ import { ApiError } from '@/services/api/apiTypes'
 const BASE = '/api/v1/admin/blog-post-file'
 
 export function resolveBlogPostFileUrl(fileName: string): string {
-  if (!fileName) return ''
-  if (fileName.startsWith('http://') || fileName.startsWith('https://')) return fileName
-  const path = fileName.startsWith('/')
-    ? fileName
-    : `/Uploads/BlogPosts/${fileName.replace(/^\/+/, '')}`
-  return `${API_BASE_URL}${path}`
+  return resolveSameOriginMediaSrc(fileName, 'BlogPosts')
 }
 
 function normalizeBlogPostFile(data: unknown): AdminBlogPostFile | null {

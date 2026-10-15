@@ -1,5 +1,4 @@
-import { API_BASE_URL } from '@/config/api'
-import { toPublicUploadPath } from '@/utils/publicUploadUrl'
+import { resolveProductImageSrc } from '@/utils/publicUploadUrl'
 import type { FeaturedShopGrid } from '@/models/home/featuredShop.model'
 
 export interface FeaturedCatalogCollection {
@@ -7,14 +6,6 @@ export interface FeaturedCatalogCollection {
   href: string
   imageUrl: string
   imageAlt: string
-}
-
-function resolveProductImageSrc(imageUrl: string): string {
-  if (!imageUrl) return ''
-  const path = toPublicUploadPath(imageUrl)
-  if (/^https?:\/\//i.test(path)) return path
-  if (path.startsWith('/')) return path
-  return `${API_BASE_URL}/${path}`
 }
 
 function isCustomCmsUpload(src?: string): boolean {

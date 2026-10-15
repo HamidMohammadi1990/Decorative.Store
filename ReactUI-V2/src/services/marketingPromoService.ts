@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '@/config/api'
+import { resolveSameOriginMediaSrc } from '@/utils/publicUploadUrl'
 import type {
   AdminMarketingPromo,
   CreateAdminMarketingPromoInput,
@@ -25,11 +26,8 @@ const PUBLIC_BASE = '/api/v1/marketing-promo'
 
 export function resolveMarketingImageSrc(imageUrl: string): string {
   if (!imageUrl) return ''
-  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
   if (imageUrl.startsWith('/images/')) return imageUrl
-  if (imageUrl.startsWith('/Uploads/MarketingPromos/')) return `${API_BASE_URL}${imageUrl}`
-  if (imageUrl.startsWith('/')) return `${API_BASE_URL}${imageUrl}`
-  return `${API_BASE_URL}/Uploads/MarketingPromos/${imageUrl.replace(/^\/+/, '')}`
+  return resolveSameOriginMediaSrc(imageUrl, 'MarketingPromos')
 }
 
 function readPromoType(record: Record<string, unknown>): MarketingPromoType {

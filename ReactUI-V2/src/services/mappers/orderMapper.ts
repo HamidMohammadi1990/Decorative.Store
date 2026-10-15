@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/config/api'
+import { resolveSameOriginMediaSrc } from '@/utils/publicUploadUrl'
 import type {
   DashboardOrder,
   DashboardOrderItem,
@@ -10,13 +10,8 @@ import { readNumberField, readRecord, readStringField } from '@/services/api/api
 
 function resolveProductImage(fileName?: string): string | undefined {
   if (!fileName?.trim()) return undefined
-  if (fileName.startsWith('http://') || fileName.startsWith('https://') || fileName.startsWith('/')) {
-    if (fileName.startsWith('/')) {
-      return `${API_BASE_URL}${fileName}`
-    }
-    return fileName
-  }
-  return `${API_BASE_URL}/Uploads/Products/${fileName}`
+  const resolved = resolveSameOriginMediaSrc(fileName, 'Products')
+  return resolved || undefined
 }
 
 function readBackendOrderStatus(record: Record<string, unknown>): number {

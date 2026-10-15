@@ -1,7 +1,6 @@
-import { useEffect, useState, type RefObject } from 'react'
+import { useEffect, useState } from 'react'
 import type { ImageAsset } from '@/models/shared/image.model'
 import { resolveHomeImageSrc } from '@/extensions/resolveHomeImage'
-import { useLazyImageSource } from '@/hooks/useLazyImageSource'
 
 interface LocalImageProps {
   image: ImageAsset
@@ -32,30 +31,23 @@ export function LocalImage({
   fetchPriority,
   decoding = 'async',
   sizes,
-  rootMargin,
 }: LocalImageProps) {
   const resolvedLoading = loading ?? (priority ? 'eager' : 'lazy')
   const resolvedFetchPriority = fetchPriority ?? (priority ? 'high' : undefined)
-  const src = resolveHomeImageSrc(image.src)
-  const [displaySrc, setDisplaySrc] = useState<string | undefined>(undefined)
+  const primarySrc = resolveHomeImageSrc(image.src)
+  const [displaySrc, setDisplaySrc] = useState(primarySrc)
 
   useEffect(() => {
-    setDisplaySrc(undefined)
-  }, [src])
-  const { ref, resolvedSrc, isLoaded } = useLazyImageSource(src, {
-    priority,
-    rootMargin,
-  })
-  const effectiveSrc = displaySrc ?? resolvedSrc
-  const webpSrc = effectiveSrc ? webpCandidate(effectiveSrc) : null
+    setDisplaySrc(primarySrc)
+  }, [primarySrc])
+
+  const webpSrc = displaySrc ? webpCandidate(displaySrc) : null
 
   const onImgError = () => {
-    if (!effectiveSrc?.startsWith('/images/home/')) return
-    const svgFallback = effectiveSrc.replace(/\.(jpg|jpeg|png|webp)$/i, '.svg')
-    if (svgFallback !== effectiveSrc) setDisplaySrc(svgFallback)
+    if (!displaySrc?.startsWith('/images/home/')) return
+    const svgFallback = displaySrc.replace(/\.(jpg|jpeg|png|webp)$/i, '.svg')
+    if (svgFallback !== displaySrc) setDisplaySrc(svgFallback)
   }
-
-  const imgClass = `${className}${!isLoaded ? ' bg-surface-muted animate-pulse' : ''}`.trim()
 
   const imgProps = {
     alt: image.alt,
@@ -65,29 +57,18 @@ export function LocalImage({
     decoding,
     fetchPriority: resolvedFetchPriority,
     sizes,
-    className: imgClass,
+    className,
+    onError: onImgError,
   }
 
   if (webpSrc) {
     return (
       <picture>
         <source srcSet={webpSrc} type="image/webp" sizes={sizes} />
-        <img
-          ref={ref as RefObject<HTMLImageElement>}
-          {...imgProps}
-          src={effectiveSrc}
-          onError={onImgError}
-        />
+        <img {...imgProps} src={displaySrc} />
       </picture>
     )
   }
 
-  return (
-    <img
-      ref={ref as RefObject<HTMLImageElement>}
-      {...imgProps}
-      src={effectiveSrc}
-      onError={onImgError}
-    />
-  )
+  return <img {...imgProps} src={displaySrc} />
 }

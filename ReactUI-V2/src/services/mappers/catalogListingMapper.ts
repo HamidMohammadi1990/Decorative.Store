@@ -1,5 +1,4 @@
-import { API_BASE_URL } from '@/config/api'
-import { toPublicUploadPath } from '@/utils/publicUploadUrl'
+import { resolveProductImageSrc } from '@/utils/publicUploadUrl'
 import type {
   CatalogListingFacetGroup,
   CatalogListingProduct,
@@ -7,13 +6,6 @@ import type {
 import type { ProductSummary } from '@/models/catalog/product.model'
 import type { FilterFacet } from '@/models/catalog/listing.model'
 import { CHECKBOX_FILTER_KEYS, LISTING_QUERY_RESERVED_KEYS } from '@/extensions/listingFilters'
-
-function resolveProductImageSrc(imageUrl: string): string {
-  if (!imageUrl) return ''
-  const path = toPublicUploadPath(imageUrl)
-  if (/^https?:\/\//i.test(path)) return path
-  return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`
-}
 
 function toSubcategorySegment(subCategorySlug: string): string | undefined {
   if (!subCategorySlug) return undefined

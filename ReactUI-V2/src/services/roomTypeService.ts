@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '@/config/api'
+import { resolveSameOriginMediaSrc } from '@/utils/publicUploadUrl'
 import type {
   AdminRoomType,
   CreateAdminRoomTypeInput,
@@ -22,17 +23,8 @@ const PUBLIC_BASE = '/api/v1/room-type'
 
 export function resolveRoomTypeImageUrl(imageUrlOrFileName: string): string {
   if (!imageUrlOrFileName) return ''
-  if (
-    imageUrlOrFileName.startsWith('http://') ||
-    imageUrlOrFileName.startsWith('https://') ||
-    imageUrlOrFileName.startsWith('/images/')
-  ) {
-    return imageUrlOrFileName
-  }
-  if (imageUrlOrFileName.startsWith('/')) {
-    return `${API_BASE_URL}${imageUrlOrFileName}`
-  }
-  return `${API_BASE_URL}/Uploads/RoomTypes/${imageUrlOrFileName.replace(/^\/+/, '')}`
+  if (imageUrlOrFileName.startsWith('/images/')) return imageUrlOrFileName
+  return resolveSameOriginMediaSrc(imageUrlOrFileName, 'RoomTypes')
 }
 
 function normalizeAdminRoomType(data: unknown): AdminRoomType | null {

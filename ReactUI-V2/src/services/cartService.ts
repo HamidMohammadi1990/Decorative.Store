@@ -1,5 +1,4 @@
-import { API_BASE_URL } from '@/config/api'
-import { toPublicUploadPath } from '@/utils/publicUploadUrl'
+import { resolveSameOriginMediaSrc } from '@/utils/publicUploadUrl'
 import type { CartLine } from '@/models/cart/cartLine.model'
 import { apiGetAuth, apiPost, apiPatch, apiDelete } from '@/services/api/apiClient'
 import { ApiError } from '@/services/api/apiTypes'
@@ -46,10 +45,7 @@ export interface ValidateDiscountResponse {
 
 function resolveImageSrc(imageUrl?: string | null): string {
   if (!imageUrl?.trim()) return '/images/home/new-arrivals.svg'
-  const path = toPublicUploadPath(imageUrl)
-  if (/^https?:\/\//i.test(path)) return path
-  if (path.startsWith('/')) return `${API_BASE_URL}${path}`
-  return `${API_BASE_URL}/Uploads/Products/${path.replace(/^\/+/, '')}`
+  return resolveSameOriginMediaSrc(imageUrl, 'Products')
 }
 
 export function mapServerCartToLines(cart: ServerCartResponse): CartLine[] {

@@ -36,28 +36,28 @@
         "eyebrow": "فرصت محدود",
         "title": "حراج تابستانه شروع شد!",
         "subtitle": "تا ۵۰٪ تخفیف روی سبک‌های منتخب",
-        "image": { "src": "/images/home/living-room.jpg", "alt": "اتاق نشیمن" },
+        "image": { "src": "/images/home/living-room.svg", "alt": "اتاق نشیمن" },
         "cta": { "label": "خرید از حراج", "href": "/sale" }
       },
       {
         "id": "hero-2",
         "title": "تا ۲۰٪ تخفیف اتاق خواب",
         "subtitle": "فضایی آرام برای تابستان",
-        "image": { "src": "/images/home/bedroom.jpg", "alt": "اتاق خواب" },
+        "image": { "src": "/images/home/bedroom.svg", "alt": "اتاق خواب" },
         "cta": { "label": "مبلمان محبوب", "href": "/bedroom" }
       },
       {
         "id": "hero-3",
         "title": "مبل و صندلی موجود در انبار",
         "subtitle": "تحویل ۱ تا ۳ هفته*",
-        "image": { "src": "/images/home/velvet-sofa.jpg", "alt": "مبل" },
+        "image": { "src": "/images/home/velvet-sofa.svg", "alt": "مبل" },
         "cta": { "label": "خرید از موجودی", "href": "/in-stock/sofas" }
       },
       {
         "id": "hero-4",
         "title": "صندلی ناهارخوری زیر ۳.۵ میلیون",
         "subtitle": "پذیرایی با استایل",
-        "image": { "src": "/images/home/dining.jpg", "alt": "ناهارخوری" },
+        "image": { "src": "/images/home/dining.svg", "alt": "ناهارخوری" },
         "cta": { "label": "خرید کنید", "href": "/dining/chairs" }
       }
     ]
@@ -68,27 +68,27 @@
         "id": "tile-1",
         "title": "تا ۲۰٪ تخفیف اتاق خواب",
         "subtitle": "مبلمان محبوب",
-        "image": { "src": "/images/home/bedroom-set.jpg", "alt": "اتاق خواب" },
+        "image": { "src": "/images/home/bedroom-set.svg", "alt": "اتاق خواب" },
         "link": { "label": "خرید", "href": "/bedroom" }
       },
       {
         "id": "tile-2",
         "title": "صندلی ناهارخوری زیر ۳.۵ میلیون",
-        "image": { "src": "/images/home/dining.jpg", "alt": "صندلی" },
+        "image": { "src": "/images/home/dining.svg", "alt": "صندلی" },
         "link": { "label": "خرید", "href": "/dining/chairs" }
       },
       {
         "id": "tile-3",
         "title": "مبل موجود در انبار",
         "subtitle": "تحویل ۱ تا ۳ هفته*",
-        "image": { "src": "/images/home/velvet-sofa.jpg", "alt": "مبل" },
+        "image": { "src": "/images/home/velvet-sofa.svg", "alt": "مبل" },
         "link": { "label": "خرید", "href": "/in-stock/sofas" }
       },
       {
         "id": "tile-4",
         "title": "حراج تابستانه",
         "subtitle": "تا ۵۰٪ تخفیف",
-        "image": { "src": "/images/home/living-room.jpg", "alt": "نشیمن" },
+        "image": { "src": "/images/home/living-room.svg", "alt": "نشیمن" },
         "link": { "label": "حراج", "href": "/sale" }
       }
     ],
@@ -119,20 +119,20 @@
         "id": "new-arrivals",
         "title": "محصولات جدید",
         "subtitle": "تازه‌ترین‌ها",
-        "image": { "src": "/images/home/new-arrivals.jpg", "alt": "جدید" },
+        "image": { "src": "/images/home/new-arrivals.svg", "alt": "جدید" },
         "link": { "label": "مشاهده جدیدها", "href": "/new" }
       },
       {
         "id": "in-stock",
         "title": "موجود و آماده ارسال",
         "subtitle": "تحویل ۱ تا ۳ هفته",
-        "image": { "src": "/images/home/in-stock.jpg", "alt": "موجودی" },
+        "image": { "src": "/images/home/in-stock.svg", "alt": "موجودی" },
         "link": { "label": "خرید از موجودی", "href": "/in-stock" }
       },
       {
         "id": "best-sellers",
         "title": "پرفروش‌ها",
-        "image": { "src": "/images/home/living-room.jpg", "alt": "پرفروش" },
+        "image": { "src": "/images/home/living-room.svg", "alt": "پرفروش" },
         "link": { "label": "مشاهده پرفروش‌ها", "href": "/best-sellers" }
       }
     ]

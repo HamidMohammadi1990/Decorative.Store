@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/config/api'
+import { resolveProductImageSrc } from '@/utils/publicUploadUrl'
 import type { CatalogProductResponse } from '@/models/catalog/catalogProduct.model'
 import type { CatalogListingProduct } from '@/models/catalog/catalogListing.model'
 import type {
@@ -9,15 +9,6 @@ import type {
 import type { ProductSummary } from '@/models/catalog/product.model'
 import type { Locale } from '@/models/shared/locale.model'
 import { mapCatalogListingProduct } from '@/services/mappers/catalogListingMapper'
-import { toPublicUploadPath } from '@/utils/publicUploadUrl'
-
-function resolveProductImageSrc(imageUrl: string): string {
-  if (!imageUrl) return ''
-  const path = toPublicUploadPath(imageUrl)
-  if (/^https?:\/\//i.test(path)) return path
-  return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`
-}
-
 function toListingProductShape(product: CatalogProductResponse): CatalogListingProduct {
   return {
     id: product.id,

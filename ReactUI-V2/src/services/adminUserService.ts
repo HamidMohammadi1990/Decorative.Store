@@ -6,6 +6,7 @@ import type {
 } from '@/models/admin/user.model'
 import type { Locale } from '@/models/shared/locale.model'
 import { API_BASE_URL } from '@/config/api'
+import { resolveUserImageUrl } from '@/utils/resolveUserImageUrl'
 import { apiDelete, apiPost, apiPut, toAcceptLanguage } from '@/services/api/apiClient'
 import { normalizeApiEnvelope, readBooleanField, readRecord, readStringField } from '@/services/api/apiNormalize'
 import { ApiError } from '@/services/api/apiTypes'
@@ -19,10 +20,7 @@ import {
 const BASE = '/api/v1/admin/account'
 
 function resolveUserProfileImageUrl(url: string): string {
-  if (!url) return ''
-  if (url.startsWith('http://') || url.startsWith('https://')) return url
-  if (url.startsWith('/')) return `${API_BASE_URL}${url}`
-  return `${API_BASE_URL}/${url}`
+  return resolveUserImageUrl(url)
 }
 
 function readGender(record: Record<string, unknown>): AdminUserGender {
