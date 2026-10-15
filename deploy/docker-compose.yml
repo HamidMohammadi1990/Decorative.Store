@@ -65,6 +65,9 @@ services:
       WAIT_FOR_SQL_HOST: sqlserver
       WAIT_FOR_SQL_PORT: "1433"
       WAIT_FOR_SQL_TIMEOUT: "120"
+      WAIT_FOR_REDIS_HOST: redis
+      WAIT_FOR_REDIS_PORT: "6379"
+      WAIT_FOR_REDIS_TIMEOUT: "60"
       Database__ApplyMigrationsOnStartup: ${DATABASE_APPLY_MIGRATIONS:-true}
       Database__SeedPermissionsOnStartup: ${DATABASE_SEED_PERMISSIONS:-false}
       ConnectionStrings__EditionDbContext: Server=sqlserver,1433;Database=${MSSQL_DATABASE:-DecorativeStoreDB};User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;Encrypt=True;MultipleActiveResultSets=True

@@ -27,14 +27,17 @@ public static class ConfigureServices
         var redisHost = (redisConfiguration?.Hosts.FirstOrDefault())
                 ?? throw new NullReferenceException($"{nameof(RedisConfiguration.Hosts)} is null in redis configuration!");
 
+        var redisPassword = configuration["RedisConfiguration:Password"] ?? redisConfiguration.Password;
+
         var multiplexer = ConnectionMultiplexer.Connect(new ConfigurationOptions
         {
             Ssl = redisConfiguration.Ssl,
-            Password = redisConfiguration.Password,
+            Password = redisPassword,
             AllowAdmin = redisConfiguration.AllowAdmin,
             DefaultDatabase = redisConfiguration.Database,
             ConnectRetry = redisConfiguration.ConnectRetry,
             ConnectTimeout = redisConfiguration.ConnectTimeout,
+            AbortOnConnectFail = false,
             EndPoints = { $"{redisHost.Host}:{redisHost.Port}" }
         });
 

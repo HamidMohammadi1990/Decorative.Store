@@ -32,4 +32,19 @@ if [ -n "${WAIT_FOR_SQL_HOST:-}" ] && [ -n "${WAIT_FOR_SQL_PORT:-}" ]; then
   echo "[entrypoint] SQL is reachable"
 fi
 
+if [ -n "${WAIT_FOR_REDIS_HOST:-}" ] && [ -n "${WAIT_FOR_REDIS_PORT:-}" ]; then
+  echo "[entrypoint] waiting for Redis at ${WAIT_FOR_REDIS_HOST}:${WAIT_FOR_REDIS_PORT} ..."
+  i=0
+  max="${WAIT_FOR_REDIS_TIMEOUT:-60}"
+  while ! nc -z "${WAIT_FOR_REDIS_HOST}" "${WAIT_FOR_REDIS_PORT}" 2>/dev/null; do
+    i=$((i + 1))
+    if [ "$i" -ge "$max" ]; then
+      echo "[entrypoint] Redis not reachable after ${max}s"
+      exit 1
+    fi
+    sleep 1
+  done
+  echo "[entrypoint] Redis is reachable"
+fi
+
 exec gosu "${APP_USER}" "$@"
