@@ -23,6 +23,11 @@ RUN groupadd --system --gid 10001 appgroup \
 
 COPY --from=build /app/publish ./
 
+# Uploads are stored on a Docker volume at runtime; keep a copy for first-time volume seeding.
+RUN if [ -d ./wwwroot/Uploads ]; then \
+      mkdir -p /app/upload-seed && cp -a ./wwwroot/Uploads/. /app/upload-seed/; \
+    fi
+
 COPY deploy/api/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 

@@ -17,6 +17,13 @@ mkdir -p \
 
 chown -R "${APP_USER}:${APP_GROUP}" /app/wwwroot
 
+SEED_DIR=/app/upload-seed
+if [ -d "${SEED_DIR}" ] && [ -z "$(ls -A "${UPLOADS_ROOT}/Products" 2>/dev/null)" ]; then
+  echo "[entrypoint] uploads volume is empty — copying seed files from image ..."
+  cp -a "${SEED_DIR}/." "${UPLOADS_ROOT}/"
+  chown -R "${APP_USER}:${APP_GROUP}" "${UPLOADS_ROOT}"
+fi
+
 if [ -n "${WAIT_FOR_SQL_HOST:-}" ] && [ -n "${WAIT_FOR_SQL_PORT:-}" ]; then
   echo "[entrypoint] waiting for SQL at ${WAIT_FOR_SQL_HOST}:${WAIT_FOR_SQL_PORT} ..."
   i=0

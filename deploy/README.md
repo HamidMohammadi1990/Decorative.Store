@@ -115,7 +115,8 @@ docker run --rm -v decorative-store-api-uploads:/data -v "$PWD":/backup alpine \
 | API بالا نمی‌آید | `docker compose logs api` — اتصال SQL/Redis |
 | Migration | `Database__ApplyMigrationsOnStartup=true` در env |
 | CORS | `PUBLIC_SITE_URL` دقیقاً همان origin مرورگر |
-| فایل آپلود | volume `api_uploads` — دست نزنید به مسیر داخل image |
+| فایل آپلود | volume `api_uploads` — اولین بار از image seed می‌شود؛ بعداً فقط backup/restore |
+| تصویر لود نمی‌شود | `curl -I http://127.0.0.1:HTTP_PORT/Uploads/Products/…` — 404 یعنی فایل در volume نیست |
 
 ## دستورات مفید
 
