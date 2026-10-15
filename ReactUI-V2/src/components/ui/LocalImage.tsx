@@ -1,4 +1,4 @@
-import type { RefObject } from 'react'
+import { useEffect, useState, type RefObject } from 'react'
 import type { ImageAsset } from '@/models/shared/image.model'
 import { resolveHomeImageSrc } from '@/extensions/resolveHomeImage'
 import { useLazyImageSource } from '@/hooks/useLazyImageSource'
@@ -37,11 +37,23 @@ export function LocalImage({
   const resolvedLoading = loading ?? (priority ? 'eager' : 'lazy')
   const resolvedFetchPriority = fetchPriority ?? (priority ? 'high' : undefined)
   const src = resolveHomeImageSrc(image.src)
+  const [displaySrc, setDisplaySrc] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    setDisplaySrc(undefined)
+  }, [src])
   const { ref, resolvedSrc, isLoaded } = useLazyImageSource(src, {
     priority,
     rootMargin,
   })
-  const webpSrc = resolvedSrc ? webpCandidate(resolvedSrc) : null
+  const effectiveSrc = displaySrc ?? resolvedSrc
+  const webpSrc = effectiveSrc ? webpCandidate(effectiveSrc) : null
+
+  const onImgError = () => {
+    if (!effectiveSrc?.startsWith('/images/home/')) return
+    const svgFallback = effectiveSrc.replace(/\.(jpg|jpeg|png|webp)$/i, '.svg')
+    if (svgFallback !== effectiveSrc) setDisplaySrc(svgFallback)
+  }
 
   const imgClass = `${className}${!isLoaded ? ' bg-surface-muted animate-pulse' : ''}`.trim()
 
@@ -60,10 +72,22 @@ export function LocalImage({
     return (
       <picture>
         <source srcSet={webpSrc} type="image/webp" sizes={sizes} />
-        <img ref={ref as RefObject<HTMLImageElement>} {...imgProps} src={resolvedSrc} />
+        <img
+          ref={ref as RefObject<HTMLImageElement>}
+          {...imgProps}
+          src={effectiveSrc}
+          onError={onImgError}
+        />
       </picture>
     )
   }
 
-  return <img ref={ref as RefObject<HTMLImageElement>} {...imgProps} src={resolvedSrc} />
+  return (
+    <img
+      ref={ref as RefObject<HTMLImageElement>}
+      {...imgProps}
+      src={effectiveSrc}
+      onError={onImgError}
+    />
+  )
 }

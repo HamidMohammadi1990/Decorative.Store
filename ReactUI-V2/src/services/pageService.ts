@@ -22,7 +22,12 @@ export const pageService = {
 
     const request = apiPost<unknown>(PAGE_GET_BY_SLUG_PATH, { slug }, { locale })
       .then((data) => normalizeCmsPage(data))
-      .catch(() => null)
+      .catch((err) => {
+        if (import.meta.env.DEV) {
+          console.warn('[pageService] getBySlug failed:', slug, err)
+        }
+        return null
+      })
 
     pageRequests.set(key, request)
 

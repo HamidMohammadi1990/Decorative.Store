@@ -165,12 +165,16 @@ export default defineConfig(({ mode }) => {
           },
           {
             urlPattern: ({ url }) => url.pathname.startsWith('/Uploads/'),
-            handler: 'StaleWhileRevalidate',
+            handler: 'NetworkFirst',
             options: {
               cacheName: 'uploaded-media',
+              networkTimeoutSeconds: 8,
               expiration: {
                 maxEntries: 120,
                 maxAgeSeconds: 60 * 60 * 24 * 14,
+              },
+              cacheableResponse: {
+                statuses: [200],
               },
             },
           },

@@ -152,9 +152,8 @@ async function buildPage(
       const cmsPage = await loadCmsPage(locale, !skipHomeCatalogContent, cmsSlug)
       if (cmsPage) {
         page = applyCmsOnMock(mockPage, cmsPage)
-      } else {
-        page = { ...mockPage, hero: { slides: [] } }
       }
+      // CMS unavailable: keep mock hero/tiles (do not clear slides — that removes all imagery).
     }
 
     const staticNav = getStaticPrimaryNav(locale)
