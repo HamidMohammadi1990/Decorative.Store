@@ -218,10 +218,11 @@ public static partial class CmsSeedService
         string locale,
         CancellationToken cancellationToken)
     {
-        var jsonPath = Path.Combine(AppContext.BaseDirectory, "SeedData", "cms", $"{slug}.{locale}.json");
-        if (!File.Exists(jsonPath))
+        var fileName = $"{slug}.{locale}.json";
+        if (!Cms.CmsSeedFilePaths.JsonExists(fileName))
             return null;
 
+        var jsonPath = Cms.CmsSeedFilePaths.GetJsonPath(fileName);
         var json = await File.ReadAllTextAsync(jsonPath, cancellationToken);
         var page = JsonSerializer.Deserialize<CmsContentSeedDto>(json, JsonOptions);
         if (page is null)
@@ -230,10 +231,11 @@ public static partial class CmsSeedService
         if (page.Footer is not null)
             return page;
 
-        var chromePath = Path.Combine(AppContext.BaseDirectory, "SeedData", "cms", $"chrome.{locale}.json");
-        if (!File.Exists(chromePath))
+        var chromeFile = $"chrome.{locale}.json";
+        if (!Cms.CmsSeedFilePaths.JsonExists(chromeFile))
             return page;
 
+        var chromePath = Cms.CmsSeedFilePaths.GetJsonPath(chromeFile);
         var chromeJson = await File.ReadAllTextAsync(chromePath, cancellationToken);
         var chrome = JsonSerializer.Deserialize<CmsContentSeedDto>(chromeJson, JsonOptions);
         if (chrome is null)

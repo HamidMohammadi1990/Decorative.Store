@@ -456,13 +456,15 @@ public static partial class CmsSeedService
 
     {
 
-        var jsonPath = Path.Combine(AppContext.BaseDirectory, "SeedData", "cms", $"shop.{locale}.json");
+        var fileName = $"shop.{locale}.json";
 
-        if (!File.Exists(jsonPath))
+        if (!Cms.CmsSeedFilePaths.JsonExists(fileName))
 
             return null;
 
 
+
+        var jsonPath = Cms.CmsSeedFilePaths.GetJsonPath(fileName);
 
         var json = await File.ReadAllTextAsync(jsonPath, cancellationToken);
 
@@ -476,13 +478,15 @@ public static partial class CmsSeedService
 
     {
 
-        var jsonPath = Path.Combine(AppContext.BaseDirectory, "SeedData", "cms", $"blog.{locale}.json");
+        var fileName = $"blog.{locale}.json";
 
-        if (!File.Exists(jsonPath))
+        if (!Cms.CmsSeedFilePaths.JsonExists(fileName))
 
             return null;
 
 
+
+        var jsonPath = Cms.CmsSeedFilePaths.GetJsonPath(fileName);
 
         var json = await File.ReadAllTextAsync(jsonPath, cancellationToken);
 

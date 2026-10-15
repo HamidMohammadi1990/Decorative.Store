@@ -197,10 +197,11 @@ public static partial class CmsSeedService
 
     private static async Task<CmsAboutSeedDto?> LoadAboutContentAsync(string locale, CancellationToken cancellationToken)
     {
-        var jsonPath = Path.Combine(AppContext.BaseDirectory, "SeedData", "cms", $"about.{locale}.json");
-        if (!File.Exists(jsonPath))
+        var fileName = $"about.{locale}.json";
+        if (!Cms.CmsSeedFilePaths.JsonExists(fileName))
             return null;
 
+        var jsonPath = Cms.CmsSeedFilePaths.GetJsonPath(fileName);
         var json = await File.ReadAllTextAsync(jsonPath, cancellationToken);
         return JsonSerializer.Deserialize<CmsAboutSeedDto>(json, JsonOptions);
     }
