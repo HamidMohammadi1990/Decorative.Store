@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '@/config/api'
+import { toPublicUploadPath } from '@/utils/publicUploadUrl'
 import type { Locale } from '@/models/shared/locale.model'
 import { toAcceptLanguage } from '@/services/api/apiClient'
 import { normalizeApiEnvelope, readRecord, readStringField } from '@/services/api/apiNormalize'
@@ -19,10 +20,11 @@ export function normalizeCmsImageStorageValue(imageUrl: string | null | undefine
 
 export function resolveCmsImageSrc(imageUrl: string): string {
   if (!imageUrl) return ''
-  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
-  if (imageUrl.startsWith('/images/')) return imageUrl
-  if (imageUrl.startsWith('/Uploads/')) return imageUrl
-  return `/Uploads/Cms/${imageUrl.replace(/^\/+/, '')}`
+  const normalized = toPublicUploadPath(imageUrl)
+  if (normalized.startsWith('/images/')) return normalized
+  if (normalized.startsWith('/Uploads/')) return normalized
+  if (/^https?:\/\//i.test(normalized)) return normalized
+  return `/Uploads/Cms/${normalized.replace(/^\/+/, '')}`
 }
 
 async function uploadCmsImage(

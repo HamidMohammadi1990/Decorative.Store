@@ -15,7 +15,10 @@ export const HOME_IMAGE_PATHS = {
   commercialOffice: '/images/home/commercial-office',
 } as const
 
-/** Prefer JPEG when present (post-download); fall back to SVG placeholders */
-export function homeImageSrc(basePath: string, preferJpg = true): string {
-  return preferJpg ? `${basePath}.jpg` : `${basePath}.svg`
+/** Prefer JPEG only after `npm run download:images`; repo ships SVG placeholders. */
+export function homeImageSrc(basePath: string, preferJpg?: boolean): string {
+  const useJpg =
+    preferJpg ??
+    (import.meta.env.VITE_HOME_IMAGES_PREFER_JPG as string | undefined)?.trim() === 'true'
+  return useJpg ? `${basePath}.jpg` : `${basePath}.svg`
 }

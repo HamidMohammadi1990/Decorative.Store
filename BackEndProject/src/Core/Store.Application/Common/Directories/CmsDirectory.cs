@@ -9,10 +9,21 @@ public static class CmsDirectory
         if (string.IsNullOrWhiteSpace(imageName))
             return string.Empty;
 
-        if (imageName.StartsWith('/') || imageName.StartsWith("http", StringComparison.OrdinalIgnoreCase))
-            return imageName;
+        var normalized = PublicMediaUrl.NormalizeStoredPath(imageName);
+        if (string.IsNullOrWhiteSpace(normalized))
+            return string.Empty;
 
-        return $"{CmsImage.Replace("wwwroot", "")}/{imageName}";
+        if (normalized.StartsWith("/images/", StringComparison.OrdinalIgnoreCase))
+            return normalized;
+
+        if (normalized.StartsWith("/Uploads/", StringComparison.OrdinalIgnoreCase))
+            return normalized;
+
+        if (normalized.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
+            || normalized.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            return normalized;
+
+        return $"{CmsImage.Replace("wwwroot", "")}/{normalized}";
     }
 
     /// <summary>
@@ -23,6 +34,7 @@ public static class CmsDirectory
         if (string.IsNullOrWhiteSpace(imageUrl))
             return null;
 
-        return GetImageUrl(imageUrl.Trim());
+        var resolved = GetImageUrl(imageUrl);
+        return string.IsNullOrWhiteSpace(resolved) ? null : resolved;
     }
 }

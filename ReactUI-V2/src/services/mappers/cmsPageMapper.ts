@@ -12,6 +12,7 @@ function toLink(label: string, href: string): AppLink {
   return { label, href: href || '/' }
 }
 import { readRecord, readStringField } from '@/services/api/apiNormalize'
+import { resolveHomeImageSrc } from '@/extensions/resolveHomeImage'
 import { resolveCmsImageSrc } from '@/services/adminCmsMediaService'
 
 function readNumberField(record: Record<string, unknown>, ...keys: string[]) {
@@ -106,7 +107,7 @@ function resolveSectionTypeKey(sectionTypeName: string): string {
 
 function toImage(src: string | null | undefined, alt: string): ImageAsset {
   const trimmed = src?.trim()
-  if (!trimmed) return { src: '/images/home/living-room.jpg', alt }
+  if (!trimmed) return { src: resolveHomeImageSrc('/images/home/living-room.jpg'), alt }
   return { src: resolveCmsImageSrc(trimmed), alt }
 }
 

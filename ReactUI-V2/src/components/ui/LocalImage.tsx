@@ -1,5 +1,6 @@
 import type { RefObject } from 'react'
 import type { ImageAsset } from '@/models/shared/image.model'
+import { resolveHomeImageSrc } from '@/extensions/resolveHomeImage'
 import { useLazyImageSource } from '@/hooks/useLazyImageSource'
 
 interface LocalImageProps {
@@ -35,7 +36,8 @@ export function LocalImage({
 }: LocalImageProps) {
   const resolvedLoading = loading ?? (priority ? 'eager' : 'lazy')
   const resolvedFetchPriority = fetchPriority ?? (priority ? 'high' : undefined)
-  const { ref, resolvedSrc, isLoaded } = useLazyImageSource(image.src, {
+  const src = resolveHomeImageSrc(image.src)
+  const { ref, resolvedSrc, isLoaded } = useLazyImageSource(src, {
     priority,
     rootMargin,
   })
