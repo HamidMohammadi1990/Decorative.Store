@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '@/config/api'
+import { resolveHomeImageSrc } from '@/extensions/resolveHomeImage'
 import { toPublicUploadPath } from '@/utils/publicUploadUrl'
 import type { Locale } from '@/models/shared/locale.model'
 import { toAcceptLanguage } from '@/services/api/apiClient'
@@ -21,7 +22,7 @@ export function normalizeCmsImageStorageValue(imageUrl: string | null | undefine
 export function resolveCmsImageSrc(imageUrl: string): string {
   if (!imageUrl) return ''
   const normalized = toPublicUploadPath(imageUrl)
-  if (normalized.startsWith('/images/')) return normalized
+  if (normalized.startsWith('/images/')) return resolveHomeImageSrc(normalized)
   if (normalized.startsWith('/Uploads/')) return normalized
   if (/^https?:\/\//i.test(normalized)) return normalized
   return `/Uploads/Cms/${normalized.replace(/^\/+/, '')}`
