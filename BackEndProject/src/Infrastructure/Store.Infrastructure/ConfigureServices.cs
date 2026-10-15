@@ -23,11 +23,21 @@ public static class ConfigureServices
     public static IServiceCollection RegisterInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpClient();
-        var redisConfiguration = configuration.GetSection("RedisConfiguration").Get<RedisConfiguration>();
-        var redisHost = (redisConfiguration?.Hosts.FirstOrDefault())
-                ?? throw new NullReferenceException($"{nameof(RedisConfiguration.Hosts)} is null in redis configuration!");
+        var redisConfiguration = configuration.GetSection("RedisConfiguration").Get<RedisConfiguration>()
+            ?? new RedisConfiguration();
+        var redisHost = redisConfiguration.Hosts.FirstOrDefault() ?? new RedisHost();
 
-        var redisPassword = configuration["RedisConfiguration:Password"] ?? redisConfiguration.Password;
+        // Env / Docker (RedisConfiguration__Hosts__0__Host) beats appsettings.json (127.0.0.1).
+        var host =
+            configuration["RedisConfiguration:Hosts:0:Host"]
+            ?? configuration["WAIT_FOR_REDIS_HOST"]
+            ?? configuration["REDIS_HOST"]
+            ?? redisHost.Host;
+        var port = configuration.GetValue("RedisConfiguration:Hosts:0:Port", redisHost.Port);
+        var redisPassword =
+            configuration["RedisConfiguration:Password"]
+            ?? configuration["REDIS_PASSWORD"]
+            ?? redisConfiguration.Password;
 
         var multiplexer = ConnectionMultiplexer.Connect(new ConfigurationOptions
         {
@@ -38,7 +48,7 @@ public static class ConfigureServices
             ConnectRetry = redisConfiguration.ConnectRetry,
             ConnectTimeout = redisConfiguration.ConnectTimeout,
             AbortOnConnectFail = false,
-            EndPoints = { $"{redisHost.Host}:{redisHost.Port}" }
+            EndPoints = { $"{host}:{port}" }
         });
 
         services.AddSingleton<IImageService, ImageService>();

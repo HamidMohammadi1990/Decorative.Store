@@ -72,6 +72,8 @@ services:
       Database__SeedPermissionsOnStartup: ${DATABASE_SEED_PERMISSIONS:-false}
       ConnectionStrings__EditionDbContext: Server=sqlserver,1433;Database=${MSSQL_DATABASE:-DecorativeStoreDB};User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;Encrypt=True;MultipleActiveResultSets=True
       Serilog__Configuration__SQLConnectionString: Server=sqlserver,1433;Database=${MSSQL_DATABASE:-DecorativeStoreDB};User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True;Encrypt=True;MultipleActiveResultSets=True
+      REDIS_HOST: redis
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
       RedisConfiguration__Hosts__0__Host: redis
       RedisConfiguration__Hosts__0__Port: "6379"
       RedisConfiguration__Password: ${REDIS_PASSWORD}
