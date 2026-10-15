@@ -92,6 +92,7 @@ services:
       args:
         SSR_API_TARGET: http://api:8080
         VITE_SITE_URL: ${PUBLIC_SITE_URL}
+        VITE_BLOCK_SEARCH_INDEXING: ${BLOCK_SEARCH_INDEXING:-true}
     restart: unless-stopped
     depends_on:
       api:
@@ -102,6 +103,7 @@ services:
       PORT: "3000"
       SSR_API_TARGET: http://api:8080
       VITE_SITE_URL: ${PUBLIC_SITE_URL}
+      BLOCK_SEARCH_INDEXING: ${BLOCK_SEARCH_INDEXING:-true}
     networks:
       - internal
     expose:

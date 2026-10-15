@@ -4,6 +4,16 @@
 
 **روش پیشنهادی:** سورس را روی سرور ببرید (Git یا rsync) و **build داخل Docker روی لینوکس** — نه build روی ویندوز و کپی `dist`/`bin`. یک `docker compose up --build` هر دو سرویس را می‌سازد.
 
+### جلوگیری از ایندکس (قبل از لانچ)
+
+در `.env`: `BLOCK_SEARCH_INDEXING=true` (پیش‌فرض در `.env.example`). بعد از آماده شدن سایت:
+
+```env
+BLOCK_SEARCH_INDEXING=false
+```
+
+سپس `docker compose --env-file .env up -d --build web` (build دوباره برای embed شدن فلگ در کلاینت).
+
 ## معماری
 
 ```text

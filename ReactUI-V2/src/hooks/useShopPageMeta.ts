@@ -15,6 +15,7 @@ import { setPageMetaDefaults } from '@/seo/pageMetaManager'
 import { stripLocaleHintFromPath } from '@/seo/canonicalPath'
 import { buildHreflangAlternates } from '@/seo/hreflang'
 import { OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH } from '@/seo/ogConstants'
+import { resolvePageNoindex } from '@/config/searchIndexing'
 
 interface UseShopPageMetaOptions {
   title?: string
@@ -76,6 +77,8 @@ export function useShopPageMeta(options: UseShopPageMetaOptions = {}) {
       title ?? t('common.brandName', { defaultValue: 'Diba Gallery' }),
       locale,
     )
+    const resolvedNoindex = resolvePageNoindex(noindex)
+
     const resolvedDescription =
       description?.trim() || DEFAULT_DESCRIPTION[locale]
     const rawPath = path ?? `${location.pathname}${location.search}`
@@ -93,7 +96,7 @@ export function useShopPageMeta(options: UseShopPageMetaOptions = {}) {
       imageHeight,
       type,
       locale,
-      noindex,
+      noindex: resolvedNoindex,
       jsonLd,
       keywords,
       author,
@@ -101,7 +104,7 @@ export function useShopPageMeta(options: UseShopPageMetaOptions = {}) {
       modifiedTime,
       productPrice,
       productCurrency,
-      alternates: noindex ? undefined : buildHreflangAlternates(rawPath),
+      alternates: resolvedNoindex ? undefined : buildHreflangAlternates(rawPath),
     }
   }, [
     active,

@@ -20,6 +20,16 @@ const host = process.env.HOST ?? '127.0.0.1'
 const apiTarget = process.env.SSR_API_TARGET ?? 'https://localhost:60927'
 configureSsrTlsForLocalApi(apiTarget)
 
+function isSearchIndexingBlocked() {
+  const raw = process.env.BLOCK_SEARCH_INDEXING ?? process.env.VITE_BLOCK_SEARCH_INDEXING ?? ''
+  const v = String(raw).trim().toLowerCase()
+  return v === 'true' || v === '1' || v === 'yes'
+}
+
+const ROBOTS_TXT_BLOCK = `User-agent: *
+Disallow: /
+`
+
 function isBuiltStaticAsset(pathname) {
   if (!pathname || pathname.endsWith('.html')) return false
   if (
@@ -75,6 +85,15 @@ function injectRenderedHtml(template, { html = '', headHtml = '', hydrationScrip
 async function createSsrServer() {
   const app = express()
   app.use(compression())
+
+  app.use((req, res, next) => {
+    if (req.method !== 'GET' && req.method !== 'HEAD') return next()
+    if (req.path !== '/robots.txt') return next()
+    if (!isSearchIndexingBlocked()) return next()
+    res.type('text/plain; charset=utf-8')
+    res.setHeader('Cache-Control', 'public, max-age=300')
+    return res.send(ROBOTS_TXT_BLOCK)
+  })
 
   if (!process.env.SSR_API_TARGET) {
     console.warn(
@@ -184,10 +203,12 @@ async function createSsrServer() {
         result.locale,
       )
 
-      res
-        .status(result.status ?? 200)
-        .set({ 'Content-Type': 'text/html; charset=utf-8' })
-        .end(html)
+      const headers = { 'Content-Type': 'text/html; charset=utf-8' }
+      if (isSearchIndexingBlocked()) {
+        headers['X-Robots-Tag'] = 'noindex, nofollow'
+      }
+
+      res.status(result.status ?? 200).set(headers).end(html)
     } catch (error) {
       if (!isProd && vite) vite.ssrFixStacktrace(error)
       next(error)
