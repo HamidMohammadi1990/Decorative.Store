@@ -84,7 +84,7 @@ function mapContactFormIntro(section: CmsPageSection): ContactPageContent['formI
   return {
     heading: section.title,
     lead: section.description ?? undefined,
-    email: section.url?.trim() || 'support@dibagallery.com',
+    email: section.url?.trim() || 'support@sarvhome.com',
     note: noteItem?.description?.trim() || undefined,
   }
 }

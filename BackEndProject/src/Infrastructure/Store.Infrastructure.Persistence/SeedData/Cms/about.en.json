@@ -13,7 +13,7 @@
     ]
   },
   "header": {
-    "brandLabel": "Diba Gallery",
+    "brandLabel": "Sarv Home",
     "searchPlaceholder": "Search furniture, rugs, lighting…",
     "accountLabel": "Sign In",
     "cartLabel": "Cart"
@@ -49,14 +49,14 @@
         "title": "Design services",
         "links": [
           { "label": "Meet with design crew", "href": "/design-services" },
-          { "label": "Diba Gallery TRADE", "href": "/trade" }
+          { "label": "Sarv Home TRADE", "href": "/trade" }
         ]
       }
     ],
     "newsletterTitle": "Exclusive sales & new arrivals",
     "newsletterPlaceholder": "Email address",
     "newsletterButton": "Join",
-    "copyright": "© 2026 Diba Gallery. All Rights Reserved",
+    "copyright": "© 2026 Sarv Home. All Rights Reserved",
     "legalLinks": [
       { "label": "Terms & Conditions", "href": "/terms" },
       { "label": "Privacy Policy", "href": "/privacy" },
@@ -72,7 +72,7 @@
   },
   "aboutStory": {
     "heading": "Our story",
-    "lead": "Diba Gallery began with a simple belief: every home deserves pieces that are beautiful, durable, and made with care.",
+    "lead": "Sarv Home began with a simple belief: every home deserves pieces that are beautiful, durable, and made with care.",
     "paragraphs": [
       "What started as a small showroom has grown into a destination for design-led living — from handcrafted sofas and artisan rugs to statement lighting and finishing touches that complete a room.",
       "We partner with makers who share our standards for quality and sustainability. Every collection is chosen for how it looks, how it feels, and how it lasts — season after season."

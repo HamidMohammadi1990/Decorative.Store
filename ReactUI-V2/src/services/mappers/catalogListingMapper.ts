@@ -10,9 +10,8 @@ import { CHECKBOX_FILTER_KEYS, LISTING_QUERY_RESERVED_KEYS } from '@/extensions/
 
 function resolveProductImageSrc(imageUrl: string): string {
   if (!imageUrl) return ''
-  const path = toPublicUploadPath(imageUrl)
-  if (/^https?:\/\//i.test(path)) return path
-  return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`
+  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
+  return `${API_BASE_URL}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`
 }
 
 function toSubcategorySegment(subCategorySlug: string): string | undefined {

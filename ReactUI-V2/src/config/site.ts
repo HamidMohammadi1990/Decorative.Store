@@ -1,6 +1,6 @@
 import type { Locale } from '@/models/shared/locale.model'
 
-export const SITE_NAME = 'Diba Gallery'
+export const SITE_NAME = 'Sarv Home'
 
 export const SITE_TAGLINE: Record<Locale, string> = {
   en: 'Contemporary Furniture & Interiors',
@@ -12,7 +12,7 @@ export const DEFAULT_DESCRIPTION: Record<Locale, string> = {
   fa: 'خرید مبلمان معاصر، فرش و دکوراسیون منزل. کالکشن‌های طراحی‌شده، چیدمان اتاق و الهام دکوراسیون.',
 }
 
-/** Public storefront origin — set VITE_SITE_URL in production (e.g. https://dibagallery.com). */
+/** Public storefront origin — set VITE_SITE_URL in production (e.g. https://sarvhome.com). */
 export function getSiteOrigin(): string {
   const configured = (import.meta.env.VITE_SITE_URL as string | undefined)?.trim()
   if (configured) return configured.replace(/\/+$/, '')
@@ -34,4 +34,4 @@ export function buildPageTitle(title: string | undefined, locale: Locale): strin
 
 export const DEFAULT_OG_IMAGE = '/images/home/living-room.jpg'
 
-export const TWITTER_HANDLE = '@dibagallery'
+export const TWITTER_HANDLE = '@sarvhhome'

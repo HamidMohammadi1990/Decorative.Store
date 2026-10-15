@@ -1,6 +1,6 @@
 # راهنمای انتشار (Publish)
 
-چک‌لیست کوتاه برای deploy فروشگاه **Diba Gallery** — فرانت React + API دات‌نت.
+چک‌لیست کوتاه برای deploy فروشگاه **Sarv Home** — فرانت React + API دات‌نت.
 
 ---
 

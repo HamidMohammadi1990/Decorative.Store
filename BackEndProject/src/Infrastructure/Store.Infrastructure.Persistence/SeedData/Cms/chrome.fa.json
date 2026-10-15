@@ -13,7 +13,7 @@
     ]
   },
   "header": {
-    "brandLabel": "دیبا گالری",
+    "brandLabel": "خانه سرو",
     "searchPlaceholder": "جستجوی مبلمان، فرش، روشنایی…",
     "accountLabel": "ورود",
     "cartLabel": "سبد خرید"
@@ -49,14 +49,14 @@
         "title": "خدمات طراحی",
         "links": [
           { "label": "ملاقات با تیم طراحی", "href": "/design-services" },
-          { "label": "دیبا گالری TRADE", "href": "/trade" }
+          { "label": "خانه سرو TRADE", "href": "/trade" }
         ]
       }
     ],
     "newsletterTitle": "حراج‌ها و محصولات جدید",
     "newsletterPlaceholder": "آدرس ایمیل",
     "newsletterButton": "عضویت",
-    "copyright": "© ۱۴۰۵ دیبا گالری. تمامی حقوق محفوظ است",
+    "copyright": "© ۱۴۰۵ خانه سرو. تمامی حقوق محفوظ است",
     "legalLinks": [
       { "label": "شرایط و ضوابط", "href": "/terms" },
       { "label": "حریم خصوصی", "href": "/privacy" },

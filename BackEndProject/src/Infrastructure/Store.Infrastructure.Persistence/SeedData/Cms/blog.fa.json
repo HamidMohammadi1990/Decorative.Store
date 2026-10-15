@@ -13,7 +13,7 @@
     ]
   },
   "header": {
-    "brandLabel": "دیبا گالری",
+    "brandLabel": "خانه سرو",
     "searchPlaceholder": "جستجوی مقالات و ایده‌ها…",
     "accountLabel": "ورود",
     "cartLabel": "سبد خرید"
@@ -50,7 +50,7 @@
         "title": "خدمات طراحی",
         "links": [
           { "label": "ملاقات با تیم طراحی", "href": "/design-services" },
-          { "label": "دیبا گالری TRADE", "href": "/trade" }
+          { "label": "خانه سرو TRADE", "href": "/trade" }
         ]
       }
     ],

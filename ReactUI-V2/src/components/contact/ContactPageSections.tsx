@@ -190,7 +190,7 @@ export function ContactFormSection({ data }: { data: ContactFormIntro }) {
 
     setSubmitting(true)
     try {
-      const recipient = data.email.trim() || 'support@dibagallery.com'
+      const recipient = data.email.trim() || 'support@sarvhome.com'
       const body = [
         `${t('contactPage.form.name')}: ${form.name.trim()}`,
         `${t('contactPage.form.email')}: ${form.email.trim()}`,

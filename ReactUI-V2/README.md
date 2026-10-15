@@ -1,6 +1,6 @@
-# Diba Gallery — Frontend (Phase 1)
+# Sarv Home — Frontend (Phase 1)
 
-React storefront for Diba Gallery, with a flatter, modern UI.
+React storefront for Sarv Home, with a flatter, modern UI.
 
 ## Stack
 

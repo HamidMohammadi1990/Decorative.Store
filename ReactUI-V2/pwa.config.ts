@@ -1,7 +1,7 @@
 /** Shared PWA manifest values (used by Vite PWA plugin). */
 export const PWA = {
-  name: 'Diba Gallery',
-  shortName: 'Diba Gallery',
+  name: 'Sarv Home',
+  shortName: 'Sarv Home',
   description:
     'Shop contemporary furniture, rugs, and home décor. Design-led collections and interior inspiration.',
   themeColor: '#9a7448',

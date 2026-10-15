@@ -74,7 +74,7 @@ export function useShopPageMeta(options: UseShopPageMetaOptions = {}) {
     if (!active) return null
 
     const resolvedTitle = buildPageTitle(
-      title ?? t('common.brandName', { defaultValue: 'Diba Gallery' }),
+      title ?? t('common.brandName', { defaultValue: 'Sarv Home' }),
       locale,
     )
     const resolvedNoindex = resolvePageNoindex(noindex)

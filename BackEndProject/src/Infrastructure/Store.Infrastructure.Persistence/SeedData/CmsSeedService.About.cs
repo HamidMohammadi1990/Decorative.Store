@@ -55,14 +55,14 @@ public static partial class CmsSeedService
                 faLanguage.Id,
                 "درباره ما",
                 "about",
-                "درباره دیبا گالری",
-                "داستان، ارزش‌ها و تیم دیبا گالری — فروشگاه مبلمان و دکوراسیون.");
+                "درباره خانه سرو",
+                "داستان، ارزش‌ها و تیم خانه سرو — فروشگاه مبلمان و دکوراسیون.");
 
             page.UpsertTranslation(
                 enLanguage.Id,
                 "About Us",
                 "about",
-                "About Diba Gallery",
+                "About Sarv Home",
                 "Our story, values, and team — a design-led furniture and home décor destination.");
 
             await context.SaveChangesAsync(cancellationToken);
@@ -77,14 +77,14 @@ public static partial class CmsSeedService
                 faLanguage.Id,
                 "درباره ما",
                 "about",
-                "درباره دیبا گالری",
-                "داستان، ارزش‌ها و تیم دیبا گالری — فروشگاه مبلمان و دکوراسیون.");
+                "درباره خانه سرو",
+                "داستان، ارزش‌ها و تیم خانه سرو — فروشگاه مبلمان و دکوراسیون.");
 
             page.UpsertTranslation(
                 enLanguage.Id,
                 "About Us",
                 "about",
-                "About Diba Gallery",
+                "About Sarv Home",
                 "Our story, values, and team — a design-led furniture and home décor destination.");
 
             await context.SaveChangesAsync(cancellationToken);

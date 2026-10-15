@@ -13,7 +13,7 @@
     ]
   },
   "header": {
-    "brandLabel": "دیبا گالری",
+    "brandLabel": "خانه سرو",
     "searchPlaceholder": "جستجوی مبلمان، فرش، روشنایی…",
     "accountLabel": "ورود",
     "cartLabel": "سبد خرید"
@@ -49,14 +49,14 @@
         "title": "خدمات طراحی",
         "links": [
           { "label": "ملاقات با تیم طراحی", "href": "/design-services" },
-          { "label": "دیبا گالری TRADE", "href": "/trade" }
+          { "label": "خانه سرو TRADE", "href": "/trade" }
         ]
       }
     ],
     "newsletterTitle": "حراج‌ها و محصولات جدید",
     "newsletterPlaceholder": "آدرس ایمیل",
     "newsletterButton": "عضویت",
-    "copyright": "© ۱۴۰۵ دیبا گالری. تمامی حقوق محفوظ است",
+    "copyright": "© ۱۴۰۵ خانه سرو. تمامی حقوق محفوظ است",
     "legalLinks": [
       { "label": "شرایط و ضوابط", "href": "/terms" },
       { "label": "حریم خصوصی", "href": "/privacy" },
@@ -81,7 +81,7 @@
         "id": "email",
         "title": "ایمیل",
         "description": "پاسخ در کمتر از یک روز کاری",
-        "href": "mailto:support@dibagallery.com"
+        "href": "mailto:support@sarvhome.com"
       },
       {
         "id": "chat",
@@ -123,7 +123,7 @@
   "contactFormIntro": {
     "heading": "ارسال پیام",
     "lead": "فرم را پر کنید تا در اسرع وقت پاسخ دهیم.",
-    "email": "support@dibagallery.com",
+    "email": "support@sarvhome.com",
     "note": "برای مسائل فوری سفارش، لطفاً تماس بگیرید تا سریع‌تر راهنمایی شوید."
   }
 }

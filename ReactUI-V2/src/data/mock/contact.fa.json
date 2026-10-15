@@ -1,8 +1,8 @@
 {
   "slug": "contact",
   "title": "تماس با ما",
-  "metaTitle": "تماس با دیبا گالری",
-  "metaDescription": "پشتیبانی، شعب و راه‌های ارتباط با تیم دیبا گالری.",
+  "metaTitle": "تماس با خانه سرو",
+  "metaDescription": "پشتیبانی، شعب و راه‌های ارتباط با تیم خانه سرو.",
   "hero": {
     "eyebrow": "در کنار شما هستیم",
     "title": "تماس با ما",
@@ -21,7 +21,7 @@
         "id": "email",
         "title": "ایمیل",
         "description": "پاسخ در کمتر از یک روز کاری",
-        "href": "mailto:support@dibagallery.com"
+        "href": "mailto:support@sarvhome.com"
       },
       {
         "id": "chat",
@@ -63,7 +63,7 @@
   "formIntro": {
     "heading": "ارسال پیام",
     "lead": "فرم را پر کنید تا در اسرع وقت پاسخ دهیم.",
-    "email": "support@dibagallery.com",
+    "email": "support@sarvhome.com",
     "note": "برای مسائل فوری سفارش، لطفاً تماس بگیرید تا سریع‌تر راهنمایی شوید."
   }
 }

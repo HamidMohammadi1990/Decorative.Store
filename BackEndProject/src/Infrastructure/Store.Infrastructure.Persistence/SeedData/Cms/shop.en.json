@@ -13,7 +13,7 @@
     ]
   },
   "header": {
-    "brandLabel": "Diba Gallery",
+    "brandLabel": "Sarv Home",
     "searchPlaceholder": "Search furniture, rugs, lighting…",
     "accountLabel": "Sign In",
     "cartLabel": "Cart",
@@ -169,7 +169,7 @@
         "title": "Design services",
         "links": [
           { "label": "Meet with design crew", "href": "/design-services" },
-          { "label": "Diba Gallery TRADE", "href": "/trade" }
+          { "label": "Sarv Home TRADE", "href": "/trade" }
         ]
       }
     ],

@@ -55,14 +55,14 @@ public static partial class CmsSeedService
                 faLanguage.Id,
                 "تماس با ما",
                 "contact",
-                "تماس با دیبا گالری",
-                "پشتیبانی، شعب و راه‌های ارتباط با تیم دیبا گالری.");
+                "تماس با خانه سرو",
+                "پشتیبانی، شعب و راه‌های ارتباط با تیم خانه سرو.");
 
             page.UpsertTranslation(
                 enLanguage.Id,
                 "Contact Us",
                 "contact",
-                "Contact Diba Gallery",
+                "Contact Sarv Home",
                 "Support, store locations, and ways to reach our team.");
 
             await context.SaveChangesAsync(cancellationToken);
@@ -77,14 +77,14 @@ public static partial class CmsSeedService
                 faLanguage.Id,
                 "تماس با ما",
                 "contact",
-                "تماس با دیبا گالری",
-                "پشتیبانی، شعب و راه‌های ارتباط با تیم دیبا گالری.");
+                "تماس با خانه سرو",
+                "پشتیبانی، شعب و راه‌های ارتباط با تیم خانه سرو.");
 
             page.UpsertTranslation(
                 enLanguage.Id,
                 "Contact Us",
                 "contact",
-                "Contact Diba Gallery",
+                "Contact Sarv Home",
                 "Support, store locations, and ways to reach our team.");
 
             await context.SaveChangesAsync(cancellationToken);

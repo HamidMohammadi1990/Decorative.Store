@@ -22,10 +22,10 @@
     },
     {
       "id": "a3",
-      "name": "Diba Gallery Studio",
+      "name": "Sarv Home Studio",
       "role": "Editorial Team",
-      "avatar": { "src": "/images/home/dining.jpg", "alt": "Diba Gallery Studio" },
-      "bio": "Stories from our design studio — seasonal ideas, care guides, and inspiration from the Diba Gallery community."
+      "avatar": { "src": "/images/home/dining.jpg", "alt": "Sarv Home Studio" },
+      "bio": "Stories from our design studio — seasonal ideas, care guides, and inspiration from the Sarv Home community."
     }
   ],
   "posts": [

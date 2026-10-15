@@ -1,4 +1,4 @@
-# Deploy — Diba Gallery (Docker)
+# Deploy — Sarv Home (Docker)
 
 استقرار production روی VPS لینوکس با Docker Compose: **SQL Server**، **Redis**، **API (`BackEndProject`)**، **فرانت SSR (`ReactUI-V2`)** و **Nginx**.
 

@@ -1,7 +1,7 @@
 {
   "slug": "contact",
   "title": "Contact Us",
-  "metaTitle": "Contact Diba Gallery",
+  "metaTitle": "Contact Sarv Home",
   "metaDescription": "Support, store locations, and ways to reach our team.",
   "hero": {
     "eyebrow": "We're here to help",
@@ -21,7 +21,7 @@
         "id": "email",
         "title": "Email",
         "description": "We reply within one business day",
-        "href": "mailto:support@dibagallery.com"
+        "href": "mailto:support@sarvhome.com"
       },
       {
         "id": "chat",
@@ -63,7 +63,7 @@
   "formIntro": {
     "heading": "Send us a message",
     "lead": "Fill in the form and we'll get back to you as soon as we can.",
-    "email": "support@dibagallery.com",
+    "email": "support@sarvhome.com",
     "note": "For urgent order issues, please call us so we can help faster."
   }
 }
