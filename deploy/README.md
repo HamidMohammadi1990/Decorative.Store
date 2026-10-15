@@ -1,6 +1,8 @@
 # Deploy — Diba Gallery (Docker)
 
-استقرار production روی VPS لینوکس با Docker Compose: **SQL Server**، **Redis**، **API (.NET)**، **فرانت SSR (Node)** و **Nginx** به‌عنوان reverse proxy.
+استقرار production روی VPS لینوکس با Docker Compose: **SQL Server**، **Redis**، **API (`BackEndProject`)**، **فرانت SSR (`ReactUI-V2`)** و **Nginx**.
+
+**روش پیشنهادی:** سورس را روی سرور ببرید (Git یا rsync) و **build داخل Docker روی لینوکس** — نه build روی ویندوز و کپی `dist`/`bin`. یک `docker compose up --build` هر دو سرویس را می‌سازد.
 
 ## معماری
 
@@ -72,7 +74,9 @@ DATABASE_SEED_PERMISSIONS=false
 docker compose up -d api
 ```
 
-6. سایت: `http://SERVER_IP` — API health: `http://SERVER_IP/health`
+6. سایت: `http://SERVER_IP:HTTP_PORT` (مثلاً `http://185.213.167.240:3031`) — health: همان آدرس + `/health`
+
+> **فایروال:** `sudo ufw allow 3031/tcp` (یا پورت `HTTP_PORT` شما)
 
 ## HTTPS (بعد از DNS)
 

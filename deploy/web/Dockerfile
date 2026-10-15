@@ -3,10 +3,10 @@
 FROM node:22-bookworm-slim AS build
 WORKDIR /app
 
-COPY ReactUI/package.json ReactUI/package-lock.json* ./
+COPY ReactUI-V2/package.json ReactUI-V2/package-lock.json* ./
 RUN npm ci
 
-COPY ReactUI/ ./
+COPY ReactUI-V2/ ./
 
 ARG SSR_API_TARGET=http://api:8080
 ARG VITE_SITE_URL=http://localhost

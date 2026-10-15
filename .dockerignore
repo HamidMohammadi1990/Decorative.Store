@@ -11,6 +11,8 @@
 **/*.log
 ReactUI/dist
 ReactUI/node_modules
+ReactUI-V2/dist
+ReactUI-V2/node_modules
 BackEndProject/**/bin
 BackEndProject/**/obj
 deploy/.env
