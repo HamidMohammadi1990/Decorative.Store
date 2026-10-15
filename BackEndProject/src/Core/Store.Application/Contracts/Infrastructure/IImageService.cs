@@ -6,5 +6,5 @@ namespace Edition.Application.Contracts.Infrastructure;
 
 public interface IImageService
 {
-    Task<OperationResult<ImageInspectorResultDto>> GetImageMetaDataAsync(IFormFile file);
+    //Task<OperationResult<ImageInspectorResultDto>> GetImageMetaDataAsync(IFormFile file);
 }

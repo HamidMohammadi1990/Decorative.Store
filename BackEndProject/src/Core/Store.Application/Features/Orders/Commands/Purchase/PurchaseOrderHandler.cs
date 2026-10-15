@@ -161,60 +161,60 @@ public class PurchaseOrderHandler
                 AddError($"File_{attachment.Id}", MessageKeys.InvalidAttachmentFileSize);
             }
 
-            var imageMetaData = await imageService.GetImageMetaDataAsync(attachment.File);
-            if (!imageMetaData.IsSuccess)
-            {
-                AddError($"File_{attachment.Id}", MessageKeys.InvalidUploadedAttachmentFile);
-                continue;
-            }
+            //var imageMetaData = await imageService.GetImageMetaDataAsync(attachment.File);
+            //if (!imageMetaData.IsSuccess)
+            //{
+            //    AddError($"File_{attachment.Id}", MessageKeys.InvalidUploadedAttachmentFile);
+            //    continue;
+            //}
 
-            var metaDataResult = imageMetaData.Result!;
-            if (metaDataResult.Width < attachmentRestriction.MinWidth)
-            {
-                AddError($"File_{attachment.Id}", MessageKeys.ImageWidthBelowMinimum);
-            }
-            if (metaDataResult.Width > attachmentRestriction.MaxWidth)
-            {
-                AddError($"File_{attachment.Id}", MessageKeys.ImageWidthAboveMaximum);
-            }
-
-
-            if (metaDataResult.Height < attachmentRestriction.MinHeight)
-            {
-                AddError($"File_{attachment.Id}", MessageKeys.ImageHeightBelowMinimum);
-            }
-            if (metaDataResult.Height > attachmentRestriction.MaxHeight)
-            {
-                AddError($"File_{attachment.Id}", MessageKeys.ImageHeightAboveMaximum);
-            }
+            //var metaDataResult = imageMetaData.Result!;
+            //if (metaDataResult.Width < attachmentRestriction.MinWidth)
+            //{
+            //    AddError($"File_{attachment.Id}", MessageKeys.ImageWidthBelowMinimum);
+            //}
+            //if (metaDataResult.Width > attachmentRestriction.MaxWidth)
+            //{
+            //    AddError($"File_{attachment.Id}", MessageKeys.ImageWidthAboveMaximum);
+            //}
 
 
-            if (metaDataResult.HorizontalResolution < attachmentRestriction.MinHorizontalResolution)
-            {
-                AddError($"File_{attachment.Id}", MessageKeys.ImageHorizontalResolutionBelowMinimum);
-            }
-            if (metaDataResult.HorizontalResolution > attachmentRestriction.MaxHorizontalResolution)
-            {
-                AddError($"File_{attachment.Id}", MessageKeys.ImageHorizontalResolutionAboveMaximum);
-            }
+            //if (metaDataResult.Height < attachmentRestriction.MinHeight)
+            //{
+            //    AddError($"File_{attachment.Id}", MessageKeys.ImageHeightBelowMinimum);
+            //}
+            //if (metaDataResult.Height > attachmentRestriction.MaxHeight)
+            //{
+            //    AddError($"File_{attachment.Id}", MessageKeys.ImageHeightAboveMaximum);
+            //}
 
 
-            if (metaDataResult.VerticalResolution < attachmentRestriction.MinVerticalResolution)
-            {
-                AddError($"File_{attachment.Id}", MessageKeys.ImageVerticalResolutionBelowMinimum);
-            }
-            if (metaDataResult.VerticalResolution > attachmentRestriction.MaxVerticalResolution)
-            {
-                AddError($"File_{attachment.Id}", MessageKeys.ImageVerticalResolutionAboveMaximum);
-            }
+            //if (metaDataResult.HorizontalResolution < attachmentRestriction.MinHorizontalResolution)
+            //{
+            //    AddError($"File_{attachment.Id}", MessageKeys.ImageHorizontalResolutionBelowMinimum);
+            //}
+            //if (metaDataResult.HorizontalResolution > attachmentRestriction.MaxHorizontalResolution)
+            //{
+            //    AddError($"File_{attachment.Id}", MessageKeys.ImageHorizontalResolutionAboveMaximum);
+            //}
 
-            if (attachmentRestriction.ColorMode is PictureColorModeType.All)
-                continue;
 
-            if (metaDataResult.ColorMode != attachmentRestriction.ColorMode)
-            {
-                AddError($"File_{attachment.Id}", MessageKeys.InvalidImageColorMode);
-            }
+            //if (metaDataResult.VerticalResolution < attachmentRestriction.MinVerticalResolution)
+            //{
+            //    AddError($"File_{attachment.Id}", MessageKeys.ImageVerticalResolutionBelowMinimum);
+            //}
+            //if (metaDataResult.VerticalResolution > attachmentRestriction.MaxVerticalResolution)
+            //{
+            //    AddError($"File_{attachment.Id}", MessageKeys.ImageVerticalResolutionAboveMaximum);
+            //}
+
+            //if (attachmentRestriction.ColorMode is PictureColorModeType.All)
+            //    continue;
+
+            //if (metaDataResult.ColorMode != attachmentRestriction.ColorMode)
+            //{
+            //    AddError($"File_{attachment.Id}", MessageKeys.InvalidImageColorMode);
+            //}
         }
 
         return [.. errors];

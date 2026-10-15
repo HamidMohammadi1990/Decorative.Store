@@ -18,7 +18,6 @@
 		<PackageReference Include="Microsoft.Extensions.Identity.Core" />
 		<PackageReference Include="Serilog.Sinks.Async" />
 		<PackageReference Include="StackExchange.Redis" />
-		<PackageReference Include="SixLabors.ImageSharp" />
 		<PackageReference Include="Serilog.Enrichers.Thread" />
 		<PackageReference Include="Microsoft.Extensions.Http" />
 		<PackageReference Include="Serilog.Sinks.MSSqlServer" />
