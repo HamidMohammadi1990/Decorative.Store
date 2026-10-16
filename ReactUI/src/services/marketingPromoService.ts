@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/config/api'
+import { API_BASE_URL, resolvePublicMediaUrl } from '@/config/api'
 import type {
   AdminMarketingPromo,
   CreateAdminMarketingPromoInput,
@@ -25,11 +25,11 @@ const PUBLIC_BASE = '/api/v1/marketing-promo'
 
 export function resolveMarketingImageSrc(imageUrl: string): string {
   if (!imageUrl) return ''
-  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
   if (imageUrl.startsWith('/images/')) return imageUrl
-  if (imageUrl.startsWith('/Uploads/MarketingPromos/')) return `${API_BASE_URL}${imageUrl}`
-  if (imageUrl.startsWith('/')) return `${API_BASE_URL}${imageUrl}`
-  return `${API_BASE_URL}/Uploads/MarketingPromos/${imageUrl.replace(/^\/+/, '')}`
+  if (imageUrl.startsWith('/Uploads/MarketingPromos/') || imageUrl.startsWith('/')) {
+    return resolvePublicMediaUrl(imageUrl)
+  }
+  return resolvePublicMediaUrl(`/Uploads/MarketingPromos/${imageUrl.replace(/^\/+/, '')}`)
 }
 
 function readPromoType(record: Record<string, unknown>): MarketingPromoType {

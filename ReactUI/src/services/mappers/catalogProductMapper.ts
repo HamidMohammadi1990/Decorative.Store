@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/config/api'
+import { resolvePublicMediaUrl } from '@/config/api'
 import type { CatalogProductResponse } from '@/models/catalog/catalogProduct.model'
 import type { CatalogListingProduct } from '@/models/catalog/catalogListing.model'
 import type {
@@ -11,9 +11,7 @@ import type { Locale } from '@/models/shared/locale.model'
 import { mapCatalogListingProduct } from '@/services/mappers/catalogListingMapper'
 
 function resolveProductImageSrc(imageUrl: string): string {
-  if (!imageUrl) return ''
-  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
-  return `${API_BASE_URL}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`
+  return resolvePublicMediaUrl(imageUrl)
 }
 
 function toListingProductShape(product: CatalogProductResponse): CatalogListingProduct {

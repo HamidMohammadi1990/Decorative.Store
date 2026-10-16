@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/config/api'
+import { resolvePublicMediaUrl } from '@/config/api'
 import type { CartLine } from '@/models/cart/cartLine.model'
 import { apiGetAuth, apiPost, apiPatch, apiDelete } from '@/services/api/apiClient'
 import { ApiError } from '@/services/api/apiTypes'
@@ -45,9 +45,10 @@ export interface ValidateDiscountResponse {
 
 function resolveImageSrc(imageUrl?: string | null): string {
   if (!imageUrl?.trim()) return '/images/home/new-arrivals.svg'
-  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
-  if (imageUrl.startsWith('/')) return `${API_BASE_URL}${imageUrl}`
-  return `${API_BASE_URL}/Uploads/Products/${imageUrl.replace(/^\/+/, '')}`
+  if (imageUrl.startsWith('/Uploads/') || imageUrl.startsWith('/images/') || imageUrl.startsWith('http')) {
+    return resolvePublicMediaUrl(imageUrl)
+  }
+  return resolvePublicMediaUrl(`/Uploads/Products/${imageUrl.replace(/^\/+/, '')}`)
 }
 
 export function mapServerCartToLines(cart: ServerCartResponse): CartLine[] {

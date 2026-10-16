@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/config/api'
+import { API_BASE_URL, resolvePublicMediaUrl } from '@/config/api'
 import type { Locale } from '@/models/shared/locale.model'
 import type { StoryMediaType, UserStoryDraft, UserStoryInput } from '@/models/stories/story.model'
 import { ApiError } from '@/services/api/apiTypes'
@@ -14,9 +14,8 @@ const USER_STORY_SEARCH_ACTIVE_PATH = '/api/v1/user-story/search-active'
 
 function resolveMediaUrl(path: string): string {
   if (!path) return ''
-  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:'))
-    return path
-  return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`
+  if (path.startsWith('data:')) return path
+  return resolvePublicMediaUrl(path)
 }
 
 function readMediaType(value: unknown): StoryMediaType {

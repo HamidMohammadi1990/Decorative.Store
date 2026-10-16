@@ -11,5 +11,16 @@ export function resolveApiBaseUrl(): string {
   return ''
 }
 
+/**
+ * Same-origin URL for img src and public media (/Uploads, /images).
+ * Do not prefix SSR_API_TARGET — browsers cannot reach http://api:8080 inside Docker.
+ */
+export function resolvePublicMediaUrl(url: string): string {
+  if (!url) return ''
+  const trimmed = url.trim()
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) return trimmed
+  return trimmed.startsWith('/') ? trimmed : `/${trimmed}`
+}
+
 /** @deprecated Prefer resolveApiBaseUrl() — kept for modules that read a module-level constant. */
 export const API_BASE_URL = resolveApiBaseUrl()

@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/config/api'
+import { resolvePublicMediaUrl } from '@/config/api'
 import type {
   CatalogListingFacetGroup,
   CatalogListingProduct,
@@ -8,9 +8,7 @@ import type { FilterFacet } from '@/models/catalog/listing.model'
 import { CHECKBOX_FILTER_KEYS, LISTING_QUERY_RESERVED_KEYS } from '@/extensions/listingFilters'
 
 function resolveProductImageSrc(imageUrl: string): string {
-  if (!imageUrl) return ''
-  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
-  return `${API_BASE_URL}${imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`}`
+  return resolvePublicMediaUrl(imageUrl)
 }
 
 function toSubcategorySegment(subCategorySlug: string): string | undefined {

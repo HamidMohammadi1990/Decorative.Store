@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/config/api'
+import { API_BASE_URL, resolvePublicMediaUrl } from '@/config/api'
 import type {
   AdminRoomType,
   CreateAdminRoomTypeInput,
@@ -30,9 +30,9 @@ export function resolveRoomTypeImageUrl(imageUrlOrFileName: string): string {
     return imageUrlOrFileName
   }
   if (imageUrlOrFileName.startsWith('/')) {
-    return `${API_BASE_URL}${imageUrlOrFileName}`
+    return resolvePublicMediaUrl(imageUrlOrFileName)
   }
-  return `${API_BASE_URL}/Uploads/RoomTypes/${imageUrlOrFileName.replace(/^\/+/, '')}`
+  return resolvePublicMediaUrl(`/Uploads/RoomTypes/${imageUrlOrFileName.replace(/^\/+/, '')}`)
 }
 
 function normalizeAdminRoomType(data: unknown): AdminRoomType | null {

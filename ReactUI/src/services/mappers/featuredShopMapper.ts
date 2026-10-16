@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/config/api'
+import { resolvePublicMediaUrl } from '@/config/api'
 import type { FeaturedShopGrid } from '@/models/home/featuredShop.model'
 
 export interface FeaturedCatalogCollection {
@@ -9,10 +9,7 @@ export interface FeaturedCatalogCollection {
 }
 
 function resolveProductImageSrc(imageUrl: string): string {
-  if (!imageUrl) return ''
-  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) return imageUrl
-  if (imageUrl.startsWith('/')) return imageUrl
-  return `${API_BASE_URL}/${imageUrl}`
+  return resolvePublicMediaUrl(imageUrl)
 }
 
 function isCustomCmsUpload(src?: string): boolean {
