@@ -4,12 +4,15 @@ import { BlogCard } from '@/components/blog/BlogCard'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
 import { Container } from '@/components/ui/Container'
 import { useHorizontalDragScroll } from '@/hooks/useHorizontalDragScroll'
-import { useHomeFeaturedPosts } from '@/hooks/useHomeFeaturedPosts'
+import type { BlogPostSummary } from '@/models/blog/blog.model'
 
-export function BlogHomeSection() {
+interface BlogHomeSectionProps {
+  posts: BlogPostSummary[]
+}
+
+export function BlogHomeSection({ posts }: BlogHomeSectionProps) {
   const { t } = useTranslation()
   const drag = useHorizontalDragScroll<HTMLDivElement>()
-  const posts = useHomeFeaturedPosts()
 
   if (posts.length === 0) return null
 

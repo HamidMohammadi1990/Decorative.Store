@@ -1,3 +1,4 @@
+import { useLoaderData } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { buildOrganizationJsonLd, buildWebSiteJsonLd } from '@/components/seo/jsonLdBuilders'
 import { BlogHomeSection } from '@/components/home/BlogHomeSection'
@@ -12,9 +13,13 @@ import { useHomePage } from '@/hooks/useHomePage'
 import { useShopPageMeta, resolveOgImageSrc } from '@/hooks/useShopPageMeta'
 import { DEFAULT_OG_IMAGE } from '@/config/site'
 import { usePreloadImage } from '@/hooks/usePreloadImage'
+import { useHomeFeaturedPosts } from '@/hooks/useHomeFeaturedPosts'
+import type { HomePageLoaderData } from '@/routes/loaders/types'
 
 export function HomePage() {
   const { t } = useTranslation()
+  const homeLoaderData = useLoaderData() as HomePageLoaderData
+  const journalPosts = useHomeFeaturedPosts(homeLoaderData)
   const { data, loading } = useHomePage()
 
   const lcpSrc = data?.hero.slides[0]?.image.src
@@ -51,7 +56,7 @@ export function HomePage() {
       <PromoTileStrip data={data.promoTiles} />
       <CategoryNav data={data.categoryNav} />
       <FeaturedShopGrid data={data.featuredShop} />
-      <BlogHomeSection />
+      <BlogHomeSection posts={journalPosts} />
     </>
   )
 }

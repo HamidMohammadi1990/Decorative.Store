@@ -1,29 +1,24 @@
 import { useEffect, useState } from 'react'
-import { useRouteLoaderData } from 'react-router-dom'
 import type { BlogPostSummary } from '@/models/blog/blog.model'
 import { blogService } from '@/services/blogService'
 import type { HomePageLoaderData } from '@/routes/loaders/types'
 import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 
-export function useHomeFeaturedPosts() {
-  const loaderData = useRouteLoaderData('home') as HomePageLoaderData | undefined
-  const locale = useStorefrontLocale(loaderData?.locale)
+export function useHomeFeaturedPosts(loaderData: HomePageLoaderData) {
+  const locale = useStorefrontLocale(loaderData.locale)
 
-  const [posts, setPosts] = useState<BlogPostSummary[]>(
-    () => loaderData?.featuredPosts ?? [],
-  )
+  const [posts, setPosts] = useState<BlogPostSummary[]>(() => loaderData.featuredPosts ?? [])
 
   useEffect(() => {
     let cancelled = false
 
     void blogService
-      .getHomeJournalPosts(locale, 3)
+      .getHomeJournalPosts(locale, 3, true)
       .then((journalPosts) => {
-        if (cancelled) return
-        setPosts(journalPosts)
+        if (!cancelled) setPosts(journalPosts)
       })
       .catch(() => {
-        if (!cancelled && loaderData?.featuredPosts?.length) {
+        if (!cancelled && loaderData.featuredPosts?.length) {
           setPosts(loaderData.featuredPosts)
         }
       })
@@ -31,7 +26,7 @@ export function useHomeFeaturedPosts() {
     return () => {
       cancelled = true
     }
-  }, [locale, loaderData?.featuredPosts])
+  }, [locale, loaderData.featuredPosts])
 
   return posts
 }

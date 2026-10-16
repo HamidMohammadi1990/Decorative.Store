@@ -23,48 +23,55 @@ function webpCandidate(src: string): string | null {
   return null
 }
 
-export function LocalImage({
+function EagerLocalImage({
+  image,
+  className = '',
+  loading = 'eager',
+  fetchPriority = 'high',
+  decoding = 'async',
+  sizes,
+}: LocalImageProps) {
+  const src = image.src?.trim() ?? ''
+  if (!src) {
+    return <div className={`${className} bg-surface-muted`.trim()} aria-hidden />
+  }
+
+  const webpSrc = webpCandidate(src)
+  const imgProps = {
+    alt: image.alt,
+    width: image.width,
+    height: image.height,
+    loading,
+    decoding,
+    fetchPriority,
+    sizes,
+    className,
+  }
+
+  if (webpSrc) {
+    return (
+      <picture>
+        <source srcSet={webpSrc} type="image/webp" sizes={sizes} />
+        <img {...imgProps} src={src} />
+      </picture>
+    )
+  }
+
+  return <img {...imgProps} src={src} />
+}
+
+function LazyLocalImage({
   image,
   className = '',
   loading,
-  priority = false,
   fetchPriority,
   decoding = 'async',
   sizes,
   rootMargin,
 }: LocalImageProps) {
-  const resolvedLoading = loading ?? (priority ? 'eager' : 'lazy')
-  const resolvedFetchPriority = fetchPriority ?? (priority ? 'high' : undefined)
-
-  if (priority && image.src) {
-    const webpSrc = webpCandidate(image.src)
-    const imgProps = {
-      alt: image.alt,
-      width: image.width,
-      height: image.height,
-      loading: resolvedLoading,
-      decoding,
-      fetchPriority: resolvedFetchPriority,
-      sizes,
-      className,
-    }
-    if (webpSrc) {
-      return (
-        <picture>
-          <source srcSet={webpSrc} type="image/webp" sizes={sizes} />
-          <img {...imgProps} src={image.src} />
-        </picture>
-      )
-    }
-    return <img {...imgProps} src={image.src} />
-  }
-
-  const { ref, resolvedSrc, isLoaded } = useLazyImageSource(image.src, {
-    priority,
-    rootMargin,
-  })
+  const resolvedLoading = loading ?? 'lazy'
+  const { ref, resolvedSrc, isLoaded } = useLazyImageSource(image.src, { rootMargin })
   const webpSrc = resolvedSrc ? webpCandidate(resolvedSrc) : null
-
   const imgClass = `${className}${!isLoaded ? ' bg-surface-muted animate-pulse' : ''}`.trim()
 
   const imgProps = {
@@ -73,7 +80,7 @@ export function LocalImage({
     height: image.height,
     loading: resolvedLoading,
     decoding,
-    fetchPriority: resolvedFetchPriority,
+    fetchPriority,
     sizes,
     className: imgClass,
   }
@@ -88,4 +95,11 @@ export function LocalImage({
   }
 
   return <img ref={ref as RefObject<HTMLImageElement>} {...imgProps} src={resolvedSrc} />
+}
+
+export function LocalImage(props: LocalImageProps) {
+  if (props.priority) {
+    return <EagerLocalImage {...props} />
+  }
+  return <LazyLocalImage {...props} />
 }
