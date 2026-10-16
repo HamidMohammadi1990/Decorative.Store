@@ -16,15 +16,22 @@ export function useHomeFeaturedPosts() {
   useEffect(() => {
     let cancelled = false
 
-    void blogService.getHomeJournalPosts(locale, 3).then((journalPosts) => {
-      if (cancelled) return
-      setPosts(journalPosts)
-    })
+    void blogService
+      .getHomeJournalPosts(locale, 3)
+      .then((journalPosts) => {
+        if (cancelled) return
+        setPosts(journalPosts)
+      })
+      .catch(() => {
+        if (!cancelled && loaderData?.featuredPosts?.length) {
+          setPosts(loaderData.featuredPosts)
+        }
+      })
 
     return () => {
       cancelled = true
     }
-  }, [locale])
+  }, [locale, loaderData?.featuredPosts])
 
   return posts
 }

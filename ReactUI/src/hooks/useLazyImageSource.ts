@@ -29,7 +29,11 @@ export function useLazyImageSource(
   { priority = false, rootMargin = '280px 0px' }: UseLazyImageSourceOptions = {},
 ) {
   const ref = useRef<HTMLElement | null>(null)
-  const [resolvedSrc, setResolvedSrc] = useState(priority ? src : '')
+  const [resolvedSrc, setResolvedSrc] = useState(() => {
+    if (priority && src) return src
+    if (typeof document === 'undefined' && src) return src
+    return ''
+  })
 
   useEffect(() => {
     if (priority || !src) {

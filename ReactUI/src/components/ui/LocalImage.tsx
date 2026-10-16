@@ -35,6 +35,30 @@ export function LocalImage({
 }: LocalImageProps) {
   const resolvedLoading = loading ?? (priority ? 'eager' : 'lazy')
   const resolvedFetchPriority = fetchPriority ?? (priority ? 'high' : undefined)
+
+  if (priority && image.src) {
+    const webpSrc = webpCandidate(image.src)
+    const imgProps = {
+      alt: image.alt,
+      width: image.width,
+      height: image.height,
+      loading: resolvedLoading,
+      decoding,
+      fetchPriority: resolvedFetchPriority,
+      sizes,
+      className,
+    }
+    if (webpSrc) {
+      return (
+        <picture>
+          <source srcSet={webpSrc} type="image/webp" sizes={sizes} />
+          <img {...imgProps} src={image.src} />
+        </picture>
+      )
+    }
+    return <img {...imgProps} src={image.src} />
+  }
+
   const { ref, resolvedSrc, isLoaded } = useLazyImageSource(image.src, {
     priority,
     rootMargin,

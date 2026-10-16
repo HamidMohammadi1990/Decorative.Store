@@ -30,17 +30,10 @@ export const blogService = {
     return postsResult.items
   },
 
-  /** Same source/order as the main grid on `/blog` (not `IsFeatured` only). */
+  /** Same posts as the main grid on `/blog` (first N items). */
   async getHomeJournalPosts(locale: Locale, limit = 3): Promise<BlogPostSummary[]> {
-    const categories = await blogPostCategoryService.getCategories(locale)
-    const categorySlugById = buildCategorySlugMap(categories)
-
-    const postsResult = await blogPostService.search(locale, {
-      categorySlugById,
-      pagination: { pageNumber: 1, pageSize: limit },
-    })
-
-    return postsResult.items
+    const listing = await this.getListing(locale)
+    return listing.posts.slice(0, limit)
   },
 
   async getListing(locale: Locale, categorySlug?: string): Promise<BlogListingResult> {
