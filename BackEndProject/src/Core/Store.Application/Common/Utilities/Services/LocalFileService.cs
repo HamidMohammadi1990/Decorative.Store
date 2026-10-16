@@ -7,6 +7,17 @@ namespace Edition.Application.Common.Utilities.Services;
 
 public class LocalFileService : ILocalFileService
 {
+    /// <summary>
+    /// Maps app-relative paths like <c>wwwroot/Uploads/Products</c> under the content root.
+    /// Do not use Windows-style backslashes here — on Linux they create a wrong single folder name
+    /// outside the Docker upload volume.
+    /// </summary>
+    private static string ResolveContentDirectory(string directoryPath)
+    {
+        var relative = directoryPath.Replace('\\', '/').TrimStart('/');
+        return Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), relative));
+    }
+
     public OperationResult DeleteDirectory(string directoryPath)
     {
         try
@@ -26,7 +37,7 @@ public class LocalFileService : ILocalFileService
     {
         try
         {
-            var rootDirectory = Path.Combine(Directory.GetCurrentDirectory(), path);
+            var rootDirectory = ResolveContentDirectory(path);
             var filePath = FileUploadSecurity.ResolveSafeFilePath(rootDirectory, fileName);
 
             if (File.Exists(filePath))
@@ -63,7 +74,7 @@ public class LocalFileService : ILocalFileService
                 return OperationResult.Fail($"{nameof(file)} is required");
 
             var fileName = FileUploadSecurity.CreateSafeFileName(file.FileName);
-            var folderName = Path.Combine(Directory.GetCurrentDirectory(), directoryPath.Replace("/", "\\"));
+            var folderName = ResolveContentDirectory(directoryPath);
 
             if (!Directory.Exists(folderName))
                 Directory.CreateDirectory(folderName);
@@ -87,7 +98,7 @@ public class LocalFileService : ILocalFileService
             if (file is null)
                 return OperationResult.Fail($"{nameof(file)} is required");
 
-            var folderName = Path.Combine(Directory.GetCurrentDirectory(), directoryPath.Replace("/", "\\"));
+            var folderName = ResolveContentDirectory(directoryPath);
             if (!Directory.Exists(folderName))
                 Directory.CreateDirectory(folderName);
 
@@ -111,7 +122,7 @@ public class LocalFileService : ILocalFileService
                 return OperationResult<string>.Fail($"{nameof(file)} is required");
 
             var fileName = FileUploadSecurity.CreateSafeFileName(file.FileName);
-            var folderName = Path.Combine(Directory.GetCurrentDirectory(), directoryPath.Replace("/", "\\"));
+            var folderName = ResolveContentDirectory(directoryPath);
 
             if (!Directory.Exists(folderName))
                 Directory.CreateDirectory(folderName);
