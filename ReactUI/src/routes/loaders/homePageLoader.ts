@@ -9,7 +9,7 @@ export async function homePageLoader({
   const locale = resolveLocale(request)
 
   try {
-    const featuredPosts = await blogService.getFeaturedPosts(locale, 3)
+    const featuredPosts = await blogService.getHomeJournalPosts(locale, 3)
     return { locale, featuredPosts }
   } catch {
     return { locale, featuredPosts: [] }

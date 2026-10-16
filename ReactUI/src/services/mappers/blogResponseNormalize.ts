@@ -13,6 +13,7 @@ import {
   readStringField,
 } from '@/services/api/apiNormalize'
 import { resolvePublicMediaUrl } from '@/config/api'
+import { BLOG_DEFAULT_COVER_SRC } from '@/data/blogDefaultCover'
 
 function resolveBlogImageUrl(url: string): string {
   return resolvePublicMediaUrl(url)
@@ -272,6 +273,6 @@ export function normalizeBlogPostDetailPage(
 }
 
 const DEFAULT_DETAIL_COVER = {
-  src: '/images/home/living-room.jpg',
+  src: BLOG_DEFAULT_COVER_SRC,
   alt: '',
 }

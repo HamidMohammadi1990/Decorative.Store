@@ -2,6 +2,7 @@ import type { BlogPostDetail, BlogPostSummary } from '@/models/blog/blog.model'
 import type { PagedRequest, PagedResult } from '@/models/shared/paged.model'
 import type { Locale } from '@/models/shared/locale.model'
 import { apiGet, apiPost } from '@/services/api/apiClient'
+import { BLOG_DEFAULT_COVER_SRC } from '@/data/blogDefaultCover'
 import {
   normalizeBlogPostDetailPage,
   normalizeBlogPostSummary,
@@ -12,7 +13,7 @@ const BLOG_POST_SEARCH_PATH = '/api/v1/blog-post/search'
 const BLOG_POST_DETAIL_PATH = '/api/v1/blog-post/detail'
 
 const DEFAULT_COVER = {
-  src: '/images/home/living-room.jpg',
+  src: BLOG_DEFAULT_COVER_SRC,
   alt: '',
 }
 

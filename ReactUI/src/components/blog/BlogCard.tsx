@@ -11,6 +11,8 @@ interface BlogCardProps {
   post: BlogPostSummary
   categoryLabel?: string
   variant?: 'grid' | 'horizontal'
+  /** Home journal sits below the fold — eager load avoids lazy-IO misses in nested layouts. */
+  priorityImage?: boolean
 }
 
 function BlogCardMeta({ post, locale }: { post: BlogPostSummary; locale: Locale }) {
@@ -42,7 +44,12 @@ function BlogCardMeta({ post, locale }: { post: BlogPostSummary; locale: Locale 
   )
 }
 
-export function BlogCard({ post, categoryLabel, variant = 'grid' }: BlogCardProps) {
+export function BlogCard({
+  post,
+  categoryLabel,
+  variant = 'grid',
+  priorityImage = false,
+}: BlogCardProps) {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
   const articlePath = `/blog/${post.slug}`
@@ -56,6 +63,7 @@ export function BlogCard({ post, categoryLabel, variant = 'grid' }: BlogCardProp
         >
           <LocalImage
             image={post.coverImage}
+            priority={priorityImage}
             sizes="144px"
             className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
           />
@@ -97,6 +105,7 @@ export function BlogCard({ post, categoryLabel, variant = 'grid' }: BlogCardProp
         <div className="aspect-[16/10] overflow-hidden bg-surface-muted">
           <LocalImage
             image={post.coverImage}
+            priority={priorityImage}
             sizes="(max-width: 768px) 100vw, 400px"
             className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
           />
