@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { formatBlogDate } from '@/extensions/formatBlogDate'
 import { ChevronIcon } from '@/components/ui/ChevronIcon'
 import { LocalImage } from '@/components/ui/LocalImage'
+import { getBlogPostCoverSrc } from '@/extensions/blogPostCover'
 import { useSettingsStore } from '@/stores/settingsStore'
 import type { BlogPostSummary } from '@/models/blog/blog.model'
 import type { Locale } from '@/models/shared/locale.model'
@@ -11,6 +12,8 @@ interface BlogCardProps {
   post: BlogPostSummary
   categoryLabel?: string
   variant?: 'grid' | 'horizontal'
+  /** Home journal sits below the fold but should not rely on lazy + hidden duplicate layouts. */
+  priority?: boolean
 }
 
 function BlogCardMeta({ post, locale }: { post: BlogPostSummary; locale: Locale }) {
@@ -42,10 +45,15 @@ function BlogCardMeta({ post, locale }: { post: BlogPostSummary; locale: Locale 
   )
 }
 
-export function BlogCard({ post, categoryLabel, variant = 'grid' }: BlogCardProps) {
+export function BlogCard({ post, categoryLabel, variant = 'grid', priority = false }: BlogCardProps) {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
   const articlePath = `/blog/${post.slug}`
+  const coverImage = {
+    ...post.coverImage,
+    src: getBlogPostCoverSrc(post),
+    alt: post.coverImage?.alt || post.title,
+  }
 
   if (variant === 'horizontal') {
     return (
@@ -55,8 +63,9 @@ export function BlogCard({ post, categoryLabel, variant = 'grid' }: BlogCardProp
           className="relative size-28 shrink-0 overflow-hidden rounded-xl sm:size-36"
         >
           <LocalImage
-            image={post.coverImage}
+            image={coverImage}
             sizes="144px"
+            priority={priority}
             className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
           />
           <div
@@ -96,8 +105,9 @@ export function BlogCard({ post, categoryLabel, variant = 'grid' }: BlogCardProp
       <CatalogNavLink href={articlePath} className="relative block overflow-hidden">
         <div className="aspect-[16/10] overflow-hidden bg-surface-muted">
           <LocalImage
-            image={post.coverImage}
+            image={coverImage}
             sizes="(max-width: 768px) 100vw, 400px"
+            priority={priority}
             className="size-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
           />
         </div>

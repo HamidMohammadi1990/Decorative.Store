@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { formatBlogDate } from '@/extensions/formatBlogDate'
 import { Container } from '@/components/ui/Container'
 import { LocalImage } from '@/components/ui/LocalImage'
+import { getBlogPostCoverSrc } from '@/extensions/blogPostCover'
 import { getDirection } from '@/extensions/getDirection'
 import { useHeroCarouselDrag } from '@/hooks/useHeroCarouselDrag'
 import { useSettingsStore } from '@/stores/settingsStore'
@@ -87,7 +88,15 @@ export function BlogFeaturedSlider({ posts, getCategoryLabel }: BlogFeaturedSlid
           {posts.map((post) => (
             <article key={post.id} className="relative w-full shrink-0">
               <div className="relative aspect-[16/9] max-h-[28rem] w-full md:aspect-[21/9]">
-                <LocalImage image={post.coverImage} className="size-full object-cover opacity-80" />
+                <LocalImage
+                  image={{
+                    ...post.coverImage,
+                    src: getBlogPostCoverSrc(post),
+                    alt: post.coverImage?.alt || post.title,
+                  }}
+                  priority
+                  className="size-full object-cover opacity-80"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
               </div>
 

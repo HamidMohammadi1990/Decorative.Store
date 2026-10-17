@@ -12,6 +12,7 @@ import {
   readRecord,
   readStringField,
 } from '@/services/api/apiNormalize'
+import { resolveHomeImageSrc } from '@/extensions/resolveHomeImage'
 import { resolveSameOriginMediaSrc } from '@/utils/publicUploadUrl'
 
 function resolveBlogImageUrl(url: string): string {
@@ -26,7 +27,12 @@ function toImageAsset(src: string, alt: string): ImageAsset {
 function readCoverImage(record: Record<string, unknown>, fallback: ImageAsset, alt: string): ImageAsset {
   const coverImageUrl = readOptionalStringField(record, 'coverImageUrl', 'CoverImageUrl')
   if (coverImageUrl) return toImageAsset(coverImageUrl, alt)
-  return { ...fallback, alt: alt || fallback.alt }
+  const resolvedFallback = {
+    ...fallback,
+    src: resolveHomeImageSrc(fallback.src),
+    alt: alt || fallback.alt,
+  }
+  return resolvedFallback
 }
 
 function readGalleryImages(record: Record<string, unknown>, fallback: ImageAsset, alt: string): ImageAsset[] {

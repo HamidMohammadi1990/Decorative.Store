@@ -38,6 +38,7 @@ export function BlogHomeSection() {
             <BlogCard
               key={post.id}
               post={post}
+              priority
               categoryLabel={post.categoryLabel ?? post.categorySlug}
             />
           ))}
@@ -62,6 +63,7 @@ export function BlogHomeSection() {
             >
               <BlogCard
                 post={post}
+                priority
                 categoryLabel={post.categoryLabel ?? post.categorySlug}
               />
             </div>

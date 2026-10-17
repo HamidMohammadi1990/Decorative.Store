@@ -30,6 +30,12 @@ export const blogService = {
     return postsResult.items
   },
 
+  /** Same search path as /blog listing (includes category map + cover URLs). */
+  async getHomeJournalPosts(locale: Locale, limit = 3): Promise<BlogPostSummary[]> {
+    const listing = await this.getListing(locale)
+    return listing.posts.slice(0, limit)
+  },
+
   async getListing(locale: Locale, categorySlug?: string): Promise<BlogListingResult> {
     const categories = await blogPostCategoryService.getCategories(locale)
     const categoryId = resolveCategoryId(categories, categorySlug)

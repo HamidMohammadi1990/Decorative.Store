@@ -22,7 +22,7 @@ export function useHomeFeaturedPosts() {
 
     let cancelled = false
 
-    void blogService.getFeaturedPosts(locale, 3).then((featuredPosts) => {
+    void blogService.getHomeJournalPosts(locale, 3).then((featuredPosts) => {
       if (cancelled) return
       setPosts(featuredPosts)
     })
