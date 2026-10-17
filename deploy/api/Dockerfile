@@ -37,8 +37,8 @@ ENV ASPNETCORE_URLS=http://+:8080 \
 
 EXPOSE 8080
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
-  CMD curl -fsS http://127.0.0.1:8080/health || exit 1
+HEALTHCHECK --interval=30s --timeout=5s --start-period=120s --retries=5 \
+  CMD curl -fsS http://127.0.0.1:8080/health || curl -g -fsS http://[::1]:8080/health || exit 1
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["dotnet", "Store.Api.dll"]
