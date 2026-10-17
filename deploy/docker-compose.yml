@@ -93,8 +93,8 @@ services:
       test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/health"]
       interval: 15s
       timeout: 10s
-      retries: 12
-      start_period: 180s
+      retries: 20
+      start_period: 600s
 
   web:
     build:

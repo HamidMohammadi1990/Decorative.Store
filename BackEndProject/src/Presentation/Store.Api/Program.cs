@@ -85,7 +85,9 @@ if (!builder.Environment.IsDevelopment())
 app.UserCustomeForwardedHeaders();
 
 app.UseCustomExceptionHandler();
-app.UseHttpsRedirection();
+// TLS terminates at nginx/Cloudflare; redirecting HTTP→HTTPS here breaks Docker /health checks.
+if (app.Environment.IsDevelopment())
+    app.UseHttpsRedirection();
 app.UseResponseCompression();
 app.UseSwaggerAndUI();
 app.UseRouting();

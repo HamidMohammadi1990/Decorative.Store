@@ -302,7 +302,7 @@ paket-files/
 __pycache__/
 *.pyc
 
-deploy/.env
+
 
 # Cake - Uncomment if you are using it
 # tools/**
