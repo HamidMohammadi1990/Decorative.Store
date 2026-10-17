@@ -84,14 +84,35 @@ DATABASE_SEED_PERMISSIONS=false
 docker compose up -d api
 ```
 
-6. سایت: `http://SERVER_IP:HTTP_PORT` (مثلاً `http://185.213.167.240:3031`) — health: همان آدرس + `/health`
+6. سایت:
+   - با دامنه: `https://sarv-home.com` (وقتی `HTTP_PORT=80` و DNS/Cloudflare آماده است)
+   - با IP و پورت: `http://SERVER_IP:HTTP_PORT` — health: همان آدرس + `/health`
 
-> **فایروال:** `sudo ufw allow 3031/tcp` (یا پورت `HTTP_PORT` شما)
+> **فایروال:** `sudo ufw allow 80/tcp` و `443/tcp` (برای دامنه). برای تست با پورت سفارشی: `ufw allow HTTP_PORT/tcp`
 
-## HTTPS (بعد از DNS)
+## دامنه (بدون :3032 در آدرس)
 
-دامنه را به IP سرور اشاره دهید. پیشنهاد: **Certbot** روی host یا **Caddy/Traefik** جلوی compose.  
-تا قبل از TLS، `PUBLIC_SITE_URL` را با `http://` تنظیم کنید.
+1. در `.env` روی سرور (فایل gitignore — خودتان ویرایش می‌کنید):
+
+```env
+HTTP_PORT=80
+PUBLIC_SITE_URL=https://sarv-home.com
+ALLOWED_HOSTS=sarv-home.com,www.sarv-home.com,sarv-home.ir,www.sarv-home.ir
+```
+
+2. مطمئن شوید هیچ سرویس دیگری پورت **80** روی host را نگرفته: `sudo ss -tlnp | grep ':80 '`
+
+3. بعد از تغییر `PUBLIC_SITE_URL` حتماً **web** را rebuild کنید:
+
+```bash
+docker compose --env-file .env up -d --build web api
+```
+
+4. **Cloudflare:** رکورد A برای `@` و `www` → IP سرور؛ ابر **Proxied**؛ SSL/TLS → **Flexible** (سرور فقط HTTP روی 80 داخل Docker).
+
+## HTTPS (گواهی روی خود سرور — اختیاری)
+
+اگر Cloudflare Proxied است، معمولاً کافی است. برای Certbot روی host یا **Full (strict)** بعداً volume گواهی به nginx اضافه کنید.
 
 ## بک‌آپ
 
