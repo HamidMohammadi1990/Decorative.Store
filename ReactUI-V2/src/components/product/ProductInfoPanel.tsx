@@ -1,5 +1,7 @@
 import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { useTranslation } from 'react-i18next'
+import { SF_PRODUCT_TITLE_CLASS } from '@/extensions/localeText'
+import { useLocaleDirection } from '@/hooks/useLocaleDirection'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import { ProductColorSelector } from '@/components/product/ProductColorSelector'
 import { ProductFeaturesPreview } from '@/components/product/ProductFeaturesPreview'
@@ -23,6 +25,7 @@ export function ProductInfoPanel({
   reviewsLoading,
 }: ProductInfoPanelProps) {
   const { t } = useTranslation()
+  const direction = useLocaleDirection()
   const colors = product.facets.color ?? []
 
   const liveStats = computeReviewStatsFromItems(reviews)
@@ -71,7 +74,10 @@ export function ProductInfoPanel({
         </CatalogNavLink>
       </div>
 
-      <h1 className="mt-3 text-xl font-bold leading-snug text-text md:text-2xl">
+      <h1
+        dir={direction}
+        className={`${SF_PRODUCT_TITLE_CLASS} mt-3 text-xl font-bold leading-snug text-text md:text-2xl`}
+      >
         {product.title}
       </h1>
 

@@ -2,6 +2,7 @@ using MediatR;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Edition.Application.Features.Users.Queries;
 using Edition.Application.Features.Users.Commands;
 using Edition.Application.Features.RefreshTokens.Commands;
@@ -28,6 +29,10 @@ public class AccountController
 {
     [HttpPost("sign-in")]
     public async Task<ApiResult<SignInUserResponse>> SignIn(SignInUserRequest request)
+        => await mediator.Send(request);
+
+    [HttpPost("sign-up")]
+    public async Task<ApiResult<SignInUserResponse>> SignUp(SignUpUserRequest request)
         => await mediator.Send(request);
 
     [HttpPost("sign-in-by-phone-number")]
@@ -120,4 +125,10 @@ public class AccountController
     [HttpPost("change-phone-number")]
     public async Task<ApiResult<OperationResult>> ChangePhoneNumber(ChangePhoneNumberRequest request)
         => await mediator.Send(request);
+
+    [Authorize]
+    [HttpPost("profile-image")]
+    [RequestSizeLimit(5 * 1024 * 1024)]
+    public async Task<ApiResult<UploadUserProfileImageResponse>> UploadProfileImage([FromForm] IFormFile image)
+        => await mediator.Send(new UpdateCurrentUserProfileImageCommand(image));
 }

@@ -4,6 +4,8 @@ import type { ProductDetail } from '@/models/catalog/productDetail.model'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
 import { getColorSwatch } from '@/extensions/colorSwatches'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
+import { useLocaleDirection } from '@/hooks/useLocaleDirection'
+import { SF_PRODUCT_TITLE_CLASS } from '@/extensions/localeText'
 import { CompareButton } from '@/components/compare/CompareButton'
 import { useAddToBag } from '@/hooks/useAddToBag'
 
@@ -14,6 +16,7 @@ interface ProductPurchasePanelProps {
 export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
   const { t } = useTranslation()
   const { currency } = useLocaleSettings()
+  const direction = useLocaleDirection()
   const { addToBag, status } = useAddToBag()
   const [quantity, setQuantity] = useState(1)
 
@@ -51,7 +54,10 @@ export function ProductPurchasePanel({ product }: ProductPurchasePanelProps) {
         </div>
       )}
 
-      <h1 className="mt-4 text-2xl font-normal leading-snug tracking-tight text-text md:text-[1.75rem]">
+      <h1
+        dir={direction}
+        className={`${SF_PRODUCT_TITLE_CLASS} mt-4 text-2xl font-normal leading-snug tracking-tight text-text md:text-[1.75rem]`}
+      >
         {product.title}
       </h1>
 

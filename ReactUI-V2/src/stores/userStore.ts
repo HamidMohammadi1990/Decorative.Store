@@ -5,7 +5,9 @@ import {
   authService,
   createFallbackDashboardUser,
   mapCurrentUserToDashboardUser,
+  type SignUpInput,
 } from '@/services/authService'
+import { ApiError } from '@/services/api/apiTypes'
 import { useCartStore } from '@/stores/cartStore'
 import { usePermissionStore } from '@/stores/permissionStore'
 
@@ -24,11 +26,13 @@ interface UserState {
   authLoading: boolean
   authError: string | null
   login: (input: LoginInput) => Promise<void>
+  signUp: (input: SignUpInput) => Promise<void>
   loginDemo: (input: Omit<LoginInput, 'password'>) => void
   logout: () => Promise<void>
   restoreSession: () => Promise<boolean>
   refreshAccessToken: (force?: boolean) => Promise<string | null>
   clearAuthError: () => void
+  updateUserProfileImage: (profileImageUrl: string) => void
 }
 
 function createDemoUser(input: Omit<LoginInput, 'password'>): DashboardUser {
@@ -60,6 +64,11 @@ export const useUserStore = create<UserState>()(
       authError: null,
 
       clearAuthError: () => set({ authError: null }),
+
+      updateUserProfileImage: (profileImageUrl) =>
+        set((state) =>
+          state.user ? { user: { ...state.user, profileImageUrl } } : {},
+        ),
 
       loginDemo: (input) => {
         set({
@@ -116,6 +125,61 @@ export const useUserStore = create<UserState>()(
             authError: 'auth.signInFailed',
           })
           throw new Error('Sign in failed')
+        }
+      },
+
+      signUp: async (input) => {
+        set({ authLoading: true, authError: null })
+
+        if (useMockAuth) {
+          set({
+            user: createDemoUser(input),
+            accessToken: 'mock-access-token',
+            refreshToken: null,
+            tokenExpiresAt: null,
+            authLoading: false,
+          })
+          return
+        }
+
+        try {
+          const tokens = await authService.signUp(input)
+          let profileUser = createFallbackDashboardUser(
+            input.userName,
+            input.firstName,
+            input.lastName,
+          )
+
+          try {
+            const profile = await authService.getCurrentUser(tokens.accessToken)
+            if (profile) {
+              profileUser = mapCurrentUserToDashboardUser(profile)
+            }
+          } catch {
+            // Keep fallback profile when /me is temporarily unavailable.
+          }
+
+          set({
+            user: profileUser,
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
+            tokenExpiresAt: Date.now() + tokens.expiresIn * 1000,
+            authLoading: false,
+            authError: null,
+          })
+        } catch (error) {
+          let authError = 'auth.signUpFailed'
+          if (error instanceof ApiError) {
+            if (error.hasCode('AnAccountWithThisInfoHasAleardyBeenRegistered')) {
+              authError = 'auth.signUpAlreadyExists'
+            }
+          }
+
+          set({
+            authLoading: false,
+            authError,
+          })
+          throw new Error('Sign up failed')
         }
       },
 

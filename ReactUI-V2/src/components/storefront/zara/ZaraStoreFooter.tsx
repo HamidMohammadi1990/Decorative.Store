@@ -13,6 +13,7 @@ import { useHydrated } from '@/hooks/useHydrated'
 import { useIsAuthenticated } from '@/stores/userStore'
 import { useCartStore } from '@/stores/cartStore'
 import { ThemeSwitcher } from '@/components/layout/ThemeSwitcher'
+import { BackToTop } from '@/components/ui/BackToTop'
 
 interface ZaraStoreFooterProps {
   footer: SiteFooterModel
@@ -126,7 +127,8 @@ export function ZaraStoreFooter({ footer, header }: ZaraStoreFooterProps) {
           ))}
         </div>
 
-        <div className="mt-12 border-t border-border pt-8 text-[10px] uppercase tracking-[0.1em] text-text-muted">
+        <div className="relative mt-12 border-t border-border pt-8 text-[10px] uppercase tracking-[0.1em] text-text-muted">
+          <BackToTop />
           <p>{footer.copyright}</p>
           <ul className="mt-4 flex flex-wrap gap-4">
             {footer.legalLinks.map((link) => (

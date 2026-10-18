@@ -120,6 +120,79 @@ export async function apiPost<T>(
   })
 }
 
+/** Multipart POST (file uploads) with the same 401 refresh retry as JSON requests. */
+export async function apiPostForm<T>(
+  path: string,
+  formData: FormData,
+  options: { locale?: Locale; accessToken?: string | null } = {},
+  allowRefreshRetry = true,
+): Promise<T> {
+  const { locale, accessToken } = options
+
+  const headers: Record<string, string> = {
+    Accept: 'application/json',
+  }
+
+  if (locale) {
+    headers['Accept-Language'] = toAcceptLanguage(locale)
+  }
+
+  if (accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`
+  }
+
+  const response = await fetch(`${resolveApiBaseUrl()}${path}`, {
+    method: 'POST',
+    headers,
+    body: formData,
+  })
+
+  if (
+    response.status === 403 &&
+    accessToken &&
+    accessToken !== 'mock-access-token' &&
+    !path.includes('/account/permissions')
+  ) {
+    const { usePermissionStore } = await import('@/stores/permissionStore')
+    const permissionStore = usePermissionStore.getState()
+    if (permissionStore.dashboardActive) {
+      void permissionStore.reload()
+    }
+  }
+
+  if (
+    response.status === 401 &&
+    allowRefreshRetry &&
+    accessToken &&
+    accessToken !== 'mock-access-token'
+  ) {
+    const { useUserStore } = await import('@/stores/userStore')
+    const { refreshToken } = useUserStore.getState()
+
+    if (refreshToken) {
+      const refreshedToken = await tryRefreshAccessToken(true)
+      if (refreshedToken) {
+        return apiPostForm<T>(path, formData, { ...options, accessToken: refreshedToken }, false)
+      }
+    }
+  }
+
+  let responseBody: unknown
+  try {
+    responseBody = await response.json()
+  } catch {
+    throw new ApiError(response.status, [])
+  }
+
+  const { isSuccess, data, messages } = normalizeApiEnvelope<T>(responseBody)
+
+  if (!response.ok || !isSuccess || data === undefined) {
+    throw new ApiError(response.status, messages)
+  }
+
+  return data
+}
+
 export async function apiPut<T>(
   path: string,
   body: unknown,

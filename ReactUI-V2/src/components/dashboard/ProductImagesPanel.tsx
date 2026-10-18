@@ -187,8 +187,13 @@ export function ProductImagesPanel({
   }
 
   const handleUpload = async () => {
-    if (!accessToken || accessToken === 'mock-access-token' || contentLanguageId == null) {
+    if (!accessToken || accessToken === 'mock-access-token') {
       setError(t('dashboard.productImages.saveFailed'))
+      return
+    }
+
+    if (contentLanguageId == null) {
+      setError(t('dashboard.productImages.languageRequired'))
       return
     }
 

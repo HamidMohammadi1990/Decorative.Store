@@ -25,6 +25,12 @@ public class UpdateProductHandler
             request.Slug,
             request.Description);
 
+        if (request.MirrorTitleToAllLanguages)
+        {
+            foreach (var translation in product.Translations.Where(t => t.LanguageId != request.LanguageId))
+                translation.UpdateTitle(request.Title);
+        }
+
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)
             return saveChangesResult;

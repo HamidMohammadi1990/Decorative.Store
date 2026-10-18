@@ -24,6 +24,7 @@ import { useStorefrontFonts } from '@/hooks/useStorefrontFonts'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { ZaraStoreHeader } from '@/components/storefront/zara/ZaraStoreHeader'
 import { ZaraStoreFooter } from '@/components/storefront/zara/ZaraStoreFooter'
+import { FloatingBackToTop } from '@/components/ui/BackToTop'
 import '@/styles/storefront-zara.css'
 
 function isHomePath(pathname: string) {
@@ -81,6 +82,7 @@ function ShopLayoutContent() {
       <LoginModal />
       <StoryViewerModal />
       <AiAssistantWidget />
+      <FloatingBackToTop />
     </div>
   )
 }

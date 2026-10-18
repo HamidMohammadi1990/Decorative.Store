@@ -96,6 +96,27 @@ html.dark .storefront-zara {
   opacity: 0.65;
 }
 
+/* Persian / RTL: search + product titles (explicit dir on elements; reinforce here) */
+html[dir='rtl'] .storefront-zara .zara-search-input,
+html[dir='rtl'] .storefront-zara .sf-search-hit,
+html[dir='rtl'] .storefront-zara .sf-product-title {
+  direction: rtl;
+  unicode-bidi: plaintext;
+  text-align: start;
+}
+
+html[lang='fa'] .storefront-zara .zara-search-input,
+html[lang='fa'] .storefront-zara .zara-search-label,
+html[lang='fa'] .storefront-zara .sf-search-hit {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+html[lang='fa'] .storefront-zara .sf-product-title {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
 /* Drawer portals to document.body — keep selectors on .zara-nav-drawer-root wrapper */
 .zara-nav-drawer-root .zara-nav-drawer-backdrop {
   opacity: 0;

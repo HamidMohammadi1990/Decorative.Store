@@ -1,4 +1,6 @@
 import { useTranslation } from 'react-i18next'
+import { SF_PRODUCT_TITLE_CLASS } from '@/extensions/localeText'
+import { useLocaleDirection } from '@/hooks/useLocaleDirection'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
 import { CloseIcon } from '@/components/ui/CloseIcon'
 import { LocalImage } from '@/components/ui/LocalImage'
@@ -19,6 +21,7 @@ export function CartLineItem({
   onUpdateQuantity,
 }: CartLineItemProps) {
   const { t } = useTranslation()
+  const direction = useLocaleDirection()
 
   const decrement = () => onUpdateQuantity(Math.max(1, line.quantity - 1))
   const increment = () => onUpdateQuantity(Math.min(99, line.quantity + 1))
@@ -40,7 +43,10 @@ export function CartLineItem({
         </div>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <p className="line-clamp-2 text-sm font-semibold leading-snug text-text">
+          <p
+            dir={direction}
+            className={`${SF_PRODUCT_TITLE_CLASS} line-clamp-2 text-sm font-semibold leading-snug text-text`}
+          >
             {line.title}
           </p>
 

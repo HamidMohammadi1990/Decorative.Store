@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { CatalogNavLink } from '@/components/routing/CatalogNavLink'
 import { navigateSsr } from '@/extensions/catalogNavLink'
+import { getDirection } from '@/extensions/getDirection'
+import { SF_SEARCH_HIT_CLASS } from '@/extensions/localeText'
 import { useTranslation } from 'react-i18next'
 import type { CatalogSearchResponse } from '@/models/catalog/catalogSearch.model'
 import { catalogSearchService } from '@/services/catalogSearchService'
@@ -20,6 +22,7 @@ interface HeaderSearchProps {
 export function HeaderSearch({ placeholder, className, tone = 'default' }: HeaderSearchProps) {
   const { t } = useTranslation()
   const locale = useSettingsStore((s) => s.locale)
+  const direction = getDirection(locale)
   const containerRef = useRef<HTMLDivElement>(null)
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
@@ -96,16 +99,17 @@ export function HeaderSearch({ placeholder, className, tone = 'default' }: Heade
 
   return (
     <div ref={containerRef} className={`relative min-w-0 flex-1 ${className ?? ''}`}>
-      <form className="mx-auto w-full max-w-lg" role="search" onSubmit={submit}>
+      <form className="mx-auto w-full max-w-lg" role="search" onSubmit={submit} dir={direction}>
         <input
           type="search"
           value={query}
+          dir={direction}
           onChange={(event) => setQuery(event.target.value)}
           onFocus={() => {
             if (trimmed.length >= MIN_QUERY_LENGTH) setOpen(true)
           }}
           placeholder={placeholder}
-          className={`w-full outline-none ${inputToneClass}`}
+          className={`zara-search-input w-full outline-none ${inputToneClass}`}
           aria-label={t('common.search')}
           aria-expanded={showPanel}
           aria-controls="header-search-results"
@@ -115,6 +119,7 @@ export function HeaderSearch({ placeholder, className, tone = 'default' }: Heade
       {showPanel && (
         <div
           id="header-search-results"
+          dir={direction}
           className="absolute start-0 end-0 top-full z-50 mt-1 max-h-[min(70vh,24rem)] overflow-y-auto rounded-sm border border-border bg-surface shadow-lg"
         >
           {loading ? (
@@ -217,7 +222,7 @@ function SearchLink({
         onClick={onNavigate}
         className="flex flex-col gap-0.5 px-3 py-2 hover:bg-surface-muted"
       >
-        <span className="text-text">{label}</span>
+        <span className={`${SF_SEARCH_HIT_CLASS} text-text`}>{label}</span>
         {hint ? <span className="text-xs text-text-muted">{hint}</span> : null}
       </CatalogNavLink>
     </li>

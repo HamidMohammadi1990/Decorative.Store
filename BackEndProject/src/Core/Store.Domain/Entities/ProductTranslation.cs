@@ -28,4 +28,9 @@ public class ProductTranslation : BaseEntity
         Slug = slug;
         Description = description;
     }
+
+    public void UpdateTitle(string title)
+    {
+        Title = title;
+    }
 }

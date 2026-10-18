@@ -27,5 +27,9 @@ public interface ICategoryRepository
     Task<List<CategoryWithSubCategoriesDto>> GetAllWithProductsAsync(
         ProductFeatureTypeCode featureType,
         CancellationToken cancellationToken = default);
+    /// <summary>
+    /// Public storefront navigation tree: only active categories and subcategories
+    /// (categories with subcategories but none active are omitted).
+    /// </summary>
     Task<List<CategoryWithSubCategoriesDto>> GetTreeAsync(CancellationToken cancellationToken = default);
 }

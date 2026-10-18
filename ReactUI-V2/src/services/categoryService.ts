@@ -17,13 +17,16 @@ function normalizeCategoryTree(data: unknown): CategoryTreeItem[] {
   return []
 }
 
+/** Dedupe concurrent requests only — do not cache the tree (admin may toggle IsActive). */
 const treeRequests = new Map<Locale, Promise<CategoryTreeItem[]>>()
 
 export const categoryService = {
   async getTree(locale: Locale, force = false): Promise<CategoryTreeItem[]> {
-    if (!force) {
-      const cached = treeRequests.get(locale)
-      if (cached) return cached
+    if (force) {
+      treeRequests.delete(locale)
+    } else {
+      const inFlight = treeRequests.get(locale)
+      if (inFlight) return inFlight
     }
 
     const request = apiGet<unknown>(CATEGORY_TREE_PATH, locale).then(normalizeCategoryTree)
@@ -34,6 +37,8 @@ export const categoryService = {
     } catch (error) {
       treeRequests.delete(locale)
       throw error
+    } finally {
+      treeRequests.delete(locale)
     }
   },
 }

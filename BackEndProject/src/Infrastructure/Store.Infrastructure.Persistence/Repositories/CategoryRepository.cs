@@ -145,6 +145,7 @@ public class CategoryRepository
                 new { ProductFeatureTypeId = productFeatureType.Id, productFeatureType.Type }
              join subCategory in Context.SubCategory on product.SubCategoryId equals subCategory.Id
              join category in Context.Category on subCategory.CategoryId equals category.Id
+             where product.IsActive && subCategory.IsActive && category.IsActive
              select new
              {
                  product,
@@ -212,6 +213,9 @@ public class CategoryRepository
         var categories = await Context.Category
             .AsNoTracking()
             .Where(x => x.IsActive)
+            .Where(x =>
+                !Context.SubCategory.Any(s => s.CategoryId == x.Id)
+                || Context.SubCategory.Any(s => s.CategoryId == x.Id && s.IsActive))
             .Include(x => x.Translations)
             .Include(x => x.SubCategories.Where(sub => sub.IsActive))
             .ThenInclude(sub => sub.Translations)
@@ -229,6 +233,7 @@ public class CategoryRepository
                     Title = categoryTranslation.Title,
                     Slug = categoryTranslation.Slug,
                     SubCategories = category.SubCategories
+                        .Where(sub => sub.IsActive)
                         .OrderBy(sub => sub.Id)
                         .Select(subCategory =>
                         {

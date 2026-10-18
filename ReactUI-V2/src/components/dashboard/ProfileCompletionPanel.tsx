@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { ProfileCompletionProfilePhoto } from '@/components/dashboard/ProfileCompletionProfilePhoto'
 import { ProfileCompletionUserSection } from '@/components/dashboard/ProfileCompletionUserSection'
 import { DashboardPageHeader } from '@/components/dashboard/DashboardPageHeader'
 import { ProfileCompletionIcon } from '@/components/dashboard/DashboardIcons'
@@ -15,6 +16,7 @@ export function ProfileCompletionPanel() {
         description={config?.campaign.subtitle ?? t('dashboard.profileCompletion.pageDescription')}
         icon={<ProfileCompletionIcon size={22} />}
       />
+      <ProfileCompletionProfilePhoto />
       <ProfileCompletionUserSection />
     </div>
   )

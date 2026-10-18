@@ -1,6 +1,7 @@
 import type { DashboardUser } from '@/models/dashboard/dashboard.model'
+import type { Locale } from '@/models/shared/locale.model'
 import { resolveUserImageUrl } from '@/utils/resolveUserImageUrl'
-import { apiGetAuth, apiPost } from '@/services/api/apiClient'
+import { apiGetAuth, apiPost, apiPostForm } from '@/services/api/apiClient'
 import {
   readNumberField,
   readOptionalStringField,
@@ -8,8 +9,10 @@ import {
 } from '@/services/api/apiNormalize'
 
 const SIGN_IN_PATH = '/api/v1/account/sign-in'
+const SIGN_UP_PATH = '/api/v1/account/sign-up'
 const SIGN_OUT_PATH = '/api/v1/account/sign-out'
 const CURRENT_USER_PATH = '/api/v1/account/me'
+const PROFILE_IMAGE_PATH = '/api/v1/account/profile-image'
 const REFRESH_TOKEN_PATH = '/api/v1/account/refresh-token'
 
 export interface SignInResponse {
@@ -100,6 +103,13 @@ export function createFallbackDashboardUser(userName: string, firstName?: string
   }
 }
 
+export interface SignUpInput {
+  userName: string
+  password: string
+  firstName: string
+  lastName: string
+}
+
 export const authService = {
   async signIn(userName: string, password: string): Promise<SignInResponse> {
     const data = await apiPost<unknown>(SIGN_IN_PATH, { userName, password })
@@ -107,6 +117,22 @@ export const authService = {
 
     if (!tokens.accessToken) {
       throw new Error('Sign-in response did not include an access token.')
+    }
+
+    return tokens
+  },
+
+  async signUp(input: SignUpInput): Promise<SignInResponse> {
+    const data = await apiPost<unknown>(SIGN_UP_PATH, {
+      userName: input.userName.trim(),
+      password: input.password,
+      firstName: input.firstName.trim(),
+      lastName: input.lastName.trim(),
+    })
+    const tokens = normalizeSignInResponse(data)
+
+    if (!tokens.accessToken) {
+      throw new Error('Sign-up response did not include an access token.')
     }
 
     return tokens
@@ -124,5 +150,31 @@ export const authService = {
 
   async signOut(accessToken: string): Promise<boolean> {
     return apiGetAuth<boolean>(SIGN_OUT_PATH, accessToken)
+  },
+
+  async uploadProfileImage(
+    accessToken: string,
+    locale: Locale,
+    file: File,
+  ): Promise<{ imageFileName: string; imageUrl: string }> {
+    const formData = new FormData()
+    formData.append('image', file)
+
+    const data = await apiPostForm<unknown>(PROFILE_IMAGE_PATH, formData, {
+      locale,
+      accessToken,
+    })
+
+    const record = data && typeof data === 'object' ? (data as Record<string, unknown>) : {}
+    const imageFileName = readStringField(record, 'imageFileName', 'ImageFileName')
+    const imageUrl = readStringField(record, 'imageUrl', 'ImageUrl')
+    if (!imageFileName || !imageUrl) {
+      throw new Error('Profile image upload response was incomplete.')
+    }
+
+    return {
+      imageFileName,
+      imageUrl: resolveUserImageUrl(imageUrl),
+    }
   },
 }

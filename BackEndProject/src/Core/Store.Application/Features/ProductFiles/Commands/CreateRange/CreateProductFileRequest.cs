@@ -4,17 +4,17 @@ using Store.Domain.Enums;
 
 namespace Edition.Application.Features.ProductFiles.Commands;
 
-public record CreateProductFileRequest : IRequest<OperationResult<List<CreateProductFileResponse>>>
+public class CreateProductFileRequest : IRequest<OperationResult<List<CreateProductFileResponse>>>
 {
-    public List<ProductFileRequest> Files { get; init; } = default!;
+    public List<ProductFileRequest> Files { get; set; } = [];
 }
 
-public record ProductFileRequest
+public class ProductFileRequest
 {
-    public string ProductId { get; init; } = default!;
-    public int LanguageId { get; init; }
-    public string Title { get; init; } = default!;
-    public IFormFile Image { get; init; } = default!;
-    public bool IsIndex { get; init; }
-    public ProductFileKind Kind { get; init; } = ProductFileKind.Gallery;
+    public string ProductId { get; set; } = default!;
+    public int LanguageId { get; set; }
+    public string Title { get; set; } = default!;
+    public IFormFile Image { get; set; } = default!;
+    public bool IsIndex { get; set; }
+    public ProductFileKind Kind { get; set; } = ProductFileKind.Gallery;
 }

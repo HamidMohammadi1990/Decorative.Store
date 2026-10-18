@@ -2,12 +2,8 @@ import type { ListingQuery, ProductListingResult } from '@/models/catalog/listin
 import type { Locale } from '@/models/shared/locale.model'
 import { catalogService } from '@/services/catalogService'
 
-interface CacheEntry {
-  promise: Promise<ProductListingResult>
-  result?: ProductListingResult
-}
-
-const cache = new Map<string, CacheEntry>()
+/** Dedupe in-flight listing requests only — do not keep stale product titles after admin edits. */
+const inFlight = new Map<string, Promise<ProductListingResult>>()
 
 function buildCacheKey(locale: Locale, pathname: string, search: string) {
   return `${locale}|${pathname}|${search}`
@@ -15,18 +11,14 @@ function buildCacheKey(locale: Locale, pathname: string, search: string) {
 
 function startListingRequest(query: ListingQuery, locale: Locale): Promise<ProductListingResult> {
   const key = buildCacheKey(locale, query.pathname, query.searchParams.toString())
-  const existing = cache.get(key)
-  if (existing?.result) return Promise.resolve(existing.result)
-  if (existing?.promise) return existing.promise
+  const existing = inFlight.get(key)
+  if (existing) return existing
 
-  const entry: CacheEntry = {
-    promise: catalogService.getListing(query, locale).then((result) => {
-      entry.result = result
-      return result
-    }),
-  }
-  cache.set(key, entry)
-  return entry.promise
+  const promise = catalogService.getListing(query, locale).finally(() => {
+    inFlight.delete(key)
+  })
+  inFlight.set(key, promise)
+  return promise
 }
 
 export async function getCatalogListingCached(
@@ -37,5 +29,5 @@ export async function getCatalogListingCached(
 }
 
 export function clearCatalogListingCache() {
-  cache.clear()
+  inFlight.clear()
 }

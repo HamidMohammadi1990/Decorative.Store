@@ -1,4 +1,3 @@
-import { API_BASE_URL } from '@/config/api'
 import { resolveProductImageSrc } from '@/utils/publicUploadUrl'
 import type {
   AdminProductFile,
@@ -6,8 +5,8 @@ import type {
   ProductFileKind,
 } from '@/models/admin/catalog.model'
 import type { Locale } from '@/models/shared/locale.model'
-import { apiDelete, apiPost, apiPut, toAcceptLanguage } from '@/services/api/apiClient'
-import { normalizeApiEnvelope, readRecord, readStringField } from '@/services/api/apiNormalize'
+import { apiDelete, apiPost, apiPostForm, apiPut } from '@/services/api/apiClient'
+import { readRecord, readStringField } from '@/services/api/apiNormalize'
 import {
   normalizeAdminPaged,
   paginationBody,
@@ -85,29 +84,22 @@ export const adminProductFileService = {
     const formData = new FormData()
 
     files.forEach((file, index) => {
+      const kind = file.kind ?? 'Gallery'
       formData.append(`Files[${index}].ProductId`, file.productId)
       formData.append(`Files[${index}].LanguageId`, String(file.languageId))
       formData.append(`Files[${index}].Title`, file.title)
-      formData.append(`Files[${index}].IsIndex`, String(file.isIndex))
-      formData.append(`Files[${index}].Kind`, file.kind ?? 'Gallery')
-      formData.append(`Files[${index}].Image`, file.image)
+      formData.append(`Files[${index}].IsIndex`, file.isIndex ? 'true' : 'false')
+      formData.append(`Files[${index}].Kind`, kind === 'RoomLayout' ? '1' : '0')
+      formData.append(`Files[${index}].Image`, file.image, file.image.name)
     })
 
-    const response = await fetch(`${API_BASE_URL}${BASE}/create-range`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Accept-Language': toAcceptLanguage(locale),
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: formData,
+    const data = await apiPostForm<unknown[]>(`${BASE}/create-range`, formData, {
+      locale,
+      accessToken,
     })
 
-    const responseBody = await response.json()
-    const { isSuccess, data, messages } = normalizeApiEnvelope<unknown[]>(responseBody)
-
-    if (!response.ok || !isSuccess || !Array.isArray(data)) {
-      throw new ApiError(response.status, messages)
+    if (!Array.isArray(data) || data.length === 0) {
+      throw new ApiError(400, [{ code: 'ProductImageUploadFailed', message: '' }])
     }
 
     return data.flatMap((item) => {

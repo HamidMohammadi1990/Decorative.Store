@@ -143,6 +143,7 @@ async function buildPage(
   skipHomeCatalogContent: boolean,
   skipCmsPage: boolean,
   cmsSlug: string,
+  forceCatalogRefresh = false,
 ): Promise<HomePage> {
   const mockPage = mapHomePage(getHomeMock(locale))
 
@@ -179,13 +180,13 @@ async function buildPage(
     }
 
     try {
-      const categoryTree = await categoryService.getTree(locale)
+      const categoryTree = await categoryService.getTree(locale, forceCatalogRefresh)
       const catalogNav = mapCategoryTreeToNav(categoryTree)
       const dynamicCategoryNav = mapCategoryTreeToCategoryNav(categoryTree)
 
       return mergeHomePage(pageWithContent, {
-        categoryNav:
-          dynamicCategoryNav.items.length > 0 ? dynamicCategoryNav : pageWithContent.categoryNav,
+        // Always trust API tree when the call succeeds (CMS/mock nav can list inactive categories).
+        categoryNav: dynamicCategoryNav,
         header: {
           primaryNav: [...staticNav, ...catalogNav],
         },
@@ -230,7 +231,14 @@ export const homeService = {
       if (inFlight) return inFlight
     }
 
-    const request = buildPage(locale, skipCatalogNav, skipHomeCatalogContent, skipCmsPage, cmsSlug)
+    const request = buildPage(
+      locale,
+      skipCatalogNav,
+      skipHomeCatalogContent,
+      skipCmsPage,
+      cmsSlug,
+      force,
+    )
     pageRequests.set(cacheKey, request)
 
     try {

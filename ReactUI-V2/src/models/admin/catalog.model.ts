@@ -91,6 +91,8 @@ export interface CreateProductInput {
 export interface UpdateProductInput extends CreateProductInput {
   id: string
   status: boolean
+  /** Copy title to all product translations (slug stays per language). */
+  mirrorTitleToAllLanguages?: boolean
 }
 
 export type ProductFileKind = 'Gallery' | 'RoomLayout'

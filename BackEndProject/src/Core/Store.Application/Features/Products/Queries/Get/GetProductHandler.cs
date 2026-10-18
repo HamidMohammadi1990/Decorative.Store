@@ -20,7 +20,8 @@ public class GetProductHandler
             return ErrorModel.Create("InvalidId");
 
         var defaultLanguage = await languageRegistry.GetDefaultAsync(cancellationToken);
-        var languageId = languageContext.IsResolved ? languageContext.LanguageId : defaultLanguage.Id;
+        var languageId = request.LanguageId
+            ?? (languageContext.IsResolved ? languageContext.LanguageId : defaultLanguage.Id);
         var (title, slug, description) = TranslationResolver.Resolve(product.Translations, languageId, defaultLanguage.Id);
 
         var subCategoryTitle = string.Empty;

@@ -6,7 +6,7 @@ import type { SearchPageLoaderData } from '@/routes/loaders/types'
 import { useStorefrontLocale } from '@/hooks/useStorefrontLocale'
 
 const MIN_QUERY_LENGTH = 2
-const RESULT_LIMIT = 100
+const RESULT_LIMIT = 50
 
 function isLoaderFresh(
   loaderData: SearchPageLoaderData | undefined,

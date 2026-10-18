@@ -133,8 +133,17 @@ export const adminProductService = {
     )
   },
 
-  async get(accessToken: string, locale: Locale, id: string): Promise<AdminProductDetail | null> {
-    const data = await apiPost<unknown>(`${BASE}/get`, { id }, { locale, accessToken })
+  async get(
+    accessToken: string,
+    locale: Locale,
+    id: string,
+    languageId?: number,
+  ): Promise<AdminProductDetail | null> {
+    const data = await apiPost<unknown>(
+      `${BASE}/get`,
+      { id, languageId: languageId ?? null },
+      { locale, accessToken },
+    )
     return normalizeProductDetail(data)
   },
 

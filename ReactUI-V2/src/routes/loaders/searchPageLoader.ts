@@ -4,7 +4,7 @@ import { resolveLocale } from '@/ssr/resolveLocale'
 import type { SearchPageLoaderData } from '@/routes/loaders/types'
 
 const MIN_QUERY_LENGTH = 2
-const RESULT_LIMIT = 100
+const RESULT_LIMIT = 50
 
 export async function searchPageLoader({
   request,

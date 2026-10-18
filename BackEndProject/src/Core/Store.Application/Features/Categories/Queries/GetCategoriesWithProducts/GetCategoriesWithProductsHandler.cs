@@ -10,6 +10,7 @@ public class GetCategoriesWithProductsHandler
 {
     public async Task<OperationResult<List<GetCategoriesWithProductsResponse>>> Handle(GetCategoriesWithProductsRequest request, CancellationToken cancellationToken)
     {
+        // Storefront catalog nav — inactive nodes are filtered in CategoryRepository.GetTreeAsync.
         var categories = await categoryRepository.GetTreeAsync(cancellationToken);
         return mapper.Map(categories);
     }

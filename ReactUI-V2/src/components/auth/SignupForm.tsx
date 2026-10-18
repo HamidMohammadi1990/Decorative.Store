@@ -26,7 +26,7 @@ export function SignupForm({
 }: SignupFormProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const login = useUserStore((s) => s.login)
+  const signUp = useUserStore((s) => s.signUp)
   const loginDemo = useUserStore((s) => s.loginDemo)
   const authLoading = useUserStore((s) => s.authLoading)
   const authError = useUserStore((s) => s.authError)
@@ -82,7 +82,12 @@ export function SignupForm({
           lastName: values.lastName,
         })
       } else {
-        await login({ userName: values.userName, password: values.password })
+        await signUp({
+          userName: values.userName,
+          password: values.password,
+          firstName: values.firstName,
+          lastName: values.lastName,
+        })
       }
 
       if (onSuccess) {

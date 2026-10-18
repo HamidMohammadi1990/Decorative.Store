@@ -20,6 +20,7 @@ import { adminCategoryService } from '@/services/adminCategoryService'
 import { adminSubCategoryService } from '@/services/adminSubCategoryService'
 import { slugifyTitle } from '@/services/admin/adminCatalogNormalize'
 import { useUserStore } from '@/stores/userStore'
+import { showToast } from '@/stores/toastStore'
 import { ProductImagesPanel } from '@/components/dashboard/ProductImagesPanel'
 
 function formatSubCategoryLabel(item: AdminSubCategory): string {
@@ -67,6 +68,7 @@ export function ProductFormPanel() {
   const [subCategoryLabel, setSubCategoryLabel] = useState('')
   const [isActive, setIsActive] = useState(true)
   const [slugTouched, setSlugTouched] = useState(false)
+  const [mirrorTitleToAllLanguages, setMirrorTitleToAllLanguages] = useState(true)
 
   const contentLocale = useMemo(
     () =>
@@ -170,7 +172,12 @@ export function ProductFormPanel() {
       setCategories(categoryResult.items)
 
       if (isEdit && productId) {
-        const product = await adminProductService.get(accessToken, contentLocale, productId)
+        const product = await adminProductService.get(
+          accessToken,
+          contentLocale,
+          productId,
+          contentLanguageId,
+        )
         if (!product) {
           setError(t('dashboard.products.notFound'))
           return
@@ -327,7 +334,9 @@ export function ProductFormPanel() {
           compareAtPrice: parsedCompare,
           subCategoryId,
           status: isActive,
+          mirrorTitleToAllLanguages,
         })
+        showToast(t('dashboard.products.saveSuccess'), 'success')
       } else {
         const newId = await adminProductService.create(accessToken, contentLocale, {
           languageId: contentLanguageId,
@@ -339,13 +348,16 @@ export function ProductFormPanel() {
           compareAtPrice: parsedCompare,
           subCategoryId,
         })
+        showToast(t('dashboard.products.saveSuccess'), 'success')
         const params = new URLSearchParams({ id: newId })
         if (subCategoryId) params.set('subCategoryId', subCategoryId)
         navigate(`/account/dashboard/products/edit?${params.toString()}`, { replace: true })
         return
       }
     } catch (err) {
-      setError(resolveAdminMutationError(err, t('dashboard.products.saveFailed')))
+      const message = resolveAdminMutationError(err, t('dashboard.products.saveFailed'))
+      setError(message)
+      showToast(message, 'error')
     } finally {
       setSaving(false)
     }
@@ -454,6 +466,23 @@ export function ProductFormPanel() {
             placeholder={t('dashboard.products.titlePlaceholder')}
           />
         </AdminField>
+
+        {isEdit && (
+          <label className="flex items-start gap-2 text-sm text-text">
+            <input
+              type="checkbox"
+              checked={mirrorTitleToAllLanguages}
+              onChange={(e) => setMirrorTitleToAllLanguages(e.target.checked)}
+              className="mt-0.5 size-4 rounded border-border text-warm focus:ring-warm"
+            />
+            <span>
+              {t('dashboard.products.mirrorTitleAllLanguages')}
+              <span className="mt-1 block text-xs text-text-muted">
+                {t('dashboard.products.mirrorTitleAllLanguagesHint')}
+              </span>
+            </span>
+          </label>
+        )}
 
         <AdminField label={t('dashboard.products.fieldSlug')}>
           <input

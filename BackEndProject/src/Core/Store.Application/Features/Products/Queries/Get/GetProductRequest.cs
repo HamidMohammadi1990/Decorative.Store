@@ -8,4 +8,7 @@ public record GetProductRequest : IRequest<OperationResult<GetProductResponse?>>
 {
     [JsonConverter(typeof(ProductEncryptor))]
     public int Id { get; init; }
+
+    /// <summary>When set (admin), resolves title/slug for this language instead of Accept-Language only.</summary>
+    public int? LanguageId { get; init; }
 }

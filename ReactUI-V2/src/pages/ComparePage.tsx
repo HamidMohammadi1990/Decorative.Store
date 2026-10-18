@@ -17,6 +17,8 @@ import { calcDiscountPercent } from '@/extensions/calcDiscountPercent'
 import { useCompareProducts } from '@/hooks/useCompareProducts'
 import { useShopPageMeta } from '@/hooks/useShopPageMeta'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
+import { useLocaleDirection } from '@/hooks/useLocaleDirection'
+import { SF_PRODUCT_TITLE_CLASS } from '@/extensions/localeText'
 import { useCompareStore } from '@/stores/compareStore'
 import { MAX_COMPARE_PRODUCTS } from '@/models/catalog/compare.model'
 import type { ProductDetail } from '@/models/catalog/productDetail.model'
@@ -167,6 +169,7 @@ function ProductColumnHeader({
 }) {
   const { t } = useTranslation()
   const { currency } = useLocaleSettings()
+  const direction = useLocaleDirection()
   const discount = product.compareAtPrice
     ? calcDiscountPercent(product.price, product.compareAtPrice)
     : null
@@ -198,7 +201,10 @@ function ProductColumnHeader({
             className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
-        <p className="mt-4 line-clamp-2 text-sm font-semibold text-text transition-colors group-hover:text-warm">
+        <p
+          dir={direction}
+          className={`${SF_PRODUCT_TITLE_CLASS} mt-4 line-clamp-2 text-sm font-semibold text-text transition-colors group-hover:text-warm`}
+        >
           {product.title}
         </p>
       </CatalogNavLink>

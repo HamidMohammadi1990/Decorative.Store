@@ -5,6 +5,8 @@ import { CloseIcon } from '@/components/ui/CloseIcon'
 import { LocalImage } from '@/components/ui/LocalImage'
 import type { CartLine } from '@/models/cart/cartLine.model'
 import type { CurrencyConfig } from '@/models/shared/currency.model'
+import { SF_PRODUCT_TITLE_CLASS } from '@/extensions/localeText'
+import { useLocaleDirection } from '@/hooks/useLocaleDirection'
 
 interface CartPageLineItemProps {
   line: CartLine
@@ -28,6 +30,8 @@ export function CartPageLineItem({
   onUpdateQuantity,
 }: CartPageLineItemProps) {
   const { t } = useTranslation()
+  const direction = useLocaleDirection()
+  const titleClass = `${SF_PRODUCT_TITLE_CLASS} line-clamp-2 text-sm font-semibold leading-snug text-text sm:text-base`
   const lineTotal = line.unitPrice.amount * line.quantity
   const productHref = line.slug ? `/product/${line.slug}` : undefined
 
@@ -53,13 +57,15 @@ export function CartPageLineItem({
     productHref ? (
       <CatalogNavLink
         href={productHref}
-        className={`line-clamp-2 text-sm font-semibold leading-snug text-text transition-colors hover:text-warm sm:text-base${compact ? ' pe-8' : ''}`}
+        dir={direction}
+        className={`${titleClass} transition-colors hover:text-warm${compact ? ' pe-8' : ''}`}
       >
         {line.title}
       </CatalogNavLink>
     ) : (
       <p
-        className={`line-clamp-2 text-sm font-semibold leading-snug text-text sm:text-base${compact ? ' pe-8' : ''}`}
+        dir={direction}
+        className={`${titleClass}${compact ? ' pe-8' : ''}`}
       >
         {line.title}
       </p>

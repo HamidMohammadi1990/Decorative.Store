@@ -63,8 +63,12 @@ function normalizeSubCategoryFromGet(data: unknown): AdminSubCategory | null {
   const id = readEncryptedId(record, 'id', 'Id')
   const code = readStringField(record, 'code', 'Code')
   const categoryId = readEncryptedId(record, 'categoryId', 'CategoryId')
+  if (!id || !code || !categoryId) return null
+
+  const translations = normalizeTranslations(record.translations ?? record.Translations)
   const title = readStringField(record, 'title', 'Title')
-  if (!id || !code || !categoryId || !title) return null
+  const slug = readStringField(record, 'slug', 'Slug')
+  const translation = translations[0]
 
   return {
     id,
@@ -73,9 +77,9 @@ function normalizeSubCategoryFromGet(data: unknown): AdminSubCategory | null {
     categoryCode: readStringField(record, 'categoryCode', 'CategoryCode'),
     categoryTitle: readStringField(record, 'categoryTitle', 'CategoryTitle'),
     isActive: readIsActive(record),
-    title,
-    slug: readStringField(record, 'slug', 'Slug'),
-    translations: [],
+    title: title || translation?.title || code,
+    slug: slug || translation?.slug || '',
+    translations,
   }
 }
 

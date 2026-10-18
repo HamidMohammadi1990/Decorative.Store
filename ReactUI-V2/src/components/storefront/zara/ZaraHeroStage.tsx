@@ -16,13 +16,13 @@ interface ZaraHeroStageProps {
 
 function HeroSlidePane({ slide, priority }: { slide: HeroSlide; priority?: boolean }) {
   return (
-    <div className="relative size-full min-h-svh overflow-hidden bg-neutral-900">
+    <div className="relative size-full min-w-0 overflow-hidden bg-neutral-900">
       <LocalImage
         image={slide.image}
         priority={priority}
         loading={priority ? 'eager' : 'lazy'}
-        sizes="50vw"
-        className="pointer-events-none absolute inset-0 size-full object-cover"
+        sizes="100vw"
+        className="absolute inset-0 size-full object-cover object-center"
       />
     </div>
   )
@@ -85,27 +85,18 @@ export function ZaraHeroStage({ hero, categoryNav, className }: ZaraHeroStagePro
       : dragOffset
 
   if (slideCount === 0) {
-    return <div className="min-h-svh bg-neutral-900" aria-hidden />
+    return <div className="h-svh w-full bg-neutral-900" aria-hidden />
   }
 
   const activeSlide = hero.slides[index]
-  const rightIndex = slideCount > 1 ? (index + 1) % slideCount : index
-  const rightSlide = hero.slides[rightIndex]
 
   return (
     <section
-      className={`relative isolate min-h-svh overflow-hidden bg-neutral-900 text-white ${className ?? ''}`}
+      className={`relative isolate h-svh w-full overflow-hidden bg-neutral-900 text-white ${className ?? ''}`}
     >
-      {/* Desktop: 50/50 split (Zara Home) */}
-      <div className="absolute inset-0 hidden min-h-svh grid-cols-2 lg:grid">
-        <HeroSlidePane slide={activeSlide} priority />
-        <HeroSlidePane slide={rightSlide} priority={rightIndex <= 1} />
-      </div>
-
-      {/* Mobile: horizontal carousel */}
       <div
         ref={viewportRef}
-        className={`absolute inset-0 touch-pan-y select-none lg:hidden ${
+        className={`absolute inset-0 touch-pan-y select-none ${
           slideCount > 1 ? (isGrabbing ? 'cursor-grabbing' : 'cursor-grab') : ''
         }`}
         onPointerDown={onPointerDown}
@@ -116,7 +107,7 @@ export function ZaraHeroStage({ hero, categoryNav, className }: ZaraHeroStagePro
       >
         <div
           dir="ltr"
-          className="flex h-full min-h-svh will-change-transform"
+          className="flex h-full will-change-transform"
           style={{
             width: viewportWidth > 0 ? viewportWidth * slideCount : '100%',
             transform: `translate3d(${trackOffset}px, 0, 0)`,
@@ -127,7 +118,7 @@ export function ZaraHeroStage({ hero, categoryNav, className }: ZaraHeroStagePro
             <article
               key={s.id}
               dir="auto"
-              className="relative h-full min-h-svh shrink-0"
+              className="relative h-full shrink-0"
               style={{ width: viewportWidth > 0 ? viewportWidth : '100%' }}
               aria-hidden={i !== index}
             >
@@ -137,7 +128,23 @@ export function ZaraHeroStage({ hero, categoryNav, className }: ZaraHeroStagePro
         </div>
       </div>
 
-      <div className="pointer-events-none relative z-[2] flex min-h-svh flex-col items-center justify-center px-6 pb-24 pt-28 text-center md:px-12 md:pb-28 md:pt-32">
+      {slideCount > 1 && (
+        <div className="pointer-events-none absolute bottom-20 start-1/2 z-[3] flex -translate-x-1/2 gap-2 rtl:translate-x-1/2">
+          {hero.slides.map((s, i) => (
+            <button
+              key={s.id}
+              type="button"
+              aria-label={`Slide ${i + 1}`}
+              onClick={() => setIndex(i)}
+              className={`pointer-events-auto size-2 rounded-full transition-colors ${
+                i === index ? 'bg-white' : 'bg-white/50'
+              }`}
+            />
+          ))}
+        </div>
+      )}
+
+      <div className="pointer-events-none absolute inset-0 z-[2] flex flex-col items-center justify-center px-6 pb-24 pt-28 text-center md:px-12 md:pb-28 md:pt-32">
         {activeSlide.eyebrow && (
           <p className="zara-hero-eyebrow mb-2 text-[10px] uppercase tracking-[0.28em] text-white/90 md:text-[11px]">
             {activeSlide.eyebrow}

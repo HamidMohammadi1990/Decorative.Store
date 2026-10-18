@@ -4,6 +4,8 @@ import type { ProductSummary } from '@/models/catalog/product.model'
 import { LocalImage } from '@/components/ui/LocalImage'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
+import { useLocaleDirection } from '@/hooks/useLocaleDirection'
+import { SF_PRODUCT_TITLE_CLASS } from '@/extensions/localeText'
 
 interface RelatedProductCardProps {
   product: ProductSummary
@@ -12,6 +14,7 @@ interface RelatedProductCardProps {
 export function RelatedProductCard({ product }: RelatedProductCardProps) {
   const { t } = useTranslation()
   const { currency } = useLocaleSettings()
+  const direction = useLocaleDirection()
   const productPath = `/product/${product.slug}`
 
   return (
@@ -42,7 +45,8 @@ export function RelatedProductCard({ product }: RelatedProductCardProps) {
       <div className="flex flex-1 flex-col gap-1 p-2">
         <CatalogNavLink
           href={productPath}
-          className="line-clamp-2 text-[11px] font-medium leading-snug text-text transition-colors group-hover:text-warm sm:text-xs"
+          dir={direction}
+          className={`${SF_PRODUCT_TITLE_CLASS} line-clamp-2 text-[11px] font-medium leading-snug text-text transition-colors group-hover:text-warm sm:text-xs`}
         >
           {product.title}
         </CatalogNavLink>

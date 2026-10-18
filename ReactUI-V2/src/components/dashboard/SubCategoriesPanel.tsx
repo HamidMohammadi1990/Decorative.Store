@@ -202,9 +202,9 @@ export function SubCategoriesPanel() {
 
   const applySubCategoryTranslation = (item: AdminSubCategory, targetLanguageId: number) => {
     const translation = pickTranslation(item.translations, targetLanguageId)
-    setTitle(translation?.title ?? '')
-    setSlug(translation?.slug ?? '')
-    setSlugTouched(Boolean(translation?.slug))
+    setTitle(translation?.title ?? item.title ?? '')
+    setSlug(translation?.slug ?? item.slug ?? '')
+    setSlugTouched(Boolean(translation?.slug ?? item.slug))
   }
 
   const openCreate = () => {
@@ -219,13 +219,25 @@ export function SubCategoriesPanel() {
 
     setEditingId(item.id)
     setEditingItem(item)
+    setCode(item.code)
+    setIsActive(item.isActive)
     setFormError(null)
     setMode('edit')
+    if (contentLanguageId != null) {
+      applySubCategoryTranslation(item, contentLanguageId)
+    }
     setFormLoading(true)
 
     void (async () => {
       try {
-        const detail = (await adminSubCategoryService.get(accessToken, locale, item.id)) ?? item
+        const fetched = await adminSubCategoryService.get(accessToken, locale, item.id)
+        const detail: AdminSubCategory = fetched
+          ? {
+              ...fetched,
+              translations:
+                fetched.translations.length > 0 ? fetched.translations : item.translations,
+            }
+          : item
         const categoryResult = await adminCategoryService.getAllForSelect(accessToken, locale, {
           languageId: contentLanguageId ?? undefined,
         })

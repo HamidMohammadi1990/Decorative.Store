@@ -7,6 +7,8 @@ import { WishlistButton } from '@/components/wishlist/WishlistButton'
 import { LocalImage } from '@/components/ui/LocalImage'
 import { PriceDisplay } from '@/components/ui/PriceDisplay'
 import { useLocaleSettings } from '@/hooks/useLocaleSettings'
+import { useLocaleDirection } from '@/hooks/useLocaleDirection'
+import { SF_PRODUCT_TITLE_CLASS } from '@/extensions/localeText'
 
 interface ProductCardProps {
   product: ProductSummary
@@ -27,6 +29,7 @@ function StarRating({ rating, count }: { rating: number; count: number }) {
 export function ProductCard({ product }: ProductCardProps) {
   const { t } = useTranslation()
   const { currency } = useLocaleSettings()
+  const direction = useLocaleDirection()
   const productPath = `/product/${product.slug}`
   const discountPercent =
     product.compareAtPrice && product.compareAtPrice.amount > product.price.amount
@@ -83,7 +86,8 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="flex flex-1 flex-col p-2.5 sm:p-3">
         <CatalogNavLink
           href={productPath}
-          className="line-clamp-2 min-h-[2.5rem] text-[13px] font-semibold leading-snug text-text transition-colors group-hover:text-warm sm:min-h-[2.75rem] sm:text-sm"
+          dir={direction}
+          className={`${SF_PRODUCT_TITLE_CLASS} line-clamp-2 min-h-[2.5rem] text-[13px] font-semibold leading-snug text-text transition-colors group-hover:text-warm sm:min-h-[2.75rem] sm:text-sm`}
         >
           {product.title}
         </CatalogNavLink>

@@ -32,24 +32,21 @@ public class CreateProductFileHandler
         {
             var productId = ResolveProductId(file.ProductId);
             if (productId == 0)
-            {
-                productFiles.Add((null, null));
-                continue;
-            }
+                return ErrorModel.Create("InvalidProductId");
 
             var filename = await localFileService.SaveFileAsync(file.Image, ProductDirectory.ProductImage);
-            if (filename.IsSuccess)
-            {
-                var isMain = file.IsIndex && file.Kind == ProductFileKind.Gallery;
-                var productFile = ProductFile.Create(productId, filename.Result!, isMain, file.Kind);
-                productFile.UpsertTranslation(file.LanguageId, file.Title);
-                productFileRepository.Add(productFile);
-                productFiles.Add((productFile, file.Title));
-                continue;
-            }
+            if (!filename.IsSuccess)
+                return OperationResult<List<CreateProductFileResponse>>.Fail();
 
-            productFiles.Add((null, null));
+            var isMain = file.IsIndex && file.Kind == ProductFileKind.Gallery;
+            var productFile = ProductFile.Create(productId, filename.Result!, isMain, file.Kind);
+            productFile.UpsertTranslation(file.LanguageId, file.Title);
+            productFileRepository.Add(productFile);
+            productFiles.Add((productFile, file.Title));
         }
+
+        if (productFiles.Count == 0)
+            return ErrorModel.Create("ImageRequired");
 
         var saveChangesResult = await uow.SaveChangesAsync(cancellationToken);
         if (!saveChangesResult.IsSuccess)
@@ -64,6 +61,10 @@ public class CreateProductFileHandler
                 Title = x.title!,
                 ImageUrl = ProductDirectory.GetImageUrl(x.productFile.FileName)
             }).ToList();
+
+        if (result.Count == 0)
+            return OperationResult<List<CreateProductFileResponse>>.Fail();
+
         return result;
     }
 

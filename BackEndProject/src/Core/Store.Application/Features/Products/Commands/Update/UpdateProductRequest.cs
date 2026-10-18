@@ -21,4 +21,7 @@ public record UpdateProductRequest : IRequest<OperationResult>
     public string ProductCode { get; init; } = default!;
     public decimal Price { get; init; }
     public decimal? CompareAtPrice { get; init; }
+
+    /// <summary>When true, copies the new title to every other language (slug/description stay per language).</summary>
+    public bool MirrorTitleToAllLanguages { get; init; }
 }

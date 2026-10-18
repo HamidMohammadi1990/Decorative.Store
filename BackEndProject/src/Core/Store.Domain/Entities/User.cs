@@ -85,6 +85,20 @@ public class User : BaseEntity
         PasswordHash = passwordHash;
         SecurityStamp = Guid.NewGuid().ToString("N");
     }
+
+    public void CompleteStorefrontSignUp(string firstName, string lastName, string passwordHash, bool registeredWithMobile)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        PasswordHash = passwordHash;
+        SecurityStamp = Guid.NewGuid().ToString("N");
+        LoginPermission = true;
+
+        if (registeredWithMobile)
+            ConfirmPhoneNumber();
+        else
+            ConfirmEmail();
+    }
     public void UpdatePhoneNumber(string phoneNumber)
     {
         PhoneNumber = phoneNumber;

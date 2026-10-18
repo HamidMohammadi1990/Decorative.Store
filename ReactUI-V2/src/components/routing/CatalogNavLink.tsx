@@ -5,7 +5,7 @@ import { isSsrFullPageHref } from '@/extensions/catalogNavLink'
 interface CatalogNavLinkProps
   extends Pick<
     AnchorHTMLAttributes<HTMLAnchorElement>,
-    'className' | 'onClick' | 'draggable' | 'title'
+    'className' | 'dir' | 'onClick' | 'draggable' | 'title'
   > {
   href: string
   children: ReactNode
@@ -15,6 +15,7 @@ interface CatalogNavLinkProps
 export function CatalogNavLink({
   href,
   className,
+  dir,
   children,
   onClick,
   draggable,
@@ -22,7 +23,14 @@ export function CatalogNavLink({
 }: CatalogNavLinkProps) {
   if (isSsrFullPageHref(href)) {
     return (
-      <a href={href} className={className} onClick={onClick} draggable={draggable} title={title}>
+      <a
+        href={href}
+        className={className}
+        dir={dir}
+        onClick={onClick}
+        draggable={draggable}
+        title={title}
+      >
         {children}
       </a>
     )
@@ -32,6 +40,7 @@ export function CatalogNavLink({
     <Link
       to={href}
       className={className}
+      dir={dir}
       prefetch="none"
       onClick={onClick}
       draggable={draggable}

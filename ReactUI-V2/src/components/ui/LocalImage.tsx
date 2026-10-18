@@ -49,10 +49,12 @@ export function LocalImage({
     if (svgFallback !== displaySrc) setDisplaySrc(svgFallback)
   }
 
+  const fillsContainer = /\b(size-full|h-full|w-full|absolute inset-0)\b/.test(className)
+
   const imgProps = {
     alt: image.alt,
-    width: image.width,
-    height: image.height,
+    width: fillsContainer ? undefined : image.width,
+    height: fillsContainer ? undefined : image.height,
     loading: resolvedLoading,
     decoding,
     fetchPriority: resolvedFetchPriority,
@@ -63,7 +65,7 @@ export function LocalImage({
 
   if (webpSrc) {
     return (
-      <picture>
+      <picture className={fillsContainer ? 'block size-full' : undefined}>
         <source srcSet={webpSrc} type="image/webp" sizes={sizes} />
         <img {...imgProps} src={displaySrc} />
       </picture>
