@@ -17,14 +17,35 @@ function isAboutContentIncomplete(content: AboutPageContent): boolean {
   return !content.hero.title?.trim()
 }
 
+function withMockHeroImageWhenPlaceholder(
+  content: AboutPageContent,
+  locale: Locale,
+): AboutPageContent {
+  const heroSrc = content.hero.image.src?.trim() ?? ''
+  if (isCmsUploadedImage(heroSrc)) return content
+  if (!heroSrc || isStockHomeMediaSrc(heroSrc)) {
+    const fallback = getAboutPageMock(locale)
+    return {
+      ...content,
+      hero: {
+        ...content.hero,
+        image: fallback.hero.image,
+      },
+    }
+  }
+  return content
+}
+
 export function applyAboutPageFallback(
   content: AboutPageContent,
   locale: Locale,
 ): AboutPageContent {
-  if (!isAboutContentIncomplete(content)) return content
+  if (!isAboutContentIncomplete(content)) {
+    return withMockHeroImageWhenPlaceholder(content, locale)
+  }
 
   const fallback = getAboutPageMock(locale)
-  return {
+  const merged: AboutPageContent = {
     ...fallback,
     slug: content.slug || fallback.slug,
     title: content.title?.trim() || fallback.title,
@@ -47,4 +68,6 @@ export function applyAboutPageFallback(
       image: isCmsUploadedImage(content.story.image.src) ? content.story.image : fallback.story.image,
     },
   }
+
+  return withMockHeroImageWhenPlaceholder(merged, locale)
 }
