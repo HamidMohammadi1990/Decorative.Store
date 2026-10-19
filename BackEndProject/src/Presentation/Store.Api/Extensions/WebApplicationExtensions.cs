@@ -34,7 +34,14 @@ public static class WebApplicationExtensions
         await languageBootstrap.EnsureLanguagesReadyAsync(cancellationToken);
 
         var seedService = scope.ServiceProvider.GetRequiredService<ISeedService>();
-        await seedService.SeedCatalogAsync(cancellationToken);
+        try
+        {
+            await seedService.SeedCatalogAsync(cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            Log.Warning(ex, "Catalog/CMS seed failed on startup; API will continue running.");
+        }
     }
     /// <summary>
     /// Close And Flush Serilog When Application Stopping

@@ -179,20 +179,34 @@ public static partial class CmsSeedService
         var pageSections = await context.PageSection
             .Include(ps => ps.Section)
                 .ThenInclude(s => s.SectionItems)
-            .Include(ps => ps.Section)
-                .ThenInclude(s => s.Translations)
             .Where(ps => ps.PageId == pageId)
             .ToListAsync(cancellationToken);
 
-        foreach (var pageSection in pageSections)
+        if (pageSections.Count == 0)
+            return;
+
+        var sections = pageSections
+            .Select(ps => ps.Section)
+            .GroupBy(s => s.Id)
+            .Select(g => g.First())
+            .ToList();
+
+        context.PageSection.RemoveRange(pageSections);
+        await context.SaveChangesAsync(cancellationToken);
+
+        foreach (var section in sections)
         {
-            context.PageSection.Remove(pageSection);
-            context.SectionItem.RemoveRange(pageSection.Section.SectionItems);
-            context.Section.Remove(pageSection.Section);
+            var stillLinked = await context.PageSection
+                .AsNoTracking()
+                .AnyAsync(ps => ps.SectionId == section.Id, cancellationToken);
+            if (stillLinked)
+                continue;
+
+            context.SectionItem.RemoveRange(section.SectionItems);
+            context.Section.Remove(section);
         }
 
-        if (pageSections.Count > 0)
-            await context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     private static async Task<CmsAboutSeedDto?> LoadAboutContentAsync(string locale, CancellationToken cancellationToken)
