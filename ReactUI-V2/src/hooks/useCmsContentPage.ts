@@ -48,7 +48,7 @@ export function useCmsContentPage(slug: string) {
       }
       setNotFound(false)
       try {
-        const page = await cmsContentPageService.getPage(slug, locale)
+        const page = await cmsContentPageService.getPage(slug, locale, { force: true })
         if (cancelled) return
         if (!page?.hero.title?.trim()) {
           setNotFound(true)

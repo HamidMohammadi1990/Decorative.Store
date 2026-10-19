@@ -34,7 +34,7 @@ export function useContactPageContent() {
       }
       setError(false)
       try {
-        const page = await contactPageService.getPage(locale)
+        const page = await contactPageService.getPage(locale, { force: true })
         if (!cancelled) setContent(page)
       } catch {
         if (!cancelled) setError(true)

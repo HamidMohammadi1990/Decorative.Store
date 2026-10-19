@@ -14,6 +14,7 @@ function toLink(label: string, href: string): AppLink {
 import { readRecord, readStringField } from '@/services/api/apiNormalize'
 import { resolveHomeImageSrc } from '@/extensions/resolveHomeImage'
 import { resolveCmsImageSrc } from '@/services/adminCmsMediaService'
+import { resolveCmsSectionTypeKey } from '@/utils/cmsSectionUtils'
 
 function readNumberField(record: Record<string, unknown>, ...keys: string[]) {
   for (const key of keys) {
@@ -94,15 +95,6 @@ export function normalizeCmsPage(data: unknown): CmsPage | null {
     metaDescription: readOptionalString(record, 'metaDescription', 'MetaDescription'),
     sections,
   }
-}
-
-function resolveSectionTypeKey(sectionTypeName: string): string {
-  const trimmed = sectionTypeName.trim()
-  if (!trimmed) return ''
-
-  const known = Object.values(CMS_SECTION_TYPES) as string[]
-  const match = known.find((key) => key.toLowerCase() === trimmed.toLowerCase())
-  return match ?? trimmed
 }
 
 function toImage(src: string | null | undefined, alt: string): ImageAsset {
@@ -320,7 +312,7 @@ export function mapCmsPageToHomePage(
   let siteFooterSection: CmsPageSection | null = null
 
   for (const section of page.sections) {
-    const typeName = resolveSectionTypeKey(section.sectionTypeName)
+    const typeName = resolveCmsSectionTypeKey(section.sectionTypeName)
 
     if (!includeHomeContent && CMS_HOME_SECTION_TYPES.has(typeName)) {
       continue

@@ -17,7 +17,7 @@ export async function cmsContentPageLoader({
   }
 
   try {
-    const content = await cmsContentPageService.getPage(slug, locale)
+    const content = await cmsContentPageService.getPage(slug, locale, { force: true })
 
     if (!content?.hero.title?.trim()) {
       return { locale, slug, content: null, notFound: true }

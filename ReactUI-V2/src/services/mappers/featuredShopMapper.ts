@@ -1,4 +1,5 @@
 import { resolveProductImageSrc } from '@/utils/publicUploadUrl'
+import { isCmsUploadedImage } from '@/utils/cmsSectionUtils'
 import type { FeaturedShopGrid } from '@/models/home/featuredShop.model'
 
 export interface FeaturedCatalogCollection {
@@ -6,11 +7,6 @@ export interface FeaturedCatalogCollection {
   href: string
   imageUrl: string
   imageAlt: string
-}
-
-function isCustomCmsUpload(src?: string): boolean {
-  if (!src) return false
-  return src.includes('/Uploads/Cms/')
 }
 
 export function buildFeaturedShopGrid(
@@ -22,7 +18,7 @@ export function buildFeaturedShopGrid(
   const collectionById = new Map(collections.map((collection) => [collection.id, collection]))
 
   const sections = fallback.sections.map((section) => {
-    if (isCustomCmsUpload(section.image?.src)) return section
+    if (isCmsUploadedImage(section.image?.src ?? '')) return section
 
     const collection = collectionById.get(section.id)
     if (!collection?.imageUrl) return section

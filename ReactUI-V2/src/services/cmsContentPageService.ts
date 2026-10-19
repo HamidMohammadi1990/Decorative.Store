@@ -4,7 +4,6 @@ import { applyContentPageFallback, getContentPageMock } from '@/data/mock/conten
 import { mapCmsPageToContentPage } from '@/services/mappers/cmsContentPageMapper'
 import { pageService } from '@/services/pageService'
 
-const cache = new Map<string, CmsContentPageContent>()
 const requests = new Map<string, Promise<CmsContentPageContent | null>>()
 
 export const cmsContentPageService = {
@@ -17,17 +16,12 @@ export const cmsContentPageService = {
     const { force = false } = options
 
     if (!force) {
-      const cached = cache.get(cacheKey)
-      if (cached) return cached
-
       const inFlight = requests.get(cacheKey)
       if (inFlight) return inFlight
-    } else {
-      cache.delete(cacheKey)
     }
 
     const request = (async () => {
-      const cmsPage = await pageService.getBySlug(slug, locale)
+      const cmsPage = await pageService.getBySlug(slug, locale, force)
       if (!cmsPage) return getContentPageMock(slug, locale)
       return applyContentPageFallback(mapCmsPageToContentPage(cmsPage), slug, locale)
     })()
@@ -35,9 +29,7 @@ export const cmsContentPageService = {
     requests.set(cacheKey, request)
 
     try {
-      const page = await request
-      if (page) cache.set(cacheKey, page)
-      return page
+      return await request
     } finally {
       requests.delete(cacheKey)
     }

@@ -3,6 +3,7 @@ import {
 } from '@/constants/cmsSectionTypes'
 import type { CmsPage, CmsPageSection } from '@/models/cms/cmsPage.model'
 import type { ContactPageContent } from '@/models/contact/contactPage.model'
+import { resolveCmsSectionTypeKey } from '@/utils/cmsSectionUtils'
 
 function parseEncodedDescription(description: string | null | undefined) {
   const raw = description?.trim() ?? ''
@@ -26,13 +27,6 @@ function parseEncodedDescription(description: string | null | undefined) {
   }
 
   return { eyebrow, subtitle }
-}
-
-function resolveSectionTypeKey(sectionTypeName: string): string {
-  const trimmed = sectionTypeName.trim()
-  if (!trimmed) return ''
-  const known = Object.values(CMS_SECTION_TYPES) as string[]
-  return known.find((key) => key.toLowerCase() === trimmed.toLowerCase()) ?? trimmed
 }
 
 function mapContactHero(section: CmsPageSection): ContactPageContent['hero'] {
@@ -106,7 +100,7 @@ export function mapCmsPageToContactPage(page: CmsPage): ContactPageContent {
   content.metaDescription = page.metaDescription
 
   for (const section of page.sections) {
-    const typeName = resolveSectionTypeKey(section.sectionTypeName)
+    const typeName = resolveCmsSectionTypeKey(section.sectionTypeName)
     switch (typeName) {
       case CMS_SECTION_TYPES.contactHero:
         content.hero = mapContactHero(section)

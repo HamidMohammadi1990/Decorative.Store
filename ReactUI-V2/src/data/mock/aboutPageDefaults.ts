@@ -2,6 +2,7 @@ import type { AboutPageContent } from '@/models/about/aboutPage.model'
 import type { Locale } from '@/models/shared/locale.model'
 import aboutEn from '@/data/mock/about.en.json'
 import aboutFa from '@/data/mock/about.fa.json'
+import { isCmsUploadedImage } from '@/utils/cmsSectionUtils'
 
 const aboutByLocale = {
   en: aboutEn,
@@ -31,9 +32,21 @@ export function applyAboutPageFallback(
     metaDescription: content.metaDescription ?? fallback.metaDescription,
     hero: {
       ...fallback.hero,
-      image: content.hero.image.src !== '/images/home/living-room.jpg'
-        ? content.hero.image
-        : fallback.hero.image,
+      ...content.hero,
+      title: content.hero.title?.trim() || fallback.hero.title,
+      subtitle: content.hero.subtitle?.trim() || fallback.hero.subtitle,
+      image:
+        isCmsUploadedImage(content.hero.image.src) ||
+        (content.hero.image.src &&
+          content.hero.image.src !== '/images/home/living-room.jpg' &&
+          !content.hero.image.src.endsWith('/images/home/living-room.svg'))
+          ? content.hero.image
+          : fallback.hero.image,
+    },
+    story: {
+      ...fallback.story,
+      ...content.story,
+      image: isCmsUploadedImage(content.story.image.src) ? content.story.image : fallback.story.image,
     },
   }
 }

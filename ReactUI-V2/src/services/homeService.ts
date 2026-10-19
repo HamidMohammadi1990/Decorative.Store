@@ -52,6 +52,7 @@ function mergeHomePage(base: HomePage, override: HomePagePatch): HomePage {
 function applyCmsOnMock(mock: HomePage, cms: HomePage): HomePage {
   let page = mergeHomePage(mock, cms)
 
+  if (!cms.hero?.slides?.length) page.hero = mock.hero
   if (!cms.promoTiles?.tiles?.length) page.promoTiles = mock.promoTiles
   if (!cms.categoryNav?.items?.length) page.categoryNav = mock.categoryNav
   if (!cms.featuredShop?.sections?.length) page.featuredShop = mock.featuredShop
@@ -91,6 +92,7 @@ async function loadCmsPage(
   locale: Locale,
   includeHomeContent: boolean,
   cmsSlug: string,
+  force = false,
 ): Promise<HomePage | null> {
   try {
     const slug =
@@ -99,7 +101,7 @@ async function loadCmsPage(
         : cmsSlug === 'blog'
           ? cmsBlogPageSlug(locale)
           : cmsSlug
-    const cmsPage = await pageService.getBySlug(slug, locale)
+    const cmsPage = await pageService.getBySlug(slug, locale, force)
     if (!cmsPage) return null
     return mapCmsPageToHomePage(cmsPage, { includeHomeContent })
   } catch {
@@ -143,14 +145,14 @@ async function buildPage(
   skipHomeCatalogContent: boolean,
   skipCmsPage: boolean,
   cmsSlug: string,
-  forceCatalogRefresh = false,
+  forceRefresh = false,
 ): Promise<HomePage> {
   const mockPage = mapHomePage(getHomeMock(locale))
 
   try {
     let page = mockPage
     if (!skipCmsPage) {
-      const cmsPage = await loadCmsPage(locale, !skipHomeCatalogContent, cmsSlug)
+      const cmsPage = await loadCmsPage(locale, !skipHomeCatalogContent, cmsSlug, forceRefresh)
       if (cmsPage) {
         page = applyCmsOnMock(mockPage, cmsPage)
       }
@@ -180,7 +182,7 @@ async function buildPage(
     }
 
     try {
-      const categoryTree = await categoryService.getTree(locale, forceCatalogRefresh)
+      const categoryTree = await categoryService.getTree(locale, forceRefresh)
       const catalogNav = mapCategoryTreeToNav(categoryTree)
       const dynamicCategoryNav = mapCategoryTreeToCategoryNav(categoryTree)
 

@@ -2,6 +2,7 @@ import { CMS_SECTION_TYPES } from '@/constants/cmsSectionTypes'
 import type { CmsPage, CmsPageSection } from '@/models/cms/cmsPage.model'
 import type { CmsContentPageContent } from '@/models/content/cmsContentPage.model'
 import type { AppLink } from '@/models/shared/link.model'
+import { resolveCmsSectionTypeKey } from '@/utils/cmsSectionUtils'
 
 function toLink(label: string, href: string): AppLink {
   return { label, href: href || '/' }
@@ -29,13 +30,6 @@ function parseEncodedDescription(description: string | null | undefined) {
   }
 
   return { eyebrow, subtitle }
-}
-
-function resolveSectionTypeKey(sectionTypeName: string): string {
-  const trimmed = sectionTypeName.trim()
-  if (!trimmed) return ''
-  const known = Object.values(CMS_SECTION_TYPES) as string[]
-  return known.find((key) => key.toLowerCase() === trimmed.toLowerCase()) ?? trimmed
 }
 
 function mapContentHero(section: CmsPageSection): CmsContentPageContent['hero'] {
@@ -99,7 +93,7 @@ export function mapCmsPageToContentPage(page: CmsPage): CmsContentPageContent {
   content.metaDescription = page.metaDescription
 
   for (const section of page.sections) {
-    const typeName = resolveSectionTypeKey(section.sectionTypeName)
+    const typeName = resolveCmsSectionTypeKey(section.sectionTypeName)
     switch (typeName) {
       case CMS_SECTION_TYPES.contentHero:
         content.hero = mapContentHero(section)

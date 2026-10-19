@@ -20,10 +20,13 @@ export function normalizeCmsImageStorageValue(imageUrl: string | null | undefine
 }
 
 export function resolveCmsImageSrc(imageUrl: string): string {
-  if (!imageUrl) return ''
-  const normalized = toPublicUploadPath(imageUrl)
+  const trimmed = imageUrl?.trim() ?? ''
+  if (!trimmed) return ''
+
+  const normalized = toPublicUploadPath(trimmed)
   if (normalized.startsWith('/images/')) return resolveHomeImageSrc(normalized)
-  if (normalized.startsWith('/Uploads/')) return normalized
+  if (/^\/Uploads\//i.test(normalized)) return normalized
+  if (/^Uploads\//i.test(normalized)) return `/${normalized}`
   if (/^https?:\/\//i.test(normalized)) return normalized
   return `/Uploads/Cms/${normalized.replace(/^\/+/, '')}`
 }

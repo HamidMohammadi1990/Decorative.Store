@@ -5,38 +5,34 @@ import { applyAboutPageFallback } from '@/data/mock/aboutPageDefaults'
 import { mapCmsPageToAboutPage } from '@/services/mappers/cmsAboutPageMapper'
 import { pageService } from '@/services/pageService'
 
-const cache = new Map<string, AboutPageContent>()
 const requests = new Map<string, Promise<AboutPageContent | null>>()
+
+function cacheKey(locale: Locale) {
+  return `${locale}:about`
+}
 
 export const aboutPageService = {
   async getPage(locale: Locale, options: { force?: boolean } = {}): Promise<AboutPageContent | null> {
-    const cacheKey = `${locale}:about`
+    const key = cacheKey(locale)
     const { force = false } = options
 
     if (!force) {
-      const cached = cache.get(cacheKey)
-      if (cached) return cached
-
-      const inFlight = requests.get(cacheKey)
+      const inFlight = requests.get(key)
       if (inFlight) return inFlight
-    } else {
-      cache.delete(cacheKey)
     }
 
     const request = (async () => {
-      const cmsPage = await pageService.getBySlug(cmsAboutPageSlug(locale), locale)
+      const cmsPage = await pageService.getBySlug(cmsAboutPageSlug(locale), locale, force)
       if (!cmsPage) return null
       return applyAboutPageFallback(mapCmsPageToAboutPage(cmsPage), locale)
     })()
 
-    requests.set(cacheKey, request)
+    requests.set(key, request)
 
     try {
-      const page = await request
-      if (page) cache.set(cacheKey, page)
-      return page
+      return await request
     } finally {
-      requests.delete(cacheKey)
+      requests.delete(key)
     }
   },
 }

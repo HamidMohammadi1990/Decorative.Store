@@ -9,7 +9,7 @@ export async function aboutPageLoader({
   const locale = resolveLocale(request)
 
   try {
-    const content = await aboutPageService.getPage(locale)
+    const content = await aboutPageService.getPage(locale, { force: true })
     return { locale, content }
   } catch {
     return { locale, content: null, error: 'failed' }

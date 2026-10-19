@@ -34,7 +34,7 @@ export function useAboutPageContent() {
       }
       setError(false)
       try {
-        const page = await aboutPageService.getPage(locale)
+        const page = await aboutPageService.getPage(locale, { force: true })
         if (!cancelled) setContent(page)
       } catch {
         if (!cancelled) setError(true)

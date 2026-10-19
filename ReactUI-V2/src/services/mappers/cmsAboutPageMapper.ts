@@ -6,6 +6,7 @@ import type { AboutPageContent } from '@/models/about/aboutPage.model'
 import type { AppLink } from '@/models/shared/link.model'
 import type { ImageAsset } from '@/models/shared/image.model'
 import { resolveCmsImageSrc } from '@/services/adminCmsMediaService'
+import { resolveCmsSectionTypeKey } from '@/utils/cmsSectionUtils'
 
 function toLink(label: string, href: string): AppLink {
   return { label, href: href || '/' }
@@ -52,13 +53,6 @@ function parseEncodedDescription(description: string | null | undefined) {
   }
 
   return { eyebrow, subtitle, ctaLabel, imageAlt }
-}
-
-function resolveSectionTypeKey(sectionTypeName: string): string {
-  const trimmed = sectionTypeName.trim()
-  if (!trimmed) return ''
-  const known = Object.values(CMS_SECTION_TYPES) as string[]
-  return known.find((key) => key.toLowerCase() === trimmed.toLowerCase()) ?? trimmed
 }
 
 function mapAboutHero(section: CmsPageSection): AboutPageContent['hero'] {
@@ -152,7 +146,7 @@ export function mapCmsPageToAboutPage(page: CmsPage): AboutPageContent {
   content.metaDescription = page.metaDescription
 
   for (const section of page.sections) {
-    const typeName = resolveSectionTypeKey(section.sectionTypeName)
+    const typeName = resolveCmsSectionTypeKey(section.sectionTypeName)
     switch (typeName) {
       case CMS_SECTION_TYPES.aboutHero:
         content.hero = mapAboutHero(section)

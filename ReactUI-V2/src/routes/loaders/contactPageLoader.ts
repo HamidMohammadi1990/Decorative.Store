@@ -9,7 +9,7 @@ export async function contactPageLoader({
   const locale = resolveLocale(request)
 
   try {
-    const content = await contactPageService.getPage(locale)
+    const content = await contactPageService.getPage(locale, { force: true })
     return { locale, content }
   } catch {
     return { locale, content: null, error: 'failed' }
