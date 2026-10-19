@@ -9,6 +9,7 @@ import type {
 import { ButtonLink } from '@/components/ui/ButtonLink'
 import { Container } from '@/components/ui/Container'
 import { LocalImage } from '@/components/ui/LocalImage'
+import { isCmsUploadedImage, isStockHomeMediaSrc } from '@/utils/cmsSectionUtils'
 
 const VALUE_ICONS: Record<string, string> = {
   quality: '✦',
@@ -17,10 +18,20 @@ const VALUE_ICONS: Record<string, string> = {
   service: '◎',
 }
 
+function shouldShowAboutHeroImage(image: AboutHero['image']) {
+  const src = image.src?.trim() ?? ''
+  if (!src) return false
+  return isCmsUploadedImage(src) || !isStockHomeMediaSrc(src)
+}
+
 export function AboutHeroSection({ data }: { data: AboutHero }) {
+  const showImage = shouldShowAboutHeroImage(data.image)
+
   return (
     <section className="relative overflow-hidden bg-surface-muted">
-      <div className="grid min-h-[28rem] lg:grid-cols-2 lg:min-h-[34rem]">
+      <div
+        className={`grid min-h-[28rem] lg:min-h-[34rem] ${showImage ? 'lg:grid-cols-2' : ''}`}
+      >
         <div className="flex items-center">
           <Container className="py-14 lg:py-20">
             {data.eyebrow && (
@@ -43,14 +54,17 @@ export function AboutHeroSection({ data }: { data: AboutHero }) {
             )}
           </Container>
         </div>
-        <div className="relative min-h-[18rem] lg:min-h-full">
-          <LocalImage
-            image={data.image}
-            loading="eager"
-            className="absolute inset-0 size-full object-cover"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent lg:bg-gradient-to-l lg:from-black/10 lg:via-transparent lg:to-transparent" />
-        </div>
+        {showImage && (
+          <div className="relative min-h-[18rem] w-full lg:min-h-[34rem]">
+            <LocalImage
+              image={data.image}
+              loading="eager"
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="block size-full min-h-[18rem] w-full object-cover lg:min-h-[34rem]"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent lg:bg-gradient-to-l lg:from-black/10 lg:via-transparent lg:to-transparent" />
+          </div>
+        )}
       </div>
     </section>
   )

@@ -6,16 +6,73 @@ import type { AboutPageContent } from '@/models/about/aboutPage.model'
 import type { AppLink } from '@/models/shared/link.model'
 import type { ImageAsset } from '@/models/shared/image.model'
 import { resolveCmsImageSrc } from '@/services/adminCmsMediaService'
-import { resolveCmsSectionTypeKey } from '@/utils/cmsSectionUtils'
+import {
+  isCmsUploadedImage,
+  isStockHomeMediaSrc,
+  resolveCmsSectionTypeKey,
+} from '@/utils/cmsSectionUtils'
 
 function toLink(label: string, href: string): AppLink {
   return { label, href: href || '/' }
 }
 
-function toImage(src: string | null | undefined, alt: string): ImageAsset {
+function toImage(src: string | null | undefined, alt: string, useStockFallback = true): ImageAsset {
   const trimmed = src?.trim()
-  if (!trimmed) return { src: '/images/home/living-room.jpg', alt }
+  if (!trimmed) {
+    return useStockFallback
+      ? { src: '/images/home/living-room.jpg', alt }
+      : { src: '', alt }
+  }
   return { src: resolveCmsImageSrc(trimmed), alt }
+}
+
+function resolveAboutHeroImageRaw(section: CmsPageSection): string | null | undefined {
+  const sectionUrl = section.imageUrl?.trim()
+  if (sectionUrl && !isStockHomeMediaSrc(resolveCmsImageSrc(sectionUrl))) {
+    return sectionUrl
+  }
+
+  for (const icon of ['image', 'hero', 'hero-image', 'banner']) {
+    const item = findItemByIcon(section, icon)
+    if (item?.imageUrl?.trim()) return item.imageUrl
+  }
+
+  const itemWithImage = section.items.find(
+    (item) =>
+      item.imageUrl?.trim() &&
+      item.icon !== 'cta' &&
+      item.icon !== 'disclaimer-link',
+  )
+  if (itemWithImage?.imageUrl?.trim()) return itemWithImage.imageUrl
+
+  return sectionUrl
+}
+
+function mergeAboutHero(
+  current: AboutPageContent['hero'],
+  incoming: AboutPageContent['hero'],
+): AboutPageContent['hero'] {
+  if (!current.title?.trim()) return incoming
+
+  const currentCms = isCmsUploadedImage(current.image.src)
+  const incomingCms = isCmsUploadedImage(incoming.image.src)
+  const image =
+    incomingCms && !currentCms
+      ? incoming.image
+      : currentCms && !incomingCms
+        ? current.image
+        : !isStockHomeMediaSrc(incoming.image.src)
+          ? incoming.image
+          : current.image
+
+  return {
+    ...current,
+    eyebrow: incoming.eyebrow ?? current.eyebrow,
+    title: incoming.title?.trim() ? incoming.title : current.title,
+    subtitle: incoming.subtitle?.trim() ? incoming.subtitle : current.subtitle,
+    cta: incoming.cta.label?.trim() ? incoming.cta : current.cta,
+    image,
+  }
 }
 
 function findItemByIcon(section: CmsPageSection, icon: string) {
@@ -58,11 +115,12 @@ function parseEncodedDescription(description: string | null | undefined) {
 function mapAboutHero(section: CmsPageSection): AboutPageContent['hero'] {
   const parsed = parseEncodedDescription(section.description)
   const ctaItem = findItemByIcon(section, 'cta')
+  const imageRaw = resolveAboutHeroImageRaw(section)
   return {
     eyebrow: parsed.eyebrow,
     title: section.title,
     subtitle: parsed.subtitle,
-    image: toImage(section.imageUrl, parsed.imageAlt ?? section.title),
+    image: toImage(imageRaw, parsed.imageAlt ?? section.title),
     cta: toLink(ctaItem?.title ?? parsed.ctaLabel ?? 'Learn more', section.url || ctaItem?.url || '/'),
   }
 }
@@ -149,7 +207,7 @@ export function mapCmsPageToAboutPage(page: CmsPage): AboutPageContent {
     const typeName = resolveCmsSectionTypeKey(section.sectionTypeName)
     switch (typeName) {
       case CMS_SECTION_TYPES.aboutHero:
-        content.hero = mapAboutHero(section)
+        content.hero = mergeAboutHero(content.hero, mapAboutHero(section))
         break
       case CMS_SECTION_TYPES.aboutStoryBlock:
         content.story = mapAboutStory(section)

@@ -7,6 +7,14 @@ export function isCmsUploadedImage(src: string): boolean {
   return /\/Uploads\/Cms\//i.test(value) || /^Uploads\/Cms\//i.test(value)
 }
 
+/** Bundled storefront placeholders under /images/home/ (not CMS uploads). */
+export function isStockHomeMediaSrc(src: string): boolean {
+  const value = src.trim().toLowerCase()
+  if (!value) return true
+  if (isCmsUploadedImage(src)) return false
+  return value.startsWith('/images/home/')
+}
+
 export function resolveCmsSectionTypeKey(sectionTypeName: string): string {
   const trimmed = sectionTypeName.trim()
   if (!trimmed) return ''
